@@ -1,4 +1,4 @@
-* **CDQN (Context Datas Quorum Nodes):** The proposed project aiming for ubiquitous, affordable AI via collective intelligence of specialized nano agents in a decentralized multi-agent system.
+* **CDQN (Context Datas Quorum Nodes):** The proposed project aiming for ubiquitous, affordable AI via collective intelligence of specialized nano agents in a decentralized multi-agent system. (see details in Doc 4)
 * **cdqNetwork:** The overall swarm structure of interacting nano-agents and nodes within the CDQN framework.
 * **cdqnDB:** The proposed evolving, new type of distributed database and collective memory for the CDQN network, designed to store and manage "Context Data".
 * **cdqnLang:** The proposed new object-context-oriented programming language specifically designed for developing and managing agents within the CDQN framework.
