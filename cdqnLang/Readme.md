@@ -2,7 +2,7 @@
 
 This repository contains the source code for `cdqnc`, the official reference compiler for the `cdqnLang` programming language.
 
-`cdqnLang` is a fast, secure, and concurrent programming language designed from the ground up to build, manage, and orchestrate the [CDQN (Context Datas Quorum Nodes) project](link-to-project-overview-doc). Its core purpose is to enable the development of ubiquitous, affordable, and self-evolving AI systems.
+`cdqnLang` is a fast, secure, and concurrent programming language designed from the ground up to build, manage, and orchestrate the [CDQN (Context Datas Quorum Nodes) project](Doc 4 V2.0.0.pdf). Its core purpose is to enable the development of ubiquitous, affordable, and self-evolving AI systems.
 
 ## Core Principles
 
