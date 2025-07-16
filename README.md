@@ -10,5 +10,6 @@ The **cdqNetwork** is a living, self-evolving, and truth-seeking AI network wher
 3.  **Doc 3:** The CDQN Project Document Versioning Registry (V1.2.0)
 4.  **Doc 4:** CDQN Vision and Core Principles (V1.0.0)
 5.  **Doc 5:** CDQN Specs of Each Part (V1.0.0)
+6.  **Doc 6:** CDQN Detailed Implementation Plan (V1.0.0)
 
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
