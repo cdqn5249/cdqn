@@ -1,6 +1,7 @@
 # **CDQN (Context Datas Quorum Nodes)**
 
-This is the genesis of the CDQN (Context Data Quorum Nodes): a living, self-evolving, and truth-seeking AI network where the compiler is the stable, intelligent ground, and the agents are the ever-adapting, learning, and self-healing intelligence that pushes the boundaries of what distributed AI can achieve, always grounded in verifiable reality. We are not just writing code; we are cultivating an intelligent, truthful ecosystem.
+This is the genesis of the CDQN (Context Data Quorum Nodes) project: 
+The **cdqNetwork** is a living, self-evolving, and truth-seeking AI network where the compiler is the stable, intelligent ground, and the agents are the ever-adapting, learning, and self-healing intelligence that pushes the boundaries of what distributed AI can achieve, always grounded in verifiable reality. We are not just writing code; we are cultivating an intelligent, truthful ecosystem.
 
 ## **Official CDQN Project Document List**
 
