@@ -1,5 +1,6 @@
-# cdqnLang: new language
+# cdqnLang: a new descripting language
 
+`cdqnLang` is meticulously designed to achieve two harmonious goals: a simple, human-centric syntax for describing complex systems, and a formally verifiable, unambiguous semantic core for ensuring correctness and security. By abstracting complexity through a declarative syntax and guaranteeing precision with a powerful compiler and type system, cdqnLang provides the ideal foundation for the CDQN. It is a language built not for programmers, but for creators, architects, and scientists—a true language for cultivating an intelligent, truthful, and self-evolving ecosystem.
 
 ## Official cdqnLang docs
 
