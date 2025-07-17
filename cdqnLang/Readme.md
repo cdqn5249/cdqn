@@ -4,7 +4,7 @@
 
 ## Official cdqnLang docs
 
-**Doc 8:** cdqnLang Full Implementation (V1.0.0)
+**Doc 8:** cdqnLang Full Implementation (V1.0.0)  
 **Doc 9:** Beyond Generation: A Language Architected for the AI Development Era (V1.0.0)
 
 ## License
