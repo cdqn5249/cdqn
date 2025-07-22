@@ -32,7 +32,7 @@ This leads us directly to understanding the foundational elements of this ground
 
 ## 2. CDQN Foundational Principles
 
-The CDQN system is driven by a set of core principles that guide its design and evolution:
+The CDQN agentic system is driven by a set of core principles that guide its design and evolution:
 
 *   **Self-Evolving Intelligence:** The network dynamically adapts its code, configurations, and internal models based on real-world feedback and observed outcomes. Learning Agents continuously monitor performance, identify inefficiencies, and autonomously generate or modify cdqnLang code, which is then compiled and deployed, often within Containers. This self-evolution extends to the refinement of knowledge veracity, driven by the FSSF system, and crucially, by the Quality of Service (QoS) system which measures a CDU's (or Model's) actual contribution to system stability and evolution.
 
