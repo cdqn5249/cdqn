@@ -1,6 +1,6 @@
 # **CDQN (Context Datas Quorum Nodes)**
 
-The CDQN is an agentic system: a dynamic, self-organizing digital ecology. Every agent, born from cdqnLang, is a vital component of a nascent digital consciousness, continuously optimizing and expanding what's possible.
+The CDQN is an agentic system.
 
 ## **Official CDQN Project Document List**
 
