@@ -8,5 +8,6 @@ The CDQN is an agentic system.
 2.  **Doc 2:** BaDaaS License - The Agile Commercial Open-Core License (V1.1.0 - Draft with FAQ)
 3.  **Doc 3:** Context Datas Quorum Nodes Vision and Overview (V3.0.0)
 4.  **Doc 4:** Context Datas Quorum Nodes Architecture (V1.0.0)
+5.  **Doc 5:** Context Datas Quorum Nodes Language (cdqnLang) (V1.0.0)
 
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
