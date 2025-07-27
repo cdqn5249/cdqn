@@ -9,5 +9,6 @@ The CDQN is an agentic system.
 3.  **Doc 3:** Context Datas Quorum Nodes Vision and Overview (V3.0.0)
 4.  **Doc 4:** Context Datas Quorum Nodes Architecture (V1.0.0)
 5.  **Doc 5:** Context Datas Quorum Nodes Language (cdqnLang) (V1.0.0)
+6.  **Doc 6:** Context Datas Quorum Nodes Memory (V1.0.0)
 
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
