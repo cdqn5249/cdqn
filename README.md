@@ -1,6 +1,9 @@
-# **CDQN (Context Datas Quorum Nodes)**
+# **CDQN (Context Datas Query Nodes) Ecosystem**
 
-The Context Datas Quorum Nodes is ...
+The cdqn (context datas query nodes) ecosystem is designed to bring beginners into the Rust community through vibe coding—a high-abstraction, beginner-friendly approach using cdqnLang, a language built on Rust principles but expressed in UTF-8 mathematical notation and explicit strong typing.
+The ecosystem provides an AI-assisted learning and coding environment through ProxyAgent, which interprets natural language into cdqnLang, executes via cdqnRuntime, persists state in cdqnDB, and connects all devices via the cdqNetwork hybrid P2P model.
+
+End goal: Seamless transition from beginner-friendly high abstraction to raw Rust proficiency.
 
 ## **Official CDQN Project Document List** (Docs directory)
 
