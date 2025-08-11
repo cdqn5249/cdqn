@@ -92,10 +92,10 @@ Example:
 
 ## 4. Example Program
 
-`let radius: f64 ≔ 5.0 
-let area: f64 ≔ π × radius²
-actor Calculator: cdqnSysComputation ≔ { receive(r: f64) :>> return π × r² }
-Calculator.receive(radius)`
+`let radius: f64 ≔ 5.0` 
+`let area: f64 ≔ π × radius²`
+`actor Calculator: cdqnSysComputation ≔ { receive(r: f64) :>> return π × r² }`
+`Calculator.receive(radius)`
 
 ---
 
