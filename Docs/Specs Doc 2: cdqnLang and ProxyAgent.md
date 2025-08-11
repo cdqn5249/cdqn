@@ -69,8 +69,8 @@ for i: i32 in 1..10 :>> process(i)
 actor Name: ActorType [with agent] ≔ { behaviour }
 ```
 - **Actor Types**:
- - **cdqnSys**: Reserved for system-level roles (security, monitoring, networking, data, policy, orchestration, etc.).  
- - **Custom**: User-defined actor types for application logic.  
+  - **cdqnSys**: Reserved for system-level roles (security, monitoring, networking, data, policy, orchestration, etc.).  
+  - **Custom**: User-defined actor types for application logic.  
 - **Metatype `agent`**: Tag marking an actor as autonomous (system or custom).  
 - All actors typed; untyped actors are invalid.
 
