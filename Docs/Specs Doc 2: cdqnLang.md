@@ -69,17 +69,20 @@ process1(data) :>> process2(result)
 
 Example:
 
-`actor Sensor: cdqnSysDataCollector with agent ≔ { receive(input: CDU) :>> process(input) }`
-
+```cdqnLang
+actor Sensor: cdqnSysDataCollector with agent ≔ { receive(input: CDU) :>> process(input) }
+```
 ### 2.5 Control Structures
 - If/Else:
 
-`if x > 0 :>> handlePositive(x) else :>> handleNegative(x)`
-
+```cdqnLang
+if x > 0 :>> handlePositive(x) else :>> handleNegative(x)
+```
 - Loops:
 
-`for i: i32 in 1..10 :>> compute(i)`
-
+```cdqnLang
+for i: i32 in 1..10 :>> compute(i)
+```
 ---
 
 ## 3. Integration with cdqn Ecosystem
@@ -92,11 +95,12 @@ Example:
 
 ## 4. Example Program
 
-`let radius: f64 ≔ 5.0` 
-`let area: f64 ≔ π × radius²`
-`actor Calculator: cdqnSysComputation ≔ { receive(r: f64) :>> return π × r² }`
-`Calculator.receive(radius)`
-
+```cdqnLang
+let radius: f64 ≔ 5.0
+let area: f64 ≔ π × radius²
+actor Calculator: cdqnSysComputation ≔ { receive(r: f64) :>> return π × r² }
+Calculator.receive(radius)
+```
 ---
 
 ## 5. Governance & Security
