@@ -1,4 +1,4 @@
-# cdqn Ecosystem Specification
+# Specs Doc 1: cdqn Ecosystem
 **Version:** V1.0.0  
 **Date:** 2025-08-11T00:00:00Z  
 **Lead Author:** Christophe Duy Quang Nguyen  
