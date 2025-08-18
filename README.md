@@ -1,7 +1,6 @@
 # **CDQN (Context Datas Query Nodes) Ecosystem**
 
-The cdqn (context datas query nodes) ecosystem is designed to bring beginners into the Rust community through vibe coding—a high-abstraction, beginner-friendly approach using cdqnLang, a language built on Rust principles but expressed in UTF-8 mathematical notation and explicit strong typing.
-The ecosystem provides an AI-assisted learning and coding environment through ProxyAgent, which interprets natural language into cdqnLang, executes via cdqnRuntime, persists state in cdqnDB, and connects all devices via the cdqNetwork hybrid P2P model.
+To establish the cdqn ecosystem as the reference for vibe coding in the Rust ecosystem. It is designed to be an engine for inspiration, valuing the generative potential and kinetic energy of ideas over their simple factual correctness.
 
 End goal: Seamless transition from beginner-friendly high abstraction to raw Rust proficiency.
 
