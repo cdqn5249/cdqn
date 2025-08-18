@@ -1,4 +1,4 @@
-# Specs Doc 1: The CDQN Ecosystem - A Master Blueprint (V1.0.0)
+# Specs Doc 1: The CDQN Ecosystem (V1.0.0)
 
 **Version:** V1.0.0
 **Date:** 2025-08-18T10:11:12Z
