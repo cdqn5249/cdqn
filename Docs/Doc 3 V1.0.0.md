@@ -65,7 +65,7 @@ Every CDU is a self-contained, auditable record, forming the bedrock of the Caus
 To ensure maximum I/O performance and durability, `cdqnDB` is built on a **disk-first architecture**. It is an embedded **Log-Structured Merge-Tree (LSM Tree)** database.
 *   **Sequential I/O Optimization:** The LSM Tree's design is crucial. It converts many small, random-seeming application writes into large, sequential writes on disk. This is dramatically faster on all modern storage hardware.
 *   **Durability:** The database utilizes a **Write-Ahead Log (WAL)**. Transactions are first committed to this fast, sequential log, guaranteeing that no data is lost even in a crash, before being structured into the main database files.
-*   **Veracity Worlds:** The database is logically partitioned into **Veracity Worlds** (Factual, Semi-Fiction, Fiction, False). These partitions serve as the foundation for the simulation layer, allowing different worlds to operate with different rules while being stored in the same efficient database.
+*   **Veracity Worlds:** The database is logically partitioned into **Veracity Worlds** (Factual, Semi-Factual, Semi-Fiction, Fiction, False). These partitions serve as the foundation for the simulation layer, allowing different worlds to operate with different rules while being stored in the same efficient database.
 
 ---
 
@@ -90,7 +90,9 @@ To ensure maximum I/O performance and durability, `cdqnDB` is built on a **disk-
 | **Comparison** | `≤`, `≥`, `<`, `>` | `if x ≥ 10` |
 | **Logical** | `∧` (AND), `∨` (OR), `¬` (NOT) | `if (x > 0) ∧ (¬is_valid)` |
 | **Math** | `+`, `−`, `×`, `÷` | `(x × 2) + y` |
-| **Powers** | `²`, `³`, `ⁿ` | `x² + yⁿ3` |
+| **Powers** | `²`, `³`, `ⁿ` | `x² + y³` |
+
+Advanced maths used on scientific publications are support with a tool, and their symbols are sugar syntax recognised by the transpiler.
 
 #### 3.3. Durable Execution
 A `goal` is a durable workflow guaranteed to run to completion. The `policy` block declaratively manages failures, retries, and timeouts.
