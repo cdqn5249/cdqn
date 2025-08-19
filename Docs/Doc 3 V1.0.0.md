@@ -1,4 +1,4 @@
-# Doc 3: The CDQN Ecosystem - Official Documentation (V1.0.0)
+# Doc 3: The CDQN Ecosystem - (V1.0.0)
 
 * **Version:** V1.0.0
 * **Date:** 2025-08-19T08:15:00Z
