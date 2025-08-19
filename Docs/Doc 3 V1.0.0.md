@@ -43,7 +43,7 @@ To establish the cdqn ecosystem as the reference for **vibe coding** in the Rust
 
 ### Section 2: The Data Layer (The Causal Foundation)
 
-The foundation of the entire ecosystem is the **Context Datas Unit (CDU)**, an immutable, cryptographically signed data structure. *Everything*—from a message, to a tool's source code, to a 3D model, to a license—is a CDU.
+The foundation of the entire ecosystem is the **Context Datas Unit (CDU)**, an immutable, cryptographically signed data structure. *Everything*—from a message, to a tool's source code, to a license—is a CDU.
 
 #### 2.1. The CDU Structure
 Every CDU is a self-contained, auditable record, forming the bedrock of the Causal Ledger.
