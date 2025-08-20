@@ -1,249 +1,273 @@
-# Soc 3: The CDQN Ecosystem
+# Doc 3 - CDQN Ecosystem 
+* **Version:** V1.0.0
+* **Status:** DRAFT
 
-### Introduction: The Engine for Inspiration
+## Abstract
 
-Imagine a digital environment that doesn't just store your data, but understands its context, history, and value. Imagine an AI that doesn't just follow commands, but acts as a creative and economic partner, helping you build, simulate, and trade entire worlds. This is the vision of the cdqn ecosystem. It is not a tool you use, but a sovereign space you inhabit alongside a cohort of personalized agents that learn *with* you and act *for* you.
-
-This ecosystem is designed for the "vibe coder"—the creator, the world-builder, the strategist who wants to build powerful agentic systems without getting lost in low-level complexities. It is a universe where your intent is the language, where your data is your sovereign territory, and where every interaction, from running a workflow to trading an asset, is secured by verifiable, causal proof. This document is the blueprint for that universe.
-
----
-
-### Section 1: Core Philosophy & Principles
-
-The entire architecture is built upon these foundational, non-negotiable principles.
-
-#### 1.1. Primary Goal
-To establish the cdqn ecosystem as the reference for **vibe coding** in the Rust ecosystem. It is designed to be an **engine for inspiration**, valuing the generative potential and kinetic energy of ideas over their simple factual correctness.
-
-#### 1.2. The Three Pillars
-1.  **Empower the Vibe Coder:** Provide a high-abstraction, intent-driven environment (`cdqnLang`) where outcomes are prioritized over algorithms.
-2.  **Build a Secure & Sovereign Digital Home:** Create a private, user-controlled "Personal Agent Fabric" founded on a "zero trust" security model that evolves into a trustless, federated economy.
-3.  **Create a Resilient & Intelligent Agentic Environment:** Build a foundation that supports inspiration, hierarchical reasoning, critique, and continuous, personalized learning in shared, simulated worlds.
-
-#### 1.3. Non-Negotiable Principles
-*   **Data Sovereignty:** The user has absolute ownership of their data.
-*   **Asynchronous-Only User Experience:** The system is designed for a disconnected world; a user's core experience is never blocked by the state of another user or node.
-*   **Verifiable Identity & Causality:** No anonymous actions. Every piece of data is signed, versioned with a Hybrid Logical Clock (HLC), and has a verifiable causal history.
-*   **Explicitness:** No implicit or "magic" behavior. All language, protocols, and dependencies are unambiguous.
-*   **User Agency:** The user is always in control. The AI is a creative partner that presents choices, not a predictor that makes decisions for the user.
+The `cdqn` (Context Data Query Nodes) ecosystem is a new paradigm for building secure, intelligent, and auditable software. In a world where data is decentralized and AI agents must reason under uncertainty, `cdqn` provides a framework founded on three key principles: **Sovereign Nodes**, where each participant owns and controls its own data; **Behavioral Identity**, where trust is earned through verifiable actions, not secrets; and **Vibe Coding**, a new way of programming that focuses on expressing declarative intent through a simple, safe, and readable language. This document provides a comprehensive specification of the `cdqn` architecture, its philosophy, its core components, and its operational workflows, intended as a foundational guide for implementation.
 
 ---
 
-### Section 2: The Data Layer (The Causal Foundation)
+## Part I: The Philosophy - A New Way of Thinking
 
-The foundation of the entire ecosystem is the **Context Datas Unit (CDU)**, an immutable, cryptographically signed data structure. *Everything*—from a message, to a tool's source code, to a license—is a CDU.
+### 1.1 The Problem: The Insecurity of "Trust Me"
+Traditional software is built on the concept of the "function"—a block of code that we call and trust to perform an action. This trust is often blind. A function can have unintended side effects, access data it shouldn't, or contain hidden security flaws. In a decentralized, AI-driven world, this model of "trust me" is no longer tenable.
 
-#### 2.1. The CDU Structure
-Every CDU is a self-contained, auditable record, forming the bedrock of the Causal Ledger.
+### 1.2 The `cdqn` Solution: "Show Me" through Verifiable Intent
+`cdqn` inverts this model. Instead of passing data to trusted code, we pass **data that describes an intent** through a zero-trust runtime. This data is packaged in a secure, verifiable, and immutable structure called a `cdu`. The runtime then interprets this intent and orchestrates the execution of small, sandboxed, and stateless capabilities (WASI Components) to fulfill it.
 
-| Category | Field Name | Detailed Purpose |
-| :--- | :--- | :--- |
-| **Identity & History**| `Unique ID` | The single, globally unique identifier for this CDU. |
-| | `Version` | The semantic version (`Major.Minor.Patch`) of the payload content. |
-| | `HLC` | The Hybrid Logical Clock timestamp, ensuring a verifiable, causal order of events. |
-| | `Lineage`| An array of parent `Unique ID`s, forming a directed acyclic graph (DAG) for a complete audit trail. |
-| **Payload Semantics**| `CDUType`| A mandatory string defining the payload's schema (e.g., `cdqn.sys.ToolDefinition`). |
-| | `FSSFF` | The mandatory veracity classification: **F**actual, **S**emi-**F**actual, **S**emi-**F**iction, **F**iction, or **F**alse. |
-| | `Payload`| The immutable data content, serialized into a compact binary format. |
-| | `PayloadHash` | A cryptographic hash of the `Payload`. |
-| **Agent Interaction** | `AgentSourceID`| The `AgentID` of the agent that created this CDU. |
-| | `Target`| The intended recipient(s) (`AgentID`, `ToolID`, or `NodeID`). |
-| | `Intent`| The purpose of the CDU (`Information`, `Task`, `Response`, `Goal`, `Critique`). |
-| | `TaskStatus`| The execution state of a task (`Pending`, `Executing`, `Success`, `Failed`, `PendingReview`, `Quarantined`). |
-| | `SharedContextID`| A common ID that groups all CDUs belonging to a single collaborative project or workflow. |
-| **Ownership & Licensing**| `Signature` | The cryptographic signature of the `PayloadHash` and metadata, signed by the `AgentSourceID`. |
-| | `LicenseID` | A mandatory pointer to the `cdqn.sys.License` CDU governing the use of this asset. |
-| **Kinetic Metadata** | `QoS` | An object containing metrics to calculate the "generative potential" of an idea. |
-| | `QoS.read_count` | A counter of how many times the payload has been accessed. |
-| | `QoS.descendant_count`| A counter of how many child CDUs have been created from this one. |
-| | `QoS.last_access_hlc`| The HLC timestamp of the last interaction. |
-
-#### 2.2. `cdqnDB`: The High-Performance Causal Store
-To ensure maximum performance and durability, `cdqnDB` is built on a **disk-first architecture**. It is an embedded **Log-Structured Merge-Tree (LSM Tree)** database.
-*   **Sequential I/O Optimization:** Converts many small, random application writes into large, sequential writes on disk for dramatically faster performance.
-*   **Durability:** Utilizes a **Write-Ahead Log (WAL)**. Transactions are first committed to this log, guaranteeing no data is lost even in a crash.
-*   **Veracity Worlds:** The database is logically partitioned into **Veracity Worlds** based on the CDU's `FSSFF` field. These partitions serve as the foundation for the simulation layer, allowing different worlds to operate with different rules within the same efficient database.
+This means every significant action in the system creates a permanent, auditable record, moving from a world of opaque operations to one of a verifiable, causal history. It’s a "show me" architecture.
 
 ---
 
-### Section 3: The Language of Intent (`cdqnLang`)
+## Part II: The Core Component - The `cdu`
 
-`cdqnLang` is a visually intuitive, declarative language for orchestrating durable workflows, designed to be both beginner-friendly and powerful.
+Everything in the `cdqn` ecosystem revolves around the `cdu` (Context Data Unit). It is the atomic unit of information.
 
-#### 3.1. Syntax Philosophy & Structure
-*   **Indentation-Based:** Code blocks are defined by their indentation level.
-*   **Explicit End Tags:** Every block construct (`goal`, `plan`, `if`) is closed with a matching `end` tag (`end goal`, `end plan`, `end if`).
-*   **No Brackets:** Avoids `{}` and `()` where possible, preferring keywords.
-*   **Strict Imports & Declarations:** All external tools (`using` block) and variables (`variables` block) must be declared at the top of their scope.
-*   **No Functions:** All executable logic must be encapsulated in a `Tool` to ensure it passes through the system's security, sandboxing, and audit protocols.
+### 2.1 Anatomy of a `cdu`
+Imagine a single, tamper-proof digital notecard with three sections:
 
-#### 3.2. Validated Operators
-`cdqnLang` uses expressive UTF-8 symbols for clarity.
+1.  **ID:** A unique, cryptographic serial number (a SHA-256 hash). This makes it **immutable**.
+2.  **Vibe:** The main content of the card—the "what."
+3.  **Context:** The metadata in the margins—the "about," including its causal timestamp (`hlc`) and security permissions (`acl`).
 
-| Operation | Symbol | Example |
+### 2.2 Technical Schema: `cdu`
+| Component | Description | Data Type Specification |
 | :--- | :--- | :--- |
-| **Value Assignment** | `←` | `let x ← 10` |
-| **Flow Capture** | `→` | `let result → task "http-get"` |
-| **Equality/Inequality**| `=` / `≠` | `if x = 10` |
-| **Comparison** | `≤`, `≥`, `<`, `>` | `if x ≥ 10` |
-| **Logical** | `∧` (AND), `∨` (OR), `¬` (NOT) | `if (x > 0) ∧ (¬is_valid)` |
-| **Math** | `+`, `−`, `×`, `÷` | `(x × 2) + y` |
-| **Powers** | `²`, `³`, `ⁿ` | `x² + y³` |
+| **`id`** | The unique, content-addressed hash. | `String` |
+| **`vibe`** | The core data payload. | `VibeData` Enum |
+| **`context`**| The metadata. | `Map<String, ContextData>` |
 
-#### 3.3. Advanced Mathematical Constructs
-Advanced mathematical operations are supported through block constructs and syntactic sugar that transpiles to tool calls.
+```cdqn
+// Data types available within the 'vibe'
+enum VibeData { Null, Bool, Int, Float, String, Bytes, Array<VibeData>, Object }
 
-| Operation | Type | Syntax |
-| :--- | :--- | :--- |
-| **Summation** | Block | `∑ (i from 1 to 10) ... end ∑` |
-| **Product** | Block | `∏ (item in my_list) ... end ∏` |
-| **Integral/Derivative** | Syntactic Sugar for Tool | `∫ (x from 0 to 10) of "x²"` |
-
-#### 3.4. Durable Execution & Reusability
-A `goal` is a durable workflow guaranteed to run to completion.
-*   **`policy` Block:** Declaratively manages failures, retries, and timeouts.
-*   **`tool` Definition Block:** A `tool` can be defined inside a `goal` for single-use, ephemeral logic (**Goal-Scoped Tool**). It provides code reuse within a plan but is not persisted and is subject to the strictest security constraints.
-
-**Code Example: A Resilient Web Fetch**
-```coffeescript
-goal "Fetch critical data from an API, with a fallback."
-    using
-        http: "cdqn.std.http.v1.1"
-        log: "cdqn.std.log.v1.0"
-    end using
-    variables
-        let String: primary_url, fallback_url, final_content
-    end variables
-    plan
-        final_content → task http.get with primary_url
-        policy
-            retry
-                max_attempts: 3
-                initial_interval: "2s"
-            end retry
-            on_failure plan
-                continue with (task http.get with fallback_url)
-            end plan
-        end policy
-    end plan
-end goal
+// Data types available within the 'context'
+enum ContextData { Scalar(VibeData), Relation(String) } // Relation points to another cdu's id
 ```
 
----
+### 2.3 Relationships Part 1: The Lineage System (Causal Transformation)
+*   **Purpose:** To record **causal, direct transformation**. It answers the question, "What was the direct input that produced this output?"
+*   **Mechanism:** A `Relation` key named `derived_from` is added to a child `cdu`'s `context`, pointing to the hash `id` of its parent.
+*   **Workflow:**
+    1.  A `worker` is invoked with `input_cdu_A`.
+    2.  The `worker`'s WASI component runs and produces `output_cdu_B`.
+    3.  The `Orchestrator` finalizes `cdu_B`, automatically inserting `{ "derived_from": Relation("id_of_cdu_A") }` into its context before saving it. This creates an unbreakable, auditable chain of events.
 
-### Section 4: The Actors (Agents & Tools)
-
-#### 4.1. Agents: The "Thinkers"
-Agents are stateful, long-lived, cognitive entities powered by AI models.
-*   **`ProxyAgent`:** The user's sole interface. Translates "vibes" into `cdqnLang` `goal`s.
-*   **`OrchestrAgent`:** The "brain." Analyzes goals, orchestrates protocols, and learns from `Experience` CDUs.
-*   **`SecurAgent`:** The guardian. Manages tool approval, security policies, and active defense.
-*   **`NetAgent`:** The conductor. Monitors network health and manages node reputation.
-*   **`AssetAgent`:** The specialist for managing, valuing, and trading assets.
-*   **The Council of Veracity (Mixture of Experts):** A team of specialist agents for nuanced content generation and critique, each an expert in a specific `FSSFF` veracity.
-
-#### 4.2. Tools: The "Doers"
-Tools are stateless, deterministic functions executed in a secure sandbox. A Tool is defined as data in a `cdqn.sys.ToolDefinition` CDU.
-
-| Field | Detailed Purpose |
-| :--- | :--- |
-| `ToolID` | The unique, versioned identifier (e.g., `tools.web.http-get.v1.2`). |
-| `GoalDescription`| A rich, natural language description for semantic discovery by agents. |
-| `InputSchema`, `OutputSchema` | The `CDUType`s defining the Tool's "API." |
-| `RequiredPermissions` | A list of exact capabilities the Tool needs (e.g., `{ capability: "network.http.get", scope: "api.weather.com" }`). |
-| `FunctionBody` | The `cdqnLang` or `RustWasm` script containing the Tool's logic. |
+### 2.4 Relationships Part 2: The Link System (Semantic Relationship)
+*   **Purpose:** To declare a **conceptual, semantic relationship**. It answers the question, "How does the idea in this `cdu` relate to the idea in that `cdu`?"
+*   **Mechanism:** A standalone `cdu` is created with the `link` schema.
+*   **`Link` `cdu` Schema (`cdqn.io/schemas/link/v1.0`):**
+    *   `vibe.targets` (Array<Relation>): The `cdu`s being linked.
+    *   `vibe.link_type` (String Enum): The nature of the relationship (`equivalence`, `refutation`, `elaboration`, `inspiration`).
+*   **Workflow:**
+    1.  An `agent` analyzes `cdu_X` (an astrology text about the Sun) and `cdu_Y` (a sci-fi story about the Sun).
+    2.  It determines they share a core subject.
+    3.  It creates a `Link` `cdu` with `targets: [cdu_X, cdu_Y]` and `link_type: 'equivalence'`. This enriches the data graph, allowing future queries to find both `cdu`s when searching for information about the Sun.
 
 ---
 
-### Section 5: The Secure Runtime Environment
+## Part III: `cdqnLang` - The Language of Vibe Coding
 
-The ecosystem's security is guaranteed by a two-part architecture that creates a strict boundary between privileged and unprivileged code.
+`cdqnLang` is the primary interface for humans and agents to interact with the ecosystem. It is a declarative, statically-typed language with a unique, literate, pure-UTF-8 syntax designed for maximum clarity and safety.
 
-#### 5.1. The `cdqn Native Host`
-A **privileged**, native Rust application that the user runs. It is the only component with direct access to system resources like the GPU, network, and file system.
+### 3.1 Syntax Fundamentals
+*   **Keywords and Indentation:** All code blocks are explicitly scoped with `define...end` or other keyword pairs. Scope is defined by consistent indentation.
+*   **Explicit Typing:** Every variable must have an explicitly declared type (e.g., `String: name`).
+*   **Top-Level Declarations:** All `import`, `define aliases`, and `define variable` statements must appear at the top of their scope, before any executable logic.
+*   **Operator Set:**
+    | Concept | Symbol | Example |
+    | :--- | :--- | :--- |
+    | Assignment | `←` | `Int: x ← 10` |
+    | Member Access | `.` | `input.vibe.title` |
+    | Type Association | `:` | `String: name` |
+    | Data Flow / Pipe | `→` | `input → use "component:resizer"` |
+    | Equality | `=` | `if x = 10` |
 
-#### 5.2. The `cdqnRuntime` (WASM Sandbox)
-An **unprivileged**, sandboxed **WASM/WASI binary** hosted by the `cdqn Native Host`. All agent logic, user `goal`s, and `Tool` executions happen inside this secure sandbox. It contains the **Primordial Toolset**, a minimal, pre-verified set of tools (`db-write`, `crypto-verify`) required for a new node to bootstrap itself securely.
+### 3.2 Key Constructs and Workflows
 
-#### 5.3. Execution Tiers (Capability Ceilings)
-The runtime enforces a passive security model that limits the maximum permissions for a tool based on its origin.
-*   **Tier 3 (Ephemeral):** Goal-Scoped Tools. `compute`-only, no I/O access. The highest level of security.
-*   **Tier 1 (Trusted):** Tools installed from a whitelisted source after passing security analysis. Can request user-approved permissions.
-*   **Tier 0 (Kernel):** The `Primordial Toolset`. Has necessary privileges to bootstrap the system.
+#### A. Data Definition
+You define data using `cdu` literals. Dot-notation provides shortcuts for defining specific parts.
+
+```cdqn
+// A full cdu definition
+define cdu matching "schema:user-profile"
+    define vibe
+        String: name, email ← "Alice", "alice@example.com"
+        Int: age ← 30
+    end vibe
+end cdu
+
+// A shortcut to define just the vibe
+define cdu.vibe
+    String: message ← "Hello, World!"
+end cdu.vibe
+```
+
+#### B. Control Flow
+Logic is expressed with explicit blocks for branching (`if`) and iteration (`for each`, `map`).
+
+*   **Use Case: Conditional Action**
+    ```cdqn
+    // This workflow receives a user profile and invokes different workers based on age.
+    define workflow process-user
+        define aliases
+            age ← input.vibe.age
+        end aliases
+
+        return if age ≥ 18
+            input → use "worker:adult-processor"
+        else
+            input → use "worker:minor-processor"
+        end if
+    end workflow
+    ```
+
+#### C. Reusable Logic with `flow`
+A `flow` is a pure, stateless, reusable block of logic, like a safe function.
+
+*   **Use Case: A Reusable Tax Calculation**
+    ```cdqn
+    define flow calculate-tax
+        expects
+            Float: amount
+        end expects
+        returns Float
+
+        Float: tax_rate ← 0.20
+        return amount × tax_rate
+    end flow
+
+    // Usage in a workflow:
+    Float: sale_tax ← calculate-tax using amount ← 150.75
+    ```
+
+#### D. Symbolic Aliasing for Science
+`cdqnLang`'s most unique feature allows mapping scientific symbols to `worker`s.
+
+*   **Use Case: Making Calculus Readable**
+    ```cdqn
+    // At the top of the file, the user "teaches" the language what '∫' means.
+    import worker "community/math/numerical-integrator"
+    alias ∫(f, from, to) using "worker:numerical-integrator"
+
+    // Later, the user can invoke the worker using the mathematical symbol.
+    // The compiler translates this into a standard worker invocation.
+    cdu: integral_result ← ∫(my_function, from: 0.0, to: 1.0)
+    ```
 
 ---
 
-### Section 6: The `cdqNetwork` - A Federated Economy
+## Part IV: The Actors of the Ecosystem
 
-The `cdqNetwork` is a federation of sovereign servers built on a hybrid P2P architecture of **Personal Nodes** (forming a private "Personal Agent Fabric") and stateless **Community Nodes** for discovery. It is built on four pillars, replacing the need for a slow, centralized blockchain.
+### 4.1 `worker`: The Deterministic Executor
+A `worker` is a non-autonomous entity that executes pre-defined `workflows`. It is the "hands" of the system.
 
-1.  **The Chronos Protocol (Causality):** A gossip HLC protocol that ensures a shared, verifiable understanding of the causal order of events.
-2.  **The Hermes Protocol (Barter):** A trustless, asynchronous protocol for two parties to trade resources using secure Asynchronous Distributed Data Escrow.
-3.  **The Aether Token (`cdqnStars`):** A Proof-of-Utility token generated by the `Stargen` protocol to reward users who contribute value to the network (e.g., successful trades, open-source tools).
-4.  **The Fama System (Reputation):** A reputation score calculated based on an agent's history of successful, value-weighted, and diverse trades.
+*   **`worker` Definition Schema (`cdqn.io/schemas/worker-definition/v1.0`):**
+    *   `vibe.workerID` (String): The worker's stable, logical name.
+    *   `vibe.capability_manifest` (Array<String>): An explicit allow-list of the WASI component IDs it is authorized to run. This is a hard security boundary.
+    *   `vibe.workflows` (Object): A library of named, multi-step workflows.
 
-**Use Case: A Secure, Trustless Trade**
-1.  **Offer:** Your `AssetAgent` sends a `TradeOffer`.
-2.  **Due Diligence (Causal Audit):** Your `NetAgent` traces the causal history of the asset by contacting the original source (as listed in its public receipts) for independent cryptographic confirmation.
-3.  **Settlement:** The audit passes. The trade is executed via the Hermes Protocol, a co-signed `TradeSettlement` CDU is created, and both traders' `Fama` reputations are updated.
+### 4.2 `agent`: The Cognitive Planner
+An `agent` is the "brain." It is an autonomous entity, powered by a Language Model, for planning and decision-making.
 
----
+*   **`agent` Definition Schema (`cdqn.io/schemas/agent-definition/v2.2`):**
+    *   `vibe.agentID` (String): The agent's logical name.
+    *   `vibe.lm_component_id` (String): The WASI component providing the Language Model capability.
+    *   `vibe.tool_manifest` (Object): A curated map of conceptual tool names to the specific, whitelisted `worker` Logical IDs the agent is allowed to command.
+    *   `vibe.trigger_policy` (Object): The conditions that activate the agent.
 
-### Section 7: The Worlds (Simulation & Rendering)
-
-The ecosystem is a platform for building, simulating, and sharing interactive worlds.
-
-#### 7.1. World Definition
-A `cdqn.sys.WorldDefinition` CDU declaratively defines a world's properties, its home **Veracity World** (e.g., `Fiction`), and its governing `PhysicsLaw`s, which are high-performance `RustWasm` `Tool`s.
-
-#### 7.2. Decoupled Architecture for Smooth UX
-The system uses an **Authoritative Simulation Host** pattern. A powerful node in your Personal Agent Fabric runs the heavy simulation logic, while your local device acts as a lightweight **Rendering Client**, ensuring a fluid 60fps experience via:
-*   **Dynamic Level of Detail (LODs):** Automatically pushing the right asset quality for the client's hardware.
-*   **Asynchronous Asset Loading:** Loading large assets on a background thread to prevent the UI from freezing.
-
----
-
-### Section 8: Key Protocols & Workflows
-
-#### 8.1. Core AI Reasoning & Learning
-*   **Hierarchical Reasoning (PIG + GCR):** The `OrchestrAgent` uses past **Preference-Informed Generation (`PIG`)** to inform a **`Generate-Critique-Refine` (`GCR`)** cycle among the Council of Veracity, resulting in multiple refined options for the user.
-*   **The Learning Loop:** The entire PIG+GCR process is captured in a `cdqn.sys.Experience` CDU. The **Cognitive Firewall** protocol ensures these are peer-reviewed by the Council for anomalies before being used for `OrchestrAgent` learning, preventing data poisoning.
-
-#### 8.2. Lifecycle & Security Protocols
-*   **Genesis Protocol:** The mandatory, automated process for a new node. It uses the embedded `Primordial Toolset` to hydrate its database, establish its identity, and create a secure-from-scratch Personal Agent Fabric.
-*   **Secure Tool Installation:** A workflow where the `SecurAgent` quarantines any new tool and uses primordial analysis tools to scan it for hazards before the user can approve its installation.
-*   **Decentralized Witness Protocol:** An active defense for high-risk actions. A `SecurAgent` cannot approve a sensitive operation (e.g., changing fabric permissions) without a concurrent, signed approval from a "witness" `SecurAgent` on another trusted device.
-*   **Cognitive Re-Projection:** A recovery mechanism. An agent's cognitive state can be instantly rebuilt from the `cdqnDB`'s immutable log, starting from the last known-good `CognitiveSnapshot`, surgically excising any corrupted learning.
+*   **Core Workflow: Agent Commanding a Worker**
+    1.  A `user-chat-message` `cdu` is created that matches the `ProxyAgent`'s `trigger_policy`.
+    2.  The `Orchestrator` activates the `ProxyAgent`.
+    3.  The `agent`'s LM component is invoked. The LM's response is a decision: "I need to use the `resize_image` tool."
+    4.  The `agent` consults its `tool_manifest`, finds that `resize_image` maps to `"worker:image-processor"`.
+    5.  The `agent`'s final action is to create a `worker-invocation` `cdu`, commanding the `image-processor` worker to run its `create-thumbnail` workflow.
+    6.  The `Orchestrator` detects this new `cdu` and begins the durable workflow execution for the worker.
 
 ---
 
-### Section 9: The Social Contract (Licensing & IP)
+## Part V: The Infrastructure - The `CDQN Node`
 
-A license is a set of verifiable and executable rules bound to an asset.
-*   **License as Data:** A `cdqn.sys.License` CDU defines rules in a machine-readable format.
-*   **Default Protection:** All new assets are automatically licensed under the **BaDaaS License**.
-*   **Automated Enforcement:** The `AssetAgent` and `cdqnRuntime` automatically check and enforce license permissions before any use or trade of an asset.
-*   **Economic Incentive for Openness:** The `Stargen` protocol rewards the facilitation of trades involving open-source assets more generously, creating an economic incentive for sharing.
+A `CDQN Node` is a sovereign, operational instance of the ecosystem.
+
+### 5.1 The `cdqnRuntime`: The Modular Monolith
+The primary executable, built in Rust on an asynchronous (`tokio`) foundation. It includes:
+*   **The `Orchestrator`:** A durable, Temporal-like workflow engine. It manages the reliable, asynchronous execution of all `agent` and `worker` activities, persisting workflow state to `cdqnDB` so that tasks can survive restarts.
+*   **Guardian Modules:** Trusted background services that manage the node's dynamic state and security.
+*   **Executor Pool:** A pool of secure, sandboxed environments for running WASI components.
+
+### 5.2 `cdqnDB`: The Causal Datastore
+A specialized database binary designed for `cdu`s.
+*   **Disk-First Durability:** Utilizes a **Write-Ahead Log (WAL)**. Every write is first committed to an on-disk log before being acknowledged, guaranteeing data is safe even in a crash.
+*   **Optimized I/O:** Employs a **Log-Structured Merge-Tree (LSM-Tree)** architecture. All new data is written sequentially to disk, maximizing write throughput and hardware longevity, which is ideal for immutable data.
+*   **Neural Graph Capabilities:** Maintains physical **subgraphs** for high-performance queries on dynamic metadata.
 
 ---
 
-### Glossary
+## Part VI: The Dynamic State Layer - The Living Network
 
-*   **Agent:** A stateful, long-lived, cognitive entity that acts on the user's behalf.
-*   **Causal Audit:** The security protocol for verifying a trading partner's economic history.
-*   **CDU (Context Datas Unit):** The atomic, immutable, signed data structure for all information.
-*   **Cognitive Firewall:** The protocol that prevents agent data poisoning by peer-reviewing `Experience` CDUs before learning.
-*   **Cognitive Re-Projection:** The recovery process of rebuilding an agent's state from a known-good snapshot.
-*   **Council of Veracity:** A Mixture of Experts (MoE) team of specialized agents.
-*   **Decentralized Witness:** The security protocol requiring a peer `SecurAgent`'s signature for high-risk operations.
-*   **Execution Tiers:** A passive security hierarchy (Kernel, Trusted, Ephemeral) that limits a tool's capabilities based on its origin.
-*   **FSSFF:** The veracity system: **F**actual, **S**emi-**F**actual, **S**emi-**F**iction, **F**iction, or **F**alse.
-*   **Genesis Protocol:** The automated bootstrapping process for a new node to securely provision itself.
-*   **HLC (Hybrid Logical Clock):** A distributed timestamping mechanism ensuring a verifiable causal order.
-*   **Native Host:** The privileged, native Rust application that runs the sandboxed `cdqnRuntime`.
-*   **Personal Agent Fabric:** A user's private, secure, P2P network of their own trusted devices.
-*   **Primordial Toolset:** The minimal set of essential, trusted tools embedded in the runtime binary.
-*   **`Stargen`:** The protocol-native process of minting new `cdqnStars` as a reward for contributing value.
-*   **Tool:** A stateless, deterministic function executed in a secure WASM sandbox.
-*   **Vibe Coding:** The core philosophy of expressing high-level intent over low-level algorithms.
-*   **WAL (Write-Ahead Log):** A durability mechanism in `cdqnDB` that ensures transactions
+A `cdu` is immutable, but its meaning and relevance evolve over time. This dynamic evolution is managed by the Guardian Modules, which store their findings in special, versioned "State" `cdu`s.
+
+### 6.1 The Veracity System: Tracking Truthfulness
+*   **Purpose:** To dynamically track the ecosystem's consensus on a `cdu`'s truthfulness.
+*   **Mechanism:** The `VeracityGuardian` manages a `VeracityState` `cdu` for each piece of data. This state can be challenged by any entity creating a `VeracityClaim` `cdu`, which provides new `proof`. The Guardian weighs the new evidence against the old, considering the reputation and quality of the proof, and can demote a `Factual` `cdu` to `Semi-Factual` if the evidence is strong enough.
+*   **Use Case: The Evolution of a "Fact"**
+    1.  A `cdu` about a scientific study (`cdu_A`) is initially classified as `Factual`.
+    2.  Months later, new studies (`cdu_B`, `cdu_C`) are published that refine the original findings.
+    3.  A `ResearchAgent` submits a `VeracityClaim` to demote `cdu_A` to `Semi-Factual`, using `cdu_B` and `cdu_C` as `proof`.
+    4.  The `VeracityGuardian` analyzes the claim. Seeing that the `proof` comes from highly-cited, `Factual` sources, it agrees and updates `cdu_A`'s `VeracityState`. Now, any agent using `cdu_A` will know its information is historical, not the current state-of-the-art.
+
+### 6.2 The QoS System: Measuring Influence
+*   **Purpose:** To quantify a `cdu`'s influence, relevance, and utility over time.
+*   **Mechanism:** The `QoSGuardian` manages a `QoSState` `cdu` for each piece of data, tracking metrics like `views`, `derivations` (how much new work it inspired), `citations` (its authority), and `corroborations` (how many other nodes hold a copy).
+*   **Use Case: Identifying Influential Ideas**
+    An `agent` is researching a topic. It finds `cdu_X` (a dry, `Factual` report) and `cdu_Y` (a speculative, `Semi-Fiction` think-piece). By checking their `QoSState`, the agent sees that `cdu_Y` has a `derivations` score of 500, while `cdu_X` has a score of 2. The agent can now reason: "While X is the literal fact, Y was the truly influential idea that sparked a wave of innovation."
+
+---
+
+## Part VII: The `cdqNetwork` - A Federation of Sovereign Nodes
+
+### 7.1 Behavioral Identity and the `Genesis cdu`
+A node's identity is not based on a secret master key. It is anchored by its **`Genesis cdu`**, a public "birth certificate" created upon installation. Trust is **earned over time** based on consistent, verifiable behavior.
+
+*   **`Genesis cdu` Schema (`cdqn.io/schemas/genesis-node/v1.0`):**
+    *   `vibe.nodeID` (String): The node's chosen logical name.
+    *   `vibe.initial_hlc` (HLC Object): The starting point of the node's history.
+    *   `vibe.claimed_capabilities` (Object): A declaration of the node's hardware.
+    *   `vibe.node_instance_id` (PublicKey): An ephemeral public key for the current runtime instance.
+
+### 7.2 The `cdqnChallenge` and Reputation System
+The network is self-policing through a proactive audit workflow.
+
+*   **Workflow: The Challenge**
+    1.  Node A's `NetworkGuardian` sends a `ChallengeRequest` `cdu` to Node B.
+    2.  Node B's `cdqnRuntime` must construct a `ChallengeResponse` `cdu`. This response includes its current `hlc`, its database's `db_state_root` (a Merkle root fingerprint of its entire state), and is co-signed by the responding `agent` and the node's current `node_instance_id` key.
+    3.  Node A receives the response and **cross-verifies** it with other peers. If Node B's claimed state is inconsistent, Node A can demand a **replay** of Node B's causal history to justify the discrepancy.
+    4.  Failure to provide a consistent history is definitive proof of a compromise.
+*   **Reputation Score:** The results of these continuous challenges are used to calculate a multi-faceted **Reputation Score** (`Liveness`, `Consistency`) for each peer, allowing the network to organically isolate and shun bad actors.
+
+---
+
+## Part VIII: The User Experience
+
+The primary interface for Vibe Coding is the `ProxyAgent`, and its initial UI is the **OS Terminal**. The `CDQN SDK` will provide a `cdqn-chat` application for this purpose, which supports the full UTF-8 character set of `cdqnLang`.
+
+---
+
+## Glossary
+*   **`agent`:** An autonomous, cognitive entity powered by a Language Model, responsible for planning.
+*   **Behavioral Identity:** The principle that trust is earned through verifiable, consistent actions, anchored by a `Genesis cdu`.
+*   **`cdu` (Context Data Unit):** The core, immutable data structure of the ecosystem.
+*   **`cdqnLang`:** The simple, declarative language used for "Vibe Coding," featuring UTF-8 operators like `←` and `→`.
+*   **`flow`:** A reusable, pure, stateless block of data transformation logic.
+*   **Genesis `cdu`:** A node's public "birth certificate."
+*   **Guardian Modules:** Trusted internal services of the `cdqnRuntime`.
+*   **HLC (Hybrid Logical Clock):** A causally-aware timestamp.
+*   **Lineage:** A causal, procedural link between `cdu`s (`derived_from`).
+*   **Link `cdu`:** A conceptual, semantic link between `cdu`s, created by an `agent`.
+*   **Nodal Sovereignty:** The principle that each node is the sole owner and authority for its own data.
+*   **Orchestrator:** The durable workflow engine within the `cdqnRuntime`.
+*   **QoS (Quality of Service):** A dynamic measure of a `cdu`s influence and utility.
+*   **Veracity:** A dynamic measure of the ecosystem's consensus on a `cdu`'s truthfulness.
+*   **`worker`:** A non-autonomous entity that deterministically executes pre-defined `workflows`.
