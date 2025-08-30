@@ -8,10 +8,14 @@ MemCDU is a content-addressable, confidence-aware memory system designed for int
 
 1.1 Foundational Concepts
 
-· Content-Addressable Storage: Every CDU is identified by a cryptographic hash of its content, ensuring verifiability and deduplication
-· Immutability Guarantee: CDUs are never modified; evolution occurs through new CDU creation with provenance links
-· Confidence-Aware Processing: DeepConf integration provides quality metrics for all operations
-· Distributed Semantics: Semantic clustering enables collaborative knowledge refinement across nodes
+* **Content-Addressable Storage:** Every CDU is identified by a cryptographic hash of its content, ensuring verifiability and deduplication
+* **Immutability Guarantee:** CDUs are never modified; evolution occurs through new CDU creation with provenance links
+* **Confidence-Aware Processing:** Deep Think with Confidence (DeepConf from Meta open source project) is a test-time method using model-internal confidence signals to filter out low-quality reasoning traces, enhancing both efficiency and accuracy—with no retraining required.
+memCDU adapts DeepConf principles modularly:
+  * Embeds local confidence metrics in each CDU.
+  * Applies dynamic filtering: low-confidence CDUs are marked low_trust and excluded early.
+  * Uses confidence-weighted merging during distributed consensus across cdqNetwork.
+* **Distributed Semantics:** Semantic clustering enables collaborative knowledge refinement across nodes
 
 1.2 Enhanced CDU Structure
 
