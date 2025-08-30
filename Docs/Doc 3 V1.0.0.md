@@ -1,4 +1,4 @@
-# memCDU — Context Data Unit Memory Architecture (Doc 3 V1.1.0)
+# memCDU — Context Data Unit Memory Architecture (Doc 3 V1.0.0)
 
 ## Executive Summary
 
