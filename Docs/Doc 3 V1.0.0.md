@@ -34,8 +34,6 @@ memCDU is the node-local Memory Context Data Unit store for agents on a cdqNetwo
 
 ## 4. Canonical CDU schema (WIT excerpt — normative)
 
-Includes full content variant list from v1.0.0.
-
 ```wit
 package cdu:memcdudm;
 
