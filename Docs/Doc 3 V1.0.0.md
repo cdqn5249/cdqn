@@ -2,7 +2,6 @@
 ## Executive summary
 
 memCDU is the node-local Memory Context Data Unit store for agents on a cdqNetwork. It defines the canonical CDU record, deterministic canonicalization, confidence semantics, token summaries, HLC/timestamp alignment, provenance/signature rules, CRDT-first merge posture, validator compatibility policy, and the memCDU WASI API. Design-only.
----
 
 ## 1. Purpose and scope
 
