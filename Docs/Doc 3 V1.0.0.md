@@ -131,7 +131,7 @@ record cdu {
     
     // Semantic Positioning
     vector: list<f32>,                  // 256+ dimension semantic vector
-    prime-host: option<s32>,            // Prime number anchor for semantic concepts
+    prime-host: option<s32>,            // Prime element anchor for semantic concepts
     scope: option<scope-label>,         // Semantic category label
     
     // Temporal Information
