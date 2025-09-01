@@ -6,8 +6,8 @@ End goal: Seamless transition from beginner-friendly high abstraction to raw Rus
 
 ## **Official CDQN Project Document List** (Docs directory)
 
-1.  **Doc 1:** AI Instructions - Document Versioning History (V1.0.0 - Cleaned for Readability)
-2.  **Doc 2:** BaDaaS License - The Agile Commercial Open-Core License (V1.1.0 - Draft with FAQ)
-3.  **Doc 3:** MemCDU: Context Data Unit Memory Architecture
+1.  **Doc 1:** AI Instructions - Document Versioning History
+2.  **Doc 2:** BaDaaS License - The Agile Commercial Open-Core License
+3.  **Doc 3:** memCDU - memories of Context Data Unit
    
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
