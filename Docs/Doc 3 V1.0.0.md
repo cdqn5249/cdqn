@@ -1,481 +1,327 @@
-# memCDU - Memory Context Data Unit
-## Executive Summary
+# memCDU - memories of Context Data Unit
+### Doc 3 Version 1.0.0
 
-**memCDU** is a sophisticated memory architecture for artificial intelligence systems that combines the reliability of content-addressable storage with the nuance of confidence-aware reasoning. It serves as the foundational data layer for decentralized knowledge systems, enabling AI agents to store, retrieve, and validate information with cryptographic certainty and contextual awareness.
+## Introduction: The Story of an AI That Remembers
 
-This document provides a complete technical specification and conceptual framework for memCDU, designed for both technical implementers and system architects.
+Imagine an AI research assistant named Archie. In its first version, Archie was brilliant but flawed. It could access vast libraries of information, but it had no true memory. It would answer a question perfectly one moment, and then forget the context in the next. It would sometimes cite a scientific paper from 2010 as the latest finding, unaware of a newer, contradictory paper from 2023. Worse, when pressed on a complex topic, it would occasionally "hallucinate"—confidently stating a plausible but incorrect fact. Archie was a powerful tool, but it wasn't a reliable partner.
 
----
+The problem wasn't Archie's intelligence; it was its memory. It lived in a perpetual present, with no stable foundation of what it knew, where that knowledge came from, or how reliable it was.
 
-## 1. Core Concept: The Memory Unit That Understands Itself
+**`memCDU` is the architecture that gives Archie a mind.**
 
-### 1.1 The Philosophy Behind memCDU
-Traditional memory systems store data passively. memCDU creates **active knowledge units** that carry their own:
-- **Provenance** (where they came from)
-- **Confidence** (how reliable they are)
-- **Context** (how they relate to other concepts)
-- **Validation** (how to verify their integrity)
+It is a new kind of memory, designed from the ground up for AI. It provides a foundation where every piece of knowledge is a verifiable, self-aware artifact. With `memCDU`, Archie can now build its own private, sovereign "universe of meaning" based on the data it processes. It can distinguish between hard facts, creative fiction, and known falsehoods. It can track how knowledge evolves over time and automatically resolve contradictions. It can learn new skills from experience and know, with mathematical certainty, which skills are the most effective.
 
-### 1.2 The CDU: An Intelligent Knowledge Container
-A **Context Data Unit (CDU)** is like a smart, self-aware data package. Each CDU contains:
-
-| Component | Purpose | Example |
-|-----------|---------|---------|
-| **Content** | The actual information | "Water boils at 100°C at sea level" |
-| **Fingerprint** | Unique content-based ID | sha256("Water boils at 100°C...") |
-| **Confidence Score** | Quality assessment | 0.95 (on a 0-1 scale) |
-| **Semantic Vector** | Meaning coordinates | [0.82, -0.15, 0.37, ...] |
-| **Provenance Trail** | Origin history | [Agent47@2023-05-21, Validator88] |
-| **Metadata** | Technical context | Format: text/plain, Source: verified |
-
-### 1.3 Key Innovations in Simple Terms
-- **Content-Addressing**: Find data by what it *is*, not where it's stored
-- **Immutable History**: Once created, a CDU never changes - updates create new CDUs
-- **Built-in Trust Metrics**: Every piece of information comes with its own "quality score"
-- **Decentralized Consensus**: Multiple AI systems can agree on truth without a central authority
+This document describes the architecture of that mind. It is a blueprint for transforming brilliant but unreliable AI into consistent, auditable, and truly intelligent partners.
 
 ---
+## 1. What is memCDU? A New Foundation for AI
 
-## 2. System Architecture: A Layered Approach
+**`memCDU`** is a complete memory architecture designed to provide AI systems with a trustworthy, adaptive, and sovereign long-term memory. It is not a database; it is a **verifiable knowledge substrate**—a foundational layer on which to build reliable AI.
 
-memCDU implements a three-layer architecture that separates concerns while maintaining tight integration:
+### Why It Matters: Key Capabilities
 
-### 2.1 Layer 1: Content Manager wasi component
-**Purpose**: Handles the intricacies of different information formats while ensuring security by treating all content as data rather than executable code.
+*   **It Solves Hallucination:** By creating a base of validated, high-integrity knowledge, `memCDU` acts as an AI's external "source of truth." It allows an AI to verify information *before* speaking, transforming it from a creative storyteller into a reliable expert.
+*   **It Provides Full Auditability:** Every piece of knowledge in `memCDU` has a cryptographic "chain of custody" (Provenance) that answers *where* it came from and *how* it was validated. This makes AI decisions fully auditable, a critical requirement for regulated industries like finance and healthcare.
+*   **It Enables Sovereign, Private AI:** The architecture is designed to run as a private, self-governing instance on a user's device or server. This allows for deep personalization and learning without ever compromising user privacy by sending data to the cloud.
+*   **It Creates a Mind That Learns and Evolves:** `memCDU` is not a static repository. It is a dynamic system that can discover new, fundamental concepts within its own knowledge, resolve contradictions, and learn which skills are most effective over time. It is a memory designed for growth.
 
-**Security Principle**: All content is treated as **data-only**. No content is ever executed directly. Code-like content (e.g., scripts, programs) is stored as inert data and can only be "executed" through specific, sandboxed interpreters outside the memCDU system.
+---
+## 2. Glossary of Core Concepts
 
-**Key Responsibilities**:
-- Format-specific canonicalization (preparing content for hashing)
-- Content validation and integrity checking
-- Type conversion and normalization
-- Security screening to prevent injection attacks
+*   **CDU (Context Data Unit):** The fundamental atom of knowledge. A secure, self-contained data package that holds not just the content, but all its metadata (provenance, confidence, vector, etc.).
+*   **Content-Addressing:** The principle of identifying data by a unique hash of its content. This guarantees that a CDU's ID is a perfect, tamper-proof fingerprint.
+*   **Provenance:** The verifiable, cryptographically signed history of a CDU, showing its origin and every transformation it has undergone.
+*   **`cdqnPSH` (Prime Semantics Hypersphere):** The advanced architecture of Layer 3. It is a "Geometric Field Theory of Meaning" where all knowledge exists on the surface of a multi-dimensional sphere. A CDU's nature is an *emergent property* of its geometric position.
+*   **Prime Ideal:** A fundamental concept (like "Verifiable Fact" or "Imaginative Fiction") that has a specific, canonical vector location on the hypersphere, acting as a "center of gravity" for meaning.
+*   **Scope Label:** A simple, low-cost **Ingestion-Time Intent Tag** (e.g., `factual`, `fiction`). It represents the *claimed identity* of a CDU at the moment of its creation, which is then subject to verification by the deeper `cdqnPSH` geometric analysis.
+*   **Polarity (`Z` Axis):** An independent axis representing the semantic "charge" of a CDU, from negative (contradictory, deconstructive) through neutral (objective) to positive (associative, constructive).
+*   **HLC (Hybrid Logical Clock):** A sophisticated timestamping mechanism that captures both real-world time and the causal relationship between events.
+*   **WASI Component:** A secure, sandboxed WebAssembly module. In this architecture, all high-level intelligence is encapsulated in a suite of distinct WASI components.
+*   **Host Environment:** The core `memCDU` runtime that loads WASI components and provides them with essential services (like memory access and LLM inference).
+*   **Trust List:** A cryptographically signed list of WASI component IDs that are authorized by the node's owner to make changes to its long-term memory. This forms the basis of the "Sovereign Trust" model for local consensus.
 
-**Supported Content Types**:
+---
+## 3. The `memCDU` Architecture: A Layered Approach
+
+`memCDU` is composed of three core layers, supported by an ecosystem of intelligent agentic components.
+
+### 3.1 Layer 1: The Content Manager - The Secure Gateway
+This layer is the universal, secure "front door" for all information. Its primary directive is security: **all content is treated as inert data, never as executable code.** It handles the complexities of diverse data formats, performs security screening, and prepares all content for the core system through a process of canonicalization.
+
+### 3.2 Layer 2: The memCDU Core - The Universal Data Container
+This is the heart of the system, defining the structure of the **Context Data Unit (CDU)**. The CDU is a rich, standardized container that packages every piece of knowledge with the intelligence needed to understand it. This is where the principles of content-addressing, immutability, and rich metadata are enforced.
+
+### 3.3 Layer 3: `cdqnPSH` - The Geometric Field of Meaning
+This is the system's "brain." It is a dynamic, self-governing universe of meaning where a CDU's nature is an emergent property of its position in a geometric space.
+*   **The Space is a Hypersphere:** All CDU `semantic vectors` are mathematically normalized, placing them on the surface of a multi-dimensional sphere.
+*   **Prime Ideals Define the "Continents":** Fundamental concepts like "Fact" and "Fiction" are not brittle tags but "capital cities" of conceptual continents on the sphere. A CDU's nature is determined by its proximity to these ideals.
+*   **Falsehood is Geometric:** A falsehood is not a label but a state. A direct contradiction is the **antipode** (the polar opposite point on the sphere) of a known fact. An inaccuracy is a CDU located in a region of the sphere that the node's local consensus has mapped as counter-factual.
+
+### 3.4 The Agentic Framework: A Component-Based Mind
+The intelligence of the `cdqnPSH` layer is implemented as a suite of discrete, secure WASI components, ensuring the system is modular and not a monolith. The Host Environment provides core services, and these components consume them to perform specialized tasks.
+
+**Key Components:**
+*   **`deepconf-validator`:** A "Quality Assurance" engine that rigorously validates new information using factual and semantic consistency checks before it is admitted to long-term memory.
+*   **`knowledge-distiller`:** A maintenance agent that promotes knowledge up the memory hierarchy by summarizing `mid-term` session memories into `long-term` insights.
+*   **`temporal-resolver`:** A maintenance agent that scans for and resolves time-based knowledge conflicts, ensuring the memory base remains coherent and up-to-date.
+*   **`ingestion-handler`:** The "front door" for all data, responsible for vectorization, polarity scoring, and assembling the final CDU for publication.
+*   **`factuality-engine`:** A real-time microservice for on-demand calculation of the mathematical `S_fact` (Factuality Score).
+*   **`semantic-topographer`:** A background agent that discovers new candidate concepts (Prime Ideals) by analyzing the geometric structure of the knowledge base.
+*   **`consensus-engine`:** Manages the local, sovereign voting process for new Prime Ideal proposals based on the node's Trust List.
+*   **`anchor-manager`:** The secure governor that ratifies and manages the official registry of Prime Ideals.
+
+---
+## 4. Key Workflows in Action
+
+### 4.1 The Journey to Truth: From a Question to a Validated Fact
+1.  **Query:** An agent asks a novel question. The system first performs a fast query against `memCDU`. If a high-confidence, pre-validated answer exists, it is returned instantly.
+2.  **Candidate Generation:** If no answer is found, the Host invokes the **`deepconf-validator`** component. The component calls a host-provided `llm-inference` service to generate multiple candidate answers.
+3.  **Validation:** The **`deepconf-validator`** fans out requests in parallel: it queries the `memCDU` API for factual evidence (using `factual` CDUs as a ground truth) and calls a host `nli-service` for semantic consistency checks between candidates.
+4.  **Selection & Publication:** The component selects the highest-scoring answer that passes a configured threshold. It assembles a new, high-quality `factual` CDU, complete with a `ValidationReceipt` in its metadata and a provenance trail linking back to the evidence used. It then publishes this new fact to `memCDU`. The next time this question is asked, the answer is retrieved instantly from memory.
+
+### 4.2 The Journey to Understanding: Conceptual Discovery
+1.  **Discovery:** On a schedule, the `semantic-topographer` agent runs an offline clustering analysis on the hypersphere. It discovers a new, coherent cluster of CDUs and calculates its **Prime Candidacy Score (`S_prime`)**.
+2.  **Proposal:** It submits this cluster as a "New Prime Proposal" CDU.
+3.  **Consensus:** The `consensus-engine` is triggered. It fetches the node's **Trust List** and invokes a `vote-on-proposal` function on each trusted component.
+4.  **Ratification:** If consensus is achieved, the `anchor-manager` is authorized. It assigns the next available prime number to the new concept and adds the new Prime Ideal (name, prime, canonical vector) to its registry. A new "capital city" is founded, permanently altering the node's map of meaning.
+
+### 4.3 The Loop of Learning: Procedural Self-Improvement
+1.  **Execution:** An agent retrieves a `procedural` CDU and executes the skill.
+2.  **Feedback:** The outcome (success or failure) is observed.
+3.  **Update:** The agent publishes a *new version* of the CDU with updated performance metrics (like `success-rate` and `usage-count`). This enriches the memory base with empirical data, allowing the agent to make better choices in the future.
+
+---
+## 5. Real-World Problems Solved
+
+*   **AI Hallucination:** `memCDU` acts as a verifiable long-term memory. An agent can cross-reference new information against its curated knowledge base, using the `factuality-engine` to compute a `S_fact` score before trusting the information. This is critical for applications like **Medical AI assistants** where accuracy is paramount.
+*   **Auditability & Compliance:** The immutable history and cryptographic provenance provide a perfect audit trail. For any AI decision, the system can produce a verifiable report of the exact knowledge used. This is essential for **Financial AI advisors** and other regulated applications.
+*   **Privacy & Personalization:** The sovereign, local-first architecture allows a **Personal AI assistant** to build a deep, nuanced understanding of a user's context, files, and preferences entirely on their own device, providing powerful personalization with absolute privacy.
+*   **Long-Term AI Coherence:** The combination of temporal resolution (`temporal-resolver`), memory consolidation (`knowledge-distiller`), and hierarchical memory prevents "AI dementia," ensuring that long-running agents, like an **AI Research Partner**, remain coherent and effective over years-long projects.
+
+---
+## 6. The Mathematical Foundation
+
+### 6.1 The Factuality Score (`S_fact`)
+This formula determines the degree of real-world factuality for a CDU.
+Let:
+*   `prox(V_cdu, V_fact_prime)` be the cosine similarity (from -1 to 1) between the CDU's vector and the "Verifiable Fact" Prime Ideal's vector.
+*   `neut(P_cdu)` be the neutrality score, calculated as `1 - abs(P_cdu)`, where `P_cdu` is the CDU's polarity (-1 to 1).
+
+**`S_fact(cdu) = prox(V_cdu, V_fact_prime) * neut(P_cdu)`**
+
+### 6.2 The Prime Candidacy Score (`S_prime`)
+This formula provides an objective measure for evaluating if a new concept is fundamental enough to become a new Prime Ideal.
+Let:
+*   `cohesion(C)` be the internal self-consistency of the candidate cluster `C`.
+*   `cohesion(Prime_max_cohesion)` be the cohesion of the most self-consistent existing Prime Ideal.
+*   `separation(C, Prime_min_separation)` be the proximity of `C` to its nearest neighboring Prime Ideal.
+
+**`S_prime(C) = (cohesion(C) / cohesion(Prime_max_cohesion)) * (1 - separation(C, Prime_min_separation))`**
+
+---
+## 7. Technical Reference & Data Structures
+
+### 7.1 The CDU Data Structures (WIT)
 ```wit
-variant content-type {
-    // Text Formats
-    text-plain,        // Plain text
-    text-html,         // HTML content (sanitized)
-    text-csv,          // CSV data
-    text-css,          // CSS stylesheets
-    text-javascript,   // JavaScript code (as data)
-    
-    // Structured Data
-    application-json,  // JSON data
-    application-xml,   // XML data
-    application-yaml,  // YAML data
-    
-    // Mathematical Representations
-    math-utf8,         // Unicode math symbols
-    math-latex,        // LaTeX math notation
-    math-expr-struct,  // Structured math expressions
-    
-    // Images
-    image-png,         // PNG images
-    image-jpeg,        // JPEG images
-    image-gif,         // GIF images
-    image-svg,         // SVG vector graphics (sanitized)
-    image-webp,        // WebP images
-    
-    // Audio
-    audio-mp3,         // MP3 audio
-    audio-wav,         // WAV audio
-    audio-ogg,         // Ogg Vorbis audio
-    
-    // Video
-    video-mp4,         // MP4 video
-    video-webm,        // WebM video
-    
-    // Documents
-    application-pdf,   // PDF documents
-    application-rtf,   // Rich Text Format
-    application-doc,   // Legacy Word documents
-    application-docx,  // Modern Word documents
-    
-    // Archives (treated as binary blobs)
-    application-zip,   // ZIP archives
-    application-tar,   // TAR archives
-    
-    // Programming languages (as text data only)
-    application-x-python,    // Python code (as data)
-    application-x-java,      // Java code (as data)
-    application-x-csrc,      // C source code (as data)
-    application-x-rust,      // Rust code (as data)
-}
-```
+package cdqn:memcdu-types@2.1.0
 
-2.2 Layer 2: memCDU Core - The Universal Data Layer
-
-Conceptual Foundation: The memCDU Core serves as the universal data container system that standardizes how knowledge is packaged, stored, and retrieved. It implements the principle that all knowledge, regardless of type, can be represented in a standardized format that carries both its content and metadata about that content.
-
-How It Works: The Core layer is built around the CDU(Context Data Unit) structure, which encapsulates seven key aspects of information:
-
-1. Identity: Cryptographic content-based addressing ensures each CDU has a unique, verifiable identity
-2. Content: The actual information being stored, in its canonicalized form
-3. Context: Semantic vectors that position the content in relation to other knowledge
-4. Confidence: Multi-level metrics that quantify the reliability of the content
-5. Provenance: A verifiable history of the content's origin and transformations
-6. Temporal Context: Precise timing information using Hybrid Logical Clocks
-7. Management: Data needed for storage optimization and retention policies
-
-Technical Specification:
-
-```wit
-// Core CDU Structure
-record cdu {
-    // Identification
-    id: string,                         // SHA-256 hash of canonicalized content
-    content-type: content-type,         // Type of content (from content-manager)
-    content-data: content-data,         // Actual content data
-    
-    // Semantic Positioning
-    vector: list<f32>,                  // 256+ dimension semantic vector
-    prime-host: option<s32>,            // Prime element anchor for semantic concepts
-    scope: option<scope-label>,         // Semantic category label
-    
-    // Temporal Information
-    hlc: hlc-record,                    // Hybrid Logical Clock timestamp
-    
-    // Confidence Metrics
-    confidence-metrics: confidence-metrics, // Multi-level confidence scores
-    token-confidences: option<list<f32>>,   // Per-token confidence (if applicable)
-    quality-score: f32,                 // Overall quality assessment (0-1)
-    
-    // Retention Management
-    retention-metrics: option<retention-metrics>, // Storage optimization data
-    
-    // Provenance and Metadata
-    provenance: list<string>,           // Chain of origin and transformations
-    metadata: metadata-record,          // Technical metadata
+// The lifecycle stage of a piece of knowledge
+enum memory-layer {
+  short-term,
+  mid-term,
+  long-term,
 }
 
-// Supporting Structures
+// Hooks for an RL agent to track procedure performance
+record procedural-metadata {
+  expected-utility: option<f32>,
+  usage-count: option<u64>,
+  success-rate: option<f32>,
+  pre-conditions: option<list<string>>,
+}
+
+// Rich metadata attached to every CDU
+record metadata-record {
+  data-rate: f32,
+  mime: option<string>,
+  layer: memory-layer,
+  // A separate scalar for semantic polarity, calculated at ingestion.
+  polarity: f32, 
+  semantic: option<semantic-metadata>,
+  episodic: option<episodic-metadata>,
+  procedural: option<procedural-metadata>,
+}
+
+// A sophisticated timestamp for causal ordering
 record hlc-record {
-    wall-seconds: u64,
-    wall-nanos: u32,
-    logical: u64
+  wall-seconds: u64,
+  wall-nanos: u32,
+  logical: u64
 }
 
 record confidence-metrics {
-    overall: f32,               // Primary confidence score (0-1)
-    tail: f32,                  // 10th percentile group confidence
-    bottom-percentile: f32,     // 5th percentile group confidence
-    group-confidences: list<f32> // Confidence scores for each content group
+  overall: f32,
+  group-confidences: list<f32>,
 }
 
-record retention-metrics {
-    retention-eta: f32,         // Retention threshold parameter
-    group-avg: f32,             // Average group confidence
-    lowest-group: f32,          // Lowest group confidence
-    warmup-proof: option<string> // Cryptographic proof of retention validity
-}
-
-record metadata-record {
-    data-rate: f32,             // Information density metric
-    mime: option<string>,       // MIME type (if different from content-type)
-    max-token-conf-len: option<u32>, // Maximum token confidence length
-    semantic: option<semantic-metadata>,   // Semantic-specific metadata
-    episodic: option<episodic-metadata>,   // Event sequence metadata
-    procedural: option<procedural-metadata> // Process knowledge metadata
-}
-
-// Semantic categorization
+// A classification of the CDU's intended nature at ingestion
 variant scope-label {
-    factual,
-    semi-factual,
-    semi-fiction,
-    fiction,
-    false
+  factual, semi-factual, semi-fiction, fiction, false
+}
+
+// The full list of supported content formats
+variant content-type {
+    text-plain, text-html, text-csv, text-css, text-javascript,
+    application-json, application-xml, application-yaml,
+    math-utf8, math-latex, math-expr-struct,
+    image-png, image-jpeg, image-gif, image-svg, image-webp,
+    audio-mp3, audio-wav, audio-ogg,
+    video-mp4, video-webm,
+    application-pdf, application-rtf, application-doc, application-docx,
+    application-zip, application-tar,
+    application-x-python, application-x-java, application-x-csrc, application-x-rust,
+}
+
+// The core CDU structure, corrected and finalized.
+record cdu {
+  id: string,
+  content-type: content-type,
+  content-data: list<u8>,
+  vector: list<f32>,
+  // The 'scope' label serves as an ingestion-time hint or
+  // the claimed identity of the CDU. It is subject to
+  // verification by the cdqnPSH layer's geometric analysis.
+  scope: option<scope-label>,
+  hlc: hlc-record,
+  confidence-metrics: confidence-metrics,
+  provenance: list<string>,
+  metadata: metadata-record,
 }
 ```
 
-Data Flow Process:
-
-1. Ingestion: Content enters through the Content Manager and gets canonicalized
-2. Packaging: The Core wraps the content with metadata, confidence metrics, and semantic context
-3. Storage: CDUs are stored in confidence-tiered storage with appropriate indexing
-4. Retrieval: Query processing uses multiple access paths (content, vector, metadata)
-5. Maintenance: Retention policies automatically manage storage based on confidence and usage
-
-2.3 Layer 3: cdqnPS Prime Semantic Layer - Meaning and Consensus
-
-Conceptual Foundation: The cdqnPS layer adds the dimension of meaning and truth validation to the raw data stored in the Core layer. It implements a sophisticated system for understanding how pieces of knowledge relate to each other, how reliable they are, and how they contribute to a coherent worldview.
-
-How It Works: cdqnPS implements three fundamental semantic concepts:
-
-1. Prime Anchoring: Concepts are anchored to prime elements that represent their verifiability level in integers Z
-   * Low primes (2, 3, 5): Factual, empirically verifiable knowledge
-   * High primes (97, 101): Subjective, opinion-based, fictional content or feelings like love
-   * Negative primes (-2, -3): Verified falsehoods or counterfactuals or opposites like hate
-2. Semantic Positioning: Each concept is positioned in a multi-dimensional space where:
-   * The primary dimension represents the fact/fiction spectrum in integers Z
-   * Secondary dimensions represent various semantic relationships in real numbers R between prime elements
-   * Distance between concepts indicates semantic similarity
-3. Consensus-Based Validation: Truth is established through a reputation-weighted voting system where:
-   * Agents with proven accuracy have greater voting power
-   * Proposed knowledge must meet confidence thresholds
-   * Controversial concepts require broader consensus
-
-Key Wasi Components:
-
-* Semantic Mapper: Positions concepts in the semantic space based on content analysis
-* Consensus Engine: Manages the reputation-weighted voting process
-* Truth Maintenance: Continuously evaluates and updates concept validity
-* Scope Manager: Dynamically categorizes content based on semantic position
-
-Validation Workflow:
-
-1. Proposal: New knowledge is proposed as a potential CDU
-2. Positioning: The semantic mapper determines its prime anchor and vector position
-3. Validation: Validator nodes evaluate the proposal against existing knowledge
-4. Voting: Reputation-weighted voting determines acceptance
-5. Integration: Accepted knowledge is integrated into the semantic graph
-
-Reputation System Mechanics:
-
-* Nodes gain reputation for accurate contributions through positive validation outcomes
-* Reputation decays over time (30-day half-life) to ensure recent accuracy matters most
-* Voting weight is proportional to reputation score
-* Malicious or consistently inaccurate nodes lose reputation and influence
-
 ---
+## 8. API Specifications: Host and Components
 
-3. Technical Workflows: How Memory Operations Work
-
-3.1 CDU Creation and Storage
-
-1. Content receipt and type identification
-2. Content-specific canonicalization
-3. SHA-256 hash generation for unique ID
-4. Metadata attachment (vector, confidence, provenance)
-5. Confidence-based storage tier placement
-6. ID return for future reference
-
-3.2 Information Retrieval Process
-
-1. Query Formation: Create semantic vector for search concept
-2. Vector Similarity Search: Find CDUs with closest vectors using HNSW algorithm
-3. Confidence Filtering: Exclude results below minimum confidence threshold
-4. Provenance Validation: Verify origin chain for remaining results
-5. Result Ranking: Sort by combined score (relevance × confidence × provenance strength)
-
-3.3 Confidence Calculation System
-
-Token-Level Confidence:
-
-```
-s_t = -ln p(token)  // Negative log probability of token correctness
-```
-
-Group Confidence:
-
-```
-G_i = mean(s_t for all tokens in group_i)
-```
-
-Overall Confidence:
-
-```
-raw_overall = mean(group_confidences)
-overall = calibrated_map(raw_overall)  // Temperature-scaled to [0,1]
-```
-
-Retention Threshold:
-
-```
-retention_eta = 0.8  // Default: keep top 80% by confidence
-```
-
-3.4 Consensus and Validation
-
-Anchor Replacement Rules:
-
-1. Challenge: New CDU challenges existing anchor with higher confidence
-2. Support Check: Validates semantic support from related concepts
-3. Weighted Voting: Reputation-weighted consensus among validator nodes
-4. Promotion: Upon success, new CDU becomes canonical anchor with prime host
-
-Reputation System:
-
-* Nodes gain reputation for accurate contributions
-* Reputation decays over time (30-day half-life default)
-* High-reputation nodes have greater voting weight
-
----
-
-4. Implementation Specifications
-
-4.1 Storage Architecture
-
-```
-Storage Tiers:
-- Tier 0: High-confidence semantic anchors (prime-host ≠ None, confidence > 0.9)
-- Tier 1: Medium-confidence content (confidence > retention_eta)
-- Tier 2: Low-confidence/pending content (confidence ≤ retention_eta)
-- Tier 3: Episodic and procedural memory (specialized access patterns)
-
-Indexing:
-- Primary: Content-addressable by SHA-256 ID
-- Secondary: HNSW vector index for semantic search
-- Tertiary: Confidence-based partitioning for efficient retrieval
-```
-
-4.2 Performance Optimization
-
-* Batch Processing: Bulk operations for CDU publication and retrieval
-* Tiered Caching: Multi-level caching based on access frequency and importance
-* Predictive Prefetching: Anticipate needed CDUs based on semantic patterns
-* Delta Encoding: Efficient storage of similar CDUs through difference encoding
-
-4.3 Security Implementation
-
-* Cryptographic Signatures: All provenance entries digitally signed
-* Poison Detection: Automated identification of conflicting information
-* Rate Limiting: Request throttling to prevent abuse
-* Access Control: Fine-grained permissions based on content type and sensitivity
-* Content Sandboxing: All executable content handled in isolated environments
-
----
-
-5. Use Cases and Applications
-
-5.1 Intelligent Fact-Checking System
-
-Process:
-
-1. Receive claim for verification
-2. Query semantic graph for related knowledge
-3. Calculate confidence-weighted truth probability
-4. Return result with supporting evidence chain
-
-Example:
-
-* Claim: "Paris is the capital of France"
-* Result: 0.98 confidence with 47 supporting sources
-* Evidence: [GeographyTextbook2023, WorldFactbook, ...]
-
-5.2 Decentralized Knowledge Base
-
-Process:
-
-1. Multiple specialized agents contribute knowledge
-2. memCDU handles conflict resolution and consensus
-3. Unified knowledge graph emerges through CRDT merging
-4. All agents benefit from shared understanding
-
-Example: Medical diagnosis system combining:
-
-* Radiology AI (image analysis)
-* Pathology AI (text analysis)
-* Clinical AI (patient history analysis)
-
-5.3 Automated Research Assistant
-
-Process:
-
-1. Gather information from multiple sources
-2. Store as CDUs with confidence scores
-3. Identify consensus and conflicts automatically
-4. Generate literature review with provenance tracking
-
----
-
-6. Technical Reference
-
-6.1 Content Canonicalization Rules
-
-1. Text Content: Unicode NFC normalization → UTF-8 encoding
-2. JSON Data: RFC-8785 JSON Canonicalization Scheme
-3. Binary Data: Base64url encoding → canonical byte representation
-4. Structured Data: Type-specific canonicalization rules
-5. Security Note: All content treated as data-only; no execution within system
-
-6.2 Mathematical Formulas
-
-Confidence Calibration:
-
-```
-calibrated_confidence = 1 / (1 + exp(-(raw_score - β) / τ))
-```
-
-Where:
-
-* β = calibration bias parameter
-* τ = temperature parameter
-
-Semantic Similarity:
-
-```
-similarity = cosine_similarity(query_vector, cdu_vector)
-```
-
-Reputation Decay:
-
-```
-reputation(t) = reputation(t₀) × 2^(-(t - t₀) / (30 × 24 × 3600))
-```
-
-6.3 Error Conditions and Handling
-
-Error Condition Detection Method Resolution
-ID Mismatch Hash verification Reject CDU
-Low Confidence Threshold check Tier 2 storage
-Provenance Break Signature verification Quarantine CDU
-Vector Inconsistency Semantic validation Recalculation
-Executable Content Content analysis Quarantine + alert
-
----
-
-7. System Integration
-
-7.1 API Specification
-
-Core Operations:
-
+### 8.1 Core `memCDU` Host API (WIT)
+This is the "microkernel" API provided by the Host Environment to all components.
 ```wit
-// Content management
-publish: func(content-type, content-data, vector, ...) → expected<string, error>
-get: func(id: string) → expected<cdu, error>
-query: func(vector, min-confidence, limit) → expected<list<cdu>, error>
+package cdqn:memcdu
 
-// Semantic operations
-publish-semantic: func(cdu) → expected<string, error>
-query-semantic: func(vector, min-reputation) → expected<list<cdu>, error>
+world memory-system {
+  export memcdu-api: cdqn:memcdu-api@2.0.0
+}
 
-// System management
-get-metrics: func() → system-metrics
-manage-storage: func(tier, operation) → expected<bool, error>
+interface memcdu-api {
+  use.cdqn:memcdu-types@2.1.0.{cdu, cdu-params, query-params}
+  
+  // All functions are async and non-blocking
+  
+  // Publishes a fully formed CDU to the memory store
+  async publish: func(new-cdu: cdu-params) -> expected<string, string>
+
+  // Retrieves a CDU by its unique, content-based hash ID
+  async get: func(id: string) -> expected<cdu, string>
+
+  // Performs a semantic search for CDUs closest to the query vector
+  async query: func(params: query-params) -> expected<list<cdu>, string>
+}
 ```
 
-7.2 Deployment Options
+### 8.2 WASI Component APIs (WIT)
+These are the interfaces for the key intelligent components.
 
-* Standalone: Single-node implementation for individual agents
-* Federated: Multi-node deployment with CRDT-based synchronization
-* Hybrid: Combination of local and federated storage tiers
+#### `deepconf-validator`
+```wit
+package cdqn:deepconf-validator
 
-7.3 Monitoring and Diagnostics
+world validator {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:llm-inference@1.0.0
+  import cdqn:nli-service@1.0.0
+  export deepconf-engine: cdqn:deepconf-engine@2.1.0
+}
 
-Key Metrics:
+interface llm-inference { /* ... */ }
+interface nli-service { /* ... */ }
 
-* Confidence distribution across CDUs
-* Storage tier utilization rates
-* Query performance and accuracy
-* Consensus effectiveness and reputation distribution
+interface deepconf-engine {
+  record Query { text: string, vector: list<f32> }
+  record ValidationReceipt {
+    llm-raw-score: f32,
+    factual-consistency-score: f32,
+    semantic-consistency-score: f32,
+    supporting-evidence-ids: list<string>,
+  }
+  record ValidatedAnswer {
+    final-answer-text: string,
+    final-confidence: f32,
+    new-cdu-id: string,
+    receipt: ValidationReceipt,
+  }
+  async validate-and-answer: func(q: Query, min-threshold: f32) -> expected<ValidatedAnswer, string>
+}
+```
 
-Diagnostic Tools:
+#### `ingestion-handler`
+```wit
+package cdqn:ingestion
 
-* CDU integrity verification utilities
-* Confidence calibration validation
-* Provenance chain audit tools
-* Semantic consistency checkers
+world ingestion-pipeline {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:embedding-service@1.0.0
+  import cdqn:polarity-service@1.0.0
+  export ingestion-handler: cdqn:ingestion-handler@1.0.0
+}
+
+interface embedding-service { /* ... */ }
+interface polarity-service { /* ... */ }
+
+interface ingestion-handler {
+  record RawContent { content-bytes: list<u8>, claimed-scope: option<scope-label> }
+  // Returns the ID of the newly created CDU.
+  async process-and-publish: func(content: RawContent) -> expected<string, string>
+}
+```
+
+#### `factuality-engine`
+```wit
+package cdqn:factuality
+
+world fact-checker {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:anchor-manager-query@1.0.0 // A read-only interface to get Prime vectors
+  export factuality-engine: cdqn:factuality-engine@1.0.0
+}
+
+interface anchor-manager-query { /* ... */ }
+
+interface factuality-engine {
+  use.cdqn:memcdu-types@2.1.0.{cdu}
+  // Implements the S_fact formula
+  calculate-factuality: func(target-cdu: cdu) -> f32
+}
+```
+
+#### `knowledge-distiller`
+```wit
+package cdqn:distiller
+
+world knowledge-distiller {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:llm-inference@1.0.0 // For summarization
+  export distiller-engine: cdqn:distiller-engine@1.0.0
+}
+
+interface distiller-engine {
+  // Takes a list of mid-term CDU IDs from a session.
+  // Returns the ID of the new long-term summary CDU.
+  async distill-session: func(session-cdu-ids: list<string>) -> expected<string, string>
+}
+```
 
 ---
+## 9. Conclusion
 
-8. Conclusion
+`memCDU` represents a complete blueprint for a new generation of AI memory. By integrating a secure, content-addressable data layer with a dynamic and geometrically grounded model of meaning, it provides a solution for building AI systems that are not only powerful but also auditable, private, and capable of genuine learning and conceptual growth.
 
-memCDU represents a significant advancement in memory systems for artificial intelligence, combining robust technical foundations with sophisticated semantic understanding. Its layered architecture provides both immediate practicality and long-term extensibility, making it suitable for everything from individual AI agents to large-scale decentralized knowledge networks.
-
-The system's unique approach to content-aware storage, confidence-based management, and distributed consensus positions it as a foundational technology for the next generation of AI systems that require reliable, auditable, and collaborative knowledge management.
-
-```
+This architecture, with its clear separation between a core memory host and a suite of specialized intelligent components, moves beyond simply storing data; it creates a framework for cultivating knowledge. It is a self-governing, self-organizing, and self-improving foundation for the trustworthy AI of the future.
