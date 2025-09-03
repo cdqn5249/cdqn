@@ -54,6 +54,19 @@ This is the system's "brain." It is a dynamic, self-governing universe of meanin
 *   **Prime Ideals Define the "Continents":** Fundamental concepts like "Fact" and "Fiction" are not brittle tags but "capital cities" of conceptual continents on the sphere. A CDU's nature is determined by its proximity to these ideals.
 *   **Falsehood is Geometric:** A falsehood is not a label but a state. A direct contradiction is the **antipode** (the polar opposite point on the sphere) of a known fact. An inaccuracy is a CDU located in a region of the sphere that the node's local consensus has mapped as counter-factual.
 
+### 3.4 The Agentic Framework: A Component-Based Mind
+The intelligence of the `cdqnPSH` layer is implemented as a suite of discrete, secure WASI components, ensuring the system is modular and not a monolith. The Host Environment provides core services, and these components consume them to perform specialized tasks.
+
+**Key Components:**
+*   **`deepconf-validator`:** A "Quality Assurance" engine that rigorously validates new information using factual and semantic consistency checks before it is admitted to long-term memory.
+*   **`knowledge-distiller`:** A maintenance agent that promotes knowledge up the memory hierarchy by summarizing `mid-term` session memories into `long-term` insights.
+*   **`temporal-resolver`:** A maintenance agent that scans for and resolves time-based knowledge conflicts, ensuring the memory base remains coherent and up-to-date.
+*   **`ingestion-handler`:** The "front door" for all data, responsible for vectorization, polarity scoring, and assembling the final CDU for publication.
+*   **`factuality-engine`:** A real-time microservice for on-demand calculation of the mathematical `S_fact` (Factuality Score).
+*   **`semantic-topographer`:** A background agent that discovers new candidate concepts (Prime Ideals) by analyzing the geometric structure of the knowledge base.
+*   **`consensus-engine`:** Manages the local, sovereign voting process for new Prime Ideal proposals based on the node's Trust List.
+*   **`anchor-manager`:** The secure governor that ratifies and manages the official registry of Prime Ideals.
+  
 ---
 ## 4. `memCDU` as the Foundation for the Actor Model
 
@@ -150,6 +163,97 @@ interface memcdu-api {
   async publish: func(new-cdu: cdu-params) -> expected<string, string>
   async get: func(id: string) -> expected<cdu, string>
   async query: func(params: query-params) -> expected<list<cdu>, string>
+}
+```
+### 6.3 WASI Component APIs (WIT)
+These are the interfaces for the key intelligent components.
+
+#### `deepconf-validator`
+```wit
+package cdqn:deepconf-validator
+
+world validator {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:llm-inference@1.0.0
+  import cdqn:nli-service@1.0.0
+  export deepconf-engine: cdqn:deepconf-engine@2.1.0
+}
+
+interface llm-inference { /* ... */ }
+interface nli-service { /* ... */ }
+
+interface deepconf-engine {
+  record Query { text: string, vector: list<f32> }
+  record ValidationReceipt {
+    llm-raw-score: f32,
+    factual-consistency-score: f32,
+    semantic-consistency-score: f32,
+    supporting-evidence-ids: list<string>,
+  }
+  record ValidatedAnswer {
+    final-answer-text: string,
+    final-confidence: f32,
+    new-cdu-id: string,
+    receipt: ValidationReceipt,
+  }
+  async validate-and-answer: func(q: Query, min-threshold: f32) -> expected<ValidatedAnswer, string>
+}
+```
+
+#### `ingestion-handler`
+```wit
+package cdqn:ingestion
+
+world ingestion-pipeline {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:embedding-service@1.0.0
+  import cdqn:polarity-service@1.0.0
+  export ingestion-handler: cdqn:ingestion-handler@1.0.0
+}
+
+interface embedding-service { /* ... */ }
+interface polarity-service { /* ... */ }
+
+interface ingestion-handler {
+  record RawContent { content-bytes: list<u8>, claimed-scope: option<scope-label> }
+  // Returns the ID of the newly created CDU.
+  async process-and-publish: func(content: RawContent) -> expected<string, string>
+}
+```
+
+#### `factuality-engine`
+```wit
+package cdqn:factuality
+
+world fact-checker {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:anchor-manager-query@1.0.0 // A read-only interface to get Prime vectors
+  export factuality-engine: cdqn:factuality-engine@1.0.0
+}
+
+interface anchor-manager-query { /* ... */ }
+
+interface factuality-engine {
+  use.cdqn:memcdu-types@2.1.0.{cdu}
+  // Implements the S_fact formula
+  calculate-factuality: func(target-cdu: cdu) -> f32
+}
+```
+
+#### `knowledge-distiller`
+```wit
+package cdqn:distiller
+
+world knowledge-distiller {
+  import cdqn:memcdu-api@2.0.0
+  import cdqn:llm-inference@1.0.0 // For summarization
+  export distiller-engine: cdqn:distiller-engine@1.0.0
+}
+
+interface distiller-engine {
+  // Takes a list of mid-term CDU IDs from a session.
+  // Returns the ID of the new long-term summary CDU.
+  async distill-session: func(session-cdu-ids: list<string>) -> expected<string, string>
 }
 ```
 
