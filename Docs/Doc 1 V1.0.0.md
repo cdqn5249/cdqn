@@ -8,13 +8,13 @@ For decades, the dominant paradigm in software has been the mutable state. We bu
 
 An immutable architecture, where data is never overwritten but only appended, provides a revolutionary advantage: the ability to roll back to any previous stable state with absolute, mathematical certainty. This makes systems not only more secure and easier to audit, but also fundamentally more agile.
 
-The **`cdqn` ecosystem** takes this principle one step further. It combines the rock-solid foundation of immutability with the dynamic, adaptive power of **agentic technology**. We envision a future where the core of our most critical systems—from enterprise infrastructure to personal devices—is built on this synthesis. We believe that systems which are both verifiably immutable and intelligently autonomous will be the foundation of technology for the next decades.
+The **`cdqn` ecosystem**, for context datas query nodes, takes this principle one step further. It combines the rock-solid foundation of immutability with the dynamic, adaptive power of **agentic technology**. We envision a future where the core of our most critical systems—from enterprise infrastructure to personal devices—is built on this synthesis. We believe that systems which are both verifiably immutable and intelligently autonomous will be the foundation of technology for the next decades.
 
-This manifesto lays out the core principles and foundational constraints of the `cdqn` ecosystem. It is a blueprint for this new paradigm, a guide to building the **smart, immutable systems** of the future.
+This manifesto lays out the core principles and foundational constraints of the `cdqn` ecosystem.
 
-## 2. The Core Principle: Smart, Immutable Systems
+## 2. The Core Principle
 
-The single guiding principle of the `cdqn` ecosystem is the creation of **smart, immutable systems.**
+The single guiding principle of the `cdqn` ecosystem is the creation of **smart immutable systems.**
 
 *   **Immutable:** Every piece of knowledge, every state change, and every action is recorded as a permanent, content-addressed, and cryptographically verifiable artifact (a `cdu`). The past is never overwritten; it is only superseded by a new, linked present. This creates a foundation of perfect auditability and integrity.
 *   **Smart:** The system is not just a passive log. It is a dynamic, self-organizing, and self-improving architecture. It is designed for agents to reason, learn from experience, and even evolve their own fundamental understanding of the world through rigorous, mathematically grounded processes.
@@ -56,6 +56,10 @@ To ensure the core principle is upheld, the `cdqn` ecosystem is governed by six 
 ### Constraint 6: All Signatures Must Use Ephemeral Keys.
 *   **The Law:** When a CDU is signed to create a `provenance` entry, or when a message is signed on the `cdqNetwork`, the signature must be generated with a short-lived, single-use, or session-based ephemeral key. This key must be derived from a long-term master identity key.
 *   **The Rationale:** This is an advanced security principle that provides **forward secrecy and mitigates key compromise**. If a node's long-term identity key is stolen, attackers cannot use it to forge signatures for *past* actions. This dramatically reduces the attack surface and ensures the long-term integrity of the historical `provenance` trails that are central to the ecosystem's trustworthiness.
+
+### Constraint 7: 1 ProxyAgent for 1 user
+*   **The Law:** User do not interact directly with the system, but must use a ProxyAgent as their representative entity in the cdqNetwork. A user can have many devices as nodes, but only the same ProxyAgent as instance will be used in it swarm of nodes.
+*   **The Rationale:** Security purpose by minimising the user access to the node system, so that he can focus on private task or usage via a smart assistant.
 
 ## 5. Conclusion: The Path Forward
 
