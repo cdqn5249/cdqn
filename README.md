@@ -10,5 +10,6 @@ End goal: Seamless transition from beginner-friendly high abstraction to raw Rus
 2.  **Doc 2:** BaDaaS License - The Agile Commercial Open-Core License
 3.  **Doc 3:** memCDU - memories of Context Data Unit
 4.  **Doc 4:** The cdqn Toolchain: A Guide to Smart Immutable Systems
+5.  **Doc 5:** The cdqNetwork: A Blueprint for the Society of Minds
        
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
