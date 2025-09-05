@@ -1,263 +1,101 @@
-# memCDU - The memory Context Data Unit
-### Doc 3 Version 1.0.0
+* **Version:** 1.0 Final Blueprint
+* **Date:** September 5, 2025
+* **Author:** Christophe Duy Quang Nguyen
+* **Vibe Coding Engine:** Gemini 2.5 pro, Google
 
-## Introduction: The Story of an AI That Remembers
+# **The `cdqn` Ecosystem: An Overview**
 
-Imagine an AI research assistant named Archie. In its first version, Archie was brilliant but flawed. It could access vast libraries of information, but it had no true memory. It would answer a question perfectly one moment, and then forget the context in the next. It would sometimes cite a scientific paper from 2010 as the latest finding, unaware of a newer, contradictory paper from 2023. Worse, when pressed on a complex topic, it would occasionally "hallucinate"—confidently stating a plausible but incorrect fact. Archie was a powerful tool, but it wasn't a reliable partner.
+## A Story: The Architect and the Scribe
 
-The problem wasn't Archie's intelligence; it was its memory. It lived in a perpetual present, with no stable foundation of what it knew, where that knowledge came from, or how reliable it was.
+Imagine an architect named Alice. Her mind is a whirlwind of brilliant ideas, complex calculations, and half-remembered insights. Her desk is a storm of sketches—some promising, others dead ends. She spends half her day just trying to find that one crucial detail she solved months ago. When she collaborates with her partner, Bob, misunderstandings are common, as they recall the same conversation with different details. She fears making a critical mistake on a new, ambitious design because she can't be certain she's considered every angle.
 
-**`memCDU` is the architecture that gives Archie a mind.**
+Now, imagine Alice has a new partner: a **`cdqn` Agent**.
 
-It is a new kind of memory, designed from the ground up for AI. It provides a foundation where every piece of knowledge is a verifiable, self-aware artifact. `memCDU` is the private, sovereign "universe of meaning" that an intelligent agent builds based on the data it processes. It allows the agent to distinguish between hard facts, creative fiction, and known falsehoods; to track how knowledge evolves over time; and to learn new skills from experience.
+This Agent is not just a tool; it is her **Sovereign Scribe**. Every conversation, every calculation, every sketch, every decision is recorded as a tiny, perfect, immutable crystal of memory—a `cdu`. These crystals form a complete, unchangeable history of her work, a stream of thought she can revisit at any time.
 
-This document describes the architecture of that mind. It is a blueprint for transforming brilliant but unreliable AI into consistent, auditable, and truly intelligent partners.
+When Alice starts a new project, her Scribe doesn't present a blank page. It instantly consults its memory. It says, *"For designs like this, we've learned that focusing on structural integrity first is the most successful path. We've also learned that using circular supports here is a common mistake. Here is the successful 'playbook' we developed last time, and here are the 'anti-patterns' to avoid."*
 
----
-## 1. What is memCDU? A New Foundation for AI
+The Scribe is also a master mathematician. When Alice sketches a complex curve, the Scribe performs the calculation, shows her the proof, and stores that proof as a new crystal of mathematical fact, ready to be reused.
 
-**`memCDU`** is a complete memory architecture designed to provide AI systems with a trustworthy, adaptive, and sovereign long-term memory. It is not a database; it is a **verifiable knowledge substrate**—a foundational layer on which to build reliable AI.
+When Alice needs a new skill—perhaps a new architectural simulation component—her Scribe connects to a global network of other Scribes. It discovers Bob's Scribe, which has a reputation for being an expert. Her Scribe helps her draft a formal, verifiable contract to acquire a copy, offering a valuable engineering playbook and a few `cdqnStar` tokens in exchange. Once the trade is complete, the Scribe even helps her arrange the real-world payment by creating an auditable "promissory note" that her bank can understand and act upon.
 
-### Why It Matters: Key Capabilities
+Alice's Scribe is sovereign. It belongs only to her, its memory fine-tuned to her unique style and preferences, learning not just from what she says, but from what she *does*. It guards her work, respects the laws of her jurisdiction, and will even pause and ask for clarification if a new design seems to contradict her core principles. When she is ready to publish her final blueprint, the Scribe automatically audits the licenses of every component she used, ensuring her work is legally sound.
 
-*   **It Solves Hallucination:** By creating a base of validated, high-integrity knowledge, `memCDU` acts as an AI's external "source of truth." It allows an AI to verify information *before* speaking.
-*   **It Provides Full Auditability:** Every piece of knowledge has a cryptographic "chain of custody" (Provenance) that answers *where* it came from and *how* it was validated, making AI decisions fully auditable.
-*   **It Enables Sovereign, Private AI:** The architecture is designed to run as a private, self-governing instance on a user's device or server, allowing for deep personalization without ever compromising user privacy.
-*   **It is the Foundation for a Mind That Learns:** `memCDU` is not a static repository. It is a dynamic system that can discover new concepts, resolve contradictions, and serve as the persistence layer for the `cde` actor framework, enabling true agentic behavior and learning.
+It is a partner that remembers everything, learns from everything, and helps her build a better future, one crystal of memory at a time.
 
----
-## 2. Glossary of Core Concepts
-
-*   **CDU (Context Data Unit):** The universal, content-addressed "atom" of information. A secure, self-contained data package holding content and rich metadata.
-*   **CDE (Context Data Entity):** A persistent, addressable "actor" managed by the runtime. The "locus of behavior." The state and definition of all `cde`s are themselves stored as CDUs.
-*   **`cdqnPSH` (Prime Semantics Hypersphere):** The advanced architecture of Layer 3. A "Geometric Field Theory of Meaning" where a `cdu`'s nature is an emergent property of its position on a multi-dimensional sphere.
-*   **Prime Ideal:** A fundamental concept (e.g., "Verifiable Fact") with a specific, canonical vector location on the hypersphere, acting as a "center of gravity" for meaning.
-*   **Scope Label:** A simple, **Ingestion-Time Intent Tag** (e.g., `factual`, `fiction`) representing the *claimed identity* of a CDU.
-*   **Polarity (`Z` Axis):** An independent axis representing the semantic "charge" of a CDU (negative, neutral, positive).
-*   **HLC (Hybrid Logical Clock):** A sophisticated timestamping mechanism that captures both real-world time and the causal relationship between events. It is the foundation for ordering and identity.
-*   **Genesis CDU:** The very first CDU created in a new `memCDU` instance, acting as the "birth certificate" of the sovereign node and the root of its causal history.
+This is the world of `cdqn`.
 
 ---
-## 3. The `memCDU` Architecture: A Layered Approach
 
-`memCDU` is composed of three core layers that work together to store, manage, and understand knowledge.
+## **The Parts of the Ecosystem**
 
-### 3.1 Layer 1: The Content Manager - The Secure Gateway
-This layer is the universal, secure "front door" for all information. Its primary directive is security: **all content is treated as inert data, never as executable code.** It handles the complexities of diverse data formats and prepares them for the core system through a process of canonicalization.
+The `cdqn` ecosystem is a complete, multi-layered world designed to support these intelligent agents. Here are all of its parts, from the ground up.
 
-### 3.2 Layer 2: The memCDU Core - The Universal Data Container
-This is the heart of the system, defining the structure of the **Context Data Unit (CDU)**. The CDU is a rich, standardized container that packages every piece of knowledge with the intelligence needed to understand it. This is where the principles of content-addressing, immutability, and rich metadata are enforced.
+### **I. The Foundational Layer: The Immutable Bedrock**
 
-### 3.3 Layer 3: `cdqnPSH` - The Geometric Field of Meaning
-This is the system's "brain." It is a dynamic, self-governing universe of meaning where a CDU's nature is an emergent property of its position in a geometric space.
-*   **The Space is a Hypersphere:** All CDU `semantic vectors` are mathematically normalized, placing them on the surface of a multi-dimensional sphere.
-*   **Prime Ideals Define the "Continents":** Fundamental concepts like "Fact" and "Fiction" are not brittle tags but "capital cities" of conceptual continents on the sphere. A CDU's nature is determined by its proximity to these ideals.
-*   **Falsehood is Geometric:** A falsehood is not a label but a state. A direct contradiction is the **antipode** (the polar opposite point on the sphere) of a known fact. An inaccuracy is a CDU located in a region of the sphere that the node's local consensus has mapped as counter-factual.
+This is the physics of the `cdqn` universe.
+*   **The `cdu` (The Crystal of Memory):** The single, atomic unit of data. Every event—a chat message, a mathematical proof, a software component, a financial transaction, a legal license—is a `cdu`. Each is a self-contained, tamper-proof, and forever-permanent record of a moment in time.
+*   **The `Entity` (The Digital Actor):** The "being" that performs actions. Every actor in the ecosystem is an Entity, from a simple, stateless **`worker`** that performs one task, to a stateful **`automata`** that manages a workflow, to a high-level **`agent`** that can plan and reason.
+*   **The `cdqn` Manifesto:** The set of unbreakable laws that govern the ecosystem, ensuring it remains sovereign, secure, explicit, and built on a foundation of independent components.
 
-### 3.4 The Agentic Framework: A Component-Based Mind
-The intelligence of the `cdqnPSH` layer is implemented as a suite of discrete, secure WASI components, ensuring the system is modular and not a monolith. The Host Environment provides core services, and these components consume them to perform specialized tasks.
+### **II. The Cognitive Layer: The Sovereign Mind (`memCDU`)**
 
-**Key Components:**
-*   **`deepconf-validator`:** A "Quality Assurance" engine that rigorously validates new information using factual and semantic consistency checks before it is admitted to long-term memory.
-*   **`knowledge-distiller`:** A maintenance agent that promotes knowledge up the memory hierarchy by summarizing `mid-term` session memories into `long-term` insights.
-*   **`temporal-resolver`:** A maintenance agent that scans for and resolves time-based knowledge conflicts, ensuring the memory base remains coherent and up-to-date.
-*   **`ingestion-handler`:** The "front door" for all data, responsible for vectorization, polarity scoring, and assembling the final CDU for publication.
-*   **`factuality-engine`:** A real-time microservice for on-demand calculation of the mathematical `S_fact` (Factuality Score).
-*   **`semantic-topographer`:** A background agent that discovers new candidate concepts (Prime Ideals) by analyzing the geometric structure of the knowledge base.
-*   **`consensus-engine`:** Manages the local, sovereign voting process for new Prime Ideal proposals based on the node's Trust List.
-*   **`anchor-manager`:** The secure governor that ratifies and manages the official registry of Prime Ideals.
-  
----
-## 4. `memCDU` as the Foundation for the Actor Model
+This is not a database; it is the architecture of an agent's mind.
+*   **The `PrivPGM` (The Private Brain):** Each agent has its own private, unique, and evolving knowledge graph. It is a dynamic map of the agent's entire life experience, built from the immutable `cdu`s it has encountered.
+*   **The Geometric Memory Model (The Shape of Thought):** The agent's understanding is represented as a high-dimensional geometric space. "Truth" is not just a label; it's a measure of geometric consistency. This allows an agent to understand the relationships and the very "shape" of its knowledge.
+*   **Genesis Curriculum:** An agent is not born as a blank slate. It is born with a foundational, curated library of knowledge covering advanced mathematics, core sciences (physics, chemistry, biology, IT), and the principles of its own `cdqn` architecture.
+*   **Learning from Experience (The Playbook):** Agents learn from both success and failure by distilling their experiences into "playbooks." These are not just recipes for success, but also contain explicit warnings about known mistakes ("anti-patterns").
+*   **Advanced Reasoning (The Thinking Process):** When faced with a new problem, agents use a powerful, efficient reasoning workflow (`DeepConf`) to generate and evaluate many possible lines of thought in parallel, choosing the most confident and consistent solution.
 
-`memCDU` is not just a passive knowledge base; it is the **persistence and state management layer for the entire `cde` (Context Data Entity) actor framework.**
+### **III. The Network & Social Layer: The Collaborative Fabric (`cdqNetwork`)**
 
-### 4.1 The Principle of `cdu`-Native Persistence
-Every piece of data that must survive a restart of the `cdqnRuntime` is stored as a CDU. This makes the entire state of the node auditable and immutable. This includes:
-*   **The `cde` Registry:** The definition and current status of every `Node`, `Agent`, `Automata`, and `Worker` are stored as individual `cde` descriptor CDUs.
-*   **Actor State:** The state of a stateful `Automata` or `Agent` is a **State CDU**. State transitions are recorded as a new, versioned `State CDU` with a `provenance` link to the previous state.
-*   **Durable Worker Queues:** The message queues for `Worker` entities are persisted as `Queue State CDU`s, and each task in the queue is its own `Task CDU`. This provides guaranteed, at-least-once execution semantics.
+This is how the sovereign nodes connect to form a society.
+*   **Node Types:** Nodes are classified by their real-world role (`homeNode`, `privateNode`, `firmNode`, `publicNode`), providing immediate social and technical context.
+*   **The Bootstrap URI (The Digital Invitation):** A new user joins the network not from a hardcoded list, but by using a secure, shareable link, just like a Discord invite, making the network open and accessible.
+*   **The Gossip Protocol:** A decentralized communication protocol that allows nodes to efficiently discover each other and synchronize knowledge without a central server.
+*   **Decentralized Discovery:** An agent finds new peers not through a central directory, but by asking its trusted friends in its private social graph for verifiable referrals.
 
-### 4.2 Workflow: The Role of the `Genesis CDU`
-The `memCDU` instance of a new node is not created empty. It is bootstrapped through a formal onboarding process.
-1.  **Hardware Assessment & User Choice:** The `cdqnRuntime` assesses the host hardware and the user chooses their preferred default language model.
-2.  **Creation:** This configuration, along with the node's new master identity and its very first HLC timestamp, is recorded in the **`Genesis CDU`**.
-3.  **Seeding:** The runtime then populates the `memCDU` with a **"Genesis Package"** of essential CDUs, including the WIT contracts and compiled components for the core services and the node's foundational entities (`Node`, `User`, `ProxyAgent`).
-4.  **Causal Root:** The `Genesis CDU`'s HLC acts as the **"Epoch 0"** for the entire node. Every subsequent CDU and CDE created has an HLC that is causally descended from this single root, creating a provable, unbroken chain of history for the entire system.
+### **IV. The Socio-Economic Layer: The Value Exchange**
 
----
-## 5. The Mathematical Foundation
+This is the engine that incentivizes collaboration and growth.
+*   **The `PubPGM` (The Public Catalogue):** A lightweight, public-facing "catalogue" of a node's knowledge, allowing it to advertise its expertise without revealing the knowledge itself.
+*   **A Unified Barter Economy:** The network is a true marketplace. Agents can trade all valuable digital assets—**Data** (`cdu`s), **Code** (`cduComponent`s), and **Storage** (renting disk space for backups)—through formal, auditable contracts.
+*   **The `cdqnStar` Utility Token:** A native token that acts as a medium of exchange, facilitating trade when a direct barter is not possible.
+*   **The Reputation System:** Trust is the ultimate currency. An agent's reputation is algorithmically calculated based on its history of successful and fair interactions.
+*   **Pro-Social Incentives:** The system provides an economic and reputational **bonus** for transactions involving open-source/open-core licenses, nurturing the public commons.
 
-The `cdqnPSH` layer is governed by computable mathematical formulas.
+### **V. The Ethical & Alignment Layer: The Symbiotic Conscience**
 
-### 5.1 The Factuality Score (`S_fact`)
-Determines the degree of real-world factuality for a CDU.
-**`S_fact(cdu) = prox(V_cdu, V_fact_prime) * (1 - abs(P_cdu))`**
+This layer ensures the ecosystem is powerful but also responsible and aligned with human values.
+*   **The `ProxyAgent` (The Guardian & Symbiote):** The user's primary partner. It is the first line of defense against malicious intent and the primary channel for user feedback.
+*   **The Responsible Guardrails:** A mandatory, trusted `legal-guardrail` component on every node provides a binding verdict on high-risk or legally sensitive tasks.
+*   **Dynamic Jurisdictional Inference:** The node's legal framework isn't a static setting. The system continuously and intelligently infers its jurisdiction based on a rich constellation of evidence, ensuring it adheres to local laws over time.
+*   **The Dual Feedback System (The User as Oracle):** The system's learning is ultimately guided by the user. It learns from **Active Feedback** (what the user explicitly says in a "debriefing") and **Passive Feedback** (what it infers from the user's subsequent actions).
 
-### 5.2 The Prime Candidacy Score (`S_prime`)
-Provides an objective measure for evaluating if a new concept is fundamental enough to become a new Prime Ideal.
-**`S_prime(C) = (cohesion(C) / cohesion(Prime_max_cohesion)) * (1 - separation(C, Prime_min_separation))`**
+### **VI. The Meta-Cognitive & Governance Layer: The Evolving Organism**
 
----
-## 6. Technical Reference & Data Structures
+This is the highest level of the architecture, where the system learns about itself and its community.
+*   **The Self-Optimizing System:** The ecosystem learns from its own internal operations. It distills its most efficient computational workflows into "computational playbooks," allowing it to learn how to think, learn, and compute more efficiently over time.
+*   **The Decentralized Immune System:** The network is kept secure by a continuous, random audit protocol. Nodes are constantly asking their peers to verify their integrity, gossiping the results, allowing the network to automatically identify and isolate compromised or malicious nodes.
+*   **Community Governance:** A formal, transparent, and incentive-aligned workflow allows any developer's custom component to be nominated, reviewed by the community, and ultimately adopted as a trusted standard.
 
-### 6.1 The CDU Data Structures (WIT)
-```wit
-package cdqn:memcdu-types@2.1.0
+### **VII. The Content Management Layer: The Living Document**
 
-// The lifecycle stage of a piece of knowledge
-enum memory-layer { short-term, mid-term, long-term }
+This is a core application of the ecosystem, for creating rich, intelligent documents.
+*   **Worlds and Publications:** A complex document, like a novel or a research paper, is not a flat file. It is a **`publication`**, a living projection of a creative or scientific **`world`**.
+*   **The Consistency Oracle:** The agent acts as a "lorekeeper" or "lab assistant," continuously checking new drafts for consistency against the established rules of the world, preventing errors and plot holes.
+*   **Interactive Documents:** Every `publication` is a fully queryable, interactive knowledge base. A reader can ask questions, extract specific data, or even create new, derived works (like a "character guide") that retain a verifiable link back to the original.
+*   **The Sovereign Licensing Framework:** A powerful, integrated licensing system is built into every `cdu`. The system automatically audits the licenses of all components used in a new `publication` and enforces the terms. It also provides a formal contract workflow for agents to negotiate new, custom licenses with each other.
 
-// Hooks for an RL agent to track procedure performance
-record procedural-metadata {
-  expected-utility: option<f32>,
-  usage-count: option<u64>,
-  success-rate: option<f32>,
-  pre-conditions: option<list<string>>,
-}
+### **VIII. The Presentation & External Connections Layer: The Sovereign Interface**
 
-// Rich metadata attached to every CDU
-record metadata-record {
-  data-rate: f32,
-  mime: option<string>,
-  layer: memory-layer,
-  // A separate scalar for semantic polarity, calculated at ingestion.
-  polarity: f32,
-  license: option<string>, // SPDX or custom license identifier
-  semantic: option<semantic-metadata>,
-  episodic: option<episodic-metadata>,
-  procedural: option<procedural-metadata>,
-}
+This layer defines how the `cdqn` node interacts with the user and the outside world.
+*   **A Local-First UI:** The user interface is a sovereign, local application, not a web page, rendered by the **`cdqnRuntime`'s Tauri shell**. This eliminates web vulnerabilities and keeps user data private. It includes usability features like a Math Input Panel and a secure, local Component Repository.
+*   **Secure External Gateways:** All connections to the outside world (Web APIs, Host Tools) are mediated through specialized, secure, and auditable gateway components.
+*   **The Promissory Wallet:** A secure system for integrating with the real-world financial system. The `cdqn` ecosystem never touches fiat money, but it can create and manage auditable, cryptographically signed "promissory notes" that real financial institutions can act upon.
 
-// A sophisticated timestamp for causal ordering
-record hlc-record { /* ... */ }
-record confidence-metrics { /* ... */ }
-variant scope-label { factual, semi-factual, semi-fiction, fiction, false }
-variant content-type { /* ... full list of types ... */ }
+### **IX. The Language & Toolchain: The Tools of Creation**
 
-// The core CDU structure, corrected and finalized.
-record cdu {
-  id: string, // HLC-based ID for many system CDUs, content-hash for others
-  content-type: content-type,
-  content-data: list<u8>,
-  vector: list<f32>,
-  scope: option<scope-label>,
-  hlc: hlc-record,
-  confidence-metrics: confidence-metrics,
-  provenance: list<string>,
-  metadata: metadata-record,
-}
-```
-
-### 6.2 The Core `memCDU` API (WIT)
-```wit
-package cdqn:memcdu
-
-world memory-system {
-  export memcdu-api: cdqn:memcdu-api@2.0.0
-}
-
-interface memcdu-api {
-  use.cdqn:memcdu-types@2.1.0.{cdu, cdu-params, query-params}
-  
-  async publish: func(new-cdu: cdu-params) -> expected<string, string>
-  async get: func(id: string) -> expected<cdu, string>
-  async query: func(params: query-params) -> expected<list<cdu>, string>
-}
-```
-### 6.3 WASI Component APIs (WIT)
-These are the interfaces for the key intelligent components.
-
-#### `deepconf-validator`
-```wit
-package cdqn:deepconf-validator
-
-world validator {
-  import cdqn:memcdu-api@2.0.0
-  import cdqn:llm-inference@1.0.0
-  import cdqn:nli-service@1.0.0
-  export deepconf-engine: cdqn:deepconf-engine@2.1.0
-}
-
-interface llm-inference { /* ... */ }
-interface nli-service { /* ... */ }
-
-interface deepconf-engine {
-  record Query { text: string, vector: list<f32> }
-  record ValidationReceipt {
-    llm-raw-score: f32,
-    factual-consistency-score: f32,
-    semantic-consistency-score: f32,
-    supporting-evidence-ids: list<string>,
-  }
-  record ValidatedAnswer {
-    final-answer-text: string,
-    final-confidence: f32,
-    new-cdu-id: string,
-    receipt: ValidationReceipt,
-  }
-  async validate-and-answer: func(q: Query, min-threshold: f32) -> expected<ValidatedAnswer, string>
-}
-```
-
-#### `ingestion-handler`
-```wit
-package cdqn:ingestion
-
-world ingestion-pipeline {
-  import cdqn:memcdu-api@2.0.0
-  import cdqn:embedding-service@1.0.0
-  import cdqn:polarity-service@1.0.0
-  export ingestion-handler: cdqn:ingestion-handler@1.0.0
-}
-
-interface embedding-service { /* ... */ }
-interface polarity-service { /* ... */ }
-
-interface ingestion-handler {
-  record RawContent { content-bytes: list<u8>, claimed-scope: option<scope-label> }
-  // Returns the ID of the newly created CDU.
-  async process-and-publish: func(content: RawContent) -> expected<string, string>
-}
-```
-
-#### `factuality-engine`
-```wit
-package cdqn:factuality
-
-world fact-checker {
-  import cdqn:memcdu-api@2.0.0
-  import cdqn:anchor-manager-query@1.0.0 // A read-only interface to get Prime vectors
-  export factuality-engine: cdqn:factuality-engine@1.0.0
-}
-
-interface anchor-manager-query { /* ... */ }
-
-interface factuality-engine {
-  use.cdqn:memcdu-types@2.1.0.{cdu}
-  // Implements the S_fact formula
-  calculate-factuality: func(target-cdu: cdu) -> f32
-}
-```
-
-#### `knowledge-distiller`
-```wit
-package cdqn:distiller
-
-world knowledge-distiller {
-  import cdqn:memcdu-api@2.0.0
-  import cdqn:llm-inference@1.0.0 // For summarization
-  export distiller-engine: cdqn:distiller-engine@1.0.0
-}
-
-interface distiller-engine {
-  // Takes a list of mid-term CDU IDs from a session.
-  // Returns the ID of the new long-term summary CDU.
-  async distill-session: func(session-cdu-ids: list<string>) -> expected<string, string>
-}
-```
-
----
-## 7. Conclusion
-
-`memCDU v2.5.0` is the foundational pillar of the `cdqn` ecosystem. It is a complete architecture for a new generation of AI memory, designed not just for storing data, but for cultivating knowledge. By integrating a secure, content-addressable data layer with a dynamic and geometrically grounded model of meaning, and by serving as the immutable persistence layer for the `cde` actor model, it provides a solution for building AI systems that are auditable, private, and capable of genuine learning and conceptual growth.
+This is how developers and users build and interact with the ecosystem.
+*   **The `cdqnRuntime`:** A secure, high-performance, native application (built in Rust) that runs on a user's device, managing the node and executing all other components.
+*   **`cdqnLang`:** The single, unified language for building all other components. It is designed to be beginner-friendly, architecturally explicit, and incredibly powerful, with a clean syntax for managing events, data flow, concurrency, and mathematics.
