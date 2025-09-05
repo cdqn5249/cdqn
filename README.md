@@ -18,5 +18,6 @@ The single guiding principle of the cdqn ecosystem is the creation of smart immu
 9.  **Doc 9:** The cdqn Ecosystem: The Meta-Cognitive & Governance Layer
 10.  **Doc 10:** The cdqn Ecosystem: The Content Management Layer
 11.  **Doc 11:** The cdqn Ecosystem: The Presentation & External Connections Layer
+12.  **Doc 12:** The cdqn Ecosystem: The cdqnLang & Toolchain Layer
        
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
