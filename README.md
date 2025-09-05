@@ -13,5 +13,6 @@ The single guiding principle of the cdqn ecosystem is the creation of smart immu
 4.  **Doc 4:** The cdqn Ecosystem: The Foundational Layer
 5.  **Doc 5:** The cdqn Ecosystem: The Cognitive Layer (memCDU)
 6.  **Doc 6:** The cdqn Ecosystem: The Network & Social Layer
+7.  **Doc 7:** The cdqn Ecosystem: The Socio-Economic Layer
        
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
