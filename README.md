@@ -11,5 +11,6 @@ End goal: Seamless transition from beginner-friendly high abstraction to raw Rus
 3.  **Doc 3:** The cdqn Ecosystem: An Overview
 4.  **Doc 4:** The cdqn Ecosystem: The Foundational Layer
 5.  **Doc 5:** The cdqn Ecosystem: The Cognitive Layer (memCDU)
+6.  **Doc 6:** The cdqn Ecosystem: The Network & Social Layer
        
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
