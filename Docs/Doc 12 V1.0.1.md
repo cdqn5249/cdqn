@@ -31,7 +31,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
 
 ### **Core Syntax and Constructs: A Complete Reference**
 
-*   **Code Blocks: Indentation & Explicit Closures**
+*   **Code Blocks: Indentation & Explicit Closures**  
     All code blocks use a `2-space indent` and are closed with a `/` followed by the opening keyword. This provides the clarity of indentation with the safety of explicit closures.
     ```cdqnlang
     if x = 10
@@ -42,7 +42,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     /if
     ```
 
-*   **Typing, Declaration, and Assignment: `type: variable ← value`**
+*   **Typing, Declaration, and Assignment: `type: variable ← value`**  
     The language uses a "type-first" syntax for clarity, and the unambiguous leftward arrow (`←` U+2190) for assignment.
     ```cdqnlang
     // Single declaration and assignment
@@ -56,7 +56,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     list<string>: names ← ["Alice", "Bob", "Carol"]
     ```
 
-*   **Comparison: `=`**
+*   **Comparison: `=`**  
     The equals sign is used exclusively for logical comparison.
     ```cdqnlang
     if name = "Alice"
@@ -64,7 +64,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     /if
     ```
 
-*   **The Core `cdqn` Verbs: `emit` and `on`**
+*   **The Core `cdqn` Verbs: `emit` and `on`**  
     These are the two fundamental, explicit actions that drive the entire event-driven ecosystem. `emit` creates a `cdu` (the only side-effect), and `on` reacts to one.
     ```cdqnlang
     automata MyAutomata {
@@ -80,7 +80,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     }
     ```
 
-*   **Control Flow: The Universal Pipe (`↦`) and Conditionals**
+*   **Control Flow: The Universal Pipe (`↦`) and Conditionals**  
     The pipe (`↦` U+21A6) is the universal "consequence" operator for all conditional logic.
     ```cdqnlang
     if
@@ -93,7 +93,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     /if
     ```
 
-*   **Data Flow: The Universal Pipe (`↦`) and Transformations**
+*   **Data Flow: The Universal Pipe (`↦`) and Transformations**  
     The same pipe operator provides a clean, readable syntax for data transformation.
     ```cdqnlang
     list<int>: numbers ← [1, 2, 3, 4, 5, 6]
@@ -102,7 +102,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
       ↦ map(n -> n²)
     ```
 
-*   **Looping: The Universal `do...until` Block**
+*   **Looping: The Universal `do...until` Block**  
     A single construct handles all forms of iteration safely and declaratively.
     ```cdqnlang
     // Simple iteration over a collection.
@@ -116,7 +116,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     until self.state.api_status = "online"
     ```
 
-*   **Explicit Parallelism: The `parallel` Block**
+*   **Explicit Parallelism: The `parallel` Block**  
     A structured block is used for "fan-out" parallel operations.
     ```cdqnlang
     parallel
@@ -127,7 +127,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     /parallel
     ```
 
-*   **Explicit Error Handling: The `handle` Block**
+*   **Explicit Error Handling: The `handle` Block**  
     Compile-time checked error handling, inspired by Rust's `Result` type.
     ```cdqnlang
     handle a_function_that_might_fail()
@@ -138,7 +138,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     /handle
     ```
 
-*   **The `memCDU` Interface: `query` and `replay`**
+*   **The `memCDU` Interface: `query` and `replay`**  
     First-class keywords for interacting with the agent's cognitive core.
     ```cdqnlang
     agent MyPlanner {
@@ -157,7 +157,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     }
     ```
 
-*   **Traits (Interfaces): Polymorphism for Components**
+*   **Traits (Interfaces): Polymorphism for Components**  
     A `trait` system for building generic, decoupled components.
     ```cdqnlang
     trait Validator { validate(data: list<u8>) -> Result<bool, string> }
@@ -165,7 +165,7 @@ The core philosophy is to provide a language that is **beginner-friendly and arc
     worker TextValidator implements Validator { /* ... */ }
     ```
 
-*   **Mathematical Reasoning: Calculation vs. `prove`**
+*   **Mathematical Reasoning: Calculation vs. `prove`**  
     The language natively understands UTF-8 math and separates pure calculation from auditable proof.
     ```cdqnlang
     // A pure calculation with no side-effects.
