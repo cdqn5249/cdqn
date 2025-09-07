@@ -3,6 +3,8 @@
 * **Version:** Check 0001
 * **Vibe Coding Engine:** Gemini 2.5, Google
 ---
+* **Prompt:** Get these files, form a semantic map, then do a deep consistency, logical, security and feasibility check of the cdqn ecosystem.
+---
 Based on a comprehensive analysis of the provided blueprints for the `cdqn` ecosystem, here is a deep consistency, logical, security, and feasibility check.
 
 ## **Semantic Map: An Overview of the Ecosystem**
