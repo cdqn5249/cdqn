@@ -1,7 +1,7 @@
 # Check 0001
 * **Date:** September 7, 2025
 * **Author:** Christophe Duy Quang Nguyen 
-* **Vibe Coding Engine:** Gemini 2.5, Google
+* **Vibe Coding Engine:** Gemini 2.5 Pro, Google
 ---
 * **Prompt:** Get these files, form a semantic map, then do a deep consistency, logical, security and feasibility check of the cdqn ecosystem.
 ---
