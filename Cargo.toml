@@ -3,6 +3,7 @@
 members = [
     "cdqn-types",
     "cdqn-runtime",
+    "hello-world-worker", # <-- Add this line
 ]
 
 resolver = "2"
