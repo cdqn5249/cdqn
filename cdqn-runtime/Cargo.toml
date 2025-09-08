@@ -8,15 +8,12 @@ license-file = "../LICENSE.md"
 repository = "https://github.com/cdqn5249/cdqn"
 
 [dependencies]
-# This is the crucial line that links our two crates together.
 cdqn-types = { path = "../cdqn-types" }
-
-# Tokio is the asynchronous runtime for handling I/O, as mandated by the Manifesto.
 tokio = { version = "1", features = ["full"] }
-
-# Wasmtime is the engine that will run our secure WASM components.
 wasmtime = "20.0.1"
 
-# Standard error handling libraries for robust applications.
+# --- THIS IS THE NEW DEPENDENCY ---
+wasmtime-wasi = "20.0.1"
+
 anyhow = "1.0"
 thiserror = "1.0"
