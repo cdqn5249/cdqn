@@ -1,16 +1,13 @@
-// This is the canonical, two-step process for including bindings.
+// This is the canonical pattern for a cargo-component guest.
 
-// Step 1: Use the `bindgen!` macro to specify the world we are implementing.
-// This macro tells `cargo-component` what bindings to generate *before*
-// the main compilation starts.
-cargo_component_bindings::bindgen!({
-    world: "hello",
-    path: "wit",
-});
+// Step 1: Declare a module named `bindings`. The `cargo component build`
+// command will automatically generate the code for this module in the
+// background based on our WIT files.
+mod bindings;
 
-// Step 2: Now that the bindings have been generated, we can `use` them.
-// The generated code is placed in a module named after our world.
-use hello::Guest;
+// Step 2: Now that the module is declared, we can `use` the items
+// that the build tool will place inside it.
+use bindings::Guest;
 
 // We define a struct that will hold our component's implementation.
 struct MyWorker;
