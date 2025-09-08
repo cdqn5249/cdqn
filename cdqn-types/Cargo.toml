@@ -1,0 +1,11 @@
+[package]
+name = "cdqn-types"
+version = "0.1.0"
+edition = "2021"
+authors = ["Christophe Duy Quang Nguyen"]
+description = "Core data types for the cdqn ecosystem (CDU, Entity, HLC, CID)."
+license-file = "../LICENSE.md"
+repository = "https://github.com/cdqn5249/cdqn"
+
+[dependencies]
+# We will add dependencies here later, as we create the source code.
