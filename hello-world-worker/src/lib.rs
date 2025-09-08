@@ -1,27 +1,22 @@
-// This macro tells wit-bindgen to look at our .wit file and generate
-// all the necessary "glue" code to make this a valid WASM component.
+// This macro tells wit-bindgen to generate all the necessary "glue" code.
 wit_bindgen::generate!({
-    // We point it to the .wit file we just created.
     path: "wit/worker.wit",
-
-    // We are generating code for the component itself (the "guest").
-    // The world path now correctly points to the `world hello`.
     world: "local:hello-world/hello",
 });
 
 // We define a struct that will hold our component's implementation.
 struct MyWorker;
 
-// This is the crucial part. Because our world exports the `worker` interface,
-// wit-bindgen generates a `Worker` trait for us to implement.
-impl Worker for MyWorker {
+// This is the crucial fix. The `generate!` macro creates a module named
+// after our world (`hello`). The trait we need to implement (`Guest`) is
+// INSIDE that module. We must use the full path `hello::Guest`.
+impl hello::Guest for MyWorker {
     fn run() {
-        // When the host runtime calls the `run` function on this component,
-        // this is the code that will execute inside the sandbox.
+        // This code will execute inside the sandbox.
         println!("Hello from inside the WASM sandbox! The worker is running!");
     }
 }
 
-// Finally, we tell wit-bindgen that our `MyWorker` struct provides the
-// implementation for the exported functions defined in our world.
-export!(MyWorker);
+// The `export!` macro is ALSO inside the generated module.
+// We must call it using its full path.
+export_hello!(MyWorker);
