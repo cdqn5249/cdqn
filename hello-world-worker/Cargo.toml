@@ -14,7 +14,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 # This dependency is required for the bindings macro.
-cargo-component-bindings = "0.7.0"
+cargo-component-bindings = "0.6.0"
 
 [package.metadata.component]
 # This is the correct, modern configuration for cargo-component.
