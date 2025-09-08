@@ -1,9 +1,9 @@
 use wasmtime::{Engine, Linker, Module, Store};
 use anyhow::Result;
 
-// This is the crucial fix. We use the keyword `crate` to refer to the
-// root of the current crate (`cdqn-runtime`).
-use crate::cdu_log::LogWriter;
+// This is the crucial fix. Now that lib.rs exists, the binary (main.rs)
+// must refer to the library by its proper name, `cdqn_runtime`.
+use cdqn_runtime::cdu_log::LogWriter;
 
 /// The main entry point for the cdqn Sovereign Runtime.
 #[tokio::main]
