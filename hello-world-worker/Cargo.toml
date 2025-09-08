@@ -12,10 +12,10 @@ crate-type = ["cdylib"]
 
 [dependencies]
 cdqn-types = { path = "../cdqn-types" }
-
-# --- THIS IS THE CRITICAL FIX ---
-# We need this dependency for the `generate!` macro to work.
 cargo-component-bindings = "0.7.0"
 
+# --- THIS IS THE CORRECTED SECTION ---
 [package.metadata.component]
-wit_path = "wit"
+# We specify the target world directly. `cargo-component` will automatically
+# find the `hello.wit` file inside the `wit` directory.
+target = { world = "hello" }
