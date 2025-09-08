@@ -1,0 +1,19 @@
+[package]
+name = "hello-world-worker"
+version = "0.1.0"
+edition = "2021"
+authors = ["Christophe Duy Quang Nguyen"]
+description = "A simple example of a cdqn worker component."
+license-file = "../LICENSE.md"
+repository = "https://github.com/cdqn5249/cdqn"
+
+[lib]
+# This is the crucial line that tells Rust to compile this to a WASM-compatible library
+crate-type = ["cdylib"]
+
+[dependencies]
+# This worker will need to understand the core types of the ecosystem
+cdqn-types = { path = "../cdqn-types" }
+
+# This is the library that allows WASM components to talk to the host runtime
+wit-bindgen = "0.24.0"
