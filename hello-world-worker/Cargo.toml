@@ -11,10 +11,11 @@ repository = "https://github.com/cdqn5249/cdqn"
 crate-type = ["cdylib"]
 
 [dependencies]
-# We no longer need wit-bindgen here; cargo-component handles it.
 cdqn-types = { path = "../cdqn-types" }
 
-# --- THIS IS THE NEW, REQUIRED SECTION ---
+# --- THIS IS THE CRITICAL FIX ---
+# We need this dependency for the `generate!` macro to work.
+cargo-component-bindings = "0.7.0"
+
 [package.metadata.component]
-# This tells cargo-component where to find our WIT definition.
 wit_path = "wit"
