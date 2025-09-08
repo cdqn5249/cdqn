@@ -19,12 +19,13 @@ jobs:
     - name: Install Rust stable toolchain
       uses: dtolnay/rust-toolchain@stable
 
-    # --- THIS IS THE NEW TOOLING SETUP ---
+    # --- THIS IS THE CORRECTED STEP ---
+    # We use the standard `cargo install` command to add the tool.
     - name: Install cargo-component
-      uses: bytecodealliance/cargo-component-action@v1
+      run: cargo install cargo-component --locked
 
     - name: Build the entire workspace with cargo-component
-      # We use `cargo component build` instead of `cargo build`.
+      # This command remains the same and is correct.
       run: cargo component build --workspace --verbose
 
     - name: Run tests for the entire workspace
