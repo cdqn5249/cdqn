@@ -1,0 +1,11 @@
+// wit/worker.wit
+
+// This defines the "world" of our component. It's the boundary between
+// the component (the guest) and the runtime (the host).
+package local:worker
+
+world worker {
+  // We declare a function named `run` that takes no parameters
+  // and returns nothing. This is the simplest possible interface.
+  export run: func()
+}
