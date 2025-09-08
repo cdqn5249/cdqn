@@ -1,17 +1,15 @@
 use wasmtime::{Engine, Linker, Module, Store};
 use anyhow::Result;
 
-// 1. Declare that our main application uses the `cdu_log` module.
-mod cdu_log;
-// 2. Import the LogWriter struct so we can use it.
-use cdu_log::LogWriter;
+// This is the crucial change. We now `use` our own crate's library
+// to get access to the modules defined in `lib.rs`.
+use cdqn_runtime::cdu_log::LogWriter;
 
 /// The main entry point for the cdqn Sovereign Runtime.
 #[tokio::main]
 async fn main() -> Result<()> {
     println!("cdqnRuntime: Sovereign Operating System starting...");
 
-    // 3. Create an instance of our LogWriter.
     let _log_writer = LogWriter::new("cdu.log").await?;
     println!("cdqnRuntime: Append-only CDU log is active.");
 
