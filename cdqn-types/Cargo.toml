@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Christophe Duy Quang Nguyen"]
 description = "Core data types for the cdqn ecosystem (CDU, Entity, HLC, CID)."
-license = "BaDaaS v1.1.0"
+license-file = "../LICENSE.md"
 repository = "https://github.com/cdqn5249/cdqn"
 readme = "README.md"
 
@@ -15,4 +15,3 @@ sha2 = "0.10"
 chrono = { version = "0.4", features = ["serde"] }
 base64 = "0.22"
 thiserror = "1.0"
-# Triggering the CI Action
