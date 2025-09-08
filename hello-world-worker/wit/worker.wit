@@ -8,3 +8,10 @@ interface worker {
     // This is the function we export.
     run: func();
 }
+
+// Define the main world for the component.
+// This is the top-level entry point that the host runtime will see.
+world hello {
+    // We declare that this world exports the `worker` interface.
+    export worker;
+}
