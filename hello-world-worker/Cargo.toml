@@ -1,0 +1,22 @@
+[package]
+name = "hello-world-worker"
+version = "0.1.0"
+edition = "2021"
+authors = ["Christophe Duy Quang Nguyen"]
+description = "A simple example of a cdqn worker component."
+license-file = "../LICENSE.md"
+repository = "https://github.com/cdqn5.249/cdqn"
+
+[lib]
+# This tells Rust to compile this crate as a dynamic library,
+# which is required for WASM components.
+crate-type = ["cdylib"]
+
+[dependencies]
+# This dependency is required for the bindings macro.
+cargo-component-bindings = "0.7.0"
+
+[package.metadata.component]
+# This is the correct, modern configuration for cargo-component.
+# It tells the tool to target a world named "hello".
+target = { world = "hello" }
