@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "cdqn-types",
+    "cdqn-runtime",
+]
+
+resolver = "2"
