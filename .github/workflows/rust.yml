@@ -1,0 +1,31 @@
+name: Build and Check Workspace
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Rust stable toolchain
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Install cargo-component
+      run: cargo install cargo-component --locked
+
+    - name: Build the entire workspace
+      # We use `cargo component build` as our primary build command
+      # because it can build both standard crates and wasip2 components.
+      run: cargo component build --workspace --verbose
+
+    - name: Run tests for the entire workspace
+      run: cargo test --workspace --verbose
