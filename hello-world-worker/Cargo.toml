@@ -8,12 +8,13 @@ license-file = "../LICENSE.md"
 repository = "https://github.com/cdqn5249/cdqn"
 
 [lib]
-# This is the crucial line that tells Rust to compile this to a WASM-compatible library
 crate-type = ["cdylib"]
 
 [dependencies]
-# This worker will need to understand the core types of the ecosystem
+# We no longer need wit-bindgen here; cargo-component handles it.
 cdqn-types = { path = "../cdqn-types" }
 
-# This is the library that allows WASM components to talk to the host runtime
-wit-bindgen = "0.24.0"
+# --- THIS IS THE NEW, REQUIRED SECTION ---
+[package.metadata.component]
+# This tells cargo-component where to find our WIT definition.
+wit_path = "wit"
