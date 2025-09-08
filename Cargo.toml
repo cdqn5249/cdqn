@@ -1,0 +1,6 @@
+[workspace]
+
+# We will add our crates (like cdqn-types) to this list later.
+members = []
+
+resolver = "2"
