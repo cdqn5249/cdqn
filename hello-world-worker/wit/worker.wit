@@ -3,15 +3,9 @@
 // Define a package namespace for our component.
 package local:hello-world;
 
-// Define an interface that the component will implement.
-interface worker {
-    // This is the function we export.
-    run: func();
-}
-
 // Define the main world for the component.
 // This is the top-level entry point that the host runtime will see.
 world hello {
-    // We declare that this world exports the `worker` interface.
-    export worker;
+  // We export the `run` function directly from the world.
+  export run: func();
 }
