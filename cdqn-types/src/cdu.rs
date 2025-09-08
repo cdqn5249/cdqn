@@ -1,5 +1,8 @@
 use serde::{Serialize, Deserialize};
 use sha2::{Sha256, Digest};
+// --- FIX: Added for the base64 warning ---
+use base64::{Engine as _, engine::general_purpose::STANDARD};
+// ---
 use crate::{
     hlc::Hlc,
     cid::Cid,
@@ -52,7 +55,9 @@ pub enum ConfidenceMetric {
     Token, Group, Trace,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+// --- FIX: Removed `Eq` because this struct contains an f64 ---
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+// ---
 #[serde(rename_all = "camelCase")]
 pub struct GenerationInfo {
     pub prompt_cid: Cid,
@@ -108,8 +113,9 @@ impl Cdu {
         // Finalize the hash.
         let hash_result = hasher.finalize();
 
-        // Format the CID string.
-        let cid_str = format!("sha256:{}", base64::encode(hash_result));
+        // --- FIX: Updated to modern base64 syntax to resolve the warning ---
+        let cid_str = format!("sha256:{}", STANDARD.encode(hash_result));
+        // ---
 
         Ok(Cid::new(cid_str))
     }
