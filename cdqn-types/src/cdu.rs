@@ -1,8 +1,6 @@
 use serde::{Serialize, Deserialize};
 use sha2::{Sha256, Digest};
-// --- FIX: Added for the base64 warning ---
 use base64::{Engine as _, engine::general_purpose::STANDARD};
-// ---
 use crate::{
     hlc::Hlc,
     cid::Cid,
@@ -55,9 +53,7 @@ pub enum ConfidenceMetric {
     Token, Group, Trace,
 }
 
-// --- FIX: Removed `Eq` because this struct contains an f64 ---
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-// ---
 #[serde(rename_all = "camelCase")]
 pub struct GenerationInfo {
     pub prompt_cid: Cid,
@@ -67,7 +63,9 @@ pub struct GenerationInfo {
     pub model_cid: Option<Cid>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+// --- FIX: Removed `Eq` because it contains `GenerationInfo` ---
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+// ---
 #[serde(rename_all = "camelCase")]
 pub struct IntrinsicMetadata {
     pub license: LicenseType,
@@ -85,7 +83,9 @@ pub struct IntrinsicMetadata {
     pub generation: Option<GenerationInfo>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+// --- FIX: Removed `Eq` because it contains `IntrinsicMetadata` ---
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+// ---
 #[serde(rename_all = "camelCase")]
 pub struct Cdu {
     pub cid: Cid,
@@ -96,27 +96,13 @@ pub struct Cdu {
 
 impl Cdu {
     /// Calculates the CID for a given content and metadata.
-    /// This is the core of content-addressing, ensuring data integrity.
-    /// The process uses a canonical JSON representation to guarantee a deterministic hash.
     pub fn calculate_cid(content: &[u8], metadata: &IntrinsicMetadata) -> Result<Cid, Error> {
-        // Serialize metadata to a canonical JSON string. A production system would
-        // require a stricter canonical format than standard JSON.
         let metadata_bytes = serde_json::to_vec(metadata)?;
-
-        // Create a SHA-256 hasher.
         let mut hasher = Sha256::new();
-
-        // Update the hasher with the content and metadata bytes.
         hasher.update(content);
         hasher.update(&metadata_bytes);
-
-        // Finalize the hash.
         let hash_result = hasher.finalize();
-
-        // --- FIX: Updated to modern base64 syntax to resolve the warning ---
         let cid_str = format!("sha256:{}", STANDARD.encode(hash_result));
-        // ---
-
         Ok(Cid::new(cid_str))
     }
 }
