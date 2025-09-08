@@ -1,16 +1,13 @@
-name: Check cdqn-types Crate
+name: Build and Check Workspace
 
 on:
   push:
-    paths:
-      - 'cdqn-types/**'
+    branches: [ "main" ]
   pull_request:
-    paths:
-      - 'cdqn-types/**'
+    branches: [ "main" ]
 
-defaults:
-  run:
-    working-directory: ./cdqn-types
+env:
+  CARGO_TERM_COLOR: always
 
 jobs:
   build:
@@ -19,8 +16,8 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Build the crate
-      run: cargo build --verbose
+    - name: Build the entire workspace
+      run: cargo build --workspace --verbose
 
-    - name: Run tests (if any)
-      run: cargo test --verbose
+    - name: Run tests for the entire workspace
+      run: cargo test --workspace --verbose
