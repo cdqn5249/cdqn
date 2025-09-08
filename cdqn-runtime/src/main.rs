@@ -1,29 +1,56 @@
-// We import a type from our `cdqn-types` crate to prove the link is working.
-use cdqn_types::CduType;
+// Import the tools we need from the wasmtime library
+use wasmtime::{Engine, Linker, Module, Store};
+use anyhow::Result;
 
 /// The main entry point for the cdqn Sovereign Runtime.
-///
-/// The `#[tokio::main]` attribute transforms this asynchronous function
-/// into a standard synchronous `main` function, automatically setting up
-/// the Tokio runtime. This is the foundation for our "Asynchronous First"
-/// architectural constraint.
 #[tokio::main]
-async fn main() -> anyhow::Result<()> {
-    // Print a startup message to the console.
+async fn main() -> Result<()> {
     println!("cdqnRuntime: Sovereign Operating System starting...");
 
-    // Create an instance of a CduType to demonstrate we can use our other crate.
-    let example_type = CduType::System;
+    // --- WASM HOST LOGIC STARTS HERE ---
 
-    // The `{:?}` format specifier is for debug printing.
-    println!("Successfully imported a type from cdqn-types: {:?}", example_type);
+    // 1. Create a Wasmtime engine. This is the core JIT compiler.
+    let engine = Engine::default();
+    println!("cdqnRuntime: Wasmtime engine created.");
 
-    println!("cdqnRuntime: Startup complete. Awaiting tasks...");
+    // 2. Load our compiled WASM component from the filesystem.
+    //    This path points to the standard location where `cargo build`
+    //    places the WASM file for our worker.
+    let wasm_path = "../target/wasm32-wasi/debug/hello_world_worker.wasm";
+    println!("cdqnRuntime: Loading component from '{}'...", wasm_path);
+    let module = Module::from_file(&engine, wasm_path)?;
+    println!("cdqnRuntime: Component loaded successfully.");
 
-    // In the future, this is where the main event loop will live,
-    // listening for tasks and dispatching them to WASM components.
-    // For now, we just exit successfully.
+    // 3. Create a "linker". This is used to define what functions the host
+    //    (our runtime) provides to the guest (the WASM component).
+    //    For now, we provide nothing.
+    let mut linker = Linker::new(&engine);
 
-    // `anyhow::Result<()>` requires us to return Ok at the end.
+    // 4. Create a "store". This holds all the state for a WASM instance.
+    let mut store = Store::new(&engine, ());
+
+    // 5. Instantiate the component. This links the component's imports
+    //    (of which there are none) and creates a runnable instance.
+    let instance = linker.instantiate(&mut store, &module)?;
+    println!("cdqnRuntime: Component instantiated.");
+
+    // 6. Look up the `run` function that our worker exported in its .wit file.
+    //    We use `get_typed_func` to ensure it has the correct signature
+    //    (no parameters, no return value).
+    let run_func = instance.get_typed_func::<(), ()>(&mut store, "run")?;
+    println!("cdqnRuntime: Found exported 'run' function.");
+
+    // 7. Call the function! This is the moment the runtime passes control
+    //    to the sandboxed WASM code.
+    println!("cdqnRuntime: Executing component...");
+    println!("-----------------------------------------");
+
+    run_func.call(&mut store, ())?;
+
+    println!("-----------------------------------------");
+    println!("cdqnRuntime: Component execution finished.");
+
+    // --- WASM HOST LOGIC ENDS HERE ---
+
     Ok(())
 }
