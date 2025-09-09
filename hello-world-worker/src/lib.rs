@@ -1,17 +1,24 @@
-// This is the canonical pattern for a cargo-component guest.
+// hello-world-worker/src/lib.rs
 
-// Step 1: Declare the `bindings` module that `cargo-component` will generate.
-mod bindings;
+// This is the canonical pattern for a cargo-component guest,
+// based on the official Bytecode Alliance examples.
 
-// Step 2: Use the `Guest` trait from the generated module.
-use bindings::Guest;
+// Step 1: Use the `bindgen!` macro to specify the world we are implementing.
+// This macro tells `cargo-component` what bindings to generate *before*
+// the main compilation starts.
+cargo_component_bindings::bindgen!({
+    world: "hello",
+    path: "wit",
+});
+
+// Step 2: Now that the bindings have been generated, we can `use` them.
+// The generated code is placed in a module named after our world.
+use hello::Guest;
 
 // We define a struct that will hold our component's implementation.
 struct MyWorker;
 
-// Step 3: We implement the `Guest` trait. `cargo-component` will
-// automatically detect this implementation and handle the exports.
-// No `export!` macro is needed.
+// We implement the `Guest` trait, which is now correctly in scope.
 impl Guest for MyWorker {
     fn run() {
         println!("Hello from inside the WASM Component! The worker is running!");
