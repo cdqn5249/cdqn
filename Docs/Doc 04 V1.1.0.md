@@ -249,6 +249,7 @@ The Manifesto is a set of foundational, non-negotiable architectural laws that a
   - *A Practical Use Case:* An `Agent` makes a decision that leads to a failure. A developer can use the `cdqn-cli`'s `lineage` command to trace the exact, step-by-step history of `cdu`s that led to that decision. The agent's "thought process" is not a black box but a clear, readable log of events, making it possible to perform a root cause analysis. The manifest file for the agent's process also reveals exactly what resources it was permitted to access.
 
 Others laws are unchanged from Doc 01.
+
 ---
 
 ## 4. The Security Intelligence Engine
