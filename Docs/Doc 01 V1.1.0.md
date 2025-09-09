@@ -1,14 +1,12 @@
-* **Author:**
+* **Date:** September 9, 2025
+* **Author:** Christophe Duy Quang Nguyen
+* **Version:** V1.1.0
 ---
 # The `cdqn` Ecosystem: A Manifesto for Smart Immutable Systems
 
 ## 1. Preamble: A New Foundation for Resilient Systems
 
-For decades, the dominant paradigm in software has been the mutable state. We build complex systems on databases and memory that are in a constant state of flux, where data is overwritten, deleted, and altered in place. This approach, while familiar, is inherently fragile. It creates systems that are difficult to debug, challenging to audit, and brittle in the face of failure. When something goes wrong, answering the simple question "What was the exact state of the system an hour ago?" can be an impossible task.
-
-**Immutability is the key to a more robust future.**
-
-An immutable architecture, where data is never overwritten but only appended, provides a revolutionary advantage: the ability to roll back to any previous stable state with absolute, mathematical certainty. This makes systems not only more secure and easier to audit, but also fundamentally more agile.
+An immutable architecture, where data is never overwritten but only appended, provides an advantage: the ability to roll back to any previous stable state with absolute, mathematical certainty. This makes systems not only more secure and easier to audit, but also fundamentally more agile.
 
 The **`cdqn` ecosystem**, for context datas query nodes, takes this principle one step further. It combines the rock-solid foundation of immutability with the dynamic, adaptive power of **agentic technology**. We envision a future where the core of our most critical systems—from enterprise infrastructure to personal devices—is built on this synthesis. We believe that systems which are both verifiably immutable and intelligently autonomous will be the foundation of technology for the next decades.
 
@@ -27,13 +25,13 @@ This vision is realized through five tightly integrated, yet modular, pillars bu
 
 1.  **The Unified Data Model (`cdu`):** The universal, content-addressed, and self-aware "atom" of information. Every piece of data in the ecosystem is a `cdu`.
 2.  **The Sovereign Memory (`memCDU`):** The architecture for a sovereign, long-term memory. Its `cdqnPSH` layer provides a "Geometric Field of Meaning," allowing each node to build its own unique, verifiable understanding of the world.
-3.  **The High-Performance Runtime (`cdqnRuntime`):** The secure, high-performance execution environment for the ecosystem, based on the Rust toolchain and WASM/WASI. It is the "operating system" for smart components.
+3.  **The High-Performance Runtime (`cdqnRuntime`):** The secure, high-performance execution environment for the ecosystem, based on the Rust toolchain. It is the "operating system" for smart cdu components.
 4.  **The Universal Language & Toolchain (`cdqnLang` & `cdqnCompiler`):** The human-computer interface for the ecosystem. A dual-use language for querying memory and defining the logic of new, smart components.
 5.  **The Collaborative Fabric (`cdqNetwork`):** The protocol and framework that allows multiple, sovereign `memCDU` nodes to communicate and collaborate as a "society of minds."
 
-## 4. The Six Foundational Constraints
+## 4. The Seven Foundational Constraints
 
-To ensure the core principle is upheld, the `cdqn` ecosystem is governed by six non-negotiable architectural laws.
+To ensure the core principle is upheld, the `cdqn` ecosystem is governed by seven non-negotiable architectural laws.
 
 ### Constraint 1: Asynchronous First, Non-Blocking Always.
 *   **The Law:** Every operation that involves I/O (disk access, network calls, inter-component communication) *must* be asynchronous. No part of the system is ever allowed to "block" or "wait" in a way that halts the progress of other tasks.
@@ -44,7 +42,7 @@ To ensure the core principle is upheld, the `cdqn` ecosystem is governed by six 
 *   **The Rationale:** This dual constraint is the foundation of **robustness and verifiability**. Strong, static typing allows the `cdqnCompiler` to catch a vast class of errors before runtime. The principle of explicit operations makes the code's logic transparent and easy to audit, eliminating bugs and security vulnerabilities that arise from hidden state and unexpected side effects. Together, these rules ensure that systems are **easy to debug and maintain**.
 
 ### Constraint 3: No Classic Functions; Reusability is Componentization.
-*   **The Law:** `cdqnLang` will not contain traditional, arbitrary user-defined functions. If a piece of logic needs to be reused, it *must* be encapsulated in its own verifiable, sandboxed **WASI component** with a formal WIT interface.
+*   **The Law:** `cdqnLang` will not contain traditional, arbitrary user-defined functions. If a piece of logic needs to be reused, it *must* be encapsulated in its own verifiable, sandboxed **cdu component**.
 *   **The Rationale:** This is a radical and powerful constraint that guarantees **modularity and security**. It prevents the creation of monolithic code and forces a clean separation of concerns. Every reusable piece of logic is a distinct, auditable, and securely sandboxed "skill," making systems easier to debug, maintain, and upgrade.
 
 ### Constraint 4: No Anonymous Entities in the `cdqNetwork`.
@@ -65,6 +63,6 @@ To ensure the core principle is upheld, the `cdqn` ecosystem is governed by six 
 
 ## 5. Conclusion: The Path Forward
 
-This manifesto is the constitution of the `cdqn` ecosystem. It is a declaration of principles and a binding set of architectural laws. All future design work on `cdqnLang`, the `cdqnRuntime`, the `cdqNetwork`, and any component within this ecosystem must be held to the standard of these constraints.
+This manifesto is the constitution of the `cdqn` ecosystem. It is a declaration of principles and a binding set of architectural laws. All future design work on `cdqnLang`, the `cdqnRuntime`, the `cdqNetwork`, and any cdu component within this ecosystem must be held to the standard of these constraints.
 
-By adhering to this vision, we commit to building a future where our most critical systems are not brittle and opaque, but are instead resilient, auditable, and intelligent. A future built on proof, not just on probability. A future of **smart, immutable systems.**
+By adhering to this vision, we commit to building a future where our most critical systems are not brittle and opaque, but are instead resilient, auditable, and intelligent. A future built on proof, not just on probability. A future of **smart immutable systems.**
