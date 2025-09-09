@@ -11,9 +11,10 @@ repository = "https://github.com/cdqn5249/cdqn"
 crate-type = ["cdylib"]
 
 [dependencies]
+# --- THIS IS THE DEFINITIVE FIX ---
 # The auto-generated bindings code requires the `wit-bindgen` runtime.
-# This dependency provides the necessary `wit_bindgen_rt` library.
-wit-bindgen = { version = "0.24.0", features = ["rt"] }
+# We provide it by depending on the crate itself, without any feature flags.
+wit-bindgen = "0.24.0"
 
 [package.metadata.component]
 target = { world = "hello" }
