@@ -2,7 +2,7 @@
 
 * **Version:** V1.1.0  
 * **Date:** 2025-07-11T06:37:51Z  
-* **Lead Author:** Christophe Duy Quang Nguyen
+* **Author:** Christophe Duy Quang Nguyen
 ---
 
 ## **Overview**
@@ -116,19 +116,19 @@ Reach out for licensing or inquiries: `cdqn5249@gmail.com`
 This section aims to clarify common real-world scenarios regarding the BaDaaS License.
 
 * **Q1: What if my small business uses a Work under the BaDaaS License and starts selling more than 1,000 units?**
-* **A1:** If your organization's annual earnings are less than $10 million, or your initiative is less than 5 years old, you are initially permitted to use the Work commercially without payment under the "Innovation Tier - Free Commercial Use". However, if you exceed 1,000 "distributed units" (e.g., individual copies sold or published), you are then required to form a "Commercial Partnership Agreement" with the licensor. This partnership could involve revenue sharing, a subscription, or other agreed-upon terms.
+  * **A1:** If your organization's annual earnings are less than $10 million, or your initiative is less than 5 years old, you are initially permitted to use the Work commercially without payment under the "Innovation Tier - Free Commercial Use". However, if you exceed 1,000 "distributed units" (e.g., individual copies sold or published), you are then required to form a "Commercial Partnership Agreement" with the licensor. This partnership could involve revenue sharing, a subscription, or other agreed-upon terms.
 
 * **Q2: My non-profit organization wants to use a BaDaaS licensed Work in a fundraising campaign. Is this allowed?**
-* **A2:** Non-profit use is generally allowed if it does not involve monetization or "donor conversion". If the Work is used directly in materials or campaigns specifically designed to solicit and convert potential donors into financial contributors, this falls under "donor conversion" and would typically require a commercial partnership. General mission-related use is permitted, but direct use as an incentive for donations would likely necessitate a commercial agreement.
+  * **A2:** Non-profit use is generally allowed if it does not involve monetization or "donor conversion". If the Work is used directly in materials or campaigns specifically designed to solicit and convert potential donors into financial contributors, this falls under "donor conversion" and would typically require a commercial partnership. General mission-related use is permitted, but direct use as an incentive for donations would likely necessitate a commercial agreement.
 
 * **Q3: I'm developing an AI model that will generate content. If I train it on a BaDaaS licensed Work, and the model then distributes a large number of unique outputs, what are my obligations?**
-* **A3:** If your AI model generates and distributes new derived content at scale, this falls under "machine-integrated reproductions". If these reproductions exceed 100,000 units, you are required to form a "Commercial Partnership Agreement". This applies to automated content generation platforms that incorporate the Work and produce numerous outputs.
+  * **A3:** If your AI model generates and distributes new derived content at scale, this falls under "machine-integrated reproductions". If these reproductions exceed 100,000 units, you are required to form a "Commercial Partnership Agreement". This applies to automated content generation platforms that incorporate the Work and produce numerous outputs.
 
 * **Q4: I want to share a BaDaaS licensed document with my colleagues, but I don't plan on modifying it. Is this allowed?**
-* **A4:** Simple viewing, listening, or sharing of the Work without adding new insight, meaning, or expression is considered "Passive Consumption" and is generally not permitted under this license. You cannot simply re-post the Work without any modification or commentary for public access. The license encourages transformative engagement.
+  * **A4:** Simple viewing, listening, or sharing of the Work without adding new insight, meaning, or expression is considered "Passive Consumption" and is generally not permitted under this license. You cannot simply re-post the Work without any modification or commentary for public access. The license encourages transformative engagement.
 
 * **Q5: What kind of attribution is required when I use a Work under this license?**
-* **A5:** All derivative or inspired works must clearly attribute the original source. The required format is: "Developed/Inspired by [Original Work Title/Author]". You should also include a link to the source or the author's portfolio. Examples include crediting design inspiration in an app's about page or linking to the original license in a GitHub repository's README.
+  * **A5:** All derivative or inspired works must clearly attribute the original source. The required format is: "Developed/Inspired by [Original Work Title/Author]". You should also include a link to the source or the author's portfolio. Examples include crediting design inspiration in an app's about page or linking to the original license in a GitHub repository's README.
 
 * **Q6: What if I am a creator and want to license my work commercially from the start, even if usage thresholds aren't met?**
-* **A6:** As a licensor, you have the option to "Fast-Track Commercialization" and choose to license your work commercially at any time, regardless of whether any usage thresholds have been met. This could be indicated by including a note like "Available for licensing - email to use commercially" in your work.
+  * **A6:** As a licensor, you have the option to "Fast-Track Commercialization" and choose to license your work commercially at any time, regardless of whether any usage thresholds have been met. This could be indicated by including a note like "Available for licensing - email to use commercially" in your work.
