@@ -1,9 +1,9 @@
 # The `cdqn` Ecosystem — The Foundational Layer
 
-**Version:** 1.1.0
-**Date:** September 9, 2025  
-**Author:** Christophe Duy Quang Nguyen  
-**Vibe Coding Engine:** Qwen3-Max-Preview, Alibaba
+* **Version:** 1.1.0
+* **Date:** September 9, 2025  
+* **Author:** Christophe Duy Quang Nguyen  
+* **Vibe Coding Engine:** Qwen3-Max-Preview, Alibaba
 
 ---
 
