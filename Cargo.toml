@@ -1,8 +1,0 @@
-[workspace]
-
-members = [
-    "cdqn-types",
-    "hello-world-worker",
-]
-
-resolver = "2"
