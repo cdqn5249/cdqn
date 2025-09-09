@@ -11,8 +11,9 @@ repository = "https://github.com/cdqn5249/cdqn"
 crate-type = ["cdylib"]
 
 [dependencies]
-# The auto-generated bindings code requires the `wit-bindgen` runtime.
-wit-bindgen = "0.24.0"
+# --- THIS IS THE DEFINITIVE FIX, BASED ON OFFICIAL DOCUMENTATION ---
+# The `macros` feature provides the `generate!` macro and all necessary bindings.
+wit-bindgen = { version = "0.24.0", features = ["macros"] }
 
 [package.metadata.component]
 target = { world = "hello" }
