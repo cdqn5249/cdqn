@@ -11,8 +11,9 @@
 
 The `cdqn` (Context Datas Query Nodes) ecosystem is a platform for building smart immutable systems.
 
-- It is built on **Rust** — the most performant and secure systems programming language available — to ensure maximum speed, memory safety, and zero-cost abstractions at the lowest level.
-- It is programmed through **`cdqnLang`** — a domain-specific language designed to be beginner-friendly, architecturally explicit, and free of hidden control flow. Every operation, every data flow, and every dependency is declared visibly and verifiably.
+It is built on Rust — the most performant and secure systems programming language available — to ensure maximum speed, memory safety, and zero-cost abstractions at the lowest level.
+
+It is programmed through `cdqnLang` — a domain-specific language designed to be beginner-friendly, architecturally explicit, and free of hidden control flow. Every operation, every data flow, and every dependency is declared visibly and verifiably.
 
 At its core, the ecosystem operates on three foundational elements:
 
@@ -247,7 +248,145 @@ The Manifesto is a set of foundational, non-negotiable architectural laws that a
   - *Why it's a Best Practice:* This principle is core to creating transparent, debuggable, and auditable systems. The manifest file makes the component's dependencies and permissions explicit before it is even spawned, preventing unexpected behavior.  
   - *A Practical Use Case:* An `Agent` makes a decision that leads to a failure. A developer can use the `cdqn-cli`'s `lineage` command to trace the exact, step-by-step history of `cdu`s that led to that decision. The agent's "thought process" is not a black box but a clear, readable log of events, making it possible to perform a root cause analysis. The manifest file for the agent's process also reveals exactly what resources it was permitted to access.
 
-See the full manifesto in Doc 01.
+Others laws are unchanged from Doc 01.
+---
+
+## 4. The Security Intelligence Engine
+
+**Definition:**  
+The Security Intelligence Engine is the cognitive immune system of the `cdqn` node. It consists of two core, self-evolving workflows: the `SandboxedComponentTester` for vetting executable logic, and the Universal `cdu` Validator Framework for validating all other types of `cdu`.
+
+These workflows ensure that *every* piece of data and code entering the system is scrutinized, tested, and learned from, turning security into an adaptive, intelligent, and collaborative process.
+
+### 4.1. The `SandboxedComponentTester`
+
+**Role:** A mandatory `Sys-L Automata` responsible for vetting new components in a secure, isolated environment before they are allowed to run in the user’s sovereign space.
+
+**Workflow:**
+1.  Spawns the component as a temporary, restricted process with null/fake capabilities.
+2.  Feeds it test `cduTask`s and monitors behavior, resource usage, and syscalls.
+3.  Emits a `component-test-report` `cdu`.
+4.  Collaborates with the `experience-mapper` to evolve new `security_playbook`s for novel threats.
+
+### 4.2. The Universal `cdu` Validator Framework
+
+**Role:** A modular framework of specialized `Validator` `Automata` that validate *all* incoming `cdu`s (not just components) based on their type and content.
+
+**Core Validators:**
+- `StructuralValidator`: Schema, signature, and CID integrity.
+- `SemanticValidator`: Logical consistency and domain-specific rules.
+- `EconomicValidator`: Contract terms, licenses, and financial instructions.
+- `ReputationValidator`: Cross-referencing with network reputation.
+- `ContentValidator`: Future validator for media and binary content.
+
+**Workflow:**
+1.  The `cdu-validator-router` receives a new `cdu` and routes it to the appropriate validator(s).
+2.  Each validator performs its checks and emits a `cdu-validation-report`.
+3.  If a novel threat is discovered, a new `threat_signature` is created and a `security_playbook` is evolved.
+4.  The `ProxyAgent` presents the report(s) to the user for final approval.
+
+### Formal Specification: Security Intelligence Schema
+
+```cdqnlang
+// --- Security-Specific Data Structures ---
+
+schema threat_signature {
+  pattern_name: string,
+  syscall_sequence: list<string>, // e.g., ["open", "connect", "execve"]
+  resource_abuse_profile: test_resource_metrics,
+  behavioral_flags: list<string>, // e.g., ["rapid_file_creation", "obfuscated_code"]
+  confidence_score: float64,
+  first_observed: hlc_id,
+  last_observed: hlc_id
+}
+
+schema security_playbook {
+  goal: string, // e.g., "Detect Data Exfiltration"
+  threat_signature: cid, // Reference to the threat this playbook counters
+  test_procedure: computational_playbook, // The testing steps to detect it
+  mitigation_strategy: list<string>, // e.g., "Block network, quarantine component"
+  effectiveness_score: float64, // Learned from real-world outcomes
+  version: u32
+}
+
+schema component-test-report {
+  component_cid: cid,          // The CID of the component being tested.
+  tester_node_id: entity_id,   // The ID of the node that ran the test.
+  test_timestamp: hlc_id,      // When the test was run.
+  resource_usage: test_resource_metrics,
+  behavior_log: list<string>,  // Key events observed during the test.
+  security_violations: list<syscall_violation>, // Any forbidden actions.
+  discovered_threats: list<cid>, // References to new or known threat_signature cdu's
+  network_reputation: optional<reputation_snapshot>,
+  applied_playbooks: list<cid>, // Which security_playbook's were used in this test
+  final_verdict: test_verdict,
+  tester_signature: bytes      // Signature by the tester's key.
+}
+
+schema cdu-validation-report {
+  target_cdu_cid: cid,         // The CID of the cdu being validated.
+  validator_id: entity_id,     // The ID of the validator that ran the check.
+  validation_timestamp: hlc_id,
+  checks_performed: list<string>, // e.g., ["schema", "signature", "semantic", "reputation"]
+  validation_results: list<validation_result>,
+  discovered_threats: list<cid>, // References to threat_signature cdu's (if any)
+  network_reputation: optional<reputation_snapshot>,
+  final_verdict: validation_verdict,
+  validator_signature: bytes
+}
+
+schema validation_result {
+  check_name: string,
+  passed: bool,
+  details: optional<string>, // e.g., "Schema mismatch on field 'amount'"
+  severity: threat_severity
+}
+
+schema syscall_violation {
+  syscall_name: string,
+  attempted_path: optional<string>,
+  timestamp: hlc_id,
+  severity: threat_severity
+}
+
+schema test_resource_metrics {
+  max_memory_mb: u64,
+  total_cpu_ms: u64,
+  disk_io_bytes: u64,
+}
+
+schema reputation_snapshot {
+  global_score: float64,
+  recent_complaints: u32,
+  recent_praises: u32,
+}
+
+enum threat_severity {
+  low,
+  medium,
+  high,
+  critical
+}
+
+enum test_verdict {
+  passed,
+  failed_resource_abuse,
+  failed_security_violation,
+  failed_incorrect_output,
+  failed_timeout,
+  failed_unknown_threat
+}
+
+enum validation_verdict {
+  passed,
+  failed_schema_violation,
+  failed_signature_invalid,
+  failed_semantic_inconsistency,
+  failed_reputation_risk,
+  failed_unknown_threat
+}
+```
+
 ---
 
 ## Glossary of `cdqn` Terms
@@ -287,3 +426,15 @@ See the full manifesto in Doc 01.
 
 - **Manifesto**  
   The seven non-negotiable architectural laws that govern the entire `cdqn` ecosystem, ensuring its core principles of sovereignty, security, and performance.
+
+- **`SandboxedComponentTester`**  
+  A `Sys-L Automata` responsible for vetting new components in a secure, isolated environment. It generates `component-test-report` `cdu`s and collaborates with the `experience-mapper` to evolve `security_playbook`s.
+
+- **`component`**  
+  A reusable piece of logic, packaged as a native, supervised process. It is acquired, tested by the `SandboxedComponentTester`, and spawned by the `cdqnRuntime`. It communicates with other components via secure, async message channels.
+
+- **Security Intelligence Engine**  
+  The cognitive immune system of the node, comprising the `SandboxedComponentTester` and the Universal `cdu` Validator Framework. It ensures all incoming data and code is validated, tested, and learned from.
+
+- **Universal `cdu` Validator Framework**  
+  A modular system of specialized `Validator` `Automata` that validate all types of `cdu`s (not just components) for structural, semantic, economic, and reputational integrity.
