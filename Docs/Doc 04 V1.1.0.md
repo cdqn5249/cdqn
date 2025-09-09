@@ -154,7 +154,8 @@ type entity_id = string
 // --- Enumerations ---
 enum cdu_type {
   system, config, log, chat, task, project, contract, procedure, math, component, license,
-  world, chapter, publication
+  world, chapter, publication,
+  security-audit  // NEW: For component-test-report, cdu-validation-report, and other security verdicts.
 }
 
 enum license_type {
@@ -439,3 +440,6 @@ enum validation_verdict {
 
 - **Universal `cdu` Validator Framework**  
   A modular system of specialized `Validator` `Automata` that validate all types of `cdu`s (not just components) for structural, semantic, economic, and reputational integrity.
+
+- **`security-audit`**  
+  A dedicated `cdu` type for all security verdicts, including `component-test-report` and `cdu-validation-report`. Ensures security events are first-class, queryable, and auditable citizens of the ecosystem.
