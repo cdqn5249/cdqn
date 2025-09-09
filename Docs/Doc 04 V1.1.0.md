@@ -1,9 +1,9 @@
 # The `cdqn` Ecosystem — The Foundational Layer
 
-* **Version:** 1.1.0
-* **Date:** September 9, 2025  
-* **Author:** Christophe Duy Quang Nguyen  
-* **Vibe Coding Engine:** Qwen3-Max-Preview, Alibaba
+**Version:** 1.1.0
+**Date:** September 9, 2025  
+**Author:** Christophe Duy Quang Nguyen  
+**Vibe Coding Engine:** Qwen3-Max-Preview, Alibaba
 
 ---
 
@@ -153,9 +153,18 @@ type entity_id = string
 
 // --- Enumerations ---
 enum cdu_type {
-  system, config, log, chat, task, project, contract, procedure, math, component, license,
+  system, config, log, chat, task, project, contract, math, component, license,
   world, chapter, publication,
-  security-audit  // NEW: For component-test-report, cdu-validation-report, and other security verdicts.
+  security-audit,
+  computational-workflow,
+  component-interface,
+  knowledge-graph-update,
+  gossip-message,
+  reputation-event,
+  alignment-decision,
+  system-telemetry,
+  external-event,
+  policy-rule
 }
 
 enum license_type {
@@ -249,7 +258,7 @@ The Manifesto is a set of foundational, non-negotiable architectural laws that a
   - *Why it's a Best Practice:* This principle is core to creating transparent, debuggable, and auditable systems. The manifest file makes the component's dependencies and permissions explicit before it is even spawned, preventing unexpected behavior.  
   - *A Practical Use Case:* An `Agent` makes a decision that leads to a failure. A developer can use the `cdqn-cli`'s `lineage` command to trace the exact, step-by-step history of `cdu`s that led to that decision. The agent's "thought process" is not a black box but a clear, readable log of events, making it possible to perform a root cause analysis. The manifest file for the agent's process also reveals exactly what resources it was permitted to access.
 
-Others laws are unchanged from Doc 01.
+See the Doc 01 for all laws.
 
 ---
 
@@ -391,6 +400,67 @@ enum validation_verdict {
 
 ---
 
+## 5. The Component Interface: The Contract for Security and Modularity
+
+**Definition:**  
+The Component Interface (`.cdqnif`) is a formal, declarative contract that every `cdu` component must provide. It defines the component’s operational scope — the messages it can send and receive, the system capabilities it requires, and the resource limits it must adhere to. This interface is used by the `cdqnRuntime` to enforce security, modularity, and sovereignty.
+
+### Key Properties & Rationale
+
+- *What it is:* A machine-readable schema that travels with the component binary. It is the single source of truth for what the component is allowed to do. The `cdqnRuntime` uses this schema to set up the component’s sandbox, granting *only* the declared capabilities and setting *only* the declared resource limits.  
+- *Why this is a Best Practice:* This is the architectural enforcement of the Principle of Least Privilege. It prevents a component from ever accessing resources or performing actions it didn’t explicitly declare, making the system fundamentally more secure and easier to audit. It also enables true modularity, as components can be understood and composed based on their declared interfaces.  
+- *A Practical Use Case:* A user acquires a new `math-worker` component. Its `.cdqnif` declares that it only needs to receive `cduTask`s and emit `cduResult`s, with no file system or network access. The `cdqnRuntime` spawns the component with *only* those permissions. Even if the component is compromised, it cannot exfiltrate data or access sensitive files, because it was never granted the capability.
+
+### Formal Specification: The Component Interface Schema
+
+This schema defines the structure of every `.cdqnif` file in the ecosystem.
+
+```cdqnlang
+// --- Component Interface Schema ---
+// This is the formal contract for a cdu component.
+// It is used by the cdqnRuntime to enforce security and modularity.
+
+schema component_interface {
+  // The entity form this component will run as.
+  form: entity_form,
+
+  // The cdu types this component can RECEIVE as input.
+  accepts: list<message_spec>,
+
+  // The cdu types this component can EMIT as output.
+  emits: list<message_spec>,
+
+  // The system capabilities this component requires.
+  requires_capabilities: list<capability_spec>,
+
+  // Optional: Resource limits (enforced by the runtime via cgroups/ulimit).
+  resource_limits: optional<resource_limits>
+}
+
+schema message_spec {
+  // The type of cdu (e.g., "task", "result", "log").
+  cdu_type: cdu_type,
+  // An optional subject filter (e.g., "Calculate:Derivative").
+  subject: optional<string>
+}
+
+schema capability_spec {
+  // The type of capability (e.g., "file-read", "network-send", "memory-alloc").
+  capability: string,
+  // An optional target or scope for the capability (e.g., a specific file path or network address).
+  scope: optional<string>
+}
+
+schema resource_limits {
+  max_memory_mb: optional<u64>,
+  max_cpu_percent: optional<u32>,
+  max_disk_io_bytes: optional<u64>,
+  max_network_bandwidth_kbps: optional<u64>
+}
+```
+
+---
+
 ## Glossary of `cdqn` Terms
 
 - **`cdqn`**  
@@ -443,3 +513,33 @@ enum validation_verdict {
 
 - **`security-audit`**  
   A dedicated `cdu` type for all security verdicts, including `component-test-report` and `cdu-validation-report`. Ensures security events are first-class, queryable, and auditable citizens of the ecosystem.
+
+- **`computational-workflow`**  
+  A dedicated `cdu` type for executable, multi-step plans used by the `workflow-orchestrator`. Replaces the generic `procedure` type for clarity and performance.
+
+- **`component-interface`**  
+  A dedicated `cdu` type that contains the formal, immutable contract (`.cdqnif`) for a component. It defines the component’s I/O, capabilities, and resource limits.
+
+- **`knowledge-graph-update`**  
+  A `cdu` type for auditable deltas that describe how the `PrivPGM` has changed. Enables efficient synchronization and versioning of the agent’s knowledge graph.
+
+- **`gossip-message`**  
+  A `cdu` type for protocol-level control messages in the `cdqNetwork`. Separates gossip traffic from application data for performance and security.
+
+- **`reputation-event`**  
+  A `cdu` type for verifiable events that update a node’s reputation score. Creates a clean, auditable ledger of reputation changes.
+
+- **`alignment-decision`**  
+  A `cdu` type for auditable records of guardrail decisions. Allows users and auditors to trace why a request was allowed, denied, or modified.
+
+- **`system-telemetry`**  
+  A `cdu` type for performance and resource metrics. Enables the system to learn and optimize its own workflows based on real-world data.
+
+- **`external-event`**  
+  A `cdu` type for the results of interactions with the outside world (e.g., HTTP responses, host command output). Makes external I/O explicit and auditable.
+
+- **`policy-rule`**  
+  A `cdu` type for guardrails, blacklists, and system-wide policies. Defines what is allowed or forbidden in the system, with full provenance and versioning.
+
+- **`.cdqnif`**  
+  The formal, declarative interface file for a `cdu` component. Defines its message types, required capabilities, and resource limits. Used by the `cdqnRuntime` to enforce security and modularity.
