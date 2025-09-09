@@ -65,4 +65,4 @@ To ensure the core principle is upheld, the `cdqn` ecosystem is governed by seve
 
 This manifesto is the constitution of the `cdqn` ecosystem. It is a declaration of principles and a binding set of architectural laws. All future design work on `cdqnLang`, the `cdqnRuntime`, the `cdqNetwork`, and any cdu component within this ecosystem must be held to the standard of these constraints.
 
-By adhering to this vision, we commit to building a future where our most critical systems are not brittle and opaque, but are instead resilient, auditable, and intelligent. A future built on proof, not just on probability. A future of **smart immutable systems.**
+By adhering to this vision, we commit to building a future where our most critical systems are resilient, auditable, and intelligent. A future built on proof, not just on probability. A future of **smart immutable systems.**
