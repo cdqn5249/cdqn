@@ -25,7 +25,7 @@ The following components and workflows define how this “mind” operates, now 
 ### What it is:
 The `PrivPGM` is a private, high-performance knowledge graph that represents the agent’s entire body of learned knowledge. It is not a flat graph — it is a **multi-dimensional, topological, and algebraic field of meaning**, embedded in a **Möbius space**.
 
-- **Streams** are flows of `cdu`s with shared context.
+- **Streams** are flows of `cdu`s with shared context and semantics meanings.
 - **Prime Ideals** are fixed, immutable anchors of truth, indexed by prime integers on the Möbius axis.
 - **Real Numbers** between primes are semantic gradients — continuous, fluid representations of meaning.
 - **The Zero Point** is the origin — the absolute, objective, neutral ground truth. It is unreachable — no stream of `cdu`s will ever sit *at* zero. It is the reference point against which all semantic charge is measured.
