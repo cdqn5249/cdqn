@@ -62,7 +62,7 @@ schema zero_point {
 }
 
 schema prime_ideal {
-  prime: i32, // The prime integer that anchors this ideal (e.g., 2, 3, 5, 7, 11, -11).
+  prime: i32, // The prime element integer that anchors this ideal (e.g., 2, 3, 5, 7, 11, -11).
   semantic_label: string, // The semantic meaning of this prime (e.g., "love", "hate", "true", "false").
   definition_cid: cid, // The CID of the cdu that defines this prime ideal.
   position: prime_coordinate, // The position of this prime on the Möbius axis.
