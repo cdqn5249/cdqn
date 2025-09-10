@@ -487,7 +487,7 @@ schema resource_limits {
 - **`PrivPGM`**  
   **Priv**ate **P**rimes **G**raph **M**ap. The agent's private, evolving knowledge graph built from its `cdu` log. It is the "brain" used for fast, low-latency queries.
 
-- **`cdqNetwork`**  
+- **`cdqnProt`**  
   The decentralized, peer-to-peer network protocol that allows sovereign `cdqn` nodes to discover each other, communicate, and collaborate.
 
 - **`ProxyAgent`**  
