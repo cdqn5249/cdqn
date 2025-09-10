@@ -1,7 +1,7 @@
 # The `cdqn` Ecosystem — The Foundational Layer
 
 * **Version:** 1.1.0
-* **Date:** September 9, 2025  
+* **Date:** September 10, 2025  
 * **Author:** Christophe Duy Quang Nguyen  
 * **Vibe Coding Engine:** Qwen3-Max-Preview, Alibaba
 
@@ -18,7 +18,7 @@ It is programmed through `cdqnLang` — a domain-specific language designed to b
 At its core, the ecosystem operates on three foundational elements:
 
 - The **`cdu`** — an immutable, content-addressed unit of data that serves as the universal atom for all knowledge, state, and action.
-- The **`Entity`** — a sovereign, managed process that performs logic. Each `Entity` runs as a supervised native binary, communicating only through secure, asynchronous channels.
+- The **`Entity`** — a sovereign, managed process that performs logic. Each `Entity` runs as a supervised native binary, communicating only through secure, asynchronous message-passing.
 - The **`Manifesto`** — a set of seven non-negotiable architectural laws that govern how the system behaves, ensuring sovereignty, explicitness, and non-blocking operation at every level.
 
 Together, these elements form a runtime environment where intelligence is built from verifiable, auditable events — not mutable state. Where components are isolated, supervised, and incapable of operating outside their sandbox. Where the entire system is observable, traceable, and reconstructable from first principles.
@@ -164,7 +164,10 @@ enum cdu_type {
   alignment-decision,
   system-telemetry,
   external-event,
-  policy-rule
+  policy-rule,
+  result, // NEW: For outputs of tasks and projects.
+  insight, // NEW: For user feedback and inferred knowledge.
+  proof-of-work // NEW: For DeepConf reasoning outputs.
 }
 
 enum license_type {
@@ -254,11 +257,11 @@ The Manifesto is a set of foundational, non-negotiable architectural laws that a
   - *A Practical Use Case:* A user receives a chat message proposal. Their `ProxyAgent` (a supervised process) uses the sender's reputation score to decide whether to even show the message to the user. This Sovereign Ingestion Workflow acts as an automatic, intelligent spam filter, giving the user ultimate control over their digital space.
 
 - **Absolutely Explicit:**  
-  - *What it is:* There is no "hidden magic" in the system. Every significant action is represented by an explicit, auditable `cdu`. Furthermore, the operational scope of every `Entity` process is explicitly defined in its manifest file, which declares the capabilities it requires and the message types it can send and receive.  
+  - *What it is:* There is no "hidden magic" in the system. Every significant action is represented by an explicit, auditable `cdu`. Furthermore, the operational scope of every `Entity` process is explicitly defined in its manifest file (the `.cdqnif`), which declares the capabilities it requires and the message types it can send and receive.  
   - *Why it's a Best Practice:* This principle is core to creating transparent, debuggable, and auditable systems. The manifest file makes the component's dependencies and permissions explicit before it is even spawned, preventing unexpected behavior.  
   - *A Practical Use Case:* An `Agent` makes a decision that leads to a failure. A developer can use the `cdqn-cli`'s `lineage` command to trace the exact, step-by-step history of `cdu`s that led to that decision. The agent's "thought process" is not a black box but a clear, readable log of events, making it possible to perform a root cause analysis. The manifest file for the agent's process also reveals exactly what resources it was permitted to access.
 
-See the Doc 01 for all laws.
+See doc 01 for all laws that are unchanged.
 
 ---
 
@@ -518,7 +521,7 @@ schema resource_limits {
   A dedicated `cdu` type for executable, multi-step plans used by the `workflow-orchestrator`. Replaces the generic `procedure` type for clarity and performance.
 
 - **`component-interface`**  
-  A dedicated `cdu` type that contains the formal, immutable contract (`.cdqnif`) for a component. It defines the component’s I/O, capabilities, and resource limits.
+  A dedicated `cdu` type that contains the formal, immutable contract (`.cdqnif`) for a component. Defines its I/O, capabilities, and resource limits.
 
 - **`knowledge-graph-update`**  
   A `cdu` type for auditable deltas that describe how the `PrivPGM` has changed. Enables efficient synchronization and versioning of the agent’s knowledge graph.
@@ -540,6 +543,15 @@ schema resource_limits {
 
 - **`policy-rule`**  
   A `cdu` type for guardrails, blacklists, and system-wide policies. Defines what is allowed or forbidden in the system, with full provenance and versioning.
+
+- **`result`**  
+  A `cdu` type for the outputs of tasks and projects. Provides a clear, explicit type for the results of cognitive workflows.
+
+- **`insight`**  
+  A `cdu` type for user feedback and inferred knowledge. Captures the user’s explicit and implicit signals to guide the agent’s learning.
+
+- **`proof-of-work`**  
+  A `cdu` type for the outputs of DeepConf reasoning workflows. Contains the winning answer, its confidence, and the contributing traces.
 
 - **`.cdqnif`**  
   The formal, declarative interface file for a `cdu` component. Defines its message types, required capabilities, and resource limits. Used by the `cdqnRuntime` to enforce security and modularity.
