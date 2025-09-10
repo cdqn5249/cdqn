@@ -52,7 +52,7 @@ schema privpgm {
 // --- The Möbius Space ---
 schema mobius_space {
   zero_point: zero_point, // The origin — the absolute, objective, neutral ground truth.
-  prime_axis: list<prime_coordinate>, // The 1D line of prime integers.
+  prime_axis: list<prime_coordinate>, // The 1D line of prime elements integers.
   semantic_axis: list<real_coordinate>, // The continuous, real-numbered gradient between primes.
   dimensions: list<dimension>, // Additional dimensions (e.g., factual/fictional, proven/speculative).
 }
