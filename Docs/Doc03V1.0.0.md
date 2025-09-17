@@ -70,7 +70,7 @@ The cdqnK Unisphere Architecture is the analytical brain of the system, offering
         A crucial feature for mitigating hallucination in language models is the inclusion of explicit **"I Don't Know" states** [3.2.2, 114]. These are mapped to specific prime indices, specifically at **-1 and 1** on each axis, with **0 representing neutrality** (or ambiguity for the Factual/Fiction axis) [3.2.2, 115]. This allows AI systems to express uncertainty directly, preventing them from fabricating information when knowledge is unclear, thereby fostering trust and ensuring reliability [3.2.2, 114].
 
 *   **3.3. Core Components: The Five Named Spheres**
-    The cdqnK architecture is composed of five distinct spheres, each providing a specialized layer of analysis [3.3]. Each sphere consists of 7 axes, and for each axis, there are 27 validated prime anchors (including -1, 0, and 1 for uncertainty and neutrality) [3.3].
+    The cdqnK architecture is composed of five distinct spheres, each providing a specialized layer of analysis [3.3]. Each sphere consists of 7 axes, and for each axis, there are 27 validated prime anchors (including -1, 0, and 1 for uncertainty and neutrality) [3.3]. Each axis can have any natural language linked to them in a form of a label, here we support 3 languages: English (en), French (fr) and Vietnamese (vn).
 
     *   **3.3.1. Semantic Nexus**
         *   **Purpose**: To analyze the **intrinsic meaning and emotional content** of information, serving as the primary meaning interpretation engine.
