@@ -1,7 +1,8 @@
-Of course. A clean, consolidated document is essential. Here is the official documentation for `cdqnLang`, rewritten for a new reader and incorporating all validated design principles.
-
+*   **Version** : 1.0.0
+*   **Date** : 17 September 2025
+*   **Author** : Christophe Duy Quang Nguyen
+*   **Vibe Coding Engine** : Gemini 2.5 Pro, Google
 ---
-
 # **An Introduction to `cdqnLang`**
 
 ## **1. Welcome to `cdqnLang`**
