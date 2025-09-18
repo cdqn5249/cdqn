@@ -9,7 +9,7 @@ The single guiding principle of the cdqn ecosystem is the creation of smart immu
 
 * **Doc 01:** The cdqn Manifesto
 * **Doc 02:** BaDaaS License - The Agile Commercial Open-Core License
-* **Doc 03:** The cdqn Kernel : cdqnK
+* **Doc 03:** The cdqn Kernel (cdqnK)
 * **Doc 04:** The cdqnLang
 * **Doc 05:** The cdqn Ecosystem: The Cognitive Layer (memCDU)
 * **Doc 06:** The cdqn Ecosystem: The Network & Social Layer
