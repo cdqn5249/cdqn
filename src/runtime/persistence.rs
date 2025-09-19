@@ -34,15 +34,18 @@ impl Persistence {
 
                 let kdu: KDU = bincode::deserialize(&kdu_buffer)
                     .expect("Failed to deserialize KDU during index build");
-                
+
                 // The position of this KDU is where its length prefix started.
                 index.insert(kdu.kdu_id, current_pos);
-                
+
                 current_pos += 8 + kdu_len;
             }
         }
 
-        Ok(Persistence { journal_path, index })
+        Ok(Persistence {
+            journal_path,
+            index,
+        })
     }
 
     // The write function now also updates the in-memory index.
@@ -54,7 +57,7 @@ impl Persistence {
             .create(true)
             .append(true)
             .open(&self.journal_path)?;
-        
+
         // Get the position of the start of our write.
         let write_pos = file.seek(SeekFrom::End(0))?;
 
@@ -85,7 +88,7 @@ impl Persistence {
 
                 let kdu = bincode::deserialize(&kdu_buffer)
                     .expect("Failed to deserialize KDU during read");
-                
+
                 Ok(Some(kdu))
             }
             None => Ok(None), // KDU not found in index.
