@@ -6,7 +6,7 @@ use ed25519_dalek::Verifier;
 fn main() {
     println!("cdqn runtime starting... [Phase 0, Milestone 3]");
 
-    // 1. Initialize the KDUFactory. This also initializes CryptoCore and HLC.
+    // 1. Initialize the KDUFactory.
     let factory = KDUFactory::new();
     let crypto_core = factory.crypto_core();
 
@@ -33,7 +33,6 @@ fn main() {
     println!("{}", kdu_as_json);
 
     // 5. --- Verification Step ---
-    // This is the most important part: we prove the signature is valid.
     println!("\n--- Verifying KDU Signature ---");
     
     // Re-hash the content exactly as the factory did.
@@ -46,7 +45,7 @@ fn main() {
     // Reconstruct the signature from the KDU's bytes.
     let signature = ed25519_dalek::Signature::from_bytes(&new_kdu.originator_signature).unwrap();
 
-    // Use the public key to verify the signature against the hash.
+    // Use the public key from the keypair to verify the signature.
     let verification_result = originator_keypair.public.verify(&content_hash_bytes, &signature);
 
     match verification_result {
