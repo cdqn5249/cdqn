@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["NodeServer"]};
+window.SIDEBAR_ITEMS = {"struct":["NodeClient","NodeServer"]};
