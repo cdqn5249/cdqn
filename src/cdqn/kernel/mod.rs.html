@@ -7,8 +7,8 @@
 <a href=#7 id=7 data-nosnippet>7</a></span><span class="kw">pub type </span>FQEI = String;
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a><span class="comment">// A placeholder for the 42-dimensional vector from the Unisphere.
-<a href=#10 id=10 data-nosnippet>10</a>// We use a fixed-size array of 16-bit unsigned integers.
-<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub type </span>UnisphereCoordinates = [u16; <span class="number">42</span>];
+<a href=#10 id=10 data-nosnippet>10</a>// We use a Vec&lt;u16&gt; which is serializable by default.
+<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub type </span>UnisphereCoordinates = Vec&lt;u16&gt;;
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
 <a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">pub struct </span>License {
