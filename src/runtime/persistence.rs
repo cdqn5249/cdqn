@@ -1,7 +1,7 @@
 // src/runtime/persistence.rs
 
 use crate::kernel::KDU;
-use std::fs::{File, OpenOptions};
+use std::fs::OpenOptions; // We only need OpenOptions, not File
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
