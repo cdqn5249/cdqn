@@ -1,8 +1,8 @@
 // src/kernel/crypto.rs
 
-use ed25519_dalek::{Signer, SigningKey, VerifyingKey, Signature};
+use ed25519_dalek::{Signature, Signer, SigningKey, VerifyingKey};
 use rand::rngs::OsRng;
-use sha2::{Sha512, Digest};
+use sha2::{Digest, Sha512};
 
 // Our own simple struct to hold the cryptographic keys.
 #[derive(Debug)]
@@ -34,7 +34,7 @@ impl CryptoCore {
     pub fn sign(&self, message_hash: &[u8], secret_key: &SigningKey) -> Signature {
         secret_key.sign(message_hash)
     }
-    
+
     // A utility function to create a SHA512 hash of any serializable data.
     pub fn hash_content<T: serde::Serialize>(content: &T) -> Vec<u8> {
         let content_bytes = serde_json::to_vec(content).unwrap();
