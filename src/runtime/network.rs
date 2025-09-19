@@ -17,7 +17,6 @@ impl NodeServer {
         Ok(NodeServer { listener })
     }
 
-    // --- NEW PUBLIC METHOD ADDED HERE ---
     // This provides a safe, public way to access the incoming connection iterator.
     pub fn incoming(&self) -> Incoming<'_> {
         self.listener.incoming()
@@ -26,16 +25,15 @@ impl NodeServer {
     // The main server loop. It accepts connections and handles them.
     pub fn run(self) {
         // accept connections and process them serially
-        for stream in self.incoming() { // Now uses the public method
+        for stream in self.incoming() {
+            // Now uses the public method
             match stream {
                 Ok(stream) => {
                     println!(
                         "[NodeServer] New connection: {}",
                         stream.peer_addr().unwrap()
                     );
-                    thread::spawn(move || {
-                        handle_client(stream)
-                    });
+                    thread::spawn(move || handle_client(stream));
                 }
                 Err(e) => {
                     println!("[NodeServer] Error: {}", e);
