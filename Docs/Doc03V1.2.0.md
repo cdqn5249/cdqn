@@ -1,3 +1,8 @@
+*   **Version** : 1.2.0
+*   **Date** : 19 September 2025
+*   **Author** : Christophe Duy Quang Nguyen
+*   **Vibe Coding Engine** : Gemini 2.5 Pro, Google
+---
 # **The `cdqn` Kernel (`cdqnK`)**
 ## **Introduction: A Story of Trust**
 
