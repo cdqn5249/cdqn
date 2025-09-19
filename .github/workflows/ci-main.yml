@@ -2,14 +2,12 @@
 
 name: CDQN Core CI
 
-# Controls when the workflow will run
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   format_and_lint:
     name: Format & Lint
@@ -52,10 +50,12 @@ jobs:
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.5
 
-      - name: Run Tests
+      # THIS IS THE CORRECTED STEP
+      - name: Run Main Executable
         env:
           RUSTC_WRAPPER: sccache
-        run: cargo test --all-features --verbose
+        # We use 'cargo run' to execute main.rs and see its output
+        run: cargo run --all-features --verbose
 
       - name: Build Release Binary
         env:
@@ -67,18 +67,18 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cdqn-runtime-linux
-          path: target/release/cdqn # Adjust binary name as needed
+          path: target/release/cdqn
 
       - name: Upload Artifact (macOS)
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
           name: cdqn-runtime-macos
-          path: target/release/cdqn # Adjust binary name as needed
+          path: target/release/cdqn
 
       - name: Upload Artifact (Windows)
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
           name: cdqn-runtime-windows.exe
-          path: target/release/cdqn.exe # Adjust binary name as needed
+          path: target/release/cdqn.exe
