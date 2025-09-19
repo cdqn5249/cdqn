@@ -19,6 +19,12 @@ jobs:
       - name: Build Documentation
         run: cargo doc --no-deps --all-features
 
+      # --- NEW STEP ADDED HERE ---
+      - name: Create Redirect Page
+        # This creates an index.html file at the root of the docs
+        # that instantly redirects the user to the correct page.
+        run: echo '<meta http-equiv="refresh" content="0; url=cdqn/index.html">' > ./target/doc/index.html
+
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
