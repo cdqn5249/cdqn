@@ -43,7 +43,6 @@ fn main() {
     println!("KDU ID: {}", new_kdu.kdu_id);
     println!("Payload as bytes: {:?}", new_kdu.data_payload);
 
-
     // --- Verification ---
     println!("\n--- 2. Verifying KDU Signature ---");
     let content_to_hash = (&new_kdu.metadata, &new_kdu.data_payload);
