@@ -17,7 +17,7 @@ fn main() {
         kdu_type: "Generic".to_string(),
         metadata: Metadata {
             metadata_hash: "zQm...meta".to_string(),
-            unisphere_coordinates: [0; 42], // Zeroed-out coordinates
+            unisphere_coordinates: vec![0; 42], // Zeroed-out coordinates
             license: License {
                 license_id: "BaDaaS-1.1.0".to_string(),
                 licensor_fqei: "user@U.CDQN#...".to_string(),
