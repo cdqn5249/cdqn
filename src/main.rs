@@ -39,7 +39,9 @@ fn main() {
     // --- Persistence Write ---
     println!("\n--- 2. Writing KDU to Sovereign Journal ---");
     let persistence = Persistence::new(db_path).expect("Failed to create persistence service");
-    persistence.write_kdu(&new_kdu).expect("Failed to write KDU to journal");
+    persistence
+        .write_kdu(&new_kdu)
+        .expect("Failed to write KDU to journal");
     println!("SUCCESS: KDU written to journal in '{}'", db_path.display());
 
     // --- Verification (Manual for now) ---
