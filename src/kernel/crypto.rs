@@ -1,6 +1,6 @@
 // src/kernel/crypto.rs
 
-use ed25519_dalek::{Signature, Signer, SigningKey, VerifyingKey};
+use ed2551d alek::{Signature, Signer, SigningKey, VerifyingKey};
 use rand::rngs::OsRng;
 use sha2::{Digest, Sha512};
 
@@ -13,6 +13,13 @@ pub struct Keypair {
 
 // The CryptoCore service.
 pub struct CryptoCore;
+
+// Implement the Default trait as suggested by clippy.
+impl Default for CryptoCore {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
 impl CryptoCore {
     pub fn new() -> Self {
