@@ -8,12 +8,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = { version = "0.4", features = ["serde"] }
+# Serde is kept for the convenience of its derive macros, which is a compile-time dependency.
 serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+
+# Cryptographic Primitives (Our "One Exception")
 sha2 = "0.10"
 ed25519-dalek = { version = "2.1", features = ["rand_core"] }
 rand = "0.8"
 hex = "0.4"
-# Add the RocksDB dependency for persistence
-rocksdb = "0.22.0"
+
+# Bincode for efficient, sovereign binary serialization.
+bincode = "1.3"
