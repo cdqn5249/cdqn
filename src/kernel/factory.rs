@@ -1,8 +1,9 @@
 // src/kernel/factory.rs
 
 use super::{KDU, FQEI, License, Metadata};
-use super::crypto::{CryptoCore, Keypair};
+use super::crypto::CryptoCore;
 use super::hlc::HLC;
+use ed25519_dalek::Keypair; // Import the official Keypair
 
 // The KDUFactory holds instances of the services it depends on.
 pub struct KDUFactory {
@@ -27,7 +28,7 @@ impl KDUFactory {
     // The main function for creating a new KDU.
     pub fn create_kdu(
         &self,
-        originator_keypair: &Keypair,
+        originator_keypair: &Keypair, // Use the official Keypair type
         originator_fqei: FQEI,
         kdu_type: String,
         data_payload: serde_json::Value,
@@ -51,7 +52,7 @@ impl KDUFactory {
 
         // 3. Hash the metadata (with its placeholder hash)
         let metadata_hash = CryptoCore::hash_content(&metadata);
-        metadata.metadata_hash = hex::encode(&metadata_hash); // Use hex for readability
+        metadata.metadata_hash = hex::encode(&metadata_hash);
 
         // 4. Create the full KDU struct with placeholder hash and signature
         let mut kdu = KDU {
@@ -75,7 +76,7 @@ impl KDUFactory {
         kdu.content_hash = hex::encode(&content_hash);
 
         // 6. Sign the final content hash
-        let signature = self.crypto_core.sign(&content_hash, &originator_keypair.secret);
+        let signature = self.crypto_core.sign(&content_hash, originator_keypair);
         kdu.originator_signature = signature.to_bytes().to_vec();
 
         // 7. Return the final, valid KDU
