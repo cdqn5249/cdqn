@@ -14,9 +14,8 @@ fn main() {
     let server_addr_clone = server_addr.to_string();
     let server_handle = thread::spawn(move || {
         if let Ok(server) = NodeServer::bind(&server_addr_clone) {
-            // We only run the server for one connection for this test.
-            // The .take(1) ensures the server thread will exit after the first connection.
-            for stream in server.listener.incoming().take(1) {
+            // We now use the safe, public .incoming() method.
+            for stream in server.incoming().take(1) {
                 if let Ok(s) = stream {
                     println!("[NodeServer] Accepted connection from: {}", s.peer_addr().unwrap());
                 }
