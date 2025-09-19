@@ -1,0 +1,9 @@
+(function() {
+    var implementors = Object.fromEntries([["cdqn",[["impl UnsafeUnpin for <a class=\"struct\" href=\"cdqn/kernel/struct.KDU.html\" title=\"struct cdqn::kernel::KDU\">KDU</a>",1,["cdqn::kernel::KDU"]],["impl UnsafeUnpin for <a class=\"struct\" href=\"cdqn/kernel/struct.License.html\" title=\"struct cdqn::kernel::License\">License</a>",1,["cdqn::kernel::License"]],["impl UnsafeUnpin for <a class=\"struct\" href=\"cdqn/kernel/struct.Metadata.html\" title=\"struct cdqn::kernel::Metadata\">Metadata</a>",1,["cdqn::kernel::Metadata"]]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":57,"fragment_lengths":[493]}

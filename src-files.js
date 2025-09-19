@@ -1,2 +1,2 @@
-createSrcSidebar('[["cdqn",["",[],["main.rs"]]]]');
-//{"start":19,"fragment_lengths":[28]}
+createSrcSidebar('[["cdqn",["",[["kernel",[],["mod.rs"]]],["lib.rs"]]]]');
+//{"start":19,"fragment_lengths":[51]}

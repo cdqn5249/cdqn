@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["KDU","License","Metadata"],"type":["FQEI","UnisphereCoordinates"]};
