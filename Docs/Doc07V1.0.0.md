@@ -1,3 +1,8 @@
+*   **Version** : 1.0.0
+*   **Date** : 19 September 2025
+*   **Author** : Christophe Duy Quang Nguyen
+*   **Vibe Coding Engine** : Gemini 2.5 Pro, Google
+---
 # **The `cdqn` Ecosystem uses cases**
 ## **Introduction: From Potential to Principle**
 
