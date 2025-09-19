@@ -6,42 +6,34 @@
 <a href=#6 id=6 data-nosnippet>6</a>
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>serde::{Deserialize, Serialize};
 <a href=#8 id=8 data-nosnippet>8</a>
-<a href=#9 id=9 data-nosnippet>9</a><span class="comment">// FQEI (Fully Qualified Entity Identifier) - A unique, verifiable name for any entity.
-<a href=#10 id=10 data-nosnippet>10</a>// For now, a simple String. Will become more complex later.
-<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub type </span>FQEI = String;
-<a href=#12 id=12 data-nosnippet>12</a>
-<a href=#13 id=13 data-nosnippet>13</a><span class="comment">// A placeholder for the 42-dimensional vector from the Unisphere.
-<a href=#14 id=14 data-nosnippet>14</a>// We use a Vec&lt;u16&gt; which is serializable by default.
-<a href=#15 id=15 data-nosnippet>15</a></span><span class="kw">pub type </span>UnisphereCoordinates = Vec&lt;u16&gt;;
-<a href=#16 id=16 data-nosnippet>16</a>
-<a href=#17 id=17 data-nosnippet>17</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
-<a href=#18 id=18 data-nosnippet>18</a></span><span class="kw">pub struct </span>License {
-<a href=#19 id=19 data-nosnippet>19</a>    <span class="kw">pub </span>license_id: String,                <span class="comment">// e.g., "BaDaaS-1.1.0"
-<a href=#20 id=20 data-nosnippet>20</a>    </span><span class="kw">pub </span>licensor_fqei: FQEI,               <span class="comment">// The owner of the content
-<a href=#21 id=21 data-nosnippet>21</a>    </span><span class="kw">pub </span>custom_terms_hash: <span class="prelude-ty">Option</span>&lt;String&gt;, <span class="comment">// Optional hash for custom licenses
-<a href=#22 id=22 data-nosnippet>22</a></span>}
-<a href=#23 id=23 data-nosnippet>23</a>
-<a href=#24 id=24 data-nosnippet>24</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
-<a href=#25 id=25 data-nosnippet>25</a></span><span class="kw">pub struct </span>Metadata {
-<a href=#26 id=26 data-nosnippet>26</a>    <span class="kw">pub </span>metadata_hash: String, <span class="comment">// Hash of this metadata block
-<a href=#27 id=27 data-nosnippet>27</a>    </span><span class="kw">pub </span>unisphere_coordinates: UnisphereCoordinates, <span class="comment">// The 42D vector
-<a href=#28 id=28 data-nosnippet>28</a>    </span><span class="kw">pub </span>license: License,      <span class="comment">// The license terms
-<a href=#29 id=29 data-nosnippet>29</a>    </span><span class="kw">pub </span>causal_link: <span class="prelude-ty">Option</span>&lt;String&gt;, <span class="comment">// Optional ID of a preceding KDU
-<a href=#30 id=30 data-nosnippet>30</a></span>}
-<a href=#31 id=31 data-nosnippet>31</a>
-<a href=#32 id=32 data-nosnippet>32</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
-<a href=#33 id=33 data-nosnippet>33</a></span><span class="kw">pub struct </span>KDU {
-<a href=#34 id=34 data-nosnippet>34</a>    <span class="comment">// --- Universal Header ---
-<a href=#35 id=35 data-nosnippet>35</a>    </span><span class="kw">pub </span>kdu_spec_version: String,
-<a href=#36 id=36 data-nosnippet>36</a>    <span class="kw">pub </span>kdu_id: String,       <span class="comment">// The HLC timestamp and unique ID
-<a href=#37 id=37 data-nosnippet>37</a>    </span><span class="kw">pub </span>content_hash: String, <span class="comment">// Hash of the payload and metadata
-<a href=#38 id=38 data-nosnippet>38</a>    </span><span class="kw">pub </span>originator_fqei: FQEI,
-<a href=#39 id=39 data-nosnippet>39</a>    <span class="kw">pub </span>originator_signature: Vec&lt;u8&gt;, <span class="comment">// The forward-secret signature
-<a href=#40 id=40 data-nosnippet>40</a>    </span><span class="kw">pub </span>timestamp_utc: String,
-<a href=#41 id=41 data-nosnippet>41</a>    <span class="kw">pub </span>kdu_type: String, <span class="comment">// e.g., "Generic", "Workflow"
-<a href=#42 id=42 data-nosnippet>42</a>
-<a href=#43 id=43 data-nosnippet>43</a>    // --- Core Blocks ---
-<a href=#44 id=44 data-nosnippet>44</a>    </span><span class="kw">pub </span>metadata: Metadata,
-<a href=#45 id=45 data-nosnippet>45</a>    <span class="comment">// The content-agnostic payload, represented as a flexible JSON value for now.
-<a href=#46 id=46 data-nosnippet>46</a>    </span><span class="kw">pub </span>data_payload: serde_json::Value,
-<a href=#47 id=47 data-nosnippet>47</a>}</code></pre></div></section></main></body></html>
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">pub type </span>FQEI = String;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">pub type </span>UnisphereCoordinates = Vec&lt;u16&gt;;
+<a href=#11 id=11 data-nosnippet>11</a>
+<a href=#12 id=12 data-nosnippet>12</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
+<a href=#13 id=13 data-nosnippet>13</a></span><span class="kw">pub struct </span>License {
+<a href=#14 id=14 data-nosnippet>14</a>    <span class="kw">pub </span>license_id: String,
+<a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">pub </span>licensor_fqei: FQEI,
+<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">pub </span>custom_terms_hash: <span class="prelude-ty">Option</span>&lt;String&gt;,
+<a href=#17 id=17 data-nosnippet>17</a>}
+<a href=#18 id=18 data-nosnippet>18</a>
+<a href=#19 id=19 data-nosnippet>19</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
+<a href=#20 id=20 data-nosnippet>20</a></span><span class="kw">pub struct </span>Metadata {
+<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">pub </span>metadata_hash: String,
+<a href=#22 id=22 data-nosnippet>22</a>    <span class="kw">pub </span>unisphere_coordinates: UnisphereCoordinates,
+<a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">pub </span>license: License,
+<a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">pub </span>causal_link: <span class="prelude-ty">Option</span>&lt;String&gt;,
+<a href=#25 id=25 data-nosnippet>25</a>}
+<a href=#26 id=26 data-nosnippet>26</a>
+<a href=#27 id=27 data-nosnippet>27</a><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
+<a href=#28 id=28 data-nosnippet>28</a></span><span class="kw">pub struct </span>KDU {
+<a href=#29 id=29 data-nosnippet>29</a>    <span class="kw">pub </span>kdu_spec_version: String,
+<a href=#30 id=30 data-nosnippet>30</a>    <span class="kw">pub </span>kdu_id: String,
+<a href=#31 id=31 data-nosnippet>31</a>    <span class="kw">pub </span>content_hash: String,
+<a href=#32 id=32 data-nosnippet>32</a>    <span class="kw">pub </span>originator_fqei: FQEI,
+<a href=#33 id=33 data-nosnippet>33</a>    <span class="kw">pub </span>originator_signature: Vec&lt;u8&gt;,
+<a href=#34 id=34 data-nosnippet>34</a>    <span class="kw">pub </span>timestamp_utc: String,
+<a href=#35 id=35 data-nosnippet>35</a>    <span class="kw">pub </span>kdu_type: String,
+<a href=#36 id=36 data-nosnippet>36</a>    <span class="kw">pub </span>metadata: Metadata,
+<a href=#37 id=37 data-nosnippet>37</a>    <span class="comment">// The payload is now a truly content-agnostic vector of bytes.
+<a href=#38 id=38 data-nosnippet>38</a>    </span><span class="kw">pub </span>data_payload: Vec&lt;u8&gt;,
+<a href=#39 id=39 data-nosnippet>39</a>}</code></pre></div></section></main></body></html>
