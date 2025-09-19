@@ -2,6 +2,7 @@
 
 use cdqn::kernel::factory::KDUFactory;
 use ed25519_dalek::Verifier;
+use std::convert::TryInto; // Import the conversion trait
 
 fn main() {
     println!("cdqn runtime starting... [Phase 0, Milestone 3]");
@@ -33,7 +34,14 @@ fn main() {
     let content_to_hash = (&new_kdu.metadata, &new_kdu.data_payload);
     let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
 
-    let signature = ed25519_dalek::Signature::from_bytes(&new_kdu.originator_signature).unwrap();
+    // Correctly convert the Vec<u8> slice into a fixed-size array reference.
+    let signature_bytes: &[u8; 64] = new_kdu.originator_signature
+        .as_slice()
+        .try_into()
+        .expect("Signature slice must be 64 bytes long");
+
+    // Reconstruct the signature. Note the removal of .unwrap().
+    let signature = ed25519_dalek::Signature::from_bytes(signature_bytes);
 
     // Use the public key from our keypair to verify
     let verification_result = originator_keypair.public.verify(&content_hash_bytes, &signature);
