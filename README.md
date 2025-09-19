@@ -20,6 +20,7 @@ The single guiding principle of the cdqn ecosystem is the creation of smart immu
 * **check_0000:** 19 September 2025, Gemini 2.5 Pro, Google
 
 ## Last 3 plans (Docs directory)
+* **plan_0001:** 19 September 2025, Gemini 2.5 Pro, Google
 * **plan_0000:** 19 September 2025, Gemini 2.5 Pro, Google
 
 **All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
