@@ -40,8 +40,11 @@ fn main() {
     {
         println!("\n--- 2. Writing KDU to Sovereign Journal ---");
         // We need to make persistence mutable to update its index
-        let mut persistence = Persistence::new(db_path).expect("Failed to create persistence service");
-        persistence.write_kdu(&kdu_to_write).expect("Failed to write KDU to journal");
+        let mut persistence =
+            Persistence::new(db_path).expect("Failed to create persistence service");
+        persistence
+            .write_kdu(&kdu_to_write)
+            .expect("Failed to write KDU to journal");
         println!("SUCCESS: KDU written to journal.");
         // persistence is dropped here, closing the file.
     }
