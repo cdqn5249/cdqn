@@ -46,10 +46,4 @@ impl HLC {
 
         (kdu_id, timestamp_utc)
     }
-}```
-
-### Next Step
-
-Commit these three changes. The CI workflow will run, and this time the `clippy` linter will be satisfied. All jobs will pass with green checkmarks.
-
-This officially completes **Phase 0, Milestone 3**. We have a robust, secure, and idiomatically correct set of kernel services. We are now in an excellent position to build the rest of the runtime.
+}
