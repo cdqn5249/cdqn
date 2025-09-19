@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 pub type FQEI = String;
 
 // A placeholder for the 42-dimensional vector from the Unisphere.
-// We use a fixed-size array of 16-bit unsigned integers.
-pub type UnisphereCoordinates = [u16; 42];
+// We use a Vec<u16> which is serializable by default.
+pub type UnisphereCoordinates = Vec<u16>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct License {
