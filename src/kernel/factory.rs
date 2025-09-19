@@ -1,8 +1,8 @@
 // src/kernel/factory.rs
 
-use super::{KDU, FQEI, License, Metadata};
 use super::crypto::{CryptoCore, Keypair}; // Use our own Keypair
 use super::hlc::HLC;
+use super::{License, Metadata, FQEI, KDU};
 
 pub struct KDUFactory {
     crypto_core: CryptoCore,
@@ -16,7 +16,7 @@ impl KDUFactory {
             hlc: HLC::new(),
         }
     }
-    
+
     pub fn crypto_core(&self) -> &CryptoCore {
         &self.crypto_core
     }
@@ -35,7 +35,7 @@ impl KDUFactory {
             licensor_fqei: originator_fqei.clone(),
             custom_terms_hash: None,
         };
-        
+
         let mut metadata = Metadata {
             metadata_hash: String::new(),
             unisphere_coordinates: vec![0; 42],
@@ -63,7 +63,9 @@ impl KDUFactory {
         kdu.content_hash = hex::encode(&content_hash);
 
         // Sign using the secret key from our keypair
-        let signature = self.crypto_core.sign(&content_hash, &originator_keypair.secret);
+        let signature = self
+            .crypto_core
+            .sign(&content_hash, &originator_keypair.secret);
         kdu.originator_signature = signature.to_bytes().to_vec();
 
         kdu
