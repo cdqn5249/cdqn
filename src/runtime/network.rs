@@ -1,7 +1,7 @@
 // src/runtime/network.rs
 
 use std::io;
-use std::net::{TcpListener, TcpStream};
+use std::net::{Incoming, TcpListener, TcpStream}; // Import Incoming
 use std::thread;
 
 // The NodeServer is responsible for listening for incoming connections.
@@ -17,19 +17,23 @@ impl NodeServer {
         Ok(NodeServer { listener })
     }
 
+    // --- NEW PUBLIC METHOD ADDED HERE ---
+    // This provides a safe, public way to access the incoming connection iterator.
+    pub fn incoming(&self) -> Incoming<'_> {
+        self.listener.incoming()
+    }
+
     // The main server loop. It accepts connections and handles them.
     pub fn run(self) {
         // accept connections and process them serially
-        for stream in self.listener.incoming() {
+        for stream in self.incoming() { // Now uses the public method
             match stream {
                 Ok(stream) => {
                     println!(
                         "[NodeServer] New connection: {}",
                         stream.peer_addr().unwrap()
                     );
-                    // For now, we just print a message. In the future, we'll handle KDU exchange.
                     thread::spawn(move || {
-                        // connection succeeded
                         handle_client(stream)
                     });
                 }
@@ -43,14 +47,11 @@ impl NodeServer {
 
 // A simple handler function for a new client connection.
 fn handle_client(stream: TcpStream) {
-    // For this milestone, we do nothing but acknowledge the connection.
     println!(
         "[handle_client] Connection from {} handled and closed.",
         stream.peer_addr().unwrap()
     );
 }
-
-// --- NEW CODE ADDED BELOW ---
 
 // The NodeClient is responsible for initiating connections to a NodeServer.
 pub struct NodeClient;
