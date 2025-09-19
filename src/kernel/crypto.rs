@@ -14,7 +14,6 @@ pub struct Keypair {
 // The CryptoCore service.
 pub struct CryptoCore;
 
-// Implement the Default trait as suggested by clippy.
 impl Default for CryptoCore {
     fn default() -> Self {
         Self::new()
@@ -26,7 +25,6 @@ impl CryptoCore {
         CryptoCore
     }
 
-    // Generates a new keypair. This will now work because of the feature flag.
     pub fn generate_keypair(&self) -> Keypair {
         let mut csprng = OsRng;
         let secret_key: SigningKey = SigningKey::generate(&mut csprng);
@@ -37,14 +35,14 @@ impl CryptoCore {
         }
     }
 
-    // Signs a given message hash with a secret key.
     pub fn sign(&self, message_hash: &[u8], secret_key: &SigningKey) -> Signature {
         secret_key.sign(message_hash)
     }
 
     // A utility function to create a SHA512 hash of any serializable data.
+    // It now uses bincode for a consistent, sovereign binary format.
     pub fn hash_content<T: serde::Serialize>(content: &T) -> Vec<u8> {
-        let content_bytes = serde_json::to_vec(content).unwrap();
+        let content_bytes = bincode::serialize(content).unwrap();
         let mut hasher = Sha512::new();
         hasher.update(&content_bytes);
         hasher.finalize().to_vec()
