@@ -16,7 +16,10 @@ fn main() {
         // In a real application, we would call server.run() here to start the main loop.
         // For this test, we let the _server object drop, which closes the listener.
     } else {
-        eprintln!("FAILURE: Could not bind NodeServer to {}. Is the port already in use?", server_addr);
+        eprintln!(
+            "FAILURE: Could not bind NodeServer to {}. Is the port already in use?",
+            server_addr
+        );
     }
 
     println!("\n--- Sovereign NodeServer implemented successfully! ---");
