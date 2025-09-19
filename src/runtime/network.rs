@@ -23,7 +23,10 @@ impl NodeServer {
         for stream in self.listener.incoming() {
             match stream {
                 Ok(stream) => {
-                    println!("[NodeServer] New connection: {}", stream.peer_addr().unwrap());
+                    println!(
+                        "[NodeServer] New connection: {}",
+                        stream.peer_addr().unwrap()
+                    );
                     // For now, we just print a message. In the future, we'll handle KDU exchange.
                     thread::spawn(move || {
                         // connection succeeded
@@ -42,5 +45,8 @@ impl NodeServer {
 fn handle_client(stream: TcpStream) {
     // For this milestone, we do nothing but acknowledge the connection.
     // In the next milestone, this is where we will read KDUs from the stream.
-    println!("[handle_client] Connection from {} handled and closed.", stream.peer_addr().unwrap());
+    println!(
+        "[handle_client] Connection from {} handled and closed.",
+        stream.peer_addr().unwrap()
+    );
 }
