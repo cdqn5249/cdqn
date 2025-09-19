@@ -1,6 +1,6 @@
 // src/kernel/crypto.rs
 
-use ed2551d alek::{Signature, Signer, SigningKey, VerifyingKey};
+use ed25519_dalek::{Signature, Signer, SigningKey, VerifyingKey};
 use rand::rngs::OsRng;
 use sha2::{Digest, Sha512};
 
