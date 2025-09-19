@@ -6,42 +6,34 @@ pub mod hlc;
 
 use serde::{Deserialize, Serialize};
 
-// FQEI (Fully Qualified Entity Identifier) - A unique, verifiable name for any entity.
-// For now, a simple String. Will become more complex later.
 pub type FQEI = String;
-
-// A placeholder for the 42-dimensional vector from the Unisphere.
-// We use a Vec<u16> which is serializable by default.
 pub type UnisphereCoordinates = Vec<u16>;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct License {
-    pub license_id: String,                // e.g., "BaDaaS-1.1.0"
-    pub licensor_fqei: FQEI,               // The owner of the content
-    pub custom_terms_hash: Option<String>, // Optional hash for custom licenses
+    pub license_id: String,
+    pub licensor_fqei: FQEI,
+    pub custom_terms_hash: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Metadata {
-    pub metadata_hash: String, // Hash of this metadata block
-    pub unisphere_coordinates: UnisphereCoordinates, // The 42D vector
-    pub license: License,      // The license terms
-    pub causal_link: Option<String>, // Optional ID of a preceding KDU
+    pub metadata_hash: String,
+    pub unisphere_coordinates: UnisphereCoordinates,
+    pub license: License,
+    pub causal_link: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct KDU {
-    // --- Universal Header ---
     pub kdu_spec_version: String,
-    pub kdu_id: String,       // The HLC timestamp and unique ID
-    pub content_hash: String, // Hash of the payload and metadata
+    pub kdu_id: String,
+    pub content_hash: String,
     pub originator_fqei: FQEI,
-    pub originator_signature: Vec<u8>, // The forward-secret signature
+    pub originator_signature: Vec<u8>,
     pub timestamp_utc: String,
-    pub kdu_type: String, // e.g., "Generic", "Workflow"
-
-    // --- Core Blocks ---
+    pub kdu_type: String,
     pub metadata: Metadata,
-    // The content-agnostic payload, represented as a flexible JSON value for now.
-    pub data_payload: serde_json::Value,
+    // The payload is now a truly content-agnostic vector of bytes.
+    pub data_payload: Vec<u8>,
 }
