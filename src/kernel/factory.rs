@@ -9,7 +9,6 @@ pub struct KDUFactory {
     hlc: HLC,
 }
 
-// Implement the Default trait as suggested by clippy.
 impl Default for KDUFactory {
     fn default() -> Self {
         Self::new()
@@ -33,7 +32,8 @@ impl KDUFactory {
         originator_keypair: &Keypair,
         originator_fqei: FQEI,
         kdu_type: String,
-        data_payload: serde_json::Value,
+        // The factory now accepts a slice of bytes for the payload.
+        data_payload: &[u8],
     ) -> KDU {
         let (kdu_id, timestamp_utc) = self.hlc.now();
 
@@ -62,14 +62,14 @@ impl KDUFactory {
             timestamp_utc,
             kdu_type,
             metadata,
-            data_payload,
+            // We clone the byte slice into the KDU's owned vector.
+            data_payload: data_payload.to_vec(),
         };
 
         let content_to_hash = (&kdu.metadata, &kdu.data_payload);
         let content_hash = CryptoCore::hash_content(&content_to_hash);
         kdu.content_hash = hex::encode(&content_hash);
 
-        // Sign using the secret key from our keypair
         let signature = self
             .crypto_core
             .sign(&content_hash, &originator_keypair.secret);
