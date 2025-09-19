@@ -14,14 +14,13 @@ fn main() {
     let server_addr_clone = server_addr.to_string();
     let server_handle = thread::spawn(move || {
         if let Ok(server) = NodeServer::bind(&server_addr_clone) {
-            // We now use the safe, public .incoming() method.
-            for stream in server.incoming().take(1) {
-                if let Ok(s) = stream {
-                    println!(
-                        "[NodeServer] Accepted connection from: {}",
-                        s.peer_addr().unwrap()
-                    );
-                }
+            // We use .flatten() to automatically handle the Result and get the stream.
+            // This is the corrected, more idiomatic loop.
+            for s in server.incoming().take(1).flatten() {
+                println!(
+                    "[NodeServer] Accepted connection from: {}",
+                    s.peer_addr().unwrap()
+                );
             }
         }
     });
