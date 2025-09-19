@@ -1,7 +1,7 @@
 // src/runtime/persistence.rs
 
 use crate::kernel::KDU;
-use rocksdb::{DB, Options};
+use rocksdb::{Options, DB};
 use std::path::Path;
 
 // The Persistence service. It holds a connection to the RocksDB database.
