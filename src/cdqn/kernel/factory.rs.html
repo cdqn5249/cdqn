@@ -1,8 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/kernel/factory.rs`."><title>factory.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="cdqn" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-68b7e25d.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">cdqn/kernel/</div>factory.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="comment">// src/kernel/factory.rs
 <a href=#2 id=2 data-nosnippet>2</a>
-<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use super</span>::{KDU, FQEI, License, Metadata};
-<a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span><span class="kw">super</span>::crypto::{CryptoCore, Keypair}; <span class="comment">// Use our own Keypair
-<a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">use </span><span class="kw">super</span>::hlc::HLC;
+<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span><span class="kw">super</span>::crypto::{CryptoCore, Keypair}; <span class="comment">// Use our own Keypair
+<a href=#4 id=4 data-nosnippet>4</a></span><span class="kw">use </span><span class="kw">super</span>::hlc::HLC;
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use super</span>::{License, Metadata, FQEI, KDU};
 <a href=#6 id=6 data-nosnippet>6</a>
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">pub struct </span>KDUFactory {
 <a href=#8 id=8 data-nosnippet>8</a>    crypto_core: CryptoCore,
@@ -16,7 +16,7 @@
 <a href=#16 id=16 data-nosnippet>16</a>            hlc: HLC::new(),
 <a href=#17 id=17 data-nosnippet>17</a>        }
 <a href=#18 id=18 data-nosnippet>18</a>    }
-<a href=#19 id=19 data-nosnippet>19</a>    
+<a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a>    <span class="kw">pub fn </span>crypto_core(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>CryptoCore {
 <a href=#21 id=21 data-nosnippet>21</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.crypto_core
 <a href=#22 id=22 data-nosnippet>22</a>    }
@@ -35,7 +35,7 @@
 <a href=#35 id=35 data-nosnippet>35</a>            licensor_fqei: originator_fqei.clone(),
 <a href=#36 id=36 data-nosnippet>36</a>            custom_terms_hash: <span class="prelude-val">None</span>,
 <a href=#37 id=37 data-nosnippet>37</a>        };
-<a href=#38 id=38 data-nosnippet>38</a>        
+<a href=#38 id=38 data-nosnippet>38</a>
 <a href=#39 id=39 data-nosnippet>39</a>        <span class="kw">let </span><span class="kw-2">mut </span>metadata = Metadata {
 <a href=#40 id=40 data-nosnippet>40</a>            metadata_hash: String::new(),
 <a href=#41 id=41 data-nosnippet>41</a>            unisphere_coordinates: <span class="macro">vec!</span>[<span class="number">0</span>; <span class="number">42</span>],
@@ -63,9 +63,11 @@
 <a href=#63 id=63 data-nosnippet>63</a>        kdu.content_hash = hex::encode(<span class="kw-2">&amp;</span>content_hash);
 <a href=#64 id=64 data-nosnippet>64</a>
 <a href=#65 id=65 data-nosnippet>65</a>        <span class="comment">// Sign using the secret key from our keypair
-<a href=#66 id=66 data-nosnippet>66</a>        </span><span class="kw">let </span>signature = <span class="self">self</span>.crypto_core.sign(<span class="kw-2">&amp;</span>content_hash, <span class="kw-2">&amp;</span>originator_keypair.secret);
-<a href=#67 id=67 data-nosnippet>67</a>        kdu.originator_signature = signature.to_bytes().to_vec();
-<a href=#68 id=68 data-nosnippet>68</a>
-<a href=#69 id=69 data-nosnippet>69</a>        kdu
-<a href=#70 id=70 data-nosnippet>70</a>    }
-<a href=#71 id=71 data-nosnippet>71</a>}</code></pre></div></section></main></body></html>
+<a href=#66 id=66 data-nosnippet>66</a>        </span><span class="kw">let </span>signature = <span class="self">self
+<a href=#67 id=67 data-nosnippet>67</a>            </span>.crypto_core
+<a href=#68 id=68 data-nosnippet>68</a>            .sign(<span class="kw-2">&amp;</span>content_hash, <span class="kw-2">&amp;</span>originator_keypair.secret);
+<a href=#69 id=69 data-nosnippet>69</a>        kdu.originator_signature = signature.to_bytes().to_vec();
+<a href=#70 id=70 data-nosnippet>70</a>
+<a href=#71 id=71 data-nosnippet>71</a>        kdu
+<a href=#72 id=72 data-nosnippet>72</a>    }
+<a href=#73 id=73 data-nosnippet>73</a>}</code></pre></div></section></main></body></html>
