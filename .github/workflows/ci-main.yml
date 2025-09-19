@@ -5,8 +5,6 @@ name: CDQN Core CI
 on:
   push:
     branches: [ "main" ]
-    # --- ADDED THIS SECTION ---
-    # This makes the workflow run ONLY if relevant files have changed.
     paths:
       - 'src/**'
       - 'Cargo.toml'
@@ -15,7 +13,6 @@ on:
       
   pull_request:
     branches: [ "main" ]
-    # --- AND ADDED THIS SECTION ---
     paths:
       - 'src/**'
       - 'Cargo.toml'
@@ -61,17 +58,21 @@ jobs:
       - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
       
-      - name: Setup sccache
-        uses: mozilla-actions/sccache-action@v0.0.5
+      # --- THIS IS THE NEW STEP ---
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run Main Executable
-        env:
-          RUSTC_WRAPPER: sccache
         run: cargo run --all-features --verbose
 
       - name: Build Release Binary
-        env:
-          RUSTC_WRAPPER: sccache
         run: cargo build --all-features --release --verbose
 
       - name: Upload Artifact (Linux)
