@@ -5,8 +5,22 @@ name: CDQN Core CI
 on:
   push:
     branches: [ "main" ]
+    # --- ADDED THIS SECTION ---
+    # This makes the workflow run ONLY if relevant files have changed.
+    paths:
+      - 'src/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/ci-main.yml'
+      
   pull_request:
     branches: [ "main" ]
+    # --- AND ADDED THIS SECTION ---
+    paths:
+      - 'src/**'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - '.github/workflows/ci-main.yml'
 
 jobs:
   format_and_lint:
@@ -50,11 +64,9 @@ jobs:
       - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.5
 
-      # THIS IS THE CORRECTED STEP
       - name: Run Main Executable
         env:
           RUSTC_WRAPPER: sccache
-        # We use 'cargo run' to execute main.rs and see its output
         run: cargo run --all-features --verbose
 
       - name: Build Release Binary
