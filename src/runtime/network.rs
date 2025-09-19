@@ -44,9 +44,23 @@ impl NodeServer {
 // A simple handler function for a new client connection.
 fn handle_client(stream: TcpStream) {
     // For this milestone, we do nothing but acknowledge the connection.
-    // In the next milestone, this is where we will read KDUs from the stream.
     println!(
         "[handle_client] Connection from {} handled and closed.",
         stream.peer_addr().unwrap()
     );
+}
+
+// --- NEW CODE ADDED BELOW ---
+
+// The NodeClient is responsible for initiating connections to a NodeServer.
+pub struct NodeClient;
+
+impl NodeClient {
+    // Attempts to connect to a given server address.
+    pub fn connect(addr: &str) -> io::Result<TcpStream> {
+        println!("[NodeClient] Attempting to connect to {}", addr);
+        let stream = TcpStream::connect(addr)?;
+        println!("[NodeClient] Connection established with {}", addr);
+        Ok(stream)
+    }
 }
