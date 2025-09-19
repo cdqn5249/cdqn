@@ -1,58 +1,55 @@
 // src/main.rs
 
 use cdqn::kernel::factory::KDUFactory;
-use ed25519_dalek::Verifier;
-use std::convert::TryInto; // Import the conversion trait
+use cdqn::runtime::persistence::Persistence; // Import the new service
+use std::fs; // Used for cleaning up the database directory
 
 fn main() {
-    println!("cdqn runtime starting... [Phase 0, Milestone 3]");
+    println!("cdqn runtime starting... [Phase 1, Milestone 1]");
 
-    let factory = KDUFactory::new();
+    // --- Setup ---
+    let factory = KDUFactory::default(); // Use the Default trait
     let crypto_core = factory.crypto_core();
-
     let originator_keypair = crypto_core.generate_keypair();
     let originator_fqei = "agent@U.TestNode#01".to_string();
+    let db_path = "./cdqn_db_test"; // Define a path for our test database
 
-    let payload = serde_json::json!({
-        "action": "self.test",
-        "status": "ok"
-    });
-
-    println!("\n--- Creating KDU with Factory ---");
+    // --- KDU Creation ---
+    let payload = serde_json::json!({"action": "persistence.test"});
     let new_kdu = factory.create_kdu(
         &originator_keypair,
         originator_fqei,
         "Generic".to_string(),
         payload,
     );
+    println!("\n--- 1. KDU Created in Memory ---");
+    println!("KDU ID: {}", new_kdu.kdu_id);
 
-    let kdu_as_json = serde_json::to_string_pretty(&new_kdu).unwrap();
-    println!("{}", kdu_as_json);
+    // --- Persistence Write ---
+    println!("\n--- 2. Writing KDU to Database ---");
+    let persistence = Persistence::new(db_path.as_ref()).expect("Failed to open DB");
+    persistence.write_kdu(&new_kdu).expect("Failed to write KDU");
+    println!("SUCCESS: KDU written to path '{}'", db_path);
 
-    println!("\n--- Verifying KDU Signature ---");
+    // --- Persistence Read ---
+    println!("\n--- 3. Reading KDU from Database ---");
+    let retrieved_kdu = persistence
+        .read_kdu(&new_kdu.kdu_id)
+        .expect("Read operation failed")
+        .expect("KDU not found in DB");
+    println!("SUCCESS: Retrieved KDU with ID: {}", retrieved_kdu.kdu_id);
 
-    let content_to_hash = (&new_kdu.metadata, &new_kdu.data_payload);
-    let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
+    // --- Verification ---
+    assert_eq!(new_kdu.content_hash, retrieved_kdu.content_hash);
+    println!("\n--- 4. Verification ---");
+    println!("SUCCESS: Retrieved KDU matches original KDU.");
 
-    // Correctly convert the Vec<u8> slice into a fixed-size array reference.
-    let signature_bytes: &[u8; 64] = new_kdu
-        .originator_signature
-        .as_slice()
-        .try_into()
-        .expect("Signature slice must be 64 bytes long");
-
-    // Reconstruct the signature. Note the removal of .unwrap().
-    let signature = ed25519_dalek::Signature::from_bytes(signature_bytes);
-
-    // Use the public key from our keypair to verify
-    let verification_result = originator_keypair
-        .public
-        .verify(&content_hash_bytes, &signature);
-
-    match verification_result {
-        Ok(_) => println!("SUCCESS: Signature is valid."),
-        Err(e) => println!("FAILURE: Signature is invalid! Error: {}", e),
-    }
-
-    println!("\n--- Kernel services implemented successfully! ---");
+    // --- Cleanup ---
+    // We drop the persistence object to release the lock on the DB files
+    drop(persistence); 
+    fs::remove_dir_all(db_path).expect("Failed to clean up DB directory");
+    println!("\n--- 5. Cleanup ---");
+    println!("SUCCESS: Database directory cleaned up.");
+    
+    println!("\n--- C.Persistence service implemented successfully! ---");
 }
