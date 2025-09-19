@@ -1,12 +1,19 @@
 // src/kernel/factory.rs
 
-use super::crypto::{CryptoCore, Keypair}; // Use our own Keypair
+use super::crypto::CryptoCore;
 use super::hlc::HLC;
 use super::{License, Metadata, FQEI, KDU};
 
 pub struct KDUFactory {
     crypto_core: CryptoCore,
     hlc: HLC,
+}
+
+// Implement the Default trait as suggested by clippy.
+impl Default for KDUFactory {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl KDUFactory {
@@ -23,7 +30,7 @@ impl KDUFactory {
 
     pub fn create_kdu(
         &self,
-        originator_keypair: &Keypair, // Use our own Keypair
+        originator_keypair: &super::crypto::Keypair,
         originator_fqei: FQEI,
         kdu_type: String,
         data_payload: serde_json::Value,
