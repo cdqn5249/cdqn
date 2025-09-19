@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["kernel"]};
+window.SIDEBAR_ITEMS = {"mod":["kernel","runtime"]};
