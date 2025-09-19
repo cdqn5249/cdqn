@@ -1,6 +1,6 @@
 // src/kernel/hlc.rs
 
-use chrono::{Utc, DateTime};
+use chrono::{DateTime, Utc};
 use std::sync::{Arc, Mutex};
 
 // The HLC service. It holds the last known time and a counter.
@@ -24,7 +24,7 @@ impl HLC {
     pub fn now(&self) -> (String, String) {
         let mut last_time = self.last_time.lock().unwrap();
         let mut counter = self.counter.lock().unwrap();
-        
+
         let current_time = Utc::now();
 
         if current_time > *last_time {
