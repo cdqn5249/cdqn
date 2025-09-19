@@ -9,7 +9,7 @@ edition = "2021"
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] } # For timestamps
-serde = { version = "1.0", features = ["derive"] } # For serialization
+serde = { version = "1.0", features = ["derive", "const-generics"] } # For serialization, with support for large arrays
 serde_json = "1.0" # For human-readable serialization (for now)
 sha2 = "0.10" # For hashing content
 ed25519-dalek = "2.1" # For cryptographic signatures
