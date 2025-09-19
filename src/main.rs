@@ -17,7 +17,10 @@ fn main() {
             // We now use the safe, public .incoming() method.
             for stream in server.incoming().take(1) {
                 if let Ok(s) = stream {
-                    println!("[NodeServer] Accepted connection from: {}", s.peer_addr().unwrap());
+                    println!(
+                        "[NodeServer] Accepted connection from: {}",
+                        s.peer_addr().unwrap()
+                    );
                 }
             }
         }
@@ -39,7 +42,6 @@ fn main() {
     println!("\n--- 3. Waiting for NodeServer thread to complete ---");
     server_handle.join().expect("Server thread panicked");
     println!("SUCCESS: NodeServer thread finished cleanly.");
-
 
     println!("\n--- Sovereign Client/Server connection implemented successfully! ---");
 }
