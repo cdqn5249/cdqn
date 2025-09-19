@@ -1,0 +1,84 @@
+# .github/workflows/ci-main.yml
+
+name: CDQN Core CI
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  format_and_lint:
+    name: Format & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Check Formatting
+        run: cargo fmt --all -- --check
+      - name: Run Linter
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+  security_audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Run cargo-audit
+        uses: taiki-e/install-action@cargo-audit
+      - name: Run Audit Scan
+        run: cargo audit
+
+  test_and_build:
+    name: Test & Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Setup sccache
+        uses: mozilla-actions/sccache-action@v0.0.5
+
+      - name: Run Tests
+        env:
+          RUSTC_WRAPPER: sccache
+        run: cargo test --all-features --verbose
+
+      - name: Build Release Binary
+        env:
+          RUSTC_WRAPPER: sccache
+        run: cargo build --all-features --release --verbose
+
+      - name: Upload Artifact (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdqn-runtime-linux
+          path: target/release/cdqn # Adjust binary name as needed
+
+      - name: Upload Artifact (macOS)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdqn-runtime-macos
+          path: target/release/cdqn # Adjust binary name as needed
+
+      - name: Upload Artifact (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cdqn-runtime-windows.exe
+          path: target/release/cdqn.exe # Adjust binary name as needed
