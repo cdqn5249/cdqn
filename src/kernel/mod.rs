@@ -1,5 +1,9 @@
 // src/kernel/mod.rs
 
+pub mod crypto;
+pub mod factory;
+pub mod hlc;
+
 use serde::{Deserialize, Serialize};
 
 // FQEI (Fully Qualified Entity Identifier) - A unique, verifiable name for any entity.
