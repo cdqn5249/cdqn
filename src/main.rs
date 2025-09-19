@@ -1,12 +1,11 @@
 // src/main.rs
 
 use cdqn::kernel::factory::KDUFactory;
-use ed25519_dalek::Verifier;
-use serde::Serialize; // We need this for our payload struct
-use std::convert::TryInto;
+use cdqn::runtime::persistence::Persistence; // Import our new service
+use serde::Serialize;
+use std::fs;
+use std::path::Path;
 
-// Define a simple struct for our test payload.
-// It must derive Serialize to be convertible to bincode.
 #[derive(Serialize)]
 struct TestPayload {
     action: String,
@@ -14,24 +13,20 @@ struct TestPayload {
 }
 
 fn main() {
-    println!("cdqn runtime starting... [Sovereign Core Baseline]");
+    println!("cdqn runtime starting... [Sovereign Persistence Write]");
 
     // --- Setup ---
     let factory = KDUFactory::default();
-    let crypto_core = factory.crypto_core();
-    let originator_keypair = crypto_core.generate_keypair();
+    let originator_keypair = factory.crypto_core().generate_keypair();
     let originator_fqei = "agent@U.TestNode#01".to_string();
+    let db_path = Path::new("./cdqn_sovereign_db_test");
 
     // --- KDU Creation ---
-    // 1. Create the payload data as a struct.
     let payload_struct = TestPayload {
-        action: "sovereign.core.test".to_string(),
+        action: "sovereign.persistence.write".to_string(),
         status: "ok".to_string(),
     };
-    // 2. Serialize the payload struct into a vector of bytes using bincode.
     let payload_bytes = bincode::serialize(&payload_struct).unwrap();
-
-    // 3. Create the KDU using the serialized byte payload.
     let new_kdu = factory.create_kdu(
         &originator_keypair,
         originator_fqei,
@@ -39,31 +34,25 @@ fn main() {
         &payload_bytes,
     );
     println!("\n--- 1. KDU Created in Memory ---");
-    // We can't easily print the whole KDU as JSON anymore, so we print its ID.
     println!("KDU ID: {}", new_kdu.kdu_id);
-    println!("Payload as bytes: {:?}", new_kdu.data_payload);
 
-    // --- Verification ---
-    println!("\n--- 2. Verifying KDU Signature ---");
-    let content_to_hash = (&new_kdu.metadata, &new_kdu.data_payload);
-    let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
+    // --- Persistence Write ---
+    println!("\n--- 2. Writing KDU to Sovereign Journal ---");
+    let persistence = Persistence::new(db_path).expect("Failed to create persistence service");
+    persistence.write_kdu(&new_kdu).expect("Failed to write KDU to journal");
+    println!("SUCCESS: KDU written to journal in '{}'", db_path.display());
 
-    let signature_bytes: &[u8; 64] = new_kdu
-        .originator_signature
-        .as_slice()
-        .try_into()
-        .expect("Signature slice must be 64 bytes long");
+    // --- Verification (Manual for now) ---
+    // We can't read it back yet, but we can check that the file was created.
+    let journal_file = db_path.join("00000001.journal");
+    assert!(journal_file.exists(), "Journal file was not created!");
+    println!("\n--- 3. Verification ---");
+    println!("SUCCESS: Journal file exists.");
 
-    let signature = ed25519_dalek::Signature::from_bytes(signature_bytes);
+    // --- Cleanup ---
+    fs::remove_dir_all(db_path).expect("Failed to clean up DB directory");
+    println!("\n--- 4. Cleanup ---");
+    println!("SUCCESS: Database directory cleaned up.");
 
-    let verification_result = originator_keypair
-        .public
-        .verify(&content_hash_bytes, &signature);
-
-    match verification_result {
-        Ok(_) => println!("SUCCESS: Signature is valid."),
-        Err(e) => println!("FAILURE: Signature is invalid! Error: {}", e),
-    }
-
-    println!("\n--- Sovereign Core Baseline Established ---");
+    println!("\n--- Sovereign JournalWriter implemented successfully! ---");
 }
