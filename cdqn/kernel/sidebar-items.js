@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["KDU","License","Metadata"],"type":["FQEI","UnisphereCoordinates"]};
+window.SIDEBAR_ITEMS = {"mod":["crypto","factory","hlc"],"struct":["KDU","License","Metadata"],"type":["FQEI","UnisphereCoordinates"]};
