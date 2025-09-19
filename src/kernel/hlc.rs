@@ -1,16 +1,16 @@
 // src/kernel/hlc.rs
 
-use chrono::{DateTime, Utc};
 use std::sync::{Arc, Mutex};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 // The HLC service. It holds the last known time and a counter.
 #[derive(Debug, Clone)]
 pub struct HLC {
-    last_time: Arc<Mutex<DateTime<Utc>>>,
+    // We now store the time as microseconds since the Unix epoch.
+    last_time_micros: Arc<Mutex<u128>>,
     counter: Arc<Mutex<u16>>,
 }
 
-// Implement the Default trait as suggested by clippy.
 impl Default for HLC {
     fn default() -> Self {
         Self::new()
@@ -18,20 +18,26 @@ impl Default for HLC {
 }
 
 impl HLC {
-    // Creates a new HLC instance, initialized to the current time.
     pub fn new() -> Self {
+        let now_micros = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("Time went backwards")
+            .as_micros();
         HLC {
-            last_time: Arc::new(Mutex::new(Utc::now())),
+            last_time_micros: Arc::new(Mutex::new(now_micros)),
             counter: Arc::new(Mutex::new(0)),
         }
     }
 
     // Generates a new, unique, and sortable timestamp ID.
     pub fn now(&self) -> (String, String) {
-        let mut last_time = self.last_time.lock().unwrap();
+        let mut last_time = self.last_time_micros.lock().unwrap();
         let mut counter = self.counter.lock().unwrap();
 
-        let current_time = Utc::now();
+        let current_time = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("Time went backwards")
+            .as_micros();
 
         if current_time > *last_time {
             *last_time = current_time;
@@ -40,9 +46,10 @@ impl HLC {
             *counter += 1;
         }
 
-        let timestamp_utc = last_time.to_rfc3339();
-        // Format into a sortable string: Time-Counter
-        let kdu_id = format!("{}-{:04x}", last_time.timestamp_micros(), *counter);
+        // We no longer have a convenient RFC3339 formatter, so we'll just use the micros.
+        // This is a temporary simplification.
+        let timestamp_utc = format!("{}", *last_time);
+        let kdu_id = format!("{}-{:04x}", *last_time, *counter);
 
         (kdu_id, timestamp_utc)
     }
