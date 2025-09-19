@@ -13,12 +13,7 @@ The single guiding principle of the cdqn ecosystem is the creation of smart immu
 * **Doc 04:** The cdqnLang
 * **Doc 05:** The cdqnRuntime
 * **Doc 06:** cdqn Applications
-* **Doc 07:** The cdqn Ecosystem: The Socio-Economic Layer
-* **Doc 08:** The cdqn Ecosystem: The Ethical & Alignment Layer
-* **Doc 09:** The cdqn Ecosystem: The Meta-Cognitive & Governance Layer
-* **Doc 10:** The cdqn Ecosystem: The Content Management Layer
-* **Doc 11:** The cdqn Ecosystem: The Presentation & External Connections Layer
-* **Doc 12:** The cdqn Ecosystem: The cdqnLang & Toolchain Layer
+* **Doc 07:** The cdqn Ecosystem uses cases
 
 ## Last 3 Checks (Docs directory)
 * **Check 0002:** September 9, 2025, Gemini 2.5 Pro, Google
