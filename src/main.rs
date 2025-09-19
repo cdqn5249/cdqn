@@ -1,7 +1,7 @@
 // src/main.rs
 
 // Use the public items from our library
-use cdqn::kernel::{KDU, FQEI, License, Metadata};
+use cdqn::kernel::{License, Metadata, FQEI, KDU};
 
 fn main() {
     println!("cdqn runtime starting... [Phase 0, Milestone 2]");
@@ -9,7 +9,7 @@ fn main() {
     // Create a dummy KDU to demonstrate the data structures.
     let dummy_kdu = KDU {
         kdu_spec_version: "2.1.0".to_string(),
-        kdu_id: "01H8XJ...".to_string(), // Placeholder HLC ID
+        kdu_id: "01H8XJ...".to_string(),    // Placeholder HLC ID
         content_hash: "zQm...".to_string(), // Placeholder content hash
         originator_fqei: "agent@U.MyProject#01H8XJ...".to_string(),
         originator_signature: vec![0u8; 64], // Placeholder 64-byte signature
