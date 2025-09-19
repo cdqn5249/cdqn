@@ -28,7 +28,9 @@ fn main() {
     // --- Persistence Write ---
     println!("\n--- 2. Writing KDU to Database ---");
     let persistence = Persistence::new(db_path.as_ref()).expect("Failed to open DB");
-    persistence.write_kdu(&new_kdu).expect("Failed to write KDU");
+    persistence
+        .write_kdu(&new_kdu)
+        .expect("Failed to write KDU");
     println!("SUCCESS: KDU written to path '{}'", db_path);
 
     // --- Persistence Read ---
@@ -46,10 +48,10 @@ fn main() {
 
     // --- Cleanup ---
     // We drop the persistence object to release the lock on the DB files
-    drop(persistence); 
+    drop(persistence);
     fs::remove_dir_all(db_path).expect("Failed to clean up DB directory");
     println!("\n--- 5. Cleanup ---");
     println!("SUCCESS: Database directory cleaned up.");
-    
+
     println!("\n--- C.Persistence service implemented successfully! ---");
 }
