@@ -1,6 +1,6 @@
 // src/kernel/factory.rs
 
-use super::crypto::CryptoCore;
+use super::crypto::{CryptoCore, Keypair};
 use super::hlc::HLC;
 use super::{License, Metadata, FQEI, KDU};
 
@@ -30,7 +30,7 @@ impl KDUFactory {
 
     pub fn create_kdu(
         &self,
-        originator_keypair: &super::crypto::Keypair,
+        originator_keypair: &Keypair,
         originator_fqei: FQEI,
         kdu_type: String,
         data_payload: serde_json::Value,
