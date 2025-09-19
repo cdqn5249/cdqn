@@ -1,7 +1,7 @@
 // src/main.rs
 
-// Use the public items from our library
-use cdqn::kernel::{License, Metadata, FQEI, KDU};
+// Use the public items from our library. Note: FQEI is removed as it was unused.
+use cdqn::kernel::{License, Metadata, KDU};
 
 fn main() {
     println!("cdqn runtime starting... [Phase 0, Milestone 2]");
@@ -17,7 +17,8 @@ fn main() {
         kdu_type: "Generic".to_string(),
         metadata: Metadata {
             metadata_hash: "zQm...meta".to_string(),
-            unisphere_coordinates: vec![0; 42], // Zeroed-out coordinates
+            // Correctly create a Vec<u16> instead of an array.
+            unisphere_coordinates: vec![0; 42],
             license: License {
                 license_id: "BaDaaS-1.1.0".to_string(),
                 licensor_fqei: "user@U.CDQN#...".to_string(),
