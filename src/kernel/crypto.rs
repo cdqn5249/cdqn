@@ -1,15 +1,8 @@
 // src/kernel/crypto.rs
 
-use ed25519_dalek::{Signer, SigningKey, VerifyingKey, Signature};
+use ed25519_dalek::{Signer, Signature, Keypair}; // Use the official Keypair
 use rand::rngs::OsRng;
 use sha2::{Sha512, Digest};
-
-// A simple struct to hold our cryptographic keys.
-#[derive(Debug)]
-pub struct Keypair {
-    pub secret: SigningKey,
-    pub public: VerifyingKey,
-}
 
 // The CryptoCore service. For now, it's a simple struct.
 pub struct CryptoCore;
@@ -20,20 +13,15 @@ impl CryptoCore {
         CryptoCore
     }
 
-    // Generates a new, cryptographically secure keypair.
+    // Generates a new, cryptographically secure keypair using the library's method.
     pub fn generate_keypair(&self) -> Keypair {
         let mut csprng = OsRng;
-        let secret_key: SigningKey = SigningKey::generate(&mut csprng);
-        let public_key: VerifyingKey = (&secret_key).into();
-        Keypair {
-            secret: secret_key,
-            public: public_key,
-        }
+        Keypair::generate(&mut csprng)
     }
 
-    // Signs a given message hash with a secret key.
-    pub fn sign(&self, message_hash: &[u8], secret_key: &SigningKey) -> Signature {
-        secret_key.sign(message_hash)
+    // Signs a given message hash with a keypair.
+    pub fn sign(&self, message_hash: &[u8], keypair: &Keypair) -> Signature {
+        keypair.sign(message_hash)
     }
     
     // A utility function to create a SHA512 hash of any serializable data.
