@@ -5,6 +5,8 @@ use cdqn::kernel::KDU;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::io::{self, Read};
+// Import the Engine trait to use the modern base64 API.
+use base64::Engine as _;
 
 // --- SHARED CONFIGURATION ---
 const GITHUB_API_URL: &str =
@@ -34,7 +36,6 @@ fn main() {
 fn run_processor() {
     println!("--- Running in PROCESSOR mode ---");
 
-    // 1. Read the incoming KDU from standard input.
     let mut buffer = Vec::new();
     io::stdin()
         .read_to_end(&mut buffer)
@@ -42,7 +43,6 @@ fn run_processor() {
     let incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
     println!("Processor received KDU with ID: {}", incoming_kdu.kdu_id);
 
-    // 2. Process the KDU (our "Ponger" logic).
     let factory = KDUFactory::default();
     let ponger_keypair = factory.crypto_core().generate_keypair();
     let ponger_fqei = "ponger@processor.bot".to_string();
@@ -61,8 +61,9 @@ fn run_processor() {
         response_kdu.kdu_id
     );
 
-    // 3. Trigger the pipe workflow to send the response.
-    let kdu_base64 = base64::encode(&bincode::serialize(&response_kdu).unwrap());
+    // Use the modern, correct base64 engine API.
+    let kdu_base64 = base64::engine::general_purpose::STANDARD
+        .encode(bincode::serialize(&response_kdu).unwrap());
     let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found");
 
     let request_body = ureq::json!({
@@ -87,7 +88,6 @@ fn run_processor() {
 
 // --- CLIENT MODE ---
 fn run_client(github_token: &str) {
-    // This function remains largely the same.
     println!("--- Starting in CLIENT mode ---");
     let factory = KDUFactory::default();
     let originator_keypair = factory.crypto_core().generate_keypair();
@@ -105,7 +105,9 @@ fn run_client(github_token: &str) {
     );
 
     println!("Client created ping KDU with ID: {}", initial_ping.kdu_id);
-    let kdu_base64 = base64::encode(&bincode::serialize(&initial_ping).unwrap());
+    // Use the modern, correct base64 engine API.
+    let kdu_base64 = base64::engine::general_purpose::STANDARD
+        .encode(bincode::serialize(&initial_ping).unwrap());
 
     let request_body = ureq::json!({
         "ref": "gh-pages",
