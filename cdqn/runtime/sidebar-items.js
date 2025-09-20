@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["entity","network","orchestrator","persistence","processor","test_entities"]};
+window.SIDEBAR_ITEMS = {"enum":["PersistenceCommand"],"mod":["entity","network","orchestrator","persistence","processor","test_entities"]};
