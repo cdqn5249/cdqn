@@ -109,7 +109,10 @@ fn run_processor() {
             println!("SUCCESS: Processor triggered pipe with pong.kdu.");
         }
         Ok(resp) => {
-            eprintln!("FAILURE: Processor received non-204 status: {}", resp.status());
+            eprintln!(
+                "FAILURE: Processor received non-204 status: {}",
+                resp.status()
+            );
             eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
         }
         Err(e) => {
