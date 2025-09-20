@@ -1,0 +1,71 @@
+# .github/workflows/kdu-handler.yml
+
+name: CDQN KDU Handler
+
+on:
+  workflow_dispatch:
+    inputs:
+      ping_kdu_base64:
+        description: 'The content of the initial ping KDU, base64 encoded'
+        required: true
+      github_token:
+        description: 'The PAT to authorize the commit to gh-pages'
+        required: true
+
+jobs:
+  # This job acts as our "serverless server"
+  process_and_respond:
+    name: Process Ping and Generate Pong
+    runs-on: ubuntu-latest
+    # We define outputs that this job will pass to the next one
+    outputs:
+      pong_kdu_base64: ${{ steps.run_processor.outputs.pong_kdu_base64 }}
+
+    steps:
+      - name: Checkout main branch for processing code
+        uses: actions/checkout@v4
+
+      - name: Decode Ping KDU from input
+        run: |
+          echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ping.kdu
+          echo "Decoded ping.kdu"
+
+      - name: Run KDU Processor
+        id: run_processor # Give this step an ID to reference its outputs
+        run: |
+          echo "Compiling and running the processor..."
+          # Run our executable in --process mode, feeding it the ping.kdu
+          # It will now print the base64 of the pong KDU to stdout
+          PONG_B64=$(cargo run --release -- --process < ping.kdu)
+          # Set the output for the next job
+          echo "pong_kdu_base64=$PONG_B64" >> $GITHUB_OUTPUT
+
+  # This job commits the results to GitHub Pages
+  commit_to_pages:
+    name: Commit KDUs to gh-pages
+    runs-on: ubuntu-latest
+    # This job depends on the first one finishing successfully
+    needs: process_and_respond
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          token: ${{ github.event.inputs.github_token }}
+
+      - name: Decode and write KDU files
+        run: |
+          # Decode the original ping
+          echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ping.kdu
+          echo "Created ping.kdu"
+          # Decode the pong from the previous job's output
+          echo "${{ needs.process_and_respond.outputs.pong_kdu_base64 }}" | base64 --decode > pong.kdu
+          echo "Created pong.kdu"
+
+      - name: Commit and push KDU files
+        run: |
+          git config --global user.name 'CDQN Handler Bot'
+          git config --global user.email 'actions@github.com'
+          git add .
+          git commit -m "handler: Add ping and pong KDUs"
+          git push
