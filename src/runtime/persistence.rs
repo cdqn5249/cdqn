@@ -1,55 +1,60 @@
 // src/runtime/persistence.rs
 
 use crate::kernel::KDU;
-use std::collections::HashMap;
-use std::fs::{File, OpenOptions};
-use std::io::{self, Read, Seek, SeekFrom, Write};
+use crate::runtime::PersistenceCommand;
+use std::fs::OpenOptions;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
+use std::sync::mpsc::{Receiver, Sender};
+use std::thread::{self, JoinHandle};
 
-// The Persistence service.
+/// The Persistence service. It now runs in its own dedicated thread.
 pub struct Persistence {
     journal_path: PathBuf,
-    // The index maps a KDU ID (String) to its byte offset (u64) in the journal file.
-    index: HashMap<String, u64>,
+    command_rx: Receiver<PersistenceCommand>,
 }
 
 impl Persistence {
-    // The 'new' function now scans the journal to build the index on startup.
-    pub fn new(dir: &Path) -> io::Result<Self> {
-        std::fs::create_dir_all(dir)?;
+    /// Spawns the persistence service in a new thread.
+    /// Returns a JoinHandle for the thread and a Sender channel to send commands to it.
+    pub fn spawn(dir: &Path) -> (JoinHandle<()>, Sender<PersistenceCommand>) {
+        let (command_tx, command_rx) = std::sync::mpsc::channel();
         let journal_path = dir.join("00000001.journal");
-        let mut index = HashMap::new();
+        std::fs::create_dir_all(dir).expect("Could not create persistence directory");
 
-        // Check if the journal file exists before trying to open it.
-        if journal_path.exists() {
-            let mut file = File::open(&journal_path)?;
-            let mut current_pos = 0;
-            let mut len_buffer = [0u8; 8];
-
-            // Read the file record by record to build the index.
-            while file.read_exact(&mut len_buffer).is_ok() {
-                let kdu_len = u64::from_le_bytes(len_buffer);
-                let mut kdu_buffer = vec![0; kdu_len as usize];
-                file.read_exact(&mut kdu_buffer)?;
-
-                let kdu: KDU = bincode::deserialize(&kdu_buffer)
-                    .expect("Failed to deserialize KDU during index build");
-
-                // The position of this KDU is where its length prefix started.
-                index.insert(kdu.kdu_id, current_pos);
-
-                current_pos += 8 + kdu_len;
-            }
-        }
-
-        Ok(Persistence {
+        let mut persistence = Persistence {
             journal_path,
-            index,
-        })
+            command_rx,
+        };
+
+        let handle = thread::spawn(move || {
+            persistence.run();
+        });
+
+        (handle, command_tx)
     }
 
-    // The write function now also updates the in-memory index.
-    pub fn write_kdu(&mut self, kdu: &KDU) -> io::Result<()> {
+    /// The main run loop for the persistence thread.
+    /// It listens for commands on the channel and processes them.
+    fn run(&mut self) {
+        println!("[Persistence] Thread started. Waiting for commands.");
+        for command in &self.command_rx {
+            match command {
+                PersistenceCommand::WriteKdu(kdu) => {
+                    if self.write_kdu(&kdu).is_err() {
+                        eprintln!("[Persistence] ERROR: Failed to write KDU to journal.");
+                    }
+                }
+                PersistenceCommand::Shutdown => {
+                    println!("[Persistence] Shutdown command received. Exiting.");
+                    break;
+                }
+            }
+        }
+    }
+
+    /// Writes a single KDU to the journal file. (This logic is unchanged).
+    fn write_kdu(&self, kdu: &KDU) -> io::Result<()> {
         let kdu_bytes = bincode::serialize(kdu).expect("Failed to serialize KDU");
         let kdu_len = kdu_bytes.len() as u64;
 
@@ -58,40 +63,9 @@ impl Persistence {
             .append(true)
             .open(&self.journal_path)?;
 
-        // Get the position of the start of our write.
-        let write_pos = file.seek(SeekFrom::End(0))?;
-
         file.write_all(&kdu_len.to_le_bytes())?;
         file.write_all(&kdu_bytes)?;
-
-        // Add the new KDU to our live index.
-        self.index.insert(kdu.kdu_id.clone(), write_pos);
-
+        println!("[Persistence] Wrote KDU with ID: {}", kdu.kdu_id);
         Ok(())
-    }
-
-    // Reads a KDU from the journal using the index.
-    pub fn read_kdu(&self, kdu_id: &str) -> io::Result<Option<KDU>> {
-        // Look up the KDU's position in the index.
-        match self.index.get(kdu_id) {
-            Some(&pos) => {
-                let mut file = File::open(&self.journal_path)?;
-                // Seek directly to the correct position.
-                file.seek(SeekFrom::Start(pos))?;
-
-                let mut len_buffer = [0u8; 8];
-                file.read_exact(&mut len_buffer)?;
-                let kdu_len = u64::from_le_bytes(len_buffer);
-
-                let mut kdu_buffer = vec![0; kdu_len as usize];
-                file.read_exact(&mut kdu_buffer)?;
-
-                let kdu = bincode::deserialize(&kdu_buffer)
-                    .expect("Failed to deserialize KDU during read");
-
-                Ok(Some(kdu))
-            }
-            None => Ok(None), // KDU not found in index.
-        }
     }
 }
