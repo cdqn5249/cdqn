@@ -1,7 +1,7 @@
 // src/runtime/network.rs
 
 use crate::kernel::KDU;
-use std::io::{self, Read};
+use std::io::{self, Read, Write}; // Import the Write trait
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::Sender;
 use std::thread::{self, JoinHandle};
@@ -10,7 +10,6 @@ pub struct NodeServer;
 
 impl NodeServer {
     /// Spawns the network server in a new thread.
-    /// Returns a JoinHandle for the thread.
     pub fn spawn(addr: &str, kdu_tx: Sender<KDU>) -> JoinHandle<()> {
         let listener = TcpListener::bind(addr).expect("Failed to bind to network address");
         println!("[NodeServer] Thread started. Listening on {}", addr);
