@@ -14,6 +14,13 @@ pub struct Orchestrator {
     persistence_handle: Option<JoinHandle<()>>,
 }
 
+// Implement the Default trait as suggested by clippy.
+impl Default for Orchestrator {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Orchestrator {
     pub fn new() -> Self {
         let db_path = Path::new("./cdqn_runtime_db");
