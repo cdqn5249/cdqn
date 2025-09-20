@@ -1,13 +1,15 @@
 // src/runtime/scheduler.rs
 
+// We are allowing this unused import because the next milestone will use it.
+#[allow(unused_imports)]
 use crate::kernel::KDU;
 use std::collections::HashMap;
 
 /// The EntityScheduler is the heart of the runtime's event loop.
 /// It is responsible for delivering KDUs to entities and executing their behaviors.
 pub struct EntityScheduler {
-    // We will need a way to store and look up our entities and their mailboxes.
-    // A HashMap from an entity's FQEI (String) to its Mailbox is a good start.
+    // We are allowing this dead code because the next milestone will use it.
+    #[allow(dead_code)]
     mailboxes: HashMap<String, super::entity::Mailbox>,
 }
 
