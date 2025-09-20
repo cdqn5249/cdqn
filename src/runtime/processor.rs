@@ -21,6 +21,12 @@ struct EntityInstance {
 /// It executes the entity behavior functions in a simple, turn-based loop.
 pub struct EntityProcessor {
     entities: HashMap<FQEI, EntityInstance>,
+    // Add this to src/runtime/processor.rs, inside impl EntityProcessor
+
+    /// Returns a set of all FQEIs for entities registered locally.
+    pub fn get_local_fqeis(&self) -> std::collections::HashSet<FQEI> {
+        self.entities.keys().cloned().collect()
+    }
 }
 
 impl EntityProcessor {
