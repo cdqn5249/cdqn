@@ -6,12 +6,18 @@ use std::any::Any;
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Mutex};
 
-/// A simple, concrete representation of a running entity.
+// --- TYPE ALIASES to simplify complex types ---
+/// A generic, type-erased entity state.
+type ErasedState = Box<dyn Any + Send>;
+/// A list of KDUs to be sent out.
+type OutgoingKdus = Vec<KDU>;
+/// A type-erased function pointer to an entity's behavior.
+type BehaviorFn = Box<dyn Fn(&ErasedState, KDU) -> (ErasedState, OutgoingKdus) + Send>;
+
+/// A concrete representation of a running entity.
 struct EntityInstance {
-    // A function pointer to the entity's behavior function.
-    // We use Box<dyn ...> to handle different state types.
-    behavior_fn: Box<dyn Fn(&dyn Any, KDU) -> (Box<dyn Any + Send>, Vec<KDU>) + Send>,
-    state: Box<dyn Any + Send>,
+    behavior_fn: BehaviorFn,
+    state: ErasedState,
     mailbox: Mailbox,
 }
 
@@ -35,13 +41,10 @@ impl EntityScheduler {
     {
         let mailbox = Arc::new(Mutex::new(VecDeque::new()));
 
-        // This is the corrected, two-stage closure.
-        let behavior_fn = move |state: &dyn Any, message: KDU| {
-            // 1. Execute the specific behavior, getting a specific state back.
+        let behavior_fn = move |state: &ErasedState, message: KDU| {
             let (new_specific_state, kuds) =
                 E::behavior(state.downcast_ref::<E::State>().unwrap(), message);
-            // 2. Explicitly convert the specific state into a generic Box.
-            let new_generic_state: Box<dyn Any + Send> = Box::new(new_specific_state);
+            let new_generic_state: ErasedState = Box::new(new_specific_state);
             (new_generic_state, kuds)
         };
 
@@ -71,9 +74,7 @@ impl EntityScheduler {
         let mut outgoing_kuds: Vec<(FQEI, KDU)> = Vec::new();
         let fqei_list: Vec<FQEI> = self.entities.keys().cloned().collect();
 
-        // --- 1. Dequeue and Execute ---
         for fqei in fqei_list {
-            // We get the entity once and use it multiple times.
             let entity = self.entities.get_mut(&fqei).unwrap();
             let maybe_message = entity.mailbox.lock().unwrap().pop_front();
             if let Some(message) = maybe_message {
@@ -89,7 +90,6 @@ impl EntityScheduler {
             }
         }
 
-        // --- 2. Route Outgoing Messages ---
         for (target_fqei, kdu) in outgoing_kuds {
             println!(
                 "[EntityScheduler] Routing KDU from {} to {}",
