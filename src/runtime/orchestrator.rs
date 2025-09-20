@@ -53,11 +53,18 @@ impl Orchestrator {
 
     pub fn run(&mut self) {
         println!("[Orchestrator] Starting main loop...");
+        // The loop will now also check for incoming network messages.
         for turn in 1..=5 {
+            // Run for a few more turns
             println!("\n--- Turn {} ---", turn);
 
+            // 1. Check for and route incoming KDUs from the network
             if let Ok(network_kdu) = self.network_rx.try_recv() {
-                println!("[Orchestrator] Received KDU from network with ID: {}", network_kdu.kdu_id);
+                println!(
+                    "[Orchestrator] Received KDU from network with ID: {}",
+                    network_kdu.kdu_id
+                );
+                // For now, assume all network KDUs are for the ponger
                 self.route_initial_kdu(&"ponger@test".to_string(), network_kdu);
             }
 
@@ -75,9 +82,12 @@ impl Orchestrator {
                 self.persistence_tx
                     .send(PersistenceCommand::WriteKdu(Box::new(kdu.clone())))
                     .unwrap();
-                
+
+                // In the final step, we will add logic here to check if the target
+                // is local or remote. For now, we still route locally.
                 self.processor.route_local(&target_fqei, kdu);
             }
+            // Give I/O threads a moment to work
             std::thread::sleep(std::time::Duration::from_millis(10));
         }
         println!("\n[Orchestrator] Simulation finished.");
