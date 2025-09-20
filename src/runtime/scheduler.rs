@@ -9,6 +9,7 @@ use std::sync::{Arc, Mutex};
 /// A simple, concrete representation of a running entity.
 struct EntityInstance {
     // A function pointer to the entity's behavior function.
+    // We use Box<dyn ...> to handle different state types.
     behavior_fn: Box<dyn Fn(&dyn Any, KDU) -> (Box<dyn Any + Send>, Vec<KDU>) + Send>,
     state: Box<dyn Any + Send>,
     mailbox: Mailbox,
@@ -33,7 +34,7 @@ impl EntityScheduler {
         E::State: Send + 'static,
     {
         let mailbox = Arc::new(Mutex::new(VecDeque::new()));
-        
+
         // This is the corrected, two-stage closure.
         let behavior_fn = move |state: &dyn Any, message: KDU| {
             // 1. Execute the specific behavior, getting a specific state back.
@@ -58,7 +59,10 @@ impl EntityScheduler {
         if let Some(entity) = self.entities.get(target_fqei) {
             entity.mailbox.lock().unwrap().push_back(kdu);
         } else {
-            println!("[EntityScheduler] WARN: No entity found for FQEI: {}", target_fqei);
+            println!(
+                "[EntityScheduler] WARN: No entity found for FQEI: {}",
+                target_fqei
+            );
         }
     }
 
@@ -87,7 +91,10 @@ impl EntityScheduler {
 
         // --- 2. Route Outgoing Messages ---
         for (target_fqei, kdu) in outgoing_kuds {
-            println!("[EntityScheduler] Routing KDU from {} to {}", kdu.originator_fqei, target_fqei);
+            println!(
+                "[EntityScheduler] Routing KDU from {} to {}",
+                kdu.originator_fqei, target_fqei
+            );
             self.route(&target_fqei, kdu);
         }
     }
