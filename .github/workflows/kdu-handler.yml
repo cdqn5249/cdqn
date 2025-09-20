@@ -5,6 +5,9 @@ name: CDQN KDU Handler
 on:
   workflow_dispatch:
     inputs:
+      ping_kdu_filename:
+        description: 'The content-addressed filename of the ping KDU'
+        required: true
       ping_kdu_base64:
         description: 'The content of the initial ping KDU, base64 encoded'
         required: true
@@ -17,6 +20,7 @@ jobs:
     name: Process Ping and Generate Pong
     runs-on: ubuntu-latest
     outputs:
+      pong_kdu_filename: ${{ steps.run_processor.outputs.pong_kdu_filename }}
       pong_kdu_base64: ${{ steps.run_processor.outputs.pong_kdu_base64 }}
 
     steps:
@@ -25,15 +29,19 @@ jobs:
 
       - name: Decode Ping KDU from input
         run: |
-          echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ping.kdu
-          echo "Decoded ping.kdu"
+          echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ${{ github.event.inputs.ping_kdu_filename }}
+          echo "Decoded ${{ github.event.inputs.ping_kdu_filename }}"
 
       - name: Run KDU Processor
         id: run_processor
         run: |
           echo "Compiling and running the processor..."
-          # Use the --quiet flag to suppress all cargo messages.
-          PONG_B64=$(cargo run --release --quiet -- --process < ping.kdu)
+          # The processor will now output "filename,base64content"
+          PROCESSOR_OUTPUT=$(cargo run --release --quiet -- --process < ${{ github.event.inputs.ping_kdu_filename }})
+          # Split the output into two variables
+          PONG_FILENAME=$(echo $PROCESSOR_OUTPUT | cut -d',' -f1)
+          PONG_B64=$(echo $PROCESSOR_OUTPUT | cut -d',' -f2)
+          echo "pong_kdu_filename=$PONG_FILENAME" >> $GITHUB_OUTPUT
           echo "pong_kdu_base64=$PONG_B64" >> $GITHUB_OUTPUT
 
   commit_to_pages:
@@ -49,15 +57,15 @@ jobs:
 
       - name: Decode and write KDU files
         run: |
-          echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ping.kdu
-          echo "Created ping.kdu"
-          echo "${{ needs.process_and_respond.outputs.pong_kdu_base64 }}" | base64 --decode > pong.kdu
-          echo "Created pong.kdu"
+          echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ${{ github.event.inputs.ping_kdu_filename }}
+          echo "Created ${{ github.event.inputs.ping_kdu_filename }}"
+          echo "${{ needs.process_and_respond.outputs.pong_kdu_base64 }}" | base64 --decode > ${{ needs.process_and_respond.outputs.pong_kdu_filename }}
+          echo "Created ${{ needs.process_and_respond.outputs.pong_kdu_filename }}"
 
       - name: Commit and push KDU files
         run: |
           git config --global user.name 'CDQN Handler Bot'
           git config --global user.email 'actions@github.com'
           git add .
-          git commit -m "handler: Add ping and pong KDUs"
+          git commit -m "handler: Add content-addressed KDUs"
           git push
