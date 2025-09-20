@@ -2,15 +2,14 @@
 
 use crate::kernel::KDU;
 use std::collections::HashMap;
-use std::fs::{File, OpenOptions};
-use std::io::{self, Read, Seek, SeekFrom, Write};
+use std::fs::OpenOptions;
+use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 
 /// The Persistence service. This is the simple, sovereign, non-threaded version.
 pub struct Persistence {
     journal_path: PathBuf,
-    // The index maps a KDU ID (String) to its byte offset (u64) in the journal file.
-    #[allow(dead_code)] // Index will be used in a future milestone
+    #[allow(dead_code)]
     index: HashMap<String, u64>,
 }
 
@@ -19,9 +18,6 @@ impl Persistence {
         std::fs::create_dir_all(dir)?;
         let journal_path = dir.join("00000001.journal");
         let index = HashMap::new();
-
-        // NOTE: Index-building logic is temporarily removed for this milestone.
-        // We are focusing on the Orchestrator/Processor interaction first.
 
         Ok(Persistence {
             journal_path,
