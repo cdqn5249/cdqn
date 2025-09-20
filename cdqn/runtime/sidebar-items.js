@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["network","persistence"]};
+window.SIDEBAR_ITEMS = {"mod":["entity","network","persistence","scheduler"]};
