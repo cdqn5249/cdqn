@@ -3,7 +3,6 @@
 use crate::kernel::{FQEI, KDU};
 use crate::runtime::processor::EntityProcessor;
 
-/// The Orchestrator is the physical heart of the runtime.
 pub struct Orchestrator {
     processor: EntityProcessor,
 }
@@ -27,20 +26,19 @@ impl Orchestrator {
         println!("[Orchestrator] Starting main loop...");
         for turn in 1..=3 {
             println!("\n--- Turn {} ---", turn);
-            let outgoing_kuds = self.processor.run_turn();
+            // The processor now returns a list of (Target, KDU) tuples.
+            let outgoing_routes = self.processor.run_turn();
 
-            if outgoing_kuds.is_empty() {
+            if outgoing_routes.is_empty() {
                 println!("[Orchestrator] System is quiet.");
             }
 
-            for kdu in outgoing_kuds {
-                // We get the target FQEI before we move the KDU.
-                let target_fqei = kdu.originator_fqei.clone();
+            // We now have the correct target FQEI for each KDU.
+            for (target_fqei, kdu) in outgoing_routes {
                 println!(
                     "[Orchestrator] Routing KDU from {} to {}",
                     kdu.originator_fqei, target_fqei
                 );
-                // Now we can safely move the kdu.
                 self.processor.route_local(&target_fqei, kdu);
             }
         }
