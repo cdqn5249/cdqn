@@ -6,6 +6,8 @@ use serde::{Deserialize, Serialize};
 use std::env;
 use std::io::{self, Read};
 use base64::Engine as _;
+// Import the Verifier trait to bring the .verify() method into scope.
+use ed25519_dalek::Verifier;
 
 // --- SHARED CONFIGURATION ---
 const GITHUB_API_URL: &str =
@@ -57,6 +59,7 @@ fn run_ci_test() {
     let signature = ed25519_dalek::Signature::from_bytes(
         kdu.originator_signature.as_slice().try_into().unwrap()
     );
+    // This line will now compile because the Verifier trait is in scope.
     let verification_result = originator_keypair.public.verify(&content_hash_bytes, &signature);
 
     assert!(verification_result.is_ok(), "FATAL: KDU signature verification failed in CI!");
@@ -67,7 +70,6 @@ fn run_ci_test() {
 
 // --- PROCESSOR MODE (The "Serverless Server") ---
 fn run_processor() {
-    // This logic remains unchanged
     println!("--- Running in PROCESSOR mode ---");
     let mut buffer = Vec::new();
     io::stdin().read_to_end(&mut buffer).expect("Failed to read KDU from stdin");
@@ -96,7 +98,6 @@ fn run_processor() {
 
 // --- CLIENT MODE ---
 fn run_client(github_token: &str) {
-    // This logic remains unchanged
     println!("--- Starting in CLIENT mode ---");
     let factory = KDUFactory::default();
     let originator_keypair = factory.crypto_core().generate_keypair();
