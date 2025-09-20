@@ -95,18 +95,22 @@ fn run_processor() {
         .encode(bincode::serialize(&response_kdu).unwrap());
     let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found");
     let request_body = ureq::json!({ "ref": "gh-pages", "inputs": { "kdu_filename": "pong.kdu", "kdu_content_base64": kdu_base64 } });
+
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
-        .set("Authorization", &format!("Bearer {}", github_token))
+        .set("Authorization", &format!("Bearer {}", github_token)) // Use Bearer
         .send_json(request_body);
-    
+
     // Match on the result to handle all cases
     match response {
         Ok(resp) if resp.status() == 204 => {
             println!("SUCCESS: Processor triggered pipe with pong.kdu.");
         }
         Ok(resp) => {
-            eprintln!("FAILURE: Processor received non-204 status: {}", resp.status());
+            eprintln!(
+                "FAILURE: Processor received non-204 status: {}",
+                resp.status()
+            );
             eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
         }
         Err(e) => {
