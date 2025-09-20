@@ -44,7 +44,8 @@ fn run_ci_test() {
     let originator_keypair = crypto_core.generate_keypair();
     let originator_fqei = "agent@ci.test".to_string();
     let payload = b"ci-test-payload".to_vec();
-    let kdu = factory.create_kdu( // <-- Correctly uses mutable factory
+    let kdu = factory.create_kdu(
+        // <-- Correctly uses mutable factory
         &originator_keypair,
         originator_fqei,
         "CITest".to_string(),
@@ -88,17 +89,24 @@ fn run_processor() {
         action: "sovereign.handler.response".to_string(),
         status: "ok".to_string(),
     };
-    let response_kdu = factory.create_kdu( // <-- Correctly uses mutable factory
+    let response_kdu = factory.create_kdu(
+        // <-- Correctly uses mutable factory
         &ponger_keypair,
         ponger_fqei,
         "PongResponse".to_string(),
         &bincode::serialize(&response_payload).unwrap(),
     );
 
+    // Re-hash to get the final, correct content hash
+    let content_to_hash = (&response_kdu.metadata, &response_kdu.data_payload);
+    let final_hash = CryptoCore::hash_content(&content_to_hash);
+    response_kdu.content_hash = hex::encode(&final_hash);
+
     let pong_filename = format!("{}.kdu", response_kdu.content_hash);
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&response_kdu).unwrap());
-    
+
+    // Output the filename and content, separated by a comma.
     print!("{},{}", pong_filename, kdu_base64);
 }
 
@@ -112,16 +120,17 @@ fn run_client(github_token: &str) {
         action: "sovereign.handler.test".to_string(),
         status: "ok".to_string(),
     };
-    let initial_ping = factory.create_kdu( // <-- Correctly uses mutable factory
+    let initial_ping = factory.create_kdu(
+        // <-- Correctly uses mutable factory
         &originator_keypair,
         pinger_fqei,
         "InitialPing".to_string(),
         &bincode::serialize(&payload_struct).unwrap(),
     );
-    
+
     let ping_filename = format!("{}.kdu", initial_ping.content_hash);
     println!("Client created ping KDU with filename: {}", ping_filename);
-    
+
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
 
