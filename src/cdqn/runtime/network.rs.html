@@ -54,8 +54,8 @@
 <a href=#54 id=54 data-nosnippet>54</a>
 <a href=#55 id=55 data-nosnippet>55</a>        <span class="comment">// Read the full KDU data.
 <a href=#56 id=56 data-nosnippet>56</a>        </span><span class="kw">if </span>stream.read_exact(<span class="kw-2">&amp;mut </span>kdu_buffer).is_ok() {
-<a href=#57 id=57 data-nosnippet>57</a>            <span class="kw">let </span>kdu: KDU = bincode::deserialize(<span class="kw-2">&amp;</span>kdu_buffer)
-<a href=#58 id=58 data-nosnippet>58</a>                .expect(<span class="string">"Failed to deserialize KDU from stream"</span>);
+<a href=#57 id=57 data-nosnippet>57</a>            <span class="kw">let </span>kdu: KDU =
+<a href=#58 id=58 data-nosnippet>58</a>                bincode::deserialize(<span class="kw-2">&amp;</span>kdu_buffer).expect(<span class="string">"Failed to deserialize KDU from stream"</span>);
 <a href=#59 id=59 data-nosnippet>59</a>            <span class="macro">println!</span>(<span class="string">"[handle_client] Received KDU with ID: {}"</span>, kdu.kdu_id);
 <a href=#60 id=60 data-nosnippet>60</a>        }
 <a href=#61 id=61 data-nosnippet>61</a>    }
@@ -73,18 +73,17 @@
 <a href=#73 id=73 data-nosnippet>73</a>        <span class="prelude-val">Ok</span>(stream)
 <a href=#74 id=74 data-nosnippet>74</a>    }
 <a href=#75 id=75 data-nosnippet>75</a>
-<a href=#76 id=76 data-nosnippet>76</a>    <span class="comment">// --- NEW FUNCTION ADDED HERE ---
-<a href=#77 id=77 data-nosnippet>77</a>    // Serializes and sends a single KDU over the stream.
-<a href=#78 id=78 data-nosnippet>78</a>    </span><span class="kw">pub fn </span>send_kdu(stream: <span class="kw-2">&amp;mut </span>TcpStream, kdu: <span class="kw-2">&amp;</span>KDU) -&gt; io::Result&lt;()&gt; {
-<a href=#79 id=79 data-nosnippet>79</a>        <span class="macro">println!</span>(<span class="string">"[NodeClient] Serializing KDU with ID: {}"</span>, kdu.kdu_id);
-<a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">let </span>kdu_bytes = bincode::serialize(kdu).expect(<span class="string">"Failed to serialize KDU"</span>);
-<a href=#81 id=81 data-nosnippet>81</a>        <span class="kw">let </span>kdu_len = kdu_bytes.len() <span class="kw">as </span>u64;
-<a href=#82 id=82 data-nosnippet>82</a>
-<a href=#83 id=83 data-nosnippet>83</a>        <span class="comment">// Write the 8-byte length prefix.
-<a href=#84 id=84 data-nosnippet>84</a>        </span>stream.write_all(<span class="kw-2">&amp;</span>kdu_len.to_le_bytes())<span class="question-mark">?</span>;
-<a href=#85 id=85 data-nosnippet>85</a>        <span class="comment">// Write the KDU data.
-<a href=#86 id=86 data-nosnippet>86</a>        </span>stream.write_all(<span class="kw-2">&amp;</span>kdu_bytes)<span class="question-mark">?</span>;
-<a href=#87 id=87 data-nosnippet>87</a>        <span class="macro">println!</span>(<span class="string">"[NodeClient] KDU sent successfully."</span>);
-<a href=#88 id=88 data-nosnippet>88</a>        <span class="prelude-val">Ok</span>(())
-<a href=#89 id=89 data-nosnippet>89</a>    }
-<a href=#90 id=90 data-nosnippet>90</a>}</code></pre></div></section></main></body></html>
+<a href=#76 id=76 data-nosnippet>76</a>    <span class="comment">// Serializes and sends a single KDU over the stream.
+<a href=#77 id=77 data-nosnippet>77</a>    </span><span class="kw">pub fn </span>send_kdu(stream: <span class="kw-2">&amp;mut </span>TcpStream, kdu: <span class="kw-2">&amp;</span>KDU) -&gt; io::Result&lt;()&gt; {
+<a href=#78 id=78 data-nosnippet>78</a>        <span class="macro">println!</span>(<span class="string">"[NodeClient] Serializing KDU with ID: {}"</span>, kdu.kdu_id);
+<a href=#79 id=79 data-nosnippet>79</a>        <span class="kw">let </span>kdu_bytes = bincode::serialize(kdu).expect(<span class="string">"Failed to serialize KDU"</span>);
+<a href=#80 id=80 data-nosnippet>80</a>        <span class="kw">let </span>kdu_len = kdu_bytes.len() <span class="kw">as </span>u64;
+<a href=#81 id=81 data-nosnippet>81</a>
+<a href=#82 id=82 data-nosnippet>82</a>        <span class="comment">// Write the 8-byte length prefix.
+<a href=#83 id=83 data-nosnippet>83</a>        </span>stream.write_all(<span class="kw-2">&amp;</span>kdu_len.to_le_bytes())<span class="question-mark">?</span>;
+<a href=#84 id=84 data-nosnippet>84</a>        <span class="comment">// Write the KDU data.
+<a href=#85 id=85 data-nosnippet>85</a>        </span>stream.write_all(<span class="kw-2">&amp;</span>kdu_bytes)<span class="question-mark">?</span>;
+<a href=#86 id=86 data-nosnippet>86</a>        <span class="macro">println!</span>(<span class="string">"[NodeClient] KDU sent successfully."</span>);
+<a href=#87 id=87 data-nosnippet>87</a>        <span class="prelude-val">Ok</span>(())
+<a href=#88 id=88 data-nosnippet>88</a>    }
+<a href=#89 id=89 data-nosnippet>89</a>}</code></pre></div></section></main></body></html>
