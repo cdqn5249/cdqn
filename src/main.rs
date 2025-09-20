@@ -116,7 +116,10 @@ fn run_processor() {
         }
         Err(ureq::Error::Status(_code, response)) => {
             eprintln!("FAILURE: GitHub API returned an error.");
-            eprintln!("Response body: {}", response.into_string().unwrap_or_default());
+            eprintln!(
+                "Response body: {}",
+                response.into_string().unwrap_or_default()
+            );
         }
         Err(e) => {
             eprintln!("FAILURE: Transport error.");
@@ -164,7 +167,10 @@ fn run_client(github_token: &str) {
         }
         Err(ureq::Error::Status(_code, response)) => {
             eprintln!("\nFAILURE: GitHub API returned an error.");
-            eprintln!("Response body: {}", response.into_string().unwrap_or_default());
+            eprintln!(
+                "Response body: {}",
+                response.into_string().unwrap_or_default()
+            );
         }
         Err(e) => {
             eprintln!("\nFAILURE: Transport error.");
