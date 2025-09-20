@@ -58,10 +58,4 @@ fn main() {
     println!("\n--- 5. Cleanup Complete ---");
 
     println!("\n--- Unified Runtime local lifecycle implemented successfully! ---");
-}```
-
-### **Next Step**
-
-Commit these changes.
-
-The CI pipeline will run. The log output will now be a beautiful symphony of all our components working together. You will see messages from the `Orchestrator`, the `EntityProcessor` (`Pinger`/`Ponger`), and the `Persistence` thread, all interleaved, demonstrating our non-blocking, multi-threaded architecture in action. You will see each KDU being journaled before it is processed.
+}
