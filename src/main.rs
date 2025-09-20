@@ -58,7 +58,6 @@ fn run_ci_test() {
     let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
     let signature =
         ed25519_dalek::Signature::from_bytes(kdu.originator_signature.as_slice().try_into().unwrap());
-    // This line will now compile because the Verifier trait is in scope.
     let verification_result = originator_keypair
         .public
         .verify(&content_hash_bytes, &signature);
@@ -74,7 +73,8 @@ fn run_ci_test() {
 // --- PROCESSOR MODE (The "Serverless Server") ---
 fn run_processor() {
     println!("--- Running in PROCESSOR mode ---");
-    let mut buffer = Vec<new>();
+    // This is the corrected line.
+    let mut buffer = Vec::new();
     io::stdin()
         .read_to_end(&mut buffer)
         .expect("Failed to read KDU from stdin");
