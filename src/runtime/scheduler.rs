@@ -2,15 +2,15 @@
 
 use crate::kernel::{FQEI, KDU};
 use crate::runtime::entity::{Entity, Mailbox};
+use std::any::Any;
 use std::collections::{HashMap, VecDeque};
 use std::sync::{Arc, Mutex};
 
 /// A simple, concrete representation of a running entity.
 struct EntityInstance {
     // A function pointer to the entity's behavior function.
-    // We use Box<dyn ...> to handle different state types.
-    behavior_fn: Box<dyn Fn(&dyn std::any::Any, KDU) -> (Box<dyn std::any::Any + Send>, Vec<KDU>) + Send>,
-    state: Box<dyn std::any::Any + Send>,
+    behavior_fn: Box<dyn Fn(&dyn Any, KDU) -> (Box<dyn Any + Send>, Vec<KDU>) + Send>,
+    state: Box<dyn Any + Send>,
     mailbox: Mailbox,
 }
 
@@ -33,9 +33,15 @@ impl EntityScheduler {
         E::State: Send + 'static,
     {
         let mailbox = Arc::new(Mutex::new(VecDeque::new()));
-        let behavior_fn = |state: &dyn std::any::Any, message: KDU| {
-            let new_state_tuple = E::behavior(state.downcast_ref::<E::State>().unwrap(), message);
-            (Box::new(new_state_tuple.0), new_state_tuple.1)
+        
+        // This is the corrected, two-stage closure.
+        let behavior_fn = move |state: &dyn Any, message: KDU| {
+            // 1. Execute the specific behavior, getting a specific state back.
+            let (new_specific_state, kuds) =
+                E::behavior(state.downcast_ref::<E::State>().unwrap(), message);
+            // 2. Explicitly convert the specific state into a generic Box.
+            let new_generic_state: Box<dyn Any + Send> = Box::new(new_specific_state);
+            (new_generic_state, kuds)
         };
 
         let instance = EntityInstance {
@@ -63,7 +69,8 @@ impl EntityScheduler {
 
         // --- 1. Dequeue and Execute ---
         for fqei in fqei_list {
-            let mut entity = self.entities.get_mut(&fqei).unwrap();
+            // We get the entity once and use it multiple times.
+            let entity = self.entities.get_mut(&fqei).unwrap();
             let maybe_message = entity.mailbox.lock().unwrap().pop_front();
             if let Some(message) = maybe_message {
                 println!("\n[EntityScheduler] Executing behavior for {}", fqei);
