@@ -1,6 +1,6 @@
 // src/main.rs
 
-use cdqn::kernel::{KDU, License, Metadata}; // Import the necessary structs
+use cdqn::kernel::{License, Metadata, KDU}; // Import the necessary structs
 use cdqn::runtime::scheduler::EntityScheduler;
 use cdqn::runtime::test_entities::{Pinger, Ponger};
 
