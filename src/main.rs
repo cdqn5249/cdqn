@@ -11,6 +11,8 @@ use std::io::{self, Read};
 // --- SHARED CONFIGURATION ---
 const GITHUB_API_URL: &str =
     "https://api.github.com/repos/cdqn5249/cdqn/actions/workflows/kdu-pipe.yml/dispatches";
+// The User-Agent header is required by the GitHub API.
+const USER_AGENT: &str = "cdqn-runtime-mvp-test";
 
 #[derive(Serialize, Deserialize, Debug)]
 struct TestPayload {
@@ -98,19 +100,16 @@ fn run_processor() {
 
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
-        .set("Authorization", &format!("Bearer {}", github_token)) // Use Bearer
+        .set("Authorization", &format!("Bearer {}", github_token))
+        .set("User-Agent", USER_AGENT) // Add the required User-Agent
         .send_json(request_body);
 
-    // Match on the result to handle all cases
     match response {
         Ok(resp) if resp.status() == 204 => {
             println!("SUCCESS: Processor triggered pipe with pong.kdu.");
         }
         Ok(resp) => {
-            eprintln!(
-                "FAILURE: Processor received non-204 status: {}",
-                resp.status()
-            );
+            eprintln!("FAILURE: Processor received non-204 status: {}", resp.status());
             eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
         }
         Err(e) => {
@@ -144,9 +143,9 @@ fn run_client(github_token: &str) {
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
         .set("Authorization", &format!("Bearer {}", github_token))
+        .set("User-Agent", USER_AGENT) // Add the required User-Agent
         .send_json(request_body);
 
-    // Use a match statement for robust error handling
     match response {
         Ok(resp) if resp.status() == 204 => {
             println!("\nSUCCESS: Workflow triggered successfully.");
