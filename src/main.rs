@@ -68,12 +68,11 @@ fn run_ci_test() {
 
 // --- PROCESSOR MODE ---
 fn run_processor() {
-    println!("--- Running in PROCESSOR mode ---");
+    // This function is now completely silent. It only prints the final base64 string.
     let mut buffer = Vec::new();
     io::stdin()
         .read_to_end(&mut buffer)
         .expect("Failed to read KDU from stdin");
-    // Prefix with an underscore to acknowledge it's intentionally unused.
     let _incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
 
     let factory = KDUFactory::default();
