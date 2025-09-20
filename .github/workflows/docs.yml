@@ -19,16 +19,11 @@ jobs:
       - name: Build Rust Documentation
         run: cargo doc --no-deps --all-features
 
-      # --- THIS IS THE NEW, ROBUST SOLUTION ---
-      # It replaces the old "Copy" and "Redirect" steps.
       - name: Build and Organize Final Documentation Site
         run: |
-          # 1. Copy all markdown files from the Docs directory into the doc root.
           cp Docs/*.md ./target/doc/
-          # 2. Copy the main README to the doc root as well.
           cp README.md ./target/doc/
           
-          # 3. Create a new, clean index.html landing page.
           echo '<!DOCTYPE html>
           <html>
           <head>
@@ -58,21 +53,20 @@ jobs:
               <h2>Design & Planning Documents</h2>
               <ul>' > ./target/doc/index.html
 
-          # 4. Dynamically add a link for each markdown file to the index.html.
-          for file in ./target/doc/*.md; do
+          # --- THIS IS THE CORRECTED LOOP ---
+          # It now looks for both .md and .kdu files.
+          for file in ./target/doc/*.md ./target/doc/*.kdu; do
             if [ -f "$file" ]; then
               filename=$(basename "$file")
               echo "                <li><a href=\"$filename\">$filename</a></li>" >> ./target/doc/index.html
             fi
           done
 
-          # 5. Close the HTML tags.
           echo '              </ul>
             </div>
           </body>
           </html>' >> ./target/doc/index.html
 
-      # This debugging step is kept to ensure everything is in the right place.
       - name: List generated files for debugging
         run: ls -R ./target/doc
 
@@ -81,3 +75,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/doc
+          keep_files: true
