@@ -1,10 +1,11 @@
 // src/runtime/orchestrator.rs
 
 use crate::kernel::{FQEI, KDU};
-use crate::runtime::network::NodeServer;
+use crate::runtime::network::{NodeClient, NodeServer};
 use crate::runtime::persistence::Persistence;
 use crate::runtime::processor::EntityProcessor;
 use crate::runtime::PersistenceCommand;
+use std::collections::HashSet;
 use std::path::Path;
 use std::sync::mpsc::{Receiver, Sender};
 use std::thread::JoinHandle;
@@ -17,19 +18,12 @@ pub struct Orchestrator {
     network_handle: Option<JoinHandle<()>>,
 }
 
-impl Default for Orchestrator {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
 impl Orchestrator {
-    pub fn new() -> Self {
+    pub fn new(listen_addr: &str) -> Self {
         let db_path = Path::new("./cdqn_runtime_db");
         let (persistence_handle, persistence_tx) = Persistence::spawn(db_path);
-
         let (network_tx, network_rx) = std::sync::mpsc::channel();
-        let network_handle = NodeServer::spawn("127.0.0.1:8082", network_tx);
+        let network_handle = NodeServer::spawn(listen_addr, network_tx);
 
         Orchestrator {
             processor: EntityProcessor::default(),
@@ -52,45 +46,32 @@ impl Orchestrator {
     }
 
     pub fn run(&mut self) {
-        println!("[Orchestrator] Starting main loop...");
-        // The loop will now also check for incoming network messages.
-        for turn in 1..=5 {
-            // Run for a few more turns
-            println!("\n--- Turn {} ---", turn);
-
-            // 1. Check for and route incoming KDUs from the network
+        println!("[Orchestrator] Starting main event loop. Press Ctrl+C to exit.");
+        loop {
             if let Ok(network_kdu) = self.network_rx.try_recv() {
-                println!(
-                    "[Orchestrator] Received KDU from network with ID: {}",
-                    network_kdu.kdu_id
-                );
-                // For now, assume all network KDUs are for the ponger
-                self.route_initial_kdu(&"ponger@test".to_string(), network_kdu);
+                let target_fqei = self.processor.get_local_fqeis().into_iter().next().unwrap_or_default();
+                self.route_initial_kdu(&target_fqei, network_kdu);
             }
 
             let outgoing_routes = self.processor.run_turn();
-
-            if outgoing_routes.is_empty() {
-                println!("[Orchestrator] System is quiet.");
-            }
+            let local_fqeis = self.processor.get_local_fqeis();
 
             for (target_fqei, kdu) in outgoing_routes {
-                println!(
-                    "[Orchestrator] Journaling and routing KDU from {} to {}",
-                    kdu.originator_fqei, target_fqei
-                );
                 self.persistence_tx
                     .send(PersistenceCommand::WriteKdu(Box::new(kdu.clone())))
                     .unwrap();
 
-                // In the final step, we will add logic here to check if the target
-                // is local or remote. For now, we still route locally.
-                self.processor.route_local(&target_fqei, kdu);
+                if local_fqeis.contains(&target_fqei) {
+                    self.processor.route_local(&target_fqei, kdu);
+                } else {
+                    println!("[Orchestrator] KDU is for a remote entity. Sending to network.");
+                    if let Ok(mut stream) = NodeClient::connect("127.0.0.1:8082") { // Hardcoded for now
+                        NodeClient::send_kdu(&mut stream, &kdu).unwrap();
+                    }
+                }
             }
-            // Give I/O threads a moment to work
-            std::thread::sleep(std::time::Duration::from_millis(10));
+            std::thread::sleep(std::time::Duration::from_millis(100));
         }
-        println!("\n[Orchestrator] Simulation finished.");
     }
 
     pub fn shutdown(&mut self) {
@@ -101,10 +82,8 @@ impl Orchestrator {
         if let Some(handle) = self.persistence_handle.take() {
             handle.join().expect("Persistence thread panicked");
         }
-        // Prefix with an underscore to silence the warning.
         if let Some(_handle) = self.network_handle.take() {
-            // We still don't have a graceful shutdown for the network thread,
-            // but now the linter is happy.
+            // Network thread will exit when main exits.
         }
         println!("[Orchestrator] Shutdown complete.");
     }
