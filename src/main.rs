@@ -56,8 +56,9 @@ fn run_ci_test() {
     // --- Verification Step ---
     let content_to_hash = (&kdu.metadata, &kdu.data_payload);
     let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
-    let signature =
-        ed25519_dalek::Signature::from_bytes(kdu.originator_signature.as_slice().try_into().unwrap());
+    let signature = ed25519_dalek::Signature::from_bytes(
+        kdu.originator_signature.as_slice().try_into().unwrap(),
+    );
     let verification_result = originator_keypair
         .public
         .verify(&content_hash_bytes, &signature);
@@ -73,7 +74,6 @@ fn run_ci_test() {
 // --- PROCESSOR MODE (The "Serverless Server") ---
 fn run_processor() {
     println!("--- Running in PROCESSOR mode ---");
-    // This is the corrected line.
     let mut buffer = Vec::new();
     io::stdin()
         .read_to_end(&mut buffer)
