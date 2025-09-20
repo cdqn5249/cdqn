@@ -1,7 +1,7 @@
 // src/runtime/network.rs
 
 use crate::kernel::KDU;
-use std::io::{self, Read, Write}; // Import the Write trait
+use std::io::{self, Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::sync::mpsc::Sender;
 use std::thread::{self, JoinHandle};
@@ -18,7 +18,10 @@ impl NodeServer {
             for stream in listener.incoming() {
                 match stream {
                     Ok(stream) => {
-                        println!("[NodeServer] New connection: {}", stream.peer_addr().unwrap());
+                        println!(
+                            "[NodeServer] New connection: {}",
+                            stream.peer_addr().unwrap()
+                        );
                         let kdu_tx_clone = kdu_tx.clone();
                         thread::spawn(move || {
                             handle_client(stream, kdu_tx_clone);
@@ -43,8 +46,13 @@ fn handle_client(mut stream: TcpStream, kdu_tx: Sender<KDU>) {
         if stream.read_exact(&mut kdu_buffer).is_ok() {
             let kdu: KDU =
                 bincode::deserialize(&kdu_buffer).expect("Failed to deserialize KDU from stream");
-            println!("[NodeServer] Received KDU with ID: {}. Sending to Orchestrator.", kdu.kdu_id);
-            kdu_tx.send(kdu).expect("Failed to send KDU to orchestrator");
+            println!(
+                "[NodeServer] Received KDU with ID: {}. Sending to Orchestrator.",
+                kdu.kdu_id
+            );
+            kdu_tx
+                .send(kdu)
+                .expect("Failed to send KDU to orchestrator");
         }
     }
 }
