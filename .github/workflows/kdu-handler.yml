@@ -13,11 +13,9 @@ on:
         required: true
 
 jobs:
-  # This job acts as our "serverless server"
   process_and_respond:
     name: Process Ping and Generate Pong
     runs-on: ubuntu-latest
-    # We define outputs that this job will pass to the next one
     outputs:
       pong_kdu_base64: ${{ steps.run_processor.outputs.pong_kdu_base64 }}
 
@@ -31,20 +29,16 @@ jobs:
           echo "Decoded ping.kdu"
 
       - name: Run KDU Processor
-        id: run_processor # Give this step an ID to reference its outputs
+        id: run_processor
         run: |
           echo "Compiling and running the processor..."
-          # Run our executable in --process mode, feeding it the ping.kdu
-          # It will now print the base64 of the pong KDU to stdout
-          PONG_B64=$(cargo run --release -- --process < ping.kdu)
-          # Set the output for the next job
+          # Use the --quiet flag to suppress all cargo messages.
+          PONG_B64=$(cargo run --release --quiet -- --process < ping.kdu)
           echo "pong_kdu_base64=$PONG_B64" >> $GITHUB_OUTPUT
 
-  # This job commits the results to GitHub Pages
   commit_to_pages:
     name: Commit KDUs to gh-pages
     runs-on: ubuntu-latest
-    # This job depends on the first one finishing successfully
     needs: process_and_respond
     steps:
       - name: Checkout gh-pages branch
@@ -55,10 +49,8 @@ jobs:
 
       - name: Decode and write KDU files
         run: |
-          # Decode the original ping
           echo "${{ github.event.inputs.ping_kdu_base64 }}" | base64 --decode > ping.kdu
           echo "Created ping.kdu"
-          # Decode the pong from the previous job's output
           echo "${{ needs.process_and_respond.outputs.pong_kdu_base64 }}" | base64 --decode > pong.kdu
           echo "Created pong.kdu"
 
