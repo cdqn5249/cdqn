@@ -2,7 +2,7 @@
 
 pub mod crypto;
 pub mod factory;
-pub mod hlc;
+// pub mod hlc; // This line is now removed.
 
 use serde::{Deserialize, Serialize};
 
