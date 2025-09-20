@@ -80,27 +80,32 @@
 <a href=#80 id=80 data-nosnippet>80</a>                    <span class="comment">// This logic is for when we have a real remote target.
 <a href=#81 id=81 data-nosnippet>81</a>                    // For now, we'll hardcode the server address.
 <a href=#82 id=82 data-nosnippet>82</a>                    </span><span class="kw">let </span>remote_addr = <span class="string">"127.0.0.1:8082"</span>;
-<a href=#83 id=83 data-nosnippet>83</a>                    <span class="macro">println!</span>(<span class="string">"[Orchestrator] KDU is for a remote entity. Sending to {}."</span>, remote_addr);
-<a href=#84 id=84 data-nosnippet>84</a>                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>stream) = <span class="kw">crate</span>::runtime::network::NodeClient::connect(remote_addr) {
-<a href=#85 id=85 data-nosnippet>85</a>                        <span class="kw">crate</span>::runtime::network::NodeClient::send_kdu(<span class="kw-2">&amp;mut </span>stream, <span class="kw-2">&amp;</span>kdu).unwrap();
-<a href=#86 id=86 data-nosnippet>86</a>                    }
-<a href=#87 id=87 data-nosnippet>87</a>                }
-<a href=#88 id=88 data-nosnippet>88</a>            }
-<a href=#89 id=89 data-nosnippet>89</a>            std::thread::sleep(std::time::Duration::from_millis(<span class="number">100</span>));
-<a href=#90 id=90 data-nosnippet>90</a>        }
-<a href=#91 id=91 data-nosnippet>91</a>    }
-<a href=#92 id=92 data-nosnippet>92</a>
-<a href=#93 id=93 data-nosnippet>93</a>    <span class="kw">pub fn </span>shutdown(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#94 id=94 data-nosnippet>94</a>        <span class="macro">println!</span>(<span class="string">"[Orchestrator] Shutting down..."</span>);
-<a href=#95 id=95 data-nosnippet>95</a>        <span class="self">self</span>.persistence_tx
-<a href=#96 id=96 data-nosnippet>96</a>            .send(PersistenceCommand::Shutdown)
-<a href=#97 id=97 data-nosnippet>97</a>            .unwrap();
-<a href=#98 id=98 data-nosnippet>98</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(handle) = <span class="self">self</span>.persistence_handle.take() {
-<a href=#99 id=99 data-nosnippet>99</a>            handle.join().expect(<span class="string">"Persistence thread panicked"</span>);
-<a href=#100 id=100 data-nosnippet>100</a>        }
-<a href=#101 id=101 data-nosnippet>101</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(_handle) = <span class="self">self</span>.network_handle.take() {
-<a href=#102 id=102 data-nosnippet>102</a>            <span class="comment">// Network thread will exit when main exits.
-<a href=#103 id=103 data-nosnippet>103</a>        </span>}
-<a href=#104 id=104 data-nosnippet>104</a>        <span class="macro">println!</span>(<span class="string">"[Orchestrator] Shutdown complete."</span>);
-<a href=#105 id=105 data-nosnippet>105</a>    }
-<a href=#106 id=106 data-nosnippet>106</a>}</code></pre></div></section></main></body></html>
+<a href=#83 id=83 data-nosnippet>83</a>                    <span class="macro">println!</span>(
+<a href=#84 id=84 data-nosnippet>84</a>                        <span class="string">"[Orchestrator] KDU is for a remote entity. Sending to {}."</span>,
+<a href=#85 id=85 data-nosnippet>85</a>                        remote_addr
+<a href=#86 id=86 data-nosnippet>86</a>                    );
+<a href=#87 id=87 data-nosnippet>87</a>                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>stream) =
+<a href=#88 id=88 data-nosnippet>88</a>                        <span class="kw">crate</span>::runtime::network::NodeClient::connect(remote_addr)
+<a href=#89 id=89 data-nosnippet>89</a>                    {
+<a href=#90 id=90 data-nosnippet>90</a>                        <span class="kw">crate</span>::runtime::network::NodeClient::send_kdu(<span class="kw-2">&amp;mut </span>stream, <span class="kw-2">&amp;</span>kdu).unwrap();
+<a href=#91 id=91 data-nosnippet>91</a>                    }
+<a href=#92 id=92 data-nosnippet>92</a>                }
+<a href=#93 id=93 data-nosnippet>93</a>            }
+<a href=#94 id=94 data-nosnippet>94</a>            std::thread::sleep(std::time::Duration::from_millis(<span class="number">100</span>));
+<a href=#95 id=95 data-nosnippet>95</a>        }
+<a href=#96 id=96 data-nosnippet>96</a>    }
+<a href=#97 id=97 data-nosnippet>97</a>
+<a href=#98 id=98 data-nosnippet>98</a>    <span class="kw">pub fn </span>shutdown(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#99 id=99 data-nosnippet>99</a>        <span class="macro">println!</span>(<span class="string">"[Orchestrator] Shutting down..."</span>);
+<a href=#100 id=100 data-nosnippet>100</a>        <span class="self">self</span>.persistence_tx
+<a href=#101 id=101 data-nosnippet>101</a>            .send(PersistenceCommand::Shutdown)
+<a href=#102 id=102 data-nosnippet>102</a>            .unwrap();
+<a href=#103 id=103 data-nosnippet>103</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(handle) = <span class="self">self</span>.persistence_handle.take() {
+<a href=#104 id=104 data-nosnippet>104</a>            handle.join().expect(<span class="string">"Persistence thread panicked"</span>);
+<a href=#105 id=105 data-nosnippet>105</a>        }
+<a href=#106 id=106 data-nosnippet>106</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(_handle) = <span class="self">self</span>.network_handle.take() {
+<a href=#107 id=107 data-nosnippet>107</a>            <span class="comment">// Network thread will exit when main exits.
+<a href=#108 id=108 data-nosnippet>108</a>        </span>}
+<a href=#109 id=109 data-nosnippet>109</a>        <span class="macro">println!</span>(<span class="string">"[Orchestrator] Shutdown complete."</span>);
+<a href=#110 id=110 data-nosnippet>110</a>    }
+<a href=#111 id=111 data-nosnippet>111</a>}</code></pre></div></section></main></body></html>
