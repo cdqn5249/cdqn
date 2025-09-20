@@ -12,20 +12,38 @@ jobs:
     name: Deploy Docs to GitHub Pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Rust Toolchain
-        uses: dtolnay/rust-toolchain@stable
+      # 1. Check out the main branch to get our code and markdown files
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          path: main
 
+      # 2. Check out the gh-pages branch to get existing KDU files
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          path: gh-pages
+
+      # 3. Build the Rust documentation
       - name: Build Rust Documentation
-        run: cargo doc --no-deps --all-features
-
-      - name: Build and Organize Final Documentation Site
         run: |
-          # 1. Copy all markdown files from the Docs directory into the doc root.
-          cp Docs/*.md ./target/doc/
-          cp README.md ./target/doc/
-          
-          # 2. Create the header for our new, clean index.html landing page.
+          cd main
+          cargo doc --no-deps --all-features
+
+      # 4. Unify all content into the gh-pages directory
+      - name: Unify documentation content
+        run: |
+          # Copy the generated Rust docs into the gh-pages checkout
+          cp -r main/target/doc/* gh-pages/
+          # Copy the markdown files into the gh-pages checkout
+          cp main/Docs/*.md gh-pages/
+          cp main/README.md gh-pages/
+
+      # 5. Generate the final index.html from the unified content
+      - name: Generate Final Index Page
+        run: |
+          # Create the header for our new, clean index.html landing page.
           echo '<!DOCTYPE html>
           <html>
           <head>
@@ -42,32 +60,28 @@ jobs:
           </head>
           <body>
             <h1>CDQN Project Index</h1>
-            <ul>' > ./target/doc/index.html
+            <ul>' > gh-pages/index.html
 
-          # 3. --- THIS IS THE CORRECTED, GENERIC LOOP ---
-          # It iterates over ALL files and directories in the doc root.
-          for item in ./target/doc/*; do
+          # Run the generic loop on the unified gh-pages directory
+          for item in gh-pages/*; do
             if [ -e "$item" ]; then
               filename=$(basename "$item")
-              # Add a link for every item EXCEPT for the index page itself.
               if [ "$filename" != "index.html" ]; then
-                echo "                <li><a href=\"$filename\">$filename</a></li>" >> ./target/doc/index.html
+                echo "                <li><a href=\"$filename\">$filename</a></li>" >> gh-pages/index.html
               fi
             fi
           done
 
-          # 4. Close the HTML tags.
           echo '              </ul>
           </body>
-          </html>' >> ./target/doc/index.html
+          </html>' >> gh-pages/index.html
 
-      - name: List generated files for debugging
-        run: ls -laR ./target/doc
-
+      # 6. Deploy the final, unified gh-pages directory
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/doc
-          # This is still crucial to prevent this workflow from deleting the KDU files.
-          keep_files: true
+          # We now deploy the gh-pages directory, which contains everything.
+          publish_dir: ./gh-pages
+          # We no longer need keep_files, as we've done the merge manually.
+          keep_files: false
