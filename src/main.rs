@@ -96,8 +96,12 @@ fn run_processor() {
         .encode(bincode::serialize(&response_kdu).unwrap());
     let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found");
     let request_body = ureq::json!({
-        "ref": "main", // Corrected: Trigger from the main branch
-        "inputs": { "kdu_filename": "pong.kdu", "kdu_content_base64": kdu_base64 }
+        "ref": "main",
+        "inputs": {
+            "kdu_filename": "pong.kdu",
+            "kdu_content_base64": kdu_base64,
+            "github_token": github_token // Pass the token through
+        }
     });
 
     let response = ureq::post(GITHUB_API_URL)
@@ -151,8 +155,12 @@ fn run_client(github_token: &str) {
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
     let request_body = ureq::json!({
-        "ref": "main", // Corrected: Trigger from the main branch
-        "inputs": { "kdu_filename": "ping.kdu", "kdu_content_base64": kdu_base64 }
+        "ref": "main",
+        "inputs": {
+            "kdu_filename": "ping.kdu",
+            "kdu_content_base64": kdu_base64,
+            "github_token": github_token // Pass the token through
+        }
     });
 
     let response = ureq::post(GITHUB_API_URL)
