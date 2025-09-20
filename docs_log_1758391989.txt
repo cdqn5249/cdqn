@@ -1,0 +1,712 @@
+--- CDQN Documentation Workflow Log ---
+Timestamp: Sat Sep 20 18:13:09 UTC 2025
+Commit: 30ca8e06587e3ca4d962e8bf2603e9906ee555e7
+\n--- Files in ./target/doc before copy ---
+./target/doc:
+total 60
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw------- 1 runner runner    0 Sep 20 18:13 .lock
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 cdqn
+-rw-r--r-- 1 runner runner   67 Sep 20 18:13 crates.js
+-rw-r--r-- 1 runner runner  173 Sep 20 18:13 docs_log_1758391989.txt
+-rw-r--r-- 1 runner runner 2908 Sep 20 18:13 help.html
+-rw-r--r-- 1 runner runner 6939 Sep 20 18:13 search-index.js
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 search.desc
+-rw-r--r-- 1 runner runner 2856 Sep 20 18:13 settings.html
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 src
+-rw-r--r-- 1 runner runner  268 Sep 20 18:13 src-files.js
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 static.files
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 trait.impl
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 type.impl
+
+./target/doc/cdqn:
+total 40
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 4414 Sep 20 18:13 all.html
+-rw-r--r-- 1 runner runner 9044 Sep 20 18:13 index.html
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 kernel
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 runtime
+-rw-r--r-- 1 runner runner   52 Sep 20 18:13 sidebar-items.js
+
+./target/doc/cdqn/kernel:
+total 152
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 crypto
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 factory
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 hlc
+-rw-r--r-- 1 runner runner  4277 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner   135 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 38458 Sep 20 18:13 struct.KDU.html
+-rw-r--r-- 1 runner runner 35484 Sep 20 18:13 struct.License.html
+-rw-r--r-- 1 runner runner 36108 Sep 20 18:13 struct.Metadata.html
+-rw-r--r-- 1 runner runner  3499 Sep 20 18:13 type.FQEI.html
+-rw-r--r-- 1 runner runner  3695 Sep 20 18:13 type.UnisphereCoordinates.html
+
+./target/doc/cdqn/kernel/crypto:
+total 68
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3439 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    59 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 25893 Sep 20 18:13 struct.CryptoCore.html
+-rw-r--r-- 1 runner runner 22978 Sep 20 18:13 struct.Keypair.html
+
+./target/doc/cdqn/kernel/factory:
+total 44
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3330 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    49 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 24617 Sep 20 18:13 struct.KDUFactory.html
+
+./target/doc/cdqn/kernel/hlc:
+total 48
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3285 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    42 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 31380 Sep 20 18:13 struct.HLC.html
+
+./target/doc/cdqn/runtime:
+total 68
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 entity
+-rw-r--r-- 1 runner runner 23899 Sep 20 18:13 enum.PersistenceCommand.html
+-rw-r--r-- 1 runner runner  4117 Sep 20 18:13 index.html
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 network
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 orchestrator
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 persistence
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 processor
+-rw-r--r-- 1 runner runner   139 Sep 20 18:13 sidebar-items.js
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 test_entities
+
+./target/doc/cdqn/runtime/entity:
+total 36
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 3925 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner   63 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 9208 Sep 20 18:13 trait.Entity.html
+-rw-r--r-- 1 runner runner 4495 Sep 20 18:13 type.Mailbox.html
+
+./target/doc/cdqn/runtime/network:
+total 64
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3466 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    62 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 22823 Sep 20 18:13 struct.NodeClient.html
+-rw-r--r-- 1 runner runner 22367 Sep 20 18:13 struct.NodeServer.html
+
+./target/doc/cdqn/runtime/orchestrator:
+total 44
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3372 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    51 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 25235 Sep 20 18:13 struct.Orchestrator.html
+
+./target/doc/cdqn/runtime/persistence:
+total 40
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3440 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    50 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 22798 Sep 20 18:13 struct.Persistence.html
+
+./target/doc/cdqn/runtime/processor:
+total 44
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3367 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    54 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 26675 Sep 20 18:13 struct.EntityProcessor.html
+
+./target/doc/cdqn/runtime/test_entities:
+total 72
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3479 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    54 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 24737 Sep 20 18:13 struct.Pinger.html
+-rw-r--r-- 1 runner runner 24740 Sep 20 18:13 struct.Ponger.html
+
+./target/doc/search.desc:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 cdqn
+
+./target/doc/search.desc/cdqn:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1552 Sep 20 18:13 cdqn-desc-0-.js
+
+./target/doc/src:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 cdqn
+
+./target/doc/src/cdqn:
+total 20
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 kernel
+-rw-r--r-- 1 runner runner 2610 Sep 20 18:13 lib.rs.html
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 runtime
+
+./target/doc/src/cdqn/kernel:
+total 44
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 6747 Sep 20 18:13 crypto.rs.html
+-rw-r--r-- 1 runner runner 9126 Sep 20 18:13 factory.rs.html
+-rw-r--r-- 1 runner runner 7421 Sep 20 18:13 hlc.rs.html
+-rw-r--r-- 1 runner runner 5690 Sep 20 18:13 mod.rs.html
+
+./target/doc/src/cdqn/runtime:
+total 80
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  4695 Sep 20 18:13 entity.rs.html
+-rw-r--r-- 1 runner runner  3784 Sep 20 18:13 mod.rs.html
+-rw-r--r-- 1 runner runner  9689 Sep 20 18:13 network.rs.html
+-rw-r--r-- 1 runner runner 13644 Sep 20 18:13 orchestrator.rs.html
+-rw-r--r-- 1 runner runner  9191 Sep 20 18:13 persistence.rs.html
+-rw-r--r-- 1 runner runner 10260 Sep 20 18:13 processor.rs.html
+-rw-r--r-- 1 runner runner  7698 Sep 20 18:13 test_entities.rs.html
+
+./target/doc/static.files:
+total 1812
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner   2746 Sep 20 18:13 COPYRIGHT-7fb11f4e.txt
+-rw-r--r-- 1 runner runner  64572 Sep 20 18:13 FiraMono-Medium-86f75c8c.woff2
+-rw-r--r-- 1 runner runner  64868 Sep 20 18:13 FiraMono-Regular-87c26294.woff2
+-rw-r--r-- 1 runner runner 136300 Sep 20 18:13 FiraSans-Italic-81dc35de.woff2
+-rw-r--r-- 1 runner runner   4461 Sep 20 18:13 FiraSans-LICENSE-05ab6dbd.txt
+-rw-r--r-- 1 runner runner 132780 Sep 20 18:13 FiraSans-Medium-e1aa3f0a.woff2
+-rw-r--r-- 1 runner runner 140588 Sep 20 18:13 FiraSans-MediumItalic-ccf7e434.woff2
+-rw-r--r-- 1 runner runner 129188 Sep 20 18:13 FiraSans-Regular-0fe48ade.woff2
+-rw-r--r-- 1 runner runner  10847 Sep 20 18:13 LICENSE-APACHE-a60eea81.txt
+-rw-r--r-- 1 runner runner   1023 Sep 20 18:13 LICENSE-MIT-23f18e03.txt
+-rw-r--r-- 1 runner runner 399468 Sep 20 18:13 NanumBarunGothic-13b3dcba.ttf.woff2
+-rw-r--r-- 1 runner runner   4787 Sep 20 18:13 NanumBarunGothic-LICENSE-a37d393b.txt
+-rw-r--r-- 1 runner runner  44896 Sep 20 18:13 SourceCodePro-It-fc8b9304.ttf.woff2
+-rw-r--r-- 1 runner runner   4570 Sep 20 18:13 SourceCodePro-LICENSE-67f54ca7.txt
+-rw-r--r-- 1 runner runner  52228 Sep 20 18:13 SourceCodePro-Regular-8badfe75.ttf.woff2
+-rw-r--r-- 1 runner runner  52348 Sep 20 18:13 SourceCodePro-Semibold-aa29a496.ttf.woff2
+-rw-r--r-- 1 runner runner  81540 Sep 20 18:13 SourceSerif4-Bold-6d4fd4c0.ttf.woff2
+-rw-r--r-- 1 runner runner  59716 Sep 20 18:13 SourceSerif4-It-ca3b17ed.ttf.woff2
+-rw-r--r-- 1 runner runner   4727 Sep 20 18:13 SourceSerif4-LICENSE-a2cfd9d5.md
+-rw-r--r-- 1 runner runner  76260 Sep 20 18:13 SourceSerif4-Regular-6b053e98.ttf.woff2
+-rw-r--r-- 1 runner runner  80732 Sep 20 18:13 SourceSerif4-Semibold-457a13ac.ttf.woff2
+-rw-r--r-- 1 runner runner   4298 Sep 20 18:13 favicon-044be391.svg
+-rw-r--r-- 1 runner runner   1125 Sep 20 18:13 favicon-32x32-6580c154.png
+-rw-r--r-- 1 runner runner  40072 Sep 20 18:13 main-fd3af306.js
+-rw-r--r-- 1 runner runner   1853 Sep 20 18:13 normalize-9960930a.css
+-rw-r--r-- 1 runner runner   8014 Sep 20 18:13 noscript-32bb7600.css
+-rw-r--r-- 1 runner runner   3297 Sep 20 18:13 rust-logo-9a9549ea.svg
+-rw-r--r-- 1 runner runner  64652 Sep 20 18:13 rustdoc-84e720fa.css
+-rw-r--r-- 1 runner runner   3035 Sep 20 18:13 scrape-examples-5e967b76.js
+-rw-r--r-- 1 runner runner  94932 Sep 20 18:13 search-92309212.js
+-rw-r--r-- 1 runner runner   7486 Sep 20 18:13 settings-5514c975.js
+-rw-r--r-- 1 runner runner   3867 Sep 20 18:13 src-script-813739b1.js
+-rw-r--r-- 1 runner runner   6635 Sep 20 18:13 storage-4e99c027.js
+
+./target/doc/trait.impl:
+total 20
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 cdqn
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 core
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 serde_core
+
+./target/doc/trait.impl/cdqn:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 runtime
+
+./target/doc/trait.impl/cdqn/runtime:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 entity
+
+./target/doc/trait.impl/cdqn/runtime/entity:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  278 Sep 20 18:13 trait.Entity.js
+
+./target/doc/trait.impl/core:
+total 28
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 clone
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 default
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 fmt
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 marker
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 panic
+
+./target/doc/trait.impl/core/clone:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1303 Sep 20 18:13 trait.Clone.js
+
+./target/doc/trait.impl/core/default:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 2356 Sep 20 18:13 trait.Default.js
+
+./target/doc/trait.impl/core/fmt:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1841 Sep 20 18:13 trait.Debug.js
+
+./target/doc/trait.impl/core/marker:
+total 44
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 5138 Sep 20 18:13 trait.Freeze.js
+-rw-r--r-- 1 runner runner 5048 Sep 20 18:13 trait.Send.js
+-rw-r--r-- 1 runner runner 5051 Sep 20 18:13 trait.Sync.js
+-rw-r--r-- 1 runner runner 5093 Sep 20 18:13 trait.Unpin.js
+-rw-r--r-- 1 runner runner 3233 Sep 20 18:13 trait.UnsafeUnpin.js
+
+./target/doc/trait.impl/core/panic:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 unwind_safe
+
+./target/doc/trait.impl/core/panic/unwind_safe:
+total 24
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 5800 Sep 20 18:13 trait.RefUnwindSafe.js
+-rw-r--r-- 1 runner runner 5665 Sep 20 18:13 trait.UnwindSafe.js
+
+./target/doc/trait.impl/serde_core:
+total 16
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 de
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 ser
+
+./target/doc/trait.impl/serde_core/de:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1190 Sep 20 18:13 trait.Deserialize.js
+
+./target/doc/trait.impl/serde_core/ser:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1112 Sep 20 18:13 trait.Serialize.js
+
+./target/doc/type.impl:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 alloc
+
+./target/doc/type.impl/alloc:
+total 20
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 string
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 sync
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 vec
+
+./target/doc/type.impl/alloc/string:
+total 272
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 267984 Sep 20 18:13 struct.String.js
+
+./target/doc/type.impl/alloc/sync:
+total 184
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 176697 Sep 20 18:13 struct.Arc.js
+
+./target/doc/type.impl/alloc/vec:
+total 300
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 298974 Sep 20 18:13 struct.Vec.js
+\n--- Generating index.html ---
+\n--- Final file list in ./target/doc before deploy ---
+./target/doc:
+total 224
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+-rw------- 1 runner runner     0 Sep 20 18:13 .lock
+-rw-r--r-- 1 runner runner  5307 Sep 20 18:13 Doc01V1.2.0.md
+-rw-r--r-- 1 runner runner 10081 Sep 20 18:13 Doc02V1.1.0.md
+-rw-r--r-- 1 runner runner 17036 Sep 20 18:13 Doc03V1.3.0.md
+-rw-r--r-- 1 runner runner 12394 Sep 20 18:13 Doc04V1.3.0.md
+-rw-r--r-- 1 runner runner 10704 Sep 20 18:13 Doc05V1.0.0.md
+-rw-r--r-- 1 runner runner 12001 Sep 20 18:13 Doc06V1.0.0.md
+-rw-r--r-- 1 runner runner 11834 Sep 20 18:13 Doc07V1.0.0.md
+-rw-r--r-- 1 runner runner   987 Sep 20 18:13 README.md
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 cdqn
+-rw-r--r-- 1 runner runner  7415 Sep 20 18:13 check_0000.md
+-rw-r--r-- 1 runner runner  4922 Sep 20 18:13 check_0001.md
+-rw-r--r-- 1 runner runner  7787 Sep 20 18:13 check_0002.md
+-rw-r--r-- 1 runner runner    67 Sep 20 18:13 crates.js
+-rw-r--r-- 1 runner runner 15178 Sep 20 18:13 docs_log_1758391989.txt
+-rw-r--r-- 1 runner runner  2908 Sep 20 18:13 help.html
+-rw-r--r-- 1 runner runner  1319 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner  8489 Sep 20 18:13 plan_0000.md
+-rw-r--r-- 1 runner runner  5853 Sep 20 18:13 plan_0001.md
+-rw-r--r-- 1 runner runner  5655 Sep 20 18:13 plan_0002.md
+-rw-r--r-- 1 runner runner  6939 Sep 20 18:13 search-index.js
+drwxr-xr-x 3 runner runner  4096 Sep 20 18:13 search.desc
+-rw-r--r-- 1 runner runner  2856 Sep 20 18:13 settings.html
+drwxr-xr-x 3 runner runner  4096 Sep 20 18:13 src
+-rw-r--r-- 1 runner runner   268 Sep 20 18:13 src-files.js
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 static.files
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 trait.impl
+drwxr-xr-x 3 runner runner  4096 Sep 20 18:13 type.impl
+
+./target/doc/cdqn:
+total 40
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 4414 Sep 20 18:13 all.html
+-rw-r--r-- 1 runner runner 9044 Sep 20 18:13 index.html
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 kernel
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 runtime
+-rw-r--r-- 1 runner runner   52 Sep 20 18:13 sidebar-items.js
+
+./target/doc/cdqn/kernel:
+total 152
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 crypto
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 factory
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 hlc
+-rw-r--r-- 1 runner runner  4277 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner   135 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 38458 Sep 20 18:13 struct.KDU.html
+-rw-r--r-- 1 runner runner 35484 Sep 20 18:13 struct.License.html
+-rw-r--r-- 1 runner runner 36108 Sep 20 18:13 struct.Metadata.html
+-rw-r--r-- 1 runner runner  3499 Sep 20 18:13 type.FQEI.html
+-rw-r--r-- 1 runner runner  3695 Sep 20 18:13 type.UnisphereCoordinates.html
+
+./target/doc/cdqn/kernel/crypto:
+total 68
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3439 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    59 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 25893 Sep 20 18:13 struct.CryptoCore.html
+-rw-r--r-- 1 runner runner 22978 Sep 20 18:13 struct.Keypair.html
+
+./target/doc/cdqn/kernel/factory:
+total 44
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3330 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    49 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 24617 Sep 20 18:13 struct.KDUFactory.html
+
+./target/doc/cdqn/kernel/hlc:
+total 48
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3285 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    42 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 31380 Sep 20 18:13 struct.HLC.html
+
+./target/doc/cdqn/runtime:
+total 68
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 entity
+-rw-r--r-- 1 runner runner 23899 Sep 20 18:13 enum.PersistenceCommand.html
+-rw-r--r-- 1 runner runner  4117 Sep 20 18:13 index.html
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 network
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 orchestrator
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 persistence
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 processor
+-rw-r--r-- 1 runner runner   139 Sep 20 18:13 sidebar-items.js
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 test_entities
+
+./target/doc/cdqn/runtime/entity:
+total 36
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 3925 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner   63 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 9208 Sep 20 18:13 trait.Entity.html
+-rw-r--r-- 1 runner runner 4495 Sep 20 18:13 type.Mailbox.html
+
+./target/doc/cdqn/runtime/network:
+total 64
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3466 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    62 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 22823 Sep 20 18:13 struct.NodeClient.html
+-rw-r--r-- 1 runner runner 22367 Sep 20 18:13 struct.NodeServer.html
+
+./target/doc/cdqn/runtime/orchestrator:
+total 44
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3372 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    51 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 25235 Sep 20 18:13 struct.Orchestrator.html
+
+./target/doc/cdqn/runtime/persistence:
+total 40
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3440 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    50 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 22798 Sep 20 18:13 struct.Persistence.html
+
+./target/doc/cdqn/runtime/processor:
+total 44
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3367 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    54 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 26675 Sep 20 18:13 struct.EntityProcessor.html
+
+./target/doc/cdqn/runtime/test_entities:
+total 72
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  3479 Sep 20 18:13 index.html
+-rw-r--r-- 1 runner runner    54 Sep 20 18:13 sidebar-items.js
+-rw-r--r-- 1 runner runner 24737 Sep 20 18:13 struct.Pinger.html
+-rw-r--r-- 1 runner runner 24740 Sep 20 18:13 struct.Ponger.html
+
+./target/doc/search.desc:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 cdqn
+
+./target/doc/search.desc/cdqn:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1552 Sep 20 18:13 cdqn-desc-0-.js
+
+./target/doc/src:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 cdqn
+
+./target/doc/src/cdqn:
+total 20
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 kernel
+-rw-r--r-- 1 runner runner 2610 Sep 20 18:13 lib.rs.html
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 runtime
+
+./target/doc/src/cdqn/kernel:
+total 44
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 6747 Sep 20 18:13 crypto.rs.html
+-rw-r--r-- 1 runner runner 9126 Sep 20 18:13 factory.rs.html
+-rw-r--r-- 1 runner runner 7421 Sep 20 18:13 hlc.rs.html
+-rw-r--r-- 1 runner runner 5690 Sep 20 18:13 mod.rs.html
+
+./target/doc/src/cdqn/runtime:
+total 80
+drwxr-xr-x 2 runner runner  4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  4695 Sep 20 18:13 entity.rs.html
+-rw-r--r-- 1 runner runner  3784 Sep 20 18:13 mod.rs.html
+-rw-r--r-- 1 runner runner  9689 Sep 20 18:13 network.rs.html
+-rw-r--r-- 1 runner runner 13644 Sep 20 18:13 orchestrator.rs.html
+-rw-r--r-- 1 runner runner  9191 Sep 20 18:13 persistence.rs.html
+-rw-r--r-- 1 runner runner 10260 Sep 20 18:13 processor.rs.html
+-rw-r--r-- 1 runner runner  7698 Sep 20 18:13 test_entities.rs.html
+
+./target/doc/static.files:
+total 1812
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner   2746 Sep 20 18:13 COPYRIGHT-7fb11f4e.txt
+-rw-r--r-- 1 runner runner  64572 Sep 20 18:13 FiraMono-Medium-86f75c8c.woff2
+-rw-r--r-- 1 runner runner  64868 Sep 20 18:13 FiraMono-Regular-87c26294.woff2
+-rw-r--r-- 1 runner runner 136300 Sep 20 18:13 FiraSans-Italic-81dc35de.woff2
+-rw-r--r-- 1 runner runner   4461 Sep 20 18:13 FiraSans-LICENSE-05ab6dbd.txt
+-rw-r--r-- 1 runner runner 132780 Sep 20 18:13 FiraSans-Medium-e1aa3f0a.woff2
+-rw-r--r-- 1 runner runner 140588 Sep 20 18:13 FiraSans-MediumItalic-ccf7e434.woff2
+-rw-r--r-- 1 runner runner 129188 Sep 20 18:13 FiraSans-Regular-0fe48ade.woff2
+-rw-r--r-- 1 runner runner  10847 Sep 20 18:13 LICENSE-APACHE-a60eea81.txt
+-rw-r--r-- 1 runner runner   1023 Sep 20 18:13 LICENSE-MIT-23f18e03.txt
+-rw-r--r-- 1 runner runner 399468 Sep 20 18:13 NanumBarunGothic-13b3dcba.ttf.woff2
+-rw-r--r-- 1 runner runner   4787 Sep 20 18:13 NanumBarunGothic-LICENSE-a37d393b.txt
+-rw-r--r-- 1 runner runner  44896 Sep 20 18:13 SourceCodePro-It-fc8b9304.ttf.woff2
+-rw-r--r-- 1 runner runner   4570 Sep 20 18:13 SourceCodePro-LICENSE-67f54ca7.txt
+-rw-r--r-- 1 runner runner  52228 Sep 20 18:13 SourceCodePro-Regular-8badfe75.ttf.woff2
+-rw-r--r-- 1 runner runner  52348 Sep 20 18:13 SourceCodePro-Semibold-aa29a496.ttf.woff2
+-rw-r--r-- 1 runner runner  81540 Sep 20 18:13 SourceSerif4-Bold-6d4fd4c0.ttf.woff2
+-rw-r--r-- 1 runner runner  59716 Sep 20 18:13 SourceSerif4-It-ca3b17ed.ttf.woff2
+-rw-r--r-- 1 runner runner   4727 Sep 20 18:13 SourceSerif4-LICENSE-a2cfd9d5.md
+-rw-r--r-- 1 runner runner  76260 Sep 20 18:13 SourceSerif4-Regular-6b053e98.ttf.woff2
+-rw-r--r-- 1 runner runner  80732 Sep 20 18:13 SourceSerif4-Semibold-457a13ac.ttf.woff2
+-rw-r--r-- 1 runner runner   4298 Sep 20 18:13 favicon-044be391.svg
+-rw-r--r-- 1 runner runner   1125 Sep 20 18:13 favicon-32x32-6580c154.png
+-rw-r--r-- 1 runner runner  40072 Sep 20 18:13 main-fd3af306.js
+-rw-r--r-- 1 runner runner   1853 Sep 20 18:13 normalize-9960930a.css
+-rw-r--r-- 1 runner runner   8014 Sep 20 18:13 noscript-32bb7600.css
+-rw-r--r-- 1 runner runner   3297 Sep 20 18:13 rust-logo-9a9549ea.svg
+-rw-r--r-- 1 runner runner  64652 Sep 20 18:13 rustdoc-84e720fa.css
+-rw-r--r-- 1 runner runner   3035 Sep 20 18:13 scrape-examples-5e967b76.js
+-rw-r--r-- 1 runner runner  94932 Sep 20 18:13 search-92309212.js
+-rw-r--r-- 1 runner runner   7486 Sep 20 18:13 settings-5514c975.js
+-rw-r--r-- 1 runner runner   3867 Sep 20 18:13 src-script-813739b1.js
+-rw-r--r-- 1 runner runner   6635 Sep 20 18:13 storage-4e99c027.js
+
+./target/doc/trait.impl:
+total 20
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 cdqn
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 core
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 serde_core
+
+./target/doc/trait.impl/cdqn:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 runtime
+
+./target/doc/trait.impl/cdqn/runtime:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 entity
+
+./target/doc/trait.impl/cdqn/runtime/entity:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner  278 Sep 20 18:13 trait.Entity.js
+
+./target/doc/trait.impl/core:
+total 28
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 clone
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 default
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 fmt
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 marker
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 panic
+
+./target/doc/trait.impl/core/clone:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1303 Sep 20 18:13 trait.Clone.js
+
+./target/doc/trait.impl/core/default:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 2356 Sep 20 18:13 trait.Default.js
+
+./target/doc/trait.impl/core/fmt:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1841 Sep 20 18:13 trait.Debug.js
+
+./target/doc/trait.impl/core/marker:
+total 44
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 5138 Sep 20 18:13 trait.Freeze.js
+-rw-r--r-- 1 runner runner 5048 Sep 20 18:13 trait.Send.js
+-rw-r--r-- 1 runner runner 5051 Sep 20 18:13 trait.Sync.js
+-rw-r--r-- 1 runner runner 5093 Sep 20 18:13 trait.Unpin.js
+-rw-r--r-- 1 runner runner 3233 Sep 20 18:13 trait.UnsafeUnpin.js
+
+./target/doc/trait.impl/core/panic:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 7 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 unwind_safe
+
+./target/doc/trait.impl/core/panic/unwind_safe:
+total 24
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 5800 Sep 20 18:13 trait.RefUnwindSafe.js
+-rw-r--r-- 1 runner runner 5665 Sep 20 18:13 trait.UnwindSafe.js
+
+./target/doc/trait.impl/serde_core:
+total 16
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 de
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 ser
+
+./target/doc/trait.impl/serde_core/de:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1190 Sep 20 18:13 trait.Deserialize.js
+
+./target/doc/trait.impl/serde_core/ser:
+total 12
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 1112 Sep 20 18:13 trait.Serialize.js
+
+./target/doc/type.impl:
+total 12
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 8 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 alloc
+
+./target/doc/type.impl/alloc:
+total 20
+drwxr-xr-x 5 runner runner 4096 Sep 20 18:13 .
+drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 ..
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 string
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 sync
+drwxr-xr-x 2 runner runner 4096 Sep 20 18:13 vec
+
+./target/doc/type.impl/alloc/string:
+total 272
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 267984 Sep 20 18:13 struct.String.js
+
+./target/doc/type.impl/alloc/sync:
+total 184
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 176697 Sep 20 18:13 struct.Arc.js
+
+./target/doc/type.impl/alloc/vec:
+total 300
+drwxr-xr-x 2 runner runner   4096 Sep 20 18:13 .
+drwxr-xr-x 5 runner runner   4096 Sep 20 18:13 ..
+-rw-r--r-- 1 runner runner 298974 Sep 20 18:13 struct.Vec.js
+\n--- Log End ---
