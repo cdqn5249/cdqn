@@ -1,7 +1,7 @@
 // src/main.rs
 
-use cdqn::kernel::factory::KDUFactory;
-use cdqn::runtime::network::{NodeClient, NodeServer};
+// Import handle_client along with the other services
+use cdqn::runtime::network::{handle_client, NodeClient, NodeServer};
 use serde::Serialize;
 use std::thread;
 use std::time::Duration;
@@ -23,7 +23,8 @@ fn main() {
         if let Ok(server) = NodeServer::bind(&server_addr_clone) {
             // The server will handle one connection and then exit.
             if let Some(stream) = server.incoming().flatten().next() {
-                // The handle_client logic is now inside network.rs
+                // Now we correctly use the stream by passing it to the handler.
+                handle_client(stream);
             }
         }
     });
@@ -31,7 +32,7 @@ fn main() {
     thread::sleep(Duration::from_millis(100));
 
     // --- 2. Create a KDU to Send ---
-    let factory = KDUFactory::default();
+    let factory = cdqn::kernel::factory::KDUFactory::default();
     let originator_keypair = factory.crypto_core().generate_keypair();
     let originator_fqei = "agent@U.ClientNode#01".to_string();
     let payload_struct = TestPayload {
