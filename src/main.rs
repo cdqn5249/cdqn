@@ -1,23 +1,54 @@
 // src/main.rs
 
+use cdqn::kernel::KDU;
 use cdqn::runtime::scheduler::EntityScheduler;
+use cdqn::runtime::test_entities::{Pinger, Ponger};
 
 fn main() {
-    println!("cdqn runtime starting... [Sovereign Actor Model - Scheduler Init]");
+    println!("cdqn runtime starting... [Sovereign Actor Model - Ping Pong]");
 
-    // --- 1. Initialize the EntityScheduler ---
-    println!("\n--- 1. Initializing EntityScheduler ---");
-    // The variable is now immutable and prefixed with an underscore.
-    let _scheduler = EntityScheduler::new();
-    println!("SUCCESS: EntityScheduler created.");
+    // --- 1. Setup ---
+    let mut scheduler = EntityScheduler::new();
+    let pinger_fqei = "pinger@test".to_string();
+    let ponger_fqei = "ponger@test".to_string();
 
-    // --- 2. Run the Scheduler ---
-    // This will start the infinite loop. In a real scenario, this would be
-    // the last line of our main function. For this test, we know it will
-    // just print a message and then sleep.
-    // We will not run it in the CI test to prevent the test from hanging.
-    println!("\n--- 2. Scheduler run loop is ready ---");
-    // scheduler.run(); // This line is commented out for the CI test.
+    // Register the two entities with their initial states.
+    scheduler.register::<Pinger>(pinger_fqei.clone(), 0);
+    scheduler.register::<Ponger>(ponger_fqei.clone(), 0);
+    println!("\n--- 1. Entities Registered ---");
+    println!("Registered: {}", pinger_fqei);
+    println!("Registered: {}", ponger_fqei);
 
-    println!("\n--- Sovereign Actor Model foundations implemented successfully! ---");
+    // --- 2. Create the initial "ping" KDU ---
+    // In a real system, this would come from an external source or another entity.
+    let initial_ping = KDU {
+        kdu_spec_version: "2.1.0".to_string(),
+        kdu_id: "ping-1".to_string(),
+        content_hash: String::new(),
+        originator_fqei: pinger_fqei.clone(), // The Pinger is the originator
+        originator_signature: vec![],
+        timestamp_utc: String::new(),
+        kdu_type: "Generic".to_string(),
+        // Create a dummy metadata struct for this test.
+        metadata: unsafe { std::mem::zeroed() },
+        data_payload: b"ping".to_vec(),
+    };
+    println!("\n--- 2. Created Initial Ping KDU ---");
+
+    // --- 3. Start the Simulation ---
+    println!("\n--- 3. Starting Simulation ---");
+    // Manually route the first message to the Ponger.
+    scheduler.route(&ponger_fqei, initial_ping);
+
+    // Run the scheduler for a few turns to see the interaction.
+    println!("\n--- Turn 1 ---");
+    scheduler.run_turn(); // Ponger receives ping, sends pong.
+
+    println!("\n--- Turn 2 ---");
+    scheduler.run_turn(); // Pinger receives pong.
+
+    println!("\n--- Turn 3 ---");
+    scheduler.run_turn(); // No new messages, nothing happens.
+
+    println!("\n--- Sovereign EntityScheduler implemented successfully! ---");
 }
