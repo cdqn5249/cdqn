@@ -13,21 +13,23 @@ pub mod test_entities;
 /// Commands that can be sent to the Persistence thread.
 #[derive(Debug)]
 pub enum PersistenceCommand {
-    WriteKdu(KDU),
+    // We Box the KDU to keep the enum's size small and efficient.
+    WriteKdu(Box<KDU>),
     Shutdown,
 }
 
 /// The main Runtime orchestrator.
 /// This struct will own and manage all the core services of a cdqn node.
 pub struct Runtime {
+    // We allow dead code for now, as these will be used in the next milestone.
+    #[allow(dead_code)]
     scheduler: EntityScheduler,
-    // A channel to send commands to the persistence thread.
+    #[allow(dead_code)]
     persistence_tx: Sender<PersistenceCommand>,
 }
 
 impl Runtime {
     /// Creates a new Runtime.
-    /// For now, it just initializes the services. In the future, it will spawn the threads.
     pub fn new() -> Self {
         // In the next step, we will create the real channel and persistence thread.
         // For now, we create a dummy channel to make the code compile.
