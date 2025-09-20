@@ -88,16 +88,16 @@ fn run_processor() {
         "PongResponse".to_string(),
         &bincode::serialize(&response_payload).unwrap(),
     );
-    
+
     // Re-hash to get the final, correct content hash
     let content_to_hash = (&response_kdu.metadata, &response_kdu.data_payload);
     let final_hash = CryptoCore::hash_content(&content_to_hash);
     response_kdu.content_hash = hex::encode(&final_hash);
-    
+
     let pong_filename = format!("{}.kdu", response_kdu.content_hash);
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&response_kdu).unwrap());
-    
+
     // Output the filename and content, separated by a comma.
     print!("{},{}", pong_filename, kdu_base64);
 }
@@ -118,10 +118,10 @@ fn run_client(github_token: &str) {
         "InitialPing".to_string(),
         &bincode::serialize(&payload_struct).unwrap(),
     );
-    
+
     let ping_filename = format!("{}.kdu", initial_ping.content_hash);
     println!("Client created ping KDU with filename: {}", ping_filename);
-    
+
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
 
@@ -141,7 +141,7 @@ fn run_client(github_token: &str) {
         .send_json(request_body);
 
     match response {
-        Ok(resp) if resp.status() == 24 => {
+        Ok(resp) if resp.status() == 204 => {
             println!("\nSUCCESS: Workflow triggered successfully.");
             println!("Watch the Actions tab for the 'CDQN KDU Handler' to run.");
         }
