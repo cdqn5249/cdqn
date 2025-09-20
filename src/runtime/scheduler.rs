@@ -42,8 +42,9 @@ impl EntityScheduler {
         let mailbox = Arc::new(Mutex::new(VecDeque::new()));
 
         let behavior_fn = move |state: &ErasedState, message: KDU| {
+            // We use .as_ref() to get &dyn Any from &Box<dyn Any> to call downcast_ref.
             let (new_specific_state, kuds) =
-                E::behavior(state.downcast_ref::<E::State>().unwrap(), message);
+                E::behavior(state.as_ref().downcast_ref::<E::State>().unwrap(), message);
             let new_generic_state: ErasedState = Box::new(new_specific_state);
             (new_generic_state, kuds)
         };
@@ -80,7 +81,8 @@ impl EntityScheduler {
             if let Some(message) = maybe_message {
                 println!("\n[EntityScheduler] Executing behavior for {}", fqei);
                 let originator_fqei = message.originator_fqei.clone();
-                let (new_state, new_kuds) = (entity.behavior_fn)(&*entity.state, message);
+                // We now pass a reference to the Box itself (&entity.state).
+                let (new_state, new_kuds) = (entity.behavior_fn)(&entity.state, message);
                 entity.state = new_state;
 
                 for kdu in new_kuds {
