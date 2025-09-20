@@ -1,0 +1,42 @@
+# .github/workflows/kdu-pipe.yml
+
+name: CDQN KDU Pipe
+
+on:
+  # This allows us to trigger the workflow manually from the Actions tab
+  # or via a secure HTTP request from a script.
+  workflow_dispatch:
+    inputs:
+      kdu_filename:
+        description: 'The name of the KDU file (e.g., ping-1.kdu)'
+        required: true
+      kdu_content_base64:
+        description: 'The content of the KDU, base64 encoded'
+        required: true
+
+jobs:
+  commit_kdu:
+    name: Commit KDU to gh-pages
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Check out the gh-pages branch specifically
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+
+      # 2. Decode the KDU content and write it to a file
+      - name: Decode and write KDU file
+        run: |
+          echo "${{ github.event.inputs.kdu_content_base64 }}" | base64 --decode > ${{ github.event.inputs.kdu_filename }}
+          echo "Created file ${{ github.event.inputs.kdu_filename }}"
+
+      # 3. Commit the new file back to the gh-pages branch
+      - name: Commit and push KDU file
+        run: |
+          git config --global user.name 'CDQN Pipe Bot'
+          git config --global user.email 'actions@github.com'
+          git add .
+          # We use a specific commit message to show which KDU was added
+          git commit -m "pipe: Add ${{ github.event.inputs.kdu_filename }}"
+          git push
