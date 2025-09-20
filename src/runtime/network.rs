@@ -54,8 +54,8 @@ fn handle_client(mut stream: TcpStream) {
 
         // Read the full KDU data.
         if stream.read_exact(&mut kdu_buffer).is_ok() {
-            let kdu: KDU = bincode::deserialize(&kdu_buffer)
-                .expect("Failed to deserialize KDU from stream");
+            let kdu: KDU =
+                bincode::deserialize(&kdu_buffer).expect("Failed to deserialize KDU from stream");
             println!("[handle_client] Received KDU with ID: {}", kdu.kdu_id);
         }
     }
@@ -73,7 +73,6 @@ impl NodeClient {
         Ok(stream)
     }
 
-    // --- NEW FUNCTION ADDED HERE ---
     // Serializes and sends a single KDU over the stream.
     pub fn send_kdu(stream: &mut TcpStream, kdu: &KDU) -> io::Result<()> {
         println!("[NodeClient] Serializing KDU with ID: {}", kdu.kdu_id);
