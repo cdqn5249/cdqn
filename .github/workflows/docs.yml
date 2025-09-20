@@ -12,47 +12,54 @@ jobs:
     name: Deploy Docs to GitHub Pages
     runs-on: ubuntu-latest
     steps:
-      - name: 1. Checkout main branch
+      # 1. Check out the main branch to get our code and markdown files
+      - name: Checkout main branch
         uses: actions/checkout@v4
+        with:
+          path: main
 
-      - name: 2. Build Rust Documentation
-        run: cargo doc --no-deps --all-features
+      # 2. Check out the current gh-pages branch into our final deployment directory
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: 'gh-pages'
+          path: gh-pages
 
-      - name: 3. Build Documentation Site and Create Log
+      # 3. Build the Rust documentation
+      - name: Build Rust Documentation
         run: |
-          # Start a detailed log file
-          LOG_FILE=./target/doc/docs_log_$(date +%s).txt
-          echo "--- CDQN Documentation Workflow Log ---" > $LOG_FILE
-          echo "Timestamp: $(date -u)" >> $LOG_FILE
-          echo "Commit: ${{ github.sha }}" >> $LOG_FILE
-          
-          echo "\n--- Files in ./target/doc before copy ---" >> $LOG_FILE
-          ls -laR ./target/doc >> $LOG_FILE
+          cd main
+          cargo doc --no-deps --all-features
 
-          # Copy markdown files
-          cp Docs/*.md ./target/doc/
-          cp README.md ./target/doc/
-          
-          echo "\n--- Generating index.html ---" >> $LOG_FILE
-          # Create the index page
-          echo '<!DOCTYPE html><html>...' > ./target/doc/index.html # (script is unchanged)
-          for item in ./target/doc/*; do
+      # 4. Unify all content into the gh-pages directory
+      - name: Unify documentation content
+        run: |
+          # Copy the newly generated Rust docs into our staging area (the gh-pages checkout)
+          cp -r main/target/doc/* gh-pages/
+          # Copy the markdown files into the staging area
+          cp main/Docs/*.md gh-pages/
+          cp main/README.md gh-pages/
+
+      # 5. Generate the final index.html from the COMPLETE, unified content
+      - name: Generate Final Index Page
+        run: |
+          echo '<!DOCTYPE html><html><head><title>CDQN Project Documentation</title><meta charset="utf-8"><style>body { font-family: sans-serif; margin: 2em; } h1 { color: #333; } ul { list-style-type: none; padding: 0; } li { margin: 0.5em 0; border-left: 3px solid #0066cc; padding-left: 1em; } a { text-decoration: none; color: #0066cc; font-weight: bold; } a:hover { text-decoration: underline; }</style></head><body><h1>CDQN Project Index</h1><ul>' > gh-pages/index.html
+          # Run the generic loop on the unified gh-pages directory, which now has ALL files.
+          for item in gh-pages/*; do
             if [ -e "$item" ]; then
               filename=$(basename "$item")
               if [ "$filename" != "index.html" ]; then
-                echo "<li><a href=\"$filename\">$filename</a></li>" >> ./target/doc/index.html
+                echo "                <li><a href=\"$filename\">$filename</a></li>" >> gh-pages/index.html
               fi
             fi
           done
-          echo '</ul></body></html>' >> ./target/doc/index.html
-          
-          echo "\n--- Final file list in ./target/doc before deploy ---" >> $LOG_FILE
-          ls -laR ./target/doc >> $LOG_FILE
-          echo "\n--- Log End ---" >> $LOG_FILE
+          echo '              </ul></body></html>' >> gh-pages/index.html
 
-      - name: 4. Deploy to gh-pages
+      # 6. Deploy the final, unified gh-pages directory
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/doc
+          publish_dir: ./gh-pages
+          # We no longer need keep_files, as we have manually built the final state.
           keep_files: false
