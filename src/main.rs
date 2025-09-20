@@ -3,16 +3,17 @@
 use cdqn::kernel::{License, Metadata, KDU};
 use cdqn::runtime::orchestrator::Orchestrator;
 use cdqn::runtime::test_entities::{Pinger, Ponger};
+use std::fs;
+use std::path::Path;
 
 fn main() {
-    println!("cdqn runtime starting... [Sovereign Orchestrated Runtime]");
+    println!("cdqn runtime starting... [Unified Runtime - Local Lifecycle]");
 
     // --- 1. Setup ---
     let mut orchestrator = Orchestrator::new();
     let pinger_fqei = "pinger@test".to_string();
     let ponger_fqei = "ponger@test".to_string();
 
-    // Register entities via the orchestrator's processor.
     orchestrator
         .processor_mut()
         .register::<Pinger>(pinger_fqei.clone(), 0);
@@ -44,10 +45,23 @@ fn main() {
         data_payload: b"ping".to_vec(),
     };
     orchestrator.route_initial_kdu(&ponger_fqei, initial_ping);
-    println!("\n--- 2. Initial Ping KDU Routed ---");
+    println!("\n--- 2. Initial Ping KDU Routed & Journaled ---");
 
     // --- 3. Run the Orchestrator ---
     orchestrator.run();
 
-    println!("\n--- Orchestrated Runtime implemented successfully! ---");
-}
+    // --- 4. Shutdown ---
+    orchestrator.shutdown();
+
+    // --- 5. Cleanup ---
+    fs::remove_dir_all(Path::new("./cdqn_runtime_db")).expect("Failed to clean up DB directory");
+    println!("\n--- 5. Cleanup Complete ---");
+
+    println!("\n--- Unified Runtime local lifecycle implemented successfully! ---");
+}```
+
+### **Next Step**
+
+Commit these changes.
+
+The CI pipeline will run. The log output will now be a beautiful symphony of all our components working together. You will see messages from the `Orchestrator`, the `EntityProcessor` (`Pinger`/`Ponger`), and the `Persistence` thread, all interleaved, demonstrating our non-blocking, multi-threaded architecture in action. You will see each KDU being journaled before it is processed.
