@@ -23,7 +23,7 @@ fn main() {
         if let Ok(server) = NodeServer::bind(&server_addr_clone) {
             // The server will handle one connection and then exit.
             if let Some(stream) = server.incoming().flatten().next() {
-                 // The handle_client logic is now inside network.rs
+                // The handle_client logic is now inside network.rs
             }
         }
     });
