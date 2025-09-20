@@ -12,5 +12,8 @@ ed25519-dalek = { version = "2.1", features = ["rand_core"] }
 rand = "0.8"
 hex = "0.4"
 bincode = "1.3"
-# Minimal HTTP client for our MVP test
-ureq = "2.9.6"
+
+# Correctly configure ureq with the "json" feature.
+ureq = { version = "2.9.6", features = ["json"] }
+# Add the missing base64 dependency.
+base64 = "0.22.1"
