@@ -20,9 +20,10 @@ pub enum PersistenceCommand {
 }
 
 pub struct Runtime {
+    // We allow dead code for this milestone, as it will be used in the next step.
+    #[allow(dead_code)]
     scheduler: EntityScheduler,
     persistence_tx: Sender<PersistenceCommand>,
-    // We need to hold the handle to the thread to shut it down later.
     persistence_handle: Option<JoinHandle<()>>,
 }
 
