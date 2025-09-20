@@ -1,6 +1,6 @@
 --- CDQN Documentation Workflow Log ---
-Timestamp: Sat Sep 20 18:13:09 UTC 2025
-Commit: 30ca8e06587e3ca4d962e8bf2603e9906ee555e7
+Timestamp: Sat Sep 20 18:13:43 UTC 2025
+Commit: 88b96d3218fe8e235cc7efcf45538610c7184c4e
 \n--- Files in ./target/doc before copy ---
 ./target/doc:
 total 60
@@ -9,7 +9,7 @@ drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 ..
 -rw------- 1 runner runner    0 Sep 20 18:13 .lock
 drwxr-xr-x 4 runner runner 4096 Sep 20 18:13 cdqn
 -rw-r--r-- 1 runner runner   67 Sep 20 18:13 crates.js
--rw-r--r-- 1 runner runner  173 Sep 20 18:13 docs_log_1758391989.txt
+-rw-r--r-- 1 runner runner  173 Sep 20 18:13 docs_log_1758392023.txt
 -rw-r--r-- 1 runner runner 2908 Sep 20 18:13 help.html
 -rw-r--r-- 1 runner runner 6939 Sep 20 18:13 search-index.js
 drwxr-xr-x 3 runner runner 4096 Sep 20 18:13 search.desc
@@ -367,7 +367,7 @@ drwxr-xr-x 4 runner runner  4096 Sep 20 18:13 cdqn
 -rw-r--r-- 1 runner runner  4922 Sep 20 18:13 check_0001.md
 -rw-r--r-- 1 runner runner  7787 Sep 20 18:13 check_0002.md
 -rw-r--r-- 1 runner runner    67 Sep 20 18:13 crates.js
--rw-r--r-- 1 runner runner 15178 Sep 20 18:13 docs_log_1758391989.txt
+-rw-r--r-- 1 runner runner 15178 Sep 20 18:13 docs_log_1758392023.txt
 -rw-r--r-- 1 runner runner  2908 Sep 20 18:13 help.html
 -rw-r--r-- 1 runner runner  1319 Sep 20 18:13 index.html
 -rw-r--r-- 1 runner runner  8489 Sep 20 18:13 plan_0000.md
