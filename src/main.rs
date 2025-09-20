@@ -68,11 +68,13 @@ fn run_ci_test() {
 
 // --- PROCESSOR MODE ---
 fn run_processor() {
+    println!("--- Running in PROCESSOR mode ---");
     let mut buffer = Vec::new();
     io::stdin()
         .read_to_end(&mut buffer)
         .expect("Failed to read KDU from stdin");
-    let incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
+    // Prefix with an underscore to acknowledge it's intentionally unused.
+    let _incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
 
     let factory = KDUFactory::default();
     let ponger_keypair = factory.crypto_core().generate_keypair();
@@ -88,7 +90,6 @@ fn run_processor() {
         &bincode::serialize(&response_payload).unwrap(),
     );
 
-    // The processor's only job is to print the base64 of the response KDU.
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&response_kdu).unwrap());
     print!("{}", kdu_base64);
@@ -114,7 +115,6 @@ fn run_client(github_token: &str) {
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
 
-    // The client now passes both the ping KDU and its token to the handler.
     let request_body = ureq::json!({
         "ref": "main",
         "inputs": {
