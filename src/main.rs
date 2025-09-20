@@ -11,7 +11,6 @@ use std::io::{self, Read};
 // --- SHARED CONFIGURATION ---
 const GITHUB_API_URL: &str =
     "https://api.github.com/repos/cdqn5249/cdqn/actions/workflows/kdu-pipe.yml/dispatches";
-// The User-Agent header is required by the GitHub API.
 const USER_AGENT: &str = "cdqn-runtime-mvp-test";
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -101,7 +100,7 @@ fn run_processor() {
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
         .set("Authorization", &format!("Bearer {}", github_token))
-        .set("User-Agent", USER_AGENT) // Add the required User-Agent
+        .set("User-Agent", USER_AGENT)
         .send_json(request_body);
 
     match response {
@@ -115,8 +114,12 @@ fn run_processor() {
             );
             eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
         }
+        Err(ureq::Error::Status(_code, response)) => {
+            eprintln!("FAILURE: GitHub API returned an error.");
+            eprintln!("Response body: {}", response.into_string().unwrap_or_default());
+        }
         Err(e) => {
-            eprintln!("FAILURE: Processor could not trigger pipe workflow.");
+            eprintln!("FAILURE: Transport error.");
             eprintln!("Error Details: {}", e);
         }
     }
@@ -146,9 +149,10 @@ fn run_client(github_token: &str) {
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
         .set("Authorization", &format!("Bearer {}", github_token))
-        .set("User-Agent", USER_AGENT) // Add the required User-Agent
+        .set("User-Agent", USER_AGENT)
         .send_json(request_body);
 
+    // Use a match statement with robust error handling to see the API's response.
     match response {
         Ok(resp) if resp.status() == 204 => {
             println!("\nSUCCESS: Workflow triggered successfully.");
@@ -158,8 +162,12 @@ fn run_client(github_token: &str) {
             eprintln!("\nFAILURE: Received non-204 status: {}", resp.status());
             eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
         }
+        Err(ureq::Error::Status(_code, response)) => {
+            eprintln!("\nFAILURE: GitHub API returned an error.");
+            eprintln!("Response body: {}", response.into_string().unwrap_or_default());
+        }
         Err(e) => {
-            eprintln!("\nFAILURE: Could not trigger workflow.");
+            eprintln!("\nFAILURE: Transport error.");
             eprintln!("Error Details: {}", e);
         }
     }
