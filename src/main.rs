@@ -1,6 +1,7 @@
 // src/main.rs
 
 use base64::Engine as _;
+use cdqn::kernel::crypto::CryptoCore;
 use cdqn::kernel::factory::KDUFactory;
 use cdqn::kernel::KDU;
 use ed25519_dalek::Verifier;
@@ -51,7 +52,7 @@ fn run_ci_test() {
     );
     println!("KDU created with ID: {}", kdu.kdu_id);
     let content_to_hash = (&kdu.metadata, &kdu.data_payload);
-    let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
+    let content_hash_bytes = CryptoCore::hash_content(&content_to_hash);
     let signature = ed25519_dalek::Signature::from_bytes(
         kdu.originator_signature.as_slice().try_into().unwrap(),
     );
@@ -68,7 +69,6 @@ fn run_ci_test() {
 
 // --- PROCESSOR MODE ---
 fn run_processor() {
-    // This function is now completely silent. It only prints the final base64 string.
     let mut buffer = Vec::new();
     io::stdin()
         .read_to_end(&mut buffer)
@@ -82,16 +82,24 @@ fn run_processor() {
         action: "sovereign.handler.response".to_string(),
         status: "ok".to_string(),
     };
-    let response_kdu = factory.create_kdu(
+    let mut response_kdu = factory.create_kdu(
         &ponger_keypair,
         ponger_fqei,
         "PongResponse".to_string(),
         &bincode::serialize(&response_payload).unwrap(),
     );
-
+    
+    // Re-hash to get the final, correct content hash
+    let content_to_hash = (&response_kdu.metadata, &response_kdu.data_payload);
+    let final_hash = CryptoCore::hash_content(&content_to_hash);
+    response_kdu.content_hash = hex::encode(&final_hash);
+    
+    let pong_filename = format!("{}.kdu", response_kdu.content_hash);
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&response_kdu).unwrap());
-    print!("{}", kdu_base64);
+    
+    // Output the filename and content, separated by a comma.
+    print!("{},{}", pong_filename, kdu_base64);
 }
 
 // --- CLIENT MODE ---
@@ -110,13 +118,17 @@ fn run_client(github_token: &str) {
         "InitialPing".to_string(),
         &bincode::serialize(&payload_struct).unwrap(),
     );
-    println!("Client created ping KDU with ID: {}", initial_ping.kdu_id);
+    
+    let ping_filename = format!("{}.kdu", initial_ping.content_hash);
+    println!("Client created ping KDU with filename: {}", ping_filename);
+    
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
 
     let request_body = ureq::json!({
         "ref": "main",
         "inputs": {
+            "ping_kdu_filename": ping_filename,
             "ping_kdu_base64": kdu_base64,
             "github_token": github_token
         }
@@ -129,7 +141,7 @@ fn run_client(github_token: &str) {
         .send_json(request_body);
 
     match response {
-        Ok(resp) if resp.status() == 204 => {
+        Ok(resp) if resp.status() == 24 => {
             println!("\nSUCCESS: Workflow triggered successfully.");
             println!("Watch the Actions tab for the 'CDQN KDU Handler' to run.");
         }
