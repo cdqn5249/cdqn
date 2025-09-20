@@ -41,7 +41,6 @@ fn run_ci_test() {
     let crypto_core = factory.crypto_core();
     let originator_keypair = crypto_core.generate_keypair();
     let originator_fqei = "agent@ci.test".to_string();
-
     let payload = b"ci-test-payload".to_vec();
     let kdu = factory.create_kdu(
         &originator_keypair,
@@ -49,10 +48,7 @@ fn run_ci_test() {
         "CITest".to_string(),
         &payload,
     );
-
     println!("KDU created with ID: {}", kdu.kdu_id);
-
-    // --- Verification Step ---
     let content_to_hash = (&kdu.metadata, &kdu.data_payload);
     let content_hash_bytes = cdqn::kernel::crypto::CryptoCore::hash_content(&content_to_hash);
     let signature = ed25519_dalek::Signature::from_bytes(
@@ -61,7 +57,6 @@ fn run_ci_test() {
     let verification_result = originator_keypair
         .public
         .verify(&content_hash_bytes, &signature);
-
     assert!(
         verification_result.is_ok(),
         "FATAL: KDU signature verification failed in CI!"
@@ -70,7 +65,7 @@ fn run_ci_test() {
     println!("\n--- CI Test Passed ---");
 }
 
-// --- PROCESSOR MODE (The "Serverless Server") ---
+// --- PROCESSOR MODE ---
 fn run_processor() {
     println!("--- Running in PROCESSOR mode ---");
     let mut buffer = Vec::new();
@@ -100,17 +95,22 @@ fn run_processor() {
         .encode(bincode::serialize(&response_kdu).unwrap());
     let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found");
     let request_body = ureq::json!({ "ref": "gh-pages", "inputs": { "kdu_filename": "pong.kdu", "kdu_content_base64": kdu_base64 } });
-
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
-        .set("Authorization", &format!("Bearer {}", github_token)) // Use Bearer
+        .set("Authorization", &format!("Bearer {}", github_token))
         .send_json(request_body);
-
-    if response.is_ok() && response.as_ref().unwrap().status() == 204 {
-        println!("SUCCESS: Processor triggered pipe with pong.kdu.");
-    } else {
-        eprintln!("FAILURE: Processor could not trigger pipe workflow.");
-        if let Err(e) = response {
+    
+    // Match on the result to handle all cases
+    match response {
+        Ok(resp) if resp.status() == 204 => {
+            println!("SUCCESS: Processor triggered pipe with pong.kdu.");
+        }
+        Ok(resp) => {
+            eprintln!("FAILURE: Processor received non-204 status: {}", resp.status());
+            eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
+        }
+        Err(e) => {
+            eprintln!("FAILURE: Processor could not trigger pipe workflow.");
             eprintln!("Error Details: {}", e);
         }
     }
@@ -142,12 +142,18 @@ fn run_client(github_token: &str) {
         .set("Authorization", &format!("Bearer {}", github_token))
         .send_json(request_body);
 
-    if response.is_ok() && response.as_ref().unwrap().status() == 204 {
-        println!("\nSUCCESS: Workflow triggered successfully.");
-        println!("Watch the Actions tab for the 'CDQN KDU Processor' to run.");
-    } else {
-        eprintln!("\nFAILURE: Could not trigger workflow.");
-        if let Err(e) = response {
+    // Use a match statement for robust error handling
+    match response {
+        Ok(resp) if resp.status() == 204 => {
+            println!("\nSUCCESS: Workflow triggered successfully.");
+            println!("Watch the Actions tab for the 'CDQN KDU Processor' to run.");
+        }
+        Ok(resp) => {
+            eprintln!("\nFAILURE: Received non-204 status: {}", resp.status());
+            eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
+        }
+        Err(e) => {
+            eprintln!("\nFAILURE: Could not trigger workflow.");
             eprintln!("Error Details: {}", e);
         }
     }
