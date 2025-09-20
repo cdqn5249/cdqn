@@ -19,15 +19,13 @@ jobs:
       - name: Build Rust Documentation
         run: cargo doc --no-deps --all-features
 
-      # --- NEW STEP ADDED HERE ---
+      # --- THIS STEP HAS BEEN CORRECTED ---
       - name: Copy Markdown Documentation
         run: |
-          # Create a directory within the generated docs to hold our .md files
-          mkdir -p ./target/doc/docs
-          # Copy the contents of the Docs directory
-          cp -r Docs/*.md ./target/doc/docs/
           # Copy the root README.md to the doc root
           cp README.md ./target/doc/
+          # Copy all .md files from the Docs directory into the doc root
+          cp Docs/*.md ./target/doc/
 
       - name: Create Redirect Page
         run: echo '<meta http-equiv="refresh" content="0; url=cdqn/index.html">' > ./target/doc/index.html
