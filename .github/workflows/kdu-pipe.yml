@@ -2,10 +2,10 @@
 
 name: CDQN KDU Pipe
 
-# --- THIS IS THE MISSING PIECE ---
 # This 'on' block allows the workflow to be triggered by an API call.
 on:
   workflow_dispatch:
+    # Nudge to re-evaluate triggers - 2025-09-20
     inputs:
       kdu_filename:
         description: 'The name of the KDU file (e.g., ping-1.kdu)'
