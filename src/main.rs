@@ -7,7 +7,8 @@ use std::env;
 use std::io::{self, Read};
 
 // --- SHARED CONFIGURATION ---
-const GITHUB_API_URL: &str = "https://api.github.com/repos/cdqn5249/cdqn/actions/workflows/kdu-pipe.yml/dispatches";
+const GITHUB_API_URL: &str =
+    "https://api.github.com/repos/cdqn5249/cdqn/actions/workflows/kdu-pipe.yml/dispatches";
 
 #[derive(Serialize, Deserialize, Debug)]
 struct TestPayload {
@@ -32,10 +33,12 @@ fn main() {
 // --- PROCESSOR MODE (The "Serverless Server") ---
 fn run_processor() {
     println!("--- Running in PROCESSOR mode ---");
-    
+
     // 1. Read the incoming KDU from standard input.
     let mut buffer = Vec::new();
-    io::stdin().read_to_end(&mut buffer).expect("Failed to read KDU from stdin");
+    io::stdin()
+        .read_to_end(&mut buffer)
+        .expect("Failed to read KDU from stdin");
     let incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
     println!("Processor received KDU with ID: {}", incoming_kdu.kdu_id);
 
@@ -53,7 +56,10 @@ fn run_processor() {
         "PongResponse".to_string(),
         &bincode::serialize(&response_payload).unwrap(),
     );
-    println!("Processor created response KDU with ID: {}", response_kdu.kdu_id);
+    println!(
+        "Processor created response KDU with ID: {}",
+        response_kdu.kdu_id
+    );
 
     // 3. Trigger the pipe workflow to send the response.
     let kdu_base64 = base64::encode(&bincode::serialize(&response_kdu).unwrap());
@@ -86,7 +92,7 @@ fn run_client(github_token: &str) {
     let factory = KDUFactory::default();
     let originator_keypair = factory.crypto_core().generate_keypair();
     let pinger_fqei = "pinger@client".to_string();
-    
+
     let payload_struct = TestPayload {
         action: "sovereign.pipe.test".to_string(),
         status: "ok".to_string(),
