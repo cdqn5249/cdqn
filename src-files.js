@@ -1,2 +1,2 @@
-createSrcSidebar('[["cdqn",["",[["kernel",[],["crypto.rs","factory.rs","hlc.rs","mod.rs"]],["runtime",[],["entity.rs","mod.rs","network.rs","persistence.rs","scheduler.rs","test_entities.rs"]]],["lib.rs"]]]]');
-//{"start":19,"fragment_lengths":[187]}
+createSrcSidebar('[["cdqn",["",[["kernel",[],["crypto.rs","factory.rs","hlc.rs","mod.rs"]],["runtime",[],["entity.rs","mod.rs","network.rs","orchestrator.rs","persistence.rs","processor.rs","test_entities.rs"]]],["lib.rs"]]]]');
+//{"start":19,"fragment_lengths":[205]}
