@@ -10,7 +10,7 @@ use std::io::{self, Read};
 
 // --- SHARED CONFIGURATION ---
 const GITHUB_API_URL: &str =
-    "https://api.github.com/repos/cdqn5249/cdqn/actions/workflows/kdu-pipe.yml/dispatches";
+    "https://api.github.com/repos/cdqn5249/cdqn/actions/workflows/kdu-handler.yml/dispatches";
 const USER_AGENT: &str = "cdqn-runtime-mvp-test";
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -68,18 +68,15 @@ fn run_ci_test() {
 
 // --- PROCESSOR MODE ---
 fn run_processor() {
-    println!("--- Running in PROCESSOR mode ---");
     let mut buffer = Vec::new();
-    io::stdin()
-        .read_to_end(&mut buffer)
-        .expect("Failed to read KDU from stdin");
+    io::stdin().read_to_end(&mut buffer).expect("Failed to read KDU from stdin");
     let incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
-    println!("Processor received KDU with ID: {}", incoming_kdu.kdu_id);
+    
     let factory = KDUFactory::default();
     let ponger_keypair = factory.crypto_core().generate_keypair();
     let ponger_fqei = "ponger@processor.bot".to_string();
     let response_payload = TestPayload {
-        action: "sovereign.pipe.response".to_string(),
+        action: "sovereign.handler.response".to_string(),
         status: "ok".to_string(),
     };
     let response_kdu = factory.create_kdu(
@@ -88,51 +85,11 @@ fn run_processor() {
         "PongResponse".to_string(),
         &bincode::serialize(&response_payload).unwrap(),
     );
-    println!(
-        "Processor created response KDU with ID: {}",
-        response_kdu.kdu_id
-    );
+    
+    // The processor's only job is to print the base64 of the response KDU.
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&response_kdu).unwrap());
-    let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found");
-    let request_body = ureq::json!({
-        "ref": "main",
-        "inputs": {
-            "kdu_filename": "pong.kdu",
-            "kdu_content_base64": kdu_base64,
-            "github_token": github_token // Pass the token through
-        }
-    });
-
-    let response = ureq::post(GITHUB_API_URL)
-        .set("Accept", "application/vnd.github.v3+json")
-        .set("Authorization", &format!("Bearer {}", github_token))
-        .set("User-Agent", USER_AGENT)
-        .send_json(request_body);
-
-    match response {
-        Ok(resp) if resp.status() == 204 => {
-            println!("SUCCESS: Processor triggered pipe with pong.kdu.");
-        }
-        Ok(resp) => {
-            eprintln!(
-                "FAILURE: Processor received non-204 status: {}",
-                resp.status()
-            );
-            eprintln!("Response body: {}", resp.into_string().unwrap_or_default());
-        }
-        Err(ureq::Error::Status(_code, response)) => {
-            eprintln!("FAILURE: GitHub API returned an error.");
-            eprintln!(
-                "Response body: {}",
-                response.into_string().unwrap_or_default()
-            );
-        }
-        Err(e) => {
-            eprintln!("FAILURE: Transport error.");
-            eprintln!("Error Details: {}", e);
-        }
-    }
+    print!("{}", kdu_base64);
 }
 
 // --- CLIENT MODE ---
@@ -142,7 +99,7 @@ fn run_client(github_token: &str) {
     let originator_keypair = factory.crypto_core().generate_keypair();
     let pinger_fqei = "pinger@client".to_string();
     let payload_struct = TestPayload {
-        action: "sovereign.pipe.test".to_string(),
+        action: "sovereign.handler.test".to_string(),
         status: "ok".to_string(),
     };
     let initial_ping = factory.create_kdu(
@@ -154,12 +111,13 @@ fn run_client(github_token: &str) {
     println!("Client created ping KDU with ID: {}", initial_ping.kdu_id);
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
+    
+    // The client now passes both the ping KDU and its token to the handler.
     let request_body = ureq::json!({
         "ref": "main",
         "inputs": {
-            "kdu_filename": "ping.kdu",
-            "kdu_content_base64": kdu_base64,
-            "github_token": github_token // Pass the token through
+            "ping_kdu_base64": kdu_base64,
+            "github_token": github_token
         }
     });
 
@@ -172,7 +130,7 @@ fn run_client(github_token: &str) {
     match response {
         Ok(resp) if resp.status() == 204 => {
             println!("\nSUCCESS: Workflow triggered successfully.");
-            println!("Watch the Actions tab for the 'CDQN KDU Processor' to run.");
+            println!("Watch the Actions tab for the 'CDQN KDU Handler' to run.");
         }
         Ok(resp) => {
             eprintln!("\nFAILURE: Received non-204 status: {}", resp.status());
