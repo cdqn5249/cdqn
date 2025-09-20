@@ -2,9 +2,9 @@
 
 name: CDQN KDU Pipe
 
+# --- THIS IS THE MISSING PIECE ---
+# This 'on' block allows the workflow to be triggered by an API call.
 on:
-  # This allows us to trigger the workflow manually from the Actions tab
-  # or via a secure HTTP request from a script.
   workflow_dispatch:
     inputs:
       kdu_filename:
