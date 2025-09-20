@@ -95,7 +95,10 @@ fn run_processor() {
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&response_kdu).unwrap());
     let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not found");
-    let request_body = ureq::json!({ "ref": "gh-pages", "inputs": { "kdu_filename": "pong.kdu", "kdu_content_base64": kdu_base64 } });
+    let request_body = ureq::json!({
+        "ref": "main", // Corrected: Trigger from the main branch
+        "inputs": { "kdu_filename": "pong.kdu", "kdu_content_base64": kdu_base64 }
+    });
 
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
@@ -147,7 +150,10 @@ fn run_client(github_token: &str) {
     println!("Client created ping KDU with ID: {}", initial_ping.kdu_id);
     let kdu_base64 = base64::engine::general_purpose::STANDARD
         .encode(bincode::serialize(&initial_ping).unwrap());
-    let request_body = ureq::json!({ "ref": "gh-pages", "inputs": { "kdu_filename": "ping.kdu", "kdu_content_base64": kdu_base64 } });
+    let request_body = ureq::json!({
+        "ref": "main", // Corrected: Trigger from the main branch
+        "inputs": { "kdu_filename": "ping.kdu", "kdu_content_base64": kdu_base64 }
+    });
 
     let response = ureq::post(GITHUB_API_URL)
         .set("Accept", "application/vnd.github.v3+json")
@@ -155,7 +161,6 @@ fn run_client(github_token: &str) {
         .set("User-Agent", USER_AGENT)
         .send_json(request_body);
 
-    // Use a match statement with robust error handling to see the API's response.
     match response {
         Ok(resp) if resp.status() == 204 => {
             println!("\nSUCCESS: Workflow triggered successfully.");
