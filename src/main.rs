@@ -7,7 +7,8 @@ fn main() {
 
     // --- 1. Initialize the EntityScheduler ---
     println!("\n--- 1. Initializing EntityScheduler ---");
-    let mut scheduler = EntityScheduler::new();
+    // The variable is now immutable and prefixed with an underscore.
+    let _scheduler = EntityScheduler::new();
     println!("SUCCESS: EntityScheduler created.");
 
     // --- 2. Run the Scheduler ---
