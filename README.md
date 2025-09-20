@@ -16,6 +16,7 @@ The single guiding principle of the cdqn ecosystem is the creation of smart immu
 * **Doc 07:** The cdqn Ecosystem uses cases
 
 ## Last 3 Checks (Docs directory)
+* **check_0002:** 20 September 2025, Gemini 2.5 Pro, Google
 * **check_0001:** 19 September 2025, Gemini 2.5 Pro, Google
 * **check_0000:** 19 September 2025, Gemini 2.5 Pro, Google
 
