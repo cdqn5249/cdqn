@@ -70,7 +70,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Run Main Executable
-        run: cargo run --all-features --verbose
+        run: cargo run --all-features --verbose -- --ci-test
 
       - name: Build Release Binary
         run: cargo build --all-features --release --verbose
