@@ -19,13 +19,20 @@ jobs:
       - name: Build Rust Documentation
         run: cargo doc --no-deps --all-features
 
-      # --- THIS STEP HAS BEEN CORRECTED ---
+      # --- THIS STEP IS NOW MORE ROBUST ---
       - name: Copy Markdown Documentation
         run: |
-          # Copy the root README.md to the doc root
-          cp README.md ./target/doc/
-          # Copy all .md files from the Docs directory into the doc root
-          cp Docs/*.md ./target/doc/
+          # Create a clean, dedicated directory for our markdown files
+          mkdir -p ./target/doc/manual_docs
+          # Copy all .md files from the Docs directory into the new directory
+          cp Docs/*.md ./target/doc/manual_docs/
+          # Copy the root README.md into the same directory
+          cp README.md ./target/doc/manual_docs/
+
+      # --- NEW DEBUGGING STEP ---
+      # This will print the full directory tree so we can verify the file locations.
+      - name: List generated files for debugging
+        run: ls -R ./target/doc
 
       - name: Create Redirect Page
         run: echo '<meta http-equiv="refresh" content="0; url=cdqn/index.html">' > ./target/doc/index.html
