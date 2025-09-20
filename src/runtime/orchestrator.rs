@@ -80,8 +80,13 @@ impl Orchestrator {
                     // This logic is for when we have a real remote target.
                     // For now, we'll hardcode the server address.
                     let remote_addr = "127.0.0.1:8082";
-                    println!("[Orchestrator] KDU is for a remote entity. Sending to {}.", remote_addr);
-                    if let Ok(mut stream) = crate::runtime::network::NodeClient::connect(remote_addr) {
+                    println!(
+                        "[Orchestrator] KDU is for a remote entity. Sending to {}.",
+                        remote_addr
+                    );
+                    if let Ok(mut stream) =
+                        crate::runtime::network::NodeClient::connect(remote_addr)
+                    {
                         crate::runtime::network::NodeClient::send_kdu(&mut stream, &kdu).unwrap();
                     }
                 }
