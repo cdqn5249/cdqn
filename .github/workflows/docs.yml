@@ -21,9 +21,11 @@ jobs:
 
       - name: Build and Organize Final Documentation Site
         run: |
+          # 1. Copy all markdown files from the Docs directory into the doc root.
           cp Docs/*.md ./target/doc/
           cp README.md ./target/doc/
           
+          # 2. Create the header for our new, clean index.html landing page.
           echo '<!DOCTYPE html>
           <html>
           <head>
@@ -31,48 +33,41 @@ jobs:
             <meta charset="utf-8">
             <style>
               body { font-family: sans-serif; margin: 2em; }
-              h1, h2 { color: #333; }
+              h1 { color: #333; }
               ul { list-style-type: none; padding: 0; }
-              li { margin: 0.5em 0; }
-              a { text-decoration: none; color: #0066cc; }
+              li { margin: 0.5em 0; border-left: 3px solid #0066cc; padding-left: 1em; }
+              a { text-decoration: none; color: #0066cc; font-weight: bold; }
               a:hover { text-decoration: underline; }
-              .section { border-top: 1px solid #ccc; padding-top: 1em; margin-top: 2em; }
             </style>
           </head>
           <body>
-            <h1>CDQN Project Documentation</h1>
-            
-            <div class="section">
-              <h2>Rust API Documentation</h2>
-              <ul>
-                <li><a href="cdqn/index.html">API Reference (cargo doc)</a></li>
-              </ul>
-            </div>
+            <h1>CDQN Project Index</h1>
+            <ul>' > ./target/doc/index.html
 
-            <div class="section">
-              <h2>Design & Planning Documents</h2>
-              <ul>' > ./target/doc/index.html
-
-          # --- THIS IS THE CORRECTED LOOP ---
-          # It now looks for both .md and .kdu files.
-          for file in ./target/doc/*.md ./target/doc/*.kdu; do
-            if [ -f "$file" ]; then
-              filename=$(basename "$file")
-              echo "                <li><a href=\"$filename\">$filename</a></li>" >> ./target/doc/index.html
+          # 3. --- THIS IS THE CORRECTED, GENERIC LOOP ---
+          # It iterates over ALL files and directories in the doc root.
+          for item in ./target/doc/*; do
+            if [ -e "$item" ]; then
+              filename=$(basename "$item")
+              # Add a link for every item EXCEPT for the index page itself.
+              if [ "$filename" != "index.html" ]; then
+                echo "                <li><a href=\"$filename\">$filename</a></li>" >> ./target/doc/index.html
+              fi
             fi
           done
 
+          # 4. Close the HTML tags.
           echo '              </ul>
-            </div>
           </body>
           </html>' >> ./target/doc/index.html
 
       - name: List generated files for debugging
-        run: ls -R ./target/doc
+        run: ls -laR ./target/doc
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/doc
+          # This is still crucial to prevent this workflow from deleting the KDU files.
           keep_files: true
