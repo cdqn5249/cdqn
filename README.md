@@ -1,4 +1,4 @@
-# **CDQN (Context Datas Query Nodes) Ecosystem**
+# **CDQN (Causal Datas Query Nodes) Ecosystem**
 
 The single guiding principle of the cdqn ecosystem is the creation of smart immutable systems.
 
