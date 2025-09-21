@@ -1,0 +1,25 @@
+name: Respond to Message
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'message.txt'
+
+jobs:
+  respond:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create Response
+        run: |
+          echo "GitHub says: Message received!" > response.txt
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add response.txt
+          git commit -m "GitHub responds to message.txt"
+      - name: Push Response
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
