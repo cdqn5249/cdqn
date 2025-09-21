@@ -11,9 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Parse Message
+        id: parse_message
+        run: |
+          ACTION=$(grep "action:" message.txt | cut -d':' -f2 | tr -d ' ')
+          SENDER=$(grep "sender:" message.txt | cut -d':' -f2 | tr -d ' ')
+          MESSAGE=$(grep "message:" message.txt | cut -d':' -f2 | tr -d ' ')
+          echo "::set-output name=action::$ACTION"
+          echo "::set-output name=sender::$SENDER"
+          echo "::set-output name=message::$MESSAGE"
       - name: Create Response
         run: |
-          echo "GitHub says: Message received!" > response.txt
+          RESPONSE="GitHub received: Action=${{ steps.parse_message.outputs.action }}, Sender=${{ steps.parse_message.outputs.sender }}, Message=${{ steps.parse_message.outputs.message }}"
+          echo "$RESPONSE" > response.txt
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add response.txt
