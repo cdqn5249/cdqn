@@ -39,13 +39,12 @@ fn main() {
 // --- CI TEST MODE ---
 fn run_ci_test() {
     println!("--- Running in CI-TEST mode ---");
-    let mut factory = KDUFactory::default(); // <-- Now mutable
+    let mut factory = KDUFactory::default();
     let crypto_core = factory.crypto_core();
     let originator_keypair = crypto_core.generate_keypair();
     let originator_fqei = "agent@ci.test".to_string();
     let payload = b"ci-test-payload".to_vec();
     let kdu = factory.create_kdu(
-        // <-- Correctly uses mutable factory
         &originator_keypair,
         originator_fqei,
         "CITest".to_string(),
@@ -82,25 +81,22 @@ fn run_processor() {
         .expect("Failed to read KDU from stdin");
     let _incoming_kdu: KDU = bincode::deserialize(&buffer).expect("Failed to deserialize KDU");
 
-    let mut factory = KDUFactory::default(); // <-- Now mutable
+    let mut factory = KDUFactory::default();
     let ponger_keypair = factory.crypto_core().generate_keypair();
     let ponger_fqei = "ponger@processor.bot".to_string();
     let response_payload = TestPayload {
         action: "sovereign.handler.response".to_string(),
         status: "ok".to_string(),
     };
+    // The response_kdu is now created immutably and is trusted to be correct.
     let response_kdu = factory.create_kdu(
-        // <-- Correctly uses mutable factory
         &ponger_keypair,
         ponger_fqei,
         "PongResponse".to_string(),
         &bincode::serialize(&response_payload).unwrap(),
     );
 
-    // Re-hash to get the final, correct content hash
-    let content_to_hash = (&response_kdu.metadata, &response_kdu.data_payload);
-    let final_hash = CryptoCore::hash_content(&content_to_hash);
-    response_kdu.content_hash = hex::encode(&final_hash);
+    // The redundant and incorrect "Re-hash" block has been removed.
 
     let pong_filename = format!("{}.kdu", response_kdu.content_hash);
     let kdu_base64 = base64::engine::general_purpose::STANDARD
@@ -112,7 +108,7 @@ fn run_processor() {
 // --- CLIENT MODE ---
 fn run_client(github_token: &str) {
     println!("--- Starting in CLIENT mode ---");
-    let mut factory = KDUFactory::default(); // <-- Now mutable
+    let mut factory = KDUFactory::default();
     let originator_keypair = factory.crypto_core().generate_keypair();
     let pinger_fqei = "pinger@client".to_string();
     let payload_struct = TestPayload {
@@ -120,7 +116,6 @@ fn run_client(github_token: &str) {
         status: "ok".to_string(),
     };
     let initial_ping = factory.create_kdu(
-        // <-- Correctly uses mutable factory
         &originator_keypair,
         pinger_fqei,
         "InitialPing".to_string(),
