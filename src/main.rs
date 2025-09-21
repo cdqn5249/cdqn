@@ -1,1 +1,0 @@
-"Hello cdqn project"
