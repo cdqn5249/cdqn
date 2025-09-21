@@ -1,0 +1,30 @@
+[package]
+name = "cdqn"
+version = "3.0.0"
+edition = "2021"
+authors = ["Christophe Duy Quang Nguyen <cdqn5249@gmail.com>"]
+description = "Causal Data Query Nodes - Pure Functional Sovereign Core v3.0"
+license = "BaDaaS-1.1.0"
+repository = "https://github.com/cdqn5249/cdqn"
+keywords = ["cdqn", "sovereign", "pure", "functional", "immutable"]
+categories = ["cryptography::cryptocurrencies", "networking"]
+
+[dependencies]
+sha2 = "0.10"
+ed25519-dalek = "2.0"
+rand = "0.8"
+hex = "0.4"
+
+[dev-dependencies]
+
+[features]
+default = []
+pure-tests = []
+
+[[example]]
+name = "pure-world-evolution"
+path = "examples/pure_world_evolution.rs"
+
+[[test]]
+name = "pure-functional-invariants"
+path = "tests/pure_invariants.rs"
