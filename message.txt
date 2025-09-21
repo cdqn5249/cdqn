@@ -1,2 +1,0 @@
-Hello, GitHub! This is Termux.
-Termux push
