@@ -5,10 +5,6 @@
 name: Deploy GH-Pages (UI + Repo Layered Tree Mirror)
 
 on:
-  push:
-    branches:
-      - main # Or your alpha-test branch if you're using one
-      # This workflow will run on every push to main to keep the mirror updated
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
 
 jobs:
