@@ -11,8 +11,12 @@ license = "BaDaaS-1.0.0" # Placeholder for your custom license ID
 [dependencies]
 sha2 = "0.10"
 
-# We now explicitly enable the "hazmat" feature, which makes the pre-hashing
-# signature functions available to us. This is the required fix.
-ed25519-dalek = { version = "2.1", features = ["rand_core", "hazmat"] }
+# We keep ed25519-dalek for its robust key generation and core types.
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+
+# NEW: We add the 'ed25519' crate directly to get access to the
+# pre-hashing signature traits, which are gated behind its 'prehash' feature.
+# We use the same version that ed25519-dalek uses internally to guarantee compatibility.
+ed25519 = { version = "2.2", features = ["prehash"] }
 
 rand_core = { version = "0.6", features = ["std"] }
