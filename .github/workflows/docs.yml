@@ -47,9 +47,16 @@ jobs:
 
           # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
           # Use a temporary staging area to avoid copying _site itself
+          # Explicitly exclude all unwanted directories and files from the source
           mkdir -p _temp_repo_content
-          rsync -av --exclude='.git' --exclude='.github' --exclude='webGhPages' . _temp_repo_content/
-          cp -r _temp_repo_content/* _site/repo-mirror/
+          rsync -av \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='webGhPages/' \
+            --exclude='_site/' \
+            --exclude='_temp_repo_content/' \
+            ./ _temp_repo_content/ # Copy contents of current dir to temp
+          cp -r _temp_repo_content/* _site/repo-mirror/ || true # Copy contents from temp to mirror
           rm -rf _temp_repo_content # Clean up temp directory
 
           # --- Generate index.html for the root of the mirror (_site/repo-mirror/) ---
@@ -68,9 +75,13 @@ jobs:
 
           echo "<h2>Directories:</h2><ul>" >> "$MIRROR_ROOT/index.html"
           # List directories directly in the mirror root, excluding the mirror root itself ('.')
+          # and explicitly excluding unwanted directories
           find "$MIRROR_ROOT" -maxdepth 1 -type d -not -name "$MIRROR_ROOT" | sort | while read -r dir; do
             DIRNAME=$(basename "$dir")
-            echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> "$MIRROR_ROOT/index.html"
+            # Explicitly exclude unwanted directories from the listing
+            if [[ "$DIRNAME" != "_site" && "$DIRNAME" != "_temp_repo_content" && "$DIRNAME" != "repo-mirror" ]]; then
+              echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> "$MIRROR_ROOT/index.html"
+            fi
           done
           echo "</ul>" >> "$MIRROR_ROOT/index.html"
           echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$MIRROR_ROOT/index.html"
