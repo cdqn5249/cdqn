@@ -1,0 +1,69 @@
+# BaDaaS License: This file is governed by the BaDaaS license.
+# File Path: /.github/workflows/rust-ci.yml
+
+# This workflow provides Continuous Integration (CI) for the Rust codebase.
+# It automatically checks, builds, and tests the code on every push and pull
+# request to the main branch, enforcing the quality and rigor mandated by the
+# CDQN Manifesto.
+
+name: Rust Continuous Integration
+
+on:
+  # Run on pushes to the main branch
+  push:
+    branches: [ "main" ]
+  # Run on pull requests targeting the main branch
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_test:
+    # Use the latest stable version of Ubuntu as the runner
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository's code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install the Rust toolchain
+      - name: Install Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          # Use the latest stable version of Rust
+          toolchain: stable
+
+      # Step 3: Cache dependencies for faster builds
+      # This step saves the compiled dependencies so we don't have to rebuild
+      # them from scratch on every run.
+      - name: Cache Cargo dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      # Step 4: Check code formatting
+      # The '--check' flag makes this step fail if the code is not formatted.
+      - name: Check formatting with rustfmt
+        run: cargo fmt --all -- --check
+
+      # Step 5: Lint code with Clippy
+      # The '-D warnings' flag treats all warnings as errors, enforcing a
+      # very high standard of code quality.
+      - name: Lint with Clippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      # Step 6: Build the entire workspace
+      # This ensures that all crates compile successfully.
+      - name: Build project
+        run: cargo build --verbose
+
+      # Step 7: Run all unit tests
+      # This is the final verification that the code's logic is correct.
+      - name: Run tests
+        run: cargo test --verbose
