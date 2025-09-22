@@ -2,7 +2,7 @@
 # For details, see: LICENSE.md (accessible at the root of the GitHub Pages site)
 #
 # .github/workflows/docs.yml
-name: Deploy GH-Pages (UI + Repo Tree Mirror)
+name: Deploy GH-Pages (UI + Repo Layered Tree Mirror)
 
 on:
   push:
@@ -67,15 +67,14 @@ jobs:
           echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$INDEX_FILE" # Link back to the main UI
           echo "<h2>Repository Tree:</h2>" >> "$INDEX_FILE"
 
-          # Initialize HTML list structure
-          echo "<ul>" >> "$INDEX_FILE"
-          echo "<li>📁 ./ (<a href=\"${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/\">Browse on GitHub</a>)" >> "$INDEX_FILE"
+          # Explicitly list the root of the mirror first
+          GITHUB_ROOT_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/"
+          echo "<h3>Depth 0 (Root):</h3><ul>" >> "$INDEX_FILE"
+          echo "<li>📁 ./ (<a href=\"$GITHUB_ROOT_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
+          echo "</ul>" >> "$INDEX_FILE"
 
-          # Track current depth for nested lists
-          current_depth=0
-          # Array to keep track of open <ul> tags, for proper closing
-          declare -a open_ul_tags
-
+          # Generate the layered tree structure with permanent GitHub links
+          last_depth=-1
           # Find all items, remove the MIRROR_ROOT prefix, sort them
           find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | while read -r item; do
             if [ -z "$item" ]; then continue; fi # Skip empty lines
@@ -83,24 +82,14 @@ jobs:
             # Calculate depth of current item
             item_depth=$(echo "$item" | grep -o "/" | wc -l)
 
-            # Close tags if moving up the hierarchy
-            while (( current_depth >= item_depth )); do
-              if (( ${#open_ul_tags[@]} > 0 )); then
-                echo "</ul></li>" >> "$INDEX_FILE"
-                unset 'open_ul_tags[${#open_ul_tags[@]}-1]' # Pop from stack
-              else
-                # This should ideally not happen if logic is perfect, but as a safeguard
-                break
+            # If depth changes, close previous <ul> and open new <h3> and <ul>
+            if (( item_depth != last_depth )); then
+              if (( last_depth != -1 )); then # Don't close <ul> if it's the very first item
+                echo "</ul>" >> "$INDEX_FILE"
               fi
-              (( current_depth-- ))
-            done
-
-            # Open new tags if moving down the hierarchy
-            while (( current_depth < item_depth - 1 )); do
-              echo "<li><ul>" >> "$INDEX_FILE"
-              open_ul_tags+=("<li><ul>") # Push to stack
-              (( current_depth++ ))
-            done
+              echo "<h3>Depth $((item_depth + 1)):</h3><ul>" >> "$INDEX_FILE" # Depth 1, 2, etc.
+              last_depth=$item_depth
+            fi
 
             # Determine if it's a file or directory
             FULL_PATH="$MIRROR_ROOT/$item"
@@ -111,17 +100,14 @@ jobs:
             elif [ -d "$FULL_PATH" ]; then
               # It's a directory
               GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
-              echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)" >> "$INDEX_FILE" # Directory, so it might contain a sub-list
+              echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
             fi
-            current_depth=$item_depth # Update current depth
           done
 
-          # Close any remaining open ul/li tags at the end
-          while (( ${#open_ul_tags[@]} > 0 )); do
-            echo "</ul></li>" >> "$INDEX_FILE"
-            unset 'open_ul_tags[${#open_ul_tags[@]}-1]'
-          done
-          echo "</ul>" >> "$INDEX_FILE" # Close the very first <ul>
+          # Close the last <ul> if any items were processed
+          if (( last_depth != -1 )); then
+            echo "</ul>" >> "$INDEX_FILE"
+          fi
 
           echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$INDEX_FILE"
           echo "</body></html>" >> "$INDEX_FILE"
