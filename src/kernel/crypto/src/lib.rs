@@ -12,15 +12,14 @@
 
 // --- External Crates ---
 use ed25519_dalek::{Signature as DalekSignature, SigningKey, VerifyingKey};
+use ed25519_dalek::ed25519::signature::hazmat::{PrehashSigner, PrehashVerifier};
 use rand_core::OsRng;
-// We now import Sha512, as required by the Ed25519ph standard.
 use sha2::{Digest, Sha512};
 
 // --- Core Type Definitions ---
 pub type PublicKey = [u8; 32];
 pub type PrivateKey = [u8; 32];
 pub type Signature = [u8; 64];
-// A hash is now 64 bytes, the output size of SHA-512.
 pub type Hash = [u8; 64];
 
 // --- 1. The Pure Functional Engine ---
@@ -36,30 +35,50 @@ impl CryptoCoreEngine {
         )
     }
 
-    /// A pure function to create a SHA-512 digest of any raw data.
     pub fn create_digest(data: &[u8]) -> Sha512 {
         let mut hasher = Sha512::new();
         hasher.update(data);
         hasher
     }
 
-    /// A pure function to sign a pre-computed digest with a given private key.
-    pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Signature {
+    /// A pure function to sign a pre-computed digest.
+    /// This function now returns a Result to avoid panicking.
+    pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Result<Signature, ()> {
         let signing_key = SigningKey::from_bytes(private_key);
-        signing_key.sign_prehashed(digest, None).unwrap().to_bytes()
+        // The sign_prehashed function returns a Result, which we now pass on.
+        match signing_key.sign_prehashed(digest, None) {
+            Ok(signature) => Ok(signature.to_bytes()),
+            Err(_) => Err(()),
+        }
     }
 
-    /// A pure function to verify a signature against a digest and a public key.
+    /// A pure function to verify a signature.
+    /// This is now written in a completely explicit, step-by-step style.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, digest: Sha512) -> bool {
-        // This final, robust version correctly handles all conversions and checks.
-        if let Ok(verifying_key) = VerifyingKey::from_bytes(public_key) {
-            if let Ok(dalek_signature) = DalekSignature::from_bytes(signature) {
-                return verifying_key
-                    .verify_prehashed(digest, None, &dalek_signature)
-                    .is_ok();
+        // Step 1: Explicitly convert the public key bytes into a temporary variable.
+        let verifying_key_result = VerifyingKey::from_bytes(public_key);
+
+        // Step 2: Explicitly check the result of the conversion.
+        match verifying_key_result {
+            Ok(verifying_key) => {
+                // Step 3: If the key is valid, explicitly convert the signature bytes.
+                let dalek_signature_result = DalekSignature::from_bytes(signature);
+
+                // Step 4: Explicitly check the result of the signature conversion.
+                match dalek_signature_result {
+                    Ok(dalek_signature) => {
+                        // Step 5: If both are valid, perform the final, pure verification.
+                        verifying_key
+                            .verify_prehashed(digest, None, &dalek_signature)
+                            .is_ok()
+                    }
+                    // If signature conversion fails, the result is false.
+                    Err(_) => false,
+                }
             }
+            // If key conversion fails, the result is false.
+            Err(_) => false,
         }
-        false
     }
 }
 
@@ -82,9 +101,10 @@ impl CryptoCoreManager {
         &self.public_key
     }
 
-    pub fn sign(&self, data: &[u8]) -> Signature {
+    /// Signs a piece of data, returning an Option to handle potential errors.
+    pub fn sign(&self, data: &[u8]) -> Option<Signature> {
         let digest = CryptoCoreEngine::create_digest(data);
-        CryptoCoreEngine::sign_digest(&self.private_key, digest)
+        CryptoCoreEngine::sign_digest(&self.private_key, digest).ok()
     }
 }
 
@@ -98,7 +118,9 @@ mod tests {
         let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         let message = b"test message";
         let digest = CryptoCoreEngine::create_digest(message);
-        let signature = CryptoCoreEngine::sign_digest(&private_key, digest.clone());
+        let signature_result = CryptoCoreEngine::sign_digest(&private_key, digest.clone());
+        assert!(signature_result.is_ok());
+        let signature = signature_result.unwrap();
         let is_valid = CryptoCoreEngine::verify_signature(&public_key, &signature, digest);
         assert!(is_valid);
     }
@@ -107,7 +129,9 @@ mod tests {
     fn manager_can_create_and_sign() {
         let alice_manager = CryptoCoreManager::new();
         let message = b"message from alice";
-        let signature = alice_manager.sign(message);
+        let signature_option = alice_manager.sign(message);
+        assert!(signature_option.is_some());
+        let signature = signature_option.unwrap();
         let digest = CryptoCoreEngine::create_digest(message);
         let is_valid =
             CryptoCoreEngine::verify_signature(alice_manager.public_key(), &signature, digest);
@@ -119,7 +143,7 @@ mod tests {
         let alice_manager = CryptoCoreManager::new();
         let message = b"original message";
         let tampered_message = b"tampered message";
-        let signature = alice_manager.sign(message);
+        let signature = alice_manager.sign(message).unwrap();
         let tampered_digest = CryptoCoreEngine::create_digest(tampered_message);
         let is_valid = CryptoCoreEngine::verify_signature(
             alice_manager.public_key(),
@@ -134,7 +158,7 @@ mod tests {
         let alice_manager = CryptoCoreManager::new();
         let eve_manager = CryptoCoreManager::new();
         let message = b"message from alice";
-        let signature = alice_manager.sign(message);
+        let signature = alice_manager.sign(message).unwrap();
         let digest = CryptoCoreEngine::create_digest(message);
         let is_valid =
             CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, digest);
