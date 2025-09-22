@@ -1,9 +1,17 @@
-# **CDQN (Causal Data Query Nodes) Ecosystem**
+<!-- BaDaaS License: This document is governed by the BaDaaS license. -->
 
-See the `cdqn Manifesto` (Doc01).
+# CDQN: Causal Data Query Nodes
 
-## **Official CDQN Project Document List**
+**CDQN** is a sovereign operating system for verifiable intelligence. Its mission is to provide a personal AI companion designed to learn from its mistakes, giving users a trustworthy and transparent tool for creativity and problem-solving.
 
-[https://cdqn5249.github.io/cdqn/](https://cdqn5249.github.io/cdqn/)
+This repository contains the complete source code, documentation, and infrastructure for the CDQN project, built on a foundation of immutable history, sovereign identity, and a pure functional core.
 
-**All works here are licensed under the BaDaaS license and are open for discussion/commercial partnership.**
+## Quick Links
+
+*   **[Project Homepage]** - Visit the main UI to understand the project's vision.
+*   **[Live Repository Mirror]** - Explore the complete, live source code and documentation.
+*   **[Live System Actions]** - Observe the system's core services processing information in real-time.
+
+[Project Homepage]: https://cdqn5249.github.io/cdqn/
+[Live Repository Mirror]: https://cdqn5249.github.io/cdqn/repo-mirror/
+[Live System Actions]: https://github.com/cdqn5249/cdqn/actions
