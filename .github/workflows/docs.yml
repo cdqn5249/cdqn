@@ -21,57 +21,6 @@ jobs:
     env:
       GITHUB_REPO_URL: https://github.com/${{ github.repository }}
       GITHUB_SHA: ${{ github.sha }}
-      # Define the awk script as a multi-line environment variable
-      AWK_SCRIPT_CONTENT: |
-        BEGIN {
-            current_depth = 0;
-            print "<ul>"; # Start the main list
-            print "<li>📁 ./ (<a href=\"" GITHUB_REPO_URL "/tree/" GITHUB_SHA "/\">Browse on GitHub</a>)";
-        }
-        {
-            # Skip empty lines or temporary build directories
-            if ($0 == "" || $0 ~ /^_site/ || $0 ~ /^_temp_repo_content/) {
-                next;
-            }
-
-            # Count slashes to determine depth
-            item_depth = split($0, path_parts, "/");
-
-            # Adjust nesting: close <ul> and <li> tags if moving up the hierarchy
-            while (current_depth >= item_depth) {
-                print "</ul></li>";
-                current_depth--;
-            }
-
-            # Open new <ul> and <li> tags if moving down the hierarchy
-            while (current_depth < item_depth - 1) {
-                print "<li><ul>"; # Open a new list item and a new sub-list
-                current_depth++;
-            }
-
-            # Determine if it's a file or directory
-            full_path = MIRROR_ROOT_PATH "/" $0;
-            if (system("test -f \"" full_path "\"") == 0) {
-                # It's a file
-                filename = path_parts[item_depth];
-                github_file_link = GITHUB_REPO_URL "/blob/" GITHUB_SHA "/" $0;
-                print "<li>📄 " filename " (<a href=\"" github_file_link "\">View Source on GitHub</a>)</li>";
-            } else if (system("test -d \"" full_path "\"") == 0) {
-                # It's a directory
-                dirname = path_parts[item_depth];
-                github_dir_link = GITHUB_REPO_URL "/tree/" GITHUB_SHA "/" $0;
-                print "<li>📁 " dirname "/ (<a href=\"" github_dir_link "\">Browse on GitHub</a>)"; # Directory, so it might contain a sub-list
-            }
-            current_depth = item_depth; # Update current depth after processing item
-        }
-        END {
-            # Close any remaining open ul/li tags
-            while (current_depth >= 0) { # Need to close the initial <li> and <ul>
-                print "</ul></li>";
-                current_depth--;
-            }
-            print "</ul>"; # Close the very first <ul>
-        }
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -111,18 +60,65 @@ jobs:
 
           # --- Generate a single, comprehensive index.html for the mirror (_site/repo-mirror/) ---
           MIRROR_ROOT="_site/repo-mirror"
-          echo "<html><head><title>CDQN Repository Tree Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > "$MIRROR_ROOT/index.html"
-          echo "<h1>CDQN Repository Tree Mirror</h1>" >> "$MIRROR_ROOT/index.html"
-          echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$MIRROR_ROOT/index.html" # Link back to the main UI
-          echo "<h2>Repository Tree:</h2>" >> "$MIRROR_ROOT/index.html"
+          INDEX_FILE="$MIRROR_ROOT/index.html"
 
-          # Generate the full tree structure with permanent GitHub links and nested bullets
-          # Find all items, remove the MIRROR_ROOT prefix, sort them, then process with awk
-          find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | \
-          awk -v GITHUB_REPO_URL="${GITHUB_REPO_URL}" -v GITHUB_SHA="${GITHUB_SHA}" -v MIRROR_ROOT_PATH="${MIRROR_ROOT}" "${{ env.AWK_SCRIPT_CONTENT }}" >> "$MIRROR_ROOT/index.html"
+          echo "<html><head><title>CDQN Repository Tree Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > "$INDEX_FILE"
+          echo "<h1>CDQN Repository Tree Mirror</h1>" >> "$INDEX_FILE"
+          echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$INDEX_FILE" # Link back to the main UI
+          echo "<h2>Repository Tree:</h2>" >> "$INDEX_FILE"
 
-          echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$MIRROR_ROOT/index.html"
-          echo "</body></html>" >> "$MIRROR_ROOT/index.html"
+          # Initialize HTML list structure
+          echo "<ul>" >> "$INDEX_FILE"
+          echo "<li>📁 ./ (<a href=\"${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/\">Browse on GitHub</a>)" >> "$INDEX_FILE"
+
+          # Track current depth for nested lists
+          current_depth=0
+          declare -a open_tags # Array to keep track of open <ul> and <li> tags
+
+          # Find all items, remove the MIRROR_ROOT prefix, sort them
+          find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | while read -r item; do
+            if [ -z "$item" ]; then continue; fi # Skip empty lines
+
+            # Calculate depth of current item
+            item_depth=$(echo "$item" | grep -o "/" | wc -l)
+
+            # Close tags if moving up the hierarchy
+            while (( current_depth >= item_depth )); do
+              echo "</ul></li>" >> "$INDEX_FILE"
+              unset 'open_tags[current_depth]' # Remove tag from stack
+              (( current_depth-- ))
+            done
+
+            # Open new tags if moving down the hierarchy
+            while (( current_depth < item_depth - 1 )); do
+              echo "<li><ul>" >> "$INDEX_FILE"
+              open_tags[current_depth]="<li><ul>" # Add tag to stack
+              (( current_depth++ ))
+            done
+
+            # Determine if it's a file or directory
+            FULL_PATH="$MIRROR_ROOT/$item"
+            if [ -f "$FULL_PATH" ]; then
+              # It's a file
+              GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${item}"
+              echo "<li>📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
+            elif [ -d "$FULL_PATH" ]; then
+              # It's a directory
+              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
+              echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)" >> "$INDEX_FILE" # Directory, so it might contain a sub-list
+            fi
+            current_depth=$item_depth # Update current depth
+          done
+
+          # Close any remaining open ul/li tags at the end
+          while (( current_depth >= 0 )); do
+            echo "</ul></li>" >> "$INDEX_FILE"
+            (( current_depth-- ))
+          done
+          echo "</ul>" >> "$INDEX_FILE" # Close the very first <ul>
+
+          echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$INDEX_FILE"
+          echo "</body></html>" >> "$INDEX_FILE"
 
           # --- Debugging step: List the contents of _site directory to verify structure ---
           echo "--- Contents of _site directory before upload ---"
