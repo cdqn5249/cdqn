@@ -1,0 +1,24 @@
+# BaDaaS License: This file is governed by the BaDaaS license.
+# File Path: /Cargo.toml
+
+# This file defines the entire CDQN project as a Rust Workspace.
+#
+# A Workspace is a collection of individual Rust crates that are managed
+# together. This is the direct implementation of the CDQN Manifesto's
+# requirement for a modular, hierarchical system with enforced boundaries
+# (Tenet 3).
+#
+# The `cargo` command will use this file as the entry point to find and
+# manage all the modules listed in the `members` array.
+
+[workspace]
+
+# This section lists all the individual crates that are part of our project.
+# The Rust compiler will manage them as a coherent whole, while respecting
+# their individual boundaries.
+members = [
+    # The first foundational module of the Kernel.
+    "src/kernel/crypto",
+
+    # As we create more modules (e.g., K.HLC), we will add their paths here.
+]
