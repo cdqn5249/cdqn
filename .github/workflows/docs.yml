@@ -5,8 +5,7 @@ on:
   push:
     branches:
       - main # Or your alpha-test branch if you're using one
-    paths-ignore: # Ignore changes to workflows themselves to prevent infinite loops
-      - '.github/workflows/**'
+    # Removed paths-ignore to auto-run on every push
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
 
 jobs:
@@ -60,7 +59,6 @@ jobs:
 
           # --- Generate index.html for all subdirectories within _site ---
           # Iterate over all directories within _site (excluding the root _site itself)
-          # Ensure we process directories like _site/Docs, _site/webGhPages, etc.
           find _site -type d -not -path "_site" | while read -r dir_path; do
             # Calculate the path relative to the _site root for display in the title
             RELATIVE_DISPLAY_PATH=$(echo "$dir_path" | sed 's/^_site\///')
@@ -82,7 +80,8 @@ jobs:
 
             echo "<h2>Directories:</h2><ul>" >> "$dir_path/index.html"
             # List subdirectories in the current subdirectory
-            find "$dir_path" -maxdepth 1 -type d -not -name "$dir_path" | sort | while read -r subdir_in_dir; do
+            # Using -mindepth 1 to ensure we don't list the current directory itself
+            find "$dir_path" -maxdepth 1 -mindepth 1 -type d | sort | while read -r subdir_in_dir; do
               SUBDIRNAME=$(basename "$subdir_in_dir")
               echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a></li>" >> "$dir_path/index.html"
             done
@@ -90,6 +89,11 @@ jobs:
             echo "<p><a href=\"../\">Back to Parent Directory</a></p>" >> "$dir_path/index.html" # Add a back link
             echo "</body></html>" >> "$dir_path/index.html"
           done
+
+          # --- Debugging step: List the contents of _site directory to verify structure ---
+          echo "--- Contents of _site directory before upload ---"
+          ls -R _site
+          echo "-------------------------------------------------"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
