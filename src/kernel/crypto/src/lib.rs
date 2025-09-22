@@ -11,7 +11,6 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::ed25519::signature::hazmat::{PrehashSigner, PrehashVerifier};
 use ed25519_dalek::{Signature as DalekSignature, SigningKey, VerifyingKey};
 use rand_core::OsRng;
 use sha2::{Digest, Sha512};
