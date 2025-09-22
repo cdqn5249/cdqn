@@ -21,6 +21,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # Provide a token with write permissions to allow pushing back to the repo
+          token: ${{ secrets.GITHUB_TOKEN }}
           # Fetch entire history to ensure we can diff between any two commits
           fetch-depth: 0
 
@@ -76,10 +78,13 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
           # Add only the newly created response files to the staging area
+          # The trim function removes leading/trailing whitespace
           git add ${{ steps.process_messages.outputs.response_files }}
           
           # Commit the changes
           git commit -m "Protocol: Response to incoming message(s)"
           
           # Push the commit to the repository
+          echo "Pushing changes to the repository..."
           git push
+          echo "Push complete."
