@@ -11,14 +11,16 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::{Signature as DalekSignature, SigningKey, VerifyingKey};
+use ed25519_dalek::{SigningKey, VerifyingKey};
 use rand_core::OsRng;
 use sha2::{Digest, Sha512};
 
 // --- Core Type Definitions ---
+// We now use the official Signature type from the library directly.
+// This is the key to solving the type mismatch errors.
+pub type Signature = ed25519_dalek::Signature;
 pub type PublicKey = [u8; 32];
 pub type PrivateKey = [u8; 32];
-pub type Signature = [u8; 64];
 pub type Hash = [u8; 64];
 
 // --- 1. The Pure Functional Engine ---
@@ -41,41 +43,28 @@ impl CryptoCoreEngine {
     }
 
     /// A pure function to sign a pre-computed digest.
-    /// This function now returns a Result to avoid panicking.
+    /// It now returns the official `Signature` object directly, not bytes.
     pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Result<Signature, ()> {
         let signing_key = SigningKey::from_bytes(private_key);
-        // The sign_prehashed function returns a Result, which we now pass on.
-        match signing_key.sign_prehashed(digest, None) {
-            Ok(signature) => Ok(signature.to_bytes()),
-            Err(_) => Err(()),
-        }
+        // We return the `Signature` object itself, wrapped in a Result.
+        signing_key.sign_prehashed(digest, None).map_err(|_| ())
     }
 
     /// A pure function to verify a signature.
-    /// This is now written in a completely explicit, step-by-step style.
-    pub fn verify_signature(public_key: &PublicKey, signature: &Signature, digest: Sha512) -> bool {
-        // Step 1: Explicitly convert the public key bytes into a temporary variable.
+    /// This is now dramatically simpler because we work with the `Signature` object.
+    pub fn verify_signature(
+        public_key: &PublicKey,
+        signature: &Signature,
+        digest: Sha512,
+    ) -> bool {
+        // Step 1: Explicitly convert the public key bytes.
         let verifying_key_result = VerifyingKey::from_bytes(public_key);
 
-        // Step 2: Explicitly check the result of the conversion.
+        // Step 2: If the key is valid, perform the verification.
         match verifying_key_result {
-            Ok(verifying_key) => {
-                // Step 3: If the key is valid, explicitly convert the signature bytes.
-                let dalek_signature_result = DalekSignature::from_bytes(signature);
-
-                // Step 4: Explicitly check the result of the signature conversion.
-                match dalek_signature_result {
-                    Ok(dalek_signature) => {
-                        // Step 5: If both are valid, perform the final, pure verification.
-                        verifying_key
-                            .verify_prehashed(digest, None, &dalek_signature)
-                            .is_ok()
-                    }
-                    // If signature conversion fails, the result is false.
-                    Err(_) => false,
-                }
-            }
-            // If key conversion fails, the result is false.
+            Ok(verifying_key) => verifying_key
+                .verify_prehashed(digest, None, signature)
+                .is_ok(),
             Err(_) => false,
         }
     }
@@ -100,7 +89,7 @@ impl CryptoCoreManager {
         &self.public_key
     }
 
-    /// Signs a piece of data, returning an Option to handle potential errors.
+    /// Signs a piece of data, returning an Option of the official Signature object.
     pub fn sign(&self, data: &[u8]) -> Option<Signature> {
         let digest = CryptoCoreEngine::create_digest(data);
         CryptoCoreEngine::sign_digest(&self.private_key, digest).ok()
