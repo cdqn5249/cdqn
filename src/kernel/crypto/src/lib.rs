@@ -11,11 +11,9 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::{
-    Signature as DalekSignature, Signer, SigningKey, VerifyingKey, Verifier,
-};
+use ed25519_dalek::{Signature as DalekSignature, Signer, SigningKey, Verifier, VerifyingKey};
 use rand_core::OsRng;
-use sha2::{Digest, Sha256};
+use sha2::{Digest, Sha265};
 
 // --- Core Type Definitions ---
 pub type PublicKey = [u8; 32];
