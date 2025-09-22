@@ -8,7 +8,7 @@ on:
   push:
     branches:
       - main # Or your alpha-test branch if you're using one
-    # This workflow will run on every push to main to keep the mirror updated
+      # This workflow will run on every push to main to keep the mirror updated
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write # Required to push to gh-pages branch
-      pages: write    # Required to deploy to GitHub Pages
+      pages: write # Required to deploy to GitHub Pages
       id-token: write # Required for OIDC authentication
     env:
       GITHUB_REPO_URL: https://github.com/${{ github.repository }}
@@ -44,8 +44,12 @@ jobs:
 
           # 3. Create a subdirectory for the repository mirror
           mkdir -p _site/repo-mirror
+          
+          # 4. Explicitly copy the .github directory to the mirror
+          echo "Explicitly copying .github directory..."
+          cp -r .github _site/repo-mirror/
 
-          # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
+          # 5. Copy the *contents* of the rest of the repository into _site/repo-mirror/
           # Using ls -A and cp -r to explicitly copy items, including hidden ones,
           # while excluding specific unwanted directories.
           MIRROR_TEMP_SOURCE_DIR="_temp_repo_content"
@@ -55,6 +59,7 @@ jobs:
           # and copy them one by one, excluding specific ones.
           for item in $(ls -A); do
             if [[ "$item" == ".git" ]] || \
+               [[ "$item" == ".github" ]] || \
                [[ "$item" == "webGhPages" ]] || \
                [[ "$item" == "_site" ]] || \
                [[ "$item" == "_temp_repo_content" ]]; then
