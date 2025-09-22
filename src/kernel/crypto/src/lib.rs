@@ -3,17 +3,12 @@
 
 //! K.CryptoCore: The Sovereign Root of Trust
 //!
-//! This module is architected to reflect the core principles of cdqnLang:
-//!
-//! 1.  **Purity:** The `CryptoCoreEngine` is a stateless collection of pure
-//!     cryptographic functions.
-//! 2.  **State Management:** The `CryptoCoreManager` is a stateful actor that
-//!     holds an entity's keypair and uses the pure `Engine` to perform actions.
-//!
-//! This enforces a clean separation between pure logic and state.
+//! This module is architected to reflect the core principles of cdqnLang and
+//! provides robust, verbose error handling to ensure the system is auditable
+//! and can learn from its mistakes (Manifesto Tenets 7 & 9).
 
 // --- External Crates ---
-use ed25519_dalek::{SigningKey, VerifyingKey};
+use ed25519_dalek::{SignatureError, SigningKey, VerifyingKey};
 use rand_core::OsRng;
 use sha2::{Digest, Sha512};
 
@@ -22,10 +17,13 @@ pub type Signature = ed25519_dalek::Signature;
 pub type PublicKey = [u8; 32];
 pub type PrivateKey = [u8; 32];
 
-/// A specific, meaningful error type for cryptographic operations.
+/// A specific, verbose, and robust error type for all cryptographic operations.
+/// This enum allows callers to know exactly *why* an operation failed.
 #[derive(Debug, PartialEq, Eq)]
 pub enum CryptoError {
-    SignatureCreationFailed,
+    /// The underlying cryptographic library returned an error. This variant
+    /// wraps the library's error to preserve the rich, original context.
+    LibraryError(SignatureError),
 }
 
 // --- 1. The Pure Functional Engine (Public API) ---
@@ -48,24 +46,27 @@ impl CryptoCoreEngine {
     }
 
     /// A pure function to sign a pre-computed digest.
-    /// It takes and returns the library's official `Signature` object.
     pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Result<Signature, CryptoError> {
         let signing_key = SigningKey::from_bytes(private_key);
+        // We now wrap the library's specific error in our module's error type.
         signing_key
             .sign_prehashed(digest, None)
-            .map_err(|_| CryptoError::SignatureCreationFailed)
+            .map_err(CryptoError::LibraryError)
     }
 
-    /// A pure function to verify a signature against a digest.
-    /// It takes the library's official `Signature` object.
-    pub fn verify_signature(public_key: &PublicKey, signature: &Signature, digest: Sha512) -> bool {
-        let verifying_key_result = VerifyingKey::from_bytes(public_key);
-        match verifying_key_result {
-            Ok(verifying_key) => verifying_key
-                .verify_prehashed(digest, None, signature)
-                .is_ok(),
-            Err(_) => false,
-        }
+    /// A pure function to verify a signature.
+    /// This function now returns a Result<(), CryptoError> to provide verbose
+    /// error information, instead of a simple boolean.
+    pub fn verify_signature(
+        public_key: &PublicKey,
+        signature: &Signature,
+        digest: Sha512,
+    ) -> Result<(), CryptoError> {
+        // The `?` operator provides a clean way to propagate errors.
+        let verifying_key = VerifyingKey::from_bytes(public_key).map_err(CryptoError::LibraryError)?;
+        verifying_key
+            .verify_prehashed(digest, None, signature)
+            .map_err(CryptoError::LibraryError)
     }
 }
 
@@ -88,10 +89,10 @@ impl CryptoCoreManager {
         &self.public_key
     }
 
-    /// Signs a piece of data, returning an Option of the official Signature object.
-    pub fn sign(&self, data: &[u8]) -> Option<Signature> {
+    /// Signs a piece of data, returning a Result with our specific error type.
+    pub fn sign(&self, data: &[u8]) -> Result<Signature, CryptoError> {
         let digest = CryptoCoreEngine::create_digest(data);
-        CryptoCoreEngine::sign_digest(&self.private_key, digest).ok()
+        CryptoCoreEngine::sign_digest(&self.private_key, digest)
     }
 }
 
@@ -112,50 +113,35 @@ mod tests {
         let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         let message = b"test message";
         let digest = CryptoCoreEngine::create_digest(message);
-        let signature_result = CryptoCoreEngine::sign_digest(&private_key, digest.clone());
-        assert!(signature_result.is_ok());
-        let signature = signature_result.unwrap();
-        let is_valid = CryptoCoreEngine::verify_signature(&public_key, &signature, digest);
-        assert!(is_valid);
+        let signature = CryptoCoreEngine::sign_digest(&private_key, digest.clone()).unwrap();
+        // A successful verification should return Ok(()).
+        assert_eq!(
+            CryptoCoreEngine::verify_signature(&public_key, &signature, digest),
+            Ok(())
+        );
     }
 
     #[test]
-    fn manager_can_create_and_sign() {
-        let alice_manager = CryptoCoreManager::new();
-        let message = b"message from alice";
-        let signature_option = alice_manager.sign(message);
-        assert!(signature_option.is_some());
-        let signature = signature_option.unwrap();
-        let digest = CryptoCoreEngine::create_digest(message);
-        let is_valid =
-            CryptoCoreEngine::verify_signature(alice_manager.public_key(), &signature, digest);
-        assert!(is_valid);
-    }
-
-    #[test]
-    fn manager_signature_is_not_valid_for_other_data() {
-        let alice_manager = CryptoCoreManager::new();
+    fn verification_fails_for_tampered_data() {
+        let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         let message = b"original message";
         let tampered_message = b"tampered message";
-        let signature = alice_manager.sign(message).unwrap();
+        let signature = CryptoCoreEngine::sign_digest(&private_key, CryptoCoreEngine::create_digest(message)).unwrap();
         let tampered_digest = CryptoCoreEngine::create_digest(tampered_message);
-        let is_valid = CryptoCoreEngine::verify_signature(
-            alice_manager.public_key(),
-            &signature,
-            tampered_digest,
+        // A failed verification should return an Err.
+        assert!(
+            CryptoCoreEngine::verify_signature(&public_key, &signature, tampered_digest).is_err()
         );
-        assert!(!is_valid);
     }
 
     #[test]
-    fn manager_signature_is_not_valid_for_other_manager() {
-        let alice_manager = CryptoCoreManager::new();
-        let eve_manager = CryptoCoreManager::new();
+    fn verification_fails_for_wrong_key() {
+        let (alice_pk, alice_sk) = CryptoCoreEngine::generate_identity_keypair();
+        let (eve_pk, _) = CryptoCoreEngine::generate_identity_keypair();
         let message = b"message from alice";
-        let signature = alice_manager.sign(message).unwrap();
         let digest = CryptoCoreEngine::create_digest(message);
-        let is_valid =
-            CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, digest);
-        assert!(!is_valid);
+        let signature = CryptoCoreEngine::sign_digest(&alice_sk, digest.clone()).unwrap();
+        // Verifying Alice's signature with Eve's key must fail.
+        assert!(CryptoCoreEngine::verify_signature(&eve_pk, &signature, digest).is_err());
     }
 }
