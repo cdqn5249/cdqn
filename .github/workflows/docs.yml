@@ -33,15 +33,14 @@ jobs:
           mkdir -p _site
 
           # Copy all repository content to _site, excluding .git and .github/workflows
-          # The webGhPages directory will be copied as part of the repo content
           rsync -av --exclude='.git' --exclude='.github/workflows' . _site/
 
-          # Generate index.html at the root of the _site directory
+          # --- Generate index.html for the root _site directory ---
           echo "<html><head><title>CDQN Repository Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > _site/index.html
           echo "<h1>CDQN Repository Mirror</h1>" >> _site/index.html
           echo "<h2>Files:</h2><ul>" >> _site/index.html
 
-          # List files directly in the _site root
+          # List files directly in the _site root, excluding the generated index.html
           find _site -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file; do
             FILENAME=$(basename "$file")
             echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> _site/index.html
@@ -57,6 +56,38 @@ jobs:
           done
           echo "</ul>" >> _site/index.html
           echo "</body></html>" >> _site/index.html
+
+          # --- Generate index.html for all subdirectories within _site ---
+          # Iterate over all directories within _site (excluding the root _site itself)
+          find _site -type d -not -path "_site" | while read -r dir_path; do
+            # Calculate the path relative to the _site root for display in the title
+            RELATIVE_DISPLAY_PATH=$(echo "$dir_path" | sed 's/^_site\///')
+            if [ -z "$RELATIVE_DISPLAY_PATH" ]; then
+              RELATIVE_DISPLAY_PATH="." # Should not happen with -not -path "_site"
+            fi
+
+            echo "Generating index.html for directory: $dir_path"
+            echo "<html><head><title>CDQN - $RELATIVE_DISPLAY_PATH</title><style>body{font-family:sans-serif;}</style></head><body>" > "$dir_path/index.html"
+            echo "<h1>Contents of $RELATIVE_DISPLAY_PATH/</h1>" >> "$dir_path/index.html"
+            echo "<h2>Files:</h2><ul>" >> "$dir_path/index.html"
+
+            # List files in the current subdirectory
+            find "$dir_path" -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file_in_dir; do
+              FILENAME=$(basename "$file_in_dir")
+              echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> "$dir_path/index.html"
+            done
+            echo "</ul>" >> "$dir_path/index.html"
+
+            echo "<h2>Directories:</h2><ul>" >> "$dir_path/index.html"
+            # List subdirectories in the current subdirectory
+            find "$dir_path" -maxdepth 1 -type d -not -name "$dir_path" | sort | while read -r subdir_in_dir; do
+              SUBDIRNAME=$(basename "$subdir_in_dir")
+              echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a></li>" >> "$dir_path/index.html"
+            done
+            echo "</ul>" >> "$dir_path/index.html"
+            echo "<p><a href=\"../\">Back to Parent Directory</a></p>" >> "$dir_path/index.html" # Add a back link
+            echo "</body></html>" >> "$dir_path/index.html"
+          done
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
