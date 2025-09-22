@@ -71,13 +71,24 @@ jobs:
           GITHUB_ROOT_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/"
           echo "<h3>Depth 0 (Root):</h3><ul>" >> "$INDEX_FILE"
           echo "<li>📁 ./ (<a href=\"$GITHUB_ROOT_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
+
+          # Add root-level files (LICENSE.md, README.md) here
+          # These are copied to _site/repo-mirror directly
+          if [ -f "$MIRROR_ROOT/LICENSE.md" ]; then
+            echo "<li>📄 LICENSE.md (<a href=\"${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/LICENSE.md\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
+          fi
+          if [ -f "$MIRROR_ROOT/README.md" ]; then
+            echo "<li>📄 README.md (<a href=\"${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/README.md\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
+          fi
           echo "</ul>" >> "$INDEX_FILE"
 
-          # Generate the layered tree structure with permanent GitHub links
+          # Generate the layered tree structure for subdirectories
           last_depth=-1
           # Find all items, remove the MIRROR_ROOT prefix, sort them
+          # Exclude root-level files already handled (LICENSE.md, README.md)
+          # Exclude the index.html from webGhPages if it somehow got copied
           find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | while read -r item; do
-            if [ -z "$item" ]; then continue; fi # Skip empty lines
+            if [ -z "$item" ] || [ "$item" = "LICENSE.md" ] || [ "$item" = "README.md" ] || [ "$item" = "index.html" ]; then continue; fi # Skip empty lines and already handled root files
 
             # Calculate depth of current item
             item_depth=$(echo "$item" | grep -o "/" | wc -l)
