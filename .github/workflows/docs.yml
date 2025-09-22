@@ -1,0 +1,65 @@
+# .github/workflows/docs.yml
+name: Deploy webGhPages to GH-Pages
+
+on:
+  push:
+    branches:
+      - main # Or your alpha-test branch if you're using one
+    paths:
+      - 'webGhPages/**' # Trigger only if changes occur within the webGhPages directory
+      - '.github/workflows/docs.yml' # Also trigger if this workflow file changes
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to push to gh-pages branch
+      pages: write    # Required to deploy to GitHub Pages
+      id-token: write # Required for OIDC authentication
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history to get all files/dirs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Generate custom index.html
+        run: |
+          # Create the webGhPages directory if it doesn't exist (should exist now)
+          mkdir -p webGhPages
+
+          # Start index.html content
+          echo "<html><head><title>CDQN Repository Contents</title><style>body{font-family:sans-serif;}</style></head><body>" > webGhPages/index.html
+          echo "<h1>CDQN Repository Contents</h1>" >> webGhPages/index.html
+          echo "<h2>Files:</h2><ul>" >> webGhPages/index.html
+
+          # List files in the root, excluding webGhPages and .github/workflows
+          find . -maxdepth 1 -type f -not -name ".*" | sort | while read -r file; do
+            FILENAME=$(basename "$file")
+            echo "<li><a href=\"../$FILENAME\">$FILENAME</a></li>" >> webGhPages/index.html
+          done
+          echo "</ul>" >> webGhPages/index.html
+
+          echo "<h2>Directories:</h2><ul>" >> webGhPages/index.html
+          # List directories in the root, excluding webGhPages and .github
+          find . -maxdepth 1 -type d -not -name "." -not -name "webGhPages" -not -name ".github" | sort | while read -r dir; do
+            DIRNAME=$(basename "$dir")
+            echo "<li><a href=\"../$DIRNAME/\">$DIRNAME/</a></li>" >> webGhPages/index.html
+          done
+          echo "</ul>" >> webGhPages/index.html
+          echo "</body></html>" >> webGhPages/index.html
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'webGhPages' # Upload the webGhPages directory as the artifact
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
