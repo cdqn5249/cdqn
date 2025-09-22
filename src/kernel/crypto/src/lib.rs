@@ -1,4 +1,4 @@
-// BaDaaS License: This file is governed by the BaDaaS license.
+// BaDaas License: This file is governed by the BaDaaS license.
 // File Path: /src/kernel/crypto/src/lib.rs
 
 //! K.CryptoCore: The Sovereign Root of Trust
@@ -16,9 +16,9 @@
 
 // --- External Crates ---
 // We import the necessary, minimal, and audited cryptographic libraries.
-use ed25519_dalek::{Signer, SigningKey, VerifyingKey, Signature as DalekSignature};
+use ed25519_dalek::{Signature as DalekSignature, Signer, SigningKey, VerifyingKey};
+use rand_core::OsRng;
 use sha2::{Digest, Sha256};
-use rand_core::OsRng; // A secure, OS-provided random number generator.
 
 // --- Core Type Definitions ---
 // We define clear, fixed-size types for our cryptographic primitives.
@@ -93,7 +93,6 @@ impl CryptoCore {
     }
 }
 
-
 // --- Unit Tests ---
 // A critical part of any cryptographic module is a robust test suite
 // to prove its correctness.
@@ -138,7 +137,10 @@ mod tests {
 
         // 4. Verify the signature with the public key. It must succeed.
         let is_valid = CryptoCore::verify_signature(&public_key, &signature, &hash);
-        assert!(is_valid, "A valid signature should be verified successfully.");
+        assert!(
+            is_valid,
+            "A valid signature should be verified successfully."
+        );
     }
 
     #[test]
@@ -155,7 +157,10 @@ mod tests {
         // Verification must fail because the signature was for the original hash,
         // not the hash of the tampered data.
         let is_valid = CryptoCore::verify_signature(&public_key, &signature, &tampered_hash);
-        assert!(!is_valid, "A signature should not be valid for tampered data.");
+        assert!(
+            !is_valid,
+            "A signature should not be valid for tampered data."
+        );
     }
 
     #[test]
@@ -172,6 +177,9 @@ mod tests {
         // We try to verify Alice's signature using EVE's public key.
         // This must fail.
         let is_valid = CryptoCore::verify_signature(&eve_pk, &signature, &hash);
-        assert!(!is_valid, "A signature should not be valid for the wrong public key.");
+        assert!(
+            !is_valid,
+            "A signature should not be valid for the wrong public key."
+        );
     }
 }
