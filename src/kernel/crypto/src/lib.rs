@@ -11,7 +11,12 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::{Signature as DalekSignature, Signer, SigningKey, Verifier, VerifyingKey};
+use ed25519_dalek::{
+    hazmat::{PrehashSigner, PrehashVerifier}, // For signing pre-hashed data
+    Signature as DalekSignature,
+    SigningKey,
+    VerifyingKey,
+};
 use rand_core::OsRng;
 use sha2::{Digest, Sha256};
 
@@ -22,21 +27,10 @@ pub type Signature = [u8; 64];
 pub type Hash = [u8; 32];
 
 // --- 1. The Pure Functional Engine ---
-
-/// The `CryptoCoreEngine` is a stateless namespace for all core cryptographic
-/// operations. It is the direct Rust equivalent of a library of pure functions.
-/// All its functions are deterministic and have no side effects beyond what is
-/// returned.
 pub struct CryptoCoreEngine;
 
 impl CryptoCoreEngine {
-    /// A pure function to generate a new, sovereign identity keypair.
-    /// NOTE: This function is inherently non-deterministic as it must interact
-    /// with the OS for entropy. It is the "Big Bang" of identity creation.
     pub fn generate_identity_keypair() -> (PublicKey, PrivateKey) {
-        // The only mutable variable is the random number generator, which is
-        // required by the underlying library API. It is created and destroyed
-        // within this function, preserving the stateless nature of the Engine.
         let mut csprng = OsRng;
         let signing_key: SigningKey = SigningKey::generate(&mut csprng);
         (
@@ -45,48 +39,45 @@ impl CryptoCoreEngine {
         )
     }
 
-    /// A pure function to create a cryptographic hash of any raw data.
     pub fn hash_data(data: &[u8]) -> Hash {
-        // The `hasher` is a temporary, mutable variable required for the builder
-        // pattern of the hashing algorithm. The function itself remains pure:
-        // same input always produces same output.
         let mut hasher = Sha256::new();
         hasher.update(data);
         hasher.finalize().into()
     }
 
     /// A pure function to sign a pre-computed hash with a given private key.
+    /// This now correctly uses the `sign_prehashed` method.
     pub fn sign_hash(private_key: &PrivateKey, hash: &Hash) -> Signature {
         let signing_key = SigningKey::from_bytes(private_key);
-        signing_key.sign(hash).to_bytes()
+        // We use `sign_prehashed` because we have already hashed the KDU data.
+        // The `None` context is standard for this use case.
+        signing_key.sign_prehashed(hash, None).unwrap().to_bytes()
     }
 
     /// A pure function to verify a signature against a hash and a public key.
+    /// This now correctly uses the `verify_prehashed` method.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, hash: &Hash) -> bool {
-        // This nested `if let` is a clear and robust way to handle the two
-        // fallible conversions before attempting verification.
-        if let Ok(verifying_key) = VerifyingKey::from_bytes(public_key) {
-            if let Ok(dalek_signature) = DalekSignature::from_bytes(signature) {
-                return verifying_key.verify(hash, &dalek_signature).is_ok();
-            }
+        if let (Ok(verifying_key), Ok(dalek_signature)) = (
+            VerifyingKey::from_bytes(public_key),
+            DalekSignature::from_bytes(signature),
+        ) {
+            // We use `verify_prehashed` to match the signing method.
+            verifying_key
+                .verify_prehashed(hash, None, &dalek_signature)
+                .is_ok()
+        } else {
+            false
         }
-        // If either conversion fails, the signature is invalid.
-        false
     }
 }
 
 // --- 2. The Stateful Manager ---
-
-/// The `CryptoCoreManager` is a stateful actor that represents a single
-/// sovereign identity. It holds the keypair and uses the `CryptoCoreEngine`
-/// to perform actions. This is the component an Entity would own and use.
 pub struct CryptoCoreManager {
     public_key: PublicKey,
     private_key: PrivateKey,
 }
 
 impl CryptoCoreManager {
-    /// Creates a new manager for a new identity.
     pub fn new() -> Self {
         let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         Self {
@@ -95,14 +86,10 @@ impl CryptoCoreManager {
         }
     }
 
-    /// Returns the public key (the verifiable identity) of this manager.
     pub fn public_key(&self) -> &PublicKey {
         &self.public_key
     }
 
-    /// Signs a piece of data. This method takes the manager's state (`&self`)
-    /// and the data, and returns a new, immutable piece of data (the signature).
-    /// It does not modify its own state.
     pub fn sign(&self, data: &[u8]) -> Signature {
         let hash = CryptoCoreEngine::hash_data(data);
         CryptoCoreEngine::sign_hash(&self.private_key, &hash)
@@ -126,14 +113,9 @@ mod tests {
 
     #[test]
     fn manager_can_create_and_sign() {
-        // 1. Create a new manager (a new identity).
         let alice_manager = CryptoCoreManager::new();
         let message = b"message from alice";
-
-        // 2. Alice's manager signs the message.
         let signature = alice_manager.sign(message);
-
-        // 3. We can verify the signature using the manager's public key and the pure engine.
         let message_hash = CryptoCoreEngine::hash_data(message);
         let is_valid = CryptoCoreEngine::verify_signature(
             alice_manager.public_key(),
@@ -148,10 +130,7 @@ mod tests {
         let alice_manager = CryptoCoreManager::new();
         let message = b"original message";
         let tampered_message = b"tampered message";
-
         let signature = alice_manager.sign(message);
-
-        // Verify against the tampered message hash. Must fail.
         let tampered_hash = CryptoCoreEngine::hash_data(tampered_message);
         let is_valid = CryptoCoreEngine::verify_signature(
             alice_manager.public_key(),
@@ -164,13 +143,9 @@ mod tests {
     #[test]
     fn manager_signature_is_not_valid_for_other_manager() {
         let alice_manager = CryptoCoreManager::new();
-        let eve_manager = CryptoCoreManager::new(); // Eve's manager/identity
+        let eve_manager = CryptoCoreManager::new();
         let message = b"message from alice";
-
-        // Alice signs the message.
         let signature = alice_manager.sign(message);
-
-        // Try to verify Alice's signature using EVE's public key. Must fail.
         let message_hash = CryptoCoreEngine::hash_data(message);
         let is_valid =
             CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, &message_hash);
