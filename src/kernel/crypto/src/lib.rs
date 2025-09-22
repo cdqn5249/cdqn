@@ -12,7 +12,7 @@
 
 // --- External Crates ---
 use ed25519_dalek::{
-    hazmat::{PrehashSigner, PrehashVerifier}, // For signing pre-hashed data
+    hazmat::{PrehashSigner, PrehashVerifier}, // Correctly import the traits
     Signature as DalekSignature,
     SigningKey,
     VerifyingKey,
@@ -46,28 +46,23 @@ impl CryptoCoreEngine {
     }
 
     /// A pure function to sign a pre-computed hash with a given private key.
-    /// This now correctly uses the `sign_prehashed` method.
     pub fn sign_hash(private_key: &PrivateKey, hash: &Hash) -> Signature {
         let signing_key = SigningKey::from_bytes(private_key);
-        // We use `sign_prehashed` because we have already hashed the KDU data.
-        // The `None` context is standard for this use case.
+        // The `sign_prehashed` method is provided by the `PrehashSigner` trait.
         signing_key.sign_prehashed(hash, None).unwrap().to_bytes()
     }
 
     /// A pure function to verify a signature against a hash and a public key.
-    /// This now correctly uses the `verify_prehashed` method.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, hash: &Hash) -> bool {
-        if let (Ok(verifying_key), Ok(dalek_signature)) = (
-            VerifyingKey::from_bytes(public_key),
-            DalekSignature::from_bytes(signature),
-        ) {
-            // We use `verify_prehashed` to match the signing method.
-            verifying_key
-                .verify_prehashed(hash, None, &dalek_signature)
-                .is_ok()
-        } else {
-            false
+        if let Ok(verifying_key) = VerifyingKey::from_bytes(public_key) {
+            if let Ok(dalek_signature) = DalekSignature::from_bytes(signature) {
+                // The `verify_prehashed` method is provided by the `PrehashVerifier` trait.
+                return verifying_key
+                    .verify_prehashed(hash, None, &dalek_signature)
+                    .is_ok();
+            }
         }
+        false
     }
 }
 
