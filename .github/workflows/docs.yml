@@ -18,9 +18,9 @@ jobs:
       contents: write # Required to push to gh-pages branch
       pages: write    # Required to deploy to GitHub Pages
       id-token: write # Required for OIDC authentication
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      GITHUB_REPO_URL: https://github.com/${{ github.repository }}
+      GITHUB_SHA: ${{ github.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -46,8 +46,7 @@ jobs:
           mkdir -p _site/repo-mirror
 
           # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
-          # Use a temporary staging area to avoid copying _site itself
-          # Explicitly exclude all unwanted directories and files from the source
+          # Exclude .git, .github, webGhPages, and the _site directory itself
           mkdir -p _temp_repo_content
           rsync -av \
             --exclude='.git/' \
@@ -69,18 +68,21 @@ jobs:
           # List files directly in the mirror root, excluding the generated index.html
           find "$MIRROR_ROOT" -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file; do
             FILENAME=$(basename "$file")
-            echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> "$MIRROR_ROOT/index.html"
+            # Construct the permanent GitHub link for the file
+            GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${FILENAME}"
+            echo "<li><a href=\"$FILENAME\">$FILENAME</a> (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
           done
           echo "</ul>" >> "$MIRROR_ROOT/index.html"
 
           echo "<h2>Directories:</h2><ul>" >> "$MIRROR_ROOT/index.html"
           # List directories directly in the mirror root, excluding the mirror root itself ('.')
-          # and explicitly excluding unwanted directories
           find "$MIRROR_ROOT" -maxdepth 1 -type d -not -name "$MIRROR_ROOT" | sort | while read -r dir; do
             DIRNAME=$(basename "$dir")
-            # Explicitly exclude unwanted directories from the listing
+            # Exclude any temporary directories from the listing
             if [[ "$DIRNAME" != "_site" && "$DIRNAME" != "_temp_repo_content" && "$DIRNAME" != "repo-mirror" ]]; then
-              echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> "$MIRROR_ROOT/index.html"
+              # Construct the permanent GitHub link for the directory
+              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${DIRNAME}"
+              echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a> (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
             fi
           done
           echo "</ul>" >> "$MIRROR_ROOT/index.html"
@@ -97,7 +99,6 @@ jobs:
             fi
 
             # Calculate relative path to LICENSE.md from current directory
-            # Count slashes in RELATIVE_DISPLAY_PATH to determine depth
             DEPTH=$(echo "$RELATIVE_DISPLAY_PATH" | grep -o "/" | wc -l)
             LICENSE_RELATIVE_PATH=""
             for i in $(seq 1 $DEPTH); do
@@ -113,7 +114,9 @@ jobs:
             # List files in the current subdirectory
             find "$dir_path" -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file_in_dir; do
               FILENAME=$(basename "$file_in_dir")
-              echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> "$dir_path/index.html"
+              # Construct the permanent GitHub link for the file
+              GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${RELATIVE_DISPLAY_PATH}/${FILENAME}"
+              echo "<li><a href=\"$FILENAME\">$FILENAME</a> (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$dir_path/index.html"
             done
             echo "</ul>" >> "$dir_path/index.html"
 
@@ -121,7 +124,9 @@ jobs:
             # List subdirectories in the current subdirectory, excluding '.' and '..'
             find "$dir_path" -maxdepth 1 -mindepth 1 -type d | sort | while read -r subdir_in_dir; do
               SUBDIRNAME=$(basename "$subdir_in_dir")
-              echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a></li>" >> "$dir_path/index.html"
+              # Construct the permanent GitHub link for the directory
+              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${RELATIVE_DISPLAY_PATH}/${SUBDIRNAME}"
+              echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a> (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$dir_path/index.html"
             done
             echo "</ul>" >> "$dir_path/index.html"
             echo "<p><a href=\"../\">Back to Parent Directory</a></p>" >> "$dir_path/index.html" # Add a back link
