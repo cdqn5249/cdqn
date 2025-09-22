@@ -8,4 +8,5 @@ The structure of this directory directly reflects the **C/U/K modules** outlined
 
 *   `/kernel` - The **K-Layer**: The fundamental, immutable truths of the system.
 *   `/core` - The **C-Layer**: The trusted, core services of the runtime.
+*   `/Shared` - The **S-Layer**: The shared, community modules.
 *   `/user` - The **U-Layer**: User-level applications and client logic.
