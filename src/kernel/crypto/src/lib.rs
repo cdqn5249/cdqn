@@ -160,4 +160,4 @@ mod tests {
             CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, &digest);
         assert!(!is_valid);
     }
-    }
+}
