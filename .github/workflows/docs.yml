@@ -46,16 +46,14 @@ jobs:
           mkdir -p _site/repo-mirror
 
           # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
-          # IMPORTANT: Explicitly include dot directories and files, then exclude specific ones.
+          # Simplified rsync: copy everything, then exclude specific unwanted directories.
+          # This should correctly include .github/ and kdu-exchange/
           mkdir -p _temp_repo_content
           rsync -av \
-            --include='.*/' \             # Include all dot directories
-            --include='.*' \              # Include all dot files
-            --exclude='.git/' \           # Exclude .git directory
-            --exclude='webGhPages/' \     # Exclude webGhPages directory
-            --exclude='_site/' \          # Exclude _site directory
-            --exclude='_temp_repo_content/' \ # Exclude temp directory
-            --exclude='*' \               # Exclude everything else not explicitly included
+            --exclude='.git/' \
+            --exclude='webGhPages/' \
+            --exclude='_site/' \
+            --exclude='_temp_repo_content/' \
             ./ _temp_repo_content/ # Copy contents of current dir to temp
           cp -r _temp_repo_content/* _site/repo-mirror/ || true # Copy contents from temp to mirror
           rm -rf _temp_repo_content # Clean up temp directory
