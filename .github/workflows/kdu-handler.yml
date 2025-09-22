@@ -75,3 +75,38 @@ jobs:
           echo "Pushing changes to the repository..."
           git push
           echo "Push complete."
+
+      - name: Check and Purge Old Messages
+        # This step runs regardless of whether new messages were processed,
+        # ensuring the directory is checked on every relevant push.
+        run: |
+          EXCHANGE_DIR="kdu-exchange"
+          THRESHOLD=10
+          
+          # Count only the message and response files, not README.md
+          FILE_COUNT=$(ls -1 $EXCHANGE_DIR | grep -E '^(incoming|response)-' | wc -l)
+          
+          echo "Found $FILE_COUNT message files. Threshold is $THRESHOLD."
+          
+          if [ "$FILE_COUNT" -ge "$THRESHOLD" ]; then
+            echo "File count exceeds threshold. Purging old messages."
+            # Use -f to prevent errors if no files match a pattern
+            rm -f $EXCHANGE_DIR/incoming-*.txt
+            rm -f $EXCHANGE_DIR/response-*.txt
+            
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            
+            # 'git add' will stage the deletions
+            git add $EXCHANGE_DIR/
+            
+            # Check if there are staged changes before committing
+            if ! git diff --staged --quiet; then
+              git commit -m "Housekeeping: Purge old messages from kdu-exchange"
+              git push
+            else
+              echo "No files were deleted, nothing to commit."
+            fi
+          else
+            echo "File count is below threshold. No purge needed."
+          fi
