@@ -46,14 +46,16 @@ jobs:
           mkdir -p _site/repo-mirror
 
           # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
-          # Exclude .git, webGhPages, and the _site directory itself
-          # The .github/ directory is *not* excluded here, so it will be copied.
+          # IMPORTANT: Explicitly include dot directories and files, then exclude specific ones.
           mkdir -p _temp_repo_content
           rsync -av \
-            --exclude='.git/' \
-            --exclude='webGhPages/' \
-            --exclude='_site/' \
-            --exclude='_temp_repo_content/' \
+            --include='.*/' \             # Include all dot directories
+            --include='.*' \              # Include all dot files
+            --exclude='.git/' \           # Exclude .git directory
+            --exclude='webGhPages/' \     # Exclude webGhPages directory
+            --exclude='_site/' \          # Exclude _site directory
+            --exclude='_temp_repo_content/' \ # Exclude temp directory
+            --exclude='*' \               # Exclude everything else not explicitly included
             ./ _temp_repo_content/ # Copy contents of current dir to temp
           cp -r _temp_repo_content/* _site/repo-mirror/ || true # Copy contents from temp to mirror
           rm -rf _temp_repo_content # Clean up temp directory
@@ -67,51 +69,61 @@ jobs:
           echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$INDEX_FILE" # Link back to the main UI
           echo "<h2>Repository Tree:</h2>" >> "$INDEX_FILE"
 
-          # Get all items (files and directories) relative to MIRROR_ROOT, excluding MIRROR_ROOT itself
-          # Store them with their depth
-          # Format: depth:item_path
-          find "$MIRROR_ROOT" -mindepth 1 -print | sed "s#^$MIRROR_ROOT/##" | \
-          awk '{
-              depth = split($0, parts, "/");
-              print depth ":" $0;
-          }' | sort -t: -k1,1n -k2,2 > /tmp/mirror_items_with_depth.txt
+          # Explicitly list the root of the mirror first
+          GITHUB_ROOT_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/"
+          echo "<h3>Depth 0 (Root):</h3><ul>" >> "$INDEX_FILE"
+          echo "<li>📁 ./ (<a href=\"$GITHUB_ROOT_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
 
-          # Process items layer by layer
-          current_depth=-1
-          while IFS=":" read -r depth item; do
-              if [ -z "$item" ]; then continue; fi # Skip empty lines
+          # Add root-level files (LICENSE.md, README.md) here
+          # These are copied to _site/repo-mirror directly
+          if [ -f "$MIRROR_ROOT/LICENSE.md" ]; then
+            echo "<li>📄 LICENSE.md (<a href=\"${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/LICENSE.md\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
+          fi
+          if [ -f "$MIRROR_ROOT/README.md" ]; then
+            echo "<li>📄 README.md (<a href=\"${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/README.md\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
+          fi
+          echo "</ul>" >> "$INDEX_FILE"
 
-              # If depth changes, close previous <ul> and open new <h3> and <ul>
-              if (( depth != current_depth )); then
-                  if (( current_depth != -1 )); then # Don't close <ul> if it's the very first depth
-                      echo "</ul>" >> "$INDEX_FILE"
-                  fi
-                  echo "<h3>Depth $depth:</h3><ul>" >> "$INDEX_FILE"
-                  current_depth=$depth
+          # Generate the layered tree structure for subdirectories
+          last_depth=-1
+          # Find all items, remove the MIRROR_ROOT prefix, sort them
+          # Exclude root-level files already handled (LICENSE.md, README.md)
+          # Exclude the index.html from webGhPages if it somehow got copied
+          find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | while read -r item; do
+            if [ -z "$item" ] || [ "$item" = "LICENSE.md" ] || [ "$item" = "README.md" ] || [ "$item" = "index.html" ]; then continue; fi # Skip empty lines and already handled root files
+
+            # Calculate depth of current item
+            item_depth=$(echo "$item" | grep -o "/" | wc -l)
+
+            # If depth changes, close previous <ul> and open new <h3> and <ul>
+            if (( item_depth != last_depth )); then
+              if (( last_depth != -1 )); then # Don't close <ul> if it's the very first item
+                echo "</ul>" >> "$INDEX_FILE"
               fi
+              echo "<h3>Depth $((item_depth + 1)):</h3><ul>" >> "$INDEX_FILE" # Depth 1, 2, etc.
+              last_depth=$item_depth
+            fi
 
-              # Determine if it's a file or directory
-              FULL_PATH="$MIRROR_ROOT/$item"
-              if [ -f "$FULL_PATH" ]; then
-                  # It's a file
-                  GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${item}"
-                  echo "<li>📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
-              elif [ -d "$FULL_PATH" ]; then
-                  # It's a directory
-                  GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
-                  echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
-              fi
-          done < /tmp/mirror_items_with_depth.txt
+            # Determine if it's a file or directory
+            FULL_PATH="$MIRROR_ROOT/$item"
+            if [ -f "$FULL_PATH" ]; then
+              # It's a file
+              GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${item}"
+              echo "<li>📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
+            elif [ -d "$FULL_PATH" ]; then
+              # It's a directory
+              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
+              echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
+            fi
+          done
 
           # Close the last <ul> if any items were processed
-          if (( current_depth != -1 )); then
-              echo "</ul>" >> "$INDEX_FILE"
+          if (( last_depth != -1 )); then
+            echo "</ul>" >> "$INDEX_FILE"
           fi
 
           echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$INDEX_FILE"
           echo "</body></html>" >> "$INDEX_FILE"
-
-          rm /tmp/mirror_items_with_depth.txt # Clean up temp file
 
           # --- Debugging step: List the contents of _site directory to verify structure ---
           echo "--- Contents of _site directory before upload ---"
