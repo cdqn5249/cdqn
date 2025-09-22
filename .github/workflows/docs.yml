@@ -46,17 +46,28 @@ jobs:
           mkdir -p _site/repo-mirror
 
           # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
-          # Simplified rsync: copy everything, then exclude specific unwanted directories.
-          # This should correctly include .github/ and kdu-exchange/
-          mkdir -p _temp_repo_content
-          rsync -av \
-            --exclude='.git/' \
-            --exclude='webGhPages/' \
-            --exclude='_site/' \
-            --exclude='_temp_repo_content/' \
-            ./ _temp_repo_content/ # Copy contents of current dir to temp
-          cp -r _temp_repo_content/* _site/repo-mirror/ || true # Copy contents from temp to mirror
-          rm -rf _temp_repo_content # Clean up temp directory
+          # Using ls -A and cp -r to explicitly copy items, including hidden ones,
+          # while excluding specific unwanted directories.
+          MIRROR_TEMP_SOURCE_DIR="_temp_repo_content"
+          mkdir -p "$MIRROR_TEMP_SOURCE_DIR"
+
+          # List all files and directories (including hidden ones) in the current directory
+          # and copy them one by one, excluding specific ones.
+          for item in $(ls -A); do
+            if [[ "$item" == ".git" ]] || \
+               [[ "$item" == "webGhPages" ]] || \
+               [[ "$item" == "_site" ]] || \
+               [[ "$item" == "_temp_repo_content" ]]; then
+              echo "Skipping excluded item: $item"
+              continue
+            fi
+            echo "Copying item: $item"
+            cp -r "$item" "$MIRROR_TEMP_SOURCE_DIR/" || true
+          done
+
+          # Now copy the contents from the temporary source to the mirror destination
+          cp -r "$MIRROR_TEMP_SOURCE_DIR"/* _site/repo-mirror/ || true
+          rm -rf "$MIRROR_TEMP_SOURCE_DIR" # Clean up temp directory
 
           # --- Generate a single, comprehensive index.html for the mirror (_site/repo-mirror/) ---
           MIRROR_ROOT="_site/repo-mirror"
