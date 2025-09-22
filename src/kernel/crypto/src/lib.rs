@@ -11,7 +11,7 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::{Signer, Signature as DalekSignature, SigningKey, Verifier, VerifyingKey};
+use ed25519_dalek::{Signature as DalekSignature, Signer, SigningKey, Verifier, VerifyingKey};
 use rand_core::OsRng;
 // We now import Sha512, as required by the Ed25519ph standard.
 use sha2::{Digest, Sha512};
