@@ -1,0 +1,29 @@
+# BaDaaS License: This file is governed by the BaDaaS license.
+# File Path: /src/kernel/crypto/Cargo.toml
+
+# This file defines the K.CryptoCore module as a Rust crate, specifies its
+# metadata, and declares its minimal, audited dependencies as required by
+# the CDQN Manifesto (Tenet 8).
+
+[package]
+name = "k_crypto_core"
+version = "0.1.0"
+edition = "2021"
+description = "The sovereign root of trust for the CDQN ecosystem."
+license = "BaDaaS-1.0.0" # Placeholder for your custom license ID
+
+[dependencies]
+# For SHA-256 hashing, mandated by Tenet 7 (isolated crypto operations).
+# This crate is a minimal, audited, and standard implementation from the RustCrypto project.
+sha2 = "0.10"
+
+# For Ed25519 digital signatures, mandated by Tenets 4 and 7.
+# This crate is a formally-audited, constant-time, and high-performance
+# implementation, providing the root of trust for the ecosystem.
+# The "rand_core" feature is specified to integrate with our chosen RNG.
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }
+
+# We need a secure random number generator for creating keys.
+# The 'rand_core' crate is the minimal, no_std interface for this, and 'OsRng'
+# is the specific implementation that securely uses the operating system's entropy source.
+rand_core = { version = "0.6", features = ["std"] }
