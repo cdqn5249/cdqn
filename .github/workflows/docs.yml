@@ -1,11 +1,11 @@
 # .github/workflows/docs.yml
-name: Deploy Repo Mirror to GH-Pages
+name: Deploy GH-Pages (UI + Repo Mirror)
 
 on:
   push:
     branches:
       - main # Or your alpha-test branch if you're using one
-    # Removed paths-ignore to auto-run on every push
+    # This workflow will run on every push to main to keep the mirror updated
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
 
 jobs:
@@ -27,47 +27,57 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare documentation directory and generate index.html
+      - name: Prepare deployment directory and generate mirror indexes
         run: |
+          # Create the main _site directory for deployment
           mkdir -p _site
 
-          # Copy all repository content to _site, excluding .git and .github directories entirely
-          # The webGhPages directory will be copied as part of the repo content
-          rsync -av --exclude='.git' --exclude='.github' . _site/
+          # 1. Copy the contents of webGhPages to the root of _site
+          # This makes webGhPages/index.html the main entry point
+          cp -r webGhPages/* _site/ || true
 
-          # --- Generate index.html for the root _site directory ---
-          echo "<html><head><title>CDQN Repository Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > _site/index.html
-          echo "<h1>CDQN Repository Mirror</h1>" >> _site/index.html
-          echo "<h2>Files:</h2><ul>" >> _site/index.html
+          # 2. Create a subdirectory for the repository mirror
+          mkdir -p _site/repo-mirror
 
-          # List files directly in the _site root, excluding the generated index.html
-          find _site -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file; do
+          # 3. Copy the rest of the repository into _site/repo-mirror/
+          # Exclude .git and the webGhPages directory itself from this mirror copy
+          # Explicitly include .github (which contains workflows)
+          rsync -av --exclude='.git' --exclude='webGhPages' . _site/repo-mirror/
+
+          # --- Generate index.html for the root of the mirror (_site/repo-mirror/) ---
+          MIRROR_ROOT="_site/repo-mirror"
+          echo "<html><head><title>CDQN Repository Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > "$MIRROR_ROOT/index.html"
+          echo "<h1>CDQN Repository Mirror</h1>" >> "$MIRROR_ROOT/index.html"
+          echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$MIRROR_ROOT/index.html" # Link back to the main UI
+          echo "<h2>Files:</h2><ul>" >> "$MIRROR_ROOT/index.html"
+
+          # List files directly in the mirror root, excluding the generated index.html
+          find "$MIRROR_ROOT" -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file; do
             FILENAME=$(basename "$file")
-            echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> _site/index.html
+            echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> "$MIRROR_ROOT/index.html"
           done
-          echo "</ul>" >> _site/index.html
+          echo "</ul>" >> "$MIRROR_ROOT/index.html"
 
-          echo "<h2>Directories:</h2><ul>" >> _site/index.html
-          # List directories directly in the _site root, excluding the _site itself (which is '.'),
-          # and also excluding 'webGhPages' from the listing as requested.
-          find _site -maxdepth 1 -type d -not -name "_site" -not -name "webGhPages" | sort | while read -r dir; do
+          echo "<h2>Directories:</h2><ul>" >> "$MIRROR_ROOT/index.html"
+          # List directories directly in the mirror root, excluding the mirror root itself ('.')
+          find "$MIRROR_ROOT" -maxdepth 1 -type d -not -name "$MIRROR_ROOT" | sort | while read -r dir; do
             DIRNAME=$(basename "$dir")
-            echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> _site/index.html
+            echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> "$MIRROR_ROOT/index.html"
           done
-          echo "</ul>" >> _site/index.html
-          echo "</body></html>" >> _site/index.html
+          echo "</ul>" >> "$MIRROR_ROOT/index.html"
+          echo "</body></html>" >> "$MIRROR_ROOT/index.html"
 
-          # --- Generate index.html for all subdirectories within _site ---
-          # Iterate over all directories within _site (excluding the root _site itself)
-          find _site -type d -not -path "_site" | while read -r dir_path; do
-            # Calculate the path relative to the _site root for display in the title
-            RELATIVE_DISPLAY_PATH=$(echo "$dir_path" | sed 's/^_site\///')
+          # --- Generate index.html for all subdirectories within the mirror ---
+          # Iterate over all directories within _site/repo-mirror (excluding its root)
+          find "$MIRROR_ROOT" -type d -not -path "$MIRROR_ROOT" | while read -r dir_path; do
+            # Calculate the path relative to the _site/repo-mirror root for display in the title
+            RELATIVE_DISPLAY_PATH=$(echo "$dir_path" | sed "s#^$MIRROR_ROOT/##")
             if [ -z "$RELATIVE_DISPLAY_PATH" ]; then
-              RELATIVE_DISPLAY_PATH="." # Should not happen with -not -path "_site"
+              RELATIVE_DISPLAY_PATH="."
             fi
 
             echo "Generating index.html for directory: $dir_path"
-            echo "<html><head><title>CDQN - $RELATIVE_DISPLAY_PATH</title><style>body{font-family:sans-serif;}</style></head><body>" > "$dir_path/index.html"
+            echo "<html><head><title>CDQN Mirror - $RELATIVE_DISPLAY_PATH</title><style>body{font-family:sans-serif;}</style></head><body>" > "$dir_path/index.html"
             echo "<h1>Contents of $RELATIVE_DISPLAY_PATH/</h1>" >> "$dir_path/index.html"
             echo "<h2>Files:</h2><ul>" >> "$dir_path/index.html"
 
@@ -80,7 +90,6 @@ jobs:
 
             echo "<h2>Directories:</h2><ul>" >> "$dir_path/index.html"
             # List subdirectories in the current subdirectory
-            # Using -mindepth 1 to ensure we don't list the current directory itself
             find "$dir_path" -maxdepth 1 -mindepth 1 -type d | sort | while read -r subdir_in_dir; do
               SUBDIRNAME=$(basename "$subdir_in_dir")
               echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a></li>" >> "$dir_path/index.html"
