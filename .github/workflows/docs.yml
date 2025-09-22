@@ -46,11 +46,11 @@ jobs:
           mkdir -p _site/repo-mirror
 
           # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
-          # Exclude .git, .github, webGhPages, and the _site directory itself
+          # Exclude .git, webGhPages, and the _site directory itself
+          # IMPORTANT: Removed --exclude='.github/' to include workflow files
           mkdir -p _temp_repo_content
           rsync -av \
             --exclude='.git/' \
-            --exclude='.github/' \
             --exclude='webGhPages/' \
             --exclude='_site/' \
             --exclude='_temp_repo_content/' \
