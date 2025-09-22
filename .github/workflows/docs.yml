@@ -65,26 +65,27 @@ jobs:
           echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$MIRROR_ROOT/index.html" # Link back to the main UI
           echo "<h2>Repository Tree:</h2><ul>" >> "$MIRROR_ROOT/index.html"
 
+          # Explicitly list the root of the mirror first
+          GITHUB_ROOT_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/"
+          echo "<li>📁 ./ (<a href=\"$GITHUB_ROOT_LINK\">Browse on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
+
           # Generate the full tree structure with permanent GitHub links
           # Using 'find' to list all files and directories recursively from MIRROR_ROOT
           # and then processing them to create the tree view.
           # We'll use sed to remove the "_site/repo-mirror/" prefix for display and link construction.
           find "$MIRROR_ROOT" -print | sed "s#^$MIRROR_ROOT/##" | sort | while read -r item; do
-            if [ -z "$item" ]; then continue; fi # Skip empty lines
+            if [ -z "$item" ] || [ "$item" = "." ]; then continue; fi # Skip empty lines and the current directory itself
 
             # Determine if it's a file or directory
             FULL_PATH="$MIRROR_ROOT/$item"
             if [ -f "$FULL_PATH" ]; then
               # It's a file
               GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${item}"
-              echo "<li>📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
+              echo "<li>&nbsp;&nbsp;📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
             elif [ -d "$FULL_PATH" ]; then
               # It's a directory
-              # Exclude the root mirror directory itself from being listed as a browsable directory
-              if [[ "$item" != "." ]]; then
-                GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
-                echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
-              fi
+              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
+              echo "<li>&nbsp;&nbsp;📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
             fi
           done
           echo "</ul>" >> "$MIRROR_ROOT/index.html"
