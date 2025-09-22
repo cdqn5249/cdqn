@@ -6,7 +6,7 @@ name = "k_crypto_core"
 version = "0.1.0"
 edition = "2021"
 description = "The sovereign root of trust for the CDQN ecosystem."
-license = "BaDaaS-1.0.0" // Placeholder for your custom license ID
+license = "BaDaaS-1.0.0" # Placeholder for your custom license ID
 
 [dependencies]
 sha2 = "0.10"
