@@ -18,19 +18,14 @@ use rand_core::OsRng;
 use sha2::{Digest, Sha512};
 
 // --- Core Type Definitions (Publicly Exported) ---
-// These types must be `pub` so that other crates can use them in function
-// signatures when interacting with this module's public API.
 pub type Signature = ed25519_dalek::Signature;
 pub type PublicKey = [u8; 32];
 pub type PrivateKey = [u8; 32];
-pub type Hash = [u8; 64];
 
 /// A specific, meaningful error type for cryptographic operations.
-/// This must be `pub` so that functions returning it are usable externally.
 #[derive(Debug, PartialEq, Eq)]
 pub enum CryptoError {
     SignatureCreationFailed,
-    VerificationFailed,
 }
 
 // --- 1. The Pure Functional Engine (Public API) ---
@@ -47,25 +42,31 @@ impl CryptoCoreEngine {
         )
     }
 
-    /// A pure, one-shot function to create a SHA-512 hash of any raw data.
-    pub fn hash_data(data: &[u8]) -> Hash {
-        Sha512::digest(data).into()
+    /// A pure function to create a SHA-512 digest object from raw data.
+    pub fn create_digest(data: &[u8]) -> Sha512 {
+        Sha512::new_with_prefix(data)
     }
 
-    /// A pure function to sign a pre-computed hash.
-    pub fn sign_hash(private_key: &PrivateKey, hash: &Hash) -> Result<Signature, CryptoError> {
+    /// A pure function to sign a pre-computed digest.
+    /// It takes the `Sha512` object directly, preserving type information.
+    pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Result<Signature, CryptoError> {
         let signing_key = SigningKey::from_bytes(private_key);
         signing_key
-            .sign_prehashed(hash.into(), None)
+            .sign_prehashed(digest, None)
             .map_err(|_| CryptoError::SignatureCreationFailed)
     }
 
-    /// A pure function to verify a signature.
-    pub fn verify_signature(public_key: &PublicKey, signature: &Signature, hash: &Hash) -> bool {
+    /// A pure function to verify a signature against a digest.
+    /// It takes the `Sha512` object directly, preserving type information.
+    pub fn verify_signature(
+        public_key: &PublicKey,
+        signature: &Signature,
+        digest: Sha512,
+    ) -> bool {
         let verifying_key_result = VerifyingKey::from_bytes(public_key);
         match verifying_key_result {
             Ok(verifying_key) => verifying_key
-                .verify_prehashed(hash.into(), None, signature)
+                .verify_prehashed(digest, None, signature)
                 .is_ok(),
             Err(_) => false,
         }
@@ -79,7 +80,6 @@ pub struct CryptoCoreManager {
 }
 
 impl CryptoCoreManager {
-    /// Creates a new manager for a new identity.
     pub fn new() -> Self {
         let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         Self {
@@ -88,15 +88,14 @@ impl CryptoCoreManager {
         }
     }
 
-    /// Returns the public key (the verifiable identity) of this manager.
     pub fn public_key(&self) -> &PublicKey {
         &self.public_key
     }
 
-    /// Signs a piece of data, returning an Option to handle potential errors.
+    /// Signs a piece of data, returning an Option of the official Signature object.
     pub fn sign(&self, data: &[u8]) -> Option<Signature> {
-        let hash = CryptoCoreEngine::hash_data(data);
-        CryptoCoreEngine::sign_hash(&self.private_key, &hash).ok()
+        let digest = CryptoCoreEngine::create_digest(data);
+        CryptoCoreEngine::sign_digest(&self.private_key, digest).ok()
     }
 }
 
@@ -116,11 +115,13 @@ mod tests {
     fn engine_functions_are_correct() {
         let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         let message = b"test message";
-        let hash = CryptoCoreEngine::hash_data(message);
-        let signature_result = CryptoCoreEngine::sign_hash(&private_key, &hash);
+        let digest = CryptoCoreEngine::create_digest(message);
+        // We must clone the digest because it's consumed by sign_digest,
+        // but we still need it for verification. This is correct ownership.
+        let signature_result = CryptoCoreEngine::sign_digest(&private_key, digest.clone());
         assert!(signature_result.is_ok());
         let signature = signature_result.unwrap();
-        let is_valid = CryptoCoreEngine::verify_signature(&public_key, &signature, &hash);
+        let is_valid = CryptoCoreEngine::verify_signature(&public_key, &signature, digest);
         assert!(is_valid);
     }
 
@@ -131,9 +132,9 @@ mod tests {
         let signature_option = alice_manager.sign(message);
         assert!(signature_option.is_some());
         let signature = signature_option.unwrap();
-        let hash = CryptoCoreEngine::hash_data(message);
+        let digest = CryptoCoreEngine::create_digest(message);
         let is_valid =
-            CryptoCoreEngine::verify_signature(alice_manager.public_key(), &signature, &hash);
+            CryptoCoreEngine::verify_signature(alice_manager.public_key(), &signature, digest);
         assert!(is_valid);
     }
 
@@ -143,11 +144,11 @@ mod tests {
         let message = b"original message";
         let tampered_message = b"tampered message";
         let signature = alice_manager.sign(message).unwrap();
-        let tampered_hash = CryptoCoreEngine::hash_data(tampered_message);
+        let tampered_digest = CryptoCoreEngine::create_digest(tampered_message);
         let is_valid = CryptoCoreEngine::verify_signature(
             alice_manager.public_key(),
             &signature,
-            &tampered_hash,
+            &tampered_digest,
         );
         assert!(!is_valid);
     }
@@ -158,9 +159,9 @@ mod tests {
         let eve_manager = CryptoCoreManager::new();
         let message = b"message from alice";
         let signature = alice_manager.sign(message).unwrap();
-        let hash = CryptoCoreEngine::hash_data(message);
+        let digest = CryptoCoreEngine::create_digest(message);
         let is_valid =
-            CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, &hash);
+            CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, &digest);
         assert!(!is_valid);
     }
 }
