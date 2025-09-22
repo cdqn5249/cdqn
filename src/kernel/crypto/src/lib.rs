@@ -11,19 +11,17 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::{
-    hazmat::{PrehashSigner, PrehashVerifier}, // Correctly import the traits
-    Signature as DalekSignature,
-    SigningKey,
-    VerifyingKey,
-};
+use ed25519_dalek::{SigningKey, VerifyingKey};
+// Correctly import the traits from the `ed25519` crate.
+use ed25519::signature::prehash::{PrehashSigner, PrehashVerifier};
 use rand_core::OsRng;
 use sha2::{Digest, Sha256};
 
 // --- Core Type Definitions ---
 pub type PublicKey = [u8; 32];
 pub type PrivateKey = [u8; 32];
-pub type Signature = [u8; 64];
+// The signature type comes from the `ed25519` crate's `Signature` type.
+pub type Signature = ed25519::Signature;
 pub type Hash = [u8; 32];
 
 // --- 1. The Pure Functional Engine ---
@@ -49,18 +47,16 @@ impl CryptoCoreEngine {
     pub fn sign_hash(private_key: &PrivateKey, hash: &Hash) -> Signature {
         let signing_key = SigningKey::from_bytes(private_key);
         // The `sign_prehashed` method is provided by the `PrehashSigner` trait.
-        signing_key.sign_prehashed(hash, None).unwrap().to_bytes()
+        signing_key.sign_prehashed(hash, None).unwrap()
     }
 
     /// A pure function to verify a signature against a hash and a public key.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, hash: &Hash) -> bool {
         if let Ok(verifying_key) = VerifyingKey::from_bytes(public_key) {
-            if let Ok(dalek_signature) = DalekSignature::from_bytes(signature) {
-                // The `verify_prehashed` method is provided by the `PrehashVerifier` trait.
-                return verifying_key
-                    .verify_prehashed(hash, None, &dalek_signature)
-                    .is_ok();
-            }
+            // The `verify_prehashed` method is provided by the `PrehashVerifier` trait.
+            return verifying_key
+                .verify_prehashed(hash, None, signature)
+                .is_ok();
         }
         false
     }
