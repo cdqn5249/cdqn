@@ -1,22 +1,21 @@
-# This workflow is governed by the BaDaaS License.
-# For details, see: LICENSE.md (accessible at the root of the GitHub Pages site)
-#
-# .github/workflows/kdu-handler.yml
+# BaDaaS License: This code is governed by the BaDaaS license.
+
 name: KDU Handler - Process Incoming Messages
 
 on:
   push:
     branches:
-      - main # Or your alpha-test branch if you're using one
+      - main
     paths:
-      - 'kdu-exchange/incoming-*.txt' # Only trigger if a file matching this pattern is pushed
-  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+      # UPDATED PATH: This now points to the new exchange directory.
+      - 'runtime/exchange/incoming-*.txt'
+  workflow_dispatch:
 
 jobs:
   process_incoming_message:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Grant write permission for committing responses
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -27,17 +26,15 @@ jobs:
       - name: Find and process new incoming messages
         id: process_messages
         run: |
+          # BaDaaS License: This script is governed by the BaDaaS license.
           NEW_RESPONSE_FILES=""
-          EXCHANGE_DIR="kdu-exchange"
+          # UPDATED PATH: The variable now points to the correct location.
+          EXCHANGE_DIR="runtime/exchange"
           mkdir -p "$EXCHANGE_DIR"
 
           if [[ "${{ github.event_name }}" == "push" ]]; then
             echo "Processing push event from ${{ github.event.before }} to ${{ github.event.after }}"
-
-            # --- THE FIX IS HERE ---
-            # We read from the 'git diff' command using process substitution (< <(...))
-            # This avoids creating a subshell for the 'while' loop, so the
-            # NEW_RESPONSE_FILES variable modification persists.
+            
             while read -r FILE; do
               if [ -f "$FILE" ]; then
                 echo "Processing new file: $FILE"
@@ -63,11 +60,11 @@ jobs:
       - name: Commit and push response files
         if: steps.process_messages.outputs.response_files != ''
         run: |
+          # BaDaaS License: This script is governed by the BaDaaS license.
           echo "Preparing to commit the following files: ${{ steps.process_messages.outputs.response_files }}"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
-          # The trim function removes leading/trailing whitespace from the variable
           git add ${{ steps.process_messages.outputs.response_files }}
           
           git commit -m "Protocol: Response to incoming message(s)"
@@ -77,32 +74,28 @@ jobs:
           echo "Push complete."
 
       - name: Check and Purge Old Messages
-        # This step runs regardless of whether new messages were processed,
-        # ensuring the directory is checked on every relevant push.
         run: |
-          EXCHANGE_DIR="kdu-exchange"
+          # BaDaaS License: This script is governed by the BaDaaS license.
+          # UPDATED PATH: The variable now points to the correct location.
+          EXCHANGE_DIR="runtime/exchange"
           THRESHOLD=10
           
-          # Count only the message and response files, not README.md
           FILE_COUNT=$(ls -1 $EXCHANGE_DIR | grep -E '^(incoming|response)-' | wc -l)
           
           echo "Found $FILE_COUNT message files. Threshold is $THRESHOLD."
           
           if [ "$FILE_COUNT" -ge "$THRESHOLD" ]; then
             echo "File count exceeds threshold. Purging old messages."
-            # Use -f to prevent errors if no files match a pattern
             rm -f $EXCHANGE_DIR/incoming-*.txt
             rm -f $EXCHANGE_DIR/response-*.txt
             
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             
-            # 'git add' will stage the deletions
             git add $EXCHANGE_DIR/
             
-            # Check if there are staged changes before committing
             if ! git diff --staged --quiet; then
-              git commit -m "Housekeeping: Purge old messages from kdu-exchange"
+              git commit -m "Housekeeping: Purge old messages from exchange"
               git push
             else
               echo "No files were deleted, nothing to commit."
