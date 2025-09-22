@@ -1,13 +1,12 @@
 # .github/workflows/docs.yml
-name: Deploy webGhPages to GH-Pages
+name: Deploy Repo Mirror to GH-Pages
 
 on:
   push:
     branches:
       - main # Or your alpha-test branch if you're using one
-    paths:
-      - 'webGhPages/**' # Trigger only if changes occur within the webGhPages directory
-      - '.github/workflows/docs.yml' # Also trigger if this workflow file changes
+    paths-ignore: # Ignore changes to workflows themselves to prevent infinite loops
+      - '.github/workflows/**'
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
 
 jobs:
@@ -29,36 +28,40 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Generate custom index.html
+      - name: Prepare documentation directory and generate index.html
         run: |
-          # Create the webGhPages directory if it doesn't exist (should exist now)
-          mkdir -p webGhPages
+          mkdir -p _site
 
-          # Start index.html content
-          echo "<html><head><title>CDQN Repository Contents</title><style>body{font-family:sans-serif;}</style></head><body>" > webGhPages/index.html
-          echo "<h1>CDQN Repository Contents</h1>" >> webGhPages/index.html
-          echo "<h2>Files:</h2><ul>" >> webGhPages/index.html
+          # Copy all repository content to _site, excluding .git and .github/workflows
+          # The webGhPages directory will be copied as part of the repo content
+          rsync -av --exclude='.git' --exclude='.github/workflows' . _site/
 
-          # List files in the root, excluding webGhPages and .github and hidden files
-          find . -maxdepth 1 -type f -not -name ".*" | sort | while read -r file; do
+          # Generate index.html at the root of the _site directory
+          echo "<html><head><title>CDQN Repository Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > _site/index.html
+          echo "<h1>CDQN Repository Mirror</h1>" >> _site/index.html
+          echo "<h2>Files:</h2><ul>" >> _site/index.html
+
+          # List files directly in the _site root
+          find _site -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file; do
             FILENAME=$(basename "$file")
-            echo "<li><a href=\"../$FILENAME\">$FILENAME</a></li>" >> webGhPages/index.html
+            echo "<li><a href=\"$FILENAME\">$FILENAME</a></li>" >> _site/index.html
           done
-          echo "</ul>" >> webGhPages/index.html
+          echo "</ul>" >> _site/index.html
 
-          echo "<h2>Directories:</h2><ul>" >> webGhPages/index.html
-          # List directories in the root, excluding webGhPages, .github, and .git
-          find . -maxdepth 1 -type d -not -name "." -not -name "webGhPages" -not -name ".github" -not -name ".git" | sort | while read -r dir; do
+          echo "<h2>Directories:</h2><ul>" >> _site/index.html
+          # List directories directly in the _site root, excluding the _site itself (which is '.'),
+          # and also excluding 'webGhPages' from the listing as requested.
+          find _site -maxdepth 1 -type d -not -name "_site" -not -name "webGhPages" | sort | while read -r dir; do
             DIRNAME=$(basename "$dir")
-            echo "<li><a href=\"../$DIRNAME/\">$DIRNAME/</a></li>" >> webGhPages/index.html
+            echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> _site/index.html
           done
-          echo "</ul>" >> webGhPages/index.html
-          echo "</body></html>" >> webGhPages/index.html
+          echo "</ul>" >> _site/index.html
+          echo "</body></html>" >> _site/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'webGhPages' # Upload the webGhPages directory as the artifact
+          path: '_site' # Upload the entire _site directory as the artifact
 
       - name: Deploy to GitHub Pages
         id: deployment
