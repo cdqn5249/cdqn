@@ -11,7 +11,7 @@
 //! This enforces a clean separation between pure logic and state.
 
 // --- External Crates ---
-use ed25519_dalek::{Signature as DalekSignature, Signer, SigningKey, Verifier, VerifyingKey};
+use ed25519_dalek::{Signature as DalekSignature, SigningKey, VerifyingKey};
 use rand_core::OsRng;
 // We now import Sha512, as required by the Ed25519ph standard.
 use sha2::{Digest, Sha512};
@@ -37,7 +37,6 @@ impl CryptoCoreEngine {
     }
 
     /// A pure function to create a SHA-512 digest of any raw data.
-    /// It now returns a Digest object, not just a byte array.
     pub fn create_digest(data: &[u8]) -> Sha512 {
         let mut hasher = Sha512::new();
         hasher.update(data);
@@ -47,15 +46,14 @@ impl CryptoCoreEngine {
     /// A pure function to sign a pre-computed digest with a given private key.
     pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Signature {
         let signing_key = SigningKey::from_bytes(private_key);
-        // The `sign_prehashed` method takes the digest object directly.
         signing_key.sign_prehashed(digest, None).unwrap().to_bytes()
     }
 
     /// A pure function to verify a signature against a digest and a public key.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, digest: Sha512) -> bool {
+        // This final, robust version correctly handles all conversions and checks.
         if let Ok(verifying_key) = VerifyingKey::from_bytes(public_key) {
             if let Ok(dalek_signature) = DalekSignature::from_bytes(signature) {
-                // The `verify_prehashed` method takes the digest object directly.
                 return verifying_key
                     .verify_prehashed(digest, None, &dalek_signature)
                     .is_ok();
