@@ -65,14 +65,13 @@ jobs:
           echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$MIRROR_ROOT/index.html" # Link back to the main UI
           echo "<h2>Repository Tree:</h2>" >> "$MIRROR_ROOT/index.html"
 
-          # Generate the full tree structure with permanent GitHub links and nested bullets
-          # Find all items, remove the MIRROR_ROOT prefix, sort them, then process with awk
-          find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | \
-          awk -v GITHUB_REPO_URL="${GITHUB_REPO_URL}" -v GITHUB_SHA="${GITHUB_SHA}" -v MIRROR_ROOT_PATH="${MIRROR_ROOT}" '
+          # Define the awk script in a variable to ensure it's passed correctly
+          # Using 'EOF_AWK' as the delimiter to prevent shell expansion within the awk script
+          AWK_SCRIPT=$(cat <<'EOF_AWK'
           BEGIN {
               current_depth = 0;
               # Explicitly list the root of the mirror first
-              print "<ul><li>📁 ./ (<a href=\"" GITHUB_REPO_URL "/tree/" GITHUB_SHA "/\">Browse on GitHub</a>)</li>";
+              print "<ul><li>📁 ./ (<a href=\"" GITHUB_REPO_URL "/tree/" GITHUB_SHA "/\">Browse on GitHub</a>)";
           }
           {
               # Skip empty lines or temporary build directories
@@ -81,15 +80,16 @@ jobs:
               }
 
               # Count slashes to determine depth
+              # Add 1 because split("foo/bar", parts, "/") gives 2 parts, but depth is 1
               item_depth = split($0, path_parts, "/");
 
-              # Adjust nesting: close </ul> tags if moving up the hierarchy
+              # Adjust nesting: close <ul> and <li> tags if moving up the hierarchy
               while (current_depth >= item_depth) {
                   print "</ul></li>";
                   current_depth--;
               }
 
-              # Open new <ul> tags if moving down the hierarchy
+              # Open new <ul> and <li> tags if moving down the hierarchy
               # We open a new <li> for the current item, then a <ul> if it's a directory
               while (current_depth < item_depth - 1) {
                   print "<li><ul>";
@@ -107,19 +107,24 @@ jobs:
                   # It's a directory
                   dirname = path_parts[item_depth];
                   github_dir_link = GITHUB_REPO_URL "/tree/" GITHUB_SHA "/" $0;
-                  print "<li>📁 " dirname "/ (<a href=\"" github_dir_link "\">Browse on GitHub</a>)</li>";
+                  print "<li>📁 " dirname "/ (<a href=\"" github_dir_link "\">Browse on GitHub</a>)"; # Directory, so it might contain a sub-list
               }
               current_depth = item_depth; # Update current depth after processing item
           }
           END {
-              # Close any remaining open ul tags
+              # Close any remaining open ul/li tags
               while (current_depth > 0) {
                   print "</ul></li>";
                   current_depth--;
               }
               print "</ul>"; # Close the initial ul
           }
-          ' >> "$MIRROR_ROOT/index.html"
+          EOF_AWK
+          
+          # Generate the full tree structure with permanent GitHub links and nested bullets
+          # Find all items, remove the MIRROR_ROOT prefix, sort them, then process with awk
+          find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | \
+          awk -v GITHUB_REPO_URL="${GITHUB_REPO_URL}" -v GITHUB_SHA="${GITHUB_SHA}" -v MIRROR_ROOT_PATH="${MIRROR_ROOT}" "$AWK_SCRIPT" >> "$MIRROR_ROOT/index.html"
 
           echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$MIRROR_ROOT/index.html"
           echo "</body></html>" >> "$MIRROR_ROOT/index.html"
