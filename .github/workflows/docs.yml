@@ -1,3 +1,6 @@
+# This workflow is governed by the BaDaaS License.
+# For details, see: LICENSE.md (accessible at the root of the GitHub Pages site)
+#
 # .github/workflows/docs.yml
 name: Deploy GH-Pages (UI + Repo Mirror)
 
@@ -36,13 +39,18 @@ jobs:
           # This makes webGhPages/index.html the main entry point
           cp -r webGhPages/* _site/ || true
 
-          # 2. Create a subdirectory for the repository mirror
+          # 2. Copy the main LICENSE.md to the root of _site for easy access from UI
+          cp LICENSE.md _site/
+
+          # 3. Create a subdirectory for the repository mirror
           mkdir -p _site/repo-mirror
 
-          # 3. Copy the rest of the repository into _site/repo-mirror/
-          # Exclude .git and the webGhPages directory itself from this mirror copy
-          # Explicitly include .github (which contains workflows)
-          rsync -av --exclude='.git' --exclude='webGhPages' . _site/repo-mirror/
+          # 4. Copy the *contents* of the rest of the repository into _site/repo-mirror/
+          # Use a temporary staging area to avoid copying _site itself
+          mkdir -p _temp_repo_content
+          rsync -av --exclude='.git' --exclude='.github' --exclude='webGhPages' . _temp_repo_content/
+          cp -r _temp_repo_content/* _site/repo-mirror/
+          rm -rf _temp_repo_content # Clean up temp directory
 
           # --- Generate index.html for the root of the mirror (_site/repo-mirror/) ---
           MIRROR_ROOT="_site/repo-mirror"
@@ -65,6 +73,7 @@ jobs:
             echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a></li>" >> "$MIRROR_ROOT/index.html"
           done
           echo "</ul>" >> "$MIRROR_ROOT/index.html"
+          echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$MIRROR_ROOT/index.html"
           echo "</body></html>" >> "$MIRROR_ROOT/index.html"
 
           # --- Generate index.html for all subdirectories within the mirror ---
@@ -75,6 +84,15 @@ jobs:
             if [ -z "$RELATIVE_DISPLAY_PATH" ]; then
               RELATIVE_DISPLAY_PATH="."
             fi
+
+            # Calculate relative path to LICENSE.md from current directory
+            # Count slashes in RELATIVE_DISPLAY_PATH to determine depth
+            DEPTH=$(echo "$RELATIVE_DISPLAY_PATH" | grep -o "/" | wc -l)
+            LICENSE_RELATIVE_PATH=""
+            for i in $(seq 1 $DEPTH); do
+              LICENSE_RELATIVE_PATH="../$LICENSE_RELATIVE_PATH"
+            done
+            LICENSE_RELATIVE_PATH="${LICENSE_RELATIVE_PATH}LICENSE.md"
 
             echo "Generating index.html for directory: $dir_path"
             echo "<html><head><title>CDQN Mirror - $RELATIVE_DISPLAY_PATH</title><style>body{font-family:sans-serif;}</style></head><body>" > "$dir_path/index.html"
@@ -89,13 +107,14 @@ jobs:
             echo "</ul>" >> "$dir_path/index.html"
 
             echo "<h2>Directories:</h2><ul>" >> "$dir_path/index.html"
-            # List subdirectories in the current subdirectory
+            # List subdirectories in the current subdirectory, excluding '.' and '..'
             find "$dir_path" -maxdepth 1 -mindepth 1 -type d | sort | while read -r subdir_in_dir; do
               SUBDIRNAME=$(basename "$subdir_in_dir")
               echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a></li>" >> "$dir_path/index.html"
             done
             echo "</ul>" >> "$dir_path/index.html"
             echo "<p><a href=\"../\">Back to Parent Directory</a></p>" >> "$dir_path/index.html" # Add a back link
+            echo "<hr><p>This content is governed by the <a href=\"$LICENSE_RELATIVE_PATH\">BaDaaS License</a>.</p>" >> "$dir_path/index.html"
             echo "</body></html>" >> "$dir_path/index.html"
           done
 
