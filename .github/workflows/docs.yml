@@ -73,7 +73,8 @@ jobs:
 
           # Track current depth for nested lists
           current_depth=0
-          declare -a open_tags # Array to keep track of open <ul> and <li> tags
+          # Array to keep track of open <ul> tags, for proper closing
+          declare -a open_ul_tags
 
           # Find all items, remove the MIRROR_ROOT prefix, sort them
           find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | while read -r item; do
@@ -84,15 +85,20 @@ jobs:
 
             # Close tags if moving up the hierarchy
             while (( current_depth >= item_depth )); do
-              echo "</ul></li>" >> "$INDEX_FILE"
-              unset 'open_tags[current_depth]' # Remove tag from stack
+              if (( ${#open_ul_tags[@]} > 0 )); then
+                echo "</ul></li>" >> "$INDEX_FILE"
+                unset 'open_ul_tags[${#open_ul_tags[@]}-1]' # Pop from stack
+              else
+                # This should ideally not happen if logic is perfect, but as a safeguard
+                break
+              fi
               (( current_depth-- ))
             done
 
             # Open new tags if moving down the hierarchy
             while (( current_depth < item_depth - 1 )); do
               echo "<li><ul>" >> "$INDEX_FILE"
-              open_tags[current_depth]="<li><ul>" # Add tag to stack
+              open_ul_tags+=("<li><ul>") # Push to stack
               (( current_depth++ ))
             done
 
@@ -111,9 +117,9 @@ jobs:
           done
 
           # Close any remaining open ul/li tags at the end
-          while (( current_depth >= 0 )); do
+          while (( ${#open_ul_tags[@]} > 0 )); do
             echo "</ul></li>" >> "$INDEX_FILE"
-            (( current_depth-- ))
+            unset 'open_ul_tags[${#open_ul_tags[@]}-1]'
           done
           echo "</ul>" >> "$INDEX_FILE" # Close the very first <ul>
 
