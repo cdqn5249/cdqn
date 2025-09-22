@@ -13,7 +13,7 @@
 // --- External Crates ---
 use ed25519_dalek::{Signature as DalekSignature, Signer, SigningKey, Verifier, VerifyingKey};
 use rand_core::OsRng;
-use sha2::{Digest, Sha265};
+use sha2::{Digest, Sha256};
 
 // --- Core Type Definitions ---
 pub type PublicKey = [u8; 32];
@@ -63,14 +63,15 @@ impl CryptoCoreEngine {
 
     /// A pure function to verify a signature against a hash and a public key.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, hash: &Hash) -> bool {
-        if let (Ok(verifying_key), Ok(dalek_signature)) = (
-            VerifyingKey::from_bytes(public_key),
-            DalekSignature::from_bytes(signature),
-        ) {
-            verifying_key.verify(hash, &dalek_signature).is_ok()
-        } else {
-            false
+        // This nested `if let` is a clear and robust way to handle the two
+        // fallible conversions before attempting verification.
+        if let Ok(verifying_key) = VerifyingKey::from_bytes(public_key) {
+            if let Ok(dalek_signature) = DalekSignature::from_bytes(signature) {
+                return verifying_key.verify(hash, &dalek_signature).is_ok();
+            }
         }
+        // If either conversion fails, the signature is invalid.
+        false
     }
 }
 
