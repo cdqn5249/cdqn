@@ -9,14 +9,11 @@ description = "The sovereign root of trust for the CDQN ecosystem."
 license = "BaDaaS-1.0.0" # Placeholder for your custom license ID
 
 [dependencies]
+# We still need sha2, but for the Sha512 algorithm.
 sha2 = "0.10"
 
-# We keep ed25519-dalek for its robust key generation and core types.
-ed25519-dalek = { version = "2.1", features = ["rand_core"] }
-
-# NEW: We add the 'ed25519' crate directly to get access to the
-# pre-hashing signature traits, which are gated behind its 'prehash' feature.
-# We use the same version that ed25519-dalek uses internally to guarantee compatibility.
-ed25519 = { version = "2.2", features = ["prehash"] }
+# We enable the "digest" feature, which correctly exposes the pre-hashing
+# signature functions that work with a SHA-512 digest object.
+ed25519-dalek = { version = "2.1", features = ["rand_core", "digest"] }
 
 rand_core = { version = "0.6", features = ["std"] }
