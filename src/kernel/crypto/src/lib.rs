@@ -42,13 +42,13 @@ impl CryptoCoreEngine {
         )
     }
 
-    /// A pure function to create a SHA-512 digest object from raw data.
+    /// A pure, one-shot function to create a SHA-512 digest object from raw data.
     pub fn create_digest(data: &[u8]) -> Sha512 {
         Sha512::new_with_prefix(data)
     }
 
     /// A pure function to sign a pre-computed digest.
-    /// It takes the `Sha512` object directly, preserving type information.
+    /// It takes and returns the library's official `Signature` object.
     pub fn sign_digest(private_key: &PrivateKey, digest: Sha512) -> Result<Signature, CryptoError> {
         let signing_key = SigningKey::from_bytes(private_key);
         signing_key
@@ -57,7 +57,7 @@ impl CryptoCoreEngine {
     }
 
     /// A pure function to verify a signature against a digest.
-    /// It takes the `Sha512` object directly, preserving type information.
+    /// It takes the library's official `Signature` object.
     pub fn verify_signature(public_key: &PublicKey, signature: &Signature, digest: Sha512) -> bool {
         let verifying_key_result = VerifyingKey::from_bytes(public_key);
         match verifying_key_result {
@@ -112,8 +112,6 @@ mod tests {
         let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
         let message = b"test message";
         let digest = CryptoCoreEngine::create_digest(message);
-        // We must clone the digest because it's consumed by sign_digest,
-        // but we still need it for verification. This is correct ownership.
         let signature_result = CryptoCoreEngine::sign_digest(&private_key, digest.clone());
         assert!(signature_result.is_ok());
         let signature = signature_result.unwrap();
@@ -144,7 +142,7 @@ mod tests {
         let is_valid = CryptoCoreEngine::verify_signature(
             alice_manager.public_key(),
             &signature,
-            &tampered_digest,
+            tampered_digest,
         );
         assert!(!is_valid);
     }
@@ -157,7 +155,7 @@ mod tests {
         let signature = alice_manager.sign(message).unwrap();
         let digest = CryptoCoreEngine::create_digest(message);
         let is_valid =
-            CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, &digest);
+            CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, digest);
         assert!(!is_valid);
     }
 }
