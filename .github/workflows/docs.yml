@@ -2,7 +2,7 @@
 # For details, see: LICENSE.md (accessible at the root of the GitHub Pages site)
 #
 # .github/workflows/docs.yml
-name: Deploy GH-Pages (UI + Repo Mirror)
+name: Deploy GH-Pages (UI + Repo Tree Mirror)
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare deployment directory and generate mirror indexes
+      - name: Prepare deployment directory and generate mirror tree index
         run: |
           # Create the main _site directory for deployment
           mkdir -p _site
@@ -58,81 +58,38 @@ jobs:
           cp -r _temp_repo_content/* _site/repo-mirror/ || true # Copy contents from temp to mirror
           rm -rf _temp_repo_content # Clean up temp directory
 
-          # --- Generate index.html for the root of the mirror (_site/repo-mirror/) ---
+          # --- Generate a single, comprehensive index.html for the mirror (_site/repo-mirror/) ---
           MIRROR_ROOT="_site/repo-mirror"
-          echo "<html><head><title>CDQN Repository Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > "$MIRROR_ROOT/index.html"
-          echo "<h1>CDQN Repository Mirror</h1>" >> "$MIRROR_ROOT/index.html"
+          echo "<html><head><title>CDQN Repository Tree Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > "$MIRROR_ROOT/index.html"
+          echo "<h1>CDQN Repository Tree Mirror</h1>" >> "$MIRROR_ROOT/index.html"
           echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$MIRROR_ROOT/index.html" # Link back to the main UI
-          echo "<h2>Files:</h2><ul>" >> "$MIRROR_ROOT/index.html"
+          echo "<h2>Repository Tree:</h2><ul>" >> "$MIRROR_ROOT/index.html"
 
-          # List files directly in the mirror root, excluding the generated index.html
-          find "$MIRROR_ROOT" -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file; do
-            FILENAME=$(basename "$file")
-            # Construct the permanent GitHub link for the file
-            GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${FILENAME}"
-            echo "<li><a href=\"$FILENAME\">$FILENAME</a> (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
-          done
-          echo "</ul>" >> "$MIRROR_ROOT/index.html"
+          # Generate the full tree structure with permanent GitHub links
+          # Using 'find' to list all files and directories recursively from MIRROR_ROOT
+          # and then processing them to create the tree view.
+          # We'll use sed to remove the "_site/repo-mirror/" prefix for display and link construction.
+          find "$MIRROR_ROOT" -print | sed "s#^$MIRROR_ROOT/##" | sort | while read -r item; do
+            if [ -z "$item" ]; then continue; fi # Skip empty lines
 
-          echo "<h2>Directories:</h2><ul>" >> "$MIRROR_ROOT/index.html"
-          # List directories directly in the mirror root, excluding the mirror root itself ('.')
-          find "$MIRROR_ROOT" -maxdepth 1 -type d -not -name "$MIRROR_ROOT" | sort | while read -r dir; do
-            DIRNAME=$(basename "$dir")
-            # Exclude any temporary directories from the listing
-            if [[ "$DIRNAME" != "_site" && "$DIRNAME" != "_temp_repo_content" && "$DIRNAME" != "repo-mirror" ]]; then
-              # Construct the permanent GitHub link for the directory
-              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${DIRNAME}"
-              echo "<li><a href=\"$DIRNAME/\">$DIRNAME/</a> (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
+            # Determine if it's a file or directory
+            FULL_PATH="$MIRROR_ROOT/$item"
+            if [ -f "$FULL_PATH" ]; then
+              # It's a file
+              GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${item}"
+              echo "<li>📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
+            elif [ -d "$FULL_PATH" ]; then
+              # It's a directory
+              # Exclude the root mirror directory itself from being listed as a browsable directory
+              if [[ "$item" != "." ]]; then
+                GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
+                echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$MIRROR_ROOT/index.html"
+              fi
             fi
           done
           echo "</ul>" >> "$MIRROR_ROOT/index.html"
           echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$MIRROR_ROOT/index.html"
           echo "</body></html>" >> "$MIRROR_ROOT/index.html"
-
-          # --- Generate index.html for all subdirectories within the mirror ---
-          # Iterate over all directories within _site/repo-mirror (excluding its root)
-          find "$MIRROR_ROOT" -type d -not -path "$MIRROR_ROOT" | while read -r dir_path; do
-            # Calculate the path relative to the _site/repo-mirror root for display in the title
-            RELATIVE_DISPLAY_PATH=$(echo "$dir_path" | sed "s#^$MIRROR_ROOT/##")
-            if [ -z "$RELATIVE_DISPLAY_PATH" ]; then
-              RELATIVE_DISPLAY_PATH="."
-            fi
-
-            # Calculate relative path to LICENSE.md from current directory
-            DEPTH=$(echo "$RELATIVE_DISPLAY_PATH" | grep -o "/" | wc -l)
-            LICENSE_RELATIVE_PATH=""
-            for i in $(seq 1 $DEPTH); do
-              LICENSE_RELATIVE_PATH="../$LICENSE_RELATIVE_PATH"
-            done
-            LICENSE_RELATIVE_PATH="${LICENSE_RELATIVE_PATH}LICENSE.md"
-
-            echo "Generating index.html for directory: $dir_path"
-            echo "<html><head><title>CDQN Mirror - $RELATIVE_DISPLAY_PATH</title><style>body{font-family:sans-serif;}</style></head><body>" > "$dir_path/index.html"
-            echo "<h1>Contents of $RELATIVE_DISPLAY_PATH/</h1>" >> "$dir_path/index.html"
-            echo "<h2>Files:</h2><ul>" >> "$dir_path/index.html"
-
-            # List files in the current subdirectory
-            find "$dir_path" -maxdepth 1 -type f -not -name "index.html" | sort | while read -r file_in_dir; do
-              FILENAME=$(basename "$file_in_dir")
-              # Construct the permanent GitHub link for the file
-              GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${RELATIVE_DISPLAY_PATH}/${FILENAME}"
-              echo "<li><a href=\"$FILENAME\">$FILENAME</a> (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$dir_path/index.html"
-            done
-            echo "</ul>" >> "$dir_path/index.html"
-
-            echo "<h2>Directories:</h2><ul>" >> "$dir_path/index.html"
-            # List subdirectories in the current subdirectory, excluding '.' and '..'
-            find "$dir_path" -maxdepth 1 -mindepth 1 -type d | sort | while read -r subdir_in_dir; do
-              SUBDIRNAME=$(basename "$subdir_in_dir")
-              # Construct the permanent GitHub link for the directory
-              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${RELATIVE_DISPLAY_PATH}/${SUBDIRNAME}"
-              echo "<li><a href=\"$SUBDIRNAME/\">$SUBDIRNAME/</a> (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$dir_path/index.html"
-            done
-            echo "</ul>" >> "$dir_path/index.html"
-            echo "<p><a href=\"../\">Back to Parent Directory</a></p>" >> "$dir_path/index.html" # Add a back link
-            echo "<hr><p>This content is governed by the <a href=\"$LICENSE_RELATIVE_PATH\">BaDaaS License</a>.</p>" >> "$dir_path/index.html"
-            echo "</body></html>" >> "$dir_path/index.html"
-          done
 
           # --- Debugging step: List the contents of _site directory to verify structure ---
           echo "--- Contents of _site directory before upload ---"
