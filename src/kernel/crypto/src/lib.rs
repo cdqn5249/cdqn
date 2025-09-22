@@ -61,11 +61,7 @@ impl CryptoCoreEngine {
     }
 
     /// A pure function to verify a signature.
-    pub fn verify_signature(
-        public_key: &PublicKey,
-        signature: &Signature,
-        hash: &Hash,
-    ) -> bool {
+    pub fn verify_signature(public_key: &PublicKey, signature: &Signature, hash: &Hash) -> bool {
         let verifying_key_result = VerifyingKey::from_bytes(public_key);
         match verifying_key_result {
             Ok(verifying_key) => verifying_key
