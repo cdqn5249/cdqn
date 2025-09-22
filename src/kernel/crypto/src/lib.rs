@@ -58,11 +58,7 @@ impl CryptoCoreEngine {
 
     /// A pure function to verify a signature against a digest.
     /// It takes the `Sha512` object directly, preserving type information.
-    pub fn verify_signature(
-        public_key: &PublicKey,
-        signature: &Signature,
-        digest: Sha512,
-    ) -> bool {
+    pub fn verify_signature(public_key: &PublicKey, signature: &Signature, digest: Sha512) -> bool {
         let verifying_key_result = VerifyingKey::from_bytes(public_key);
         match verifying_key_result {
             Ok(verifying_key) => verifying_key
@@ -164,4 +160,4 @@ mod tests {
             CryptoCoreEngine::verify_signature(eve_manager.public_key(), &signature, &digest);
         assert!(!is_valid);
     }
-}
+    }
