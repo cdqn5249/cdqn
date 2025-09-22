@@ -39,7 +39,7 @@ jobs:
           echo "<h1>CDQN Repository Contents</h1>" >> webGhPages/index.html
           echo "<h2>Files:</h2><ul>" >> webGhPages/index.html
 
-          # List files in the root, excluding webGhPages and .github/workflows
+          # List files in the root, excluding webGhPages and .github and hidden files
           find . -maxdepth 1 -type f -not -name ".*" | sort | while read -r file; do
             FILENAME=$(basename "$file")
             echo "<li><a href=\"../$FILENAME\">$FILENAME</a></li>" >> webGhPages/index.html
@@ -47,8 +47,8 @@ jobs:
           echo "</ul>" >> webGhPages/index.html
 
           echo "<h2>Directories:</h2><ul>" >> webGhPages/index.html
-          # List directories in the root, excluding webGhPages and .github
-          find . -maxdepth 1 -type d -not -name "." -not -name "webGhPages" -not -name ".github" | sort | while read -r dir; do
+          # List directories in the root, excluding webGhPages, .github, and .git
+          find . -maxdepth 1 -type d -not -name "." -not -name "webGhPages" -not -name ".github" -not -name ".git" | sort | while read -r dir; do
             DIRNAME=$(basename "$dir")
             echo "<li><a href=\"../$DIRNAME/\">$DIRNAME/</a></li>" >> webGhPages/index.html
           done
