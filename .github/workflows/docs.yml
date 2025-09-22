@@ -32,8 +32,9 @@ jobs:
         run: |
           mkdir -p _site
 
-          # Copy all repository content to _site, excluding .git and .github/workflows
-          rsync -av --exclude='.git' --exclude='.github/workflows' . _site/
+          # Copy all repository content to _site, excluding .git and .github directories entirely
+          # The webGhPages directory will be copied as part of the repo content
+          rsync -av --exclude='.git' --exclude='.github' . _site/
 
           # --- Generate index.html for the root _site directory ---
           echo "<html><head><title>CDQN Repository Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > _site/index.html
@@ -59,6 +60,7 @@ jobs:
 
           # --- Generate index.html for all subdirectories within _site ---
           # Iterate over all directories within _site (excluding the root _site itself)
+          # Ensure we process directories like _site/Docs, _site/webGhPages, etc.
           find _site -type d -not -path "_site" | while read -r dir_path; do
             # Calculate the path relative to the _site root for display in the title
             RELATIVE_DISPLAY_PATH=$(echo "$dir_path" | sed 's/^_site\///')
