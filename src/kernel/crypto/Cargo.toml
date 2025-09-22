@@ -1,10 +1,6 @@
 # BaDaaS License: This file is governed by the BaDaaS license.
 # File Path: /src/kernel/crypto/Cargo.toml
 
-# This file defines the K.CryptoCore module as a Rust crate, specifies its
-# metadata, and declares its minimal, audited dependencies as required by
-# the CDQN Manifesto (Tenet 8).
-
 [package]
 name = "k_crypto_core"
 version = "0.1.0"
