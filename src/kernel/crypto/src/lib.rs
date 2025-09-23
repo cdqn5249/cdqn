@@ -1,4 +1,5 @@
 // BaDaaS License: This file is governed by the BaDaaS license.
+// Vibe coding engine: Gemini 2.5 Pro, Google
 // File Path: /src/kernel/crypto/src/lib.rs
 
 //! K.CryptoCore: The Sovereign Root of Trust
@@ -63,9 +64,11 @@ mod tests {
             let (public_key, private_key) = CryptoCoreEngine::generate_identity_keypair();
             let message = b"original message";
             let tampered_message = b"tampered message";
-            let signature =
-                CryptoCoreEngine::sign_digest(&private_key, CryptoCoreEngine::create_digest(message))
-                    .unwrap();
+            let signature = CryptoCoreEngine::sign_digest(
+                &private_key,
+                CryptoCoreEngine::create_digest(message),
+            )
+            .unwrap();
             let tampered_digest = CryptoCoreEngine::create_digest(tampered_message);
             let verification_result =
                 CryptoCoreEngine::verify_signature(&public_key, &signature, tampered_digest);
