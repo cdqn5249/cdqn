@@ -149,8 +149,7 @@ mod tests {
         let digest = CryptoCoreEngine::create_digest(message);
         let signature = CryptoCoreEngine::sign_digest(&alice_sk, digest.clone()).unwrap();
         // Verifying Alice's signature with Eve's key must fail.
-        let verification_result =
-            CryptoCoreEngine::verify_signature(&eve_pk, &signature, digest);
+        let verification_result = CryptoCoreEngine::verify_signature(&eve_pk, &signature, digest);
         assert!(verification_result.is_err());
     }
 
