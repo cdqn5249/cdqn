@@ -10,26 +10,26 @@
 name: Rust Continuous Integration
 
 on:
-  # Run on pushes to the main branch
   push:
     branches: [ "main" ]
-  # Run on pull requests targeting the main branch
+    # --- MODIFICATION: Ignore Docs Directory for PUSH ---
+    paths-ignore:
+      - 'Docs/**'
+    # --- END MODIFICATION ---
   pull_request:
     branches: [ "main" ]
+    # --- MODIFICATION: Ignore Docs Directory for PULL REQUEST ---
+    paths-ignore:
+      - 'Docs/**'
+    # --- END MODIFICATION ---
 
 jobs:
   build_and_test:
     # Use the latest stable version of Ubuntu as the runner
     runs-on: ubuntu-latest
     
-    # --- MODIFICATION: Ignore Docs Directory (Syntax Corrected) ---
-    # Skip this job if the event is a pull_request AND the changed paths 
-    # do not contain any files outside the Docs/ directory.
-    if: |
-      github.event_name == 'push' || 
-      (github.event_name == 'pull_request' && 
-       !contains(github.event.pull_request.paths.*, 'Docs/'))
-    # --- END MODIFICATION ---
+    # The 'if' condition is now removed as the workflow trigger itself handles path filtering.
+    # This ensures the job never runs if only Docs/ files are changed.
 
     steps:
       # Step 1: Check out the repository's code
