@@ -22,13 +22,13 @@ jobs:
     # Use the latest stable version of Ubuntu as the runner
     runs-on: ubuntu-latest
     
-    # --- MODIFICATION: Ignore Docs Directory ---
-    # Skip this job if the event is a pull_request AND all changed files 
-    # are within the /Docs/ directory (which contains only .md files).
+    # --- MODIFICATION: Ignore Docs Directory (Syntax Corrected) ---
+    # Skip this job if the event is a pull_request AND the changed paths 
+    # do not contain any files outside the Docs/ directory.
     if: |
       github.event_name == 'push' || 
       (github.event_name == 'pull_request' && 
-       !github.event.pull_request.paths.*.startsWith('Docs/'))
+       !contains(github.event.pull_request.paths.*, 'Docs/'))
     # --- END MODIFICATION ---
 
     steps:
