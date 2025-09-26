@@ -36,12 +36,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Install the Rust toolchain
-      - name: Install Rust toolchain
+      # Step 2: Install the Rust toolchain AND necessary components (FIXED)
+      - name: Install Rust toolchain and components
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           # Use the latest stable version of Rust
           toolchain: stable
+          # Explicitly install rustfmt and clippy components to resolve runtime errors
+          components: rustfmt, clippy 
 
       # Step 3: Cache dependencies for faster builds
       # This step saves the compiled dependencies so we don't have to rebuild
