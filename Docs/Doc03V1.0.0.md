@@ -15,7 +15,7 @@ The K-Module hosts all immutable logic, primitives, and foundational security/ti
 
 | Component | Role | Workflow Integration |
 | :--- | :--- | :--- |
-| **Primitives ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$)** | Execute all core reasoning, validation, and learning logic using fast arithmetic. | Triggered by C-Module upon receipt of new CDU data. |
+| **Primitives ($\mathcal{P}, \mathcal{C}, \mathcal{I}, \mathcal{L}$)** | Execute all core reasoning, validation, and learning logic using fast arithmetic. | Triggered by C-Module upon receipt of new CDU data. |
 | **Axiom Set Storage** | Stores all validated rules (A1-A18, etc.) as immutable CDUs. | Accessed synchronously by all Primitives. |
 | **K.HLC Generator** | **Generates the next sequential HLC value** upon request from S/U modules. | Called by S/U modules during CDU creation. |
 | **K.CryptoCore** | **Performs all cryptographic operations** (hashing, signing, signature verification). | Called by $\mathcal{V}$ and $\mathcal{C}$ to ensure integrity. |
