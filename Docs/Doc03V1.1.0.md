@@ -103,8 +103,37 @@ While $\mathcal{P}$ assigns the discrete Polarity, it is **not** the same as the
 Primitive $\mathcal{P}$ ensures that every piece of data entering the system is immediately categorized according to the system's established, discrete ethical and factual boundaries.
 
 ### Primitive 2: The HLC-Constrained State Resolver ($\mathcal{C}$)
-*   **Function:** Resolves the current state by maximizing HLC, filtering based on World Context (A4), and checking for predicted harm.
-*   **Key Operation:** **Comparison** (HLC maximization) and **Counting** (for simulation depth limit). **Crucially, it resolves reputation scores by searching the immutable Reputation CDU Chain.**
+
+* **Module Location:** K-Module (Pure Logic)
+* **Core Operations:** Comparison, Counting, Lookup.
+* **Asynchronous Nature:** Relies on asynchronous I/O calls to the C-Module for ledger access.
+
+#### 1. Role and Purpose
+
+The role of $\mathcal{C}$ is to deterministically answer the question: **"What is the current, valid state of Entity $X$ within World Context $W$?"** It achieves this by finding the most recent, contextually valid CDU for that entity, while simultaneously checking if the proposed action leading to that state violates safety axioms.
+
+#### 2. Detailed Workflow
+
+The operation is a sequence of filtering and maximization steps, designed to be fast by avoiding full ledger scans.
+
+1.  **Input:** Entity ID, World Context ($W$), and an optional Proposed Action CDU.
+2.  **Candidate Retrieval (Asynchronous I/O):** $\mathcal{C}$ requests the C-Module to retrieve all CDUs associated with the `EntityID` from the local ledger. (This is the only I/O step, handled asynchronously).
+3.  **Contextual Filtering (Comparison based on Axiom A4):**
+    *   If $W = \text{TwinWorld}$, $\mathcal{C}$ **compares** the Polarity of each candidate against the rule in Axiom A4. Any CDU with $\text{Polarity} = -1$ is immediately discarded from the set.
+    *   If $W$ is a Cloned/Virtual World, this filter is bypassed or modified by the World's specific Constraint Axioms.
+4.  **Reputation Check (Lookup & Comparison):** If the query involves an action by an author, $\mathcal{C}$ queries the **Reputation Resolution Logic** (in K-Module) to find the author's current score (by resolving their highest HLC Reputation CDU). This score is used to validate the action's authorization.
+5.  **HLC Maximization (Comparison based on Axiom A3):** Among the remaining candidates, $\mathcal{C}$ selects the CDU with the **MAX `hlc_timestamp`**. This is the definitive current state.
+6.  **Harm Prediction (Guardrail Input):** If a `proposed_action` exists, $\mathcal{C}$ performs a **bounded, hypothetical traversal** starting from the resolved state.
+    *   This traversal uses **Counting** to ensure it does not exceed a predefined depth limit (preventing infinite loops).
+    *   If the simulation path violates any **Harm Axiom**, $\mathcal{C}$ immediately returns the special signal `VETO` to the C-Module.
+7.  **Output:** Returns the ID of the resolved state CDU, or a `VETO` signal.
+
+#### 3. Performance Rationale
+
+Primitive $\mathcal{C}$ is fast because:
+*   It relies on **indexed lookups** based on Entity ID, avoiding scanning the entire ledger ($N$).
+*   The filtering and maximization steps are simple **comparisons** on fixed-size metadata fields (Polarity, HLC).
+*   The Harm Check depth is **bounded by a constant**, making its complexity $O(1)$ relative to the ledger size $N$.
 
 ### Primitive 3: The Symbolic Inference Engine ($\mathcal{I}$)
 *   **Function:** Performs deductive proof by matching premises against **Inference Axioms**.
