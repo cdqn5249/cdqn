@@ -9,53 +9,38 @@ The Chronos Model is a **Symbolic, Self-Correcting, Asynchronous Reasoning Engin
 
 ## Section 1: Architectural Mandate (K-C-S-U Hierarchy)
 
-### K-Module (Kernel: Pure Logic and Reasoning)
+### K-Module (Kernel: The Pure Logic and Security Core)
 
-The K-Module executes the core intelligence using the Four Primitives. It initiates asynchronous calls to the C-Module for all data access.
+The K-Module hosts all immutable logic, primitives, and foundational security/time services.
 
-| Component | Role | Primary Workflow Step |
+| Component | Role | Workflow Integration |
 | :--- | :--- | :--- |
-| **Primitives ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$)** | Execute the core mathematical logic of the system. | **Synchronous Execution** within the K-Module's context, but all I/O calls are non-blocking futures awaited by the C-Module. |
-| **Axiom Set Storage** | Stores all validated rules (Axioms) that govern logic, semantics, and security. | Accessed by $\mathcal{I}$ and $\mathcal{V}$ via asynchronous requests to the C-Module ledger. |
-| **Schema Registry** | Stores the mapping between concepts (Primes) and data structures. | Accessed by $\mathcal{D}$ (conceptual) and $\mathcal{I}$ to interpret CDU payloads. |
+| **Primitives ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$)** | Execute all core reasoning, validation, and learning logic using fast arithmetic. | Triggered by C-Module upon receipt of new CDU data. |
+| **Axiom Set Storage** | Stores all validated rules (A1-A18, etc.) as immutable CDUs. | Accessed synchronously by all Primitives. |
+| **K.HLC Generator** | **Generates the next sequential HLC value** upon request from S/U modules. | Called by S/U modules during CDU creation. |
+| **K.CryptoCore** | **Performs all cryptographic operations** (hashing, signing, signature verification). | Called by $\mathcal{V}$ and $\mathcal{C}$ to ensure integrity. |
+| **Reputation Resolution Logic** | Implements the logic to find the **highest HLC Reputation CDU** for any author ID. | Called by Primitive $\mathcal{C}$ during state resolution checks. |
 
-### C-Module (Core Runtime: Execution and Security Enforcement)
+### C-Module (Core Runtime: Execution and Enforcement)
 
-The C-Module is the asynchronous backbone, managing state, time, security, and resource allocation.
+The C-Module manages the mutable execution environment and enforces system boundaries.
 
-| Component | Role | Primary Workflow Step |
-| :--- | :--- | :--- |
-| **Asynchronous Runtime** | Manages task scheduling and concurrency for all K-Module primitive calls. | Polls for new CDU events and schedules K-Module tasks. |
-| **K.HLC Generator** | Generates the next sequential, globally consistent HLC value upon request. | **Synchronous** generation, but the request/response is asynchronous to the main flow. |
-| **K.CryptoCore** | Handles all cryptographic operations (hashing, signing, verification) using ephemeral keys. | Called by $\mathcal{V}$ and S/U modules to secure new CDUs. |
-| **Gas Metering** | Tracks resource consumption for every operation requested by K, S, or U. | Enforces Axiom A7; rejects operations exceeding allocated Gas. |
-| **Replay Cache** | Stores recently processed CDU IDs to prevent re-execution of signed actions. | Checked by $\mathcal{V}$ and $\mathcal{C}$ before processing/resolving. |
-| **Local Reputation Ledger** | Stores the **mutable** scores for all known authors. | Updated only when a CDU authored by that entity is successfully appended. |
-| **Harm Guardrail** | Intercepts proposed actions from $\mathcal{C}$ and vetoes execution if harm is predicted. | **Synchronous Veto** based on Harm Axioms. |
+*   **Primary Role:** Asynchronous I/O, resource metering, and final action veto.
+*   **Workflows:**
+    1.  **Asynchronous I/O:** Manages network gossip, ledger persistence, and communication with the K-Module primitives.
+    2.  **Gas Metering:** Tracks resource consumption for all K-Module operations (Axiom A7).
+    3.  **Replay Cache Management:** Maintains the temporary set of recently processed CDU IDs to prevent replay attacks (A2).
+    4.  **Harm Guardrail Enforcement:** Receives the `VETO` signal from Primitive $\mathcal{C}$ and **blocks the C-Module's I/O layer** from appending the proposed CDU.
 
 ### S/U Modules (Application Layer: Sovereignty and Interaction)
 
-These modules are the interface between the Chronos Model and the external world (users, other systems, CI/CD).
+These modules interface with the user and the external world.
 
-| Component | Role | Primary Workflow Step |
-| :--- | :--- | :--- |
-| **CDU Factory** | Packages raw data into the final CDU structure, requests HLC from C, and requests signing from K.CryptoCore. | Creates the final, signed CDU ready for submission. |
-| **Local Reputation Manager** | Tracks the node's own reputation score and initiates updates based on local success/failure. | Updates local score based on $\mathcal{V}$'s validation result. |
-| **`cdqnLang` Transpiler** | Translates high-level code into sequences of **Data CDUs** (e.g., `RELATIONAL_TRIPLE`s or `QUERY_REQUEST`s). | Generates the input data for the K-Module. |
-| **Network Gossip Handler** | Manages sending and receiving CDUs over the P2P network using `cdqnProt`. | Relays validated CDUs to neighbors and forwards requests to C-Module. |
-
-### Operational Workflow Example: Processing a New Fact
-
-This illustrates the asynchronous flow across the modules:
-
-1.  **Creation (S/U):** An S/U module creates raw data, packages it into a proposed CDU structure, and requests an HLC from the C-Module.
-2.  **Signing (C $\rightarrow$ K):** The C-Module passes the data to **K.CryptoCore** to generate the signature using an ephemeral key.
-3.  **Validation ($\mathcal{V}$):** The C-Module passes the signed CDU to **Primitive $\mathcal{V}$ (K-Module)**. $\mathcal{V}$ checks the signature (via K.CryptoCore), verifies HLC ordering (via K.HLC), checks reputation (via C-Module Ledger), and assigns initial Polarity.
-4.  **Persistence (C):** If $\mathcal{V}$ passes, the C-Module commits the CDU to the immutable ledger.
-5.  **Asynchronous Processing (K):** The C-Module notifies the **Asynchronous Runtime** of the new CDU. The runtime schedules Primitive $\mathcal{C}$ and $\mathcal{L}$ tasks to process the new data point against the existing state and learning models.
-6.  **Inference Trigger ($\mathcal{I}$):** The new CDU might trigger Primitive $\mathcal{I}$ to check if this new fact allows any existing Axioms to resolve a pending query or generate a new conclusion.
-
-This structure ensures that every step is either a fast, pure logical operation (K) or a securely managed, non-blocking execution step (C).
+*   **Primary Role:** Translating high-level goals (`cdqnLang`) into CDU creation requests and managing local reputation updates.
+*   **Workflows:**
+    1.  **CDU Creation:** Packages data, requests HLC from K.HLC, requests signature from K.CryptoCore, and submits the signed CDU to the C-Module for validation/gossip.
+    2.  **Reputation Update:** Updates its **local, mutable reputation score** based on the success/failure of its own submitted CDUs, which is then included in the next CDU it signs.
+    3.  **Goal Definition:** Defines the context (World) for reasoning tasks.
 ---
 
 ## Section 2: The Causal Data Unit (CDU) Schema
