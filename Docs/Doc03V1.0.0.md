@@ -412,11 +412,11 @@ These Axioms define the system's fundamental logic, security, and semantic struc
 | :--- | :--- | :--- |
 | **CDU** | **Causal Data Unit.** The immutable, content-addressed container. | Immutability |
 | **HLC** | **Hybrid Logical Clock.** Ensures strict, distributed temporal ordering. | K.HLC Module |
-| **K-Module** | **Kernel Module.** Hosts the **Four Core Primitives** ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$). | Root of Logic |
+| **K-Module** | **Kernel Module.** Hosts the **Four Core Primitives** ($\mathcal{P}, \mathcal{C}, \mathcal{I}, \mathcal{L}$). | Root of Logic |
 | **C-Module** | **Core Runtime.** Manages asynchronous execution, I/O, Gas Metering, and enforces the **Harm Guardrail**. | Execution Environment |
 | **Axiom CDU** | A special CDU defining a rule. These are the system's explicit knowledge base. | Symbolic Logic |
 | **Polarity** | A discrete value ($\{-1, 0, 1\}$) indicating immediate semantic valence for guardrail checks. | CDU Metadata |
-| **Dynamic Valence ($V_{\text{dynamic}}$)** | A real number calculated locally based on neighbor influence, representing nuanced semantic position relative to Prime Anchors. | Primitive $\mathcal{D}$ |
+| **Dynamic Valence ($V_{\text{dynamic}}$)** | A real number calculated locally based on neighbor influence, representing nuanced semantic position relative to Prime Anchors. |  |
 | **Prime Elements** | Fixed, discrete numbers ($P_3, P_5, \dots$) that define hierarchical anchors for semantic certainty. | Semantic Anchors |
 | **Prime Ideal** | A concept whose $V_{\text{dynamic}}$ is consistently near a Prime Anchor, representing a stable, high-certainty truth. | Emergent Property |
 | **Gpath** | **Golden Path.** A complete reasoning sequence analyzed by Primitive $\mathcal{L}$ to find successful (Bpath) and failed (Dpath) outcomes. | Learning Input |
