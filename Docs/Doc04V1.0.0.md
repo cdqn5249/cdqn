@@ -72,11 +72,11 @@ It is a language built on four core principles:
       x: 0.0
       y: 0.0
     ```
-*   **`query` Block:** A declarative, SQL-like syntax for building `QueryKDU`s.
+*   **`query` Block:** A declarative, SQL-like syntax for building `QueryCDU`s.
     ```cdqnlang
     // Build a query to find all high-reputation users in the "Science" domain
-    KDU: find_experts_query ← query
-      select fqei, name, reputation.merit
+    CDU: find_experts_query ← query
+      select name, reputation.merit
       from "UserIndexer"
       where (reputation.consistency > 0.9) and ("Science" ∈ user.domains)
       limit 100
@@ -132,11 +132,11 @@ It is a language built on four core principles:
         int: count ← 0
       /state
       
-      behavior KDU: message → (state, list[KDU])
+      behavior CDU: message → (state, list[CDU])
         if message.action = "increment"
           return ({count: state.count + 1}, [])
         → message.action = "get"
-          KDU: response ← KDU.new(kdu_type: "Generic", payload: state.count)
+          CDU: response ← CDU.new(cdu_type: "Generic", payload: state.count)
           return state, [response]
         /if
       /behavior
