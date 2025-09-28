@@ -70,6 +70,46 @@ The system's intelligence is derived from its ability to calculate meaning and s
 
 ## Section 5: Validated Core Axioms (The TwinWorld Foundation)
 
+In the Chronos Model, **Worlds** are not continuous sensory streams (like in traditional World Models); they are **Parameterized Contexts** that define the specific set of **Axioms and Constraints** under which the Chronos Model performs its symbolic reasoning.
+
+A World is essentially a **specific, isolated configuration of the Rule Set** that governs how the Primitives interpret the immutable CDU ledger.
+
+### The Three Types of Worlds
+
+The Chronos Model manages three distinct ontological layers, all rooted in the same underlying CDU ledger:
+
+#### 1. The TwinWorld (The Ground Truth Reality)
+
+The TwinWorld represents the system's best, most trusted understanding of the actual, shared reality.
+
+*   **Definition:** The set of all CDUs whose state is resolved using the **Primary Axiom Set** (the core, high-certainty rules) and where **Axiom A4 (TwinWorld Filter)** is active, pruning all Negative Polarity CDUs from the operational state.
+*   **Purpose:** To guide real-world actions, maintain system stability, and serve as the source of truth for reputation and core knowledge.
+
+#### 2. Cloned Worlds (Persistent Hypothesis Testing)
+
+Cloned Worlds allow for the exploration of counterfactuals or alternative physical/logical laws.
+
+*   **Definition:** A persistent fork of the ledger state, anchored at a specific **HLC** in the main chain.
+*   **Parameterization:** A Cloned World is defined by loading the TwinWorld's base Axioms and then **overriding or injecting specific Constraint CDUs** (e.g., a `WORLD_CONSTRAINT` CDU that changes the value of Axiom A16: Kinematics).
+*   **Purpose:** To run long-term simulations or test complex theories (like the impact of a new Meta-Axiom) without affecting the operational TwinWorld.
+
+#### 3. Virtual Worlds (Ephemeral Calculation Space)
+
+Virtual Worlds are temporary, in-memory contexts for rapid, low-cost calculation.
+
+*   **Definition:** A temporary, in-memory projection initialized with a subset of CDUs (the initial state) from the TwinWorld or a Cloned World.
+*   **Purpose:** To perform rapid, short-term simulations or test immediate consequences of a proposed action *before* it is submitted for full validation. They allow the system to explore paths that might temporarily violate TwinWorld constraints, provided the final result is either discarded or committed as a new, validated CDU.
+
+### How Worlds Affect Chronos Primitives
+
+The World Context dictates which rules the Primitives use:
+
+*   **Primitive $\mathcal{C}$ (Resolver):** Uses the World Context to apply the correct **Polarity Filter** (A4).
+*   **Primitive $\mathcal{I}$ (Inference Engine):** Uses the World Context to load the correct **Axiom Set** (e.g., TwinWorld Axioms vs. Cloned World Physics Axioms) for deductive proof.
+*   **Primitive $\mathcal{D}$ (Valence Calculator):** The calculation of $V_{\text{dynamic}}$ is influenced by the World Context, as the Axioms defining neighbor influence (A10) and Prime Mappings (A11) can be context-dependent.
+
+In essence, **Worlds are the semantic environments** that define the rules of engagement for the Chronos Model's symbolic reasoning.
+
 These Axioms define the system's fundamental logic, security, and semantic structure.
 
 | Axiom Name | Type | Purpose | Key Operation |
