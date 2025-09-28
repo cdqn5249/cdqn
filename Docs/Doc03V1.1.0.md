@@ -269,6 +269,41 @@ The system's intelligence is derived from its ability to calculate meaning and s
 *   **Self-Correction:** Contradictions generate **`IMPOSSIBILITY_CDU`s** (Polarity -2), triggering Primitive $\mathcal{L}$ to propose revisions to Knowledge Axioms.
 *   **Trust Maintenance:** Reputation is **immutable per CDU**. New reputation scores are established by creating new **Reputation CDUs** linked causally to the previous one. The C-Module enforces reputation thresholds during CDU creation validation.
 
+In the Chronos Model, **Paths** are the explicit, traceable sequences of causal events (CDUs) that represent a complete reasoning attempt, simulation, or execution flow. They are the fundamental unit of **experience** that the Chronos Model analyzes to learn and improve.
+
+Paths are not stored as a single entity; they are **derived** by traversing the CDU graph backward from a terminal point to a source point.
+
+### Definition of Paths
+
+A Path is defined by its **Source CDU** (the starting query or event) and its **Terminal CDU** (the final result or failure point).
+
+#### 1. Path Structure
+
+A Path is a sequence of CDU IDs:
+$$\text{Path} = [\text{CDU}_{\text{Source}}, \text{CDU}_1, \text{CDU}_2, \dots, \text{CDU}_{\text{Terminal}}]$$
+
+The sequence is determined by following the causal links (Parent/Child relationships) established by the HLC ordering.
+
+#### 2. Path Classification (The Role of Polarity and Axioms)
+
+The Chronos Model analyzes the sequence of **Polarities** and the **Terminal CDU's outcome** to classify the Path, which is essential for learning (Primitive $\mathcal{L}$).
+
+| Path Type | Definition | Key Determinant |
+| :--- | :--- | :--- |
+| **Bright Path (Bpath)** | A path that successfully resolves the initial goal and terminates at a CDU with a **Positive Polarity (+1)**, or a Valence $V_{\text{dynamic}}$ strongly aligned with positive Axioms. | Success and Positive Semantic Alignment. |
+| **Dark Path (Dpath)** | A path that terminates due to failure, contradiction, or undefined result. This includes paths ending in a **Negative Polarity (-1)** CDU (an alert) or a CDU whose meaning is in the **Undefined Zone (ZU)**. | Failure, Contradiction, or Undefined Outcome. |
+| **Golden Path (Gpath)** | The complete set of **all Bpaths and Dpaths** that originate from the **same Source CDU**. | Captures the full spectrum of outcomes for a single initial query/action. |
+
+#### 3. Role in Chronos Operation
+
+Paths are central to the system's intelligence:
+
+*   **Learning (Primitive $\mathcal{L}$):** The Chronos Model analyzes **Gpaths** to find recurring structural patterns that lead to Bpaths. This allows it to generate **Meta-Axioms** that codify successful reasoning strategies.
+*   **Adaptation:** The **Abstract Pattern Hash** derived from a Bpath allows Primitive $\mathcal{I}$ to adapt that successful reasoning structure to new, similar problems.
+*   **Error Analysis:** Dpaths provide the necessary evidence for the system to understand its limitations, triggering the generation of **`IMPOSSIBILITY_CDU`s** or **`SCHEMA_DEFINITION`s** to correct or expand its knowledge base.
+
+In short, **Paths are the recorded experiences of the Chronos Model**, and analyzing them is how the system learns, adapts, and improves its deductive capabilities.
+
 ---
 
 ## Section 5: Validated Core Axioms (The TwinWorld Foundation)
