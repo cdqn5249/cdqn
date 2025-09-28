@@ -1,0 +1,107 @@
+This is the final, comprehensive technical specification for the Chronos Model (v1.7), incorporating all validated constraints, including the **Centralized K-Module Security Primitives** and the **Immutable Reputation Chain**.
+
+---
+
+# Chronos Model: Final Technical Specification (v1.7)
+
+The Chronos Model is a **Symbolic, Self-Correcting, Asynchronous Reasoning Engine** operating on an immutable ledger, governed by explicit Axioms and optimized for speed using fast arithmetic.
+
+## Section 1: Architectural Mandate (K-C-S-U Hierarchy)
+
+The architecture enforces strict separation: K holds pure logic; C manages execution and security enforcement.
+
+*   **K-Module (Kernel/Logic):** Hosts the **Four Core Primitives** ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$), the **Axiom Set**, **Schema Registry**, **K.HLC Generator**, **K.CryptoCore**, and the **Reputation Resolution Logic**.
+*   **C-Module (Core Runtime):** Hosts the **Asynchronous Runtime**, **Gas Metering**, and **Replay Cache**. It enforces the **Harm Guardrail** based on K-Module results.
+*   **S/U Modules (Application/User):** Handle external interaction, data creation, and local reputation score updates.
+
+---
+
+## Section 2: The Causal Data Unit (CDU) Schema
+
+The CDU is the immutable data structure, optimized for fast comparison and arithmetic operations.
+
+| Field Name | Data Type (Conceptual) | Purpose |
+| :--- | :--- | :--- |
+| `id` | `[u8; 32]` (Hash) | Content Address. |
+| `parent_ids` | `Vec<[u8; 32]>` | Causal Links. Must satisfy Axiom A1. |
+| `hlc_timestamp` | `u64` | Temporal Ordering. |
+| `author_id` | `[u8; 16]` | Persistent Identity Handle. |
+| `polarity` | `i8` ($\{-1, 0, 1\}$) | Guardrail Flag (Urgency). |
+| `dynamic_valence` | `f32` | Calculated semantic position $V_{\text{dynamic}}$. |
+| `prime_indices` | `Vec<u32>` | List of Prime Numbers anchoring concepts. |
+| `data_type_id` | `u8` | Identifies payload structure (e.g., AXIOM, TRIPLE, REPUTATION\_UPDATE). |
+| `payload_hash` | `[u8; 32]` | Integrity hash of the data payload. |
+| **`author_reputation`** | `f32` | Author's reputation score **at the time of signing**. |
+| `payload_data` | `Vec<u8>` (Opaque) | The actual data content. |
+
+---
+
+## Section 3: The Four Core Mathematical Primitives (K-Module Logic)
+
+These primitives execute logic using only **Addition, Multiplication, Comparison, and Counting**.
+
+### Primitive 1: The Discrete Polarity Assigner ($\mathcal{P}$)
+*   **Function:** Assigns discrete Polarity ($\{-1, 0, 1\}$) based on explicit **Polarity Assignment Axioms** via **Comparison**.
+
+### Primitive 2: The HLC-Constrained State Resolver ($\mathcal{C}$)
+*   **Function:** Resolves the current state by maximizing HLC, filtering based on World Context (A4), and checking for predicted harm.
+*   **Key Operation:** **Comparison** (HLC maximization) and **Counting** (for simulation depth limit). **Crucially, it resolves reputation scores by searching the immutable Reputation CDU Chain.**
+
+### Primitive 3: The Symbolic Inference Engine ($\mathcal{I}$)
+*   **Function:** Performs deductive proof by matching premises against **Inference Axioms**.
+*   **Key Operation:** **Lookup/Comparison** against known facts. Orchestrates **parallel asynchronous searches** and uses **Abstract Pattern Matching** for adaptation.
+
+### Primitive 4: The Pattern Induction Operator ($\mathcal{L}$)
+*   **Function:** Learns by analyzing successful **Bpaths** to generate new **Meta-Axioms**.
+*   **Key Operation:** **Counting** sequence frequencies and checking against thresholds ($T$), modulated by the **Average Valence** of the path's terminal CDUs.
+
+---
+
+## Section 4: Dynamic Semantics and Learning
+
+The system's intelligence is derived from its ability to calculate meaning and self-correct its rules.
+
+*   **Dynamic Valence:** Calculated via **Weighted Summation (Multiplication/Addition)** of neighbor Polarity, decayed by HLC distance (Axiom A10). Meaning is anchored by **Prime Elements** ($P_3, P_5, \dots$).
+*   **Self-Correction:** Contradictions generate **`IMPOSSIBILITY_CDU`s** (Polarity -2), triggering Primitive $\mathcal{L}$ to propose revisions to Knowledge Axioms.
+*   **Trust Maintenance:** Reputation is **immutable per CDU**. New reputation scores are established by creating new **Reputation CDUs** linked causally to the previous one. The C-Module enforces reputation thresholds during CDU creation validation.
+
+---
+
+## Section 5: Validated Core Axioms (The TwinWorld Foundation)
+
+These Axioms define the system's fundamental logic, security, and semantic structure.
+
+| Axiom Name | Type | Purpose | Key Operation |
+| :--- | :--- | :--- | :--- |
+| **A1: Causal Precedence** | `LINKAGE_RULE` | Enforces strict temporal ordering. | Comparison (HLC) |
+| **A2: Replay Prevention** | `LINKAGE_RULE` | Prevents re-execution of signed actions. | Comparison (ID Check) |
+| **A3: State Resolution Rule** | `STATE_RULE` | Defines current reality via MAX HLC. | Comparison (HLC) |
+| **A4: TwinWorld Filter** | `WORLD_CONSTRAINT` | Prunes Negative Polarity CDUs from operational planning. | Comparison (Polarity) |
+| **A5: Harmful Inference Block** | `INFERENCE_RULE` | Prevents deriving positive conclusions from negative premises. | Comparison (Polarity) |
+| **A6: Pure Function Guarantee** | `RUNTIME_RULE` | Enforces deterministic execution in K-Module. | Architectural Constraint |
+| **A7: Gas Budget Enforcement** | `RUNTIME_RULE` | Prevents DoS by metering operations. | Comparison (Cost vs. Gas) |
+| **A8: Identity Chain Rule** | `LINKAGE_RULE` | Enforces traceability back to the MC-sponsored Origin. | Comparison (Author ID Chain) |
+| **A9: Pattern Induction Threshold** | `LEARNING_RULE` | Defines when a sequence becomes a reliable Meta-Axiom. | **Counting** & Comparison ($\bar{V}$) |
+| **A10: Causal Distance Weighting** | `TEMPORAL_WEIGHT_RULE` | Modulates neighbor influence on $V_{\text{dynamic}}$ based on HLC distance (using **Multiplication**). |
+| **A11: Core Lexical Anchors** | `LEXICAL_ANCHOR_RULE` | Maps fundamental vocabulary to initial Prime Elements. |
+| **A12-A14:** | `INFERENCE_RULE` | Foundational Mathematics (Commutativity, Transitivity, Non-Contradiction). |
+| **A15-A16:** | `INFERENCE_RULE` | Basic Applied Science (Conservation, Kinematics). |
+
+---
+
+## Section 6: Glossary of Core Concepts
+
+| Term | Definition | Key Mechanism |
+| :--- | :--- | :--- |
+| **CDU** | **Causal Data Unit.** The immutable, content-addressed container. | Immutability |
+| **HLC** | **Hybrid Logical Clock.** Ensures strict, distributed temporal ordering. | K.HLC Module |
+| **K-Module** | **Kernel Module.** Hosts the **Four Core Primitives** ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$). | Root of Logic |
+| **C-Module** | **Core Runtime.** Manages asynchronous execution, I/O, Gas Metering, and enforces the **Harm Guardrail**. | Execution Environment |
+| **Axiom CDU** | A special CDU defining a rule. These are the system's explicit knowledge base. | Symbolic Logic |
+| **Polarity** | A discrete value ($\{-1, 0, 1\}$) indicating immediate semantic valence for guardrail checks. | CDU Metadata |
+| **Dynamic Valence ($V_{\text{dynamic}}$)** | A real number calculated locally based on neighbor influence, representing nuanced semantic position relative to Prime Anchors. | Primitive $\mathcal{D}$ |
+| **Prime Elements** | Fixed, discrete numbers ($P_3, P_5, \dots$) that define hierarchical anchors for semantic certainty. | Semantic Anchors |
+| **Prime Ideal** | A concept whose $V_{\text{dynamic}}$ is consistently near a Prime Anchor, representing a stable, high-certainty truth. | Emergent Property |
+| **Gpath** | **Golden Path.** A complete reasoning sequence analyzed by Primitive $\mathcal{L}$ to find successful (Bpath) and failed (Dpath) outcomes. | Learning Input |
+| **Meta-Axiom** | A new Axiom CDU generated by Primitive $\mathcal{L}$ that codifies a successful, abstract pattern found in Gpaths. | Learned Knowledge |
+| **Reputation Score** | A dynamic score stored immutably in a **Reputation CDU Chain**, reflecting author trust earned via successful actions. | Local Trust Metric |
