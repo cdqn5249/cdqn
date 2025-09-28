@@ -68,7 +68,39 @@ The CDU is the immutable data structure, optimized for fast comparison and arith
 These primitives execute logic using only **Addition, Multiplication, Comparison, and Counting**.
 
 ### Primitive 1: The Discrete Polarity Assigner ($\mathcal{P}$)
-*   **Function:** Assigns discrete Polarity ($\{-1, 0, 1\}$) based on explicit **Polarity Assignment Axioms** via **Comparison**.
+
+**Module Location:** K-Module (Pure Logic)
+**Core Operations:** Comparison, Lookup (against Axioms).
+
+#### 1. Role and Purpose
+
+The role of $\mathcal{P}$ is to assign the discrete **Polarity** field of a new CDU based on the content of its payload, using the explicit **Polarity Assignment Axioms** as its rule set. This discrete flag is used by Primitive $\mathcal{C}$ for fast filtering in the TwinWorld context (Axiom A4).
+
+#### 2. Detailed Workflow
+
+The process is synchronous and relies on fast comparison:
+
+1.  **Input:** Receives the proposed CDU's `payload_data`, `data_type_id`, and the current **World Context**.
+2.  **Axiom Lookup (K-Module):** $\mathcal{P}$ asynchronously requests the relevant **Polarity Assignment Axioms** (e.g., $R_{\text{Temp}}$) from the K-Module's Axiom Set storage. (This lookup is fast as the Axiom Set is indexed).
+3.  **Rule Matching (Comparison):** $\mathcal{P}$ iterates through the retrieved Axioms:
+    *   It checks if the Axiom's `applies_to_type` matches the CDU's `data_type_id`.
+    *   It performs a **Comparison** between the data in the payload and the threshold defined in the Axiom (e.g., `temp > 30.0`).
+4.  **Polarity Assignment:**
+    *   If a matching rule is found and the condition is met, the corresponding Polarity ($\{-1, 0, 1\}$) is assigned.
+    *   If multiple rules match, the rule with the highest priority (defined in the Axiom metadata) takes precedence.
+    *   If **no rule matches** (the concept is novel or unmapped), the default Polarity is assigned, typically **0 (Neutral)**.
+5.  **Output:** Returns the assigned Polarity value to the Validator ($\mathcal{V}$) for final CDU assembly.
+
+#### 3. Interaction with Dynamic Valence ($V_{\text{dynamic}}$)
+
+While $\mathcal{P}$ assigns the discrete Polarity, it is **not** the same as the continuous $V_{\text{dynamic}}$:
+
+*   **Relationship:** The discrete Polarity is a **coarse categorization** of the calculated $V_{\text{dynamic}}$:
+    *   If $V_{\text{dynamic}}$ falls near a strong Prime Anchor (e.g., $V > 1.5$ or $V < -1.5$), the Polarity is likely set to $+1$ or $-1$.
+    *   If $V_{\text{dynamic}}$ falls in the Undefined Zone (ZU), the Polarity is likely set to $0$.
+*   **Why the Separation?** The discrete Polarity is used for **fast, binary guardrail checks** (A4, A5) by Primitive $\mathcal{C}$ and $\mathcal{I}$. The continuous $V_{\text{dynamic}}$ is used for **nuanced learning and pattern induction** by Primitive $\mathcal{L}$.
+
+Primitive $\mathcal{P}$ ensures that every piece of data entering the system is immediately categorized according to the system's established, discrete ethical and factual boundaries.
 
 ### Primitive 2: The HLC-Constrained State Resolver ($\mathcal{C}$)
 *   **Function:** Resolves the current state by maximizing HLC, filtering based on World Context (A4), and checking for predicted harm.
