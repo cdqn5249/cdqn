@@ -21,7 +21,7 @@ It is a language built on four core principles:
 *   **Purity is Not Optional:** All user-defined logic (in `behavior` blocks) is guaranteed to be pure.
 *   **Readability is Paramount:** The syntax is designed to be unambiguous and self-documenting.
 *   **Security through Abstraction:** Complex and sensitive operations are abstracted away into elegant syntax that transpiles into secure, hardened calls to trusted Core Modules.
-*   **Concurrency by Default:** The language is built on an actor model. An entity sending a KDU is an inherently asynchronous, non-blocking operation. Developers do not manage threads or async/await; they think in terms of messages and responses.
+*   **Concurrency by Default:** The language is built on an actor model. An entity sending a CDU is an inherently asynchronous, non-blocking operation. Developers do not manage threads or async/await; they think in terms of messages and responses.
 
 ## **2. The `cdqnLang` Toolchain: From Code to Machine**
 
