@@ -201,6 +201,7 @@ Primitive $\mathcal{L}$ is highly efficient because:
 *   It runs **asynchronously** in the background, ensuring real-time query performance is never impacted by the learning process.
 
 Primitive $\mathcal{L}$ is the mechanism that allows the Chronos Model to evolve its understanding of the world by codifying successful, contextually validated reasoning patterns into reusable, high-certainty rules.
+
 ---
 
 ## Section 4: Dynamic Semantics and Learning
