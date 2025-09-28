@@ -168,9 +168,39 @@ Primitive $\mathcal{I}$ is designed to be fast by:
 *   **Asynchronous Delegation:** Offloading all slow mathematical computations to the C-Module, ensuring the core logic thread remains responsive.
   
 ### Primitive 4: The Pattern Induction Operator ($\mathcal{L}$)
-*   **Function:** Learns by analyzing successful **Bpaths** to generate new **Meta-Axioms**.
-*   **Key Operation:** **Counting** sequence frequencies and checking against thresholds ($T$), modulated by the **Average Valence** of the path's terminal CDUs.
 
+* **Module Location:** K-Module (Pure Logic)
+* **Core Operations:** Counting, Comparison, Hashing, Assignment.
+* **Asynchronous Nature:** Runs entirely asynchronously as a background learning task.
+
+#### 1. Role and Purpose
+
+The role of $\mathcal{L}$ is to analyze the history of reasoning attempts (Paths) to identify **reusable, high-certainty algorithmic patterns**. It converts observed success/failure into new, explicit **Meta-Axioms**, thereby solving the scalability issue of the explicit Axiom Set ($A$).
+
+#### 2. Detailed Workflow
+
+The learning process is triggered asynchronously by the C-Module upon the completion of a path traversal.
+
+1.  **Input:** A completed **Path Sequence** (a list of CDU hashes representing the traversal) and the **Terminal CDU** of that path.
+2.  **Sequence Hashing (Fast Operation):** The sequence of (CDU Type, Polarity, Valence Range) is hashed to create a unique **Sequence Hash**.
+3.  **Frequency Counting (Fast Operation):** The count associated with this `SequenceHash` in the internal **Frequency Counter Map** (managed by K-Module) is incremented.
+4.  **Semantic Validation Check (Comparison & Valence Lookup):** This step ensures learning is meaningful, not just frequent:
+    *   **Frequency Check:** Compare the count against the threshold $T$ (Axiom A8).
+    *   **Valence Check:** Retrieve the `dynamic_valence` of the Terminal CDU. Compare this value against the minimum certainty threshold (e.g., $\bar{V} > 1.5$).
+5.  **Meta-Axiom Generation (Assignment):** If **both** the frequency and semantic quality checks pass:
+    *   $\mathcal{L}$ generates a new **`ALGORITHMIC_PATTERN` CDU** (a Meta-Axiom).
+    *   The payload of this new CDU contains the abstract structure of the successful path (derived from the hash) and the resulting high Valence.
+    *   This new Axiom is submitted for validation (via $\mathcal{V}$) to be added to the active Axiom Set.
+6.  **Axiom Falsification Check (Contradiction Detection):** If the path resulted in an **`IMPOSSIBILITY_CDU`** (Polarity -2), $\mathcal{L}$ analyzes the path leading to it. If the path consistently involved a specific, high-certainty Knowledge Axiom, $\mathcal{L}$ generates a **`REVISION_PROPOSAL` CDU** to challenge that Axiom, triggering the self-correction mechanism.
+
+#### 3. Performance Rationale
+
+Primitive $\mathcal{L}$ is highly efficient because:
+*   It relies on **Hashing** and **Counting**, which are extremely fast operations.
+*   It avoids complex symbolic reasoning during the initial pattern detection phase.
+*   It runs **asynchronously** in the background, ensuring real-time query performance is never impacted by the learning process.
+
+Primitive $\mathcal{L}$ is the mechanism that allows the Chronos Model to evolve its understanding of the world by codifying successful, contextually validated reasoning patterns into reusable, high-certainty rules.
 ---
 
 ## Section 4: Dynamic Semantics and Learning
