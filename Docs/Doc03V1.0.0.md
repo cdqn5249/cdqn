@@ -55,7 +55,7 @@ The CDU is the atomic, immutable, content-addressed record of the Chronos Model.
 | **`author_id`** | `[u8; 16]` | 16 Bytes | Persistent Identity Handle. |
 | **`polarity`** | `i8` ($\{-1, 0, 1\}$) | 1 Byte | **Guardrail Flag.** Assigned by $\mathcal{P}$ based on Axioms; used by $\mathcal{C}$ for filtering. |
 | **`dynamic_valence`** | `f32` (or Fixed-Point) | 4 Bytes | **Calculated Semantic Position ($V_{\text{dynamic}}$)** derived from neighbor influence. |
-| **`prime_indices`** | `Vec<u32>` | Variable | List of Prime Numbers anchoring concepts in the payload. Input for Primitive $\mathcal{D}$. |
+| **`prime_indices`** | `Vec<u32>` | Variable | List of Prime Numbers anchoring concepts in the payload. |
 | **`data_type_id`** | `u8` | 1 Byte | Index mapping to the Schema Registry (e.g., AXIOM, TRIPLE, PATH\_RECORD). |
 | **`payload_hash`** | `[u8; 32]` | 32 Bytes | Integrity hash of the opaque data payload. |
 | **`author_reputation`** | `f32` | 4 Bytes | Author's reputation score **at the time of signing**. |
@@ -65,7 +65,7 @@ The CDU is the atomic, immutable, content-addressed record of the Chronos Model.
 
 1.  **Immutability:** Every field is fixed upon signing. Dynamic changes (like reputation updates or new $V_{\text{dynamic}}$ calculations) result in **new CDUs** with higher HLCs.
 2.  **Performance Optimization:** Critical fields (`hlc_timestamp`, `polarity`, `author_reputation`) are fixed-size integers/floats to ensure fast comparison and indexing by Primitives $\mathcal{C}$.
-3.  **Semantic Grounding:** The inclusion of `prime_indices` directly supports the dynamic calculation of $V_{\text{dynamic}}$ by Primitive $\mathcal{D}$.
+3.  **Semantic Grounding:** The inclusion of `prime_indices` directly supports the dynamic calculation of $V_{\text{dynamic}}$.
 
 The **Schema Registry** is a critical component of the K-Module, as it defines the structure and initial semantic anchors for every recognized `data_type_id`. It is itself defined by a set of **Schema Definition CDUs**.
 
