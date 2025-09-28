@@ -125,28 +125,6 @@ It is a language built on four core principles:
       // ... entity definitions go here ...
     /Umodule
     ```
-*   **`SphereModule`:** A specialized block for defining a new Custom Sphere. This is compiled into a `Configuration` KDU with `config_type: "SphereModule"`.
-    ```cdqnlang
-    SphereModule U.Sphere.SyntacticStructure
-      version: "1.0.0"
-      sphere_name: "SyntacticStructure"
-      
-      axes
-        axis "Language"
-          anchors
-            prime 2
-              en: "Python"
-              fr: "Python"
-          /anchors
-        /axis
-        // ... 6 more axes ...
-      /axes
-      
-      worker entity ProjectionEngine
-        // ... projection logic ...
-      /worker
-    /SphereModule
-    ```
 *   **`entity`:** The fundamental unit of computation, defined within a module.
     ```cdqnlang
     bot.stateful entity Counter
@@ -165,131 +143,6 @@ It is a language built on four core principles:
     /bot
     ```
 
-## **7. Defining Knowledge: Declarative Data Structures**
-
-*   **`workflow`:** Defines a high-level, strategic plan (`WorkflowKDU`).
-    ```cdqnlang
-    workflow "ClientOnboarding"
-      goal: "Onboard a new enterprise client"
-      
-      step "SendWelcomeEmail"
-        action: ExecuteProcedure "Procedures.Email.SendWelcome"
-        assign_to: bot.service.email
-      /step
-      
-      step "ScheduleKickoff"
-        action: ExecuteProcedure "Procedures.Scheduling.FindTime"
-        assign_to: agent.assistant.scheduling
-        depends_on: "SendWelcomeEmail"
-      /step
-    /workflow
-    ```
-*   **`procedure`:** Defines a low-level, tactical sequence of actions (`ProceduralKDU`).
-    ```cdqnlang
-    procedure "Procedures.Email.SendWelcome"
-      task: "Send a standardized welcome email to a new user."
-      
-      script
-        "1. Retrieve user profile from UserIndexer."
-        "2. Select 'Welcome' email template."
-        "3. Send email via EmailBot."
-      /script
-    /procedure
-    ```
-*   **`worldlaw`:** Defines a single, verifiable rule for a `World Model Sphere` (`WorldLawKDU`).
-    ```cdqnlang
-    worldlaw "GravityConstant"
-      world_id: "MyGameWorld"
-      law_type: "Physics"
-      description: "Gravity is a constant force of 9.8 m/s²."
-      
-      logic
-        // Machine-readable logic
-      /logic
-    /worldlaw
-    ```
-
-## **8. Interaction & Logic: Workflows in Action**
-
-### **Workflow Example 1: Solving a Math Problem**
-This workflow shows how an Agent uses `cdqnLang`'s features to solve a problem and create a verifiable result KDU.
-
-```cdqnlang
-agent.specialist.math entity GeometryAgent
-  struct Point
-    float: x, y
-  /struct
-  
-  behavior KDU: message → (state, list[KDU])
-    if message.action = "calculate.euclidean_distance"
-      Point: p1, p2 ← message.payload.point1, message.payload.point2
-      
-      float: distance ← √((p2.x - p1.x)² + (p2.y - p1.y)²)
-      
-      KDU: result_kdu ← KDU.new
-        kdu_type: "Generic"
-        target: message.originator_fqei
-        causal_link: message.kdu_id
-        data_payload: {
-          action: "math.result",
-          problem: "Euclidean Distance",
-          result: distance
-        }
-      
-      return state, [result_kdu]
-    /if
-  /behavior
-/agent
-```
-
-### **Workflow Example 2: The Asynchronous Learning Loop**
-This workflow shows how an Agent interacts with the knowledge system to learn and solve new problems.
-
-```cdqnlang
-agent.planner entity OnboardingPlanner
-  behavior KDU: message → (state, list[KDU])
-    // --- SCENARIO 1: A new goal arrives ---
-    if message.action = "goal.onboard_client"
-      // 1. The Agent's first step is to ASK if a solution already exists.
-      KDU: find_workflow_query ← query
-        select *
-        from "WorkflowIndexer"
-        where goal = "Onboard a new client"
-        limit 1
-      /query
-      
-      // 2. The Agent sends the query. Its work for this turn is done.
-      return state, [find_workflow_query]
-    
-    // --- SCENARIO 2: The response from the query arrives later ---
-    → message.action = "query.response"
-      if message.payload.found = true
-        // 3a. A solution exists! The Agent can now execute it.
-        Workflow: known_workflow ← message.payload.workflow
-        // ... logic to start executing the known_workflow ...
-        return state, [ ... next action KDUs ... ]
-      →
-        // 3b. No solution exists. The Agent must create one.
-        workflow "NewClientOnboarding"
-          // ... define new workflow ...
-        /workflow
-        
-        // 4. The Agent submits its new solution as a Proposal to the Curation module.
-        KDU: learning_submission ← KDU.new
-          kdu_type: "Proposal"
-          target: "C.Curation.MetaCognitiveBot"
-          payload: {
-            proposal_type: "NewWorkflow",
-            proposal_data: NewClientOnboarding
-          }
-        
-        return state, [learning_submission]
-      /if
-    /if
-  /behavior
-/agent
-```
-
 ## **9. Mathematical Elegance: Syntax Sugar**
 
 `cdqnLang` provides a rich set of UTF-8 mathematical symbols that act as elegant, readable syntax sugar, transpiling into secure `call`s to the `C.Numerics` module.
@@ -300,20 +153,6 @@ agent.planner entity OnboardingPlanner
 *   **Linear Algebra:** `·`, `×`, `ᵀ`, `|M|`.
 *   **Set Theory & Logic:** `∈`, `∀`, `∃`.
 *   **Other Operators:** `√`.
-
-## **10. Native Types**
-
-`cdqnLang` includes a rich set of built-in types that correspond to the core concepts of the ecosystem.
-
-```cdqnlang
-// Example declarations of native types
-KDU: my_kdu ← KDU.new(...)
-FQEI: target_entity ← "agent@U.MyProject#01H8XJ..."
-Alias: local_bot ← "MyCounterBot"
-ReputationVector: node_rep ← call C.Trust.ReputationBot(...)
-cdqnStar: user_balance ← 100.50
-vector[u16]: unisphere_coords ← [ ... ]
-```
 
 ## **11. Conclusion**
 
