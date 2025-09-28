@@ -67,6 +67,57 @@ The CDU is the atomic, immutable, content-addressed record of the Chronos Model.
 2.  **Performance Optimization:** Critical fields (`hlc_timestamp`, `polarity`, `author_reputation`) are fixed-size integers/floats to ensure fast comparison and indexing by Primitives $\mathcal{C}$ and $\mathcal{V}$.
 3.  **Semantic Grounding:** The inclusion of `prime_indices` directly supports the dynamic calculation of $V_{\text{dynamic}}$ by Primitive $\mathcal{D}$.
 
+The **Schema Registry** is a critical component of the K-Module, as it defines the structure and initial semantic anchors for every recognized `data_type_id`. It is itself defined by a set of **Schema Definition CDUs**.
+
+Since we validated that the system must be self-describing (Omni Causal Model), the Schema Registry must be populated by CDUs that define the structure of all other CDUs.
+
+### The Schema Registry Definition
+
+The Schema Registry is a mapping maintained by the K-Module that links the `data_type_id` (a simple integer) to its required structure, associated Primes, and initial Axioms.
+
+#### 1. Schema Definition CDU Structure (Example)
+
+A Schema is defined by a CDU of type `SCHEMA_DEFINITION`.
+
+```json
+{
+  "metadata": { /* ... standard metadata ... */ },
+  "data_type_id": 99, // Example ID for SCHEMA_DEFINITION
+  "payload_data": {
+    "schema_name": "RELATIONAL_TRIPLE_V1",
+    "required_fields": ["subject_id", "predicate_id", "object_id"],
+    "initial_prime_map": {
+      "predicate_id": 101, // Prime P101 defines the semantic space for predicates
+      "subject_id": 103
+    },
+    "default_polarity_rule_id": "R_TRIPLE_DEFAULT" // Links to a Polarity Assignment Axiom
+  }
+}
+```
+
+#### 2. Initial Schema Registry Mapping (Based on Validated Concepts)
+
+The registry must contain definitions for the core CDU types and the Axiom types that govern the system.
+
+| `data_type_id` | Schema Name | Primary Role | Key Primes/Axioms Referenced |
+| :--- | :--- | :--- | :--- |
+| **1** | **AXIOM\_CORE** | Defines the fundamental rules of the system (A1-A18). | Primes $P_3, P_5, P_7$ (Identity, Causality, Integrity). |
+| **2** | **RELATIONAL\_TRIPLE** | The fundamental unit of symbolic knowledge. | Primes assigned to Subject, Predicate, Object concepts. |
+| **3** | **NUMERIC\_SNAPSHOT** | Records quantifiable state changes. | Primes associated with measurement units (e.g., Mass, Temperature). |
+| **4** | **PATH\_RECORD** | Records the result of a reasoning attempt (Bpath/Dpath). | Primes associated with Path Analysis (e.g., Sequence Hash). |
+| **5** | **ALGORITHMIC\_PATTERN** | Stores learned, generalized inference rules (Meta-Axioms). | Primes associated with high-level logic structures. |
+| **6** | **REPUTATION\_UPDATE** | Records an author's reputation score at a specific HLC. | Primes associated with Trust/Verification. |
+| **7** | **SCHEMA\_DEFINITION** | Defines the structure of other data types (Self-Description). | Primes associated with Structure/Syntax. |
+| **8** | **COMPUTE\_REQUEST** | Request for slow mathematical calculation (delegated to C-Module). | Primes associated with mathematical operations. |
+| **9** | **COMPUTE\_RESULT** | Response containing the result of a slow calculation. | Primes associated with mathematical results. |
+
+#### 3. Dynamic Schema Evolution
+
+The Omni Causal Model capability is realized here:
+
+*   If Primitive $\mathcal{I}$ encounters a new, unmapped data structure in a `RAW_TEXT` or `RAW_DATA` CDU, the system generates a **`SCHEMA_DEFINITION` CDU**.
+*   Once this new Schema CDU is validated and appended, the Schema Registry is updated, allowing the Chronos Model to interpret the new data type correctly in future steps, thus **dynamically expanding its understanding of the world's structure.**
+
 ---
 
 ## Section 3: The Four Core Mathematical Primitives (K-Module Logic)
