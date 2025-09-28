@@ -136,9 +136,37 @@ Primitive $\mathcal{C}$ is fast because:
 *   The Harm Check depth is **bounded by a constant**, making its complexity $O(1)$ relative to the ledger size $N$.
 
 ### Primitive 3: The Symbolic Inference Engine ($\mathcal{I}$)
-*   **Function:** Performs deductive proof by matching premises against **Inference Axioms**.
-*   **Key Operation:** **Lookup/Comparison** against known facts. Orchestrates **parallel asynchronous searches** and uses **Abstract Pattern Matching** for adaptation.
 
+**Module Location:** K-Module (Pure Logic)
+**Core Operations:** Lookup, Comparison, Assignment.
+**Asynchronous Nature:** Orchestrates parallel searches and delegates slow mathematical computations.
+
+#### 1. Role and Purpose
+
+The role of $\mathcal{I}$ is to perform **deductive proof** based on the explicit **Inference Axioms** (e.g., A12, A13, A16). It synthesizes new facts (Proposed CDUs) from existing facts, ensuring the resulting knowledge is logically sound and contextually appropriate.
+
+#### 2. Detailed Workflow
+
+The inference process is a structured search guided by the active Axiom Set within the current World Context.
+
+1.  **Input:** A Target Conclusion (the query goal) or a set of known facts (resolved by $\mathcal{C}$).
+2.  **Axiom Selection:** $\mathcal{I}$ retrieves the relevant **Inference Axioms** from the K-Module's Axiom Set based on the target conclusion or the current World Context.
+3.  **Premise Verification (Lookup & Comparison):** For each selected Axiom, $\mathcal{I}$ performs lookups (via C-Module) to verify if the required premises exist as validated CDUs in the ledger.
+    *   **Semantic Check:** If the Axiom involves semantic concepts (Primes), $\mathcal{I}$ checks if the existing CDU's $V_{\text{dynamic}}$ is sufficiently close to the Valence required by the Axiom (using **Comparison**).
+4.  **Adaptation Check (Pattern Matching):** Before concluding, $\mathcal{I}$ checks the **Path Index Cache (PIC)** for any **Meta-Axiom Templates** associated with the goal structure. If a template is found, it attempts to **substitute** the current entities into the template structure for a faster proof path.
+5.  **Conclusion Generation (Assignment):** If all premises are verified (or the pattern template is successfully instantiated), $\mathcal{I}$ generates a **Proposed New CDU** (the conclusion).
+6.  **Harm Check Delegation:** Before outputting the proposal, $\mathcal{I}$ checks the proposed CDU against **Harm Axioms (A5)**.
+    *   If the proposed conclusion violates A5 (e.g., deriving a positive outcome from a negative premise), the proposal is discarded.
+    *   If the proposed conclusion requires **slow math** (e.g., complex geometry in a Cloned World), $\mathcal{I}$ generates a **`COMPUTE_REQUEST` CDU** and delegates the calculation to the C-Module's `MathWorker`, pausing its current proof thread asynchronously.
+7.  **Output:** Returns the validated Proposed CDU or the `COMPUTE_REQUEST` CDU.
+
+#### 3. Performance Rationale
+
+Primitive $\mathcal{I}$ is designed to be fast by:
+*   **Prioritizing Axioms:** Checking high-priority Axioms (like core math A12-A14) first.
+*   **Leveraging Learning:** Using the **Meta-Axiom Templates** from the PIC to shortcut exhaustive graph searches.
+*   **Asynchronous Delegation:** Offloading all slow mathematical computations to the C-Module, ensuring the core logic thread remains responsive.
+  
 ### Primitive 4: The Pattern Induction Operator ($\mathcal{L}$)
 *   **Function:** Learns by analyzing successful **Bpaths** to generate new **Meta-Axioms**.
 *   **Key Operation:** **Counting** sequence frequencies and checking against thresholds ($T$), modulated by the **Average Valence** of the path's terminal CDUs.
