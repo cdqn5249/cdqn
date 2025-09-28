@@ -23,15 +23,15 @@ We are building the next generation of intelligent systems—not based on statis
 
 These tenets define the technical architecture of the Chronos Model.
 
-1.  **Immutable History:** Built on an **append-only ledger (CDUs)**, time-ordered by the **HLC**.
+1.  **Immutable History:** We build on an **append-only ledger (CDUs)**, time-ordered by the **HLC**.
 2.  **Sovereign Ownership:** Each node controls its own data. Trust is **earned locally** via dynamic reputation and **triangulation**, not granted globally.
 3.  **Modular Security:** Strict **K-C-S-U hierarchy** isolates core logic (K) from runtime execution (C).
 4.  **Verifiable Identity:** No anonymous actions. Every CDU is signed, tracing accountability back to the **Origin CDU**, which is anchored by the Master Chronos.
-5.  **Asynchronous Performance:** Built on a **non-blocking runtime** that executes all core logic via **fast arithmetic (Add, Mult, Comp, Count)**, maximizing concurrency.
+5.  **Asynchronous Performance:** Built on a **non-blocking, asynchronous runtime**. Core logic relies on **fast arithmetic (Add, Mult, Comp, Count)**, while complex calculations are delegated to specialized, metered workers.
 6.  **Guaranteed Resilience:** State is **perfectly reconstructible** from the immutable HLC chain. Replay Attacks are prevented by the **Replay Cache** managed by the C-Module.
-7.  **Forward-Secret Security:** All cryptographic operations are isolated in the **K.CryptoCore**, and **every CDU signature must use a unique, ephemeral key**.
+7.  **Forward-Secret Security:** All cryptographic operations are isolated in the **K.CryptoCore**, and **every CDU signature must use a unique, ephemeral key** to prevent long-term identity compromise.
 8.  **Content Agnostic Core:** The engine interprets data via **explicit Axioms** and a **Schema Registry**, allowing it to self-describe new data structures.
-9.  **Self-Correcting Growth:** Learning occurs by analyzing failed paths (Dpaths) to generate new, verified **Meta-Axioms**, ensuring the system's logic evolves based on verifiable contradiction.
+9.  **Self-Correcting Growth:** Learning occurs by analyzing failed paths (Dpaths) to generate new, verified **Meta-Axioms**, ensuring the system's logic evolves based on verifiable contradiction and successful pattern abstraction.
 
 ***
 
@@ -44,9 +44,9 @@ These tenets define the technical architecture of the Chronos Model.
 | **K-Module** | **Kernel Module.** Hosts the **Four Core Primitives** ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$), the immutable Axioms, and the logic for dynamic semantics. | Root of Logic |
 | **C-Module** | **Core Runtime.** Manages asynchronous execution, I/O, Gas Metering, and enforces the **Harm Guardrail**. | Execution Environment |
 | **Axiom CDU** | A special CDU defining a rule (e.g., inference, polarity, world law). These are the system's explicit knowledge base. | Symbolic Logic |
-| **Polarity** | A discrete value ($\{-1, 0, 1\}$) assigned to a CDU indicating its immediate semantic valence for guardrail checks. | CDU Metadata |
+| **Polarity** | A discrete value ($\{-1, 0, 1\}$) indicating immediate semantic valence for guardrail checks. | CDU Metadata |
 | **Dynamic Valence ($V_{\text{dynamic}}$)** | A real number calculated locally based on neighbor influence, representing nuanced semantic position relative to Prime Anchors. | Primitive $\mathcal{D}$ |
 | **Prime Elements** | Fixed, discrete numbers ($P_3, P_5, \dots$) that define hierarchical anchors for semantic certainty. | Semantic Anchors |
 | **Prime Ideal** | A concept whose $V_{\text{dynamic}}$ is consistently near a Prime Anchor, representing a stable, high-certainty truth. | Emergent Property |
 | **Gpath** | **Golden Path.** A complete reasoning sequence analyzed by Primitive $\mathcal{L}$ to find successful (Bpath) and failed (Dpath) outcomes. | Learning Input |
-| **Reputation Score** | A dynamic score maintained locally in the C-Module, earned through successful CDU validation and decaying over time. | Local Trust Metric |
+| **Reputation Score** | A **dynamic score** maintained locally in the C-Module, earned through successful CDU validation and decaying over time. Trust is verified via **triangulation**. | Local Trust Metric |
