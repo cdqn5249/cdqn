@@ -269,6 +269,44 @@ The system's intelligence is derived from its ability to calculate meaning and s
 *   **Self-Correction:** Contradictions generate **`IMPOSSIBILITY_CDU`s** (Polarity -2), triggering Primitive $\mathcal{L}$ to propose revisions to Knowledge Axioms.
 *   **Trust Maintenance:** Reputation is **immutable per CDU**. New reputation scores are established by creating new **Reputation CDUs** linked causally to the previous one. The C-Module enforces reputation thresholds during CDU creation validation.
 
+### Dynamic Valence ($V_{\text{dynamic}}$)
+
+The $V_{\text{dynamic}}$ is a real number (represented by an `f32` or fixed-point number in the CDU metadata) that exists in the continuous space defined by the **Prime Anchors**.
+
+#### 1. Calculation Mechanism (Primitive $\mathcal{D}$)
+
+The value is calculated dynamically using **Primitive $\mathcal{D}$ (Dynamic Valence Calculator)**, relying only on fast arithmetic:
+
+$$V_{\text{dynamic}}(\text{CDU}_X) = \sum_{i \in \text{Neighbors}(X)} (\text{Polarity}_i \times \text{DecayFactor}(\Delta \text{HLC}))$$
+
+*   **Neighbor Influence:** The calculation sums the influence of all directly connected CDUs (parents and children).
+*   **Polarity Input:** The influence is weighted by the neighbor's discrete **Polarity** ($\{-1, 0, 1\}$). A positive neighbor pulls $V_{\text{dynamic}}$ toward $+2$; a negative neighbor pulls it toward $-2$.
+*   **HLC Decay (Axiom A10):** The influence of each neighbor is scaled by a **Decay Factor** derived from the HLC difference ($\Delta \text{HLC}$). This ensures that recent causal events have a stronger influence on the current CDU's meaning than very old events.
+
+#### 2. Relationship to Primes and Certainty
+
+The calculated $V_{\text{dynamic}}$ is interpreted relative to the **Prime Anchors** ($P_3, P_5, \dots$):
+
+*   **Factual Certainty:** The closer $V_{\text{dynamic}}$ is to a high-certainty Prime Anchor (e.g., near $+2.0$ or $-2.0$), the more factual or established the concept is considered.
+*   **Nuance and Fiction:** The value captures nuance:
+    *   A value of **$+1.5$** means the concept is generally positive/factual, but its meaning is still being shaped by its immediate context.
+    *   A value near **$0.0$** means the concept is in the **Undefined Zone (ZU)**—it is either novel, context-dependent, or its meaning is being actively debated/learned.
+
+#### 3. Relationship to Discrete Polarity
+
+The discrete **Polarity** field ($\{-1, 0, 1\}$) is a **coarse categorization** of the continuous $V_{\text{dynamic}}$ used for fast guardrail checks:
+
+*   If $V_{\text{dynamic}}$ is very high positive, Polarity is set to **$+1$**.
+*   If $V_{\text{dynamic}}$ is near zero (in the ZU), Polarity is set to **$0$**.
+*   If $V_{\text{dynamic}}$ is very high negative, Polarity is set to **$-1$**.
+
+#### 4. Role in Learning and Stability
+
+*   **Stability:** Core Axioms and established **Prime Ideals** have their $V_{\text{dynamic}}$ **fixed** (immune to neighbor influence) to prevent semantic drift.
+*   **Learning:** Primitive $\mathcal{L}$ uses the $V_{\text{dynamic}}$ of terminal CDUs in Bpaths to ensure that learned Meta-Axioms are based on **high-certainty outcomes** ($\bar{V} > 1.5$), not just frequent ones.
+
+In summary, **Dynamic Valence is the continuous, context-aware semantic coordinate** of a CDU, calculated locally using fast arithmetic based on the Polarity and HLC of its causal neighbors.
+
 In the Chronos Model, **Paths** are the explicit, traceable sequences of causal events (CDUs) that represent a complete reasoning attempt, simulation, or execution flow. They are the fundamental unit of **experience** that the Chronos Model analyzes to learn and improve.
 
 Paths are not stored as a single entity; they are **derived** by traversing the CDU graph backward from a terminal point to a source point.
