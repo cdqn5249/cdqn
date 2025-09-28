@@ -69,8 +69,8 @@ These primitives execute logic using only **Addition, Multiplication, Comparison
 
 ### Primitive 1: The Discrete Polarity Assigner ($\mathcal{P}$)
 
-**Module Location:** K-Module (Pure Logic)
-**Core Operations:** Comparison, Lookup (against Axioms).
+* **Module Location:** K-Module (Pure Logic)
+* **Core Operations:** Comparison, Lookup (against Axioms).
 
 #### 1. Role and Purpose
 
