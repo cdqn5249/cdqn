@@ -41,7 +41,7 @@ These tenets define the technical architecture of the Chronos Model.
 | :--- | :--- | :--- |
 | **CDU** | **Causal Data Unit.** The immutable, content-addressed container holding data, metadata, and payload. | Immutability |
 | **HLC** | **Hybrid Logical Clock.** Ensures strict, distributed temporal ordering. | K.HLC Module |
-| **K-Module** | **Kernel Module.** Hosts the **Four Core Primitives** ($\mathcal{V}, \mathcal{C}, \mathcal{I}, \mathcal{L}$), the immutable Axioms, and the logic for dynamic semantics. | Root of Logic |
+| **K-Module** | **Kernel Module.** Hosts the **Four Core Primitives** ($\mathcal{P}, \mathcal{C}, \mathcal{I}, \mathcal{L}$), the immutable Axioms, and the logic for dynamic semantics. | Root of Logic |
 | **C-Module** | **Core Runtime.** Manages asynchronous execution, I/O, Gas Metering, and enforces the **Harm Guardrail**. | Execution Environment |
 | **Axiom CDU** | A special CDU defining a rule (e.g., inference, polarity, world law). These are the system's explicit knowledge base. | Symbolic Logic |
 | **Polarity** | A discrete value ($\{-1, 0, 1\}$) indicating immediate semantic valence for guardrail checks. | CDU Metadata |
