@@ -4,7 +4,7 @@
 *   **Vibe Coding Engine** : Gemini Flash-Lite Latest, Google
 ---
 
-# The CDQN Chronos Manifesto: A Blueprint for Verifiable Intelligence (v2.2.0)
+# The Chronos Manifesto
 
 ## Introduction: The Promise of Certainty
 
