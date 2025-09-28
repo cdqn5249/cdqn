@@ -137,9 +137,9 @@ Primitive $\mathcal{C}$ is fast because:
 
 ### Primitive 3: The Symbolic Inference Engine ($\mathcal{I}$)
 
-**Module Location:** K-Module (Pure Logic)
-**Core Operations:** Lookup, Comparison, Assignment.
-**Asynchronous Nature:** Orchestrates parallel searches and delegates slow mathematical computations.
+* **Module Location:** K-Module (Pure Logic)
+* **Core Operations:** Lookup, Comparison, Assignment.
+* **Asynchronous Nature:** Orchestrates parallel searches and delegates slow mathematical computations.
 
 #### 1. Role and Purpose
 
