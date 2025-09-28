@@ -58,13 +58,13 @@ The CDU is the atomic, immutable, content-addressed record of the Chronos Model.
 | **`prime_indices`** | `Vec<u32>` | Variable | List of Prime Numbers anchoring concepts in the payload. Input for Primitive $\mathcal{D}$. |
 | **`data_type_id`** | `u8` | 1 Byte | Index mapping to the Schema Registry (e.g., AXIOM, TRIPLE, PATH\_RECORD). |
 | **`payload_hash`** | `[u8; 32]` | 32 Bytes | Integrity hash of the opaque data payload. |
-| **`author_reputation`** | `f32` | 4 Bytes | Author's reputation score **at the time of signing**. Used by $\mathcal{V}$ for authorization. |
+| **`author_reputation`** | `f32` | 4 Bytes | Author's reputation score **at the time of signing**. |
 | **`payload_data`** | `Vec<u8>` (Opaque) | The actual data content, interpreted based on `data_type_id` and Axioms. |
 
 ### Key Schema Features:
 
 1.  **Immutability:** Every field is fixed upon signing. Dynamic changes (like reputation updates or new $V_{\text{dynamic}}$ calculations) result in **new CDUs** with higher HLCs.
-2.  **Performance Optimization:** Critical fields (`hlc_timestamp`, `polarity`, `author_reputation`) are fixed-size integers/floats to ensure fast comparison and indexing by Primitives $\mathcal{C}$ and $\mathcal{V}$.
+2.  **Performance Optimization:** Critical fields (`hlc_timestamp`, `polarity`, `author_reputation`) are fixed-size integers/floats to ensure fast comparison and indexing by Primitives $\mathcal{C}$.
 3.  **Semantic Grounding:** The inclusion of `prime_indices` directly supports the dynamic calculation of $V_{\text{dynamic}}$ by Primitive $\mathcal{D}$.
 
 The **Schema Registry** is a critical component of the K-Module, as it defines the structure and initial semantic anchors for every recognized `data_type_id`. It is itself defined by a set of **Schema Definition CDUs**.
@@ -273,9 +273,9 @@ The system's intelligence is derived from its ability to calculate meaning and s
 
 The $V_{\text{dynamic}}$ is a real number (represented by an `f32` or fixed-point number in the CDU metadata) that exists in the continuous space defined by the **Prime Anchors**.
 
-#### 1. Calculation Mechanism (Primitive $\mathcal{D}$)
+#### 1. Calculation Mechanism
 
-The value is calculated dynamically using **Primitive $\mathcal{D}$ (Dynamic Valence Calculator)**, relying only on fast arithmetic:
+The value is calculated dynamically, relying only on fast arithmetic:
 
 $$V_{\text{dynamic}}(\text{CDU}_X) = \sum_{i \in \text{Neighbors}(X)} (\text{Polarity}_i \times \text{DecayFactor}(\Delta \text{HLC}))$$
 
