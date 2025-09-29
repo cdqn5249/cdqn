@@ -27,7 +27,7 @@ These tenets define the technical architecture of the Chronos Model.
 2.  **Sovereign Ownership:** Each node controls its own data and processing decisions. Trust is **earned locally** via dynamic reputation and **triangulation**, not granted globally.
 3.  **Modular Security:** Strict **K-C-S-U hierarchy** isolates core logic (K) from runtime execution (C).
 4.  **Verifiable Identity:** No anonymous actions. Every CDU is signed, tracing accountability back to the **Origin CDU**, which is anchored by the Master Chronos.
-5.  **Asynchronous Performance (Reinforced):** Built on a **non-blocking, asynchronous runtime**. All K-Module interactions return an **Asynchronous Handle** immediately. Core logic relies on **fast arithmetic (Add, Mult, Comp, Count)**, while complex calculations are delegated to specialized, metered workers.
+5.  **Asynchronous Performance:** Built on a **non-blocking, asynchronous runtime**. All K-Module interactions return an **Asynchronous Handle** immediately. Core logic relies on **fast arithmetic (Add, Mult, Comp, Count)**, while complex calculations are delegated to specialized, metered workers.
 6.  **Guaranteed Resilience:** State is **perfectly reconstructible** from the immutable HLC chain. Replay Attacks are prevented by the **Replay Cache** managed by the C-Module.
 7.  **Forward-Secret Security:** All cryptographic operations are isolated in the **K.CryptoCore**, and **every CDU signature must use a unique, ephemeral key** to prevent long-term identity compromise.
 8.  **Content Agnostic Core:** The engine interprets data via **explicit Axioms** and a **Schema Registry**, allowing it to self-describe new data structures via validated **Schema Definition CDUs**.
@@ -45,7 +45,7 @@ These tenets define the technical architecture of the Chronos Model.
 | **C-Module** | **Core Runtime.** Manages asynchronous execution, I/O, Gas Metering, and enforces the **Harm Guardrail**. | Execution Environment |
 | **Axiom CDU** | A special CDU defining a rule (e.g., inference, polarity, world law). These are the system's explicit knowledge base. | Symbolic Logic |
 | **Polarity** | A discrete value ($\{-1, 0, 1\}$) indicating immediate semantic valence for guardrail checks. | CDU Metadata |
-| **Dynamic Valence ($V_{\text{dynamic}}$)** | A real number calculated locally based on neighbor influence, representing nuanced semantic position relative to Prime Anchors. | Primitive $\mathcal{D}$ |
+| **Dynamic Valence ($V_{\text{dynamic}}$)** | A real number calculated locally based on neighbor influence, representing nuanced semantic position relative to Prime Anchors. |  |
 | **Prime Elements** | Fixed, discrete numbers ($P_3, P_5, \dots$) that define hierarchical anchors for semantic certainty. | Semantic Anchors |
 | **Prime Ideal** | A concept whose $V_{\text{dynamic}}$ is consistently near a Prime Anchor, representing a stable, high-certainty truth. | Emergent Property |
 | **Gpath** | **Golden Path.** A complete reasoning sequence analyzed by Primitive $\mathcal{L}$ to find successful (Bpath) and failed (Dpath) outcomes. | Learning Input |
