@@ -1,4 +1,4 @@
-# **BaDaaS License - The Agile Commercial Open-Core License**
+# **The BaDaaS License**
 
 * **Version**: V1.0.0  
 * **Date**: 11 July 2025
