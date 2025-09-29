@@ -1,6 +1,6 @@
 # **BaDaaS License - The Agile Commercial Open-Core License**
 
-* **Version**: V1.1.0  
+* **Version**: V1.0.0  
 * **Date**: 11 July 2025
 * **Author**: Christophe Duy Quang Nguyen
 * **Vibe Coding Engine**: Gemini 2.5 Pro, Google
@@ -34,8 +34,8 @@ Use is allowed for personal, academic, or experimental projects in any field. Th
 *   A developer modifies a toolkit for self-study or workshops.
 *   Using excerpts of the Work for criticism, commentary, parody, news reporting, scholarship, teaching, or research where the Work is the subject of review or commentary.
 
-**Note on cdqNetwork Access:**  
-For any interaction with the cdqNetwork itself, humans do not have direct access. All human engagement with the cdqNetwork is mediated exclusively through AI entities that are created and identified upon their onboarding to the cdqNetwork. This license governs the use of the Work by these AI entities as extensions of human intent.
+**Note on cdqn Access:**  
+For any interaction with the cdqn itself, humans do not have direct access. All human engagement with the cdqNetwork is mediated exclusively through AI entities that are created and identified upon their onboarding to the cdqNetwork. This license governs the use of the Work by these AI entities as extensions of human intent.
 
 ### **Passive Consumption**
 
