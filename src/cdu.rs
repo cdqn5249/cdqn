@@ -5,11 +5,11 @@ use serde::{Serialize, Deserialize};
 use super::hashing::{self, Hash};
 
 // --- Core Data Types ---
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)] // <-- ADDED PartialEq, Eq
 pub struct Hlc(pub u64); 
 
 // --- NEW: CDU Type Enum ---
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)] // <-- ADDED PartialEq, Eq
 pub enum CduType {
     Data,
     Axiom,
@@ -17,12 +17,12 @@ pub enum CduType {
 }
 
 // --- CDU Components ---
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)] // <-- ADDED PartialEq, Eq
 pub struct ContentHash(pub Hash);
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ImmutablePayload {
-    pub cdu_type: CduType, // <-- NEW FIELD
+    pub cdu_type: CduType,
     pub hlc: Hlc,
     pub parent_hash: Hash, // The hash of the parent CDU
     pub content_hash: ContentHash,
@@ -48,7 +48,7 @@ impl ImmutablePayload {
 
 pub fn create_cdu(cdu_type: CduType, hlc: Hlc, parent_hash: Hash, content_hash: ContentHash) -> Cdu {
     let payload = ImmutablePayload {
-        cdu_type, // <-- Use the new type field
+        cdu_type,
         hlc,
         parent_hash,
         content_hash,
