@@ -22,6 +22,9 @@ on:
 jobs:
   chronos_ci:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./chronos_ai # Set the working directory for all steps
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,17 +36,11 @@ jobs:
           profile: minimal
           override: true
 
-      - name: Install Rustfmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: --locked rustfmt
-
       - name: Check Code Formatting (rustfmt)
         uses: actions-rs/cargo@v1
         with:
-          command: run
-          args: --fmt --check # Checks if code is formatted correctly
+          command: fmt
+          args: -- --check # Checks if code is formatted correctly
 
       - name: Build Chronos Engine
         uses: actions-rs/cargo@v1
