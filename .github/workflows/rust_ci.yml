@@ -8,14 +8,14 @@ on:
     branches:
       - main # Trigger on push to the main branch
     paths:
-      - 'chronos_ai/src/**'
+      - '/**'
       - 'Cargo.toml'
       - 'Cargo.lock'
   pull_request:
     branches:
       - main
     paths:
-      - 'chronos_ai/src/**'
+      - '/**'
       - 'Cargo.toml'
       - 'Cargo.lock'
 
