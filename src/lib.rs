@@ -7,11 +7,11 @@ pub mod hashing;
 pub mod axioms;
 
 // Re-export core types for external use
-pub use cdu::{Cdu, ImmutablePayload, Hlc, GENESIS_HASH, CduType}; // <-- CduType is now exported
+pub use cdu::{Cdu, ImmutablePayload, Hlc, GENESIS_HASH, CduType};
 pub use hashing::Hash;
 
 // Re-export the main creation function
 pub use cdu::create_cdu;
 
 // Re-export the axiom check functions
-pub use axioms::{axiom_content_identity, axiom_type_check}; // <-- Exported axiom_type_check
+pub use axioms::{axiom_content_identity, axiom_type_check}; // <-- Ensure both are exported
