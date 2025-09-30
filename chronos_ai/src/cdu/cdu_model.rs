@@ -1,4 +1,5 @@
 // File Path: chronos_ai/src/cdu/cdu_model.rs
+// Vibe coding engine : Gemini Flash-Lite Latest, Google
 
 use std::collections::HashMap;
 
