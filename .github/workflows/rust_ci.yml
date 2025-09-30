@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./chronos_ai/ # CRITICAL: Run all cargo commands from the project root
+        working-directory: ./cdqn/chronos_ai # CRITICAL: Run all cargo commands from the project root
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
