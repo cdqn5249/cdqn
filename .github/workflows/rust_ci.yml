@@ -9,15 +9,15 @@ on:
       - main # Trigger on push to the main branch
     paths:
       - '/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
+      - 'chronos_ai/Cargo.toml'
+      - 'chronos_ai/Cargo.lock'
   pull_request:
     branches:
       - main
     paths:
       - '/**'
-      - 'Cargo.toml'
-      - 'Cargo.lock'
+      - 'chronos_ai/Cargo.toml'
+      - 'chronos_ai/Cargo.lock'
 
 jobs:
   chronos_ci:
