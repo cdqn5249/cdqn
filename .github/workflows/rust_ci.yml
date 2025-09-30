@@ -7,17 +7,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'chronos_ai/src/**'         # Trigger on any change in the source code
-      - 'chronos_ai/Cargo.toml'     # Trigger on Cargo.toml change
-      - 'chronos_ai/Cargo.lock'     # Trigger on dependency lock change
+    
   pull_request:
     branches:
       - main
-    paths:
-      - 'chronos_ai/src/**'
-      - 'chronos_ai/Cargo.toml'
-      - 'chronos_ai/Cargo.lock'
 
 jobs:
   chronos_ci:
