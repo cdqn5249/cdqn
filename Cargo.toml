@@ -1,0 +1,26 @@
+# Source code under BaDaaS license, vibe coding engine: Gemini Flash-Lite Latest, Google
+# File path: Cargo.toml
+
+[package]
+name = "cdqn"
+version = "0.1.0"
+edition = "2021"
+description = "Causal Data Query Node implementation using immutable CDUs."
+license = "MIT" # Placeholder license
+
+[dependencies]
+# Essential for defining the structure of the CDU payload
+serde = { version = "1.0", features = ["derive"] } 
+
+# Essential for content-addressing and Merkle Tree integrity
+sha2 = "0.10" 
+
+# Note: The Hybrid Logical Clock (HLC) and custom serialization/deserialization 
+# will likely need to be implemented manually or with minimal crates later.
+
+[profile.dev]
+opt-level = 1
+
+[profile.release]
+lto = true
+codegen-units = 1
