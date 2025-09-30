@@ -1,14 +1,13 @@
 // Source code under BaDaaS license, vibe coding engine: Gemini Flash-Lite Latest, Google
 // File path: src/axioms.rs
 
-use super::cdu::{Cdu, ContentHash, CduType};
+use super::cdu::{Cdu, CduType}; // Removed ContentHash as it's not directly used in the signature
 use super::hashing::Hash;
 
 /// A simple axiom: If two CDUs share the same content hash, they are logically identical
 /// in terms of content, regardless of time (HLC) or parent lineage.
-///
-/// This function checks if two CDUs are logically identical based on their content hash.
 pub fn axiom_content_identity(cdu_a: &Cdu, cdu_b: &Cdu) -> bool {
+    // This now works because ContentHash derives PartialEq in cdu.rs
     cdu_a.payload.content_hash == cdu_b.payload.content_hash
 }
 
