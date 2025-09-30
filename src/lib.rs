@@ -14,4 +14,9 @@ pub use hashing::Hash;
 pub use cdu::create_cdu;
 
 // Re-export the axiom check functions
-pub use axioms::{axiom_content_identity, axiom_type_check}; // <-- Ensure both are exported
+pub use axioms::{axiom_content_identity, axiom_type_check}; // <-- Both are now exported
+
+// A simple entry point for testing/initialization
+pub fn initialize_cdqn() {
+    println!("CDQN Initialized: Modular structure loaded with typed CDUs.");
+}
