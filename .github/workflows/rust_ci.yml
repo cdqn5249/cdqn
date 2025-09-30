@@ -22,9 +22,6 @@ on:
 jobs:
   chronos_ci:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./chronos_ai # CRITICAL: Run all cargo commands from the project root
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,25 +32,25 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
-          components: rustfmt # Explicitly install rustfmt component
+          components: rustfmt
 
       - name: Check Code Formatting (rustfmt)
         uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: -- --check
+          args: -- --manifest-path ./chronos_ai/Cargo.toml -- --check # <-- FIX: Use manifest-path
 
       - name: Build Chronos Engine
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --verbose
+          args: --verbose --manifest-path ./chronos_ai/Cargo.toml # <-- FIX: Use manifest-path
 
       - name: Run Unit Tests
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --verbose
+          args: --verbose --manifest-path ./chronos_ai/Cargo.toml # <-- FIX: Use manifest-path
 
 # BaDaaS License Attribution
 # This workflow file is part of the Chronos AI project, licensed under BaDaaS.
