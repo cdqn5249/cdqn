@@ -7,10 +7,12 @@ on:
   push:
     branches:
       - main
+    # REMOVED paths: block to trigger on ALL pushes to main for testing
     
   pull_request:
     branches:
       - main
+    # REMOVED paths: block to trigger on ALL PRs to main for testing
 
 jobs:
   chronos_ci:
@@ -22,12 +24,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Rust toolchain
+      - name: Set up Rust toolchain (WITH RUSTFMT)
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           profile: minimal
           override: true
+          components: rustfmt # Explicitly install rustfmt component
 
       - name: Check Code Formatting (rustfmt)
         uses: actions-rs/cargo@v1
