@@ -3,6 +3,8 @@
 
 use serde::{Serialize, Deserialize};
 use super::hashing::{self, Hash};
+use super::axioms::axiom_type_check; // <-- FIX 1: Import axiom_type_check for the test
+use sha2::Digest; // <-- FIX 2: Import Digest trait to use .new() and .finalize()
 
 // --- Core Data Types ---
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)] // <-- ADDED PartialEq, Eq
@@ -61,8 +63,8 @@ pub fn create_cdu(cdu_type: CduType, hlc: Hlc, parent_hash: Hash, content_hash: 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::{SystemTime, UNIX_EPOCH};
-
+    // FIX 3: Removed unused imports std::time::{SystemTime, UNIX_EPOCH};
+    
     // Helper to create a dummy content hash
     fn create_content_hash(data: &str) -> ContentHash {
         let mut hasher = sha2::Sha256::new();
@@ -99,10 +101,8 @@ mod tests {
         let data_cdu = create_cdu(CduType::Data, hlc.clone(), parent, ContentHash(content_data.0));
         let axiom_cdu = create_cdu(CduType::Axiom, hlc, parent, ContentHash(content_axiom.0));
 
-        // Check that two data CDUs are NOT considered axioms by the type check
-        assert!(!super::axiom_type_check(&data_cdu, &data_cdu));
-        
-        // Check that two axiom CDUs ARE considered axioms by the type check
-        assert!(super::axiom_type_check(&axiom_cdu, &axiom_cdu));
+        // FIX 1: Removed super:: prefix because axiom_type_check is now imported via 'use super::axioms::axiom_type_check;' in lib.rs
+        assert!(!axiom_type_check(&data_cdu, &data_cdu)); 
+        assert!(axiom_type_check(&axiom_cdu, &axiom_cdu));
     }
 }
