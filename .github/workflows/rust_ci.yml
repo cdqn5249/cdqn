@@ -7,18 +7,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'chronos_ai/src/**'
-      - 'chronos_ai/Cargo.toml'
-      - 'chronos_ai/Cargo.lock'
   pull_request:
     branches:
       - main
-    paths:
-      - 'chronos_ai/src/**'
-      - 'chronos_ai/Cargo.toml'
-      - 'chronos_ai/Cargo.lock'
-
+    
 jobs:
   chronos_ci:
     runs-on: ubuntu-latest
