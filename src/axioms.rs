@@ -1,7 +1,7 @@
 // Source code under BaDaaS license, vibe coding engine: Gemini Flash-Lite Latest, Google
 // File path: src/axioms.rs
 
-use super::cdu::{Cdu, CduType}; // Removed ContentHash and Hash
+use super::cdu::{Cdu, CduType}; 
 use super::cdu::ContentHash; // Re-added ContentHash as it is used in the comparison
 
 /// A simple axiom: If two CDUs share the same content hash, they are logically identical
