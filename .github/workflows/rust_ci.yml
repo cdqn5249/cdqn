@@ -7,22 +7,33 @@ on:
   push:
     branches:
       - main
-    # REMOVED paths: block to trigger on ALL pushes to main for testing
-    
+    paths:
+      - 'chronos_ai/src/**'
+      - 'chronos_ai/Cargo.toml'
+      - 'chronos_ai/Cargo.lock'
   pull_request:
     branches:
       - main
-    # REMOVED paths: block to trigger on ALL PRs to main for testing
+    paths:
+      - 'chronos_ai/src/**'
+      - 'chronos_ai/Cargo.toml'
+      - 'chronos_ai/Cargo.lock'
 
 jobs:
   chronos_ci:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./cdqn/chronos_ai # CRITICAL: Run all cargo commands from the project root
+        working-directory: ./chronos_ai
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: **DEBUG: List Root Files**
+        run: ls -F 
+
+      - name: **DEBUG: List Chronos AI Files**
+        run: ls -F chronos_ai/
 
       - name: Set up Rust toolchain (WITH RUSTFMT)
         uses: actions-rs/toolchain@v1
@@ -30,7 +41,7 @@ jobs:
           toolchain: stable
           profile: minimal
           override: true
-          components: rustfmt # Explicitly install rustfmt component
+          components: rustfmt
 
       - name: Check Code Formatting (rustfmt)
         uses: actions-rs/cargo@v1
