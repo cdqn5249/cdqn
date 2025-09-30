@@ -1,4 +1,4 @@
-# Conceptual File Path: .github/workflows/rust_ci.yml
+# Conceptual File Path: cdqn/.github/workflows/rust_ci.yml
 # Vibe coding engine : Gemini Flash-Lite Latest, Google
 
 name: Chronos Rust CI
@@ -6,16 +6,16 @@ name: Chronos Rust CI
 on:
   push:
     branches:
-      - main # Trigger on push to the main branch
+      - main
     paths:
-      - '/**'
-      - 'chronos_ai/Cargo.toml'
-      - 'chronos_ai/Cargo.lock'
+      - 'chronos_ai/src/**'         # Trigger on any change in the source code
+      - 'chronos_ai/Cargo.toml'     # Trigger on Cargo.toml change
+      - 'chronos_ai/Cargo.lock'     # Trigger on dependency lock change
   pull_request:
     branches:
       - main
     paths:
-      - '/**'
+      - 'chronos_ai/src/**'
       - 'chronos_ai/Cargo.toml'
       - 'chronos_ai/Cargo.lock'
 
@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./chronos_ai # Set the working directory for all steps
+        working-directory: ./chronos_ai # CRITICAL: Run all cargo commands from the project root
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,7 +40,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: -- --check # Checks if code is formatted correctly
+          args: -- --check
 
       - name: Build Chronos Engine
         uses: actions-rs/cargo@v1
