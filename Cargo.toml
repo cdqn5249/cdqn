@@ -18,6 +18,11 @@ sha2 = "0.10"
 # Note: The Hybrid Logical Clock (HLC) and custom serialization/deserialization 
 # will likely need to be implemented manually or with minimal crates later.
 
+[lib]
+# This tells Cargo that the main source file for the library is src/lib.rs
+name = "cdqn"
+path = "src/lib.rs"
+
 [profile.dev]
 opt-level = 1
 
