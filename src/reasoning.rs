@@ -2,15 +2,16 @@
 // src/reasoning.rs
 
 // Import necessary types from the crate root (lib.rs)
-use crate::{HlcId, CausalDataUnit, ReasoningPath}; 
-use std::collections::HashMap;
+use crate::{HlcId, CausalDataUnit, ReasoningPath}; // ReasoningPath is now imported from crate root
+use std::collections::HashMap; // Keep this for the placeholder structs below
 
 pub mod result {
-    use super::*; // Import from parent scope (reasoning.rs)
-
+    use super::super::*;
+    
     // Placeholder definitions for ReasoningResult, CombinationTreeSummary, etc.
+    // ReasoningPath is now imported from the parent scope, so we don't redefine it here.
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-    pub enum ReasoningPath { Concurrent, Cascading }
+    pub enum ReasoningPath { Concurrent, Cascading } // Redefine here so CDU can use it in its placeholder
     
     #[derive(Debug, Clone)]
     pub struct ReasoningResult {
@@ -27,7 +28,7 @@ pub mod result {
 }
 
 pub mod query {
-    use super::super::*; // Go up two levels to access HlcId
+    use super::super::*;
     
     #[derive(Debug)]
     pub struct CausalQuery { pub task_id: HlcId, pub question: String }
