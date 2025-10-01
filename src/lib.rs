@@ -2,7 +2,6 @@
 // src/lib.rs
 
 // --- Module Declarations ---
-// These declarations tell the compiler where to look for the module contents.
 pub mod id;
 pub mod cdu;
 pub mod reasoning;
@@ -10,7 +9,6 @@ pub mod algebraic;
 pub mod agent;
 
 // --- Public Re-exports ---
-// Re-export core types so users of the 'cdqn' crate can access them easily.
 pub use id::HlcId;
 pub use cdu::{CausalDataUnit, HybridLogicalClock, Identifiable};
 pub use reasoning::result::{ReasoningResult, ReasoningPath, CombinationTreeSummary};
