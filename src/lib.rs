@@ -10,7 +10,9 @@ pub mod agent;
 
 // --- Public Re-exports ---
 pub use id::HlcId;
-pub use cdu::{CausalDataUnit, HybridLogicalClock, Identifiable};
+// *** MODIFIED LINE BELOW ***
+pub use cdu::{CausalDataUnit, HybridLogicalClock, Identifiable, AxiomCdu, KoCdu, OkCdu, PathCdu, StepCdu, TaskCdu};
+// ***************************
 pub use reasoning::result::{ReasoningResult, ReasoningPath, CombinationTreeSummary};
 pub use reasoning::query::CausalQuery;
 pub use algebraic::projections::{PrimeElement, AxisScoring, PrimeIdeal, ProjectionSpace};
