@@ -3,10 +3,11 @@
 
 // Import necessary types from the crate root (lib.rs)
 use crate::{HlcId}; 
-use std::collections::HashMap; // <-- ADDED THIS LINE
+// Removed: use std::collections::HashMap; // Removed from here to scope it locally
 
 pub mod projections {
-    use super::super::*; // Go up two levels to access HlcId
+    use super::super::*; // Accesses crate root
+    use std::collections::HashMap; // <-- ADDED THIS LINE
 
     // Placeholder definitions for Projections
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -26,7 +27,7 @@ pub mod projections {
 pub mod context {
     use super::super::*;
     use super::projections::PrimeIdeal;
-    use std::collections::HashMap; // <-- ADDED THIS LINE for AlgebraicContext::new()
+    use std::collections::HashMap; // <-- ADDED THIS LINE
 
     // Placeholder definition for AlgebraicContext
     #[derive(Debug)]
