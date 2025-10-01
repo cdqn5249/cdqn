@@ -3,7 +3,7 @@
 
 // Import necessary types from the crate root (lib.rs)
 use crate::{HlcId}; 
-use std::collections::HashMap;
+use std::collections::HashMap; // <-- ADDED THIS LINE
 
 pub mod projections {
     use super::super::*; // Go up two levels to access HlcId
@@ -17,15 +17,16 @@ pub mod projections {
     pub struct PrimeIdeal { 
         pub prime_meaning: PrimeElement, 
         pub prime_reasoning: PrimeElement, 
-        pub scores: HashMap<HlcId, AxisScoring> 
+        pub scores: HashMap<HlcId, AxisScoring> // Now HashMap is in scope
     }
     #[derive(Debug, Clone, PartialEq, Eq, Hash)]
     pub enum ProjectionSpace { Meaning, Reasoning }
 }
 
 pub mod context {
-    use super::super::*; // Go up two levels to access HlcId
+    use super::super::*;
     use super::projections::PrimeIdeal;
+    use std::collections::HashMap; // <-- ADDED THIS LINE for AlgebraicContext::new()
 
     // Placeholder definition for AlgebraicContext
     #[derive(Debug)]
