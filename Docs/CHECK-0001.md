@@ -46,7 +46,7 @@ The path to this stable baseline involved overcoming several critical technical 
 -   **Optimizing CI/CD Performance:** Initial build times were over 3 minutes. We identified that compiling tools like `cargo-audit` from scratch on every run was the bottleneck. This was solved by adding caching to all CI jobs, dramatically reducing feedback time to under 90 seconds.
 -   **Enforcing Code Quality:** The pipeline consistently caught numerous issues, including formatting errors, unused imports, and violations of Rust API conventions (e.g., missing `Default` or `is_empty` implementations), forcing a high standard of code quality.
 -   **Mastering Rust's Ownership Model:** A major hurdle was a series of borrow checker errors (`E0499`, `E0505`) when designing the API. An initial "mutable" design and a subsequent "cloning" design were rejected as they violated our core principles.
--   **Ensuring Data Durability and Consistency:** You raised critical concerns about data loss during disorderly shutdowns, which led to a deep architectural review of our persistence strategy.
+-   **Ensuring Data Durability and Consistency:** The author raised critical concerns about data loss during disorderly shutdowns, which led to a deep architectural review of our persistence strategy.
 
 ### Key Accomplishments & Architectural Decisions
 
