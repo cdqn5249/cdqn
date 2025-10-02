@@ -23,6 +23,8 @@ The entire architecture is built upon a single, unified data model:
 
 The project has evolved into a robust, asynchronous, event-sourced system. The logic is cleanly separated into modular components, each with a distinct responsibility.
 
+* **Project Homepage**: https://cdqn5249.github.io/cdqn/
+
 -   **`/src/main.rs`**: The main application entry point. It is responsible for composing and launching the system components (Engine, Executor, Projector).
 -   **`/src/lib.rs`**: The library crate root, which declares and exposes all the public modules of the `cdqn` framework.
 -   **`/src/cdu.rs`**: Defines the `Cdu` and `CduMetadata` structs, the universal data model for the entire system.
