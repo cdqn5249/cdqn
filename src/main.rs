@@ -25,6 +25,6 @@ fn main() {
 
     println!(
         "\nChronosa Core is operational and has recorded {} causally linked events.",
-        core.log.len() // Read the length from the final core state.
+        core.len() // Use the new public getter method.
     );
 }
