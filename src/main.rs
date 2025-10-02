@@ -12,10 +12,7 @@ fn main() {
 
     // 1. Create the Chronosa instance. It loads past events and starts the Janitor.
     let mut chronosa = Chronosa::new(log_path);
-    println!(
-        "Initialized. State has {} events.",
-        chronosa.state().len()
-    );
+    println!("Initialized. State has {} events.", chronosa.state().len());
 
     // 2. Send a command. This is fast and only marks the log as "dirty".
     println!("Client: Sending observation (buffered)...");
