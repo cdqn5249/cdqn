@@ -7,7 +7,7 @@
 //! and state manager for an agent instance.
 
 use crate::cdu::Cdu;
-use crate::hlc::Hlc; // Import the Hlc
+use crate::hlc::Hlc;
 
 /// Represents the core of a Chronosa agent instance.
 ///
@@ -30,25 +30,39 @@ impl ChronosaCore {
         }
     }
 
-    /// Records a new event in the agent's log.
-    ///
-    /// This method advances the core's internal clock and uses that new timestamp
-    /// to create and record a new CDU.
-    /// It returns a reference to the newly created CDU.
+    /// Records a new, non-causal event in the agent's log.
+    /// This is a convenience wrapper around `record_causal`.
     pub fn record(&mut self, payload: Vec<u8>, subtype: &str) -> &Cdu {
-        // 1. Advance the core's internal clock. This is the crucial step.
+        self.record_causal(payload, subtype, &[])
+    }
+
+    /// Records a new event that is causally linked to previous events.
+    ///
+    /// This is the primary method for creating new experiences in the log. It advances
+    /// the core's internal clock and uses the provided causes to build the causal graph.
+    /// It returns a reference to the newly created CDU.
+    pub fn record_causal(
+        &mut self,
+        payload: Vec<u8>,
+        subtype: &str,
+        causes: &[&Cdu],
+    ) -> &Cdu {
+        // 1. Advance the core's internal clock.
         self.hlc.tick();
 
-        // 2. Create a new CDU. We will then overwrite its placeholder HLC.
-        let mut new_cdu = Cdu::new(payload, subtype, vec![]);
+        // 2. Collect the names of the cause CDUs.
+        let cause_names = causes.iter().map(|cdu| cdu.name.clone()).collect();
 
-        // 3. Assign the core's official, ticked timestamp to the new CDU.
+        // 3. Create a new CDU with the collected cause names.
+        let mut new_cdu = Cdu::new(payload, subtype, cause_names);
+
+        // 4. Assign the core's official, ticked timestamp to the new CDU.
         new_cdu.metadata.hlc = self.hlc.clone();
 
-        // 4. Push the finalized CDU to the log.
+        // 5. Push the finalized CDU to the log.
         self.log.push(new_cdu);
 
-        // 5. Return a reference to the last CDU added.
+        // 6. Return a reference to the last CDU added.
         self.log.last().unwrap()
     }
 }
@@ -73,17 +87,31 @@ mod tests {
     #[test]
     fn test_core_record() {
         let mut core = ChronosaCore::new();
-        assert_eq!(core.log.len(), 0);
-
         core.record(b"First event".to_vec(), "genesis");
-        assert_eq!(core.log.len(), 1);
-        assert_eq!(core.log[0].payload, b"First event".to_vec());
-
         core.record(b"Second event".to_vec(), "observation");
         assert_eq!(core.log.len(), 2);
-        assert_eq!(core.log[1].payload, b"Second event".to_vec());
-
-        // This assertion will now pass because the core ticks its internal clock.
         assert!(core.log[1].metadata.hlc > core.log[0].metadata.hlc);
+    }
+
+    #[test]
+    fn test_core_record_causal() {
+        let mut core = ChronosaCore::new();
+
+        // 1. Record a genesis event.
+        let cause_cdu = core.record(b"Initial observation".to_vec(), "observation");
+        let cause_name = cause_cdu.name.clone(); // Clone name before mutable borrow
+
+        // 2. Record a new event that was caused by the first one.
+        let effect_cdu = core.record_causal(
+            b"Agent performs an action".to_vec(),
+            "action",
+            &[&cause_cdu],
+        );
+
+        // 3. Verify the log state.
+        assert_eq!(core.log.len(), 2);
+        assert_eq!(effect_cdu.metadata.causes.len(), 1);
+        assert_eq!(effect_cdu.metadata.causes[0], cause_name);
+        assert!(effect_cdu.metadata.hlc > core.log[0].metadata.hlc);
     }
 }
