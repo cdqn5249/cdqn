@@ -96,7 +96,10 @@ mod tests {
         assert_eq!(cdu.payload, payload);
 
         // 5. Verify that the HLC timestamp is no longer a placeholder.
-        assert_ne!(cdu.metadata.hlc.timestamp, 0, "HLC timestamp should be initialized.");
+        assert_ne!(
+            cdu.metadata.hlc.timestamp, 0,
+            "HLC timestamp should be initialized."
+        );
     }
 
     #[test]
