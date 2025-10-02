@@ -16,18 +16,18 @@ impl Projector for SimpleProjector {
     fn project(&self, state: &ChronosaState, input: &Cdu) -> Vec<Cdu> {
         // If the input is an observation of "see enemy",
         // and we haven't already decided to attack, create a command to attack.
-        if input.name.contains(".observation.") && input.payload == b"see enemy" {
-            if state
+        if input.name.contains(".observation.")
+            && input.payload == b"see enemy"
+            && state
                 .find_last_by_subtype("command.schedule_task")
                 .is_none()
-            {
-                println!("Projector: Saw enemy, creating attack command.");
-                return vec![Cdu::new(
-                    b"{\"task\":\"attack\"}".to_vec(),
-                    "command.schedule_task",
-                    vec![input.name.clone()],
-                )];
-            }
+        {
+            println!("Projector: Saw enemy, creating attack command.");
+            return vec![Cdu::new(
+                b"{\"task\":\"attack\"}".to_vec(),
+                "command.schedule_task",
+                vec![input.name.clone()],
+            )];
         }
         // Otherwise, produce no new events.
         vec![]
