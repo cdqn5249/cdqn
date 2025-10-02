@@ -1,5 +1,5 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
-// File path: src/codec.rs
+// File path: src/codec.rs 
 
 //! A custom, minimalist binary codec for Chronosa's data structures.
 
