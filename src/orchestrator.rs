@@ -2,7 +2,8 @@
 // File path: src/orchestrator.rs
 
 //! The orchestrator module for Chronosa.
-//!//! This module contains the primary decision-making loop for the agent.
+//!
+//! This module contains the primary decision-making loop for the agent.
 
 use crate::core::ChronosaCore;
 
@@ -23,7 +24,7 @@ impl Orchestrator {
 
     /// Represents one "thought cycle" of the agent.
     ///
-    // This pure function takes the current state of the orchestrator and returns
+    /// This pure function takes the current state of the orchestrator and returns
     /// a new state reflecting the decisions and actions taken during the cycle.
     pub fn tick(self) -> Self {
         // 1. Decide on an action based on the last observation.
@@ -38,9 +39,9 @@ impl Orchestrator {
             };
 
             // 2. Record the chosen action, causally linked to the observation.
-            let (new_core, _) =
-                self.core
-                    .record_causal(action_payload, "action", &[observation]);
+            let (new_core, _) = self
+                .core
+                .record_causal(action_payload, "action", &[observation]);
 
             // 3. Return the new state of the orchestrator.
             return Self { core: new_core };
