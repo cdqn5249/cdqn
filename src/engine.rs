@@ -67,7 +67,10 @@ impl Engine {
                 }
                 self.state = evolve(self.state, event);
             }
-            println!("Engine: Processed event. New state has {} CDUs.", self.state.len());
+            println!(
+                "Engine: Processed event. New state has {} CDUs.",
+                self.state.len()
+            );
         }
         println!("Engine: Shutting down.");
     }
