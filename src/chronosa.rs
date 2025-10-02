@@ -76,6 +76,8 @@ impl Chronosa {
         }
     }
 
+
+
     /// Gracefully shuts down the Janitor thread.
     pub fn shutdown(self) {
         // Before shutting down, perform one final commit if needed.
@@ -89,5 +91,42 @@ impl Chronosa {
     /// Provides read-only access to the current state.
     pub fn state(&self) -> &ChronosaState {
         &self.state
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs;
+
+    #[test]
+    fn test_chronosa_process_command() {
+        let temp_log_path = PathBuf::from("chronosa_command_test.cdqn");
+        // Ensure clean state
+        let _ = fs::remove_file(&temp_log_path);
+
+        // 1. Create a new Chronosa instance.
+        let mut chronosa = Chronosa::new(temp_log_path.clone());
+        assert!(chronosa.state().is_empty());
+
+        // 2. Process a command.
+        chronosa.process_command(Command::RecordObservation {
+            payload: b"test payload".to_vec(),
+        });
+
+        // 3. Verify the in-memory state was updated.
+        assert_eq!(chronosa.state().len(), 1);
+        let last_event = chronosa.state().find_last_by_subtype("observation");
+        assert!(last_event.is_some());
+        assert_eq!(last_event.unwrap().payload, b"test payload".to_vec());
+
+        // 4. Verify that rehydrating from the log produces the same state.
+        let rehydrated_events = rehydrate_from_log(&temp_log_path).unwrap();
+        assert_eq!(rehydrated_events.len(), 1);
+        assert_eq!(rehydrated_events[0].name, last_event.unwrap().name);
+
+        // 5. Clean up.
+        chronosa.shutdown();
+        fs::remove_file(temp_log_path).unwrap();
     }
 }
