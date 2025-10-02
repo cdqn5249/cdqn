@@ -80,8 +80,8 @@ impl Chronosa {
     pub fn shutdown(self) {
         // Before shutting down, perform one final commit if needed.
         if self.is_dirty.load(Ordering::Relaxed) {
-             println!("  -> Committing dirty log on shutdown...");
-             sync_log_to_disk(&self.log_path).unwrap();
+            println!("  -> Committing dirty log on shutdown...");
+            sync_log_to_disk(&self.log_path).unwrap();
         }
         self.janitor.shutdown();
     }
