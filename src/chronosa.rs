@@ -76,8 +76,6 @@ impl Chronosa {
         }
     }
 
-
-
     /// Gracefully shuts down the Janitor thread.
     pub fn shutdown(self) {
         // Before shutting down, perform one final commit if needed.
