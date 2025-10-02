@@ -1,4 +1,4 @@
-<!-- BaDaaS License: This document is governed by the BaDaaS license. -->
+<!-- This document is governed by the BaDaaS license. -->
 
 # CDQN: Causal Data Query Nodes
 
