@@ -29,7 +29,10 @@ fn main() {
             String::from_utf8_lossy(&action.payload)
         );
         println!("  -> Action CDU: {}", action.name);
-        println!("     (Caused by observation: {})", action.metadata.causes[0]);
+        println!(
+            "     (Caused by observation: {})",
+            action.metadata.causes[0]
+        );
     } else {
         println!("Orchestrator decided to do nothing.");
     }
