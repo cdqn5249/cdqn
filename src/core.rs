@@ -14,7 +14,7 @@ use crate::hlc::Hlc;
 ///
 /// It maintains a verifiable, append-only log of Causal Data Units (CDUs),
 /// representing the agent's complete history of experiences.
-#[derive(Debug, Clone)] // Clone is now needed for the functional approach
+#[derive(Debug, Clone)]
 pub struct ChronosaCore {
     /// The agent's internal, stateful Hybrid Logical Clock.
     hlc: Hlc,
@@ -68,6 +68,18 @@ impl ChronosaCore {
             new_cdu,
         )
     }
+
+    // --- GETTER METHODS ---
+
+    /// Returns a slice providing read-only access to the entire CDU log.
+    pub fn log(&self) -> &[Cdu] {
+        &self.log
+    }
+
+    /// Returns the number of CDUs currently in the log.
+    pub fn len(&self) -> usize {
+        self.log.len()
+    }
 }
 
 impl Default for ChronosaCore {
@@ -84,7 +96,7 @@ mod tests {
     #[test]
     fn test_core_new() {
         let core = ChronosaCore::new();
-        assert!(core.log.is_empty(), "A new core should have an empty log.");
+        assert!(core.log().is_empty(), "A new core should have an empty log.");
     }
 
     #[test]
@@ -93,8 +105,8 @@ mod tests {
         let (core, _) = core.record(b"First event".to_vec(), "genesis");
         let (core, _) = core.record(b"Second event".to_vec(), "observation");
 
-        assert_eq!(core.log.len(), 2);
-        assert!(core.log[1].metadata.hlc > core.log[0].metadata.hlc);
+        assert_eq!(core.len(), 2);
+        assert!(core.log()[1].metadata.hlc > core.log()[0].metadata.hlc);
     }
 
     #[test]
@@ -112,9 +124,9 @@ mod tests {
         );
 
         // 3. Verify the final state of the core.
-        assert_eq!(core.log.len(), 2);
+        assert_eq!(core.len(), 2);
         assert_eq!(effect_cdu.metadata.causes.len(), 1);
         assert_eq!(effect_cdu.metadata.causes[0], cause_cdu.name);
-        assert!(effect_cdu.metadata.hlc > core.log[0].metadata.hlc);
+        assert!(effect_cdu.metadata.hlc > core.log()[0].metadata.hlc);
     }
 }
