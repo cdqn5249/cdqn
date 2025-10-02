@@ -4,7 +4,7 @@
 //! A custom, minimalist binary codec for Chronosa's data structures.
 
 use crate::cdu::{Cdu, CduMetadata};
-use crate::core::ChronosaCore;
+// --- FIX: The import for ChronosaCore is removed ---
 use crate::hlc::Hlc;
 
 // A simple trait for encoding an object into a byte buffer.
@@ -144,17 +144,4 @@ impl Decode for Cdu {
     }
 }
 
-impl Encode for ChronosaCore {
-    fn encode(&self, buffer: &mut Vec<u8>) {
-        self.hlc.encode(buffer);
-        self.log.encode(buffer);
-    }
-}
-impl Decode for ChronosaCore {
-    fn decode(buffer: &mut &[u8]) -> Self {
-        Self {
-            hlc: Hlc::decode(buffer),
-            log: Vec::<Cdu>::decode(buffer),
-        }
-    }
-}
+// --- FIX: The obsolete implementations for ChronosaCore are removed ---
