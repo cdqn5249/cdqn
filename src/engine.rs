@@ -75,3 +75,68 @@ impl Engine {
         println!("Engine: Shutting down.");
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::state::ChronosaState;
+    use std::fs;
+
+    // A mock projector for testing purposes.
+    struct TestProjector;
+    impl Projector for TestProjector {
+        fn project(&self, _state: &ChronosaState, input: &Cdu) -> Vec<Cdu> {
+            // If the input is an observation, create a command.
+            if input.name.contains(".observation.") {
+                vec![Cdu::new(
+                    b"test command".to_vec(),
+                    "command.test",
+                    vec![input.name.clone()],
+                )]
+            } else {
+                vec![]
+            }
+        }
+    }
+
+    #[test]
+    fn test_engine_processing_flow() {
+        let temp_log_path = PathBuf::from("engine_test.cdqn");
+        let _ = fs::remove_file(&temp_log_path);
+
+        // 1. Create the engine and get the command receiver.
+        let (mut engine, command_receiver) =
+            Engine::new(temp_log_path.clone(), Box::new(TestProjector));
+        let input_sender = engine.input_sender.clone();
+
+        // 2. Send an input observation.
+        let observation = Cdu::new(b"test observation".to_vec(), "observation", vec![]);
+        input_sender.send(observation).unwrap();
+
+        // 3. Manually run one cycle of the engine's loop logic.
+        // We do this instead of spawning a thread to have deterministic control.
+        if let Ok(input_cdu) = engine.input_receiver.recv() {
+            let new_events = engine.projector.project(&engine.state, &input_cdu);
+            let mut all_events = vec![input_cdu];
+            all_events.extend(new_events);
+            append_events_to_log(&all_events, &engine.log_path).unwrap();
+            for event in all_events {
+                if event.name.contains(".command.") {
+                    engine.command_sender.send(event.clone()).unwrap();
+                }
+                engine.state = evolve(engine.state, event);
+            }
+        }
+
+        // 4. Verify the state was updated correctly.
+        assert_eq!(engine.state.len(), 2); // observation + command
+
+        // 5. Verify the command was sent to the command channel.
+        let command = command_receiver.try_recv().unwrap();
+        assert!(command.name.contains(".command.test"));
+        assert_eq!(command.payload, b"test command".to_vec());
+
+        // 6. Clean up.
+        let _ = fs::remove_file(&temp_log_path);
+    }
+}
