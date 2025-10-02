@@ -40,7 +40,7 @@ impl Cdu {
     /// Creates a new Causal Data Unit.
     ///
     /// The CDU's name is deterministically generated from the SHA-256 hash of its payload,
-    /// ensuring content-addressable, verifiable storage.
+    /// and its metadata is timestamped with a new Hybrid Logical Clock value.
     pub fn new(payload: Vec<u8>, subtype: &str, causes: Vec<String>) -> Self {
         // 1. Create a new SHA-256 hasher.
         let mut hasher = Sha256::new();
@@ -54,13 +54,9 @@ impl Cdu {
         // 5. Construct the full CDU name.
         let name = format!("{}.{}.cdu", payload_hash, subtype);
 
-        // 6. Create placeholder metadata.
-        //    (We will implement HLC logic in a future step).
+        // 6. Create the metadata, now with a real HLC timestamp.
         let metadata = CduMetadata {
-            hlc: Hlc {
-                timestamp: 0,
-                counter: 0,
-            },
+            hlc: Hlc::new(), // <-- This now calls our functional HLC constructor.
             causes,
             tags: vec![],
         };
@@ -88,7 +84,6 @@ mod tests {
         let cdu = Cdu::new(payload.clone(), subtype, vec![]);
 
         // 3. Verify the name construction.
-        // We don't know the exact hash, but we can verify the structure.
         assert!(cdu.name.contains(subtype));
         assert!(cdu.name.ends_with(".cdu"));
         assert_ne!(
@@ -99,6 +94,9 @@ mod tests {
 
         // 4. Verify the payload was stored correctly.
         assert_eq!(cdu.payload, payload);
+
+        // 5. Verify that the HLC timestamp is no longer a placeholder.
+        assert_ne!(cdu.metadata.hlc.timestamp, 0, "HLC timestamp should be initialized.");
     }
 
     #[test]
@@ -116,5 +114,8 @@ mod tests {
         // 3. Verify that the causal link was stored correctly.
         assert_eq!(effect_cdu.metadata.causes.len(), 1);
         assert_eq!(effect_cdu.metadata.causes[0], cause_cdu.name);
+
+        // 4. Verify that the effect's timestamp is greater than or equal to the cause's.
+        assert!(effect_cdu.metadata.hlc >= cause_cdu.metadata.hlc);
     }
 }
