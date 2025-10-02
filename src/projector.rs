@@ -7,12 +7,16 @@ use crate::cdu::Cdu;
 use crate::engine::Projector;
 use crate::state::ChronosaState;
 
+// --- FIX: Define type aliases for complex function traits ---
+pub type Predicate = Box<dyn Fn(&ChronosaState, &Cdu) -> bool + Send>;
+pub type Mapper = Box<dyn Fn(&Cdu) -> Vec<Cdu> + Send>;
+
 /// A single, stateless rule for the projector to evaluate.
 pub struct Rule {
     /// The predicate: a function that checks if the rule should fire.
-    pub predicate: Box<dyn Fn(&ChronosaState, &Cdu) -> bool + Send>,
+    pub predicate: Predicate,
     /// The mapper: a function that creates the resulting command CDUs if the predicate is true.
-    pub mapper: Box<dyn Fn(&Cdu) -> Vec<Cdu> + Send>,
+    pub mapper: Mapper,
 }
 
 /// A projector that uses a list of rules to make decisions.
