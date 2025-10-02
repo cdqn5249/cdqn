@@ -53,7 +53,7 @@ impl ChronosaCore {
         let mut new_cdu = Cdu::new(payload, subtype, cause_names);
 
         // 4. Assign the core's official, ticked timestamp to the new CDU.
-        new_new_cdu.metadata.hlc = new_hlc.clone();
+        new_cdu.metadata.hlc = new_hlc.clone(); // <-- FIX: Corrected variable name
 
         // 5. Create the next state for the log.
         let mut new_log = self.log;
@@ -89,7 +89,7 @@ impl ChronosaCore {
 
 impl Default for ChronosaCore {
     fn default() -> Self {
-        Self.new()
+        Self::new() // <-- FIX: Corrected syntax
     }
 }
 
