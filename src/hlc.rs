@@ -52,6 +52,15 @@ impl Hlc {
     }
 }
 
+// --- ADD THIS IMPLEMENTATION AS SUGGESTED BY CLIPPY ---
+impl Default for Hlc {
+    /// Creates a default HLC instance by calling `new()`.
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+
 // --- Unit tests for the HLC logic ---
 #[cfg(test)]
 mod tests {
@@ -100,4 +109,6 @@ mod tests {
         assert!(hlc > original_hlc);
         assert_eq!(hlc.counter, 6);
     }
-}
+}```
+
+After committing this change, the Clippy check will pass, and your CI pipeline will be fully green.
