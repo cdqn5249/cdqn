@@ -41,12 +41,7 @@ impl ChronosaCore {
     /// This is the primary method for creating new experiences in the log. It advances
     /// the core's internal clock and uses the provided causes to build the causal graph.
     /// It returns a reference to the newly created CDU.
-    pub fn record_causal(
-        &mut self,
-        payload: Vec<u8>,
-        subtype: &str,
-        causes: &[&Cdu],
-    ) -> &Cdu {
+    pub fn record_causal(&mut self, payload: Vec<u8>, subtype: &str, causes: &[&Cdu]) -> &Cdu {
         // 1. Advance the core's internal clock.
         self.hlc.tick();
 
