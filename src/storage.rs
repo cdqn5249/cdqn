@@ -94,7 +94,10 @@ mod tests {
         assert_eq!(events.len(), rehydrated_events.len());
         assert_eq!(events[0].name, rehydrated_events[0].name);
         assert_eq!(events[1].name, rehydrated_events[1].name);
-        assert_eq!(events[1].metadata.causes, rehydrated_events[1].metadata.causes);
+        assert_eq!(
+            events[1].metadata.causes,
+            rehydrated_events[1].metadata.causes
+        );
 
         // 6. Clean up the temporary file.
         fs::remove_file(temp_path).unwrap();
