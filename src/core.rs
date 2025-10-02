@@ -23,8 +23,51 @@ pub struct ChronosaCore {
 }
 
 impl ChronosaCore {
-    // ... (keep all existing methods: new, record, record_causal) ...
-    // ...
+    /// Creates a new, empty ChronosaCore.
+    pub fn new() -> Self {
+        Self {
+            hlc: Hlc::new(),
+            log: Vec::new(),
+        }
+    }
+
+    /// Records a new, non-causal event, returning a new state of the core.
+    /// This is a convenience wrapper around `record_causal`.
+    pub fn record(self, payload: Vec<u8>, subtype: &str) -> (Self, Cdu) {
+        self.record_causal(payload, subtype, &[])
+    }
+
+    /// Records a new causal event, returning a new state of the core.
+    ///
+    /// This is a pure function that takes the current core state and returns a new
+    /// core state with the event added. It does not mutate the original core.
+    pub fn record_causal(self, payload: Vec<u8>, subtype: &str, causes: &[&Cdu]) -> (Self, Cdu) {
+        // 1. Create the next state for the HLC.
+        let mut new_hlc = self.hlc;
+        new_hlc.tick();
+
+        // 2. Collect the names of the cause CDUs.
+        let cause_names = causes.iter().map(|cdu| cdu.name.clone()).collect();
+
+        // 3. Create a new CDU with the collected cause names.
+        let mut new_cdu = Cdu::new(payload, subtype, cause_names);
+
+        // 4. Assign the core's official, ticked timestamp to the new CDU.
+        new_cdu.metadata.hlc = new_hlc.clone();
+
+        // 5. Create the next state for the log.
+        let mut new_log = self.log;
+        new_log.push(new_cdu.clone()); // Push a clone of the CDU to the new log
+
+        // 6. Construct and return the new core state and the created CDU.
+        (
+            Self {
+                hlc: new_hlc,
+                log: new_log,
+            },
+            new_cdu,
+        )
+    }
 
     // --- GETTER AND QUERY METHODS ---
 
@@ -48,7 +91,10 @@ impl ChronosaCore {
     /// This method iterates backward through the log for efficiency.
     pub fn find_last_by_subtype(&self, subtype: &str) -> Option<&Cdu> {
         let pattern = format!(".{}.cdu", subtype);
-        self.log.iter().rev().find(|cdu| cdu.name.contains(&pattern))
+        self.log
+            .iter()
+            .rev()
+            .find(|cdu| cdu.name.contains(&pattern))
     }
 }
 
@@ -63,8 +109,42 @@ impl Default for ChronosaCore {
 mod tests {
     use super::*;
 
-    // ... (keep all existing tests: test_core_new, test_core_record, test_core_record_causal) ...
-    // ...
+    #[test]
+    fn test_core_new() {
+        let core = ChronosaCore::new();
+        assert!(core.is_empty(), "A new core should be empty.");
+    }
+
+    #[test]
+    fn test_core_record() {
+        let core = ChronosaCore::new();
+        let (core, _) = core.record(b"First event".to_vec(), "genesis");
+        let (core, _) = core.record(b"Second event".to_vec(), "observation");
+
+        assert_eq!(core.len(), 2);
+        assert!(core.log()[1].metadata.hlc > core.log()[0].metadata.hlc);
+    }
+
+    #[test]
+    fn test_core_record_causal() {
+        let core = ChronosaCore::new();
+
+        // 1. Record a genesis event. `core` is consumed and a new `core` is returned.
+        let (core, cause_cdu) = core.record(b"Initial observation".to_vec(), "observation");
+
+        // 2. Record a new event that was caused by the first one.
+        let (core, effect_cdu) = core.record_causal(
+            b"Agent performs an action".to_vec(),
+            "action",
+            &[&cause_cdu],
+        );
+
+        // 3. Verify the final state of the core.
+        assert_eq!(core.len(), 2);
+        assert_eq!(effect_cdu.metadata.causes.len(), 1);
+        assert_eq!(effect_cdu.metadata.causes[0], cause_cdu.name);
+        assert!(effect_cdu.metadata.hlc > core.log()[0].metadata.hlc);
+    }
 
     #[test]
     fn test_core_find_last_by_subtype() {
@@ -81,10 +161,7 @@ mod tests {
         // 2. Find the last observation.
         let last_observation = core.find_last_by_subtype("observation");
         assert!(last_observation.is_some());
-        assert_eq!(
-            last_observation.unwrap().payload,
-            b"Observation 2".to_vec()
-        );
+        assert_eq!(last_observation.unwrap().payload, b"Observation 2".to_vec());
 
         // 3. Search for a subtype that doesn't exist.
         let no_result = core.find_last_by_subtype("nonexistent");
