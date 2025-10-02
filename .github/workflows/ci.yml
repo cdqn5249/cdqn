@@ -1,0 +1,88 @@
+# File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
+# File path: .github/workflows/ci.yml
+name: Rust CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  ################################################################
+  # Phase 1: Code Quality Checks
+  # This job focuses on static analysis to ensure code quality
+  # and adherence to standards, without compiling the full project.
+  ################################################################
+  code_quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Run Clippy Linter
+        run: cargo clippy --all-targets -- -D warnings
+
+  ################################################################
+  # Phase 2: Security Audit
+  # This job checks for security vulnerabilities in dependencies.
+  ################################################################
+  security_audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+
+      - name: Run Security Audit
+        run: cargo audit
+
+  ################################################################
+  # Phase 3: Build and Test
+  # This job builds the project and runs the test suite.
+  # It uses a matrix strategy to test on multiple platforms.
+  ################################################################
+  build_and_test:
+    name: Build and Test
+    needs: [code_quality, security_audit] # This job runs after code_quality and security_audit
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
+      - name: Build project
+        run: cargo build --verbose
+
+      - name: Run tests
+        run: cargo test --verbose
