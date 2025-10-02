@@ -22,7 +22,9 @@ fn main() {
             predicate: Box::new(|state, input| {
                 input.name.contains(".observation.")
                     && input.payload == b"see enemy"
-                    && state.find_last_by_subtype("command.schedule_task").is_none()
+                    && state
+                        .find_last_by_subtype("command.schedule_task")
+                        .is_none()
             }),
             mapper: Box::new(|input| {
                 println!("Projector: Saw enemy, creating attack command.");
