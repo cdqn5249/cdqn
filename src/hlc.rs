@@ -64,7 +64,10 @@ mod tests {
         let hlc1 = Hlc::new();
         sleep(Duration::from_millis(2));
         let hlc2 = Hlc::new();
-        assert!(hlc2 > hlc1, "A later HLC should be greater than an earlier one.");
+        assert!(
+            hlc2 > hlc1,
+            "A later HLC should be greater than an earlier one."
+        );
     }
 
     #[test]
@@ -73,12 +76,18 @@ mod tests {
         let original_hlc = hlc.clone();
 
         hlc.tick();
-        assert!(hlc > original_hlc, "Ticking the clock should always produce a greater timestamp.");
+        assert!(
+            hlc > original_hlc,
+            "Ticking the clock should always produce a greater timestamp."
+        );
     }
 
     #[test]
     fn test_hlc_counter_increment() {
-        let mut hlc = Hlc { timestamp: 100, counter: 5 };
+        let mut hlc = Hlc {
+            timestamp: 100,
+            counter: 5,
+        };
         let original_hlc = hlc.clone();
 
         // Simulate a tick where the physical clock has not advanced.
