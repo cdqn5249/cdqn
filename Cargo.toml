@@ -1,0 +1,10 @@
+# File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
+# File path: Cargo.toml
+[package]
+name = "cdqn"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
