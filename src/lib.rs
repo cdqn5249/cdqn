@@ -11,3 +11,6 @@ pub mod hlc;
 
 // Declare the cdu module, making its public contents available.
 pub mod cdu;
+
+// Declare the core module, making its public contents available.
+pub mod core;
