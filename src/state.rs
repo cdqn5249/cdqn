@@ -33,7 +33,10 @@ impl ChronosaState {
     /// Finds the most recent CDU in the log that matches a given subtype.
     pub fn find_last_by_subtype(&self, subtype: &str) -> Option<&Cdu> {
         let pattern = format!(".{}.cdu", subtype);
-        self.log.iter().rev().find(|cdu| cdu.name.contains(&pattern))
+        self.log
+            .iter()
+            .rev()
+            .find(|cdu| cdu.name.contains(&pattern))
     }
 }
 
