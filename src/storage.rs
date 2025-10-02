@@ -62,3 +62,41 @@ pub fn sync_log_to_disk(path: &Path) -> io::Result<()> {
     }
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::cdu::Cdu;
+    use std::env;
+    use std::fs;
+
+    #[test]
+    fn test_log_rehydration_cycle() {
+        // 1. Define a temporary path for the test file.
+        let mut temp_path = env::temp_dir();
+        temp_path.push("cdqn_storage_rehydration_test.cdqn");
+        // Ensure the file doesn't exist from a previous failed run.
+        let _ = fs::remove_file(&temp_path);
+
+        // 2. Create some events.
+        let event1 = Cdu::new(b"event 1".to_vec(), "type1", vec![]);
+        let event2 = Cdu::new(b"event 2".to_vec(), "type2", vec![event1.name.clone()]);
+        let events = vec![event1.clone(), event2.clone()];
+
+        // 3. Append the events to the log.
+        let append_result = append_events_to_log(&events, &temp_path);
+        assert!(append_result.is_ok());
+
+        // 4. Rehydrate the log from the file.
+        let rehydrated_events = rehydrate_from_log(&temp_path).expect("Failed to rehydrate log.");
+
+        // 5. Verify that the loaded events are identical to the original.
+        assert_eq!(events.len(), rehydrated_events.len());
+        assert_eq!(events[0].name, rehydrated_events[0].name);
+        assert_eq!(events[1].name, rehydrated_events[1].name);
+        assert_eq!(events[1].metadata.causes, rehydrated_events[1].metadata.causes);
+
+        // 6. Clean up the temporary file.
+        fs::remove_file(temp_path).unwrap();
+    }
+}
