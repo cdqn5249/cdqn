@@ -1,41 +1,35 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/main.rs
 
-use cdqn::orchestrator::Orchestrator;
+use cdqn::chronosa::{Chronosa, Command};
+use std::path::PathBuf;
+use std::thread;
+use std::time::Duration;
 
 fn main() {
-    println!("--- Chronosa Agent Simulation ---");
+    println!("--- CDQN Janitor Demo ---");
+    let log_path = PathBuf::from("chronosa_events.cdqn");
 
-    // 1. Initialize the Orchestrator.
-    let orchestrator = Orchestrator::new();
+    // 1. Create the Chronosa instance. It loads past events and starts the Janitor.
+    let mut chronosa = Chronosa::new(log_path);
+    println!(
+        "Initialized. State has {} events.",
+        chronosa.state().len()
+    );
 
-    // 2. Simulate an initial observation.
-    println!("Simulating: Agent observes 'see food'");
-    let (core, _) = orchestrator
-        .core()
-        .clone()
-        .record(b"see food".to_vec(), "observation");
-    let orchestrator = Orchestrator { core }; // Create a new orchestrator with this memory
+    // 2. Send a command. This is fast and only marks the log as "dirty".
+    println!("Client: Sending observation (buffered)...");
+    chronosa.process_command(Command::RecordObservation {
+        payload: b"see enemy".to_vec(),
+    });
+    println!("  -> State updated instantly.");
 
-    // 3. Run the agent's thought cycle.
-    println!("Orchestrator is thinking...");
-    let orchestrator = orchestrator.tick();
+    // 3. The user can force a save at a critical moment.
+    println!("Client: Forcing a save before continuing...");
+    chronosa.process_command(Command::Commit);
+    println!("  -> Data is now durable.");
 
-    // 4. Inspect the result.
-    let last_action = orchestrator.core().find_last_by_subtype("action");
-    if let Some(action) = last_action {
-        println!(
-            "Orchestrator decided to: {}",
-            String::from_utf8_lossy(&action.payload)
-        );
-        println!("  -> Action CDU: {}", action.name);
-        println!(
-            "     (Caused by observation: {})",
-            action.metadata.causes[0]
-        );
-    } else {
-        println!("Orchestrator decided to do nothing.");
-    }
-
-    println!("\nSimulation complete.");
+    // 4. Gracefully shut down the agent and its background thread.
+    chronosa.shutdown();
+    println!("\nSession complete.");
 }
