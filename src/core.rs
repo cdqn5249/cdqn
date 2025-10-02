@@ -53,7 +53,7 @@ impl ChronosaCore {
         let mut new_cdu = Cdu::new(payload, subtype, cause_names);
 
         // 4. Assign the core's official, ticked timestamp to the new CDU.
-        new_cdu.metadata.hlc = new_hlc.clone();
+        new_new_cdu.metadata.hlc = new_hlc.clone();
 
         // 5. Create the next state for the log.
         let mut new_log = self.log;
@@ -80,11 +80,16 @@ impl ChronosaCore {
     pub fn len(&self) -> usize {
         self.log.len()
     }
+
+    /// Returns `true` if the log contains no CDUs.
+    pub fn is_empty(&self) -> bool {
+        self.log.is_empty()
+    }
 }
 
 impl Default for ChronosaCore {
     fn default() -> Self {
-        Self::new()
+        Self.new()
     }
 }
 
@@ -96,10 +101,7 @@ mod tests {
     #[test]
     fn test_core_new() {
         let core = ChronosaCore::new();
-        assert!(
-            core.log().is_empty(),
-            "A new core should have an empty log."
-        );
+        assert!(core.is_empty(), "A new core should be empty.");
     }
 
     #[test]
