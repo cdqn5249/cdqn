@@ -50,3 +50,25 @@ pub fn evolve(mut state: ChronosaState, event: Cdu) -> ChronosaState {
     state.log.push(event);
     state
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::cdu::Cdu;
+
+    #[test]
+    fn test_evolve() {
+        let initial_state = ChronosaState::default();
+        assert!(initial_state.is_empty());
+
+        let event1 = Cdu::new(b"event 1".to_vec(), "type1", vec![]);
+        let state1 = evolve(initial_state, event1);
+
+        assert_eq!(state1.len(), 1);
+        assert_eq!(state1.log()[0].payload, b"event 1".to_vec());
+
+        let event2 = Cdu::new(b"event 2".to_vec(), "type2", vec![]);
+        let state2 = evolve(state1, event2);
+        assert_eq!(state2.len(), 2);
+    }
+}
