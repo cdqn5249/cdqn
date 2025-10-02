@@ -39,3 +39,33 @@ impl Executor {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_executor_receives_and_sends() {
+        let (command_sender, command_receiver) = mpsc::channel();
+        let (result_sender, result_receiver) = mpsc::channel();
+
+        // 1. Spawn the executor.
+        let handle = Executor::spawn(command_receiver, result_sender);
+
+        // 2. Send a command to the executor.
+        let command = Cdu::new(b"do work".to_vec(), "command.work", vec![]);
+        command_sender.send(command.clone()).unwrap();
+
+        // 3. Wait for the result from the executor.
+        let result = result_receiver.recv().unwrap();
+
+        // 4. Verify the result is correct and causally linked.
+        assert!(result.name.contains(".result.task_completed"));
+        assert_eq!(result.metadata.causes.len(), 1);
+        assert_eq!(result.metadata.causes[0], command.name);
+
+        // 5. Shut down the executor by dropping the sender.
+        drop(command_sender);
+        handle.join().unwrap();
+    }
+}
