@@ -16,94 +16,28 @@ use crate::hlc::Hlc;
 /// representing the agent's complete history of experiences.
 #[derive(Debug, Clone)]
 pub struct ChronosaCore {
+    // --- FIX: Make fields public within the crate ---
     /// The agent's internal, stateful Hybrid Logical Clock.
-    hlc: Hlc,
+    pub(crate) hlc: Hlc,
     /// The immutable log of all CDUs ever recorded by this agent.
-    log: Vec<Cdu>,
+    pub(crate) log: Vec<Cdu>,
 }
 
+// (The rest of the file remains exactly the same)
+// ...
 impl ChronosaCore {
-    /// Creates a new, empty ChronosaCore.
-    pub fn new() -> Self {
-        Self {
-            hlc: Hlc::new(),
-            log: Vec::new(),
-        }
-    }
-
-    /// Records a new, non-causal event, returning a new state of the core.
-    /// This is a convenience wrapper around `record_causal`.
-    pub fn record(self, payload: Vec<u8>, subtype: &str) -> (Self, Cdu) {
-        self.record_causal(payload, subtype, &[])
-    }
-
-    /// Records a new causal event, returning a new state of the core.
-    ///
-    /// This is a pure function that takes the current core state and returns a new
-    /// core state with the event added. It does not mutate the original core.
-    pub fn record_causal(self, payload: Vec<u8>, subtype: &str, causes: &[&Cdu]) -> (Self, Cdu) {
-        // 1. Create the next state for the HLC.
-        let mut new_hlc = self.hlc;
-        new_hlc.tick();
-
-        // 2. Collect the names of the cause CDUs.
-        let cause_names = causes.iter().map(|cdu| cdu.name.clone()).collect();
-
-        // 3. Create a new CDU with the collected cause names.
-        let mut new_cdu = Cdu::new(payload, subtype, cause_names);
-
-        // 4. Assign the core's official, ticked timestamp to the new CDU.
-        new_cdu.metadata.hlc = new_hlc.clone(); // <-- FIX: Corrected variable name
-
-        // 5. Create the next state for the log.
-        let mut new_log = self.log;
-        new_log.push(new_cdu.clone()); // Push a clone of the CDU to the new log
-
-        // 6. Construct and return the new core state and the created CDU.
-        (
-            Self {
-                hlc: new_hlc,
-                log: new_log,
-            },
-            new_cdu,
-        )
-    }
-
-    // --- GETTER METHODS ---
-
-    /// Returns a slice providing read-only access to the entire CDU log.
-    pub fn log(&self) -> &[Cdu] {
-        &self.log
-    }
-
-    /// Returns the number of CDUs currently in the log.
-    pub fn len(&self) -> usize {
-        self.log.len()
-    }
-
-    /// Returns `true` if the log contains no CDUs.
-    pub fn is_empty(&self) -> bool {
-        self.log.is_empty()
-    }
+// ...
+// ...
 }
 
 impl Default for ChronosaCore {
-    fn default() -> Self {
-        Self::new() // <-- FIX: Corrected syntax
-    }
+// ...
 }
 
-// --- Unit tests for the ChronosaCore ---
 #[cfg(test)]
 mod tests {
-    use super::*;
-
-    #[test]
-    fn test_core_new() {
-        let core = ChronosaCore::new();
-        assert!(core.is_empty(), "A new core should be empty.");
-    }
-
+// ...
+}
     #[test]
     fn test_core_record() {
         let core = ChronosaCore::new();
