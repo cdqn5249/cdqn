@@ -24,7 +24,7 @@ fn main() {
     // 3. Create a sample Causal Data Unit.
     let cdu = Cdu {
         name: "00000000.genesis.cdu".to_string(), // A placeholder name for this example
-        payload: vec![1, 2, 3, 4],               // Some example byte data
+        payload: vec![1, 2, 3, 4],                // Some example byte data
         metadata,
     };
 
