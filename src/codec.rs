@@ -1,5 +1,5 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
-// File path: src/codec.rs 
+// File path: src/codec.rs
 
 //! A custom, minimalist binary codec for Chronosa's data structures.
 
@@ -20,7 +20,6 @@ pub trait Decode: Sized {
 
 // --- Primitive Implementations ---
 
-// --- FIX: Add implementation for u8 ---
 impl Encode for u8 {
     fn encode(&self, buffer: &mut Vec<u8>) {
         buffer.push(*self);
