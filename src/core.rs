@@ -96,7 +96,10 @@ mod tests {
     #[test]
     fn test_core_new() {
         let core = ChronosaCore::new();
-        assert!(core.log().is_empty(), "A new core should have an empty log.");
+        assert!(
+            core.log().is_empty(),
+            "A new core should have an empty log."
+        );
     }
 
     #[test]
