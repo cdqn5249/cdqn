@@ -5,15 +5,17 @@ use cdqn::core::ChronosaCore;
 
 fn main() {
     println!("Initializing Chronosa Core...");
-    let mut core = ChronosaCore::new();
+    // `core` is no longer mutable. It's a state that gets replaced.
+    let core = ChronosaCore::new();
 
     println!("Recording genesis event...");
-    let cdu1 = core.record(b"Chronosa instance created.".to_vec(), "genesis");
+    // The original `core` is consumed, and a new `core` and `cdu1` are created.
+    let (core, cdu1) = core.record(b"Chronosa instance created.".to_vec(), "genesis");
     println!("  -> Recorded CDU: {}", cdu1.name);
 
     println!("Recording a causally linked action...");
-    // This action is a direct result of the genesis event.
-    let cdu2 = core.record_causal(
+    // The updated `core` is consumed to produce the final `core` state.
+    let (core, cdu2) = core.record_causal(
         b"Perform initial environmental scan.".to_vec(),
         "action",
         &[&cdu1],
@@ -23,6 +25,6 @@ fn main() {
 
     println!(
         "\nChronosa Core is operational and has recorded {} causally linked events.",
-        2
+        core.log.len() // Read the length from the final core state.
     );
 }
