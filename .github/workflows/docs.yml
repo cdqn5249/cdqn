@@ -1,8 +1,6 @@
-# This workflow is governed by the BaDaaS License.
-# For details, see: LICENSE.md (accessible at the root of the GitHub Pages site)
-#
-# .github/workflows/docs.yml
-name: Deploy GH-Pages (UI + Repo Layered Tree Mirror)
+# File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
+# File path: .github/workflows/docs.yml
+name: Deploy Landing Page to GH-Pages
 
 on:
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
@@ -14,126 +12,24 @@ jobs:
       contents: write # Required to push to gh-pages branch
       pages: write # Required to deploy to GitHub Pages
       id-token: write # Required for OIDC authentication
-    env:
-      GITHUB_REPO_URL: https://github.com/${{ github.repository }}
-      GITHUB_SHA: ${{ github.sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history to get all files/dirs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare deployment directory and generate mirror tree index
+      - name: Prepare deployment directory
         run: |
           # Create the main _site directory for deployment
           mkdir -p _site
 
-          # 1. Copy the contents of webGhPages to the root of _site
-          # This makes webGhPages/index.html the main entry point
-          cp -r webGhPages/* _site/ || true
+          # Copy the contents of the webGhPages directory to the root of _site.
+          # This makes webGhPages/index.html the main landing page.
+          cp -r webGhPages/* _site/
 
-          # 2. Copy the main LICENSE.md to the root of _site for easy access from UI
+          # Copy the main LICENSE.md to the root of _site for easy access from the UI.
           cp LICENSE.md _site/
-
-          # 3. Create a subdirectory for the repository mirror
-          mkdir -p _site/repo-mirror
-          
-          # 4. Explicitly copy the .github directory to the mirror
-          echo "Explicitly copying .github directory..."
-          cp -r .github _site/repo-mirror/
-
-          # 5. Copy the *contents* of the rest of the repository into _site/repo-mirror/
-          # Using ls -A and cp -r to explicitly copy items, including hidden ones,
-          # while excluding specific unwanted directories.
-          MIRROR_TEMP_SOURCE_DIR="_temp_repo_content"
-          mkdir -p "$MIRROR_TEMP_SOURCE_DIR"
-
-          # List all files and directories (including hidden ones) in the current directory
-          # and copy them one by one, excluding specific ones.
-          for item in $(ls -A); do
-            if [[ "$item" == ".git" ]] || \
-               [[ "$item" == ".github" ]] || \
-               [[ "$item" == "webGhPages" ]] || \
-               [[ "$item" == "_site" ]] || \
-               [[ "$item" == "_temp_repo_content" ]]; then
-              echo "Skipping excluded item: $item"
-              continue
-            fi
-            echo "Copying item: $item"
-            cp -r "$item" "$MIRROR_TEMP_SOURCE_DIR/" || true
-          done
-
-          # Now copy the contents from the temporary source to the mirror destination
-          cp -r "$MIRROR_TEMP_SOURCE_DIR"/* _site/repo-mirror/ || true
-          rm -rf "$MIRROR_TEMP_SOURCE_DIR" # Clean up temp directory
-
-          # --- Generate a single, comprehensive index.html for the mirror (_site/repo-mirror/) ---
-          MIRROR_ROOT="_site/repo-mirror"
-          INDEX_FILE="$MIRROR_ROOT/index.html"
-
-          echo "<html><head><title>CDQN Repository Tree Mirror</title><style>body{font-family:sans-serif;}</style></head><body>" > "$INDEX_FILE"
-          echo "<h1>CDQN Repository Tree Mirror</h1>" >> "$INDEX_FILE"
-          echo "<p><a href=\"../\">Back to Main UI</a></p>" >> "$INDEX_FILE" # Link back to the main UI
-          echo "<h2>Repository Tree:</h2>" >> "$INDEX_FILE"
-
-          # Explicitly list the root of the mirror first
-          GITHUB_ROOT_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/"
-          echo "<h3>Depth 0 (Root):</h3><ul>" >> "$INDEX_FILE"
-          echo "<li>📁 ./ (<a href=\"$GITHUB_ROOT_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
-
-          # Add root-level files (LICENSE.md, README.md) here
-          # These are copied to _site/repo-mirror directly
-          if [ -f "$MIRROR_ROOT/LICENSE.md" ]; then
-            echo "<li>📄 LICENSE.md (<a href=\"${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/LICENSE.md\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
-          fi
-          if [ -f "$MIRROR_ROOT/README.md" ]; then
-            echo "<li>📄 README.md (<a href=\"${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/README.md\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
-          fi
-          echo "</ul>" >> "$INDEX_FILE"
-
-          # Generate the layered tree structure for subdirectories
-          last_depth=-1
-          # Find all items, remove the MIRROR_ROOT prefix, sort them
-          # Exclude root-level files already handled (LICENSE.md, README.md)
-          # Exclude the index.html from webGhPages if it somehow got copied
-          find "$MIRROR_ROOT" -mindepth 1 -print | sort | sed "s#^$MIRROR_ROOT/##" | while read -r item; do
-            if [ -z "$item" ] || [ "$item" = "LICENSE.md" ] || [ "$item" = "README.md" ] || [ "$item" = "index.html" ]; then continue; fi # Skip empty lines and already handled root files
-
-            # Calculate depth of current item
-            item_depth=$(echo "$item" | grep -o "/" | wc -l)
-
-            # If depth changes, close previous <ul> and open new <h3> and <ul>
-            if (( item_depth != last_depth )); then
-              if (( last_depth != -1 )); then # Don't close <ul> if it's the very first item
-                echo "</ul>" >> "$INDEX_FILE"
-              fi
-              echo "<h3>Depth $((item_depth + 1)):</h3><ul>" >> "$INDEX_FILE" # Depth 1, 2, etc.
-              last_depth=$item_depth
-            fi
-
-            # Determine if it's a file or directory
-            FULL_PATH="$MIRROR_ROOT/$item"
-            if [ -f "$FULL_PATH" ]; then
-              # It's a file
-              GITHUB_FILE_LINK="${GITHUB_REPO_URL}/blob/${GITHUB_SHA}/${item}"
-              echo "<li>📄 $item (<a href=\"$GITHUB_FILE_LINK\">View Source on GitHub</a>)</li>" >> "$INDEX_FILE"
-            elif [ -d "$FULL_PATH" ]; then
-              # It's a directory
-              GITHUB_DIR_LINK="${GITHUB_REPO_URL}/tree/${GITHUB_SHA}/${item}"
-              echo "<li>📁 $item/ (<a href=\"$GITHUB_DIR_LINK\">Browse on GitHub</a>)</li>" >> "$INDEX_FILE"
-            fi
-          done
-
-          # Close the last <ul> if any items were processed
-          if (( last_depth != -1 )); then
-            echo "</ul>" >> "$INDEX_FILE"
-          fi
-
-          echo "<hr><p>This content is governed by the <a href=\"LICENSE.md\">BaDaaS License</a>.</p>" >> "$INDEX_FILE"
-          echo "</body></html>" >> "$INDEX_FILE"
 
           # --- Debugging step: List the contents of _site directory to verify structure ---
           echo "--- Contents of _site directory before upload ---"
