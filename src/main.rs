@@ -1,39 +1,38 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/main.rs
 
-use cdqn::core::ChronosaCore;
-use cdqn::storage::{load_core, save_core};
-use std::path::Path;
+use cdqn::orchestrator::Orchestrator;
 
 fn main() {
-    // --- FIX: File path now uses the .cdqn extension ---
-    let core_path = Path::new("chronosa_core.cdqn");
+    println!("--- Chronosa Agent Simulation ---");
 
-    // Try to load an existing core, or create a new one.
-    let core = match load_core(core_path) {
-        Ok(loaded_core) => {
-            println!(
-                "Successfully loaded existing Chronosa Core with {} events.",
-                loaded_core.len()
-            );
-            loaded_core
-        }
-        Err(_) => {
-            println!("No existing core found. Initializing a new Chronosa Core...");
-            let core = ChronosaCore::new();
-            let (core, _) = core.record(b"Chronosa instance created.".to_vec(), "genesis");
-            core
-        }
-    };
+    // 1. Initialize the Orchestrator.
+    let orchestrator = Orchestrator::new();
 
-    // Record a new event every time the program runs.
-    println!("Recording a new session event...");
-    let (core, session_cdu) = core.record(b"New session started.".to_vec(), "session");
-    println!("  -> Recorded CDU: {}", session_cdu.name);
+    // 2. Simulate an initial observation.
+    println!("Simulating: Agent observes 'see food'");
+    let (core, _) = orchestrator
+        .core()
+        .clone()
+        .record(b"see food".to_vec(), "observation");
+    let orchestrator = Orchestrator { core }; // Create a new orchestrator with this memory
 
-    // Save the final state.
-    println!("Saving Chronosa Core with {} total events...", core.len());
-    save_core(&core, core_path).expect("Failed to save core.");
+    // 3. Run the agent's thought cycle.
+    println!("Orchestrator is thinking...");
+    let orchestrator = orchestrator.tick();
 
-    println!("\nChronosa Core session complete.");
+    // 4. Inspect the result.
+    let last_action = orchestrator.core().find_last_by_subtype("action");
+    if let Some(action) = last_action {
+        println!(
+            "Orchestrator decided to: {}",
+            String::from_utf8_lossy(&action.payload)
+        );
+        println!("  -> Action CDU: {}", action.name);
+        println!("     (Caused by observation: {})", action.metadata.causes[0]);
+    } else {
+        println!("Orchestrator decided to do nothing.");
+    }
+
+    println!("\nSimulation complete.");
 }
