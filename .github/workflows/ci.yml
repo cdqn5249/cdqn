@@ -14,8 +14,6 @@ env:
 jobs:
   ################################################################
   # Phase 1: Code Quality Checks
-  # This job focuses on static analysis to ensure code quality
-  # and adherence to standards, without compiling the full project.
   ################################################################
   code_quality:
     name: Code Quality
@@ -40,7 +38,6 @@ jobs:
 
   ################################################################
   # Phase 2: Security Audit
-  # This job checks for security vulnerabilities in dependencies.
   ################################################################
   security_audit:
     name: Security Audit
@@ -52,6 +49,11 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
+      # --- ADDED THIS CACHING STEP ---
+      # This will cache the compiled cargo-audit binary and its dependencies.
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked
 
@@ -60,12 +62,10 @@ jobs:
 
   ################################################################
   # Phase 3: Build and Test
-  # This job builds the project and runs the test suite.
-  # It uses a matrix strategy to test on multiple platforms.
   ################################################################
   build_and_test:
     name: Build and Test
-    needs: [code_quality, security_audit] # This job runs after code_quality and security_audit
+    needs: [code_quality, security_audit]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
