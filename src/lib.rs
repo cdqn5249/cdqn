@@ -2,7 +2,8 @@
 // File path: src/lib.rs
 
 pub mod cdu;
-pub mod codec; // Add the new module
+pub mod codec;
 pub mod core;
 pub mod hlc;
+pub mod orchestrator; // Add the new module
 pub mod storage;
