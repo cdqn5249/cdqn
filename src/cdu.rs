@@ -91,7 +91,11 @@ mod tests {
         // We don't know the exact hash, but we can verify the structure.
         assert!(cdu.name.contains(subtype));
         assert!(cdu.name.ends_with(".cdu"));
-        assert_ne!(cdu.name, format!(".{}.cdu", subtype), "Hash part of the name should not be empty.");
+        assert_ne!(
+            cdu.name,
+            format!(".{}.cdu", subtype),
+            "Hash part of the name should not be empty."
+        );
 
         // 4. Verify the payload was stored correctly.
         assert_eq!(cdu.payload, payload);
