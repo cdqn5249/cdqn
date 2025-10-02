@@ -1,113 +1,64 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/storage.rs
 
-//! The storage module for the cdqn project.
-//!
-//! Provides functionality to persist and load the `ChronosaCore` state
-//! using a custom binary format.
-
+use crate::cdu::Cdu;
 use crate::codec::{Decode, Encode};
-use crate::core::ChronosaCore;
-use std::fs::File;
-use std::io::{Read, Write};
+use std::fs::{File, OpenOptions};
+use std::io::{self, Read, Write};
 use std::path::Path;
 
 const MAGIC_BYTES: &[u8; 6] = b"CDQNv1";
 
-/// Saves the state of a ChronosaCore to a file.
-pub fn save_core(core: &ChronosaCore, path: &Path) -> std::io::Result<()> {
-    let mut buffer = Vec::new();
-    core.encode(&mut buffer);
-
-    let mut file = File::create(path)?;
-    file.write_all(MAGIC_BYTES)?;
-    file.write_all(&buffer)?;
+/// Appends a list of serialized CDUs to the end of the log file.
+pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
+    let is_new_file = !path.exists();
+    let mut file = OpenOptions::new().create(true).append(true).open(path)?;
+    if is_new_file {
+        file.write_all(MAGIC_BYTES)?;
+    }
+    for event in events {
+        let mut buffer = Vec::new();
+        event.encode(&mut buffer);
+        file.write_all(&(buffer.len() as u64).to_be_bytes())?;
+        file.write_all(&buffer)?;
+    }
     Ok(())
 }
 
-/// Loads the state of a ChronosaCore from a file.
-pub fn load_core(path: &Path) -> std::io::Result<ChronosaCore> {
+/// Rehydrates the state by reading the entire event log file.
+pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
+    if !path.exists() {
+        return Ok(Vec::new());
+    }
+
     let mut file = File::open(path)?;
     let mut magic = [0u8; 6];
     file.read_exact(&mut magic)?;
 
     if magic != *MAGIC_BYTES {
-        return Err(std::io::Error::new(
-            std::io::ErrorKind::InvalidData,
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidData,
             "Invalid or unsupported file format.",
         ));
     }
 
-    let mut buffer = Vec::new();
-    file.read_to_end(&mut buffer)?;
-    Ok(ChronosaCore::decode(&mut buffer.as_slice()))
+    let mut events = Vec::new();
+    let mut len_buffer = [0u8; 8];
+    while let Ok(()) = file.read_exact(&mut len_buffer) {
+        let len = u64::from_be_bytes(len_buffer);
+        let mut cdu_buffer = vec![0; len as usize];
+        file.read_exact(&mut cdu_buffer)?;
+        events.push(Cdu::decode(&mut cdu_buffer.as_slice()));
+    }
+
+    Ok(events)
 }
 
-// --- Unit tests for the storage module ---
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::env;
-    use std::fs;
-
-    // Helper function to create a core with some data for testing.
-    fn create_test_core() -> ChronosaCore {
-        let core = ChronosaCore::new();
-        let (core, cdu1) = core.record(b"Event 1".to_vec(), "type1");
-        let (core, _) = core.record_causal(b"Event 2".to_vec(), "type2", &[&cdu1]);
-        core
+/// Forces the synchronization of the log file's in-memory buffers to the disk.
+pub fn sync_log_to_disk(path: &Path) -> io::Result<()> {
+    if path.exists() {
+        let file = File::open(path)?;
+        file.sync_all()?;
     }
-
-    #[test]
-    fn test_save_and_load_cycle() {
-        // 1. Create a core with some data.
-        let original_core = create_test_core();
-
-        // 2. Define a temporary path for the test file.
-        let mut temp_path = env::temp_dir();
-        temp_path.push("cdqn_storage_test.cdqn");
-
-        // 3. Save the core.
-        let save_result = save_core(&original_core, &temp_path);
-        assert!(save_result.is_ok());
-
-        // 4. Load the core back from the file.
-        let loaded_core = load_core(&temp_path).expect("Failed to load core.");
-
-        // 5. Verify that the loaded core is identical to the original.
-        // We compare essential properties to confirm correctness.
-        assert_eq!(original_core.len(), loaded_core.len());
-        assert_eq!(original_core.log()[1].name, loaded_core.log()[1].name);
-        assert_eq!(
-            original_core.log()[1].metadata.causes,
-            loaded_core.log()[1].metadata.causes
-        );
-        assert_eq!(
-            original_core.log()[1].metadata.hlc,
-            loaded_core.log()[1].metadata.hlc
-        );
-
-        // 6. Clean up the temporary file.
-        fs::remove_file(temp_path).unwrap();
-    }
-
-    #[test]
-    fn test_load_invalid_magic_bytes() {
-        // 1. Create a dummy file with incorrect magic bytes.
-        let mut temp_path = env::temp_dir();
-        temp_path.push("cdqn_invalid_test.cdqn");
-        let mut file = File::create(&temp_path).unwrap();
-        file.write_all(b"WRONGv1").unwrap();
-
-        // 2. Attempt to load the core and verify it fails with the correct error.
-        let load_result = load_core(&temp_path);
-        assert!(load_result.is_err());
-        assert_eq!(
-            load_result.err().unwrap().kind(),
-            std::io::ErrorKind::InvalidData
-        );
-
-        // 3. Clean up.
-        fs::remove_file(temp_path).unwrap();
-    }
+    Ok(())
 }
