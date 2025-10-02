@@ -20,6 +20,20 @@ pub trait Decode: Sized {
 
 // --- Primitive Implementations ---
 
+// --- FIX: Add implementation for u8 ---
+impl Encode for u8 {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        buffer.push(*self);
+    }
+}
+impl Decode for u8 {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        let byte = buffer[0];
+        *buffer = &buffer[1..];
+        byte
+    }
+}
+
 impl Encode for u16 {
     fn encode(&self, buffer: &mut Vec<u8>) {
         buffer.extend_from_slice(&self.to_be_bytes());
