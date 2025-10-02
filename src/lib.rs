@@ -3,7 +3,8 @@
 
 pub mod cdu;
 pub mod codec;
-pub mod engine; // Add the new module
+pub mod engine;
+pub mod executor; // Add the new module
 pub mod hlc;
 pub mod state;
 pub mod storage;
