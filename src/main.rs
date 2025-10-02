@@ -3,8 +3,7 @@
 
 use cdqn::chronosa::{Chronosa, Command};
 use std::path::PathBuf;
-use std::thread;
-use std::time::Duration;
+// --- FIX: The unused imports for thread and Duration are removed ---
 
 fn main() {
     println!("--- CDQN Janitor Demo ---");
