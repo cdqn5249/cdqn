@@ -2,29 +2,38 @@
 // File path: src/main.rs
 
 use cdqn::core::ChronosaCore;
+use cdqn::storage::{load_core, save_core};
+use std::path::Path;
 
 fn main() {
-    println!("Initializing Chronosa Core...");
-    // `core` is no longer mutable. It's a state that gets replaced.
-    let core = ChronosaCore::new();
+    // --- FIX: File path now uses the .cdqn extension ---
+    let core_path = Path::new("chronosa_core.cdqn");
 
-    println!("Recording genesis event...");
-    // The original `core` is consumed, and a new `core` and `cdu1` are created.
-    let (core, cdu1) = core.record(b"Chronosa instance created.".to_vec(), "genesis");
-    println!("  -> Recorded CDU: {}", cdu1.name);
+    // Try to load an existing core, or create a new one.
+    let core = match load_core(core_path) {
+        Ok(loaded_core) => {
+            println!(
+                "Successfully loaded existing Chronosa Core with {} events.",
+                loaded_core.len()
+            );
+            loaded_core
+        }
+        Err(_) => {
+            println!("No existing core found. Initializing a new Chronosa Core...");
+            let core = ChronosaCore::new();
+            let (core, _) = core.record(b"Chronosa instance created.".to_vec(), "genesis");
+            core
+        }
+    };
 
-    println!("Recording a causally linked action...");
-    // The updated `core` is consumed to produce the final `core` state.
-    let (core, cdu2) = core.record_causal(
-        b"Perform initial environmental scan.".to_vec(),
-        "action",
-        &[&cdu1],
-    );
-    println!("  -> Recorded CDU: {}", cdu2.name);
-    println!("     (Caused by: {})", cdu2.metadata.causes[0]);
+    // Record a new event every time the program runs.
+    println!("Recording a new session event...");
+    let (core, session_cdu) = core.record(b"New session started.".to_vec(), "session");
+    println!("  -> Recorded CDU: {}", session_cdu.name);
 
-    println!(
-        "\nChronosa Core is operational and has recorded {} causally linked events.",
-        core.len() // Use the new public getter method.
-    );
+    // Save the final state.
+    println!("Saving Chronosa Core with {} total events...", core.len());
+    save_core(&core, core_path).expect("Failed to save core.");
+
+    println!("\nChronosa Core session complete.");
 }
