@@ -2,9 +2,8 @@
 // File path: src/lib.rs
 
 pub mod cdu;
-pub mod chronosa;
 pub mod codec;
+pub mod engine; // Add the new module
 pub mod hlc;
-pub mod janitor;
 pub mod state;
 pub mod storage;
