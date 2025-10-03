@@ -86,11 +86,9 @@ impl Cdu {
     /// Extracts the structured content from the CDU payload
     pub fn extract_payload(&self) -> Option<CduPayload> {
         if self.name.contains("prime.element.") {
-            crate::reasoning::PrimeElement::from_bytes(&self.payload)
-                .map(CduPayload::PrimeElement)
+            crate::reasoning::PrimeElement::from_bytes(&self.payload).map(CduPayload::PrimeElement)
         } else if self.name.contains("semi-axiom.prime-ideal.") {
-            crate::reasoning::SemiAxiom::from_bytes(&self.payload)
-                .map(CduPayload::SemiAxiom)
+            crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
         } else {
             Some(CduPayload::Raw(self.payload.clone()))
         }
