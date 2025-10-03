@@ -4,11 +4,13 @@
 //! The reasoning module for Chronosa.
 //!
 //! This module contains the core components of Chronosa's reasoning model,
-//! including prime elements and semi-axioms.
+//! including prime elements, semi-axioms, and the reasoning projector.
 
 pub mod prime_element;
 pub mod semi_axiom;
+pub mod reasoning_projector;
 
 // Re-export for easier access
 pub use prime_element::PrimeElement;
 pub use semi_axiom::SemiAxiom;
+pub use reasoning_projector::ReasoningProjector;
