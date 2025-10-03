@@ -48,9 +48,9 @@ impl PrimeElement {
 
     /// Convert to CDU
     pub fn to_cdu(&self) -> Cdu {
-        let payload = CduPayload::PrimeElement(self.clone());
-        let metadata = CduMetadata::new(Hlc::now(), format!("prime.element.{}", self.world));
-        Cdu::new(payload, metadata)
+        let payload_bytes = self.to_bytes();
+        let subtype = format!("prime.element.{}", self.world);
+        Cdu::new(payload_bytes, &subtype, vec![])
     }
 
     /// Convert the PrimeElement to a byte representation for storage
