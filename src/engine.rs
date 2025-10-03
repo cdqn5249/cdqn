@@ -83,8 +83,8 @@ impl Engine {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::state::ChronosaState;
     use crate::projector::{Rule, RuleBasedProjector};
+    use crate::state::ChronosaState;
     use std::fs;
     use std::time::Duration;
 
