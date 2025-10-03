@@ -219,3 +219,4 @@ mod tests {
         // 5. Assert that NO command was generated because the axiom's condition was not met.
         assert_eq!(commands.len(), 0);
     }
+}
