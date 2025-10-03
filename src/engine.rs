@@ -49,7 +49,7 @@ impl Engine {
     }
 
     /// The main run loop. It listens for inputs and drives the state forward.
-    pub fn run(mut self) {
+    pub fn run(self) {
         println!("Engine: Running.");
         while let Ok(input_cdu) = self.input_receiver.recv() {
             // 1. Clone necessary data for the new thread.
@@ -83,7 +83,6 @@ impl Engine {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::projector::{Rule, RuleBasedProjector};
     use crate::state::ChronosaState;
     use std::fs;
     use std::time::Duration;
