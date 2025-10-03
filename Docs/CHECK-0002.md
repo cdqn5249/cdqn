@@ -27,6 +27,7 @@ The project structure has evolved to accommodate the new reasoning components, m
         -   `main.rs`: Main application entry point.
         -   `lib.rs`: Library crate root, declaring all public modules.
         -   `cdu.rs`: Defines the `Cdu`, `CduMetadata`, and `CduPayload` structs. The core of the system.
+        -   `codec.rs`: Implements a custom, dependency-free binary `Encode`/`Decode` trait and logic for serializing CDUs.
         -   `hlc.rs`: Implements the `Hlc` (Hybrid Logical Clock).
         -   `state.rs`: Defines `ChronosaState` and the `SharedState` type alias for thread-safe state management.
         -   `engine.rs`: The main execution engine, now refactored for concurrency.
@@ -38,6 +39,7 @@ The project structure has evolved to accommodate the new reasoning components, m
             -   `prime_element.rs`: Defines the `PrimeElement` struct.
             -   `semi_axiom.rs`: Defines the `SemiAxiom` struct.
             -   `reasoning_projector.rs`: Defines the `ReasoningProjector`.
+  
     -   `Docs/`: All markdown documentation.
         -   `CHECK-0001.md`: The previous checkpoint document.
         -   `CHECK-0002.md`: This current checkpoint document.
