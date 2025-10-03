@@ -7,7 +7,7 @@ use crate::cdu::Cdu;
 use crate::state::{evolve_shared_state, ChronosaState, SharedState};
 use crate::storage::{append_events_to_log, rehydrate_from_log};
 use std::path::PathBuf;
-use std::sync::{mpsc, Arc};
+use std::sync::{mpsc, Arc, RwLock};
 use std::thread;
 
 /// The Projector is the pure, deterministic "brain" of the agent.
@@ -31,13 +31,15 @@ pub struct Engine {
 impl Engine {
     pub fn new(log_path: PathBuf, projector: Box<dyn Projector>) -> (Self, mpsc::Receiver<Cdu>) {
         let events = rehydrate_from_log(&log_path).unwrap_or_default();
-        let initial_state = events.into_iter().fold(ChronosaState::default(), |mut acc, event| {
-            if event.metadata.hlc > acc.hlc {
-                acc.hlc = event.metadata.hlc.clone();
-            }
-            acc.log.push(event);
-            acc
-        });
+        let initial_state = events
+            .into_iter()
+            .fold(ChronosaState::default(), |mut acc, event| {
+                if event.metadata.hlc > acc.hlc {
+                    acc.hlc = event.metadata.hlc.clone();
+                }
+                acc.log.push(event);
+                acc
+            });
 
         let (input_sender, input_receiver) = mpsc::channel();
         let (command_sender, command_receiver) = mpsc::channel();
@@ -143,7 +145,7 @@ mod tests {
             // In a real scenario, the engine would spawn a thread. We simulate that here.
             // The engine's logic is now inside this thread.
             thread::spawn(move || {
-                // This simulates the work done in the engine's spawned thread.
+                // This simulates the work done in the engine in the spawned thread.
                 let _command = Cdu::new(b"test command".to_vec(), "command.test", vec![]);
                 // In the real engine, this would be sent to the executor.
                 // For the test, we just send a signal that the work is done.
