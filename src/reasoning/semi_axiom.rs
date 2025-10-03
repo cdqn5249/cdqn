@@ -44,7 +44,8 @@ impl SemiAxiom {
     /// Convert to CDU
     pub fn to_cdu(&self) -> Cdu {
         let payload = CduPayload::SemiAxiom(self.clone());
-        let metadata = CduMetadata::new(Hlc::now(), format!("semi-axiom.prime-ideal.{}", self.world));
+        let metadata =
+            CduMetadata::new(Hlc::now(), format!("semi-axiom.prime-ideal.{}", self.world));
         Cdu::new(payload, metadata)
     }
 
