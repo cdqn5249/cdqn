@@ -89,7 +89,7 @@ impl Projector for ReasoningProjector {
 
         // 2. Set up concurrency.
         let (sender, receiver) = mpsc::channel();
-        let mut handles = vec!![];
+        let mut handles = vec![];
 
         // 3. Spawn a thread for each axiom to evaluate it concurrently.
         for axiom in axioms {
@@ -162,7 +162,7 @@ mod tests {
         let projector = ReasoningProjector::new();
 
         // 3. Create an input CDU.
-        let input = Cdu::new(b"User says hello".to_vec(), "observation.uworld", vec![]);
+        let input = Cdu::new(b"User says hello".to_string(), "observation.uworld", vec![]);
 
         // 4. Project the input against the state.
         let commands = projector.project(&initial_state, &input);
