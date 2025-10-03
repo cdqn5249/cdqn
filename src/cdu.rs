@@ -9,6 +9,7 @@
 use crate::hlc::Hlc;
 // Import the necessary traits for hashing from the sha2 crate.
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 
 /// The mutable metadata associated with a Causal Data Unit.
 /// This contains Chronosa's current interpretation and context of the immutable payload.
@@ -44,6 +45,8 @@ pub enum CduPayload {
     Raw(Vec<u8>),
     /// A prime element in Chronosa's reasoning model.
     PrimeElement(PrimeElement),
+    /// A semi-axiom as a prime ideal of prime elements.
+    SemiAxiom(SemiAxiom),
 }
 
 /// Represents a prime element in Chronosa's reasoning model.
@@ -59,6 +62,21 @@ pub struct PrimeElement {
     pub description: String,
     /// Proof of irreducibility
     pub irreducibility_proof: String,
+}
+
+/// Represents a semi-axiom as a prime ideal of prime elements in Chronosa's reasoning model.
+#[derive(Debug, Clone)]
+pub struct SemiAxiom {
+    /// Unique identifier for the semi-axiom
+    pub id: String,
+    /// World context this semi-axiom belongs to
+    pub world: String,
+    /// Constituent prime elements that form this prime ideal
+    pub prime_elements: Vec<String>, // Storing IDs for now
+    /// Description of the semi-axiom's rule or constraint
+    pub description: String,
+    /// Current weight of the semi-axiom, determined by links
+    pub weight: f64,
 }
 
 impl PrimeElement {
@@ -81,7 +99,6 @@ impl PrimeElement {
 
     /// Convert to CDU
     pub fn to_cdu(&self) -> Cdu {
-        // Convert the PrimeElement to bytes for the payload
         let payload_bytes = self.to_bytes();
         let subtype = format!("prime.element.{}", self.world);
         Cdu::new(payload_bytes, &subtype, vec![])
@@ -89,7 +106,6 @@ impl PrimeElement {
 
     /// Convert the PrimeElement to a byte representation for storage
     fn to_bytes(&self) -> Vec<u8> {
-        // Simple serialization without external dependencies
         let mut bytes = Vec::new();
 
         // Serialize id
@@ -199,32 +215,179 @@ impl PrimeElement {
     }
 }
 
+impl SemiAxiom {
+    /// Create a new semi-axiom
+    pub fn new(
+        id: String,
+        world: String,
+        prime_elements: Vec<String>,
+        description: String,
+    ) -> Self {
+        Self {
+            id,
+            world,
+            prime_elements,
+            description,
+            weight: 1.0, // Default initial weight
+        }
+    }
+
+    /// Update the weight of the semi-axiom
+    pub fn update_weight(&mut self, new_weight: f64) {
+        self.weight = new_weight;
+    }
+
+    /// Convert to CDU
+    pub fn to_cdu(&self) -> Cdu {
+        let payload_bytes = self.to_bytes();
+        let subtype = format!("semi-axiom.prime-ideal.{}", self.world);
+        Cdu::new(payload_bytes, &subtype, vec![])
+    }
+
+    /// Convert the SemiAxiom to a byte representation for storage
+    fn to_bytes(&self) -> Vec<u8> {
+        let mut bytes = Vec::new();
+
+        // Serialize id
+        bytes.extend_from_slice(&(self.id.len() as u32).to_le_bytes());
+        bytes.extend_from_slice(self.id.as_bytes());
+
+        // Serialize world
+        bytes.extend_from_slice(&(self.world.len() as u32).to_le_bytes());
+        bytes.extend_from_slice(self.world.as_bytes());
+
+        // Serialize prime_elements
+        bytes.extend_from_slice(&(self.prime_elements.len() as u32).to_le_bytes());
+        for element_id in &self.prime_elements {
+            bytes.extend_from_slice(&(element_id.len() as u32).to_le_bytes());
+            bytes.extend_from_slice(element_id.as_bytes());
+        }
+
+        // Serialize description
+        bytes.extend_from_slice(&(self.description.len() as u32).to_le_bytes());
+        bytes.extend_from_slice(self.description.as_bytes());
+
+        // Serialize weight
+        bytes.extend_from_slice(&self.weight.to_le_bytes());
+
+        bytes
+    }
+
+    /// Create a SemiAxiom from a byte representation
+    fn from_bytes(bytes: &[u8]) -> Option<Self> {
+        let mut pos = 0;
+
+        // Deserialize id
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let id_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
+        pos += 4;
+        if pos + id_len > bytes.len() {
+            return None;
+        }
+        let id = String::from_utf8(bytes[pos..pos + id_len].to_vec()).ok()?;
+        pos += id_len;
+
+        // Deserialize world
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let world_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
+        pos += 4;
+        if pos + world_len > bytes.len() {
+            return None;
+        }
+        let world = String::from_utf8(bytes[pos..pos + world_len].to_vec()).ok()?;
+        pos += world_len;
+
+        // Deserialize prime_elements
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let elements_count =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
+        pos += 4;
+        let mut prime_elements = Vec::new();
+        for _ in 0..elements_count {
+            if pos + 4 > bytes.len() {
+                return None;
+            }
+            let element_id_len =
+                u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                    as usize;
+            pos += 4;
+            if pos + element_id_len > bytes.len() {
+                return None;
+            }
+            let element_id =
+                String::from_utf8(bytes[pos..pos + element_id_len].to_vec()).ok()?;
+            pos += element_id_len;
+            prime_elements.push(element_id);
+        }
+
+        // Deserialize description
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let desc_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
+        pos += 4;
+        if pos + desc_len > bytes.len() {
+            return None;
+        }
+        let description = String::from_utf8(bytes[pos..pos + desc_len].to_vec()).ok()?;
+        pos += desc_len;
+
+        // Deserialize weight
+        if pos + 8 > bytes.len() {
+            return None;
+        }
+        let weight = f64::from_le_bytes([
+            bytes[pos],
+            bytes[pos + 1],
+            bytes[pos + 2],
+            bytes[pos + 3],
+            bytes[pos + 4],
+            bytes[pos + 5],
+            bytes[pos + 6],
+            bytes[pos + 7],
+        ]);
+
+        Some(SemiAxiom {
+            id,
+            world,
+            prime_elements,
+            description,
+            weight,
+        })
+    }
+}
+
 impl Cdu {
     /// Creates a new Causal Data Unit.
     ///
     /// The CDU's name is deterministically generated from the SHA-256 hash of its payload,
     /// and its metadata is timestamped with a new Hybrid Logical Clock value.
     pub fn new(payload: Vec<u8>, subtype: &str, causes: Vec<String>) -> Self {
-        // 1. Create a new SHA-256 hasher.
         let mut hasher = Sha256::new();
-        // 2. Write the payload data into the hasher.
         hasher.update(&payload);
-        // 3. Finalize the hash and get the result as a byte array.
         let hash_result = hasher.finalize();
-        // 4. Format the hash as a hexadecimal string.
         let payload_hash = format!("{:x}", hash_result);
-
-        // 5. Construct the full CDU name.
         let name = format!("{}.{}.cdu", payload_hash, subtype);
 
-        // 6. Create the metadata, now with a real HLC timestamp.
         let metadata = CduMetadata {
-            hlc: Hlc::new(), // <-- This now calls our functional HLC constructor.
+            hlc: Hlc::new(),
             causes,
             tags: vec![],
         };
 
-        // 7. Return the newly constructed CDU.
         Self {
             name,
             payload,
@@ -237,15 +400,17 @@ impl Cdu {
         let payload_bytes = match payload {
             CduPayload::Raw(bytes) => bytes,
             CduPayload::PrimeElement(element) => element.to_bytes(),
+            CduPayload::SemiAxiom(axiom) => axiom.to_bytes(),
         };
         Self::new(payload_bytes, subtype, causes)
     }
 
     /// Extracts the structured content from the CDU payload
     pub fn extract_payload(&self) -> Option<CduPayload> {
-        // Try to determine the payload type from the CDU name
         if self.name.contains("prime.element.") {
             PrimeElement::from_bytes(&self.payload).map(CduPayload::PrimeElement)
+        } else if self.name.contains("semi-axiom.prime-ideal.") {
+            SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
         } else {
             Some(CduPayload::Raw(self.payload.clone()))
         }
@@ -254,53 +419,32 @@ impl Cdu {
 
 #[cfg(test)]
 mod tests {
-    use super::*; // Import everything from the parent module (cdu)
+    use super::*;
 
     #[test]
     fn test_cdu_creation_and_naming() {
-        // 1. Define a sample payload and subtype.
         let payload = b"Test payload data".to_vec();
         let subtype = "test_event";
-
-        // 2. Create the CDU.
         let cdu = Cdu::new(payload.clone(), subtype, vec![]);
 
-        // 3. Verify the name construction.
         assert!(cdu.name.contains(subtype));
         assert!(cdu.name.ends_with(".cdu"));
-        assert_ne!(
-            cdu.name,
-            format!(".{}.cdu", subtype),
-            "Hash part of the name should not be empty."
-        );
-
-        // 4. Verify the payload was stored correctly.
+        assert_ne!(cdu.name, format!(".{}.cdu", subtype));
         assert_eq!(cdu.payload, payload);
-
-        // 5. Verify that the HLC timestamp is no longer a placeholder.
-        assert_ne!(
-            cdu.metadata.hlc.timestamp, 0,
-            "HLC timestamp should be initialized."
-        );
+        assert_ne!(cdu.metadata.hlc.timestamp, 0);
     }
 
     #[test]
     fn test_cdu_causal_link() {
-        // 1. Create a "cause" CDU.
         let cause_cdu = Cdu::new(b"First event".to_vec(), "genesis", vec![]);
-
-        // 2. Create a second CDU that is caused by the first.
         let effect_cdu = Cdu::new(
             b"Second event".to_vec(),
             "response",
             vec![cause_cdu.name.clone()],
         );
 
-        // 3. Verify that the causal link was stored correctly.
         assert_eq!(effect_cdu.metadata.causes.len(), 1);
         assert_eq!(effect_cdu.metadata.causes[0], cause_cdu.name);
-
-        // 4. Verify that the effect's timestamp is greater than or equal to the cause's.
         assert!(effect_cdu.metadata.hlc >= cause_cdu.metadata.hlc);
     }
 
@@ -350,4 +494,46 @@ mod tests {
             _ => panic!("Expected PrimeElement payload"),
         }
     }
-}
+
+    #[test]
+    fn test_semi_axiom_serialization() {
+        let axiom = SemiAxiom::new(
+            "test_axiom".to_string(),
+            "test_world".to_string(),
+            vec!["element1".to_string(), "element2".to_string()],
+            "A test semi-axiom".to_string(),
+        );
+
+        let bytes = axiom.to_bytes();
+        let deserialized_axiom = SemiAxiom::from_bytes(&bytes).unwrap();
+
+        assert_eq!(axiom.id, deserialized_axiom.id);
+        assert_eq!(axiom.world, deserialized_axiom.world);
+        assert_eq!(axiom.prime_elements, deserialized_axiom.prime_elements);
+        assert_eq!(axiom.description, deserialized_axiom.description);
+        assert_eq!(axiom.weight, deserialized_axiom.weight);
+    }
+
+    #[test]
+    fn test_semi_axiom_cdu() {
+        let axiom = SemiAxiom::new(
+            "test_axiom".to_string(),
+            "test_world".to_string(),
+            vec!["element1".to_string(), "element2".to_string()],
+            "A test semi-axiom".to_string(),
+        );
+
+        let cdu = axiom.to_cdu();
+        assert!(cdu.name.contains("semi-axiom.prime-ideal.test_world"));
+        assert!(cdu.name.ends_with(".cdu"));
+
+        let extracted_payload = cdu.extract_payload();
+        match extracted_payload {
+            Some(CduPayload::SemiAxiom(extracted_axiom)) => {
+                assert_eq!(axiom.id, extracted_axiom.id);
+                assert_eq!(axiom.world, extracted_axiom.world);
+            }
+            _ => panic!("Expected SemiAxiom payload"),
+        }
+    }
+    }
