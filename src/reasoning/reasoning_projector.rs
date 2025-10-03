@@ -134,6 +134,15 @@ mod tests {
     use crate::reasoning::{PrimeElement, SemiAxiom};
     use crate::state::ChronosaState;
 
+    /// Helper function to manually evolve a state for testing purposes.
+    fn test_evolve(mut state: ChronosaState, event: Cdu) -> ChronosaState {
+        if event.metadata.hlc > state.hlc {
+            state.hlc = event.metadata.hlc.clone();
+        }
+        state.log.push(event);
+        state
+    }
+
     #[test]
     fn test_reasoning_projector() {
         // 1. Set up the initial state with a prime element and a semi-axiom.
@@ -147,7 +156,7 @@ mod tests {
             "Cannot be decomposed".to_string(),
         );
         let pe1_cdu = pe1.to_cdu();
-        initial_state = crate::state::evolve(initial_state, pe1_cdu);
+        initial_state = test_evolve(initial_state, pe1_cdu);
 
         let axiom1 = SemiAxiom::new(
             "axiom-1".to_string(),
@@ -156,13 +165,13 @@ mod tests {
             "If user is present, greet them".to_string(),
         );
         let axiom1_cdu = axiom1.to_cdu();
-        initial_state = crate::state::evolve(initial_state, axiom1_cdu);
+        initial_state = test_evolve(initial_state, axiom1_cdu);
 
         // 2. Create the projector.
         let projector = ReasoningProjector::new();
 
         // 3. Create an input CDU.
-        let input = Cdu::new(b"User says hello".to_string(), "observation.uworld", vec![]);
+        let input = Cdu::new("User says hello".to_string().into_bytes(), "observation.uworld", vec![]);
 
         // 4. Project the input against the state.
         let commands = projector.project(&initial_state, &input);
@@ -188,13 +197,13 @@ mod tests {
             "If user is present, greet them".to_string(),
         );
         let axiom1_cdu = axiom1.to_cdu();
-        initial_state = crate::state::evolve(initial_state, axiom1_cdu);
+        initial_state = test_evolve(initial_state, axiom1_cdu);
 
         // 2. Create the projector.
         let projector = ReasoningProjector::new();
 
         // 3. Create an input CDU.
-        let input = Cdu::new(b"User says hello".to_string(), "observation.uworld", vec![]);
+        let input = Cdu::new("User says hello".to_string().into_bytes(), "observation.uworld", vec![]);
 
         // 4. Project the input against the state.
         let commands = projector.project(&initial_state, &input);
