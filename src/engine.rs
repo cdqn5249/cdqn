@@ -7,7 +7,7 @@ use crate::cdu::Cdu;
 use crate::state::{evolve, ChronosaState};
 use crate::storage::{append_events_to_log, rehydrate_from_log};
 use std::path::PathBuf;
-use std::sync::{mpsc, Arc, Mutex};
+use std::sync::{mpsc, Arc};
 use std::thread;
 
 /// The Projector is the pure, deterministic "brain" of the agent.
@@ -111,7 +111,7 @@ mod tests {
         let _ = fs::remove_file(&temp_log_path);
 
         // 1. Create the engine and get the command receiver.
-        let (engine, command_receiver) =
+        let (engine, _command_receiver) =
             Engine::new(temp_log_path.clone(), Box::new(TestProjector));
         let input_sender = engine.input_sender.clone();
 
@@ -128,7 +128,7 @@ mod tests {
             // The engine's logic is now inside this thread.
             thread::spawn(move || {
                 // This simulates the work done in the engine's spawned thread.
-                let command = Cdu::new(b"test command".to_vec(), "command.test", vec![]);
+                let _command = Cdu::new(b"test command".to_vec(), "command.test", vec![]);
                 // In the real engine, this would be sent to the executor.
                 // For the test, we just send a signal that the work is done.
                 done_sender.send(()).unwrap();
