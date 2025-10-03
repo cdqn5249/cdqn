@@ -13,7 +13,6 @@ pub type Predicate = Box<dyn Fn(&ChronosaState, &Cdu) -> bool + Send + Sync>;
 pub type Mapper = Box<dyn Fn(&Cdu) -> Vec<Cdu> + Send + Sync>;
 
 /// A single, stateless rule for the projector to evaluate.
-#[derive(Clone)]
 pub struct Rule {
     /// The predicate: a function that checks if the rule should fire.
     pub predicate: Predicate,
@@ -21,19 +20,7 @@ pub struct Rule {
     pub mapper: Mapper,
 }
 
-// Manual implementation of Clone for Rule.
-// Since functions are just pointers, we can create new Boxes pointing to the same function.
-impl Clone for Rule {
-    fn clone(&self) -> Self {
-        Self {
-            predicate: Box::new((&*self.predicate)),
-            mapper: Box::new((&*self.mapper)),
-        }
-    }
-}
-
 /// A projector that uses a list of rules to make decisions.
-#[derive(Clone)]
 pub struct RuleBasedProjector {
     rules: Vec<Rule>,
 }
