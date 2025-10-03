@@ -4,7 +4,7 @@
 //! The CDQN Native Execution Engine.
 
 use crate::cdu::Cdu;
-use crate::state::{evolve, ChronosaState};
+use crate::state::{evolve_shared_state, ChronosaState, SharedState};
 use crate::storage::{append_events_to_log, rehydrate_from_log};
 use std::path::PathBuf;
 use std::sync::{mpsc, Arc};
@@ -17,7 +17,7 @@ pub trait Projector: Send + Sync {
 
 /// The Engine drives the agent's lifecycle.
 pub struct Engine {
-    state: ChronosaState,
+    state: SharedState,
     log_path: PathBuf,
     projector: Arc<dyn Projector>,
     // The channel to receive all incoming CDUs.
@@ -31,13 +31,19 @@ pub struct Engine {
 impl Engine {
     pub fn new(log_path: PathBuf, projector: Box<dyn Projector>) -> (Self, mpsc::Receiver<Cdu>) {
         let events = rehydrate_from_log(&log_path).unwrap_or_default();
-        let initial_state = events.into_iter().fold(ChronosaState::default(), evolve);
+        let initial_state = events.into_iter().fold(ChronosaState::default(), |mut acc, event| {
+            if event.metadata.hlc > acc.hlc {
+                acc.hlc = event.metadata.hlc.clone();
+            }
+            acc.log.push(event);
+            acc
+        });
 
         let (input_sender, input_receiver) = mpsc::channel();
         let (command_sender, command_receiver) = mpsc::channel();
 
         let engine = Self {
-            state: initial_state,
+            state: Arc::new(RwLock::new(initial_state)),
             log_path,
             projector: Arc::from(projector),
             input_receiver,
@@ -53,26 +59,36 @@ impl Engine {
         println!("Engine: Running.");
         while let Ok(input_cdu) = self.input_receiver.recv() {
             // 1. Clone necessary data for the new thread.
-            let state_snapshot = self.state.clone();
+            let state = self.state.clone(); // Arc::clone is cheap
             let projector = self.projector.clone(); // Arc::clone is cheap
             let command_sender = self.command_sender.clone();
             let log_path = self.log_path.clone();
 
             // 2. Spawn a new thread for the reasoning task.
             thread::spawn(move || {
-                // 3. Project the input against the state snapshot to get new events.
-                let new_events = projector.project(&state_snapshot, &input_cdu);
+                // 3. Acquire a read lock on the state for projection.
+                if let Ok(state_guard) = state.read() {
+                    // 4. Project the input against the state snapshot to get new events.
+                    let new_events = projector.project(&state_guard, &input_cdu);
 
-                // 4. Persist the input and all new events to the WAL.
-                let mut all_events_to_persist = vec![input_cdu];
-                all_events_to_persist.extend(new_events);
-                append_events_to_log(&all_events_to_persist, &log_path).unwrap();
+                    // 5. Persist the input and all new events to the WAL.
+                    let mut all_events_to_persist = vec![input_cdu];
+                    all_events_to_persist.extend(new_events);
+                    append_events_to_log(&all_events_to_persist, &log_path).unwrap();
 
-                // 5. Send commands to the executor.
-                for event in &all_events_to_persist {
-                    if event.name.contains(".command.") {
-                        command_sender.send(event.clone()).unwrap();
+                    // 6. Send commands to the executor.
+                    for event in &all_events_to_persist {
+                        if event.name.contains(".command.") {
+                            command_sender.send(event.clone()).unwrap();
+                        }
                     }
+
+                    // 7. Evolve the shared state with all new events.
+                    for event in all_events_to_persist {
+                        evolve_shared_state(&state, event);
+                    }
+                } else {
+                    eprintln!("Failed to acquire read lock for projection.");
                 }
             });
         }
