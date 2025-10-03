@@ -171,7 +171,11 @@ mod tests {
         let projector = ReasoningProjector::new();
 
         // 3. Create an input CDU.
-        let input = Cdu::new("User says hello".to_string().into_bytes(), "observation.uworld", vec![]);
+        let input = Cdu::new(
+            "User says hello".to_string().into_bytes(),
+            "observation.uworld",
+            vec![],
+        );
 
         // 4. Project the input against the state.
         let commands = projector.project(&initial_state, &input);
@@ -203,7 +207,11 @@ mod tests {
         let projector = ReasoningProjector::new();
 
         // 3. Create an input CDU.
-        let input = Cdu::new("User says hello".to_string().into_bytes(), "observation.uworld", vec![]);
+        let input = Cdu::new(
+            "User says hello".to_string().into_bytes(),
+            "observation.uworld",
+            vec![],
+        );
 
         // 4. Project the input against the state.
         let commands = projector.project(&initial_state, &input);
@@ -211,4 +219,3 @@ mod tests {
         // 5. Assert that NO command was generated because the axiom's condition was not met.
         assert_eq!(commands.len(), 0);
     }
-}
