@@ -91,72 +91,104 @@ impl PrimeElement {
     fn to_bytes(&self) -> Vec<u8> {
         // Simple serialization without external dependencies
         let mut bytes = Vec::new();
-        
+
         // Serialize id
         bytes.extend_from_slice(&(self.id.len() as u32).to_le_bytes());
         bytes.extend_from_slice(self.id.as_bytes());
-        
+
         // Serialize world
         bytes.extend_from_slice(&(self.world.len() as u32).to_le_bytes());
         bytes.extend_from_slice(self.world.as_bytes());
-        
+
         // Serialize representation
         bytes.extend_from_slice(&self.representation.to_le_bytes());
-        
+
         // Serialize description
         bytes.extend_from_slice(&(self.description.len() as u32).to_le_bytes());
         bytes.extend_from_slice(self.description.as_bytes());
-        
+
         // Serialize irreducibility_proof
         bytes.extend_from_slice(&(self.irreducibility_proof.len() as u32).to_le_bytes());
         bytes.extend_from_slice(self.irreducibility_proof.as_bytes());
-        
+
         bytes
     }
 
     /// Create a PrimeElement from a byte representation
     fn from_bytes(bytes: &[u8]) -> Option<Self> {
         let mut pos = 0;
-        
+
         // Deserialize id
-        if pos + 4 > bytes.len() { return None; }
-        let id_len = u32::from_le_bytes([bytes[pos], bytes[pos+1], bytes[pos+2], bytes[pos+3]]) as usize;
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let id_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
         pos += 4;
-        if pos + id_len > bytes.len() { return None; }
-        let id = String::from_utf8(bytes[pos..pos+id_len].to_vec()).ok()?;
+        if pos + id_len > bytes.len() {
+            return None;
+        }
+        let id = String::from_utf8(bytes[pos..pos + id_len].to_vec()).ok()?;
         pos += id_len;
-        
+
         // Deserialize world
-        if pos + 4 > bytes.len() { return None; }
-        let world_len = u32::from_le_bytes([bytes[pos], bytes[pos+1], bytes[pos+2], bytes[pos+3]]) as usize;
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let world_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
         pos += 4;
-        if pos + world_len > bytes.len() { return None; }
-        let world = String::from_utf8(bytes[pos..pos+world_len].to_vec()).ok()?;
+        if pos + world_len > bytes.len() {
+            return None;
+        }
+        let world = String::from_utf8(bytes[pos..pos + world_len].to_vec()).ok()?;
         pos += world_len;
-        
+
         // Deserialize representation
-        if pos + 8 > bytes.len() { return None; }
+        if pos + 8 > bytes.len() {
+            return None;
+        }
         let representation = f64::from_le_bytes([
-            bytes[pos], bytes[pos+1], bytes[pos+2], bytes[pos+3],
-            bytes[pos+4], bytes[pos+5], bytes[pos+6], bytes[pos+7]
+            bytes[pos],
+            bytes[pos + 1],
+            bytes[pos + 2],
+            bytes[pos + 3],
+            bytes[pos + 4],
+            bytes[pos + 5],
+            bytes[pos + 6],
+            bytes[pos + 7],
         ]);
         pos += 8;
-        
+
         // Deserialize description
-        if pos + 4 > bytes.len() { return None; }
-        let desc_len = u32::from_le_bytes([bytes[pos], bytes[pos+1], bytes[pos+2], bytes[pos+3]]) as usize;
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let desc_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
         pos += 4;
-        if pos + desc_len > bytes.len() { return None; }
-        let description = String::from_utf8(bytes[pos..pos+desc_len].to_vec()).ok()?;
+        if pos + desc_len > bytes.len() {
+            return None;
+        }
+        let description = String::from_utf8(bytes[pos..pos + desc_len].to_vec()).ok()?;
         pos += desc_len;
-        
+
         // Deserialize irreducibility_proof
-        if pos + 4 > bytes.len() { return None; }
-        let proof_len = u32::from_le_bytes([bytes[pos], bytes[pos+1], bytes[pos+2], bytes[pos+3]]) as usize;
+        if pos + 4 > bytes.len() {
+            return None;
+        }
+        let proof_len =
+            u32::from_le_bytes([bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]])
+                as usize;
         pos += 4;
-        if pos + proof_len > bytes.len() { return None; }
-        let irreducibility_proof = String::from_utf8(bytes[pos..pos+proof_len].to_vec()).ok()?;
-        
+        if pos + proof_len > bytes.len() {
+            return None;
+        }
+        let irreducibility_proof = String::from_utf8(bytes[pos..pos + proof_len].to_vec()).ok()?;
+
         Some(PrimeElement {
             id,
             world,
@@ -289,7 +321,10 @@ mod tests {
         assert_eq!(element.world, deserialized_element.world);
         assert_eq!(element.representation, deserialized_element.representation);
         assert_eq!(element.description, deserialized_element.description);
-        assert_eq!(element.irreducibility_proof, deserialized_element.irreducibility_proof);
+        assert_eq!(
+            element.irreducibility_proof,
+            deserialized_element.irreducibility_proof
+        );
     }
 
     #[test]
