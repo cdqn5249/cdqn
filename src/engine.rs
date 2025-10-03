@@ -7,7 +7,7 @@ use crate::cdu::Cdu;
 use crate::state::{evolve, ChronosaState};
 use crate::storage::{append_events_to_log, rehydrate_from_log};
 use std::path::PathBuf;
-use std::sync::mpsc;
+use std::sync::{mpsc, Arc};
 use std::thread;
 
 /// The Projector is the pure, deterministic "brain" of the agent.
@@ -19,7 +19,7 @@ pub trait Projector: Send + Sync {
 pub struct Engine {
     state: ChronosaState,
     log_path: PathBuf,
-    projector: Box<dyn Projector>,
+    projector: Arc<dyn Projector>,
     // The channel to receive all incoming CDUs.
     input_receiver: mpsc::Receiver<Cdu>,
     // A sender for the input channel, can be cloned and given to Executors.
@@ -39,7 +39,7 @@ impl Engine {
         let engine = Self {
             state: initial_state,
             log_path,
-            projector,
+            projector: Arc::from(projector),
             input_receiver,
             input_sender,
             command_sender,
@@ -54,7 +54,7 @@ impl Engine {
         while let Ok(input_cdu) = self.input_receiver.recv() {
             // 1. Clone necessary data for the new thread.
             let state_snapshot = self.state.clone();
-            let projector = self.projector.clone_box(); // We'll add this method to the trait.
+            let projector = self.projector.clone(); // Arc::clone is cheap
             let command_sender = self.command_sender.clone();
             let log_path = self.log_path.clone();
 
@@ -80,32 +80,12 @@ impl Engine {
     }
 }
 
-/// Helper trait to allow cloning of a `Box<dyn Projector>`.
-pub trait ProjectorClone {
-    fn clone_box(&self) -> Box<dyn Projector>;
-}
-
-impl<T> ProjectorClone for T
-where
-    T: 'static + Projector + Clone,
-{
-    fn clone_box(&self) -> Box<dyn Projector> {
-        Box::new(self.clone())
-    }
-}
-
-impl Clone for Box<dyn Projector> {
-    fn clone(&self) -> Box<dyn Projector> {
-        self.clone_box()
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::state::ChronosaState;
+    use crate::projector::{Rule, RuleBasedProjector};
     use std::fs;
-    use std::sync::Arc;
     use std::time::Duration;
 
     // A mock projector for testing purposes.
@@ -133,7 +113,7 @@ mod tests {
         let _ = fs::remove_file(&temp_log_path);
 
         // 1. Create the engine and get the command receiver.
-        let (mut engine, command_receiver) =
+        let (engine, command_receiver) =
             Engine::new(temp_log_path.clone(), Box::new(TestProjector));
         let input_sender = engine.input_sender.clone();
 
