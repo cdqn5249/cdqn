@@ -1,13 +1,12 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/main.rs
 
-use cdqn::cdu::{Cdu, CduPayload};
+use cdqn::cdu::Cdu;
 use cdqn::engine::Engine;
 use cdqn::executor::Executor;
 use cdqn::reasoning::{PrimeElement, ReasoningProjector, SemiAxiom};
 use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
-use std::sync::mpsc;
 use std::thread;
 use std::time::Duration;
 
@@ -22,7 +21,7 @@ fn main() {
     // 2. Create the core components.
     let (engine, command_receiver) = Engine::new(log_path, Box::new(projector));
     let input_sender = engine.input_sender.clone();
-    let shared_state = engine.state.clone();
+    let shared_state = engine.state.clone(); // Get a handle to the shared state.
 
     // 3. Spawn all background threads.
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
@@ -75,7 +74,7 @@ fn main() {
         let feedback = Cdu::new(
             b"Greeting during emergency is bad".to_vec(),
             "feedback.reputation.negative.emergency", // Context is in the name
-            vec![result.name], // Causal link to the bad result
+            vec![result.name],                        // Causal link to the bad result
         );
         input_sender.send(feedback).unwrap();
     } else {
@@ -108,6 +107,8 @@ fn main() {
     drop(input_sender);
     engine_handle.join().unwrap();
     executor_handle.join().unwrap();
+    // Although the refinement thread will exit when the sender drops,
+    // it's good practice to join its handle as well.
     refinement_handle.join().unwrap();
 
     println!("\nSession complete.");
