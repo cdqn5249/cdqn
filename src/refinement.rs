@@ -118,6 +118,7 @@ impl RefinementEngine {
     }
 
     /// Placeholder for analyzing the log to discover new theorems.
+    #[allow(dead_code)]
     fn discover_theorems(&self) -> Vec<Cdu> {
         // In the future, this will look for frequently repeated, successful
         // reasoning paths and abstract them into Theorem CDUs.
