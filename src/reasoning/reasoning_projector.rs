@@ -140,14 +140,14 @@ impl Projector for ReasoningProjector {
         let mut allowed_axioms = Vec::new();
         'axiom_loop: for axiom in all_axioms {
             for constraint in &constraints {
-                if constraint.target_path.contains(&axiom.id) {
-                    if input.name.contains(&constraint.inhibiting_context) {
-                        println!(
-                            "Inhibition: Axiom '{}' pruned by constraint for context '{}'.",
-                            axiom.id, constraint.inhibiting_context
-                        );
-                        continue 'axiom_loop;
-                    }
+                if constraint.target_path.contains(&axiom.id)
+                    && input.name.contains(&constraint.inhibiting_context)
+                {
+                    println!(
+                        "Inhibition: Axiom '{}' pruned by constraint for context '{}'.",
+                        axiom.id, constraint.inhibiting_context
+                    );
+                    continue 'axiom_loop;
                 }
             }
             allowed_axioms.push(axiom);
