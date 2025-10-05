@@ -4,7 +4,7 @@
 //! The ReasoningProjector for Chronosa's advanced reasoning model.
 //! This projector acts as an orchestrator for a pipeline of reasoning strategies.
 
-use crate::cdu::Cdu;
+use crate::cdu::{Cdu, CduPayload};
 use crate::engine::Projector;
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::reasoning::strategy::{
@@ -151,8 +151,11 @@ mod tests {
             reason: "Do not greet during an emergency".to_string(),
             world: "uworld".to_string(),
         };
-        let constraint_cdu =
-            Cdu::from_payload(CduPayload::Constraint(constraint), "constraint.uworld", vec![]);
+        let constraint_cdu = Cdu::from_payload(
+            CduPayload::Constraint(constraint),
+            "constraint.uworld",
+            vec![],
+        );
         initial_state = test_evolve(initial_state, constraint_cdu);
         let projector = ReasoningProjector::new();
         let input = Cdu::new(
