@@ -5,6 +5,7 @@ use cdqn::cdu::Cdu;
 use cdqn::engine::Engine;
 use cdqn::executor::Executor;
 use cdqn::projector::{Rule, RuleBasedProjector};
+use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -44,9 +45,11 @@ fn main() {
     // 3. Create the Engine with our Projector.
     let (engine, command_receiver) = Engine::new(log_path, Box::new(projector));
     let input_sender = engine.input_sender.clone();
+    let shared_state = engine.state.clone(); // Get a handle to the shared state.
 
-    // 4. Spawn the Executor and Engine on background threads.
+    // 4. Spawn the Executor, Engine, and the new RefinementEngine on background threads.
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
+    let refinement_handle = RefinementEngine::spawn(shared_state, input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
     // 5. The main thread acts as the "world", feeding an observation to the Engine.
@@ -62,6 +65,9 @@ fn main() {
     drop(input_sender);
     engine_handle.join().unwrap();
     executor_handle.join().unwrap();
+    // Although the refinement thread will exit when the sender drops,
+    // it's good practice to join its handle as well.
+    refinement_handle.join().unwrap();
 
     println!("\nSession complete.");
 }
