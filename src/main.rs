@@ -25,7 +25,7 @@ fn main() {
 
     // 3. Spawn all background threads.
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
-    let refinement_handle = RefinementEngine::spawn(shared_state, input_sender.clone());
+    let refinement_handle = RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
     // --- Seeding the Initial State ---
@@ -65,7 +65,8 @@ fn main() {
     // We need to find the result of the greeting command to link our feedback to it.
     // In a real app, this would be more robust.
     let last_result = {
-        let state = engine.state.read().unwrap();
+        // FIX: Use the shared_state handle, not the moved 'engine'.
+        let state = shared_state.read().unwrap();
         state.find_last_by_subtype("result.task_completed").cloned()
     };
 
@@ -93,7 +94,8 @@ fn main() {
 
     // --- The Proof ---
     println!("\n[PROOF] Checking the final state...");
-    let final_state = engine.state.read().unwrap();
+    // FIX: Use the shared_state handle, not the moved 'engine'.
+    let final_state = shared_state.read().unwrap();
     let constraint_found = final_state.find_last_by_subtype("constraint.discovered");
     if let Some(constraint) = constraint_found {
         println!("SUCCESS: A new constraint was discovered and added to the log:");
