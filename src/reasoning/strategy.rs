@@ -175,6 +175,10 @@ impl AxiomEvaluationStrategy {
         }
 
         let command_payload = format!("Command from axiom: {}", axiom.description).into_bytes();
-        Cdu::new(command_payload, "command.reasoned", vec![axiom.id.clone()]).into()
+        vec![Cdu::new(
+            command_payload,
+            "command.reasoned",
+            vec![axiom.id.clone()],
+        )]
     }
 }
