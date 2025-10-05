@@ -90,8 +90,10 @@ impl ReasoningStrategy for ConstraintStrategy {
             'axiom_loop: for axiom in &context.candidate_axioms {
                 for constraint in context.kb.constraints() {
                     if constraint.target_path.contains(&axiom.id) {
-                        if let Some(constraint_context_pe) =
-                            context.kb.prime_elements().get(&constraint.inhibiting_context)
+                        if let Some(constraint_context_pe) = context
+                            .kb
+                            .prime_elements()
+                            .get(&constraint.inhibiting_context)
                         {
                             let distance = (input_context_pe.representation
                                 - constraint_context_pe.representation)
@@ -173,11 +175,6 @@ impl AxiomEvaluationStrategy {
         }
 
         let command_payload = format!("Command from axiom: {}", axiom.description).into_bytes();
-        Cdu::new(
-            command_payload,
-            "command.reasoned",
-            vec![axiom.id.clone()],
-        )
-        .into()
+        Cdu::new(command_payload, "command.reasoned", vec![axiom.id.clone()]).into()
     }
 }
