@@ -59,8 +59,6 @@ impl KnowledgeBase {
         &self.constraints
     }
 
-
-
     pub fn theorems(&self) -> &[Theorem] {
         &self.theorems
     }
