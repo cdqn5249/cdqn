@@ -17,7 +17,8 @@ pub trait Projector: Send + Sync {
 
 /// The Engine drives the agent's lifecycle.
 pub struct Engine {
-    state: SharedState,
+    // This field is now public to allow main.rs to share it with other components.
+    pub state: SharedState,
     log_path: PathBuf,
     projector: Arc<dyn Projector>,
     // The channel to receive all incoming CDUs.
