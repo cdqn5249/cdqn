@@ -59,7 +59,11 @@ fn main() {
 
     // --- SCENARIO 1: Learning from Failure ---
     println!("\n[SCENARIO 1] Simulating an emergency. Chronosa will make a mistake.");
-    let emergency_input = Cdu::new(b"User shouts for help".to_vec(), "observation.emergency", vec![]);
+    let emergency_input = Cdu::new(
+        b"User shouts for help".to_vec(),
+        "observation.emergency",
+        vec![],
+    );
     input_sender.send(emergency_input.clone()).unwrap();
     thread::sleep(Duration::from_millis(200));
 
@@ -114,8 +118,12 @@ fn main() {
     // --- The Final Proof ---
     println!("\n[PROOF] Checking the final state for learned knowledge...");
     let final_state = shared_state.read().unwrap();
-    let constraint_found = final_state.find_last_by_subtype("constraint.discovered").is_some();
-    let theorem_found = final_state.find_last_by_subtype("theorem.discovered").is_some();
+    let constraint_found = final_state
+        .find_last_by_subtype("constraint.discovered")
+        .is_some();
+    let theorem_found = final_state
+        .find_last_by_subtype("theorem.discovered")
+        .is_some();
 
     if constraint_found {
         println!("SUCCESS: A new CONSTRAINT was discovered and added to the log.");
