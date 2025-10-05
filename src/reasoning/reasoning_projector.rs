@@ -3,11 +3,11 @@
 
 //! The ReasoningProjector for Chronosa's advanced reasoning model.
 
-use crate::cdu::{Cdu, CduPayload, Constraint};
+use crate::cdu::{Cdu, CduPayload, Constraint, Theorem};
 use crate::engine::Projector;
 use crate::reasoning::{PrimeElement, SemiAxiom};
 use crate::state::ChronosaState;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::mpsc;
 use std::thread;
 
@@ -57,6 +57,17 @@ impl ReasoningProjector {
         constraints
     }
 
+    /// Extracts all theorems from the current state log.
+    fn get_theorems(&self, state: &ChronosaState) -> Vec<Theorem> {
+        let mut theorems = Vec::new();
+        for cdu in state.log() {
+            if let Some(CduPayload::Theorem(theorem)) = cdu.extract_payload() {
+                theorems.push(theorem);
+            }
+        }
+        theorems
+    }
+
     /// Evaluates a single semi-axiom against the state and input.
     /// This is a pure function and can be run in a separate thread.
     fn evaluate_axiom(
@@ -96,23 +107,41 @@ impl Projector for ReasoningProjector {
     fn project(&self, state: &ChronosaState, input: &Cdu) -> Vec<Cdu> {
         // 1. Extract all necessary knowledge from the state once.
         let prime_elements = self.get_prime_elements(state);
+        let theorems = self.get_theorems(state);
+
+        // 2. Perform the Theorem Check (the "shortcut").
+        let known_element_ids: HashSet<_> = prime_elements.keys().cloned().collect();
+        for theorem in &theorems {
+            let premises_set: HashSet<_> = theorem.premises.iter().cloned().collect();
+            if premises_set.is_subset(&known_element_ids) {
+                // All premises for this theorem are met.
+                println!(
+                    "Shortcut: Theorem conclusion '{}' applied, skipping axiom evaluation.",
+                    theorem.conclusion
+                );
+                let command_payload =
+                    format!("Command from theorem: {}", theorem.conclusion).into_bytes();
+                // We need a way to find the theorem's CDU name to cite it.
+                // For now, we'll just use the conclusion as a placeholder cause.
+                let command_cdu = Cdu::new(
+                    command_payload,
+                    "command.theorem",
+                    vec![theorem.conclusion.clone()],
+                );
+                return vec![command_cdu];
+            }
+        }
+
+        // 3. If no theorem applied, proceed with axiom evaluation.
         let all_axioms = self.get_semi_axioms(state);
         let constraints = self.get_constraints(state);
 
-        // 2. Perform the Inhibition Check.
-        // For this simple projector, a "path" is just the axiom's ID.
-        // A more advanced projector would check multi-step paths.
+        // 4. Perform the Inhibition Check.
         let mut allowed_axioms = Vec::new();
         'axiom_loop: for axiom in all_axioms {
             for constraint in &constraints {
-                // Check if the constraint's target path contains our axiom
                 if constraint.target_path.contains(&axiom.id) {
-                    // This axiom is part of a constrained path.
-                    // A real similarity engine would go here. For now, we do a simple check:
-                    // Does the input CDU's name contain the inhibiting context string?
-                    // This is a placeholder for a real contextual check.
                     if input.name.contains(&constraint.inhibiting_context) {
-                        // The context matches, so this axiom is inhibited. Skip it.
                         println!(
                             "Inhibition: Axiom '{}' pruned by constraint for context '{}'.",
                             axiom.id, constraint.inhibiting_context
@@ -121,15 +150,13 @@ impl Projector for ReasoningProjector {
                     }
                 }
             }
-            // If we get here, the axiom is not inhibited.
             allowed_axioms.push(axiom);
         }
 
-        // 3. Set up concurrency for allowed axioms.
+        // 5. Set up concurrency for allowed axioms.
         let (sender, receiver) = mpsc::channel();
         let mut handles = vec![];
 
-        // 4. Spawn a thread for each *allowed* axiom to evaluate it concurrently.
         for axiom in allowed_axioms {
             let sender_clone = sender.clone();
             let input_clone = input.clone();
@@ -139,7 +166,6 @@ impl Projector for ReasoningProjector {
                 let results = Self::evaluate_axiom(axiom, &input_clone, &elements_clone);
                 for result in results {
                     if sender_clone.send(result).is_err() {
-                        // The receiver has been dropped, likely because the main thread is shutting down.
                         break;
                     }
                 }
@@ -147,16 +173,14 @@ impl Projector for ReasoningProjector {
             handles.push(handle);
         }
 
-        // Drop the original sender so the receiver doesn't wait for it.
         drop(sender);
 
-        // 5. Collect all results from the concurrent evaluations.
+        // 6. Collect all results.
         let mut final_commands = Vec::new();
         for command in receiver {
             final_commands.push(command);
         }
 
-        // 6. Wait for all threads to finish to ensure clean shutdown.
         for handle in handles {
             handle.join().unwrap();
         }
@@ -168,7 +192,7 @@ impl Projector for ReasoningProjector {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cdu::{Cdu, Constraint};
+    use crate::cdu::{Cdu, Constraint, Theorem};
     use crate::reasoning::{PrimeElement, SemiAxiom};
     use crate::state::ChronosaState;
 
@@ -183,95 +207,15 @@ mod tests {
 
     #[test]
     fn test_reasoning_projector() {
-        // 1. Set up the initial state with a prime element and a semi-axiom.
         let mut initial_state = ChronosaState::default();
-
         let pe1 = PrimeElement::new(
             "pe-1".to_string(),
             "uworld".to_string(),
             1.0,
-            "The user is present".to_string(),
-            "Cannot be decomposed".to_string(),
-        );
-        let pe1_cdu = pe1.to_cdu();
-        initial_state = test_evolve(initial_state, pe1_cdu);
-
-        let axiom1 = SemiAxiom::new(
-            "axiom-1".to_string(),
-            "uworld".to_string(),
-            vec!["pe-1".to_string()], // This axiom requires "pe-1"
-            "If user is present, greet them".to_string(),
-        );
-        let axiom1_cdu = axiom1.to_cdu();
-        initial_state = test_evolve(initial_state, axiom1_cdu);
-
-        // 2. Create the projector.
-        let projector = ReasoningProjector::new();
-
-        // 3. Create an input CDU.
-        let input = Cdu::new(
-            "User says hello".to_string().into_bytes(),
-            "observation.uworld",
-            vec![],
-        );
-
-        // 4. Project the input against the state.
-        let commands = projector.project(&initial_state, &input);
-
-        // 5. Assert that a command was generated.
-        assert_eq!(commands.len(), 1);
-        assert!(commands[0].name.contains(".command.reasoned"));
-        assert_eq!(
-            commands[0].metadata.causes[0],
-            "axiom-1" // The command was caused by the axiom
-        );
-    }
-
-    #[test]
-    fn test_reasoning_projector_fails_axiom() {
-        // 1. Set up state with a semi-axiom that requires a prime element that is NOT in the state.
-        let mut initial_state = ChronosaState::default();
-
-        let axiom1 = SemiAxiom::new(
-            "axiom-1".to_string(),
-            "uworld".to_string(),
-            vec!["pe-missing".to_string()], // This axiom requires "pe-missing"
-            "If user is present, greet them".to_string(),
-        );
-        let axiom1_cdu = axiom1.to_cdu();
-        initial_state = test_evolve(initial_state, axiom1_cdu);
-
-        // 2. Create the projector.
-        let projector = ReasoningProjector::new();
-
-        // 3. Create an input CDU.
-        let input = Cdu::new(
-            "User says hello".to_string().into_bytes(),
-            "observation.uworld",
-            vec![],
-        );
-
-        // 4. Project the input against the state.
-        let commands = projector.project(&initial_state, &input);
-
-        // 5. Assert that NO command was generated because the axiom's condition was not met.
-        assert_eq!(commands.len(), 0);
-    }
-
-    #[test]
-    fn test_reasoning_projector_inhibits_axiom() {
-        // 1. Set up state with an axiom and a constraint that forbids it in a specific context.
-        let mut initial_state = ChronosaState::default();
-
-        let pe1 = PrimeElement::new(
-            "pe-1".to_string(),
-            "uworld".to_string(),
-            1.0,
-            "The user is present".to_string(),
+            "User is present".to_string(),
             "Cannot be decomposed".to_string(),
         );
         initial_state = test_evolve(initial_state, pe1.to_cdu());
-
         let axiom1 = SemiAxiom::new(
             "axiom-1".to_string(),
             "uworld".to_string(),
@@ -279,34 +223,104 @@ mod tests {
             "If user is present, greet them".to_string(),
         );
         initial_state = test_evolve(initial_state, axiom1.to_cdu());
+        let projector = ReasoningProjector::new();
+        let input = Cdu::new(b"User says hello".to_vec(), "observation.uworld", vec![]);
+        let commands = projector.project(&initial_state, &input);
+        assert_eq!(commands.len(), 1);
+        assert!(commands[0].name.contains(".command.reasoned"));
+        assert_eq!(commands[0].metadata.causes[0], "axiom-1");
+    }
 
+    #[test]
+    fn test_reasoning_projector_fails_axiom() {
+        let mut initial_state = ChronosaState::default();
+        let axiom1 = SemiAxiom::new(
+            "axiom-1".to_string(),
+            "uworld".to_string(),
+            vec!["pe-missing".to_string()],
+            "If user is present, greet them".to_string(),
+        );
+        initial_state = test_evolve(initial_state, axiom1.to_cdu());
+        let projector = ReasoningProjector::new();
+        let input = Cdu::new(b"User says hello".to_vec(), "observation.uworld", vec![]);
+        let commands = projector.project(&initial_state, &input);
+        assert_eq!(commands.len(), 0);
+    }
+
+    #[test]
+    fn test_reasoning_projector_inhibits_axiom() {
+        let mut initial_state = ChronosaState::default();
+        let pe1 = PrimeElement::new(
+            "pe-1".to_string(),
+            "uworld".to_string(),
+            1.0,
+            "User is present".to_string(),
+            "Cannot be decomposed".to_string(),
+        );
+        initial_state = test_evolve(initial_state, pe1.to_cdu());
+        let axiom1 = SemiAxiom::new(
+            "axiom-1".to_string(),
+            "uworld".to_string(),
+            vec!["pe-1".to_string()],
+            "If user is present, greet them".to_string(),
+        );
+        initial_state = test_evolve(initial_state, axiom1.to_cdu());
         let constraint = Constraint {
             target_path: vec!["axiom-1".to_string()],
             inhibiting_context: "emergency".to_string(),
             reason: "Do not greet during an emergency".to_string(),
             world: "uworld".to_string(),
         };
-        let constraint_cdu = Cdu::from_payload(
-            CduPayload::Constraint(constraint),
-            "constraint.uworld",
+        let constraint_cdu =
+            Cdu::from_payload(CduPayload::Constraint(constraint), "constraint.uworld", vec![]);
+        initial_state = test_evolve(initial_state, constraint_cdu);
+        let projector = ReasoningProjector::new();
+        let input = Cdu::new(
+            b"User shouts for help".to_vec(),
+            "observation.emergency",
             vec![],
         );
-        initial_state = test_evolve(initial_state, constraint_cdu);
+        let commands = projector.project(&initial_state, &input);
+        assert_eq!(commands.len(), 0);
+    }
+
+    #[test]
+    fn test_reasoning_projector_uses_theorem() {
+        // 1. Set up state with two prime elements and a theorem that requires them.
+        let mut initial_state = ChronosaState::default();
+        let pe1 = PrimeElement::new("pe-a".to_string(), "uworld".to_string(), 1.0, "A".to_string(), "".to_string());
+        initial_state = test_evolve(initial_state, pe1.to_cdu());
+        let pe2 = PrimeElement::new("pe-b".to_string(), "uworld".to_string(), 1.0, "B".to_string(), "".to_string());
+        initial_state = test_evolve(initial_state, pe2.to_cdu());
+
+        let theorem = Theorem {
+            premises: vec!["pe-a".to_string(), "pe-b".to_string()],
+            conclusion: "Conclusion C".to_string(),
+            proof_path: vec![],
+            confidence_score: 1.0,
+        };
+        let theorem_cdu = Cdu::from_payload(CduPayload::Theorem(theorem), "theorem.uworld", vec![]);
+        initial_state = test_evolve(initial_state, theorem_cdu);
+
+        // Also add an axiom that would otherwise fire, to prove the theorem takes precedence.
+        let axiom1 = SemiAxiom::new(
+            "axiom-1".to_string(),
+            "uworld".to_string(),
+            vec!["pe-a".to_string()],
+            "This should not fire".to_string(),
+        );
+        initial_state = test_evolve(initial_state, axiom1.to_cdu());
 
         // 2. Create the projector.
         let projector = ReasoningProjector::new();
+        let input = Cdu::new(b"trigger".to_vec(), "observation.uworld", vec![]);
 
-        // 3. Create an input CDU that MATCHES the inhibiting context.
-        let input = Cdu::new(
-            "User shouts for help".to_string().into_bytes(),
-            "observation.emergency", // The context matches the constraint
-            vec![],
-        );
-
-        // 4. Project the input against the state.
+        // 3. Project the input.
         let commands = projector.project(&initial_state, &input);
 
-        // 5. Assert that NO command was generated because the axiom was inhibited.
-        assert_eq!(commands.len(), 0);
+        // 4. Assert that exactly one command was generated, and it's from the theorem.
+        assert_eq!(commands.len(), 1);
+        assert!(commands[0].name.contains(".command.theorem"));
+        assert_eq!(commands[0].metadata.causes[0], "Conclusion C");
     }
 }
