@@ -84,7 +84,14 @@ pub struct ConstraintStrategy;
 impl ReasoningStrategy for ConstraintStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
         let mut allowed_axioms = Vec::new();
-        let input_context_str = context.input.name.split('.').nth(1).unwrap_or("");
+
+        // FIX: Robustly extract the last part of the subtype as the context.
+        let name_parts: Vec<&str> = context.input.name.split('.').collect();
+        let input_context_str = if name_parts.len() > 2 {
+            name_parts[name_parts.len() - 2]
+        } else {
+            "" // No context found
+        };
 
         if let Some(input_context_pe) = context.kb.prime_elements().get(input_context_str) {
             'axiom_loop: for axiom in &context.candidate_axioms {
