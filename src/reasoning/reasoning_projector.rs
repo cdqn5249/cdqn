@@ -271,8 +271,11 @@ mod tests {
             reason: "Do not greet during an emergency".to_string(),
             world: "uworld".to_string(),
         };
-        let constraint_cdu =
-            Cdu::from_payload(CduPayload::Constraint(constraint), "constraint.uworld", vec![]);
+        let constraint_cdu = Cdu::from_payload(
+            CduPayload::Constraint(constraint),
+            "constraint.uworld",
+            vec![],
+        );
         initial_state = test_evolve(initial_state, constraint_cdu);
         let projector = ReasoningProjector::new();
         let input = Cdu::new(
@@ -288,9 +291,21 @@ mod tests {
     fn test_reasoning_projector_uses_theorem() {
         // 1. Set up state with two prime elements and a theorem that requires them.
         let mut initial_state = ChronosaState::default();
-        let pe1 = PrimeElement::new("pe-a".to_string(), "uworld".to_string(), 1.0, "A".to_string(), "".to_string());
+        let pe1 = PrimeElement::new(
+            "pe-a".to_string(),
+            "uworld".to_string(),
+            1.0,
+            "A".to_string(),
+            "".to_string(),
+        );
         initial_state = test_evolve(initial_state, pe1.to_cdu());
-        let pe2 = PrimeElement::new("pe-b".to_string(), "uworld".to_string(), 1.0, "B".to_string(), "".to_string());
+        let pe2 = PrimeElement::new(
+            "pe-b".to_string(),
+            "uworld".to_string(),
+            1.0,
+            "B".to_string(),
+            "".to_string(),
+        );
         initial_state = test_evolve(initial_state, pe2.to_cdu());
 
         let theorem = Theorem {
