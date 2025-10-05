@@ -156,15 +156,21 @@ impl Theorem {
         let mut pos = 0;
         // A simple helper for reading a Vec<String>
         let read_vec_string = |bytes: &[u8], pos: &mut usize| -> Option<Vec<String>> {
-            if *pos + 4 > bytes.len() { return None; }
+            if *pos + 4 > bytes.len() {
+                return None;
+            }
             let vec_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
             *pos += 4;
             let mut vec = Vec::with_capacity(vec_len);
             for _ in 0..vec_len {
-                if *pos + 4 > bytes.len() { return None; }
+                if *pos + 4 > bytes.len() {
+                    return None;
+                }
                 let str_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
                 *pos += 4;
-                if *pos + str_len > bytes.len() { return None; }
+                if *pos + str_len > bytes.len() {
+                    return None;
+                }
                 let item = String::from_utf8(bytes[*pos..*pos + str_len].to_vec()).ok()?;
                 *pos += str_len;
                 vec.push(item);
@@ -172,16 +178,27 @@ impl Theorem {
             Some(vec)
         };
         let premises = read_vec_string(bytes, &mut pos)?;
-        if pos + 4 > bytes.len() { return None; }
+        if pos + 4 > bytes.len() {
+            return None;
+        }
         let conclusion_len = u32::from_le_bytes(bytes[pos..pos + 4].try_into().ok()?) as usize;
         pos += 4;
-        if pos + conclusion_len > bytes.len() { return None; }
+        if pos + conclusion_len > bytes.len() {
+            return None;
+        }
         let conclusion = String::from_utf8(bytes[pos..pos + conclusion_len].to_vec()).ok()?;
         pos += conclusion_len;
         let proof_path = read_vec_string(bytes, &mut pos)?;
-        if pos + 8 > bytes.len() { return None; }
+        if pos + 8 > bytes.len() {
+            return None;
+        }
         let confidence_score = f64::from_le_bytes(bytes[pos..pos + 8].try_into().ok()?);
-        Some(Theorem { premises, conclusion, proof_path, confidence_score })
+        Some(Theorem {
+            premises,
+            conclusion,
+            proof_path,
+            confidence_score,
+        })
     }
 }
 
@@ -208,15 +225,21 @@ impl Constraint {
     pub fn from_bytes(bytes: &[u8]) -> Option<Self> {
         let mut pos = 0;
         let read_vec_string = |bytes: &[u8], pos: &mut usize| -> Option<Vec<String>> {
-            if *pos + 4 > bytes.len() { return None; }
+            if *pos + 4 > bytes.len() {
+                return None;
+            }
             let vec_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
             *pos += 4;
             let mut vec = Vec::with_capacity(vec_len);
             for _ in 0..vec_len {
-                if *pos + 4 > bytes.len() { return None; }
+                if *pos + 4 > bytes.len() {
+                    return None;
+                }
                 let str_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
                 *pos += 4;
-                if *pos + str_len > bytes.len() { return None; }
+                if *pos + str_len > bytes.len() {
+                    return None;
+                }
                 let item = String::from_utf8(bytes[*pos..*pos + str_len].to_vec()).ok()?;
                 *pos += str_len;
                 vec.push(item);
@@ -224,10 +247,14 @@ impl Constraint {
             Some(vec)
         };
         let read_string = |bytes: &[u8], pos: &mut usize| -> Option<String> {
-            if *pos + 4 > bytes.len() { return None; }
+            if *pos + 4 > bytes.len() {
+                return None;
+            }
             let str_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
             *pos += 4;
-            if *pos + str_len > bytes.len() { return None; }
+            if *pos + str_len > bytes.len() {
+                return None;
+            }
             let item = String::from_utf8(bytes[*pos..*pos + str_len].to_vec()).ok()?;
             *pos += str_len;
             Some(item)
@@ -236,10 +263,14 @@ impl Constraint {
         let inhibiting_context = read_string(bytes, &mut pos)?;
         let reason = read_string(bytes, &mut pos)?;
         let world = read_string(bytes, &mut pos)?;
-        Some(Constraint { target_path, inhibiting_context, reason, world })
+        Some(Constraint {
+            target_path,
+            inhibiting_context,
+            reason,
+            world,
+        })
     }
 }
-
 
 #[cfg(test)]
 mod tests {
