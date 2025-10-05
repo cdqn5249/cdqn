@@ -4,7 +4,7 @@
 //! The ReasoningProjector for Chronosa's advanced reasoning model.
 //! This projector acts as an orchestrator for a pipeline of reasoning strategies.
 
-use crate::cdu::{Cdu, CduPayload};
+use crate::cdu::Cdu;
 use crate::engine::Projector;
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::reasoning::strategy::{
@@ -65,7 +65,7 @@ impl Projector for ReasoningProjector {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cdu::{Constraint, Theorem};
+    use crate::cdu::{CduPayload, Constraint, Theorem};
     use crate::reasoning::{PrimeElement, SemiAxiom};
 
     /// Helper function to manually evolve a state for testing purposes.
