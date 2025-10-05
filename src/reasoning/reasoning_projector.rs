@@ -309,4 +309,4 @@ mod tests {
         // 5. Assert that NO command was generated because the axiom was inhibited.
         assert_eq!(commands.len(), 0);
     }
-    }
+}
