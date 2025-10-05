@@ -66,8 +66,11 @@ impl RefinementEngine {
                     new_theorems.len()
                 );
                 for theorem in new_theorems {
-                    let theorem_cdu =
-                        Cdu::from_payload(CduPayload::Theorem(theorem), "theorem.discovered", vec![]);
+                    let theorem_cdu = Cdu::from_payload(
+                        CduPayload::Theorem(theorem),
+                        "theorem.discovered",
+                        vec![],
+                    );
                     if self.input_sender.send(theorem_cdu).is_err() {
                         break;
                     }
@@ -129,14 +132,26 @@ impl RefinementEngine {
                 if let Some(result_name) = cdu.metadata.causes.first() {
                     if let Some(result_cdu) = log.iter().find(|c| c.name == *result_name) {
                         if let Some(command_name) = result_cdu.metadata.causes.first() {
-                            if let Some(command_cdu) = log.iter().find(|c| c.name == *command_name) {
+                            if let Some(command_cdu) = log.iter().find(|c| c.name == *command_name)
+                            {
                                 if let Some(axiom_id) = command_cdu.metadata.causes.first() {
-                                    if let Some(axiom_cdu) = log.iter().find(|c| c.name.contains(axiom_id)) {
-                                        if let Some(CduPayload::SemiAxiom(axiom)) = axiom_cdu.extract_payload() {
+                                    if let Some(axiom_cdu) =
+                                        log.iter().find(|c| c.name.contains(axiom_id))
+                                    {
+                                        if let Some(CduPayload::SemiAxiom(axiom)) =
+                                            axiom_cdu.extract_payload()
+                                        {
                                             let theorem = Theorem {
                                                 premises: axiom.prime_elements.clone(),
-                                                conclusion: format!("Successfully apply '{}'", axiom.description),
-                                                proof_path: vec![axiom_id.clone(), command_name.clone(), result_name.clone()],
+                                                conclusion: format!(
+                                                    "Successfully apply '{}'",
+                                                    axiom.description
+                                                ),
+                                                proof_path: vec![
+                                                    axiom_id.clone(),
+                                                    command_name.clone(),
+                                                    result_name.clone(),
+                                                ],
                                                 confidence_score: 1.0, // Start with high confidence
                                             };
                                             new_theorems.push(theorem);
