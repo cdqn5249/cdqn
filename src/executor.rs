@@ -7,7 +7,6 @@ use crate::cdu::Cdu;
 use crate::engine::EngineInput;
 use std::sync::mpsc;
 use std::thread;
-use std::time::Duration;
 
 /// The Executor runs on a background thread, processing commands.
 pub struct Executor;
@@ -48,6 +47,7 @@ impl Executor {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::Duration; // FIX: Moved the import here where it is used.
 
     #[test]
     fn test_executor_receives_and_sends() {
