@@ -3,7 +3,8 @@
 
 //! The Refinement Engine for Chronosa's autonomous learning.
 
-use crate::cdu::{Cdu, CduPayload, Constraint, Theorem};
+use crate::cdu::{Cdu, CduPayload};
+use crate::payloads::{Constraint, Theorem}; // FIX: Import directly from payloads
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::state::SharedState;
 use std::collections::HashSet;
@@ -62,11 +63,9 @@ impl RefinementEngine {
 
             // Create a single knowledge snapshot for this analysis cycle.
             let kb = {
-                // Use a short timeout to avoid deadlocking with the main engine during shutdown.
                 if let Ok(state_guard) = self.state.try_read() {
                     KnowledgeBase::from_state(&state_guard)
                 } else {
-                    // If we can't get a lock, the main thread is likely shutting down. Exit.
                     break;
                 }
             };
@@ -83,9 +82,8 @@ impl RefinementEngine {
                         "constraint.discovered",
                         vec![],
                     );
-                    // If this send fails, the main engine has shut down, so we should exit.
                     if self.input_sender.send(constraint_cdu).is_err() {
-                        return; // Exit the run loop entirely.
+                        return;
                     }
                 }
             }
@@ -102,9 +100,8 @@ impl RefinementEngine {
                         "theorem.discovered",
                         vec![],
                     );
-                    // If this send fails, the main engine has shut down, so we should exit.
                     if self.input_sender.send(theorem_cdu).is_err() {
-                        return; // Exit the run loop entirely.
+                        return;
                     }
                 }
             }
