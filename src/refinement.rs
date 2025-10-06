@@ -3,7 +3,8 @@
 
 //! The Refinement Engine for Chronosa's autonomous learning.
 
-use crate::cdu::{Cdu, CduPayload, Constraint, Theorem};
+use crate::cdu::{Cdu, CduPayload};
+use crate::payloads::{Constraint, Theorem}; // FIX: Import directly from payloads
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::state::SharedState;
 use std::collections::HashSet;
