@@ -32,7 +32,9 @@ impl Executor {
                 println!("[Executor] Sending result for command.");
                 if result_sender.send(EngineInput::Cdu(result_cdu)).is_err() {
                     // This happens if the Engine's input channel is closed.
-                    println!("[Executor] Engine channel closed, cannot send result. Shutting down.");
+                    println!(
+                        "[Executor] Engine channel closed, cannot send result. Shutting down."
+                    );
                     break;
                 }
             }
