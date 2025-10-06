@@ -56,8 +56,11 @@ fn main() {
         proof_path: vec![],
         confidence_score: 1.0,
     };
-    let intent_theorem_cdu =
-        Cdu::from_payload(CduPayload::Theorem(intent_theorem), "theorem.uworld", vec![]);
+    let intent_theorem_cdu = Cdu::from_payload(
+        CduPayload::Theorem(intent_theorem),
+        "theorem.uworld",
+        vec![],
+    );
     input_sender.send(intent_theorem_cdu).unwrap();
     thread::sleep(Duration::from_millis(100));
 
