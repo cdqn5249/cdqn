@@ -66,11 +66,7 @@ fn main() {
 
     // --- SCENARIO 1: Causal Tensor Decomposition ---
     println!("\n[SCENARIO 1] Simulating a user intent to test the CTD workflow.");
-    let intent_input = Cdu::new(
-        b"Find my keys".to_vec(),
-        "observation.intent",
-        vec![],
-    );
+    let intent_input = Cdu::new(b"Find my keys".to_vec(), "observation.intent", vec![]);
     input_sender.send(intent_input).unwrap();
     thread::sleep(Duration::from_millis(200));
 
