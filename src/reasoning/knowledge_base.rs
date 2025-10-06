@@ -3,7 +3,8 @@
 
 //! A snapshot of all knowledge relevant to a single reasoning cycle.
 
-use crate::cdu::{CduPayload, Constraint, Theorem};
+use crate::cdu::CduPayload;
+use crate::payloads::{Constraint, Theorem}; // FIX: Import directly from payloads
 use crate::reasoning::{PrimeElement, SemiAxiom};
 use crate::state::ChronosaState;
 use std::collections::HashMap;
