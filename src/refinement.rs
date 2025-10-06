@@ -4,7 +4,7 @@
 //! The Refinement Engine for Chronosa's autonomous learning.
 
 use crate::cdu::{Cdu, CduPayload};
-use crate::engine::EngineInput; // Import the new enum
+use crate::engine::EngineInput;
 use crate::payloads::{Constraint, Theorem};
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::state::SharedState;
@@ -40,14 +40,14 @@ fn calculate_euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
 /// to discover new knowledge like Constraints and Theorems.
 pub struct RefinementEngine {
     state: SharedState,
-    input_sender: std::sync::mpsc::Sender<EngineInput>, // Sender type is updated
+    input_sender: std::sync::mpsc::Sender<EngineInput>,
 }
 
 impl RefinementEngine {
     /// Spawns the RefinementEngine on a new background thread.
     pub fn spawn(
         state: SharedState,
-        input_sender: std::sync::mpsc::Sender<EngineInput>, // Sender type is updated
+        input_sender: std::sync::mpsc::Sender<EngineInput>,
     ) -> thread::JoinHandle<()> {
         let engine = Self {
             state,
@@ -82,7 +82,11 @@ impl RefinementEngine {
                         "constraint.discovered",
                         vec![],
                     );
-                    if self.input_sender.send(EngineInput::Cdu(constraint_cdu)).is_err() {
+                    if self
+                        .input_sender
+                        .send(EngineInput::Cdu(constraint_cdu))
+                        .is_err()
+                    {
                         return;
                     }
                 }
@@ -100,7 +104,11 @@ impl RefinementEngine {
                         "theorem.discovered",
                         vec![],
                     );
-                    if self.input_sender.send(EngineInput::Cdu(theorem_cdu)).is_err() {
+                    if self
+                        .input_sender
+                        .send(EngineInput::Cdu(theorem_cdu))
+                        .is_err()
+                    {
                         return;
                     }
                 }
