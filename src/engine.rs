@@ -62,6 +62,9 @@ impl Engine {
     /// The main run loop. It listens for inputs and drives the state forward.
     pub fn run(self) {
         println!("[Engine] Thread spawned and running.");
+        // FIX: Keep track of spawned task handles.
+        let mut task_handles = Vec::new();
+
         while let Ok(input) = self.input_receiver.recv() {
             println!("[Engine] Received input from channel.");
             match input {
@@ -72,7 +75,8 @@ impl Engine {
                     let command_sender = self.command_sender.clone();
                     let log_path = self.log_path.clone();
 
-                    thread::spawn(move || {
+                    // Spawn the task and store its handle.
+                    let handle = thread::spawn(move || {
                         println!("[Engine-Task] Spawned for CDU: {}", input_cdu.name);
                         if let Ok(state_guard) = state.read() {
                             let new_events = projector.project(&state_guard, &input_cdu);
@@ -104,6 +108,7 @@ impl Engine {
                             eprintln!("[Engine-Task] Failed to acquire read lock for projection.");
                         }
                     });
+                    task_handles.push(handle);
                 }
                 EngineInput::Shutdown => {
                     println!("[Engine] Shutdown signal received.");
@@ -111,8 +116,14 @@ impl Engine {
                 }
             }
         }
-        // This line will only be reached if the input_receiver channel closes or Shutdown is received.
-        println!("[Engine] Input channel closed or shutdown received, thread terminating.");
+
+        // FIX: After the loop, wait for all spawned tasks to complete.
+        println!("[Engine] Waiting for all pending tasks to complete...");
+        for handle in task_handles {
+            handle.join().unwrap();
+        }
+
+        println!("[Engine] All tasks complete. Thread terminating.");
     }
 }
 
