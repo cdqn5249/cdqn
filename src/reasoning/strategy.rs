@@ -53,8 +53,16 @@ pub trait ReasoningStrategy {
 /// Pads the shorter vector with zeros if lengths are unequal.
 fn calculate_euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
     let max_len = a.len().max(b.len());
-    let a_padded = a.iter().cloned().chain(std::iter::repeat(0.0)).take(max_len);
-    let b_padded = b.iter().cloned().chain(std::iter::repeat(0.0)).take(max_len);
+    let a_padded = a
+        .iter()
+        .cloned()
+        .chain(std::iter::repeat(0.0))
+        .take(max_len);
+    let b_padded = b
+        .iter()
+        .cloned()
+        .chain(std::iter::repeat(0.0))
+        .take(max_len);
 
     a_padded
         .zip(b_padded)
