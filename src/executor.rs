@@ -18,7 +18,6 @@ impl Executor {
     ) -> thread::JoinHandle<()> {
         thread::spawn(move || {
             println!("[Executor] Thread spawned and running.");
-            // The loop will continue as long as the channel is open.
             while let Ok(command_cdu) = command_receiver.recv() {
                 println!("[Executor] Received command: {}", command_cdu.name);
 
@@ -30,15 +29,12 @@ impl Executor {
 
                 println!("[Executor] Sending result for command.");
                 if result_sender.send(EngineInput::Cdu(result_cdu)).is_err() {
-                    // This happens if the Engine's input channel is closed.
                     println!(
                         "[Executor] Engine channel closed, cannot send result. Shutting down."
                     );
                     break;
                 }
             }
-            // This line is reached only when the command_receiver channel is closed,
-            // which happens when the Engine and all its tasks terminate and drop their senders.
             println!("[Executor] Command channel closed, thread terminating.");
         })
     }
@@ -47,7 +43,7 @@ impl Executor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration; // FIX: Moved the import here where it is used.
+    use std::time::Duration;
 
     #[test]
     fn test_executor_receives_and_sends() {
@@ -59,7 +55,8 @@ mod tests {
         let command = Cdu::new(b"do work".to_vec(), "command.work", vec![]);
         command_sender.send(command.clone()).unwrap();
 
-        let result_input = result_receiver.recv().unwrap();
+        // Give a moment for the result to be sent back.
+        let result_input = result_receiver.recv_timeout(Duration::from_secs(1)).unwrap();
         let result = match result_input {
             EngineInput::Cdu(cdu) => cdu,
             _ => panic!("Expected a CDU from executor"),
