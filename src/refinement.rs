@@ -115,9 +115,7 @@ impl RefinementEngine {
     /// Analyzes the log to discover new constraints, avoiding duplicates.
     fn discover_constraints(&self, kb: &KnowledgeBase) -> Vec<Constraint> {
         let mut potential_constraints = Vec::new();
-        let log = kb.semi_axioms(); // This is a placeholder, we need the full log from state.
-                                   // Let's get it from the KB's source. Oh, KB doesn't store the raw log.
-                                   // We need to re-read the state here. This is inefficient but necessary for now.
+        // This is inefficient but necessary for now without changing the KB.
         let state_guard = self.state.read().unwrap();
         let log_cdu = state_guard.log();
 
@@ -180,7 +178,8 @@ impl RefinementEngine {
                 if let Some(result_name) = cdu.metadata.causes.first() {
                     if let Some(result_cdu) = log_cdu.iter().find(|c| c.name == *result_name) {
                         if let Some(command_name) = result_cdu.metadata.causes.first() {
-                            if let Some(command_cdu) = log_cdu.iter().find(|c| c.name == *command_name)
+                            if let Some(command_cdu) =
+                                log_cdu.iter().find(|c| c.name == *command_name)
                             {
                                 if let Some(axiom_id) = command_cdu.metadata.causes.first() {
                                     if let Some(axiom_cdu) =
@@ -226,4 +225,4 @@ impl RefinementEngine {
         }
         new_theorems
     }
-            }
+}
