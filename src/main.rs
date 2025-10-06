@@ -26,7 +26,8 @@ fn main() {
 
     // 3. Spawn all background threads.
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
-    let refinement_handle = RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
+    // The RefinementEngine is a background "daemon". We spawn it but don't hold its handle.
+    RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
     // --- Seeding the Initial State ---
@@ -49,9 +50,8 @@ fn main() {
     );
     input_sender.send(pe_emergency.to_cdu()).unwrap();
 
-    // NEW: Seed an intent-based theorem for the CTD demo.
     let intent_theorem = Theorem {
-        premises: vec![], // This theorem is not based on premises, but on modes.
+        premises: vec![],
         conclusion: "intent-based: Formulate a plan to find keys".to_string(),
         proof_path: vec![],
         confidence_score: 1.0,
@@ -68,11 +68,10 @@ fn main() {
     println!("\n[SCENARIO 1] Simulating a user intent to test the CTD workflow.");
     let intent_input = Cdu::new(
         b"Find my keys".to_vec(),
-        "observation.intent", // This subtype will trigger the DecompositionStrategy
+        "observation.intent",
         vec![],
     );
     input_sender.send(intent_input).unwrap();
-    // Give the engine time to process this single event before we check the proof.
     thread::sleep(Duration::from_millis(200));
 
     // --- The Final Proof ---
@@ -99,13 +98,14 @@ fn main() {
 
     // --- Graceful Shutdown ---
     println!("\n[SHUTDOWN] Shutting down all components.");
-    // FIX: Drop the sender BEFORE joining the handles.
-    // This closes the channel and signals the threads to terminate.
     drop(input_sender);
 
+    // Now, the Engine will shut down once the Executor's loop finishes.
+    // The Executor will shut down once the Engine drops its command sender.
+    // This creates a clean, cascading shutdown of the critical components.
     engine_handle.join().unwrap();
     executor_handle.join().unwrap();
-    refinement_handle.join().unwrap();
+    // We do NOT join the refinement_handle.
 
     println!("\nSession complete.");
 }
