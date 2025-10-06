@@ -40,9 +40,7 @@ impl Theorem {
             return None;
         }
         let confidence_score = f64::from_le_bytes(bytes[pos..pos + 8].try_into().ok()?);
-        // No need to increment pos here, as f64::from_le_bytes does not advance the slice.
-        // Let's be explicit to avoid bugs.
-        pos += 8;
+        // The 'pos' variable is not used after this point, so we don't need to increment it.
         Some(Theorem {
             premises,
             conclusion,
