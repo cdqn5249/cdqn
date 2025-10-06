@@ -61,14 +61,23 @@ impl RefinementEngine {
         println!("[Refinement] Thread spawned and running.");
         loop {
             thread::sleep(Duration::from_secs(5));
-            println!("[Refinement] Waking up to analyze log...");
 
+            // FIX: Send a heartbeat at the start of every loop.
+            // This is the primary mechanism to check if the Engine is still alive.
+            let heartbeat = Cdu::new(vec![], "refinement.heartbeat", vec![]);
+            if self.input_sender.send(EngineInput::Cdu(heartbeat)).is_err() {
+                // If this fails, the Engine's receiver is gone. We can safely shut down.
+                println!("[Refinement] Engine channel closed, shutting down.");
+                break;
+            }
+
+            println!("[Refinement] Waking up to analyze log...");
             let kb = {
                 if let Ok(state_guard) = self.state.try_read() {
                     KnowledgeBase::from_state(&state_guard)
                 } else {
-                    println!("[Refinement] Could not get read lock, likely shutting down.");
-                    break;
+                    // This can happen during a write lock, just skip this cycle.
+                    continue;
                 }
             };
 
@@ -84,14 +93,12 @@ impl RefinementEngine {
                         "constraint.discovered",
                         vec![],
                     );
-                    println!("[Refinement] Sending new constraint to Engine.");
                     if self
                         .input_sender
                         .send(EngineInput::Cdu(constraint_cdu))
                         .is_err()
                     {
-                        println!("[Refinement] Engine channel closed, shutting down.");
-                        return;
+                        return; // Exit if channel closes mid-send
                     }
                 }
             }
@@ -108,14 +115,12 @@ impl RefinementEngine {
                         "theorem.discovered",
                         vec![],
                     );
-                    println!("[Refinement] Sending new theorem to Engine.");
                     if self
                         .input_sender
                         .send(EngineInput::Cdu(theorem_cdu))
                         .is_err()
                     {
-                        println!("[Refinement] Engine channel closed, shutting down.");
-                        return;
+                        return; // Exit if channel closes mid-send
                     }
                 }
             }
