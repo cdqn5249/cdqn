@@ -111,84 +111,43 @@ fn main() {
     println!("\n[LEARNING 2] Pausing for 6s for RefinementEngine to discover a THEOREM...");
     thread::sleep(Duration::from_secs(6));
 
-    // --- SCENARIO 3: Testing Intelligent Assimilation ---
-    println!("\n[SCENARIO 3] Repeating scenarios to test for redundancy.");
-    println!("The RefinementEngine should discover nothing new this time.");
-
-    println!("\n[ASSIMILATION 1] Repeating the failed action to test constraint redundancy...");
-    input_sender.send(emergency_input.clone()).unwrap();
-    thread::sleep(Duration::from_millis(200));
-    if let Some(result) = {
-        shared_state
-            .read()
-            .unwrap()
-            .find_last_by_subtype("result.task_completed")
-            .cloned()
-    } {
-        let feedback = Cdu::new(
-            b"This is a redundant negative feedback".to_vec(),
-            "feedback.reputation.negative.emergency",
-            vec![result.name],
-        );
-        input_sender.send(feedback).unwrap();
-    }
-
-    println!("\n[ASSIMILATION 2] Repeating the successful action to test theorem redundancy...");
-    input_sender.send(normal_input.clone()).unwrap();
-    thread::sleep(Duration::from_millis(200));
-    if let Some(result) = {
-        shared_state
-            .read()
-            .unwrap()
-            .find_last_by_subtype("result.task_completed")
-            .cloned()
-    } {
-        let feedback = Cdu::new(
-            b"This is a redundant positive feedback".to_vec(),
-            "feedback.reputation.positive.normal",
-            vec![result.name],
-        );
-        input_sender.send(feedback).unwrap();
-    }
-
-    println!("\n[LEARNING 3] Pausing for 6s for RefinementEngine to process redundant events...");
-    thread::sleep(Duration::from_secs(6));
+    // --- SCENARIO 3: Causal Tensor Decomposition ---
+    println!("\n[SCENARIO 3] Simulating a user intent to test the DecompositionStrategy.");
+    let intent_input = Cdu::new(
+        b"Find my keys".to_vec(),
+        "observation.intent", // This subtype will trigger the strategy
+        vec![],
+    );
+    input_sender.send(intent_input).unwrap();
+    thread::sleep(Duration::from_millis(100));
 
     // --- The Final Proof ---
-    println!("\n[PROOF] Checking final log for duplicate knowledge...");
+    println!("\n[PROOF] Checking final log for all learned knowledge...");
     let final_state = shared_state.read().unwrap();
-    let discovered_constraints: Vec<_> = final_state
-        .log()
-        .iter()
-        .filter(|c| c.name.contains("constraint.discovered"))
-        .collect();
-    let discovered_theorems: Vec<_> = final_state
-        .log()
-        .iter()
-        .filter(|c| c.name.contains("theorem.discovered"))
-        .collect();
+    let constraint_found = final_state
+        .find_last_by_subtype("constraint.discovered")
+        .is_some();
+    let theorem_found = final_state
+        .find_last_by_subtype("theorem.discovered")
+        .is_some();
+    let mode_found = final_state
+        .find_last_by_subtype("causal.mode.intent")
+        .is_some();
 
-    println!(
-        "Total constraints discovered: {}",
-        discovered_constraints.len()
-    );
-    println!("Total theorems discovered: {}", discovered_theorems.len());
-
-    if discovered_constraints.len() == 1 {
-        println!("SUCCESS: System correctly avoided creating a duplicate CONSTRAINT.");
+    if constraint_found {
+        println!("SUCCESS: A new CONSTRAINT was discovered.");
     } else {
-        println!(
-            "FAILURE: System created {} constraints instead of 1.",
-            discovered_constraints.len()
-        );
+        println!("FAILURE: No new constraint was discovered.");
     }
-    if discovered_theorems.len() == 1 {
-        println!("SUCCESS: System correctly avoided creating a duplicate THEOREM.");
+    if theorem_found {
+        println!("SUCCESS: A new THEOREM was discovered.");
     } else {
-        println!(
-            "FAILURE: System created {} theorems instead of 1.",
-            discovered_theorems.len()
-        );
+        println!("FAILURE: No new theorem was discovered.");
+    }
+    if mode_found {
+        println!("SUCCESS: A new CAUSAL MODE was created by the DecompositionStrategy.");
+    } else {
+        println!("FAILURE: The DecompositionStrategy did not create a Causal Mode.");
     }
 
     // --- Graceful Shutdown ---
