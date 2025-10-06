@@ -5,7 +5,7 @@ use cdqn::cdu::{Cdu, CduPayload};
 use cdqn::engine::Engine;
 use cdqn::executor::Executor;
 use cdqn::payloads::Theorem;
-use cdqn::reasoning::{PrimeElement, ReasoningProjector}; // FIX: Removed unused SemiAxiom
+use cdqn::reasoning::{PrimeElement, ReasoningProjector};
 use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
 use std::thread;
@@ -72,7 +72,8 @@ fn main() {
         vec![],
     );
     input_sender.send(intent_input).unwrap();
-    thread::sleep(Duration::from_millis(100));
+    // Give the engine time to process this single event before we check the proof.
+    thread::sleep(Duration::from_millis(200));
 
     // --- The Final Proof ---
     println!("\n[PROOF] Checking final log for CTD-related knowledge...");
@@ -98,7 +99,10 @@ fn main() {
 
     // --- Graceful Shutdown ---
     println!("\n[SHUTDOWN] Shutting down all components.");
+    // FIX: Drop the sender BEFORE joining the handles.
+    // This closes the channel and signals the threads to terminate.
     drop(input_sender);
+
     engine_handle.join().unwrap();
     executor_handle.join().unwrap();
     refinement_handle.join().unwrap();
