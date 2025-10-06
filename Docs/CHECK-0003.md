@@ -9,7 +9,7 @@
 
 ## 1. Project Goal (Recap from CHECK-0002)
 
-The `cdqn` project aims to create a **Sovereign AI Companion**, named **Chronosa**. This agent is founded on the principles of Verifiable Experience, Transparent Reasoning, and user ownership. The core objective is to design Chronosa to learn from its mistakes and successes, becoming a truly intelligent and autonomous partner.
+The `cdqn` project aims to create a **Sovereign AI Companion**, named **Chronosa**. This agent is founded on the principles of Verifiable Experience, Transparent Reasoning, and user ownership ("Your AI, your data, your identity"). The core objective is to design Chronosa to learn from its mistakes and successes, becoming a truly intelligent and autonomous partner.
 
 ## 2. Progress from CHECK-0002
 
@@ -42,34 +42,41 @@ The architecture has been significantly upgraded to support true learning and ma
 
 The reasoning process is a pipeline that can be terminated early for efficiency.
 
-```mermaid
-graph TD
-    A[Input CDU Received] --> B{Create KnowledgeBase};
-    B --> C{Execute TheoremStrategy};
-    C --> D{Theorem Found?};
-    D -- Yes --> E[Generate Command from Theorem];
-    D -- No --> F{Execute ConstraintStrategy};
-    F -- Uses --> F1[Similarity Engine (Euclidean Distance)];
-    F1 --> G[Filter Candidate Axioms];
-    G --> H{Execute AxiomEvaluationStrategy};
-    H --> I[Generate Commands from Axioms];
-    E --> J[Return Final Commands];
-    I --> J;```
+*   **1. Trigger:** An Input CDU is received.
+*   **2. Preparation:** A `KnowledgeBase` is created, snapshotting all current knowledge from the state.
+*   **3. Strategy 1: Theorem Execution:**
+    *   The `TheoremStrategy` is executed.
+    *   **If a conclusive `Theorem` is found whose premises are met:**
+        *   A command is generated directly from the `Theorem`'s conclusion.
+        *   The pipeline terminates early, and the command is returned.
+*   **4. Strategy 2: Constraint Filtering:**
+    *   **If no conclusive theorem was found:**
+        *   The `ConstraintStrategy` is executed.
+        *   It uses the `Similarity Engine` to compare the input context to the contexts of known `Constraint`s.
+        *   Candidate axioms that are inhibited by a relevant constraint are filtered out.
+*   **5. Strategy 3: Axiom Evaluation:**
+    *   The `AxiomEvaluationStrategy` is executed on the final list of allowed axioms.
+    *   Commands are generated from any axioms whose conditions are met.
+*   **6. Conclusion:** The final list of generated commands is returned.
 
-### 4.2. The Intelligent Assimilation Workflow
+### 4.2. The Autonomous Learning Workflow
 
-The `RefinementEngine` now uses the Similarity Engine to avoid creating redundant knowledge.
+The `RefinementEngine` runs in the background, creating a continuous, asynchronous learning loop.
 
-```mermaid
-graph TD
-    A(RefinementEngine Wakes) --> B{Analyze Log};
-    B --> C{Discover Potential Constraint};
-    C --> D{Find Similar Existing Constraints};
-    D -- Uses --> E[Similarity Engine];
-    E --> F{Is Distance < Epsilon?};
-    F -- Yes --> G[Discard Redundant Constraint];
-    F -- No --> H[Create New Constraint CDU];
-```
+*   **Main Engine Loop:**
+    *   Continuously processes incoming CDUs (observations, commands, feedback, etc.).
+    *   All processed CDUs are written to the persistent, immutable CDU Log.
+*   **Background Refinement Loop:**
+    *   Periodically wakes up to perform an analysis cycle.
+    *   Reads the entire CDU Log to build an up-to-date `KnowledgeBase`.
+    *   **Identifies patterns:**
+        *   **Failure Patterns:** Scans for events like a command that is causally followed by a `feedback.reputation.negative` CDU.
+        *   **Success Patterns:** Scans for events like a command that is causally followed by a `feedback.reputation.positive` CDU.
+    *   **If a new, non-redundant pattern is found:**
+        *   The engine uses the `Similarity Engine` to check if the discovered knowledge is genuinely novel or just a minor variation of an existing `Constraint` or `Theorem`.
+        *   If it is novel, a new `Constraint` (for failure) or `Theorem` (for success) CDU is created.
+    *   The new knowledge CDU is sent back to the Main Engine's input channel.
+    *   The Main Engine processes and persists the new knowledge, making it available for all future reasoning cycles.
 
 ## 5. Detailed Implementation Changes
 
@@ -93,7 +100,7 @@ graph TD
 
 -   **Failure: Compiler Errors (Ownership, Mismatched Types, Unused Imports):** The development process was a continuous cycle of making a change and then methodically fixing the resulting cascade of compiler errors. This was particularly acute during the `f64` -> `Vec<f64>` refactoring.
     -   **Resolution:** Each error was treated as a guide from the compiler. We systematically worked through each file, correcting types and fixing logic until the entire project compiled cleanly.
--   **Failure: Test Failure due to Logic Bug:** The initial refactoring introduced a bug in the `ConstraintStrategy`'s context-parsing logic, which was only caught by a failing test.
+-   **Failure: Test Failure due to Logic Bug:** The refactoring introduced a subtle bug in the `ConstraintStrategy`'s context-parsing logic, which was only caught by a failing test.
     -   **Resolution:** The test failure pinpointed the exact problem, which was quickly fixed. This validated the critical importance of a comprehensive and specific test suite.
 -   **Failure: Persistent Formatting Errors:** The Vibe Coding Engine repeatedly produced code that failed `cargo fmt` checks.
     -   **Resolution:** Each failure was manually corrected, highlighting the need for strict adherence to project-wide quality standards.
@@ -121,3 +128,21 @@ The CIN v1 foundation is stable. The next phase will focus on solving the proble
 
 -   **Task: Refactor the `TheoremStrategy` to use CTD.**
     -   Upgrade the theorem lookup from its current direct pattern match (`premises_set.is_subset(...)`) to a CTD-based relevance search. The engine will decompose the current state into its modes and use those modes to mathematically reconstruct the most relevant `Theorem` from its knowledge base. This will allow Chronosa to find and apply relevant wisdom even when the situation is not an exact match to its past experiences, unlocking a powerful new level of generalization.
+
+## 10. Glossary
+
+-   **CDU (Causal Data Unit):** The atomic, immutable, and verifiable unit of data for the entire system. Every fact, action, result, and piece of learned knowledge is a CDU.
+-   **Chronosa:** The name of the Sovereign AI Companion being built by the `cdqn` project.
+-   **World:** A mathematical space (a set of real numbers) that provides a grounded context for concepts. All knowledge exists within a World (e.g., `uWorld`, `EnWorld`).
+-   **Prime Element:** A node in the knowledge graph representing an irreducible concept within a World. Its `representation` is a vector (`Vec<f64>`) that positions it within that World's meaning-space.
+-   **Semi-Axiom:** A rule or causal link that is valid only within a specific World.
+-   **Axiom:** A Semi-Axiom that has been proven valid across multiple Worlds, acting as a bridge for cross-world reasoning.
+-   **Theorem:** A cognitive shortcut representing a proven, successful reasoning path, discovered by the `RefinementEngine`. It allows the system to become more efficient.
+-   **Constraint:** An emergent guardrail. A piece of learned knowledge, discovered by the `RefinementEngine`, that inhibits a specific reasoning path in a specific context to prevent repeating mistakes.
+-   **Refinement Engine:** The autonomous background component that analyzes the historical log to discover new `Theorem`s and `Constraint`s, enabling the system to learn.
+-   **Reasoning Projector:** The main "brain" component that orchestrates the reasoning pipeline by executing a series of `ReasoningStrategy` modules.
+-   **Strategy Pattern:** The software design pattern used to refactor the `ReasoningProjector` into a modular pipeline of interchangeable components.
+-   **KnowledgeBase:** An in-memory snapshot of all knowledge (Prime Elements, Theorems, etc.) extracted from the state for a single, atomic reasoning cycle.
+-   **Similarity Engine:** The component responsible for calculating the semantic distance between concepts, currently using Euclidean distance on their vector representations. This is the core of CIN.
+-   **CIN (Causal Interpolation Networks):** The architectural goal for Chronosa's reasoning, where intelligence emerges from interpolating the strength and relevance of causal links in a mathematical, context-aware way.
+-   **CTD (Causal Tensor Decomposition):** The architectural goal for achieving scalable and generalized knowledge retrieval by decomposing high-dimensional problems (e.g., `Intent x State x Axiom`) into lower-dimensional modes.
