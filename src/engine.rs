@@ -26,9 +26,7 @@ pub struct Engine {
     pub state: SharedState,
     log_path: PathBuf,
     projector: Arc<dyn Projector>,
-    // The channel now receives the EngineInput enum.
     input_receiver: mpsc::Receiver<EngineInput>,
-    // The sender now sends the EngineInput enum.
     pub input_sender: mpsc::Sender<EngineInput>,
     pub command_sender: mpsc::Sender<Cdu>,
 }
@@ -63,18 +61,22 @@ impl Engine {
 
     /// The main run loop. It listens for inputs and drives the state forward.
     pub fn run(self) {
-        println!("Engine: Running.");
+        println!("[Engine] Thread spawned and running.");
         while let Ok(input) = self.input_receiver.recv() {
+            println!("[Engine] Received input from channel.");
             match input {
                 EngineInput::Cdu(input_cdu) => {
+                    println!("[Engine] Input is a CDU: {}", input_cdu.name);
                     let state = self.state.clone();
                     let projector = self.projector.clone();
                     let command_sender = self.command_sender.clone();
                     let log_path = self.log_path.clone();
 
                     thread::spawn(move || {
+                        println!("[Engine-Task] Spawned for CDU: {}", input_cdu.name);
                         if let Ok(state_guard) = state.read() {
                             let new_events = projector.project(&state_guard, &input_cdu);
+                            println!("[Engine-Task] Projector generated {} new event(s).", new_events.len());
 
                             let mut all_events_to_persist = vec![input_cdu];
                             all_events_to_persist.extend(new_events);
@@ -82,25 +84,30 @@ impl Engine {
 
                             for event in &all_events_to_persist {
                                 if event.name.contains(".command.") {
-                                    command_sender.send(event.clone()).unwrap();
+                                    println!("[Engine-Task] Sending command: {}", event.name);
+                                    if command_sender.send(event.clone()).is_err() {
+                                        println!("[Engine-Task] Command channel closed, cannot send.");
+                                    }
                                 }
                             }
 
                             for event in all_events_to_persist {
                                 evolve_shared_state(&state, event);
                             }
+                            println!("[Engine-Task] Task complete.");
                         } else {
-                            eprintln!("Failed to acquire read lock for projection.");
+                            eprintln!("[Engine-Task] Failed to acquire read lock for projection.");
                         }
                     });
                 }
                 EngineInput::Shutdown => {
-                    println!("Engine: Shutdown signal received.");
-                    break; // Exit the loop.
+                    println!("[Engine] Shutdown signal received.");
+                    break;
                 }
             }
         }
-        println!("Engine: Shutting down.");
+        // This line will only be reached if the input_receiver channel closes or Shutdown is received.
+        println!("[Engine] Input channel closed or shutdown received, thread terminating.");
     }
 }
 
@@ -112,7 +119,6 @@ mod tests {
     use std::sync::mpsc;
     use std::thread;
 
-    // A mock projector for testing purposes.
     #[derive(Clone)]
     struct TestProjector;
     impl Projector for TestProjector {
