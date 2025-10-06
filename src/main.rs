@@ -5,16 +5,17 @@ use cdqn::cdu::Cdu;
 use cdqn::engine::{Engine, EngineInput};
 use cdqn::executor::Executor;
 use cdqn::projector::{Rule, RuleBasedProjector};
+use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
 
 fn main() {
-    println!("--- Chronosa Shutdown Test ---");
+    println!("--- Chronosa Verbose Shutdown Test ---");
     let log_path = PathBuf::from("shutdown_test.cdqn");
     let _ = std::fs::remove_file(&log_path);
 
-    // 1. Use the simple RuleBasedProjector for this test.
+    // 1. Use a simple projector for this test.
     let rules = vec![Rule {
         predicate: Box::new(|_, input| input.name.contains("observation")),
         mapper: Box::new(|input| {
@@ -30,10 +31,11 @@ fn main() {
     // 2. Create the core components.
     let (engine, command_receiver) = Engine::new(log_path, Box::new(projector));
     let input_sender = engine.input_sender.clone();
+    let shared_state = engine.state.clone();
 
-    // 3. Spawn the Engine and Executor.
-    // FIX: Removed the second argument to match the new function signature.
-    let executor_handle = Executor::spawn(command_receiver);
+    // 3. Spawn all components.
+    let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
+    let refinement_handle = RefinementEngine::spawn(shared_state, input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
     // 4. Send a single CDU to ensure the system processes something.
@@ -41,16 +43,13 @@ fn main() {
     let observation = Cdu::new(b"test".to_vec(), "observation", vec![]);
     input_sender.send(EngineInput::Cdu(observation)).unwrap();
 
-    // Wait for the CDU to be fully processed.
-    thread::sleep(Duration::from_millis(500));
+    // Wait for the CDU to be fully processed through the entire loop.
+    thread::sleep(Duration::from_secs(1));
 
     // 5. Initiate the graceful shutdown.
     println!("\n[MAIN] Sending shutdown signal...");
-    if let Err(e) = input_sender.send(EngineInput::Shutdown) {
-        println!(
-            "[MAIN] Error sending shutdown signal: {}. The engine may have already terminated.",
-            e
-        );
+    if input_sender.send(EngineInput::Shutdown).is_err() {
+        println!("[MAIN] Engine channel was already closed.");
     }
 
     // 6. Wait for the threads to terminate.
@@ -61,6 +60,10 @@ fn main() {
     println!("[MAIN] Waiting for Executor thread to join...");
     executor_handle.join().unwrap();
     println!("[MAIN] Executor thread joined.");
+
+    println!("[MAIN] Waiting for Refinement thread to join...");
+    refinement_handle.join().unwrap();
+    println!("[MAIN] Refinement thread joined.");
 
     println!("\nSession complete. Shutdown was successful.");
 }
