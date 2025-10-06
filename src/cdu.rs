@@ -21,6 +21,7 @@ pub struct CduMetadata {
 }
 
 /// A Causal Data Unit (CDU).
+/// It combines an immutable fact (payload) with mutable, evolving context (metadata).
 #[derive(Debug, Clone)]
 pub struct Cdu {
     /// The unique, content-addressed name of the CDU.
@@ -79,11 +80,13 @@ impl Cdu {
     }
 
     /// Extracts the subtype string from the CDU name.
-    fn get_subtype(&self) -> Option<&str> {
-        let parts: Vec<&str> = self.name.split('.').collect();
-        // e.g., hash.subtype.cdu -> len=3. We want parts[1]
-        if parts.len() >= 3 {
-            Some(parts[1])
+    /// This now correctly handles complex subtypes like "causal.mode.intent".
+    fn get_subtype(&self) -> Option<String> {
+        let name_without_suffix = self.name.strip_suffix(".cdu")?;
+        let parts: Vec<&str> = name_without_suffix.split('.').collect();
+        if parts.len() > 1 {
+            // Join all parts after the hash
+            Some(parts[1..].join("."))
         } else {
             None
         }
@@ -91,14 +94,14 @@ impl Cdu {
 
     /// Extracts the structured content from the CDU payload using robust subtype matching.
     pub fn extract_payload(&self) -> Option<CduPayload> {
-        // FIX: Replace the brittle `if/else if` chain with a robust `match`.
-        match self.get_subtype() {
-            Some("prime") => {
-                crate::reasoning::PrimeElement::from_bytes(&self.payload).map(CduPayload::PrimeElement)
-            }
-            Some("semi-axiom") => {
-                crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
-            }
+        // FIX: Use a robust match on the primary subtype component.
+        let primary_subtype = self.get_subtype().and_then(|s| s.split('.').next());
+
+        match primary_subtype {
+            Some("prime") => crate::reasoning::PrimeElement::from_bytes(&self.payload)
+                .map(CduPayload::PrimeElement),
+            Some("semi-axiom") => crate::reasoning::SemiAxiom::from_bytes(&self.payload)
+                .map(CduPayload::SemiAxiom),
             Some("theorem") => Theorem::from_bytes(&self.payload).map(CduPayload::Theorem),
             Some("constraint") => Constraint::from_bytes(&self.payload).map(CduPayload::Constraint),
             Some("causal") => CausalMode::from_bytes(&self.payload).map(CduPayload::CausalMode),
@@ -136,5 +139,30 @@ mod tests {
         assert_eq!(effect_cdu.metadata.causes.len(), 1);
         assert_eq!(effect_cdu.metadata.causes[0], cause_cdu.name);
         assert!(effect_cdu.metadata.hlc >= cause_cdu.metadata.hlc);
+    }
+
+    #[test]
+    fn test_robust_subtype_parsing() {
+        let cdu_simple = Cdu::new(vec![], "prime.element", vec![]);
+        let cdu_complex = Cdu::new(vec![], "causal.mode.intent", vec![]);
+        let cdu_result = Cdu::new(vec![], "result.task_completed", vec![]);
+
+        assert_eq!(
+            cdu_simple.get_subtype().unwrap(),
+            "prime.element".to_string()
+        );
+        assert_eq!(
+            cdu_complex.get_subtype().unwrap(),
+            "causal.mode.intent".to_string()
+        );
+
+        // Test the primary subtype matching for extract_payload
+        let primary_simple = cdu_simple.get_subtype().and_then(|s| s.split('.').next());
+        let primary_complex = cdu_complex.get_subtype().and_then(|s| s.split('.').next());
+        let primary_result = cdu_result.get_subtype().and_then(|s| s.split('.').next());
+
+        assert_eq!(primary_simple, Some("prime"));
+        assert_eq!(primary_complex, Some("causal"));
+        assert_eq!(primary_result, Some("result"));
     }
 }
