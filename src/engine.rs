@@ -76,7 +76,10 @@ impl Engine {
                         println!("[Engine-Task] Spawned for CDU: {}", input_cdu.name);
                         if let Ok(state_guard) = state.read() {
                             let new_events = projector.project(&state_guard, &input_cdu);
-                            println!("[Engine-Task] Projector generated {} new event(s).", new_events.len());
+                            println!(
+                                "[Engine-Task] Projector generated {} new event(s).",
+                                new_events.len()
+                            );
 
                             let mut all_events_to_persist = vec![input_cdu];
                             all_events_to_persist.extend(new_events);
@@ -86,7 +89,9 @@ impl Engine {
                                 if event.name.contains(".command.") {
                                     println!("[Engine-Task] Sending command: {}", event.name);
                                     if command_sender.send(event.clone()).is_err() {
-                                        println!("[Engine-Task] Command channel closed, cannot send.");
+                                        println!(
+                                            "[Engine-Task] Command channel closed, cannot send."
+                                        );
                                     }
                                 }
                             }
