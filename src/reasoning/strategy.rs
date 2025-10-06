@@ -47,11 +47,25 @@ pub trait ReasoningStrategy {
     fn execute(&self, context: &mut ReasoningContext);
 }
 
+// --- Helper function for the Similarity Engine ---
+
+/// Calculates the Euclidean distance between two vectors.
+/// Pads the shorter vector with zeros if lengths are unequal.
+fn calculate_euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
+    let max_len = a.len().max(b.len());
+    let a_padded = a.iter().cloned().chain(std::iter::repeat(0.0)).take(max_len);
+    let b_padded = b.iter().cloned().chain(std::iter::repeat(0.0)).take(max_len);
+
+    a_padded
+        .zip(b_padded)
+        .map(|(x, y)| (x - y).powi(2))
+        .sum::<f64>()
+        .sqrt()
+}
+
 // --- Concrete Strategy Implementations ---
 
 /// **Strategy 1: Theorem Shortcut**
-/// Checks if a theorem's premises are met. If so, it generates a command
-/// and sets the context to conclusive to stop the pipeline.
 pub struct TheoremStrategy;
 impl ReasoningStrategy for TheoremStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
@@ -72,25 +86,22 @@ impl ReasoningStrategy for TheoremStrategy {
                 );
                 context.commands.push(command_cdu);
                 context.is_conclusive = true;
-                return; // Stop after the first matching theorem.
+                return;
             }
         }
     }
 }
 
 /// **Strategy 2: Constraint Filtering**
-/// Filters the list of candidate axioms based on active constraints.
 pub struct ConstraintStrategy;
 impl ReasoningStrategy for ConstraintStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
         let mut allowed_axioms = Vec::new();
-
-        // FIX: Robustly extract the last part of the subtype as the context.
         let name_parts: Vec<&str> = context.input.name.split('.').collect();
         let input_context_str = if name_parts.len() > 2 {
             name_parts[name_parts.len() - 2]
         } else {
-            "" // No context found
+            ""
         };
 
         if let Some(input_context_pe) = context.kb.prime_elements().get(input_context_str) {
@@ -102,9 +113,11 @@ impl ReasoningStrategy for ConstraintStrategy {
                             .prime_elements()
                             .get(&constraint.inhibiting_context)
                         {
-                            let distance = (input_context_pe.representation
-                                - constraint_context_pe.representation)
-                                .abs();
+                            // UPGRADE: Use Euclidean distance for vector comparison.
+                            let distance = calculate_euclidean_distance(
+                                &input_context_pe.representation,
+                                &constraint_context_pe.representation,
+                            );
                             if distance < SIMILARITY_EPSILON {
                                 println!(
                                     "Inhibition: Axiom '{}' pruned by constraint for context '{}' (distance: {:.4}).",
@@ -118,7 +131,6 @@ impl ReasoningStrategy for ConstraintStrategy {
                 allowed_axioms.push(axiom.clone());
             }
         } else {
-            // If the input context is unknown, no constraints can be checked.
             allowed_axioms = context.candidate_axioms.clone();
         }
         context.candidate_axioms = allowed_axioms;
@@ -126,7 +138,6 @@ impl ReasoningStrategy for ConstraintStrategy {
 }
 
 /// **Strategy 3: Axiom Evaluation**
-/// Takes the final list of candidate axioms and evaluates them concurrently.
 pub struct AxiomEvaluationStrategy;
 impl ReasoningStrategy for AxiomEvaluationStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
@@ -140,7 +151,6 @@ impl ReasoningStrategy for AxiomEvaluationStrategy {
         for axiom in &context.candidate_axioms {
             let sender_clone = sender.clone();
             let input_clone = context.input.clone();
-            // Clone the necessary parts of the KB for the thread.
             let prime_elements_clone = context.kb.prime_elements().clone();
             let axiom_clone = axiom.clone();
 
