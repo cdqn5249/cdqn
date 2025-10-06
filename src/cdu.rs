@@ -21,7 +21,6 @@ pub struct CduMetadata {
 }
 
 /// A Causal Data Unit (CDU).
-/// It combines an immutable fact (payload) with mutable, evolving context (metadata).
 #[derive(Debug, Clone)]
 pub struct Cdu {
     /// The unique, content-addressed name of the CDU.
@@ -34,20 +33,13 @@ pub struct Cdu {
 }
 
 /// Represents the structured content within a CDU payload.
-/// This enum now refers to types defined in the `payloads` module.
 #[derive(Debug, Clone)]
 pub enum CduPayload {
-    /// A raw byte payload for maximum flexibility.
     Raw(Vec<u8>),
-    /// A prime element in Chronosa's reasoning model.
     PrimeElement(crate::reasoning::PrimeElement),
-    /// A semi-axiom as a prime ideal of prime elements.
     SemiAxiom(crate::reasoning::SemiAxiom),
-    /// A proven, reusable reasoning path.
     Theorem(Theorem),
-    /// A guardrail that inhibits a reasoning path in a specific context.
     Constraint(Constraint),
-    /// A decomposed vector for Causal Tensor Decomposition.
     CausalMode(CausalMode),
 }
 
@@ -74,7 +66,6 @@ impl Cdu {
     }
 
     /// Creates a new CDU from a CduPayload.
-    /// This now calls the `to_bytes` methods on the payload types.
     pub fn from_payload(payload: CduPayload, subtype: &str, causes: Vec<String>) -> Self {
         let payload_bytes = match payload {
             CduPayload::Raw(bytes) => bytes,
@@ -87,21 +78,31 @@ impl Cdu {
         Self::new(payload_bytes, subtype, causes)
     }
 
-    /// Extracts the structured content from the CDU payload.
-    /// This now calls the `from_bytes` methods on the payload types.
-    pub fn extract_payload(&self) -> Option<CduPayload> {
-        if self.name.contains(".prime.element.") {
-            crate::reasoning::PrimeElement::from_bytes(&self.payload).map(CduPayload::PrimeElement)
-        } else if self.name.contains(".semi-axiom.") {
-            crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
-        } else if self.name.contains(".theorem.") {
-            Theorem::from_bytes(&self.payload).map(CduPayload::Theorem)
-        } else if self.name.contains(".constraint.") {
-            Constraint::from_bytes(&self.payload).map(CduPayload::Constraint)
-        } else if self.name.contains(".causal.mode.") {
-            CausalMode::from_bytes(&self.payload).map(CduPayload::CausalMode)
+    /// Extracts the subtype string from the CDU name.
+    fn get_subtype(&self) -> Option<&str> {
+        let parts: Vec<&str> = self.name.split('.').collect();
+        // e.g., hash.subtype.cdu -> len=3. We want parts[1]
+        if parts.len() >= 3 {
+            Some(parts[1])
         } else {
-            Some(CduPayload::Raw(self.payload.clone()))
+            None
+        }
+    }
+
+    /// Extracts the structured content from the CDU payload using robust subtype matching.
+    pub fn extract_payload(&self) -> Option<CduPayload> {
+        // FIX: Replace the brittle `if/else if` chain with a robust `match`.
+        match self.get_subtype() {
+            Some("prime") => {
+                crate::reasoning::PrimeElement::from_bytes(&self.payload).map(CduPayload::PrimeElement)
+            }
+            Some("semi-axiom") => {
+                crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
+            }
+            Some("theorem") => Theorem::from_bytes(&self.payload).map(CduPayload::Theorem),
+            Some("constraint") => Constraint::from_bytes(&self.payload).map(CduPayload::Constraint),
+            Some("causal") => CausalMode::from_bytes(&self.payload).map(CduPayload::CausalMode),
+            _ => Some(CduPayload::Raw(self.payload.clone())),
         }
     }
 }
