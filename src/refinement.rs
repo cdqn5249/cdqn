@@ -58,14 +58,16 @@ impl RefinementEngine {
 
     /// The main run loop. It periodically wakes up to analyze the state.
     fn run(self) {
-        println!("RefinementEngine: Running.");
+        println!("[Refinement] Thread spawned and running.");
         loop {
             thread::sleep(Duration::from_secs(5));
+            println!("[Refinement] Waking up to analyze log...");
 
             let kb = {
                 if let Ok(state_guard) = self.state.try_read() {
                     KnowledgeBase::from_state(&state_guard)
                 } else {
+                    println!("[Refinement] Could not get read lock, likely shutting down.");
                     break;
                 }
             };
@@ -73,7 +75,7 @@ impl RefinementEngine {
             let new_constraints = self.discover_constraints(&kb);
             if !new_constraints.is_empty() {
                 println!(
-                    "RefinementEngine: Discovered {} new constraint(s).",
+                    "[Refinement] Discovered {} new constraint(s).",
                     new_constraints.len()
                 );
                 for constraint in new_constraints {
@@ -82,11 +84,13 @@ impl RefinementEngine {
                         "constraint.discovered",
                         vec![],
                     );
+                    println!("[Refinement] Sending new constraint to Engine.");
                     if self
                         .input_sender
                         .send(EngineInput::Cdu(constraint_cdu))
                         .is_err()
                     {
+                        println!("[Refinement] Engine channel closed, shutting down.");
                         return;
                     }
                 }
@@ -95,7 +99,7 @@ impl RefinementEngine {
             let new_theorems = self.discover_theorems(&kb);
             if !new_theorems.is_empty() {
                 println!(
-                    "RefinementEngine: Discovered {} new theorem(s).",
+                    "[Refinement] Discovered {} new theorem(s).",
                     new_theorems.len()
                 );
                 for theorem in new_theorems {
@@ -104,17 +108,19 @@ impl RefinementEngine {
                         "theorem.discovered",
                         vec![],
                     );
+                    println!("[Refinement] Sending new theorem to Engine.");
                     if self
                         .input_sender
                         .send(EngineInput::Cdu(theorem_cdu))
                         .is_err()
                     {
+                        println!("[Refinement] Engine channel closed, shutting down.");
                         return;
                     }
                 }
             }
         }
-        println!("RefinementEngine: Shutting down.");
+        println!("[Refinement] Thread terminating.");
     }
 
     /// Analyzes the log to discover new constraints, avoiding duplicates.
