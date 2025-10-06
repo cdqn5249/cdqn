@@ -5,7 +5,7 @@ use cdqn::cdu::{Cdu, CduPayload};
 use cdqn::engine::Engine;
 use cdqn::executor::Executor;
 use cdqn::payloads::Theorem;
-use cdqn::reasoning::{PrimeElement, ReasoningProjector, SemiAxiom};
+use cdqn::reasoning::{PrimeElement, ReasoningProjector}; // FIX: Removed unused SemiAxiom
 use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
 use std::thread;
