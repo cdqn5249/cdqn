@@ -6,6 +6,7 @@ pub mod codec;
 pub mod engine;
 pub mod executor;
 pub mod hlc;
+pub mod payloads;
 pub mod projector;
 pub mod reasoning;
 pub mod refinement;
