@@ -4,7 +4,8 @@
 //! The Refinement Engine for Chronosa's autonomous learning.
 
 use crate::cdu::{Cdu, CduPayload};
-use crate::payloads::{Constraint, Theorem}; // FIX: Import directly from payloads
+use crate::engine::EngineInput; // Import the new enum
+use crate::payloads::{Constraint, Theorem};
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::state::SharedState;
 use std::collections::HashSet;
@@ -39,14 +40,14 @@ fn calculate_euclidean_distance(a: &[f64], b: &[f64]) -> f64 {
 /// to discover new knowledge like Constraints and Theorems.
 pub struct RefinementEngine {
     state: SharedState,
-    input_sender: std::sync::mpsc::Sender<Cdu>,
+    input_sender: std::sync::mpsc::Sender<EngineInput>, // Sender type is updated
 }
 
 impl RefinementEngine {
     /// Spawns the RefinementEngine on a new background thread.
     pub fn spawn(
         state: SharedState,
-        input_sender: std::sync::mpsc::Sender<Cdu>,
+        input_sender: std::sync::mpsc::Sender<EngineInput>, // Sender type is updated
     ) -> thread::JoinHandle<()> {
         let engine = Self {
             state,
@@ -61,7 +62,6 @@ impl RefinementEngine {
         loop {
             thread::sleep(Duration::from_secs(5));
 
-            // Create a single knowledge snapshot for this analysis cycle.
             let kb = {
                 if let Ok(state_guard) = self.state.try_read() {
                     KnowledgeBase::from_state(&state_guard)
@@ -82,7 +82,7 @@ impl RefinementEngine {
                         "constraint.discovered",
                         vec![],
                     );
-                    if self.input_sender.send(constraint_cdu).is_err() {
+                    if self.input_sender.send(EngineInput::Cdu(constraint_cdu)).is_err() {
                         return;
                     }
                 }
@@ -100,7 +100,7 @@ impl RefinementEngine {
                         "theorem.discovered",
                         vec![],
                     );
-                    if self.input_sender.send(theorem_cdu).is_err() {
+                    if self.input_sender.send(EngineInput::Cdu(theorem_cdu)).is_err() {
                         return;
                     }
                 }
