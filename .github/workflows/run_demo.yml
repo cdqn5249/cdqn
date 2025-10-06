@@ -15,10 +15,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # FIX: Use the correct and standard action for setting up the Rust toolchain.
     - name: Set up Rust toolchain
-      uses: actions/toolchain@v1
-      with:
-        toolchain: stable
+      uses: dtolnay/rust-toolchain@stable
 
     - name: Run the main demo binary
       run: cargo run
