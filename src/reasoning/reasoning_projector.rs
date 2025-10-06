@@ -7,7 +7,7 @@
 use crate::cdu::Cdu;
 use crate::engine::Projector;
 use crate::reasoning::knowledge_base::KnowledgeBase;
-use crate::reasoning::strategy::{
+use crate.reasoning::strategy::{
     AxiomEvaluationStrategy, ConstraintStrategy, ReasoningContext, ReasoningStrategy,
     TheoremStrategy,
 };
@@ -65,7 +65,8 @@ impl Projector for ReasoningProjector {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cdu::{CduPayload, Constraint, Theorem};
+    use crate::cdu::CduPayload;
+    use crate::payloads::{Constraint, Theorem};
     use crate::reasoning::{PrimeElement, SemiAxiom};
 
     /// Helper function to manually evolve a state for testing purposes.
@@ -83,7 +84,7 @@ mod tests {
         let pe1 = PrimeElement::new(
             "pe-1".to_string(),
             "uworld".to_string(),
-            vec![1.0], // FIX: Wrap in vec![]
+            vec![1.0],
             "User is present".to_string(),
             "Cannot be decomposed".to_string(),
         );
@@ -125,7 +126,7 @@ mod tests {
         let pe1 = PrimeElement::new(
             "pe-user-present".to_string(),
             "uworld".to_string(),
-            vec![1.0], // FIX: Wrap in vec![]
+            vec![1.0],
             "User is present".to_string(),
             "Cannot be decomposed".to_string(),
         );
@@ -133,7 +134,7 @@ mod tests {
         let pe_emergency_context = PrimeElement::new(
             "emergency".to_string(),
             "uworld".to_string(),
-            vec![0.9], // FIX: Wrap in vec![]
+            vec![0.9],
             "A state of emergency".to_string(),
             "".to_string(),
         );
@@ -173,7 +174,7 @@ mod tests {
         let pe1 = PrimeElement::new(
             "pe-a".to_string(),
             "uworld".to_string(),
-            vec![1.0], // FIX: Wrap in vec![]
+            vec![1.0],
             "A".to_string(),
             "".to_string(),
         );
@@ -181,7 +182,7 @@ mod tests {
         let pe2 = PrimeElement::new(
             "pe-b".to_string(),
             "uworld".to_string(),
-            vec![1.0], // FIX: Wrap in vec![]
+            vec![1.0],
             "B".to_string(),
             "".to_string(),
         );
