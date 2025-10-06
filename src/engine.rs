@@ -76,36 +76,41 @@ impl Engine {
 
                     let handle = thread::spawn(move || {
                         println!("[Engine-Task] Spawned for CDU: {}", input_cdu.name);
-                        if let Ok(state_guard) = state.read() {
-                            let new_events = projector.project(&state_guard, &input_cdu);
-                            println!(
-                                "[Engine-Task] Projector generated {} new event(s).",
-                                new_events.len()
-                            );
 
-                            let mut all_events_to_persist = vec![input_cdu.clone()]; // Clone here
-                            all_events_to_persist.extend(new_events);
-                            append_events_to_log(&all_events_to_persist, &log_path).unwrap();
+                        // --- Read Phase ---
+                        let new_events = {
+                            if let Ok(state_guard) = state.read() {
+                                let events = projector.project(&state_guard, &input_cdu);
+                                println!(
+                                    "[Engine-Task] Projector generated {} new event(s).",
+                                    events.len()
+                                );
+                                // The read lock (state_guard) is automatically dropped here.
+                                events
+                            } else {
+                                eprintln!("[Engine-Task] Failed to acquire read lock.");
+                                return; // Exit thread if we can't get a lock.
+                            }
+                        };
 
-                            for event in &all_events_to_persist {
-                                if event.name.contains(".command.") {
-                                    println!("[Engine-Task] Sending command: {}", event.name);
-                                    if command_sender.send(event.clone()).is_err() {
-                                        println!(
-                                            "[Engine-Task] Command channel closed, cannot send."
-                                        );
-                                    }
+                        // --- Write Phase ---
+                        let mut all_events_to_persist = vec![input_cdu.clone()];
+                        all_events_to_persist.extend(new_events);
+                        append_events_to_log(&all_events_to_persist, &log_path).unwrap();
+
+                        for event in &all_events_to_persist {
+                            if event.name.contains(".command.") {
+                                println!("[Engine-Task] Sending command: {}", event.name);
+                                if command_sender.send(event.clone()).is_err() {
+                                    println!("[Engine-Task] Command channel closed.");
                                 }
                             }
-
-                            for event in all_events_to_persist {
-                                evolve_shared_state(&state, event);
-                            }
-                            // FIX: Use input_cdu.name, which is in scope.
-                            println!("[Engine-Task] Task complete for {}.", input_cdu.name);
-                        } else {
-                            eprintln!("[Engine-Task] Failed to acquire read lock for projection.");
                         }
+
+                        for event in all_events_to_persist {
+                            evolve_shared_state(&state, event);
+                        }
+                        println!("[Engine-Task] Task complete for {}.", input_cdu.name);
                     });
                     task_handles.push(handle);
                 }
