@@ -177,12 +177,18 @@ fn main() {
     if discovered_constraints.len() == 1 {
         println!("SUCCESS: System correctly avoided creating a duplicate CONSTRAINT.");
     } else {
-        println!("FAILURE: System created {} constraints instead of 1.", discovered_constraints.len());
+        println!(
+            "FAILURE: System created {} constraints instead of 1.",
+            discovered_constraints.len()
+        );
     }
     if discovered_theorems.len() == 1 {
         println!("SUCCESS: System correctly avoided creating a duplicate THEOREM.");
     } else {
-        println!("FAILURE: System created {} theorems instead of 1.", discovered_theorems.len());
+        println!(
+            "FAILURE: System created {} theorems instead of 1.",
+            discovered_theorems.len()
+        );
     }
 
     // --- Graceful Shutdown ---
