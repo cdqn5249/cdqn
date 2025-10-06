@@ -5,7 +5,17 @@
 
 use crate::cdu::Cdu;
 use crate::state::{evolve_shared_state, ChronosaState, SharedState};
-use crate of the CDU.
+use crate::storage::{append_events_to_log, rehydrate_from_log};
+use std::path::PathBuf;
+use std::sync::{mpsc, Arc, RwLock};
+use std::thread;
+
+/// The Projector is the pure, deterministic "brain" of the agent.
+pub trait Projector: Send + Sync {
+    fn project(&self, state: &ChronosaState, input: &Cdu) -> Vec<Cdu>;
+}
+
+/// A wrapper for inputs sent to the Engine, allowing for control signals.
 pub enum EngineInput {
     Cdu(Cdu),
     Shutdown,
