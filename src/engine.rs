@@ -62,7 +62,6 @@ impl Engine {
     /// The main run loop. It listens for inputs and drives the state forward.
     pub fn run(self) {
         println!("[Engine] Thread spawned and running.");
-        // FIX: Keep track of spawned task handles.
         let mut task_handles = Vec::new();
 
         while let Ok(input) = self.input_receiver.recv() {
@@ -75,7 +74,6 @@ impl Engine {
                     let command_sender = self.command_sender.clone();
                     let log_path = self.log_path.clone();
 
-                    // Spawn the task and store its handle.
                     let handle = thread::spawn(move || {
                         println!("[Engine-Task] Spawned for CDU: {}", input_cdu.name);
                         if let Ok(state_guard) = state.read() {
@@ -103,7 +101,7 @@ impl Engine {
                             for event in all_events_to_persist {
                                 evolve_shared_state(&state, event);
                             }
-                            println!("[Engine-Task] Task complete.");
+                            println!("[Engine-Task] Task complete for {}.", event.name);
                         } else {
                             eprintln!("[Engine-Task] Failed to acquire read lock for projection.");
                         }
@@ -117,8 +115,10 @@ impl Engine {
             }
         }
 
-        // FIX: After the loop, wait for all spawned tasks to complete.
-        println!("[Engine] Waiting for all pending tasks to complete...");
+        println!(
+            "[Engine] Waiting for {} pending tasks to complete...",
+            task_handles.len()
+        );
         for handle in task_handles {
             handle.join().unwrap();
         }
