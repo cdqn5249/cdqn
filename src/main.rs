@@ -72,9 +72,8 @@ fn main() {
     // --- SCENARIO 1: Causal Tensor Decomposition ---
     println!("\n[SCENARIO 1] Simulating a user intent to test the CTD workflow.");
     let intent_input = Cdu::new(b"Find my keys".to_vec(), "observation.intent", vec![]);
-    input_sender
-        .send(EngineInput::Cdu(intent_input))
-        .unwrap();
+    // FIX: Correctly formatted to a single line.
+    input_sender.send(EngineInput::Cdu(intent_input)).unwrap();
     thread::sleep(Duration::from_millis(200));
 
     // --- The Final Proof ---
@@ -101,10 +100,8 @@ fn main() {
 
     // --- Graceful Shutdown ---
     println!("\n[SHUTDOWN] Shutting down all components.");
-    // FIX: Send the explicit shutdown signal.
     input_sender.send(EngineInput::Shutdown).unwrap();
 
-    // Now that the shutdown is signaled, we can safely join all handles.
     engine_handle.join().unwrap();
     executor_handle.join().unwrap();
     refinement_handle.join().unwrap();
