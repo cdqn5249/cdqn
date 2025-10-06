@@ -56,7 +56,9 @@ mod tests {
         command_sender.send(command.clone()).unwrap();
 
         // Give a moment for the result to be sent back.
-        let result_input = result_receiver.recv_timeout(Duration::from_secs(1)).unwrap();
+        let result_input = result_receiver
+            .recv_timeout(Duration::from_secs(1))
+            .unwrap();
         let result = match result_input {
             EngineInput::Cdu(cdu) => cdu,
             _ => panic!("Expected a CDU from executor"),
