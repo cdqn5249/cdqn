@@ -2,7 +2,7 @@
 // File path: src/main.rs
 
 use cdqn::cdu::{Cdu, CduPayload};
-use cdqn::engine::Engine;
+use cdqn::engine::{Engine, EngineInput}; // Import the new enum
 use cdqn::executor::Executor;
 use cdqn::payloads::Theorem;
 use cdqn::reasoning::{PrimeElement, ReasoningProjector};
@@ -26,8 +26,7 @@ fn main() {
 
     // 3. Spawn all background threads.
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
-    // The RefinementEngine is a background "daemon". We spawn it but don't hold its handle.
-    RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
+    let refinement_handle = RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
     // --- Seeding the Initial State ---
@@ -39,7 +38,9 @@ fn main() {
         "The user is present".to_string(),
         "".to_string(),
     );
-    input_sender.send(pe_user.to_cdu()).unwrap();
+    input_sender
+        .send(EngineInput::Cdu(pe_user.to_cdu()))
+        .unwrap();
 
     let pe_emergency = PrimeElement::new(
         "emergency".to_string(),
@@ -48,7 +49,9 @@ fn main() {
         "Emergency context".to_string(),
         "".to_string(),
     );
-    input_sender.send(pe_emergency.to_cdu()).unwrap();
+    input_sender
+        .send(EngineInput::Cdu(pe_emergency.to_cdu()))
+        .unwrap();
 
     let intent_theorem = Theorem {
         premises: vec![],
@@ -61,13 +64,17 @@ fn main() {
         "theorem.uworld",
         vec![],
     );
-    input_sender.send(intent_theorem_cdu).unwrap();
+    input_sender
+        .send(EngineInput::Cdu(intent_theorem_cdu))
+        .unwrap();
     thread::sleep(Duration::from_millis(100));
 
     // --- SCENARIO 1: Causal Tensor Decomposition ---
     println!("\n[SCENARIO 1] Simulating a user intent to test the CTD workflow.");
     let intent_input = Cdu::new(b"Find my keys".to_vec(), "observation.intent", vec![]);
-    input_sender.send(intent_input).unwrap();
+    input_sender
+        .send(EngineInput::Cdu(intent_input))
+        .unwrap();
     thread::sleep(Duration::from_millis(200));
 
     // --- The Final Proof ---
@@ -94,14 +101,13 @@ fn main() {
 
     // --- Graceful Shutdown ---
     println!("\n[SHUTDOWN] Shutting down all components.");
-    drop(input_sender);
+    // FIX: Send the explicit shutdown signal.
+    input_sender.send(EngineInput::Shutdown).unwrap();
 
-    // Now, the Engine will shut down once the Executor's loop finishes.
-    // The Executor will shut down once the Engine drops its command sender.
-    // This creates a clean, cascading shutdown of the critical components.
+    // Now that the shutdown is signaled, we can safely join all handles.
     engine_handle.join().unwrap();
     executor_handle.join().unwrap();
-    // We do NOT join the refinement_handle.
+    refinement_handle.join().unwrap();
 
     println!("\nSession complete.");
 }
