@@ -6,8 +6,9 @@
 
 use crate::cdu::Cdu;
 use crate::engine::Projector;
+// FIX: Corrected the import paths to use `::` instead of `.`
 use crate::reasoning::knowledge_base::KnowledgeBase;
-use crate.reasoning::strategy::{
+use crate::reasoning::strategy::{
     AxiomEvaluationStrategy, ConstraintStrategy, ReasoningContext, ReasoningStrategy,
     TheoremStrategy,
 };
