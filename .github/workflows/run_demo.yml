@@ -1,0 +1,24 @@
+# File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
+# File path: .github/workflows/run_demo.yml
+
+name: Run Demo
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  run-main:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Rust toolchain
+      uses: actions/toolchain@v1
+      with:
+        toolchain: stable
+
+    - name: Run the main demo binary
+      run: cargo run
