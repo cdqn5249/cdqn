@@ -33,7 +33,7 @@ fn main() {
     let pe_user = PrimeElement::new(
         "pe-user-present".to_string(),
         "uworld".to_string(),
-        1.0,
+        vec![1.0], // FIX: Wrap in vec![]
         "The user is present".to_string(),
         "".to_string(),
     );
@@ -42,7 +42,7 @@ fn main() {
     let pe_emergency = PrimeElement::new(
         "emergency".to_string(),
         "uworld".to_string(),
-        0.9,
+        vec![0.9], // FIX: Wrap in vec![]
         "Emergency context".to_string(),
         "".to_string(),
     );
