@@ -21,7 +21,6 @@ pub struct CduMetadata {
 }
 
 /// A Causal Data Unit (CDU).
-/// It combines an immutable fact (payload) with mutable, evolving context (metadata).
 #[derive(Debug, Clone)]
 pub struct Cdu {
     /// The unique, content-addressed name of the CDU.
@@ -80,12 +79,10 @@ impl Cdu {
     }
 
     /// Extracts the subtype string from the CDU name.
-    /// This now correctly handles complex subtypes like "causal.mode.intent".
     fn get_subtype(&self) -> Option<String> {
         let name_without_suffix = self.name.strip_suffix(".cdu")?;
         let parts: Vec<&str> = name_without_suffix.split('.').collect();
         if parts.len() > 1 {
-            // Join all parts after the hash
             Some(parts[1..].join("."))
         } else {
             None
@@ -94,10 +91,12 @@ impl Cdu {
 
     /// Extracts the structured content from the CDU payload using robust subtype matching.
     pub fn extract_payload(&self) -> Option<CduPayload> {
-        // FIX: Use a robust match on the primary subtype component.
-        let primary_subtype = self.get_subtype().and_then(|s| s.split('.').next());
+        // FIX: Convert the borrowed &str to an owned String to fix the lifetime error.
+        let primary_subtype = self
+            .get_subtype()
+            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
 
-        match primary_subtype {
+        match primary_subtype.as_deref() {
             Some("prime") => crate::reasoning::PrimeElement::from_bytes(&self.payload)
                 .map(CduPayload::PrimeElement),
             Some("semi-axiom") => {
@@ -157,13 +156,19 @@ mod tests {
             "causal.mode.intent".to_string()
         );
 
-        // Test the primary subtype matching for extract_payload
-        let primary_simple = cdu_simple.get_subtype().and_then(|s| s.split('.').next());
-        let primary_complex = cdu_complex.get_subtype().and_then(|s| s.split('.').next());
-        let primary_result = cdu_result.get_subtype().and_then(|s| s.split('.').next());
+        // FIX: Apply the same lifetime fix to the test logic.
+        let primary_simple = cdu_simple
+            .get_subtype()
+            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
+        let primary_complex = cdu_complex
+            .get_subtype()
+            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
+        let primary_result = cdu_result
+            .get_subtype()
+            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
 
-        assert_eq!(primary_simple, Some("prime"));
-        assert_eq!(primary_complex, Some("causal"));
-        assert_eq!(primary_result, Some("result"));
+        assert_eq!(primary_simple.as_deref(), Some("prime"));
+        assert_eq!(primary_complex.as_deref(), Some("causal"));
+        assert_eq!(primary_result.as_deref(), Some("result"));
     }
 }
