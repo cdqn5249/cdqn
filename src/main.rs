@@ -11,8 +11,8 @@ use std::thread;
 use std::time::Duration;
 
 fn main() {
-    println!("--- Chronosa Full Learning Cycle Demo ---");
-    let log_path = PathBuf::from("full_learning_demo.cdqn");
+    println!("--- Chronosa Full Learning & Assimilation Cycle Demo ---");
+    let log_path = PathBuf::from("assimilation_demo.cdqn");
     let _ = std::fs::remove_file(&log_path);
 
     // 1. Use the intelligent ReasoningProjector.
@@ -33,7 +33,7 @@ fn main() {
     let pe_user = PrimeElement::new(
         "pe-user-present".to_string(),
         "uworld".to_string(),
-        vec![1.0], // FIX: Wrap in vec![]
+        vec![1.0],
         "The user is present".to_string(),
         "".to_string(),
     );
@@ -42,7 +42,7 @@ fn main() {
     let pe_emergency = PrimeElement::new(
         "emergency".to_string(),
         "uworld".to_string(),
-        vec![0.9], // FIX: Wrap in vec![]
+        vec![0.9],
         "Emergency context".to_string(),
         "".to_string(),
     );
@@ -68,11 +68,13 @@ fn main() {
     thread::sleep(Duration::from_millis(200));
 
     println!("\n[FEEDBACK 1] Providing negative feedback for the mistake.");
-    let last_result = {
-        let state = shared_state.read().unwrap();
-        state.find_last_by_subtype("result.task_completed").cloned()
-    };
-    if let Some(result) = last_result.clone() {
+    if let Some(result) = {
+        shared_state
+            .read()
+            .unwrap()
+            .find_last_by_subtype("result.task_completed")
+            .cloned()
+    } {
         let feedback = Cdu::new(
             b"Greeting during emergency is bad".to_vec(),
             "feedback.reputation.negative.emergency",
@@ -84,10 +86,6 @@ fn main() {
     println!("\n[LEARNING 1] Pausing for 6s for RefinementEngine to discover a CONSTRAINT...");
     thread::sleep(Duration::from_secs(6));
 
-    println!("\n[WISDOM] Simulating the same emergency again. Chronosa should now be inhibited.");
-    input_sender.send(emergency_input).unwrap();
-    thread::sleep(Duration::from_millis(200));
-
     // --- SCENARIO 2: Learning from Success ---
     println!("\n[SCENARIO 2] Simulating a normal situation. Chronosa should act correctly.");
     let normal_input = Cdu::new(b"User waves hello".to_vec(), "observation.normal", vec![]);
@@ -95,11 +93,13 @@ fn main() {
     thread::sleep(Duration::from_millis(200));
 
     println!("\n[FEEDBACK 2] Providing positive feedback for the correct action.");
-    let last_result = {
-        let state = shared_state.read().unwrap();
-        state.find_last_by_subtype("result.task_completed").cloned()
-    };
-    if let Some(result) = last_result {
+    if let Some(result) = {
+        shared_state
+            .read()
+            .unwrap()
+            .find_last_by_subtype("result.task_completed")
+            .cloned()
+    } {
         let feedback = Cdu::new(
             b"Greeting was appropriate".to_vec(),
             "feedback.reputation.positive.normal",
@@ -111,29 +111,78 @@ fn main() {
     println!("\n[LEARNING 2] Pausing for 6s for RefinementEngine to discover a THEOREM...");
     thread::sleep(Duration::from_secs(6));
 
-    println!("\n[EFFICIENCY] Simulating the same normal situation again. Chronosa should use a shortcut.");
-    input_sender.send(normal_input).unwrap();
+    // --- SCENARIO 3: Testing Intelligent Assimilation ---
+    println!("\n[SCENARIO 3] Repeating scenarios to test for redundancy.");
+    println!("The RefinementEngine should discover nothing new this time.");
+
+    println!("\n[ASSIMILATION 1] Repeating the failed action to test constraint redundancy...");
+    input_sender.send(emergency_input.clone()).unwrap();
     thread::sleep(Duration::from_millis(200));
+    if let Some(result) = {
+        shared_state
+            .read()
+            .unwrap()
+            .find_last_by_subtype("result.task_completed")
+            .cloned()
+    } {
+        let feedback = Cdu::new(
+            b"This is a redundant negative feedback".to_vec(),
+            "feedback.reputation.negative.emergency",
+            vec![result.name],
+        );
+        input_sender.send(feedback).unwrap();
+    }
+
+    println!("\n[ASSIMILATION 2] Repeating the successful action to test theorem redundancy...");
+    input_sender.send(normal_input.clone()).unwrap();
+    thread::sleep(Duration::from_millis(200));
+    if let Some(result) = {
+        shared_state
+            .read()
+            .unwrap()
+            .find_last_by_subtype("result.task_completed")
+            .cloned()
+    } {
+        let feedback = Cdu::new(
+            b"This is a redundant positive feedback".to_vec(),
+            "feedback.reputation.positive.normal",
+            vec![result.name],
+        );
+        input_sender.send(feedback).unwrap();
+    }
+
+    println!("\n[LEARNING 3] Pausing for 6s for RefinementEngine to process redundant events...");
+    thread::sleep(Duration::from_secs(6));
 
     // --- The Final Proof ---
-    println!("\n[PROOF] Checking the final state for learned knowledge...");
+    println!("\n[PROOF] Checking final log for duplicate knowledge...");
     let final_state = shared_state.read().unwrap();
-    let constraint_found = final_state
-        .find_last_by_subtype("constraint.discovered")
-        .is_some();
-    let theorem_found = final_state
-        .find_last_by_subtype("theorem.discovered")
-        .is_some();
+    let discovered_constraints: Vec<_> = final_state
+        .log()
+        .iter()
+        .filter(|c| c.name.contains("constraint.discovered"))
+        .collect();
+    let discovered_theorems: Vec<_> = final_state
+        .log()
+        .iter()
+        .filter(|c| c.name.contains("theorem.discovered"))
+        .collect();
 
-    if constraint_found {
-        println!("SUCCESS: A new CONSTRAINT was discovered and added to the log.");
+    println!(
+        "Total constraints discovered: {}",
+        discovered_constraints.len()
+    );
+    println!("Total theorems discovered: {}", discovered_theorems.len());
+
+    if discovered_constraints.len() == 1 {
+        println!("SUCCESS: System correctly avoided creating a duplicate CONSTRAINT.");
     } else {
-        println!("FAILURE: No new constraint was discovered.");
+        println!("FAILURE: System created {} constraints instead of 1.", discovered_constraints.len());
     }
-    if theorem_found {
-        println!("SUCCESS: A new THEOREM was discovered and added to the log.");
+    if discovered_theorems.len() == 1 {
+        println!("SUCCESS: System correctly avoided creating a duplicate THEOREM.");
     } else {
-        println!("FAILURE: No new theorem was discovered.");
+        println!("FAILURE: System created {} theorems instead of 1.", discovered_theorems.len());
     }
 
     // --- Graceful Shutdown ---
