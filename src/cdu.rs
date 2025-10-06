@@ -100,8 +100,9 @@ impl Cdu {
         match primary_subtype {
             Some("prime") => crate::reasoning::PrimeElement::from_bytes(&self.payload)
                 .map(CduPayload::PrimeElement),
-            Some("semi-axiom") => crate::reasoning::SemiAxiom::from_bytes(&self.payload)
-                .map(CduPayload::SemiAxiom),
+            Some("semi-axiom") => {
+                crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
+            }
             Some("theorem") => Theorem::from_bytes(&self.payload).map(CduPayload::Theorem),
             Some("constraint") => Constraint::from_bytes(&self.payload).map(CduPayload::Constraint),
             Some("causal") => CausalMode::from_bytes(&self.payload).map(CduPayload::CausalMode),
