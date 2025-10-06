@@ -52,7 +52,7 @@ fn main() {
         println!("[MAIN] Engine channel was already closed.");
     }
 
-    // 6. Wait for the threads to terminate.
+    // 6. Wait for all threads to terminate.
     println!("[MAIN] Waiting for Engine thread to join...");
     engine_handle.join().unwrap();
     println!("[MAIN] Engine thread joined.");
@@ -61,6 +61,7 @@ fn main() {
     executor_handle.join().unwrap();
     println!("[MAIN] Executor thread joined.");
 
+    // FIX: We can now safely join the refinement handle because it is guaranteed to terminate.
     println!("[MAIN] Waiting for Refinement thread to join...");
     refinement_handle.join().unwrap();
     println!("[MAIN] Refinement thread joined.");
