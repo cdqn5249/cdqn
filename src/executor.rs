@@ -4,6 +4,7 @@
 //! The Executor for running non-deterministic tasks.
 
 use crate::cdu::Cdu;
+use crate::engine::EngineInput; // Import the new enum
 use std::sync::mpsc;
 use std::thread;
 
@@ -13,7 +14,7 @@ pub struct Executor;
 impl Executor {
     pub fn spawn(
         command_receiver: mpsc::Receiver<Cdu>,
-        result_sender: mpsc::Sender<Cdu>,
+        result_sender: mpsc::Sender<EngineInput>, // Sender type is updated
     ) -> thread::JoinHandle<()> {
         thread::spawn(move || {
             println!("Executor: Running.");
@@ -29,8 +30,8 @@ impl Executor {
                     vec![command_cdu.name],
                 );
 
-                // Send the result back to the Engine.
-                if result_sender.send(result_cdu).is_err() {
+                // Send the result back to the Engine, wrapped in the enum.
+                if result_sender.send(EngineInput::Cdu(result_cdu)).is_err() {
                     // The engine has shut down, so we can exit.
                     break;
                 }
@@ -57,7 +58,11 @@ mod tests {
         command_sender.send(command.clone()).unwrap();
 
         // 3. Wait for the result from the executor.
-        let result = result_receiver.recv().unwrap();
+        let result_input = result_receiver.recv().unwrap();
+        let result = match result_input {
+            EngineInput::Cdu(cdu) => cdu,
+            _ => panic!("Expected a CDU from executor"),
+        };
 
         // 4. Verify the result is correct and causally linked.
         assert!(result.name.contains(".result.task_completed"));
