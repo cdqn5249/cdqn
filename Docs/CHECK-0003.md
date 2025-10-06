@@ -1,105 +1,155 @@
-# Checkpoint 0003: The Foundational Learning Architecture
+# Checkpoint 0003: The Stable Foundational Architecture
 
 - **Date:** October 6, 2025
 - **Author:** Christophe Duy Quang Nguyen
 - **Vibe coding engine:** Gemini 2.5 Pro, Google
-- **Status:** Core Learning Loop & CTD v1 Prototype Implemented and Stabilized
+- **Status:** Stable, Verifiable, and Deadlock-Free Core System Achieved
 
 ---
 
-## 1. Project Goal (Recap from CHECK-0002)
+## 1. Project Goal (Recap)
 
 The `cdqn` project aims to create a **Sovereign AI Companion**, named **Chronosa**. This agent is founded on the principles of Verifiable Experience, Transparent Reasoning, and user ownership. The core objective is to design Chronosa to learn from its mistakes and successes, becoming a truly intelligent and autonomous partner.
 
-## 2. Progress from CHECK-0002
+## 2. Summary of Progress
 
-This phase was a critical and challenging evolution of the system. We moved from a simple concurrent reasoning engine to a fully autonomous, self-correcting learning architecture. The work involved three major thrusts:
+This development phase was a critical and arduous journey of stabilization and architectural correction. We began with the ambitious goal of implementing the core learning loop and the mathematical foundations of CIN and CTD. However, the process of implementation revealed fundamental flaws in the initial concurrent design, leading to a series of deadlocks, memory allocation failures, and infinite loops.
 
-1.  **Implementing the Foundational Learning Loop:** We introduced the core vocabulary for learned knowledge (`Theorem`, `Constraint`) and the `RefinementEngine` to discover them autonomously.
-2.  **Implementing the Mathematical Engine (CIN v1):** We upgraded the system's understanding of knowledge from discrete concepts to nuanced, mathematical ones by vectorizing `PrimeElement`s and implementing a `Similarity Engine`.
-3.  **Implementing the CTD v1 Prototype:** We introduced the `CausalMode` vocabulary and a `DecompositionStrategy` to prove the viability of the Causal Tensor Decomposition architecture.
+The primary achievement of this phase was not the addition of new features, but the successful diagnosis and resolution of these critical issues. We have forged a new architecture that is not only stable and deadlock-free but also more modular, verifiable, and philosophically aligned with the project's core principles. The system is now a solid foundation upon which future development can be confidently built.
 
-Most importantly, this phase involved a deep and difficult debugging process that uncovered and fixed fundamental architectural flaws, resulting in a vastly more robust, stable, and verifiable system.
+## 3. The Final, Validated Architecture
 
-## 3. Core Architectural Evolution: The Final Design
+The architecture has been significantly refactored into a layered, modular, and robust ecosystem.
 
-The architecture has been significantly upgraded and stabilized.
+-   **The Layered Ecosystem:** We have formally separated the concerns of the project:
+    -   **Layer 0 (Physics):** The `cdu`, `payloads`, `codec`, and `storage` modules define the fundamental, agent-agnostic laws of our universe.
+    -   **Layer 1 (Metaphysics):** The `worlds` and `metaphysics` modules provide the tools and constants to construct the foundational realities (`Rworld`, the Zones of Valence).
+    -   **Layer 2 (Runtime):** The `main.rs` binary now acts as the `cdqnRuntime`, a simple bootstrapper responsible for initializing the environment.
+    -   **Layer 3 (The Agent):** `Chronosa` (represented by the `engine`, `executor`, `refinement`, and `reasoning` modules) is the intelligent agent that is spawned into this pre-existing universe.
 
--   **Vector-Based Knowledge Representation (CIN v1):** The `representation` field of a `PrimeElement` is now a vector (`Vec<f64>`), allowing concepts to be positioned as points in a high-dimensional "meaning-space."
+-   **The Epistemic Landscape:** We have defined a formal mathematical and moral landscape for Chronosa's reasoning. The first dimension of a concept's vector representation (`representation[0]`) defines its **Valence**, with zones for Positive, Negative, Neutral, and a crucial **Zone of Uncertainty (`-1.0` to `1.0`)** that allows Chronosa to express "I don't know."
 
--   **The Similarity Engine:** A `calculate_euclidean_distance` function now allows Chronosa to measure the semantic "closeness" of two concepts, enabling nuanced, context-aware reasoning.
+-   **Robust Concurrency Model:** The entire system now operates on a provably correct, deadlock-free concurrency model:
+    -   **Explicit Shutdown Signal:** An `EngineInput::Shutdown` enum variant ensures a clean, top-down shutdown cascade.
+    -   **Responsible Parent Threads:** The `Engine` now tracks and waits for its short-lived child tasks, guaranteeing all logs are captured and all work is completed before it terminates.
+    -   **Decoupled Lifecycles:** The `RefinementEngine` uses a "heartbeat" mechanism to check the `Engine`'s status, allowing it to terminate independently and reliably.
 
--   **Intelligent Assimilation:** The `RefinementEngine` now uses the Similarity Engine to check for semantically similar knowledge before creating new `Constraint`s or `Theorem`s, preventing log bloat and building a more abstract knowledge graph.
+-   **Secure and Modular Core:**
+    -   **Robust Type Parsing:** The `Cdu::extract_payload` function was rewritten to use unambiguous subtype matching, fixing a critical memory allocation vulnerability.
+    -   **Modular Payloads:** All complex payload structs (`Theorem`, `Constraint`, etc.) have been moved to a dedicated `payloads` module, cleaning up the core `cdu.rs` file.
+    -   **Modular Reasoning:** The `ReasoningProjector` has been successfully refactored into a clean pipeline of discrete `ReasoningStrategy` components.
 
--   **The Strategy Pattern:** The monolithic `ReasoningProjector` has been successfully refactored into a clean, modular pipeline of discrete `ReasoningStrategy` components (`Decomposition`, `Theorem`, `Constraint`, `AxiomEvaluation`).
+## 4. Repository File Structure
 
--   **Explicit Shutdown Signaling:** The entire concurrent architecture was refactored to use an explicit `EngineInput::Shutdown` signal, eliminating deadlocks and ensuring a graceful, predictable shutdown sequence.
+The project structure has evolved to reflect this new, modular design.
 
--   **Robust Type Parsing:** The core `Cdu::extract_payload` function was rewritten to use robust subtype matching, eliminating a critical "type confusion" vulnerability that could lead to memory allocation failures.
+-   **`/`**: Project root
+    -   `Cargo.toml`: Project configuration and dependencies.
+    -   `.github/workflows/run_demo.yml`: CI workflow to run the main binary for validation.
+    -   `src/`: All Rust source code.
+        -   `main.rs`: The `cdqnRuntime`. The main application entry point, responsible for bootstrapping the system.
+        -   `lib.rs`: Library crate root, declaring all public modules.
+        -   `cdu.rs`: Defines the core `Cdu`, `CduMetadata`, and `CduPayload` structs.
+        -   `payloads/`: **(New Module)** Defines all concrete payload types.
+            -   `mod.rs`: Module declaration and shared serialization helpers.
+            -   `causal_mode.rs`: Defines the `CausalMode` struct for CTD.
+            -   `configuration.rs`: Defines the `Configuration` struct for triggering events.
+            -   `constraint.rs`: Defines the `Constraint` struct (emergent guardrails).
+            -   `theorem.rs`: Defines the `Theorem` struct (learned knowledge).
+        -   `codec.rs`: Implements the binary `Encode`/`Decode` logic.
+        -   `hlc.rs`: Implements the `Hlc` (Hybrid Logical Clock).
+        -   `state.rs`: Defines `ChronosaState` and the `SharedState` type.
+        -   `engine.rs`: The main `Engine` thread, now a "responsible parent."
+        -   `executor.rs`: The `Executor` thread for handling side effects.
+        -   `projector.rs`: Defines the simple `RuleBasedProjector`.
+        -   `storage.rs`: Manages disk I/O and the Write-Ahead Log (WAL).
+        -   `reasoning/`: The module for Chronosa's reasoning model.
+            -   `mod.rs`: Module declaration.
+            -   `knowledge_base.rs`: **(New)** Defines the `KnowledgeBase` snapshot.
+            -   `strategy.rs`: **(New)** Defines the `ReasoningStrategy` pattern and implementations.
+            -   `reasoning_projector.rs`: **(Refactored)** The orchestrator for the strategy pipeline.
+            -   `prime_element.rs`: Defines the `PrimeElement` struct.
+            -   `semi_axiom.rs`: Defines the `SemiAxiom` struct.
+        -   `refinement.rs`: **(New)** The `RefinementEngine` for autonomous learning.
+        -   `worlds.rs`: **(New)** The "Toolbox" for creating foundational worlds.
+        -   `metaphysics.rs`: **(New)** Defines the universal constants of the ecosystem (e.g., the Zones of Valence).
 
-## 4. Workflows
+## 5. Workflows
 
-### 4.1. The Modular Reasoning Workflow
+### 5.1. The Reasoning (Thinking) Workflow
 
-*   **1. Trigger:** An `EngineInput::Cdu` is received by the `Engine`.
-*   **2. Task Spawning:** The `Engine` spawns a new, short-lived "Engine-Task" thread to process the CDU, adding its handle to a tracking list.
-*   **3. Preparation:** Inside the task, a `KnowledgeBase` is created, snapshotting all current knowledge.
-*   **4. Strategy Pipeline Execution:**
-    *   A `ReasoningContext` is created.
-    *   The `DecompositionStrategy` runs, potentially creating new `CausalMode` CDUs.
-    *   The `TheoremStrategy` runs, checking for both mode-based (CTD) and premise-based shortcuts. If a conclusive theorem is found, the pipeline terminates early.
-    *   The `ConstraintStrategy` runs, filtering candidate axioms using the Similarity Engine.
-    *   The `AxiomEvaluationStrategy` runs on the final list of allowed axioms.
-*   **5. State Evolution:** The task gathers all newly generated CDUs, persists them to the log, sends commands to the `Executor`, and evolves the shared state. The task then terminates.
+*   An `EngineInput::Cdu` arrives at the `Engine`.
+*   The `Engine` spawns a new "Engine-Task" thread to process the CDU.
+*   The task creates a `KnowledgeBase` (a read-only snapshot of the world).
+*   The task executes the `ReasoningStrategy` pipeline:
+    1.  `DecompositionStrategy` may create `CausalMode` CDUs.
+    2.  `TheoremStrategy` checks for shortcuts via `CausalMode`s or direct premises.
+    3.  `ConstraintStrategy` filters actions using the `Similarity Engine`.
+    4.  `AxiomEvaluationStrategy` performs first-principles reasoning.
+*   The task gathers all new CDUs, persists them, sends commands, and evolves the state, then terminates.
 
-### 4.2. The Graceful Shutdown Workflow
+### 5.2. The Graceful Shutdown Workflow
 
-*   **1. Signal:** The `main` thread sends an `EngineInput::Shutdown` message.
-*   **2. Engine Termination:** The `Engine`'s main loop receives the signal and breaks. It then waits for all "Engine-Task" handles in its tracking list to be `.join()`ed, ensuring all work is complete. The `Engine` thread then terminates.
-*   **3. Cascading Shutdown:**
-    *   As the `Engine` is dropped, its `command_sender` is dropped. This closes the command channel, causing the `Executor`'s loop to break and its thread to terminate.
-    *   The `RefinementEngine`'s "heartbeat" `send` call eventually fails because the `Engine`'s receiver is gone. This causes its loop to break and its thread to terminate.
-*   **4. Final Join:** The `main` thread, having successfully joined the `Engine`, can now successfully join the `Executor` and `RefinementEngine` handles, leading to a clean exit.
-
-## 5. Detailed Implementation Changes
-
--   **`src/cdu.rs`:** Expanded `CduPayload` with `CausalMode`. Critically refactored `extract_payload` to use robust subtype matching, fixing a major memory allocation vulnerability.
--   **`src/payloads/*` (New Module):** All payload structs (`Theorem`, `Constraint`, `CausalMode`) were moved into this new, modular directory.
--   **`src/reasoning/prime_element.rs`:** Upgraded `representation` from `f64` to `Vec<f64>`.
--   **`src/reasoning/strategy.rs`:** Implemented the Strategy pattern, the `calculate_euclidean_distance` function, and the new `DecompositionStrategy`.
--   **`src/reasoning/reasoning_projector.rs`:** Refactored into a simple orchestrator for the strategy pipeline.
--   **`src/refinement.rs`:** Upgraded with intelligent assimilation logic and a robust "heartbeat" shutdown mechanism.
--   **`src/engine.rs`:** Introduced the `EngineInput` enum for explicit shutdown signaling. Implemented the "responsible parent" pattern, where the `Engine` now tracks and joins its child task threads before terminating.
--   **`src/executor.rs`:** Instrumented with verbose logging.
--   **`src/main.rs`:** Rewritten to test and demonstrate the final, stable, and deadlock-free architecture.
+*   The `main` thread sends an `EngineInput::Shutdown` message.
+*   The `Engine`'s main loop breaks. It then waits for all its child "Engine-Task" threads to complete. The `Engine` thread then terminates.
+*   As the `Engine` is dropped, its `command_sender` is dropped. This closes the command channel, causing the `Executor`'s loop to break and its thread to terminate.
+*   The `RefinementEngine`'s "heartbeat" `send` call fails because the `Engine`'s receiver is gone. This causes its loop to break and its thread to terminate.
+*   The `main` thread, having successfully joined the `Engine`, can now successfully join the `Executor` and `RefinementEngine` handles, leading to a clean exit.
 
 ## 6. Successes
 
--   **Deadlock Resolution:** We successfully diagnosed and fixed a series of complex, interacting deadlocks, resulting in a robust and provably correct concurrent architecture.
--   **Critical Bug Fix:** We identified and fixed a catastrophic "type confusion" vulnerability in `cdu.rs` that could cause memory allocation failures.
--   **CIN v1 and CTD v1 Prototypes Achieved:** The core goals were met. The system now has a functional mathematical foundation for CIN and a working prototype of the CTD workflow.
--   **Full Learning Loop Validated:** The final demo proves that Chronosa can learn from success and failure, do so efficiently, and shut down cleanly.
--   **Successful Major Refactoring:** The entire data model and reasoning engine were successfully refactored for modularity and clarity while maintaining stability.
+-   **Achieved Architectural Stability:** The primary success of this phase. We successfully diagnosed and fixed a series of critical, interacting deadlocks, resulting in a provably correct and robust concurrent architecture.
+-   **Eliminated Critical Bugs:** We fixed a catastrophic "type confusion" vulnerability that could cause memory allocation failures and an infinite feedback loop caused by a logical flaw in the reasoning strategy.
+-   **Successful Modularization:** The entire data model and reasoning engine were successfully refactored for modularity, clarity, and maintainability without sacrificing the core design.
+-   **Established Foundational Metaphysics:** We have successfully implemented the core concepts of `Rworld` and the "Epistemic Landscape," providing a solid, meaningful foundation for all future knowledge.
 
 ## 7. Failures and Resolutions
 
--   **Failure: Catastrophic Deadlocks:** The most critical failure of this phase. The initial design for concurrency and shutdown was fundamentally flawed, leading to multiple, hard-to-diagnose deadlocks. Initial fixes were incorrect "patches" that addressed symptoms rather than the root cause.
-    -   **Resolution:** A systematic, logging-driven debugging process revealed the true architectural flaws: first, a thread self-deadlock on the `RwLock`, and finally, a flawed lifecycle in the `RefinementEngine`. The final solution involved implementing an explicit `Shutdown` signal and a robust "heartbeat" for the `RefinementEngine`, leading to a provably correct shutdown cascade.
--   **Failure: Infinite Feedback Loop:** A logical flaw in the `TheoremStrategy` (treating an empty premise set as always true) caused a runaway infinite loop that was not caught by unit tests.
-    -   **Resolution:** The logic was corrected to require that standard theorems must have non-empty premises. This highlighted the need for more integration-style tests.
--   **Failure: Memory Allocation Crash:** A "type confusion" vulnerability in `cdu.rs` was discovered that could cause the system to attempt to allocate terabytes of memory and crash.
-    -   **Resolution:** The `extract_payload` function was completely rewritten to use robust subtype matching instead of brittle `string.contains()` checks, permanently fixing the vulnerability.
+-   **Failure: Catastrophic Deadlocks:** The most critical failure. The initial concurrent design was fundamentally flawed, leading to multiple, hard-to-diagnose deadlocks.
+    -   **Resolution:** A systematic, logging-driven debugging process revealed the true architectural flaws. The final solution involved implementing an explicit `Shutdown` signal, a "responsible parent" pattern in the `Engine`, and a robust "heartbeat" for the `RefinementEngine`.
+-   **Failure: Infinite Feedback Loop:** A logical flaw in the `TheoremStrategy` (treating an empty premise set as always true) caused a runaway infinite loop.
+    -   **Resolution:** The logic was corrected to require that standard theorems must have non-empty premises.
+-   **Failure: Memory Allocation Crash:** A "type confusion" vulnerability in `cdu.rs` could cause the system to crash.
+    -   **Resolution:** The `extract_payload` function was completely rewritten to use robust subtype matching.
 
 ## 8. Current State of the System
 
-As of this checkpoint, the `cdqn` system is a stable, robust, and verifiable learning agent. It is feature-complete for this phase and serves as a solid foundation for further development. The system is no longer just a prototype; it is a resilient piece of software.
+As of this checkpoint, the `cdqn` ecosystem is a stable, robust, and verifiable foundation.
+-   **What it can do:**
+    -   Start up and create a foundational `Rworld` based on first principles.
+    -   Operate a multi-threaded, asynchronous, non-blocking architecture.
+    -   Perform a clean, predictable, and deadlock-free shutdown.
+    -   Process CDUs through a modular, extensible reasoning pipeline.
+-   **The system is stable, test-covered, and ready for the implementation of advanced reasoning and learning features.**
 
-## 9. Next Steps (Phase 5 - Full CTD Implementation)
+## 9. Next Steps (Phase 4 - The Reasoning Engine)
 
-The CIN v1 foundation is stable. The next phase will focus on evolving the CTD prototype into a fully-fledged, powerful engine for generalization.
+The foundation is now solid. The next phase is to build the intelligent agent, Chronosa, on top of this stable platform.
 
--   **Task: Implement a Real Decomposer Engine.**
-    -   The current `DecompositionStrategy` is a placeholder. We will research and implement a real mathematical algorithm (e.g., inspired by PARAFAC, Tucker decomposition, or modern neural network techniques) to take a high-level CDU (like a user's natural language request) and generate a meaningful set of `CausalMode` vectors.
+-   **Task: Implement the Full Reasoning Pipeline.**
+    -   We will now re-implement the full demonstration from `CHECK-0002`, but on top of our new, stable architecture. This will involve seeding a more complex world and demonstrating the full learning loop (Constraint and Theorem discovery) in a single, verifiable run.
 
--   **Task: Implement the CTD-based Theorem Retriever.**
-    -   We will create a new `ReasoningStrategy` or upgrade the `TheoremStrategy`. Its job will be to take the set of `CausalMode`s generated by the decomposer and use them to mathematically **reconstruct** the most relevant `Theorem` from the `KnowledgeBase`. This is the core of CTD—finding knowledge by relevance and similarity, not just by an exact match of premises. This will be the key to unlocking Chronosa's ability to generalize its knowledge to new, unseen situations.
+-   **Task: Implement the "I Don't Know" Logic.**
+    -   We will upgrade the `ReasoningProjector` and `Executor` to understand the "Zone of Uncertainty." When a reasoning process results in a concept with a valence between `-1.0` and `1.0`, the system must generate a specific "state of not knowing" CDU, which the `Executor` will translate into the phrase "I don't know."
+
+-   **Task: Begin the Real Decomposer Engine.**
+    -   We will replace the placeholder `DecompositionStrategy` with the "Embedding by Causal Proximity" algorithm. This will be the first real implementation of a verifiable, graph-based embedding system, which is the heart of the CTD concept.
+
+## 10. Glossary
+
+-   **CDU (Causal Data Unit):** The atomic, immutable, and verifiable unit of data for the entire system.
+-   **Chronosa:** The name of the Sovereign AI Companion being built. It is the "agent" layer of the ecosystem.
+-   **`cdqnRuntime`:** The bootstrapper application (`main.rs`) responsible for initializing the environment and starting the agent.
+-   **World:** A mathematical space (a set of real numbers) that provides a grounded context for concepts.
+-   **`Rworld`:** The foundational "real world," representing the entirety of existence.
+-   **Valence:** The semantic meaning of a concept on the spectrum from negative to positive, represented by the first dimension of its vector.
+-   **Zone of Uncertainty:** The region of the Valence axis (between -1.0 and 1.0) where a concept's meaning is ambiguous, leading to an "I don't know" response.
+-   **Prime Element:** A node in the knowledge graph representing an irreducible concept within a World.
+-   **Semi-Axiom / Axiom:** A verifiable rule that defines a causal link or reasoning step.
+-   **Theorem:** A learned "shortcut" or abstraction, discovered by the `RefinementEngine`.
+-   **Constraint:** A learned "guardrail" or inhibition, discovered by the `RefinementEngine`.
+-   **Refinement Engine:** The autonomous background component that analyzes the log to discover new `Theorem`s and `Constraint`s.
+-   **Reasoning Projector:** The orchestrator for the reasoning pipeline.
+-   **Strategy Pattern:** The software design pattern used to make the reasoning engine modular.
+-   **CIN (Causal Interpolation Networks):** The architectural goal for Chronosa's reasoning, where intelligence emerges from interpolating the strength and relevance of causal links.
+-   **CTD (Causal Tensor Decomposition):** The architectural goal for achieving scalable and generalized knowledge retrieval.
