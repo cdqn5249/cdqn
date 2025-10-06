@@ -83,7 +83,7 @@ impl Engine {
                                 new_events.len()
                             );
 
-                            let mut all_events_to_persist = vec![input_cdu];
+                            let mut all_events_to_persist = vec![input_cdu.clone()]; // Clone here
                             all_events_to_persist.extend(new_events);
                             append_events_to_log(&all_events_to_persist, &log_path).unwrap();
 
@@ -101,7 +101,8 @@ impl Engine {
                             for event in all_events_to_persist {
                                 evolve_shared_state(&state, event);
                             }
-                            println!("[Engine-Task] Task complete for {}.", event.name);
+                            // FIX: Use input_cdu.name, which is in scope.
+                            println!("[Engine-Task] Task complete for {}.", input_cdu.name);
                         } else {
                             eprintln!("[Engine-Task] Failed to acquire read lock for projection.");
                         }
