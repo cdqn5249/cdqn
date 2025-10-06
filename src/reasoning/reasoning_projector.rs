@@ -83,7 +83,7 @@ mod tests {
         let pe1 = PrimeElement::new(
             "pe-1".to_string(),
             "uworld".to_string(),
-            1.0,
+            vec![1.0], // FIX: Wrap in vec![]
             "User is present".to_string(),
             "Cannot be decomposed".to_string(),
         );
@@ -125,7 +125,7 @@ mod tests {
         let pe1 = PrimeElement::new(
             "pe-user-present".to_string(),
             "uworld".to_string(),
-            1.0,
+            vec![1.0], // FIX: Wrap in vec![]
             "User is present".to_string(),
             "Cannot be decomposed".to_string(),
         );
@@ -133,7 +133,7 @@ mod tests {
         let pe_emergency_context = PrimeElement::new(
             "emergency".to_string(),
             "uworld".to_string(),
-            0.9,
+            vec![0.9], // FIX: Wrap in vec![]
             "A state of emergency".to_string(),
             "".to_string(),
         );
@@ -173,7 +173,7 @@ mod tests {
         let pe1 = PrimeElement::new(
             "pe-a".to_string(),
             "uworld".to_string(),
-            1.0,
+            vec![1.0], // FIX: Wrap in vec![]
             "A".to_string(),
             "".to_string(),
         );
@@ -181,7 +181,7 @@ mod tests {
         let pe2 = PrimeElement::new(
             "pe-b".to_string(),
             "uworld".to_string(),
-            1.0,
+            vec![1.0], // FIX: Wrap in vec![]
             "B".to_string(),
             "".to_string(),
         );
