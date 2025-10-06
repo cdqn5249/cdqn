@@ -4,7 +4,7 @@
 use cdqn::cdu::Cdu;
 use cdqn::engine::{Engine, EngineInput};
 use cdqn::executor::Executor;
-use cdqn::projector::{Rule, RuleBasedProjector}; // Using the simple projector for this test
+use cdqn::projector::{Rule, RuleBasedProjector};
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -32,7 +32,8 @@ fn main() {
     let input_sender = engine.input_sender.clone();
 
     // 3. Spawn the Engine and Executor.
-    let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
+    // FIX: Removed the second argument to match the new function signature.
+    let executor_handle = Executor::spawn(command_receiver);
     let engine_handle = thread::spawn(move || engine.run());
 
     // 4. Send a single CDU to ensure the system processes something.
