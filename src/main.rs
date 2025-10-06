@@ -46,7 +46,10 @@ fn main() {
     // 5. Initiate the graceful shutdown.
     println!("\n[MAIN] Sending shutdown signal...");
     if let Err(e) = input_sender.send(EngineInput::Shutdown) {
-        println!("[MAIN] Error sending shutdown signal: {}. The engine may have already terminated.", e);
+        println!(
+            "[MAIN] Error sending shutdown signal: {}. The engine may have already terminated.",
+            e
+        );
     }
 
     // 6. Wait for the threads to terminate.
