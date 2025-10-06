@@ -3,8 +3,7 @@
 
 //! The Refinement Engine for Chronosa's autonomous learning.
 
-use crate::cdu::{Cdu, CduPayload};
-use crate::payloads::{Constraint, Theorem}; // FIX: Import directly from payloads
+use crate::cdu::{Cdu, CduPayload, Constraint, Theorem};
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::state::SharedState;
 use std::collections::HashSet;
@@ -61,21 +60,18 @@ impl RefinementEngine {
         loop {
             thread::sleep(Duration::from_secs(5));
 
-            let heartbeat = Cdu::new(vec![], "refinement.heartbeat", vec![]);
-            if self.input_sender.send(heartbeat).is_err() {
-                break;
-            }
-
-            println!("RefinementEngine: Waking up to analyze log...");
             // Create a single knowledge snapshot for this analysis cycle.
             let kb = {
-                let state_guard = self.state.read().unwrap();
-                KnowledgeBase::from_state(&state_guard)
+                // Use a short timeout to avoid deadlocking with the main engine during shutdown.
+                if let Ok(state_guard) = self.state.try_read() {
+                    KnowledgeBase::from_state(&state_guard)
+                } else {
+                    // If we can't get a lock, the main thread is likely shutting down. Exit.
+                    break;
+                }
             };
 
             let new_constraints = self.discover_constraints(&kb);
-            let new_theorems = self.discover_theorems(&kb);
-
             if !new_constraints.is_empty() {
                 println!(
                     "RefinementEngine: Discovered {} new constraint(s).",
@@ -87,12 +83,14 @@ impl RefinementEngine {
                         "constraint.discovered",
                         vec![],
                     );
+                    // If this send fails, the main engine has shut down, so we should exit.
                     if self.input_sender.send(constraint_cdu).is_err() {
-                        break;
+                        return; // Exit the run loop entirely.
                     }
                 }
             }
 
+            let new_theorems = self.discover_theorems(&kb);
             if !new_theorems.is_empty() {
                 println!(
                     "RefinementEngine: Discovered {} new theorem(s).",
@@ -104,8 +102,9 @@ impl RefinementEngine {
                         "theorem.discovered",
                         vec![],
                     );
+                    // If this send fails, the main engine has shut down, so we should exit.
                     if self.input_sender.send(theorem_cdu).is_err() {
-                        break;
+                        return; // Exit the run loop entirely.
                     }
                 }
             }
@@ -116,7 +115,6 @@ impl RefinementEngine {
     /// Analyzes the log to discover new constraints, avoiding duplicates.
     fn discover_constraints(&self, kb: &KnowledgeBase) -> Vec<Constraint> {
         let mut potential_constraints = Vec::new();
-        // This is inefficient but necessary for now without changing the KB.
         let state_guard = self.state.read().unwrap();
         let log_cdu = state_guard.log();
 
@@ -144,7 +142,6 @@ impl RefinementEngine {
             }
         }
 
-        // Filter out constraints that are too similar to existing ones.
         let mut new_constraints = Vec::new();
         'potential_loop: for p_constraint in &potential_constraints {
             for e_constraint in kb.constraints() {
@@ -158,7 +155,7 @@ impl RefinementEngine {
                             &e_context_pe.representation,
                         );
                         if distance < SIMILARITY_EPSILON {
-                            continue 'potential_loop; // Similar constraint exists, discard.
+                            continue 'potential_loop;
                         }
                     }
                 }
@@ -212,14 +209,13 @@ impl RefinementEngine {
             }
         }
 
-        // Filter out theorems that already exist.
         let mut new_theorems = Vec::new();
         'potential_loop: for p_theorem in &potential_theorems {
             for e_theorem in kb.theorems() {
                 let p_premises: HashSet<_> = p_theorem.premises.iter().collect();
                 let e_premises: HashSet<_> = e_theorem.premises.iter().collect();
                 if p_premises == e_premises && p_theorem.conclusion == e_theorem.conclusion {
-                    continue 'potential_loop; // Duplicate theorem exists, discard.
+                    continue 'potential_loop;
                 }
             }
             new_theorems.push(p_theorem.clone());
