@@ -1,70 +1,111 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/main.rs
 
-use cdqn::cdu::Cdu;
+use cdqn::cdu::{Cdu, CduPayload};
 use cdqn::engine::{Engine, EngineInput};
 use cdqn::executor::Executor;
-use cdqn::projector::{Rule, RuleBasedProjector};
+use cdqn::payloads::Theorem;
+use cdqn::reasoning::{PrimeElement, ReasoningProjector};
 use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
 
 fn main() {
-    println!("--- Chronosa Verbose Shutdown Test ---");
-    let log_path = PathBuf::from("shutdown_test.cdqn");
+    println!("--- Chronosa Full Learning & CTD Cycle Demo ---");
+    let log_path = PathBuf::from("ctd_demo.cdqn");
     let _ = std::fs::remove_file(&log_path);
 
-    // 1. Use a simple projector for this test.
-    let rules = vec![Rule {
-        predicate: Box::new(|_, input| input.name.contains("observation")),
-        mapper: Box::new(|input| {
-            vec![Cdu::new(
-                b"test command".to_vec(),
-                "command.test",
-                vec![input.name.clone()],
-            )]
-        }),
-    }];
-    let projector = RuleBasedProjector::new(rules);
+    // 1. Use the intelligent ReasoningProjector.
+    let projector = ReasoningProjector::new();
 
     // 2. Create the core components.
     let (engine, command_receiver) = Engine::new(log_path, Box::new(projector));
     let input_sender = engine.input_sender.clone();
     let shared_state = engine.state.clone();
 
-    // 3. Spawn all components.
+    // 3. Spawn all background threads.
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
-    let refinement_handle = RefinementEngine::spawn(shared_state, input_sender.clone());
+    let refinement_handle = RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
-    // 4. Send a single CDU to ensure the system processes something.
-    println!("\n[MAIN] Sending a single test CDU...");
-    let observation = Cdu::new(b"test".to_vec(), "observation", vec![]);
-    input_sender.send(EngineInput::Cdu(observation)).unwrap();
+    // --- Seeding the Initial State ---
+    println!("\n[SETUP] Seeding initial knowledge...");
+    let pe_user = PrimeElement::new(
+        "pe-user-present".to_string(),
+        "uworld".to_string(),
+        vec![1.0],
+        "The user is present".to_string(),
+        "".to_string(),
+    );
+    input_sender
+        .send(EngineInput::Cdu(pe_user.to_cdu()))
+        .unwrap();
 
-    // Wait for the CDU to be fully processed through the entire loop.
-    thread::sleep(Duration::from_secs(1));
+    let pe_emergency = PrimeElement::new(
+        "emergency".to_string(),
+        "uworld".to_string(),
+        vec![0.9],
+        "Emergency context".to_string(),
+        "".to_string(),
+    );
+    input_sender
+        .send(EngineInput::Cdu(pe_emergency.to_cdu()))
+        .unwrap();
 
-    // 5. Initiate the graceful shutdown.
-    println!("\n[MAIN] Sending shutdown signal...");
-    if input_sender.send(EngineInput::Shutdown).is_err() {
-        println!("[MAIN] Engine channel was already closed.");
+    let intent_theorem = Theorem {
+        premises: vec![],
+        conclusion: "intent-based: Formulate a plan to find keys".to_string(),
+        proof_path: vec![],
+        confidence_score: 1.0,
+    };
+    let intent_theorem_cdu = Cdu::from_payload(
+        CduPayload::Theorem(intent_theorem),
+        "theorem.uworld",
+        vec![],
+    );
+    input_sender
+        .send(EngineInput::Cdu(intent_theorem_cdu))
+        .unwrap();
+    thread::sleep(Duration::from_millis(200)); // Allow seeding to process
+
+    // --- SCENARIO 1: Causal Tensor Decomposition ---
+    println!("\n[SCENARIO 1] Simulating a user intent to test the CTD workflow.");
+    let intent_input = Cdu::new(b"Find my keys".to_vec(), "observation.intent", vec![]);
+    input_sender
+        .send(EngineInput::Cdu(intent_input))
+        .unwrap();
+    thread::sleep(Duration::from_millis(200));
+
+    // --- The Final Proof ---
+    println!("\n[PROOF] Checking final log for CTD-related knowledge...");
+    let final_state = shared_state.read().unwrap();
+    let mode_found = final_state
+        .find_last_by_subtype("causal.mode.intent")
+        .is_some();
+    let ctd_command_found = final_state
+        .find_last_by_subtype("command.theorem.ctd")
+        .is_some();
+
+    if mode_found {
+        println!("SUCCESS: A new CAUSAL MODE was created by the DecompositionStrategy.");
+    } else {
+        println!("FAILURE: The DecompositionStrategy did not create a Causal Mode.");
     }
 
-    // 6. Wait for all threads to terminate.
-    println!("[MAIN] Waiting for Engine thread to join...");
+    if ctd_command_found {
+        println!("SUCCESS: The TheoremStrategy USED the Causal Mode to apply a relevant theorem.");
+    } else {
+        println!("FAILURE: The TheoremStrategy did not use the Causal Mode.");
+    }
+
+    // --- Graceful Shutdown ---
+    println!("\n[SHUTDOWN] Shutting down all components.");
+    input_sender.send(EngineInput::Shutdown).unwrap();
+
     engine_handle.join().unwrap();
-    println!("[MAIN] Engine thread joined.");
-
-    println!("[MAIN] Waiting for Executor thread to join...");
     executor_handle.join().unwrap();
-    println!("[MAIN] Executor thread joined.");
-
-    // FIX: We can now safely join the refinement handle because it is guaranteed to terminate.
-    println!("[MAIN] Waiting for Refinement thread to join...");
     refinement_handle.join().unwrap();
-    println!("[MAIN] Refinement thread joined.");
 
-    println!("\nSession complete. Shutdown was successful.");
+    println!("\nSession complete.");
 }
