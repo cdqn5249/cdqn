@@ -4,28 +4,40 @@
 //! The Executor for running non-deterministic tasks.
 
 use crate::cdu::Cdu;
-// FIX: EngineInput is no longer used here.
+use crate::engine::EngineInput;
 use std::sync::mpsc;
 use std::thread;
-// FIX: Duration is no longer used here.
+use std::time::Duration;
 
 /// The Executor runs on a background thread, processing commands.
 pub struct Executor;
 
 impl Executor {
-    // The Executor's job is to execute commands. It no longer sends results back.
-    pub fn spawn(command_receiver: mpsc::Receiver<Cdu>) -> thread::JoinHandle<()> {
+    pub fn spawn(
+        command_receiver: mpsc::Receiver<Cdu>,
+        result_sender: mpsc::Sender<EngineInput>,
+    ) -> thread::JoinHandle<()> {
         thread::spawn(move || {
             println!("[Executor] Thread spawned and running.");
+            // The loop will continue as long as the channel is open.
             while let Ok(command_cdu) = command_receiver.recv() {
                 println!("[Executor] Received command: {}", command_cdu.name);
-                // In a real system, this is where you would perform side effects.
-                // For this demo, we just print that the task is "done".
-                println!(
-                    "[Executor] Task for command '{}' completed.",
-                    command_cdu.name
+
+                let result_cdu = Cdu::new(
+                    b"Task completed successfully".to_vec(),
+                    "result.task_completed",
+                    vec![command_cdu.name],
                 );
+
+                println!("[Executor] Sending result for command.");
+                if result_sender.send(EngineInput::Cdu(result_cdu)).is_err() {
+                    // This happens if the Engine's input channel is closed.
+                    println!("[Executor] Engine channel closed, cannot send result. Shutting down.");
+                    break;
+                }
             }
+            // This line is reached only when the command_receiver channel is closed,
+            // which happens when the Engine and all its tasks terminate and drop their senders.
             println!("[Executor] Command channel closed, thread terminating.");
         })
     }
@@ -34,20 +46,26 @@ impl Executor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::cdu::Cdu; // Re-add Cdu import specifically for the test module
-    use std::thread; // Re-add thread import specifically for the test module
-    use std::time::Duration; // Re-add Duration import specifically for the test module
 
     #[test]
     fn test_executor_receives_and_sends() {
         let (command_sender, command_receiver) = mpsc::channel();
-        let handle = Executor::spawn(command_receiver);
+        let (result_sender, result_receiver) = mpsc::channel();
+
+        let handle = Executor::spawn(command_receiver, result_sender);
 
         let command = Cdu::new(b"do work".to_vec(), "command.work", vec![]);
         command_sender.send(command.clone()).unwrap();
 
-        // Give the thread a moment to process the command before we drop the sender.
-        thread::sleep(Duration::from_millis(50));
+        let result_input = result_receiver.recv().unwrap();
+        let result = match result_input {
+            EngineInput::Cdu(cdu) => cdu,
+            _ => panic!("Expected a CDU from executor"),
+        };
+
+        assert!(result.name.contains(".result.task_completed"));
+        assert_eq!(result.metadata.causes.len(), 1);
+        assert_eq!(result.metadata.causes[0], command.name);
 
         drop(command_sender);
         handle.join().unwrap();
