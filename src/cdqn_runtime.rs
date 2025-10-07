@@ -23,7 +23,7 @@ struct GenesisPrimeElement {
     world: String,
     representation: Vec<f64>,
     description: String,
-    #[serde(default)] // Handles cases where symmetric_pair is null or missing
+    #[serde(default)]
     symmetric_pair: Option<String>,
 }
 
@@ -66,7 +66,8 @@ pub fn run() {
     let shared_state = engine.state.clone();
 
     // 2. Spawn all background threads.
-    let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
+    // FIX: Call the new, simpler Executor::spawn function.
+    let executor_handle = Executor::spawn(command_receiver);
     let refinement_handle = RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
     let engine_handle = thread::spawn(move || engine.run());
 
@@ -74,7 +75,6 @@ pub fn run() {
     println!("\n[Runtime] Reading genesis.json to build the universe...");
     let genesis_content = fs::read_to_string("genesis.json").expect("Failed to read genesis.json");
 
-    // FIX: Parse the entire file as a Vec<GenesisCdu> instead of a stream.
     match serde_json::from_str::<Vec<GenesisCdu>>(&genesis_content) {
         Ok(genesis_cdus) => {
             for genesis_cdu in genesis_cdus {
@@ -92,7 +92,7 @@ pub fn run() {
         }
     }
 
-    thread::sleep(Duration::from_millis(500)); // Allow seeding to process.
+    thread::sleep(Duration::from_millis(500));
 
     // 4. Initiate a graceful shutdown.
     println!("\n[Runtime] Genesis complete. Shutting down components.");
@@ -142,7 +142,7 @@ fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
         GenesisCdu::Axiom(ax) => {
             let axiom = SemiAxiom {
                 id: ax.id,
-                world: ax.worlds.join("_"), // Create a composite world string
+                world: ax.worlds.join("_"),
                 prime_elements: ax.premises,
                 description: ax.description,
                 weight: 1.0,
