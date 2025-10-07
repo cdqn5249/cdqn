@@ -7,13 +7,12 @@ use crate::cdu::Cdu;
 use crate::engine::EngineInput;
 use std::sync::mpsc;
 use std::thread;
-use std::time::Duration;
 
 /// The Executor runs on a background thread, processing commands.
 pub struct Executor;
 
 impl Executor {
-    // FIX: Restore the result_sender to test the feedback loop.
+    // FIX: Re-introducing the result_sender to test the feedback loop.
     pub fn spawn(
         command_receiver: mpsc::Receiver<Cdu>,
         result_sender: mpsc::Sender<EngineInput>,
@@ -45,6 +44,7 @@ impl Executor {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::time::Duration;
 
     #[test]
     fn test_executor_receives_and_sends() {
