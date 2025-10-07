@@ -6,6 +6,7 @@
 use crate::cdu::{Cdu, CduPayload};
 use crate::engine::{Engine, EngineInput};
 use crate::executor::Executor;
+use crate::payloads::Axiom; // Import the new Axiom struct
 use crate::reasoning::{PrimeElement, ReasoningProjector, SemiAxiom};
 use crate::refinement::RefinementEngine;
 use serde::Deserialize;
@@ -138,16 +139,17 @@ fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
                 format!("semi-axiom.{}", sa.world),
             )
         }
+        // FIX: Correctly create a CduPayload::Axiom variant.
         GenesisCdu::Axiom(ax) => {
-            let axiom = SemiAxiom {
+            let axiom = Axiom {
                 id: ax.id,
-                world: ax.worlds.join("_"),
-                prime_elements: ax.premises,
+                worlds: ax.worlds.clone(),
+                premises: ax.premises,
                 description: ax.description,
                 weight: 1.0,
             };
             (
-                CduPayload::SemiAxiom(axiom),
+                CduPayload::Axiom(axiom),
                 format!("axiom.{}", ax.worlds.join("_")),
             )
         }
@@ -163,7 +165,6 @@ mod tests {
 
     #[test]
     fn test_genesis_parsing_and_storage() {
-        // 1. Define a temporary path for the test files.
         let rand_string: String = rand::thread_rng()
             .sample_iter(&Alphanumeric)
             .take(12)
@@ -174,21 +175,19 @@ mod tests {
         let genesis_path = temp_dir.join("genesis.json");
         let log_path = temp_dir.join("test_runtime.cdqn");
 
-        // 2. Create a dummy genesis.json file.
         let dummy_genesis_content = r#"[
             {
                 "type": "PrimeElement", "id": "pe-test-1", "world": "TestWorld", "representation": [1.0],
                 "description": "Test PE 1"
             },
             {
-                "type": "SemiAxiom", "id": "sa-test-1", "world": "TestWorld", "premises": ["pe-test-1"],
-                "description": "Test SA 1"
+                "type": "Axiom", "id": "ax-test-1", "worlds": ["W1", "W2"], "premises": ["pe-test-1"],
+                "description": "Test Axiom 1"
             }
         ]"#;
         let mut file = fs::File::create(&genesis_path).unwrap();
         file.write_all(dummy_genesis_content.as_bytes()).unwrap();
 
-        // 3. Run a simplified version of the runtime logic.
         let projector = ReasoningProjector::new();
         let (engine, command_receiver) = Engine::new(log_path.clone(), Box::new(projector));
         let input_sender = engine.input_sender.clone();
@@ -209,9 +208,7 @@ mod tests {
         input_sender.send(EngineInput::Shutdown).unwrap();
         engine_handle.join().unwrap();
 
-        // 4. Rehydrate the log and verify the contents.
         let rehydrated_cdus = rehydrate_from_log(&log_path).unwrap();
-
         assert_eq!(rehydrated_cdus.len(), expected_cdu_count);
 
         let pe_found = rehydrated_cdus.iter().any(|c| {
@@ -221,24 +218,17 @@ mod tests {
                 false
             }
         });
-        let sa_found = rehydrated_cdus.iter().any(|c| {
-            if let Some(CduPayload::SemiAxiom(sa)) = c.extract_payload() {
-                sa.id == "sa-test-1"
+        let ax_found = rehydrated_cdus.iter().any(|c| {
+            if let Some(CduPayload::Axiom(ax)) = c.extract_payload() {
+                ax.id == "ax-test-1"
             } else {
                 false
             }
         });
 
-        assert!(
-            pe_found,
-            "The test PrimeElement was not found in the rehydrated log."
-        );
-        assert!(
-            sa_found,
-            "The test SemiAxiom was not found in the rehydrated log."
-        );
+        assert!(pe_found, "The test PrimeElement was not found.");
+        assert!(ax_found, "The test Axiom was not found.");
 
-        // 5. Clean up.
         fs::remove_dir_all(temp_dir).unwrap();
     }
 }
