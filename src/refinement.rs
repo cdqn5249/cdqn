@@ -9,7 +9,7 @@ use crate::payloads::{Constraint, Theorem};
 use crate::reasoning::knowledge_base::KnowledgeBase;
 use crate::reasoning::PrimeElement;
 use crate::state::SharedState;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet; // FIX: Removed unused HashMap
 use std::thread;
 use std::time::Duration;
 
