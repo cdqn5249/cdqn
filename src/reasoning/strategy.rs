@@ -97,7 +97,6 @@ impl ReasoningStrategy for DecompositionStrategy {
 pub struct TheoremStrategy;
 impl ReasoningStrategy for TheoremStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
-        // First, check for CTD-based triggers.
         for cdu in &context.new_cdus {
             if let Some(CduPayload::CausalMode(mode)) = cdu.extract_payload() {
                 if mode.mode_type == "intent" {
@@ -123,11 +122,8 @@ impl ReasoningStrategy for TheoremStrategy {
             }
         }
 
-        // Fallback to standard premise-matching.
         let known_element_ids: HashSet<_> = context.kb.prime_elements().keys().cloned().collect();
         for theorem in context.kb.theorems() {
-            // FIX: A theorem MUST have premises to be matched this way.
-            // This prevents the infinite loop.
             if theorem.premises.is_empty() {
                 continue;
             }
@@ -242,6 +238,12 @@ impl AxiomEvaluationStrategy {
         _input: &Cdu,
         prime_elements: &HashMap<String, crate::reasoning::PrimeElement>,
     ) -> Vec<Cdu> {
+        // FIX: A standard axiom MUST have premises to be evaluated this way.
+        // This prevents the infinite loop.
+        if axiom.prime_elements.is_empty() {
+            return vec![];
+        }
+
         for element_id in &axiom.prime_elements {
             if !prime_elements.contains_key(element_id) {
                 return vec![];
