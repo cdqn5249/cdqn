@@ -67,10 +67,21 @@ pub struct DecompositionStrategy;
 impl ReasoningStrategy for DecompositionStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
         if context.input.name.contains("observation.intent") {
-            println!("Decomposition: Input is an intent, generating Causal Mode.");
+            println!("[Decomposition] Input is an intent, generating Causal Mode.");
+            let vector: Vec<f64> = context
+                .input
+                .payload
+                .iter()
+                .map(|&byte| f64::from(byte) / 255.0)
+                .collect();
+
+            if vector.is_empty() {
+                return;
+            }
+
             let mode = CausalMode {
                 mode_type: "intent".to_string(),
-                vector: vec![1.0, 0.5, 0.25],
+                vector,
                 source_cdu: context.input.name.clone(),
             };
             let mode_cdu = Cdu::from_payload(
@@ -86,6 +97,7 @@ impl ReasoningStrategy for DecompositionStrategy {
 pub struct TheoremStrategy;
 impl ReasoningStrategy for TheoremStrategy {
     fn execute(&self, context: &mut ReasoningContext) {
+        // First, check for CTD-based triggers.
         for cdu in &context.new_cdus {
             if let Some(CduPayload::CausalMode(mode)) = cdu.extract_payload() {
                 if mode.mode_type == "intent" {
@@ -111,6 +123,7 @@ impl ReasoningStrategy for TheoremStrategy {
             }
         }
 
+        // Fallback to standard premise-matching.
         let known_element_ids: HashSet<_> = context.kb.prime_elements().keys().cloned().collect();
         for theorem in context.kb.theorems() {
             // FIX: A theorem MUST have premises to be matched this way.
