@@ -91,7 +91,7 @@ pub fn run() {
         }
     }
 
-    thread::sleep(Duration::from_millis(500));
+    thread::sleep(Duration::from_millis(500)); // Allow seeding to process.
 
     // 4. Initiate a graceful shutdown.
     println!("\n[Runtime] Genesis complete. Shutting down components.");
@@ -152,4 +152,4 @@ fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
             )
         }
     }
-}
+                }
