@@ -142,7 +142,7 @@ impl PrimeElement {
                 Some(read_string(bytes, &mut pos)?)
             }
             _ => {
-                pos += 1;
+                // FIX: The pos increment was unused. The byte is consumed by the match.
                 None
             }
         };
