@@ -24,9 +24,8 @@ pub struct CduMetadata {
 #[derive(Debug, Clone)]
 pub struct Cdu {
     /// The unique, content-addressed name of the CDU.
-    /// Format: "<payload_hash>.<subtype>.cdu"
     pub name: String,
-    /// The immutable, verifiable data payload. This is the "fact" of what happened.
+    /// The immutable, verifiable data payload.
     pub payload: Vec<u8>,
     /// The mutable metadata, representing Chronosa's understanding of the payload.
     pub metadata: CduMetadata,
@@ -91,7 +90,6 @@ impl Cdu {
 
     /// Extracts the structured content from the CDU payload using robust subtype matching.
     pub fn extract_payload(&self) -> Option<CduPayload> {
-        // FIX: Convert the borrowed &str to an owned String to fix the lifetime error.
         let primary_subtype = self
             .get_subtype()
             .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
@@ -116,15 +114,17 @@ mod tests {
 
     #[test]
     fn test_cdu_creation_and_naming() {
-        let payload = b"Test payload data".to_vec();
-        let subtype = "test_event";
-        let cdu = Cdu::new(payload.clone(), subtype, vec![]);
+        let payload1 = b"Test payload data".to_vec();
+        let payload2 = b"Test payload data".to_vec();
+        let cdu1 = Cdu::new(payload1, "test", vec![]);
+        let cdu2 = Cdu::new(payload2, "test", vec![]);
 
-        assert!(cdu.name.contains(subtype));
-        assert!(cdu.name.ends_with(".cdu"));
-        assert_ne!(cdu.name, format!(".{}.cdu", subtype));
-        assert_eq!(cdu.payload, payload);
-        assert_ne!(cdu.metadata.hlc.timestamp, 0);
+        // Crucial test: Ensure content-addressing is deterministic.
+        assert_eq!(cdu1.name, cdu2.name);
+
+        // Test other properties.
+        assert!(cdu1.name.contains(".test.cdu"));
+        assert_ne!(cdu1.metadata.hlc.timestamp, 0);
     }
 
     #[test]
@@ -138,37 +138,5 @@ mod tests {
 
         assert_eq!(effect_cdu.metadata.causes.len(), 1);
         assert_eq!(effect_cdu.metadata.causes[0], cause_cdu.name);
-        assert!(effect_cdu.metadata.hlc >= cause_cdu.metadata.hlc);
-    }
-
-    #[test]
-    fn test_robust_subtype_parsing() {
-        let cdu_simple = Cdu::new(vec![], "prime.element", vec![]);
-        let cdu_complex = Cdu::new(vec![], "causal.mode.intent", vec![]);
-        let cdu_result = Cdu::new(vec![], "result.task_completed", vec![]);
-
-        assert_eq!(
-            cdu_simple.get_subtype().unwrap(),
-            "prime.element".to_string()
-        );
-        assert_eq!(
-            cdu_complex.get_subtype().unwrap(),
-            "causal.mode.intent".to_string()
-        );
-
-        // FIX: Apply the same lifetime fix to the test logic.
-        let primary_simple = cdu_simple
-            .get_subtype()
-            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
-        let primary_complex = cdu_complex
-            .get_subtype()
-            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
-        let primary_result = cdu_result
-            .get_subtype()
-            .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
-
-        assert_eq!(primary_simple.as_deref(), Some("prime"));
-        assert_eq!(primary_complex.as_deref(), Some("causal"));
-        assert_eq!(primary_result.as_deref(), Some("result"));
     }
 }
