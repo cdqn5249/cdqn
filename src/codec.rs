@@ -4,8 +4,9 @@
 //! A custom, minimalist binary codec for Chronosa's data structures.
 
 use crate::cdu::{Cdu, CduMetadata};
-// --- FIX: The import for ChronosaCore is removed ---
 use crate::hlc::Hlc;
+use crate::payloads::{Axiom, CausalMode, Constraint, Theorem};
+use crate::reasoning::{PrimeElement, SemiAxiom};
 
 // A simple trait for encoding an object into a byte buffer.
 pub trait Encode {
@@ -59,6 +60,19 @@ impl Decode for u64 {
     }
 }
 
+impl Encode for f64 {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        buffer.extend_from_slice(&self.to_le_bytes());
+    }
+}
+impl Decode for f64 {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        let (float_bytes, rest) = buffer.split_at(std::mem::size_of::<f64>());
+        *buffer = rest;
+        f64::from_le_bytes(float_bytes.try_into().unwrap())
+    }
+}
+
 impl Encode for String {
     fn encode(&self, buffer: &mut Vec<u8>) {
         (self.len() as u64).encode(buffer);
@@ -90,6 +104,26 @@ impl<T: Decode> Decode for Vec<T> {
             vec.push(T::decode(buffer));
         }
         vec
+    }
+}
+
+impl<T: Encode> Encode for Option<T> {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        match self {
+            Some(val) => {
+                1u8.encode(buffer);
+                val.encode(buffer);
+            }
+            None => 0u8.encode(buffer),
+        }
+    }
+}
+impl<T: Decode> Decode for Option<T> {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        match u8::decode(buffer) {
+            1 => Some(T::decode(buffer)),
+            _ => None,
+        }
     }
 }
 
@@ -144,4 +178,125 @@ impl Decode for Cdu {
     }
 }
 
-// --- FIX: The obsolete implementations for ChronosaCore are removed ---
+// --- Payload Struct Implementations ---
+
+impl Encode for PrimeElement {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        self.id.encode(buffer);
+        self.world.encode(buffer);
+        self.representation.encode(buffer);
+        self.description.encode(buffer);
+        self.irreducibility_proof.encode(buffer);
+        self.symmetric_pair.encode(buffer);
+    }
+}
+impl Decode for PrimeElement {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        Self {
+            id: String::decode(buffer),
+            world: String::decode(buffer),
+            representation: Vec::<f64>::decode(buffer),
+            description: String::decode(buffer),
+            irreducibility_proof: String::decode(buffer),
+            symmetric_pair: Option::<String>::decode(buffer),
+            relationships: Default::default(),
+        }
+    }
+}
+
+impl Encode for SemiAxiom {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        self.id.encode(buffer);
+        self.world.encode(buffer);
+        self.prime_elements.encode(buffer);
+        self.description.encode(buffer);
+        self.weight.encode(buffer);
+    }
+}
+impl Decode for SemiAxiom {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        Self {
+            id: String::decode(buffer),
+            world: String::decode(buffer),
+            prime_elements: Vec::<String>::decode(buffer),
+            description: String::decode(buffer),
+            weight: f64::decode(buffer),
+        }
+    }
+}
+
+impl Encode for Axiom {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        self.id.encode(buffer);
+        self.worlds.encode(buffer);
+        self.premises.encode(buffer);
+        self.description.encode(buffer);
+        self.weight.encode(buffer);
+    }
+}
+impl Decode for Axiom {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        Self {
+            id: String::decode(buffer),
+            worlds: Vec::<String>::decode(buffer),
+            premises: Vec::<String>::decode(buffer),
+            description: String::decode(buffer),
+            weight: f64::decode(buffer),
+        }
+    }
+}
+
+impl Encode for Theorem {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        self.premises.encode(buffer);
+        self.conclusion.encode(buffer);
+        self.proof_path.encode(buffer);
+        self.confidence_score.encode(buffer);
+    }
+}
+impl Decode for Theorem {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        Self {
+            premises: Vec::<String>::decode(buffer),
+            conclusion: String::decode(buffer),
+            proof_path: Vec::<String>::decode(buffer),
+            confidence_score: f64::decode(buffer),
+        }
+    }
+}
+
+impl Encode for Constraint {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        self.target_path.encode(buffer);
+        self.inhibiting_context.encode(buffer);
+        self.reason.encode(buffer);
+        self.world.encode(buffer);
+    }
+}
+impl Decode for Constraint {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        Self {
+            target_path: Vec::<String>::decode(buffer),
+            inhibiting_context: String::decode(buffer),
+            reason: String::decode(buffer),
+            world: String::decode(buffer),
+        }
+    }
+}
+
+impl Encode for CausalMode {
+    fn encode(&self, buffer: &mut Vec<u8>) {
+        self.mode_type.encode(buffer);
+        self.vector.encode(buffer);
+        self.source_cdu.encode(buffer);
+    }
+}
+impl Decode for CausalMode {
+    fn decode(buffer: &mut &[u8]) -> Self {
+        Self {
+            mode_type: String::decode(buffer),
+            vector: Vec::<f64>::decode(buffer),
+            source_cdu: String::decode(buffer),
+        }
+    }
+}
