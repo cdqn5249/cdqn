@@ -152,4 +152,4 @@ fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
             )
         }
     }
-                }
+}
