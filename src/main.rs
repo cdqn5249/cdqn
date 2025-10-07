@@ -56,7 +56,9 @@ fn main() {
         .unwrap();
 
     // --- The Learning Phase ---
-    println!("\n[LEARNING] Pausing for 6 seconds for the RefinementEngine to discover the symmetry...");
+    println!(
+        "\n[LEARNING] Pausing for 6 seconds for the RefinementEngine to discover the symmetry..."
+    );
     thread::sleep(Duration::from_secs(6));
 
     // --- The Proof ---
@@ -85,7 +87,9 @@ fn main() {
     });
 
     if success_is_linked && failure_is_linked {
-        println!("SUCCESS: The RefinementEngine correctly identified and linked the symmetric pair.");
+        println!(
+            "SUCCESS: The RefinementEngine correctly identified and linked the symmetric pair."
+        );
     } else {
         println!("FAILURE: The RefinementEngine did not link the symmetric pair.");
     }
