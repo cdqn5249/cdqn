@@ -158,8 +158,8 @@ fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
 mod tests {
     use super::*;
     use crate::storage::rehydrate_from_log;
-    use std::io::Write;
     use rand::{distributions::Alphanumeric, Rng};
+    use std::io::Write;
 
     #[test]
     fn test_genesis_parsing_and_storage() {
@@ -211,9 +211,9 @@ mod tests {
 
         // 4. Rehydrate the log and verify the contents.
         let rehydrated_cdus = rehydrate_from_log(&log_path).unwrap();
+
         assert_eq!(rehydrated_cdus.len(), expected_cdu_count);
 
-        // FIX: Robustly check the payload content, not the name.
         let pe_found = rehydrated_cdus.iter().any(|c| {
             if let Some(CduPayload::PrimeElement(pe)) = c.extract_payload() {
                 pe.id == "pe-test-1"
@@ -229,8 +229,14 @@ mod tests {
             }
         });
 
-        assert!(pe_found, "The test PrimeElement was not found in the rehydrated log.");
-        assert!(sa_found, "The test SemiAxiom was not found in the rehydrated log.");
+        assert!(
+            pe_found,
+            "The test PrimeElement was not found in the rehydrated log."
+        );
+        assert!(
+            sa_found,
+            "The test SemiAxiom was not found in the rehydrated log."
+        );
 
         // 5. Clean up.
         fs::remove_dir_all(temp_dir).unwrap();
