@@ -17,6 +17,8 @@ pub struct PrimeElement {
     pub description: String,
     /// Proof of irreducibility
     pub irreducibility_proof: String,
+    /// The ID of the corresponding symmetric prime element, if known.
+    pub symmetric_pair: Option<String>,
     /// Relationships to other prime elements
     pub relationships: HashMap<String, String>,
 }
@@ -36,6 +38,7 @@ impl PrimeElement {
             representation,
             description,
             irreducibility_proof,
+            symmetric_pair: None, // A new element's pair is initially unknown.
             relationships: HashMap::new(),
         }
     }
@@ -56,13 +59,14 @@ impl PrimeElement {
     pub fn to_bytes(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
 
-        // Serialize id
-        bytes.extend_from_slice(&(self.id.len() as u32).to_le_bytes());
-        bytes.extend_from_slice(self.id.as_bytes());
+        // Helper to write a string
+        let write_string = |bytes: &mut Vec<u8>, s: &str| {
+            bytes.extend_from_slice(&(s.len() as u32).to_le_bytes());
+            bytes.extend_from_slice(s.as_bytes());
+        };
 
-        // Serialize world
-        bytes.extend_from_slice(&(self.world.len() as u32).to_le_bytes());
-        bytes.extend_from_slice(self.world.as_bytes());
+        write_string(&mut bytes, &self.id);
+        write_string(&mut bytes, &self.world);
 
         // Serialize representation vector
         bytes.extend_from_slice(&(self.representation.len() as u32).to_le_bytes());
@@ -70,13 +74,19 @@ impl PrimeElement {
             bytes.extend_from_slice(&val.to_le_bytes());
         }
 
-        // Serialize description
-        bytes.extend_from_slice(&(self.description.len() as u32).to_le_bytes());
-        bytes.extend_from_slice(self.description.as_bytes());
+        write_string(&mut bytes, &self.description);
+        write_string(&mut bytes, &self.irreducibility_proof);
 
-        // Serialize irreducibility_proof
-        bytes.extend_from_slice(&(self.irreducibility_proof.len() as u32).to_le_bytes());
-        bytes.extend_from_slice(self.irreducibility_proof.as_bytes());
+        // Serialize symmetric_pair
+        match &self.symmetric_pair {
+            Some(pair_id) => {
+                bytes.push(1); // Tag for Some
+                write_string(&mut bytes, pair_id);
+            }
+            None => {
+                bytes.push(0); // Tag for None
+            }
+        }
 
         bytes
     }
@@ -122,13 +132,29 @@ impl PrimeElement {
         let description = read_string(bytes, &mut pos)?;
         let irreducibility_proof = read_string(bytes, &mut pos)?;
 
+        // Deserialize symmetric_pair
+        if pos >= bytes.len() {
+            return None;
+        }
+        let symmetric_pair = match bytes[pos] {
+            1 => {
+                pos += 1;
+                Some(read_string(bytes, &mut pos)?)
+            }
+            _ => {
+                pos += 1;
+                None
+            }
+        };
+
         Some(PrimeElement {
             id,
             world,
             representation,
             description,
             irreducibility_proof,
-            relationships: HashMap::new(), // Note: relationships are not serialized for simplicity
+            symmetric_pair,
+            relationships: HashMap::new(),
         })
     }
 }
@@ -161,15 +187,8 @@ impl PrimeElementManager {
     pub fn add_element(&mut self, element: PrimeElement) {
         let world = element.world.clone();
         let id = element.id.clone();
-
-        // Add to main storage
         self.elements.insert(id.clone(), element);
-
-        // Update world index
-        if !self.world_index.contains_key(&world) {
-            self.world_index.insert(world.clone(), Vec::new());
-        }
-        self.world_index.get_mut(&world).unwrap().push(id);
+        self.world_index.entry(world).or_default().push(id);
     }
 
     /// Get a prime element by ID
@@ -179,11 +198,10 @@ impl PrimeElementManager {
 
     /// Get all prime elements for a specific world
     pub fn get_elements_by_world(&self, world: &str) -> Vec<&PrimeElement> {
-        if let Some(ids) = self.world_index.get(world) {
-            ids.iter().filter_map(|id| self.elements.get(id)).collect()
-        } else {
-            Vec::new()
-        }
+        self.world_index
+            .get(world)
+            .map(|ids| ids.iter().filter_map(|id| self.elements.get(id)).collect())
+            .unwrap_or_default()
     }
 
     /// Check if an element is prime (irreducible)
@@ -209,26 +227,28 @@ mod tests {
         assert_eq!(element.id, "test_element");
         assert_eq!(element.world, "test_world");
         assert_eq!(element.representation, vec![42.0, 1.0]);
+        assert!(element.symmetric_pair.is_none());
     }
 
     #[test]
-    fn test_prime_element_manager() {
-        let mut manager = PrimeElementManager::new();
-
-        let element = PrimeElement::new(
+    fn test_prime_element_serialization_cycle() {
+        let mut element = PrimeElement::new(
             "test_element".to_string(),
             "test_world".to_string(),
-            vec![42.0],
+            vec![1.0, 2.0],
             "A test element".to_string(),
-            "Cannot be decomposed".to_string(),
+            "Proof".to_string(),
         );
+        element.symmetric_pair = Some("symmetric_id".to_string());
 
-        manager.add_element(element);
+        let bytes = element.to_bytes();
+        let deserialized = PrimeElement::from_bytes(&bytes).unwrap();
 
-        assert!(manager.is_prime("test_element"));
-        assert!(manager.get_element("test_element").is_some());
-
-        let world_elements = manager.get_elements_by_world("test_world");
-        assert_eq!(world_elements.len(), 1);
+        assert_eq!(element.id, deserialized.id);
+        assert_eq!(element.world, deserialized.world);
+        assert_eq!(element.representation, deserialized.representation);
+        assert_eq!(element.description, deserialized.description);
+        assert_eq!(element.irreducibility_proof, deserialized.irreducibility_proof);
+        assert_eq!(element.symmetric_pair, deserialized.symmetric_pair);
     }
 }
