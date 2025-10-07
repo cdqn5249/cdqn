@@ -38,7 +38,7 @@ impl PrimeElement {
             representation,
             description,
             irreducibility_proof,
-            symmetric_pair: None, // A new element's pair is initially unknown.
+            symmetric_pair: None,
             relationships: HashMap::new(),
         }
     }
@@ -48,115 +48,8 @@ impl PrimeElement {
         self.relationships.insert(target_id, relationship_type);
     }
 
-    /// Convert to CDU
-    pub fn to_cdu(&self) -> Cdu {
-        let payload_bytes = self.to_bytes();
-        let subtype = format!("prime.element.{}", self.world);
-        Cdu::new(payload_bytes, &subtype, vec![])
-    }
-
-    /// Convert the PrimeElement to a byte representation for storage
-    pub fn to_bytes(&self) -> Vec<u8> {
-        let mut bytes = Vec::new();
-
-        // Helper to write a string
-        let write_string = |bytes: &mut Vec<u8>, s: &str| {
-            bytes.extend_from_slice(&(s.len() as u32).to_le_bytes());
-            bytes.extend_from_slice(s.as_bytes());
-        };
-
-        write_string(&mut bytes, &self.id);
-        write_string(&mut bytes, &self.world);
-
-        // Serialize representation vector
-        bytes.extend_from_slice(&(self.representation.len() as u32).to_le_bytes());
-        for val in &self.representation {
-            bytes.extend_from_slice(&val.to_le_bytes());
-        }
-
-        write_string(&mut bytes, &self.description);
-        write_string(&mut bytes, &self.irreducibility_proof);
-
-        // Serialize symmetric_pair
-        match &self.symmetric_pair {
-            Some(pair_id) => {
-                bytes.push(1); // Tag for Some
-                write_string(&mut bytes, pair_id);
-            }
-            None => {
-                bytes.push(0); // Tag for None
-            }
-        }
-
-        bytes
-    }
-
-    /// Create a PrimeElement from a byte representation
-    pub fn from_bytes(bytes: &[u8]) -> Option<Self> {
-        let mut pos = 0;
-
-        // Helper to read a string
-        let read_string = |bytes: &[u8], pos: &mut usize| -> Option<String> {
-            if *pos + 4 > bytes.len() {
-                return None;
-            }
-            let len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
-            *pos += 4;
-            if *pos + len > bytes.len() {
-                return None;
-            }
-            let s = String::from_utf8(bytes[*pos..*pos + len].to_vec()).ok()?;
-            *pos += len;
-            Some(s)
-        };
-
-        let id = read_string(bytes, &mut pos)?;
-        let world = read_string(bytes, &mut pos)?;
-
-        // Deserialize representation vector
-        if pos + 4 > bytes.len() {
-            return None;
-        }
-        let vec_len = u32::from_le_bytes(bytes[pos..pos + 4].try_into().ok()?) as usize;
-        pos += 4;
-        let mut representation = Vec::with_capacity(vec_len);
-        for _ in 0..vec_len {
-            if pos + 8 > bytes.len() {
-                return None;
-            }
-            let val = f64::from_le_bytes(bytes[pos..pos + 8].try_into().ok()?);
-            pos += 8;
-            representation.push(val);
-        }
-
-        let description = read_string(bytes, &mut pos)?;
-        let irreducibility_proof = read_string(bytes, &mut pos)?;
-
-        // Deserialize symmetric_pair
-        if pos >= bytes.len() {
-            return None;
-        }
-        let symmetric_pair = match bytes[pos] {
-            1 => {
-                pos += 1;
-                Some(read_string(bytes, &mut pos)?)
-            }
-            _ => {
-                // FIX: The pos increment was unused. The byte is consumed by the match.
-                None
-            }
-        };
-
-        Some(PrimeElement {
-            id,
-            world,
-            representation,
-            description,
-            irreducibility_proof,
-            symmetric_pair,
-            relationships: HashMap::new(),
-        })
-    }
+    // The to_cdu method is removed for now as it depends on the old serialization.
+    // We will replace it with a better mechanism after the codec is updated.
 }
 
 /// Manager for prime elements
@@ -230,28 +123,6 @@ mod tests {
         assert!(element.symmetric_pair.is_none());
     }
 
-    #[test]
-    fn test_prime_element_serialization_cycle() {
-        let mut element = PrimeElement::new(
-            "test_element".to_string(),
-            "test_world".to_string(),
-            vec![1.0, 2.0],
-            "A test element".to_string(),
-            "Proof".to_string(),
-        );
-        element.symmetric_pair = Some("symmetric_id".to_string());
-
-        let bytes = element.to_bytes();
-        let deserialized = PrimeElement::from_bytes(&bytes).unwrap();
-
-        assert_eq!(element.id, deserialized.id);
-        assert_eq!(element.world, deserialized.world);
-        assert_eq!(element.representation, deserialized.representation);
-        assert_eq!(element.description, deserialized.description);
-        assert_eq!(
-            element.irreducibility_proof,
-            deserialized.irreducibility_proof
-        );
-        assert_eq!(element.symmetric_pair, deserialized.symmetric_pair);
-    }
+    // The serialization test has been removed as it is no longer valid.
+    // This will be replaced by a codec-level test.
 }
