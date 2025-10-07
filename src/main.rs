@@ -5,13 +5,14 @@ use cdqn::cdu::Cdu;
 use cdqn::engine::{Engine, EngineInput};
 use cdqn::executor::Executor;
 use cdqn::projector::{Rule, RuleBasedProjector};
+use cdqn::refinement::RefinementEngine;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
 
 fn main() {
-    println!("--- CASCADING TEST 3: Engine <-> Executor Feedback Loop ---");
-    let log_path = PathBuf::from("test3_feedback_loop.cdqn");
+    println!("--- CASCADING TEST 4: Full System Integration ---");
+    let log_path = PathBuf::from("test4_full_system.cdqn");
     let _ = std::fs::remove_file(&log_path);
 
     // 1. Use a simple projector.
@@ -30,10 +31,13 @@ fn main() {
     // 2. Create the core components.
     let (engine, command_receiver) = Engine::new(log_path, Box::new(projector));
     let input_sender = engine.input_sender.clone();
+    let shared_state = engine.state.clone();
 
-    // 3. Spawn the Engine and Executor, now with the feedback loop re-enabled.
-    println!("[MAIN] Spawning Executor thread with feedback sender...");
+    // 3. Spawn ALL THREE threads.
+    println!("[MAIN] Spawning Executor thread...");
     let executor_handle = Executor::spawn(command_receiver, input_sender.clone());
+    println!("[MAIN] Spawning RefinementEngine thread...");
+    let refinement_handle = RefinementEngine::spawn(shared_state, input_sender.clone());
     println!("[MAIN] Spawning Engine thread...");
     let engine_handle = thread::spawn(move || engine.run());
     println!("[MAIN] All threads spawned.");
@@ -43,8 +47,9 @@ fn main() {
     let observation = Cdu::new(b"test".to_vec(), "observation", vec![]);
     input_sender.send(EngineInput::Cdu(observation)).unwrap();
 
-    // Give the system time to complete the full loop.
-    thread::sleep(Duration::from_millis(500));
+    // Give the system time to complete the full loop AND for the RefinementEngine to run once.
+    println!("\n[MAIN] Waiting 6 seconds for all threads to perform work...");
+    thread::sleep(Duration::from_secs(6));
 
     // 5. Initiate the graceful shutdown.
     println!("\n[MAIN] Sending shutdown signal...");
@@ -61,5 +66,9 @@ fn main() {
     executor_handle.join().unwrap();
     println!("[MAIN] Executor thread joined successfully.");
 
-    println!("\n--- TEST 3 PASSED: Feedback loop shutdown is clean. ---");
+    println!("[MAIN] Waiting for RefinementEngine thread to join...");
+    refinement_handle.join().unwrap();
+    println!("[MAIN] RefinementEngine thread joined successfully.");
+
+    println!("\n--- TEST 4 PASSED: Full system shutdown is clean. ---");
 }
