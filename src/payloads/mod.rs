@@ -4,11 +4,13 @@
 //! Defines the concrete data structures for all CDU payload types.
 
 // 1. Declare the sub-modules we will create.
+pub mod axiom; // New module
 pub mod causal_mode;
 pub mod constraint;
 pub mod theorem;
 
 // 2. Re-export the structs for easy access from other parts of the application.
+pub use axiom::Axiom; // New re-export
 pub use causal_mode::CausalMode;
 pub use constraint::Constraint;
 pub use theorem::Theorem;
