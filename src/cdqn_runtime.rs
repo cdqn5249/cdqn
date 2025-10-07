@@ -6,9 +6,10 @@
 use crate::cdu::{Cdu, CduPayload};
 use crate::engine::{Engine, EngineInput};
 use crate::executor::Executor;
-use crate::payloads::{Constraint, Theorem}; // We might need these later
+// FIX: Removed unused imports for Constraint and Theorem
 use crate::reasoning::{PrimeElement, ReasoningProjector, SemiAxiom};
-use crate::worlds;
+use crate::refinement::RefinementEngine; // FIX: Added missing import
+use crate::worlds; // FIX: Added missing import
 use serde::Deserialize;
 use std::fs;
 use std::path::PathBuf;
