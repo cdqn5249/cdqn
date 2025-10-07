@@ -159,7 +159,7 @@ mod tests {
     use super::*;
     use crate::storage::rehydrate_from_log;
     use std::io::Write;
-    // FIX: Import rand for generating a unique test directory name.
+    // Import rand for generating a unique test directory name.
     use rand::{distributions::Alphanumeric, Rng};
 
     #[test]
