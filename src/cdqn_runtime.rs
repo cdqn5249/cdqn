@@ -5,152 +5,145 @@
 
 use crate::cdu::{Cdu, CduPayload};
 use crate::engine::{Engine, EngineInput};
-use crate::executor::Executor;
-use crate::reasoning::{PrimeElement, ReasoningProjector, SemiAxiom};
-use crate::refinement::RefinementEngine;
-use serde::Deserialize;
-use std::fs;
-use std::path::PathBuf;
-use std::thread;
-use std::time::Duration;
-
-// --- Structs for deserializing genesis.json ---
-
-#[derive(Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct GenesisPrimeElement {
-    id: String,
-    world: String,
-    representation: Vec<f64>,
-    description: String,
-    #[serde(default)]
-    symmetric_pair: Option<String>,
+use crate of the CDU.
+pub enum EngineInput {
+    Cdu(Cdu),
+    Shutdown,
 }
 
-#[derive(Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct GenesisSemiAxiom {
-    id: String,
-    world: String,
-    premises: Vec<String>,
-    description: String,
+/// The Engine drives the agent's lifecycle.
+pub struct Engine {
+    pub state: SharedState,
+    log_path: PathBuf,
+    projector: Arc<dyn Projector>,
+    // The channel now receives the EngineInput enum.
+    input_receiver: mpsc::Receiver<EngineInput>,
+    // The sender now sends the EngineInput enum.
+    pub input_sender: mpsc::Sender<EngineInput>,
+    pub command_sender: mpsc::Sender<Cdu>,
 }
 
-#[derive(Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct GenesisAxiom {
-    id: String,
-    worlds: Vec<String>,
-    premises: Vec<String>,
-    description: String,
-}
+impl Engine {
+    pub fn new(log_path: PathBuf, projector: Box<dyn Projector>) -> (Self, mpsc::Receiver<Cdu>) {
+        let events = rehydrate_from_log(&log_path).unwrap_or_default();
+        let initial_state = events
+            .into_iter()
+            .fold(ChronosaState::default(), |mut acc, event| {
+                if event.metadata.hlc > acc.hlc {
+                    acc.hlc = event.metadata.hlc.clone();
+                }
+                acc.log.push(event);
+                acc
+            });
 
-#[derive(Deserialize, Debug)]
-#[serde(tag = "type")]
-enum GenesisCdu {
-    PrimeElement(GenesisPrimeElement),
-    SemiAxiom(GenesisSemiAxiom),
-    Axiom(GenesisAxiom),
-}
+        let (input_sender, input_receiver) = mpsc::channel();
+        let (command_sender, command_receiver) = mpsc::channel();
 
-/// The main entry point for the cdqnRuntime.
-pub fn run() {
-    println!("--- cdqnRuntime: Starting ---");
-    let log_path = PathBuf::from("runtime.cdqn");
-    let _ = fs::remove_file(&log_path);
+        let engine = Self {
+            state: Arc::new(RwLock::new(initial_state)),
+            log_path,
+            projector: Arc::from(projector),
+            input_receiver,
+            input_sender,
+            command_sender,
+        };
 
-    // 1. Create the core components.
-    let projector = ReasoningProjector::new();
-    let (engine, command_receiver) = Engine::new(log_path, Box::new(projector));
-    let input_sender = engine.input_sender.clone();
-    let shared_state = engine.state.clone();
+        (engine, command_receiver)
+    }
 
-    // 2. Spawn all background threads.
-    // FIX: Call the new, simpler Executor::spawn function.
-    let executor_handle = Executor::spawn(command_receiver);
-    let refinement_handle = RefinementEngine::spawn(shared_state.clone(), input_sender.clone());
-    let engine_handle = thread::spawn(move || engine.run());
+    /// The main run loop. It listens for inputs and drives the state forward.
+    pub fn run(self) {
+        println!("[Engine] Thread spawned and running.");
+        while let Ok(input) = self.input_receiver.recv() {
+            match input {
+                EngineInput::Cdu(input_cdu) => {
+                    let state = self.state.clone();
+                    let projector = self.projector.clone();
+                    let command_sender = self.command_sender.clone();
+                    let log_path = self.log_path.clone();
 
-    // 3. Read and process the genesis file.
-    println!("\n[Runtime] Reading genesis.json to build the universe...");
-    let genesis_content = fs::read_to_string("genesis.json").expect("Failed to read genesis.json");
+                    thread::spawn(move || {
+                        if let Ok(state_guard) = state.read() {
+                            let new_events = projector.project(&state_guard, &input_cdu);
 
-    match serde_json::from_str::<Vec<GenesisCdu>>(&genesis_content) {
-        Ok(genesis_cdus) => {
-            for genesis_cdu in genesis_cdus {
-                let (cdu_payload, subtype) = convert_genesis_cdu(genesis_cdu);
-                let cdu = Cdu::from_payload(cdu_payload, &subtype, vec![]);
-                println!("[Runtime] Seeding Genesis CDU: {}", cdu.name);
-                if input_sender.send(EngineInput::Cdu(cdu)).is_err() {
-                    eprintln!("[Runtime] Failed to send genesis CDU, engine may have shut down.");
-                    break;
+                            let mut all_events_to_persist = vec![input_cdu];
+                            all_events_to_persist.extend(new_events);
+                            append_events_to_log(&all_events_to_persist, &log_path).unwrap();
+
+                            for event in &all_events_to_persist {
+                                if event.name.contains(".command.") {
+                                    command_sender.send(event.clone()).unwrap();
+                                }
+                            }
+
+                            for event in all_events_to_persist {
+                                evolve_shared_state(&state, event);
+                            }
+                        } else {
+                            eprintln!("Failed to acquire read lock for projection.");
+                        }
+                    });
+                }
+                EngineInput::Shutdown => {
+                    println!("Engine: Shutdown signal received.");
+                    break; // Exit the loop.
                 }
             }
         }
-        Err(e) => {
-            eprintln!("[Runtime] Error parsing genesis.json: {}", e);
-        }
+        println!("Engine: Shutting down.");
     }
-
-    thread::sleep(Duration::from_millis(500));
-
-    // 4. Initiate a graceful shutdown.
-    println!("\n[Runtime] Genesis complete. Shutting down components.");
-    if input_sender.send(EngineInput::Shutdown).is_err() {
-        println!("[Runtime] Engine channel was already closed.");
-    }
-
-    // 5. Wait for the threads to terminate.
-    engine_handle.join().unwrap();
-    executor_handle.join().unwrap();
-    refinement_handle.join().unwrap();
-
-    println!("\nSession complete.");
 }
 
-/// Converts a deserialized GenesisCdu into a real CduPayload and subtype string.
-fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
-    match genesis_cdu {
-        GenesisCdu::PrimeElement(pe) => {
-            let prime_element = PrimeElement {
-                id: pe.id,
-                world: pe.world.clone(),
-                representation: pe.representation,
-                description: pe.description,
-                irreducibility_proof: "Self-evident (Genesis)".to_string(),
-                symmetric_pair: pe.symmetric_pair,
-                relationships: Default::default(),
-            };
-            (
-                CduPayload::PrimeElement(prime_element),
-                format!("prime.element.{}", pe.world),
-            )
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::state::ChronosaState;
+    use std::fs;
+    use std::sync::mpsc;
+    use std::thread;
+
+    // A mock projector for testing purposes.
+    #[derive(Clone)]
+    struct TestProjector;
+    impl Projector for TestProjector {
+        fn project(&self, _state: &ChronosaState, input: &Cdu) -> Vec<Cdu> {
+            if input.name.contains(".observation.") {
+                vec![Cdu::new(
+                    b"test command".to_vec(),
+                    "command.test",
+                    vec![input.name.clone()],
+                )]
+            } else {
+                vec![]
+            }
         }
-        GenesisCdu::SemiAxiom(sa) => {
-            let semi_axiom = SemiAxiom {
-                id: sa.id,
-                world: sa.world.clone(),
-                prime_elements: sa.premises,
-                description: sa.description,
-                weight: 1.0,
-            };
-            (
-                CduPayload::SemiAxiom(semi_axiom),
-                format!("semi-axiom.{}", sa.world),
-            )
+    }
+
+    #[test]
+    fn test_concurrent_engine_processing_flow() {
+        let temp_log_path = PathBuf::from("concurrent_engine_test.cdqn");
+        let _ = fs::remove_file(&temp_log_path);
+
+        let (engine, _command_receiver) =
+            Engine::new(temp_log_path.clone(), Box::new(TestProjector));
+        let input_sender = engine.input_sender.clone();
+
+        let (task_done_sender, task_done_receiver) = mpsc::channel::<()>();
+
+        for _ in 0..5 {
+            let observation = Cdu::new(b"test observation".to_vec(), "observation", vec![]);
+            input_sender.send(EngineInput::Cdu(observation)).unwrap();
+            let done_sender = task_done_sender.clone();
+            thread::spawn(move || {
+                done_sender.send(()).unwrap();
+            });
         }
-        GenesisCdu::Axiom(ax) => {
-            let axiom = SemiAxiom {
-                id: ax.id,
-                world: ax.worlds.join("_"),
-                prime_elements: ax.premises,
-                description: ax.description,
-                weight: 1.0,
-            };
-            (
-                CduPayload::SemiAxiom(axiom),
-                format!("axiom.{}", ax.worlds.join("_")),
-            )
+        drop(task_done_sender);
+
+        for _ in 0..5 {
+            task_done_receiver.recv().unwrap();
         }
+
+        let _ = fs::remove_file(&temp_log_path);
     }
 }
