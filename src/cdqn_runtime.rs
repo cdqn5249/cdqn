@@ -153,3 +153,66 @@ fn convert_genesis_cdu(genesis_cdu: GenesisCdu) -> (CduPayload, String) {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::storage::rehydrate_from_log;
+    use std::io::Write;
+
+    #[test]
+    fn test_genesis_parsing_and_storage() {
+        // 1. Define a temporary path for the test files.
+        let temp_dir = std::env::temp_dir().join(format!("genesis_test_{}", thread::current().id().as_u64()));
+        fs::create_dir_all(&temp_dir).unwrap();
+        let genesis_path = temp_dir.join("genesis.json");
+        let log_path = temp_dir.join("test_runtime.cdqn");
+
+        // 2. Create a dummy genesis.json file.
+        let dummy_genesis_content = r#"[
+            {
+                "type": "PrimeElement", "id": "pe-test-1", "world": "TestWorld", "representation": [1.0],
+                "description": "Test PE 1"
+            },
+            {
+                "type": "SemiAxiom", "id": "sa-test-1", "world": "TestWorld", "premises": ["pe-test-1"],
+                "description": "Test SA 1"
+            }
+        ]"#;
+        let mut file = fs::File::create(&genesis_path).unwrap();
+        file.write_all(dummy_genesis_content.as_bytes()).unwrap();
+
+        // 3. Run a simplified version of the runtime logic.
+        let projector = ReasoningProjector::new();
+        let (engine, command_receiver) = Engine::new(log_path.clone(), Box::new(projector));
+        let input_sender = engine.input_sender.clone();
+        let _executor_handle = Executor::spawn(command_receiver, input_sender.clone());
+        let engine_handle = thread::spawn(move || engine.run());
+
+        let genesis_content = fs::read_to_string(genesis_path).unwrap();
+        let genesis_cdus: Vec<GenesisCdu> = serde_json::from_str(&genesis_content).unwrap();
+        let expected_cdu_count = genesis_cdus.len();
+
+        for genesis_cdu in genesis_cdus {
+            let (cdu_payload, subtype) = convert_genesis_cdu(genesis_cdu);
+            let cdu = Cdu::from_payload(cdu_payload, &subtype, vec![]);
+            input_sender.send(EngineInput::Cdu(cdu)).unwrap();
+        }
+
+        thread::sleep(Duration::from_millis(200)); // Allow processing
+        input_sender.send(EngineInput::Shutdown).unwrap();
+        engine_handle.join().unwrap();
+
+        // 4. Rehydrate the log and verify the contents.
+        let rehydrated_cdus = rehydrate_from_log(&log_path).unwrap();
+
+        // The log should contain the genesis CDUs plus any heartbeats from the (now-removed) RefinementEngine.
+        // For this test, we'll just check that the genesis CDUs are present.
+        assert_eq!(rehydrated_cdus.len(), expected_cdu_count);
+        assert!(rehydrated_cdus.iter().any(|c| c.name.contains("pe-test-1")));
+        assert!(rehydrated_cdus.iter().any(|c| c.name.contains("sa-test-1")));
+
+        // 5. Clean up.
+        fs::remove_dir_all(temp_dir).unwrap();
+    }
+}
