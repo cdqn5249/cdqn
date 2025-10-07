@@ -23,6 +23,7 @@ struct GenesisPrimeElement {
     world: String,
     representation: Vec<f64>,
     description: String,
+    #[serde(default)] // Handles cases where symmetric_pair is null or missing
     symmetric_pair: Option<String>,
 }
 
@@ -72,12 +73,11 @@ pub fn run() {
     // 3. Read and process the genesis file.
     println!("\n[Runtime] Reading genesis.json to build the universe...");
     let genesis_content = fs::read_to_string("genesis.json").expect("Failed to read genesis.json");
-    let genesis_parser = serde_json::Deserializer::from_str(&genesis_content);
-    let stream = genesis_parser.into_iter::<GenesisCdu>();
-
-    for item in stream {
-        match item {
-            Ok(genesis_cdu) => {
+    
+    // FIX: Parse the entire file as a Vec<GenesisCdu> instead of a stream.
+    match serde_json::from_str::<Vec<GenesisCdu>>(&genesis_content) {
+        Ok(genesis_cdus) => {
+            for genesis_cdu in genesis_cdus {
                 let (cdu_payload, subtype) = convert_genesis_cdu(genesis_cdu);
                 let cdu = Cdu::from_payload(cdu_payload, &subtype, vec![]);
                 println!("[Runtime] Seeding Genesis CDU: {}", cdu.name);
@@ -86,10 +86,9 @@ pub fn run() {
                     break;
                 }
             }
-            Err(e) => {
-                eprintln!("[Runtime] Error parsing genesis.json: {}", e);
-                break;
-            }
+        }
+        Err(e) => {
+            eprintln!("[Runtime] Error parsing genesis.json: {}", e);
         }
     }
 
