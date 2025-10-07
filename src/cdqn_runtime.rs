@@ -73,7 +73,7 @@ pub fn run() {
     // 3. Read and process the genesis file.
     println!("\n[Runtime] Reading genesis.json to build the universe...");
     let genesis_content = fs::read_to_string("genesis.json").expect("Failed to read genesis.json");
-    
+
     // FIX: Parse the entire file as a Vec<GenesisCdu> instead of a stream.
     match serde_json::from_str::<Vec<GenesisCdu>>(&genesis_content) {
         Ok(genesis_cdus) => {
