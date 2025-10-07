@@ -163,7 +163,8 @@ mod tests {
     #[test]
     fn test_genesis_parsing_and_storage() {
         // 1. Define a temporary path for the test files.
-        let temp_dir = std::env::temp_dir().join(format!("genesis_test_{}", thread::current().id().as_u64()));
+        let temp_dir =
+            std::env::temp_dir().join(format!("genesis_test_{}", thread::current().id().as_u64()));
         fs::create_dir_all(&temp_dir).unwrap();
         let genesis_path = temp_dir.join("genesis.json");
         let log_path = temp_dir.join("test_runtime.cdqn");
@@ -206,8 +207,7 @@ mod tests {
         // 4. Rehydrate the log and verify the contents.
         let rehydrated_cdus = rehydrate_from_log(&log_path).unwrap();
 
-        // The log should contain the genesis CDUs plus any heartbeats from the (now-removed) RefinementEngine.
-        // For this test, we'll just check that the genesis CDUs are present.
+        // The log should contain exactly the genesis CDUs.
         assert_eq!(rehydrated_cdus.len(), expected_cdu_count);
         assert!(rehydrated_cdus.iter().any(|c| c.name.contains("pe-test-1")));
         assert!(rehydrated_cdus.iter().any(|c| c.name.contains("sa-test-1")));
