@@ -3,6 +3,7 @@
 
 //! Defines the Axiom struct, a rule verified across multiple worlds.
 
+// FIX: Correctly import and use read_string.
 use crate::payloads::{read_string, read_vec_string, write_vec_string};
 
 /// Represents a rule or transformation that has been verified to be valid
@@ -25,10 +26,17 @@ impl Axiom {
     /// Serializes the Axiom into a byte vector.
     pub fn to_bytes(&self) -> Vec<u8> {
         let mut bytes = Vec::new();
-        write_vec_string(&mut bytes, &vec![self.id.clone()]); // Re-use for single string
+        // Helper to write a single string.
+        let write_string = |bytes: &mut Vec<u8>, s: &str| {
+            bytes.extend_from_slice(&(s.len() as u32).to_le_bytes());
+            bytes.extend_from_slice(s.as_bytes());
+        };
+
+        // FIX: Use the correct serialization for single strings.
+        write_string(&mut bytes, &self.id);
         write_vec_string(&mut bytes, &self.worlds);
         write_vec_string(&mut bytes, &self.premises);
-        write_vec_string(&mut bytes, &vec![self.description.clone()]);
+        write_string(&mut bytes, &self.description);
         bytes.extend_from_slice(&self.weight.to_le_bytes());
         bytes
     }
@@ -36,10 +44,11 @@ impl Axiom {
     /// Deserializes an Axiom from a byte slice.
     pub fn from_bytes(bytes: &[u8]) -> Option<Self> {
         let mut pos = 0;
-        let id = read_vec_string(bytes, &mut pos)?.remove(0);
+        // FIX: Use the correct deserialization for single strings.
+        let id = read_string(bytes, &mut pos)?;
         let worlds = read_vec_string(bytes, &mut pos)?;
         let premises = read_vec_string(bytes, &mut pos)?;
-        let description = read_vec_string(bytes, &mut pos)?.remove(0);
+        let description = read_string(bytes, &mut pos)?;
         if pos + 8 > bytes.len() {
             return None;
         }
