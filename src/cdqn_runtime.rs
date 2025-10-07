@@ -159,13 +159,11 @@ mod tests {
     use super::*;
     use crate::storage::rehydrate_from_log;
     use std::io::Write;
-    // Import rand for generating a unique test directory name.
     use rand::{distributions::Alphanumeric, Rng};
 
     #[test]
     fn test_genesis_parsing_and_storage() {
         // 1. Define a temporary path for the test files.
-        // Use a random string to ensure the test directory is unique.
         let rand_string: String = rand::thread_rng()
             .sample_iter(&Alphanumeric)
             .take(12)
@@ -207,16 +205,32 @@ mod tests {
             input_sender.send(EngineInput::Cdu(cdu)).unwrap();
         }
 
-        thread::sleep(Duration::from_millis(200)); // Allow processing
+        thread::sleep(Duration::from_millis(200));
         input_sender.send(EngineInput::Shutdown).unwrap();
         engine_handle.join().unwrap();
 
         // 4. Rehydrate the log and verify the contents.
         let rehydrated_cdus = rehydrate_from_log(&log_path).unwrap();
-
         assert_eq!(rehydrated_cdus.len(), expected_cdu_count);
-        assert!(rehydrated_cdus.iter().any(|c| c.name.contains("pe-test-1")));
-        assert!(rehydrated_cdus.iter().any(|c| c.name.contains("sa-test-1")));
+
+        // FIX: Robustly check the payload content, not the name.
+        let pe_found = rehydrated_cdus.iter().any(|c| {
+            if let Some(CduPayload::PrimeElement(pe)) = c.extract_payload() {
+                pe.id == "pe-test-1"
+            } else {
+                false
+            }
+        });
+        let sa_found = rehydrated_cdus.iter().any(|c| {
+            if let Some(CduPayload::SemiAxiom(sa)) = c.extract_payload() {
+                sa.id == "sa-test-1"
+            } else {
+                false
+            }
+        });
+
+        assert!(pe_found, "The test PrimeElement was not found in the rehydrated log.");
+        assert!(sa_found, "The test SemiAxiom was not found in the rehydrated log.");
 
         // 5. Clean up.
         fs::remove_dir_all(temp_dir).unwrap();
