@@ -1,7 +1,7 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/main.rs
 
-use cdqn::cdu::Cdu;
+// FIX: Removed unused `use cdqn::cdu::Cdu;`
 use cdqn::engine::{Engine, EngineInput};
 use cdqn::executor::Executor;
 use cdqn::reasoning::{PrimeElement, ReasoningProjector};
