@@ -10,55 +10,63 @@ use crate::reasoning::{PrimeElement, SemiAxiom};
 use std::sync::mpsc::Sender;
 
 /// Creates the foundational CDUs for Rworld and sends them to the Engine.
-/// Rworld is founded on the principle of a fundamental duality.
+/// Rworld is founded on the principle of a fundamental, symmetric duality.
 pub fn create_rworld(input_sender: &Sender<EngineInput>) {
     println!("[Worlds] Creating Rworld based on the fundamental duality...");
 
-    // The First Prime Element: The Negative Pole.
-    let pe_neg_pole = PrimeElement::new(
-        "pe-r-neg-pole".to_string(),
+    // 1. Define the IDs for the symmetric pair.
+    let neg_pole_id = "pe-r-neg-pole".to_string();
+    let pos_pole_id = "pe-r-pos-pole".to_string();
+
+    // 2. Create the Prime Elements and immediately link them symmetrically.
+    let mut pe_neg_pole = PrimeElement::new(
+        neg_pole_id.clone(),
         "Rworld".to_string(),
-        vec![NEGATIVE_POLE], // Use the constant from metaphysics
+        vec![NEGATIVE_POLE],
         "The fundamental pole of negative potential.".to_string(),
         "Self-evident".to_string(),
     );
+    pe_neg_pole.symmetric_pair = Some(pos_pole_id.clone());
+
+    let mut pe_pos_pole = PrimeElement::new(
+        pos_pole_id.clone(),
+        "Rworld".to_string(),
+        vec![POSITIVE_POLE],
+        "The fundamental pole of positive potential.".to_string(),
+        "Self-evident".to_string(),
+    );
+    pe_pos_pole.symmetric_pair = Some(neg_pole_id.clone());
+
+    // 3. Send the symmetrically-linked poles to the Engine.
     if input_sender
         .send(EngineInput::Cdu(pe_neg_pole.to_cdu()))
         .is_err()
     {
-        return; // Engine is gone, abort.
+        return;
     }
-
-    // The Second Prime Element: The Positive Pole.
-    let pe_pos_pole = PrimeElement::new(
-        "pe-r-pos-pole".to_string(),
-        "Rworld".to_string(),
-        vec![POSITIVE_POLE], // Use the constant from metaphysics
-        "The fundamental pole of positive potential.".to_string(),
-        "Self-evident".to_string(),
-    );
     if input_sender
         .send(EngineInput::Cdu(pe_pos_pole.to_cdu()))
         .is_err()
     {
-        return; // Engine is gone, abort.
+        return;
     }
 
-    // The First Rule: "Duality". This defines the relationship between the two poles.
+    // 4. The First Rule: "Duality". This rule is composed from the two poles.
+    // Its own representation should have a larger magnitude to satisfy compositionality.
     let sa_duality = SemiAxiom::new(
         "sa-r-duality".to_string(),
         "Rworld".to_string(),
-        vec!["pe-r-neg-pole".to_string(), "pe-r-pos-pole".to_string()],
+        vec![neg_pole_id, pos_pole_id], // Its causes are the two poles.
         "The principle that positive and negative potentials are fundamental and co-existing."
             .to_string(),
     );
     let axiom_cdu = Cdu::from_payload(
         CduPayload::SemiAxiom(sa_duality),
         "semi-axiom.Rworld",
-        vec![],
+        vec![], // The axiom itself is foundational, its causes are its premises.
     );
     if input_sender.send(EngineInput::Cdu(axiom_cdu)).is_err() {
-        return; // Engine is gone, abort.
+        return;
     }
 
     println!("[Worlds] Rworld created successfully.");
