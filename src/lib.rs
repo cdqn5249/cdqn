@@ -2,6 +2,7 @@
 // File path: src/lib.rs
 
 pub mod cdu;
+pub mod cdqn_runtime;
 pub mod codec;
 pub mod engine;
 pub mod executor;
