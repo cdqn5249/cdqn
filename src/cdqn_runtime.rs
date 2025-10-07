@@ -159,12 +159,19 @@ mod tests {
     use super::*;
     use crate::storage::rehydrate_from_log;
     use std::io::Write;
+    // FIX: Import rand for generating a unique test directory name.
+    use rand::{distributions::Alphanumeric, Rng};
 
     #[test]
     fn test_genesis_parsing_and_storage() {
         // 1. Define a temporary path for the test files.
-        let temp_dir =
-            std::env::temp_dir().join(format!("genesis_test_{}", thread::current().id().as_u64()));
+        // Use a random string to ensure the test directory is unique.
+        let rand_string: String = rand::thread_rng()
+            .sample_iter(&Alphanumeric)
+            .take(12)
+            .map(char::from)
+            .collect();
+        let temp_dir = std::env::temp_dir().join(format!("genesis_test_{}", rand_string));
         fs::create_dir_all(&temp_dir).unwrap();
         let genesis_path = temp_dir.join("genesis.json");
         let log_path = temp_dir.join("test_runtime.cdqn");
@@ -207,7 +214,6 @@ mod tests {
         // 4. Rehydrate the log and verify the contents.
         let rehydrated_cdus = rehydrate_from_log(&log_path).unwrap();
 
-        // The log should contain exactly the genesis CDUs.
         assert_eq!(rehydrated_cdus.len(), expected_cdu_count);
         assert!(rehydrated_cdus.iter().any(|c| c.name.contains("pe-test-1")));
         assert!(rehydrated_cdus.iter().any(|c| c.name.contains("sa-test-1")));
