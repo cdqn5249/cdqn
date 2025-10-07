@@ -6,7 +6,7 @@
 //! This is the fundamental, atomic unit of memory for the Chronosa agent.
 
 use crate::hlc::Hlc;
-use crate::payloads::{CausalMode, Constraint, Theorem};
+use crate::payloads::{Axiom, CausalMode, Constraint, Theorem}; // Import the new Axiom struct
 use sha2::{Digest, Sha256};
 
 /// The mutable metadata associated with a Causal Data Unit.
@@ -37,6 +37,7 @@ pub enum CduPayload {
     Raw(Vec<u8>),
     PrimeElement(crate::reasoning::PrimeElement),
     SemiAxiom(crate::reasoning::SemiAxiom),
+    Axiom(Axiom), // New variant
     Theorem(Theorem),
     Constraint(Constraint),
     CausalMode(CausalMode),
@@ -70,6 +71,7 @@ impl Cdu {
             CduPayload::Raw(bytes) => bytes,
             CduPayload::PrimeElement(element) => element.to_bytes(),
             CduPayload::SemiAxiom(axiom) => axiom.to_bytes(),
+            CduPayload::Axiom(axiom) => axiom.to_bytes(), // New match arm
             CduPayload::Theorem(theorem) => theorem.to_bytes(),
             CduPayload::Constraint(constraint) => constraint.to_bytes(),
             CduPayload::CausalMode(mode) => mode.to_bytes(),
@@ -100,6 +102,7 @@ impl Cdu {
             Some("semi-axiom") => {
                 crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
             }
+            Some("axiom") => Axiom::from_bytes(&self.payload).map(CduPayload::Axiom), // New match arm
             Some("theorem") => Theorem::from_bytes(&self.payload).map(CduPayload::Theorem),
             Some("constraint") => Constraint::from_bytes(&self.payload).map(CduPayload::Constraint),
             Some("causal") => CausalMode::from_bytes(&self.payload).map(CduPayload::CausalMode),
@@ -119,10 +122,7 @@ mod tests {
         let cdu1 = Cdu::new(payload1, "test", vec![]);
         let cdu2 = Cdu::new(payload2, "test", vec![]);
 
-        // Crucial test: Ensure content-addressing is deterministic.
         assert_eq!(cdu1.name, cdu2.name);
-
-        // Test other properties.
         assert!(cdu1.name.contains(".test.cdu"));
         assert_ne!(cdu1.metadata.hlc.timestamp, 0);
     }
