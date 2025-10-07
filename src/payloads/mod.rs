@@ -3,41 +3,40 @@
 
 //! Defines the concrete data structures for all CDU payload types.
 
-// 1. Declare the sub-modules we will create.
-pub mod axiom; // New module
+pub mod axiom;
 pub mod causal_mode;
 pub mod constraint;
 pub mod theorem;
 
-// 2. Re-export the structs for easy access from other parts of the application.
-pub use axiom::Axiom; // New re-export
+pub use axiom::Axiom;
 pub use causal_mode::CausalMode;
 pub use constraint::Constraint;
 pub use theorem::Theorem;
 
-// 3. Define shared (crate-public) serialization helpers here.
+// --- Shared Serialization Helpers ---
 
+// FIX: Use u64 for all length prefixes to be consistent with the main codec.
 pub(crate) fn write_vec_string(bytes: &mut Vec<u8>, vec: &Vec<String>) {
-    bytes.extend_from_slice(&(vec.len() as u32).to_le_bytes());
+    bytes.extend_from_slice(&(vec.len() as u64).to_le_bytes());
     for item in vec {
-        bytes.extend_from_slice(&(item.len() as u32).to_le_bytes());
+        bytes.extend_from_slice(&(item.len() as u64).to_le_bytes());
         bytes.extend_from_slice(item.as_bytes());
     }
 }
 
 pub(crate) fn read_vec_string(bytes: &[u8], pos: &mut usize) -> Option<Vec<String>> {
-    if *pos + 4 > bytes.len() {
+    if *pos + 8 > bytes.len() {
         return None;
     }
-    let vec_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
-    *pos += 4;
+    let vec_len = u64::from_le_bytes(bytes[*pos..*pos + 8].try_into().ok()?) as usize;
+    *pos += 8;
     let mut vec = Vec::with_capacity(vec_len);
     for _ in 0..vec_len {
-        if *pos + 4 > bytes.len() {
+        if *pos + 8 > bytes.len() {
             return None;
         }
-        let str_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
-        *pos += 4;
+        let str_len = u64::from_le_bytes(bytes[*pos..*pos + 8].try_into().ok()?) as usize;
+        *pos += 8;
         if *pos + str_len > bytes.len() {
             return None;
         }
@@ -49,11 +48,11 @@ pub(crate) fn read_vec_string(bytes: &[u8], pos: &mut usize) -> Option<Vec<Strin
 }
 
 pub(crate) fn read_string(bytes: &[u8], pos: &mut usize) -> Option<String> {
-    if *pos + 4 > bytes.len() {
+    if *pos + 8 > bytes.len() {
         return None;
     }
-    let str_len = u32::from_le_bytes(bytes[*pos..*pos + 4].try_into().ok()?) as usize;
-    *pos += 4;
+    let str_len = u64::from_le_bytes(bytes[*pos..*pos + 8].try_into().ok()?) as usize;
+    *pos += 8;
     if *pos + str_len > bytes.len() {
         return None;
     }
