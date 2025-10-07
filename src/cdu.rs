@@ -5,29 +5,24 @@
 //!
 //! This is the fundamental, atomic unit of memory for the Chronosa agent.
 
+use crate::codec::{Decode, Encode}; // Import the core traits
 use crate::hlc::Hlc;
-use crate::payloads::{Axiom, CausalMode, Constraint, Theorem}; // Import the new Axiom struct
+use crate::payloads::{Axiom, CausalMode, Constraint, Theorem};
 use sha2::{Digest, Sha256};
 
 /// The mutable metadata associated with a Causal Data Unit.
 #[derive(Debug, Clone)]
 pub struct CduMetadata {
-    /// The Hybrid Logical Clock timestamp for when this CDU was created or last updated.
     pub hlc: Hlc,
-    /// A list of CDU names that are the direct causes for this CDU's existence.
     pub causes: Vec<String>,
-    /// User-defined tags for querying and classification.
     pub tags: Vec<String>,
 }
 
 /// A Causal Data Unit (CDU).
 #[derive(Debug, Clone)]
 pub struct Cdu {
-    /// The unique, content-addressed name of the CDU.
     pub name: String,
-    /// The immutable, verifiable data payload.
     pub payload: Vec<u8>,
-    /// The mutable metadata, representing Chronosa's understanding of the payload.
     pub metadata: CduMetadata,
 }
 
@@ -37,10 +32,17 @@ pub enum CduPayload {
     Raw(Vec<u8>),
     PrimeElement(crate::reasoning::PrimeElement),
     SemiAxiom(crate::reasoning::SemiAxiom),
-    Axiom(Axiom), // New variant
+    Axiom(Axiom),
     Theorem(Theorem),
     Constraint(Constraint),
     CausalMode(CausalMode),
+}
+
+/// Helper function to correctly serialize any payload type that implements Encode.
+fn to_payload_bytes<T: Encode>(payload_struct: &T) -> Vec<u8> {
+    let mut buffer = Vec::new();
+    payload_struct.encode(&mut buffer);
+    buffer
 }
 
 impl Cdu {
@@ -67,14 +69,15 @@ impl Cdu {
 
     /// Creates a new CDU from a CduPayload.
     pub fn from_payload(payload: CduPayload, subtype: &str, causes: Vec<String>) -> Self {
-        let payload_bytes = match payload {
-            CduPayload::Raw(bytes) => bytes,
-            CduPayload::PrimeElement(element) => element.to_bytes(),
-            CduPayload::SemiAxiom(axiom) => axiom.to_bytes(),
-            CduPayload::Axiom(axiom) => axiom.to_bytes(), // New match arm
-            CduPayload::Theorem(theorem) => theorem.to_bytes(),
-            CduPayload::Constraint(constraint) => constraint.to_bytes(),
-            CduPayload::CausalMode(mode) => mode.to_bytes(),
+        // FIX: Use the new generic helper function.
+        let payload_bytes = match &payload {
+            CduPayload::Raw(bytes) => bytes.clone(),
+            CduPayload::PrimeElement(element) => to_payload_bytes(element),
+            CduPayload::SemiAxiom(axiom) => to_payload_bytes(axiom),
+            CduPayload::Axiom(axiom) => to_payload_bytes(axiom),
+            CduPayload::Theorem(theorem) => to_payload_bytes(theorem),
+            CduPayload::Constraint(constraint) => to_payload_bytes(constraint),
+            CduPayload::CausalMode(mode) => to_payload_bytes(mode),
         };
         Self::new(payload_bytes, subtype, causes)
     }
@@ -96,16 +99,15 @@ impl Cdu {
             .get_subtype()
             .and_then(|s| s.split('.').next().map(|s_slice| s_slice.to_string()));
 
+        // FIX: Use the Decode trait for deserialization.
+        let mut payload_slice = self.payload.as_slice();
         match primary_subtype.as_deref() {
-            Some("prime") => crate::reasoning::PrimeElement::from_bytes(&self.payload)
-                .map(CduPayload::PrimeElement),
-            Some("semi-axiom") => {
-                crate::reasoning::SemiAxiom::from_bytes(&self.payload).map(CduPayload::SemiAxiom)
-            }
-            Some("axiom") => Axiom::from_bytes(&self.payload).map(CduPayload::Axiom), // New match arm
-            Some("theorem") => Theorem::from_bytes(&self.payload).map(CduPayload::Theorem),
-            Some("constraint") => Constraint::from_bytes(&self.payload).map(CduPayload::Constraint),
-            Some("causal") => CausalMode::from_bytes(&self.payload).map(CduPayload::CausalMode),
+            Some("prime") => Some(CduPayload::PrimeElement(crate::reasoning::PrimeElement::decode(&mut payload_slice))),
+            Some("semi-axiom") => Some(CduPayload::SemiAxiom(crate::reasoning::SemiAxiom::decode(&mut payload_slice))),
+            Some("axiom") => Some(CduPayload::Axiom(Axiom::decode(&mut payload_slice))),
+            Some("theorem") => Some(CduPayload::Theorem(Theorem::decode(&mut payload_slice))),
+            Some("constraint") => Some(CduPayload::Constraint(Constraint::decode(&mut payload_slice))),
+            Some("causal") => Some(CduPayload::CausalMode(CausalMode::decode(&mut payload_slice))),
             _ => Some(CduPayload::Raw(self.payload.clone())),
         }
     }
