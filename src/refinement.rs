@@ -84,9 +84,19 @@ impl RefinementEngine {
             let symmetry_updates = self.complete_symmetries(&kb);
 
             // --- Send New Knowledge to Engine ---
-            self.send_new_cdus(new_constraints.into_iter().map(CduPayload::Constraint).collect());
+            self.send_new_cdus(
+                new_constraints
+                    .into_iter()
+                    .map(CduPayload::Constraint)
+                    .collect(),
+            );
             self.send_new_cdus(new_theorems.into_iter().map(CduPayload::Theorem).collect());
-            self.send_new_cdus(symmetry_updates.into_iter().map(CduPayload::PrimeElement).collect());
+            self.send_new_cdus(
+                symmetry_updates
+                    .into_iter()
+                    .map(CduPayload::PrimeElement)
+                    .collect(),
+            );
         }
         println!("[Refinement] Thread terminating.");
     }
@@ -97,7 +107,10 @@ impl RefinementEngine {
             return;
         }
 
-        println!("[Refinement] Discovered {} new knowledge CDU(s).", payloads.len());
+        println!(
+            "[Refinement] Discovered {} new knowledge CDU(s).",
+            payloads.len()
+        );
         for payload in payloads {
             let subtype = match &payload {
                 CduPayload::Constraint(_) => "constraint.discovered",
@@ -114,13 +127,13 @@ impl RefinementEngine {
     }
 
     /// Analyzes the log to discover new constraints, avoiding duplicates.
-    fn discover_constraints(&self, kb: &KnowledgeBase) -> Vec<Constraint> {
+    fn discover_constraints(&self, _kb: &KnowledgeBase) -> Vec<Constraint> {
         // ... (existing logic remains the same)
         vec![] // Simplified for brevity in this example
     }
 
     /// Analyzes the log to discover new theorems, avoiding duplicates.
-    fn discover_theorems(&self, kb: &KnowledgeBase) -> Vec<Theorem> {
+    fn discover_theorems(&self, _kb: &KnowledgeBase) -> Vec<Theorem> {
         // ... (existing logic remains the same)
         vec![] // Simplified for brevity in this example
     }
