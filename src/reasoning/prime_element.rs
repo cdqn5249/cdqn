@@ -248,7 +248,10 @@ mod tests {
         assert_eq!(element.world, deserialized.world);
         assert_eq!(element.representation, deserialized.representation);
         assert_eq!(element.description, deserialized.description);
-        assert_eq!(element.irreducibility_proof, deserialized.irreducibility_proof);
+        assert_eq!(
+            element.irreducibility_proof,
+            deserialized.irreducibility_proof
+        );
         assert_eq!(element.symmetric_pair, deserialized.symmetric_pair);
     }
 }
