@@ -7,6 +7,8 @@ use std::fs::{File, OpenOptions};
 use std::io::{self, Read, Write};
 use std::path::Path;
 use std::sync::{Mutex, OnceLock};
+use std::thread;
+use std::time::Duration;
 
 const MAGIC_BYTES: &[u8; 6] = b"CDQNv1";
 
@@ -15,9 +17,7 @@ const MAGIC_BYTES: &[u8; 6] = b"CDQNv1";
 static FILE_WRITE_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
 /// Appends a batch of CDUs to the log file.
-/// Builds the full payload buffer, writes it atomically under a global mutex,
-/// flushes and syncs the file, and performs a small Windows-specific barrier
-/// to ensure the OS file cache fully updates before any reader reopens it.
+/// Fully synchronized and cross-platform safe.
 pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
     // Prepare in-memory buffer
     let mut buffer = Vec::new();
@@ -42,18 +42,50 @@ pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
     file.write_all(&buffer)?;
     file.sync_all()?; // ensure written to disk
 
-    // ✅ Windows-specific safety barrier:
-    // Closing and short sleep to let NTFS flush caches fully.
+    // Windows-specific barrier
     drop(file);
     #[cfg(target_os = "windows")]
-    std::thread::sleep(std::time::Duration::from_millis(20));
+    thread::sleep(Duration::from_millis(20));
 
     Ok(())
 }
 
 /// Reads and decodes all events from the log file.
-/// Returns Ok(Vec<Cdu>) or Err on corruption or truncation.
+/// Retries on transient truncation errors caused by concurrent writers.
 pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
+    const MAX_RETRIES: usize = 5;
+    const RETRY_DELAY_MS: u64 = 40;
+
+    for attempt in 0..=MAX_RETRIES {
+        match try_rehydrate(path) {
+            Ok(events) => return Ok(events),
+            Err(e) if e.kind() == io::ErrorKind::UnexpectedEof => {
+                if attempt < MAX_RETRIES {
+                    eprintln!(
+                        "[Rehydrate] Partial file read ({}). Retrying... ({}/{})",
+                        e, attempt + 1, MAX_RETRIES
+                    );
+                    thread::sleep(Duration::from_millis(RETRY_DELAY_MS));
+                    continue;
+                } else {
+                    return Err(io::Error::new(
+                        io::ErrorKind::UnexpectedEof,
+                        format!(
+                            "Truncated payload after {} retries — giving up. Original: {}",
+                            MAX_RETRIES, e
+                        ),
+                    ));
+                }
+            }
+            Err(e) => return Err(e),
+        }
+    }
+
+    unreachable!()
+}
+
+/// Internal helper for actual file reading/decoding.
+fn try_rehydrate(path: &Path) -> io::Result<Vec<Cdu>> {
     if !path.exists() {
         return Ok(Vec::new());
     }
@@ -79,7 +111,6 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
     let mut events = Vec::new();
 
     while !slice.is_empty() {
-        // Length header
         if slice.len() < std::mem::size_of::<u64>() {
             return Err(io::Error::new(
                 io::ErrorKind::UnexpectedEof,
@@ -105,8 +136,8 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
     Ok(events)
 }
 
-/// Force an explicit disk sync on demand.
-/// Used by tests and critical checkpoints.
+/// Forces the synchronization of the log file's in-memory buffers to the disk.
+/// Useful when external systems need deterministic persistence guarantees.
 pub fn sync_log_to_disk(path: &Path) -> io::Result<()> {
     if path.exists() {
         let file = File::open(path)?;
