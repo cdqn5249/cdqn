@@ -37,33 +37,37 @@ pub fn create_rworld(input_sender: &Sender<EngineInput>) {
     );
     pe_pos_pole.symmetric_pair = Some(neg_pole_id.clone());
 
-    // 3. Send the symmetrically-linked poles to the Engine.
-    if input_sender
-        .send(EngineInput::Cdu(pe_neg_pole.to_cdu()))
-        .is_err()
-    {
-        return;
-    }
-    if input_sender
-        .send(EngineInput::Cdu(pe_pos_pole.to_cdu()))
-        .is_err()
-    {
+    // 3. Send the symmetrically-linked poles to the Engine using the correct method.
+    let neg_pole_cdu = Cdu::from_payload(
+        CduPayload::PrimeElement(pe_neg_pole),
+        "prime.element.Rworld",
+        vec![],
+    );
+    if input_sender.send(EngineInput::Cdu(neg_pole_cdu)).is_err() {
         return;
     }
 
-    // 4. The First Rule: "Duality". This rule is composed from the two poles.
-    // Its own representation should have a larger magnitude to satisfy compositionality.
+    let pos_pole_cdu = Cdu::from_payload(
+        CduPayload::PrimeElement(pe_pos_pole),
+        "prime.element.Rworld",
+        vec![],
+    );
+    if input_sender.send(EngineInput::Cdu(pos_pole_cdu)).is_err() {
+        return;
+    }
+
+    // 4. The First Rule: "Duality".
     let sa_duality = SemiAxiom::new(
         "sa-r-duality".to_string(),
         "Rworld".to_string(),
-        vec![neg_pole_id, pos_pole_id], // Its causes are the two poles.
+        vec![neg_pole_id, pos_pole_id],
         "The principle that positive and negative potentials are fundamental and co-existing."
             .to_string(),
     );
     let axiom_cdu = Cdu::from_payload(
         CduPayload::SemiAxiom(sa_duality),
         "semi-axiom.Rworld",
-        vec![], // The axiom itself is foundational, its causes are its premises.
+        vec![],
     );
     if input_sender.send(EngineInput::Cdu(axiom_cdu)).is_err() {
         return;
