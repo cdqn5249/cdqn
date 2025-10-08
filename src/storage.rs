@@ -63,7 +63,9 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
                 if attempt < MAX_RETRIES {
                     eprintln!(
                         "[Rehydrate] Partial file read ({}). Retrying... ({}/{})",
-                        e, attempt + 1, MAX_RETRIES
+                        e,
+                        attempt + 1,
+                        MAX_RETRIES
                     );
                     thread::sleep(Duration::from_millis(RETRY_DELAY_MS));
                     continue;
