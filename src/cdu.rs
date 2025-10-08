@@ -102,12 +102,20 @@ impl Cdu {
         // FIX: Use the Decode trait for deserialization.
         let mut payload_slice = self.payload.as_slice();
         match primary_subtype.as_deref() {
-            Some("prime") => Some(CduPayload::PrimeElement(crate::reasoning::PrimeElement::decode(&mut payload_slice))),
-            Some("semi-axiom") => Some(CduPayload::SemiAxiom(crate::reasoning::SemiAxiom::decode(&mut payload_slice))),
+            Some("prime") => Some(CduPayload::PrimeElement(
+                crate::reasoning::PrimeElement::decode(&mut payload_slice),
+            )),
+            Some("semi-axiom") => Some(CduPayload::SemiAxiom(crate::reasoning::SemiAxiom::decode(
+                &mut payload_slice,
+            ))),
             Some("axiom") => Some(CduPayload::Axiom(Axiom::decode(&mut payload_slice))),
             Some("theorem") => Some(CduPayload::Theorem(Theorem::decode(&mut payload_slice))),
-            Some("constraint") => Some(CduPayload::Constraint(Constraint::decode(&mut payload_slice))),
-            Some("causal") => Some(CduPayload::CausalMode(CausalMode::decode(&mut payload_slice))),
+            Some("constraint") => Some(CduPayload::Constraint(Constraint::decode(
+                &mut payload_slice,
+            ))),
+            Some("causal") => Some(CduPayload::CausalMode(CausalMode::decode(
+                &mut payload_slice,
+            ))),
             _ => Some(CduPayload::Raw(self.payload.clone())),
         }
     }
