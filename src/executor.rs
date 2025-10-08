@@ -12,7 +12,6 @@ use std::thread;
 pub struct Executor;
 
 impl Executor {
-    // FIX: Re-introducing the result_sender to test the feedback loop.
     pub fn spawn(
         command_receiver: mpsc::Receiver<Cdu>,
         result_sender: mpsc::Sender<EngineInput>,
@@ -22,6 +21,17 @@ impl Executor {
             while let Ok(command_cdu) = command_receiver.recv() {
                 println!("[Executor] Received command: {}", command_cdu.name);
 
+                // CRITICAL FIX: Only send results for non-genesis commands
+                // This breaks the infinite memory loop during genesis bootstrap
+                if command_cdu.name.contains(".genesis.") || 
+                   command_cdu.name.contains(".prime.element.") ||
+                   command_cdu.name.contains(".semi-axiom.") ||
+                   command_cdu.name.contains(".axiom.") {
+                    println!("[Executor] Genesis/system command - skipping result feedback to break memory loop");
+                    continue;
+                }
+
+                // Only create results for actual user commands, not system/bootstrap commands
                 let result_cdu = Cdu::new(
                     b"Task completed successfully".to_vec(),
                     "result.task_completed",
