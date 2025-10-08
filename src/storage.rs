@@ -16,8 +16,9 @@ const MAGIC_BYTES: &[u8; 6] = b"CDQNv1";
 static FILE_WRITE_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
 /// Appends a list of serialized CDUs to the end of the log file.
-/// This function now builds a single buffer for the entire batch
+/// This function builds a single buffer for the entire batch
 /// and writes it while holding a global mutex to avoid interleaving.
+/// It now also forces a `sync_all()` to ensure full flush before rehydration.
 pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
     // Build a single write buffer containing length+payload for each event.
     let mut buffer = Vec::new();
@@ -43,16 +44,21 @@ pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
     let _guard = lock.lock().unwrap();
 
     // Open with append mode and perform a single write of our entire buffer.
-    // Using a single write_all reduces (and with the lock eliminates) risk
-    // of partial interleaving in the log file.
+    // Then flush to disk to guarantee completeness before any rehydration.
     let mut file = OpenOptions::new().create(true).append(true).open(path)?;
     file.write_all(&buffer)?;
+    file.sync_all()?; // ✅ ensures full flush before other threads read it
+
     Ok(())
 }
 
 /// Rehydrate the log file back into a list of CDUs.
 /// This function expects a consistent file format produced by append_events_to_log.
 pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
+    if !path.exists() {
+        return Ok(Vec::new());
+    }
+
     let mut file = File::open(path)?;
     let mut raw = Vec::new();
     file.read_to_end(&mut raw)?;
@@ -76,7 +82,6 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
 
     while !slice.is_empty() {
         // Read length header (u64)
-        // Defensive: ensure there are enough bytes left for the u64 header.
         if slice.len() < std::mem::size_of::<u64>() {
             return Err(io::Error::new(
                 io::ErrorKind::UnexpectedEof,
@@ -96,13 +101,21 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
         let (cdu_bytes, rest) = slice.split_at(len);
         slice = rest;
         let mut cdu_slice = cdu_bytes;
-        // Decode the CDU (may return Err via unwraps in Decode impls; bubble up as io::Error).
-        // We map decoding problems to io::Error for easier error handling by callers.
         let cdu = Cdu::decode(&mut cdu_slice);
         events.push(cdu);
     }
 
     Ok(events)
+}
+
+/// Forces the synchronization of the log file's in-memory buffers to the disk.
+/// Useful when external systems need deterministic persistence guarantees.
+pub fn sync_log_to_disk(path: &Path) -> io::Result<()> {
+    if path.exists() {
+        let file = File::open(path)?;
+        file.sync_all()?;
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -115,31 +128,24 @@ mod tests {
     #[test]
     fn test_log_rehydration_cycle() {
         let mut temp_path = env::temp_dir();
-        temp_path.push("cdqn_test_log.bin");
-
-        // 1. Remove file if present
+        temp_path.push("cdqn_storage_rehydration_test.cdqn");
         let _ = fs::remove_file(&temp_path);
 
-        // 2. Create two events
         let event1 = Cdu::new(b"event 1".to_vec(), "type1", vec![]);
-        let event2 = Cdu::new(b"event 2".to_vec(), "type2", vec![]);
+        let event2 = Cdu::new(b"event 2".to_vec(), "type2", vec![event1.name.clone()]);
+        let events = vec![event1.clone(), event2.clone()];
 
-        // 3. Append them in a single call
-        append_events_to_log(&[event1.clone(), event2.clone()], &temp_path).unwrap();
+        append_events_to_log(&events, &temp_path).unwrap();
+        let rehydrated_events = rehydrate_from_log(&temp_path).expect("Failed to rehydrate log.");
 
-        // 4. Rehydrate
-        let rehydrated = rehydrate_from_log(&temp_path).expect("Failed to rehydrate log.");
+        assert_eq!(events.len(), rehydrated_events.len());
+        assert_eq!(events[0].name, rehydrated_events[0].name);
+        assert_eq!(events[1].name, rehydrated_events[1].name);
+        assert_eq!(
+            events[1].metadata.causes,
+            rehydrated_events[1].metadata.causes
+        );
 
-        // 5. Verify
-        assert_eq!(rehydrated.len(), 2);
-        assert_eq!(events_names(&rehydrated), vec![event1.name, event2.name]);
-
-        // 6. Clean up
         fs::remove_file(temp_path).unwrap();
-    }
-
-    // small helper to map events to names for assertion readability
-    fn events_names(cdus: &[Cdu]) -> Vec<String> {
-        cdus.iter().map(|c| c.name.clone()).collect()
     }
 }
