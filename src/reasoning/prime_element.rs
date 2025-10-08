@@ -1,7 +1,7 @@
 // File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
 // File path: src/reasoning/prime_element.rs
 
-use crate::cdu::Cdu;
+// FIX: Removed unused `use crate::cdu::Cdu;`
 use std::collections::HashMap;
 
 /// Represents a prime element in Chronosa's reasoning model.
@@ -47,9 +47,6 @@ impl PrimeElement {
     pub fn add_relationship(&mut self, target_id: String, relationship_type: String) {
         self.relationships.insert(target_id, relationship_type);
     }
-
-    // The to_cdu method is removed for now as it depends on the old serialization.
-    // We will replace it with a better mechanism after the codec is updated.
 }
 
 /// Manager for prime elements
@@ -122,7 +119,4 @@ mod tests {
         assert_eq!(element.representation, vec![42.0, 1.0]);
         assert!(element.symmetric_pair.is_none());
     }
-
-    // The serialization test has been removed as it is no longer valid.
-    // This will be replaced by a codec-level test.
 }
