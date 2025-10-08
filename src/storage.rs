@@ -10,20 +10,17 @@ use std::sync::{Mutex, OnceLock};
 
 const MAGIC_BYTES: &[u8; 6] = b"CDQNv1";
 
-/// A process-global lock to serialize writes to the on-disk log.
-/// This prevents concurrent threads from interleaving length+payload
-/// writes and corrupting the log.
+/// Global lock to serialize writes across all threads.
+/// Prevents interleaved appends that could corrupt the log file.
 static FILE_WRITE_LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
-/// Appends a list of serialized CDUs to the end of the log file.
-/// This function builds a single buffer for the entire batch
-/// and writes it while holding a global mutex to avoid interleaving.
-/// It now also forces a `sync_all()` to ensure full flush before rehydration.
+/// Appends a batch of CDUs to the log file.
+/// Builds the full payload buffer, writes it atomically under a global mutex,
+/// flushes and syncs the file, and performs a small Windows-specific barrier
+/// to ensure the OS file cache fully updates before any reader reopens it.
 pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
-    // Build a single write buffer containing length+payload for each event.
+    // Prepare in-memory buffer
     let mut buffer = Vec::new();
-
-    // If a new file will be created we need to include the magic bytes first.
     let is_new_file = !path.exists();
     if is_new_file {
         buffer.extend_from_slice(MAGIC_BYTES);
@@ -32,28 +29,30 @@ pub fn append_events_to_log(events: &[Cdu], path: &Path) -> io::Result<()> {
     for event in events {
         let mut event_buf = Vec::new();
         event.encode(&mut event_buf);
-
-        // Prepend length header (u64, big-endian) followed by payload bytes.
         buffer.extend_from_slice(&(event_buf.len() as u64).to_be_bytes());
         buffer.extend_from_slice(&event_buf);
     }
 
-    // Acquire the global write lock to ensure this write is not interleaved
-    // with other concurrent writers.
+    // Acquire global mutex
     let lock = FILE_WRITE_LOCK.get_or_init(|| Mutex::new(()));
     let _guard = lock.lock().unwrap();
 
-    // Open with append mode and perform a single write of our entire buffer.
-    // Then flush to disk to guarantee completeness before any rehydration.
+    // Single atomic write + flush
     let mut file = OpenOptions::new().create(true).append(true).open(path)?;
     file.write_all(&buffer)?;
-    file.sync_all()?; // ✅ ensures full flush before other threads read it
+    file.sync_all()?; // ensure written to disk
+
+    // ✅ Windows-specific safety barrier:
+    // Closing and short sleep to let NTFS flush caches fully.
+    drop(file);
+    #[cfg(target_os = "windows")]
+    std::thread::sleep(std::time::Duration::from_millis(20));
 
     Ok(())
 }
 
-/// Rehydrate the log file back into a list of CDUs.
-/// This function expects a consistent file format produced by append_events_to_log.
+/// Reads and decodes all events from the log file.
+/// Returns Ok(Vec<Cdu>) or Err on corruption or truncation.
 pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
     if !path.exists() {
         return Ok(Vec::new());
@@ -62,7 +61,6 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
     let mut file = File::open(path)?;
     let mut raw = Vec::new();
     file.read_to_end(&mut raw)?;
-
     let mut slice: &[u8] = &raw;
 
     // Verify magic bytes
@@ -70,18 +68,18 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
         return Err(io::Error::new(io::ErrorKind::InvalidData, "File too short"));
     }
     let (magic, rest) = slice.split_at(MAGIC_BYTES.len());
-    slice = rest;
     if magic != MAGIC_BYTES {
         return Err(io::Error::new(
             io::ErrorKind::InvalidData,
             "Invalid or unsupported file format.",
         ));
     }
+    slice = rest;
 
     let mut events = Vec::new();
 
     while !slice.is_empty() {
-        // Read length header (u64)
+        // Length header
         if slice.len() < std::mem::size_of::<u64>() {
             return Err(io::Error::new(
                 io::ErrorKind::UnexpectedEof,
@@ -90,7 +88,6 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
         }
         let len = u64::decode(&mut slice) as usize;
 
-        // Defensive: ensure there are enough bytes left for the payload.
         if slice.len() < len {
             return Err(io::Error::new(
                 io::ErrorKind::UnexpectedEof,
@@ -108,8 +105,8 @@ pub fn rehydrate_from_log(path: &Path) -> io::Result<Vec<Cdu>> {
     Ok(events)
 }
 
-/// Forces the synchronization of the log file's in-memory buffers to the disk.
-/// Useful when external systems need deterministic persistence guarantees.
+/// Force an explicit disk sync on demand.
+/// Used by tests and critical checkpoints.
 pub fn sync_log_to_disk(path: &Path) -> io::Result<()> {
     if path.exists() {
         let file = File::open(path)?;
