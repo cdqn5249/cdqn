@@ -1,4 +1,4 @@
-// File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
+// File under BaDaaS license, vibe coding engine: chat.deepseek.com
 // File path: src/executor.rs
 
 //! The Executor for running non-deterministic tasks.
@@ -21,13 +21,16 @@ impl Executor {
             while let Ok(command_cdu) = command_receiver.recv() {
                 println!("[Executor] Received command: {}", command_cdu.name);
 
-                // CRITICAL FIX: Only send results for non-genesis commands
+                // ⚠️ CRITICAL FIX: Only send results for non-genesis commands
                 // This breaks the infinite memory loop during genesis bootstrap
-                if command_cdu.name.contains(".genesis.") || 
-                   command_cdu.name.contains(".prime.element.") ||
-                   command_cdu.name.contains(".semi-axiom.") ||
-                   command_cdu.name.contains(".axiom.") {
-                    println!("[Executor] Genesis/system command - skipping result feedback to break memory loop");
+                if command_cdu.name.contains(".genesis.")
+                    || command_cdu.name.contains(".prime.element.")
+                    || command_cdu.name.contains(".semi-axiom.")
+                    || command_cdu.name.contains(".axiom.")
+                {
+                    println!(
+                        "[Executor] Genesis/system command - skipping result feedback to break memory loop"
+                    );
                     continue;
                 }
 
