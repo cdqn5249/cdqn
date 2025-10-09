@@ -1,12 +1,13 @@
 # ✅ CHECK-0004 — Chronosa Reasoning Core Redesign and Transition
 
-**Document ID:** `CHECK-0004.md`
-**Parent:** `CHECK-0003.md`
-**Stage:** Design validation and architectural approval
-**Scope:** Redesign of Chronosa’s reasoning model and causal persistence layer
-**Status:** Draft for review
-**Date:** 2025-10-09
-**Author:** cdqn core design team
+- **Document ID:** `CHECK-0004.md`
+- **Parent:** `CHECK-0003.md`
+- **Stage:** Design validation and architectural approval
+- **Scope:** Redesign of Chronosa’s reasoning model and causal persistence layer
+- **Status:** Draft for review
+- **Date:** 2025-10-09
+- **Author:** Christophe Duy Quang Nguyen
+- **Vibe coding engine:** ChatGPT-5, OpenAi
 
 ---
 
@@ -335,19 +336,3 @@ This guarantees that even distributed or asynchronous worlds maintain causal ver
 * **Projector:** Pure reasoning operator that expands causal graphs from known axioms/semi-axioms.
 * **Manifold:** Global structure of worlds, semi-axioms, and causal links forming Chronosa’s reasoning space.
 * **Rehydration:** Reconstruction of reasoning state by replaying CDUs in causal order.
-
----
-
-## 14. Closure
-
-`CHECK-0004` supersedes all previous reasoning model definitions.
-This design ensures that Chronosa’s intelligence arises from **causal reasoning, self-evolution, and verifiable provenance**, not prediction.
-Its next checkpoint (`CHECK-0005`) will specify formal algorithms for induction, promotion, and proof construction once Phase 0 and Phase 1 are validated.
-
----
-
-**End of CHECK-0004.md**
-
----
-
-Would you like me to now generate this as a ready-to-commit Markdown file (`/checks/check_0004.md`) with proper front-matter headers, indentation, and internal links (to `check_0003.md` and `check_0005.md` placeholders)?
