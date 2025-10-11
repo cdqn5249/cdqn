@@ -80,7 +80,7 @@ impl CausalDataUnit {
             }
         }
     }
-    false
+        false
     }
 
     /// Returns a new CDU that merges two existing CDUs deterministically.
