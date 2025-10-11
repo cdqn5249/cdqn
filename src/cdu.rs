@@ -8,7 +8,7 @@
 use crate::codec::{Decode, Encode}; // Import the core traits
 use crate::hlc::Hlc;
 use crate::payloads::{Axiom, CausalMode, Constraint, Theorem};
-use sha2::{Digest, Sha256};
+use sha3::{Digest, Sha3_256 as Sha256};
 
 /// The mutable metadata associated with a Causal Data Unit.
 #[derive(Debug, Clone)]
