@@ -3,10 +3,10 @@
 // Generated and maintained by ChatGPT-5, OpenAI
 // Licensed under BaDaaS (Build and Develop as a Service)
 
+use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
+use rand::rngs::OsRng;
 use serde::{Deserialize, Serialize};
 use sha3::{Digest, Sha3_256 as Sha256};
-use ed25519_dalek::{Signature, SigningKey, VerifyingKey, Signer, Verifier};
-use rand::rngs::OsRng;
 use std::fmt;
 
 /// Represents the lifecycle state of a Causal Data Unit.
@@ -71,14 +71,16 @@ impl CausalDataUnit {
 
     /// Verifies the CDU signature using the provided Ed25519 public key.
     pub fn verify(&self, verifying_key: &VerifyingKey) -> bool {
-        if let Some(sig_hex) = &self.signature {
-            if let Ok(sig_bytes) = hex::decode(sig_hex) {
-                if let Ok(signature) = Signature::from_bytes(&sig_bytes) {
-                    return verifying_key.verify(self.hash.as_bytes(), &signature).is_ok();
-                }
+    if let Some(sig_hex) = &self.signature {
+        if let Ok(sig_bytes) = hex::decode(sig_hex) {
+            if let Ok(signature) = Signature::from_bytes(&sig_bytes) {
+                return verifying_key
+                    .verify(self.hash.as_bytes(), &signature)
+                    .is_ok();
             }
         }
-        false
+    }
+    false
     }
 
     /// Returns a new CDU that merges two existing CDUs deterministically.
