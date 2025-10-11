@@ -8,7 +8,7 @@
 
 ## 1. Purpose
 
-The **Causal Data Query Network (CDQN)** defines a new paradigm of distributed reasoning and data exchange.  
+The **Causal Data Query Nodes (CDQN)** defines a new paradigm of distributed reasoning and data exchange.  
 It integrates logic, causality, feedback, and accountability into a sovereign peer-to-peer architecture.
 
 Each node in the network hosts its own **Chronosa instance** — a reasoning agent grounded in mathematical logic and causal proofs, not in statistical language models.  
