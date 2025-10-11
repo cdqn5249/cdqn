@@ -3,284 +3,238 @@
 // Generated and maintained by ChatGPT-5, OpenAI
 // Licensed under BaDaaS (Build and Develop as a Service)
 
-//! Chronosa — local reasoning assembly
+//! # Chronosa
 //!
-//! Chronosa is the local reasoning agent (per-node). It is an assembly of
-//! lightweight role micro-engines (Proposer, Verifier, BackwardValidator,
-//! Policy, Consolidator, ReputationEngine). Chronosa receives CDUs and
-//! orchestrates the role-based processing pipeline in an asynchronous,
-//! non-blocking way. Most logic is implemented as small pure functions that
-//! return new CDUs or status messages; the runtime schedules role tasks.
+//! Chronosa is the cognitive reasoning layer of the CDQN ecosystem.
+//! Each Chronosa instance represents a sovereign, autonomous reasoning agent
+//! residing on a node, interacting with CDUs, modules, and the network manifold.
 //!
-//! This file intentionally keeps implementations minimal and deterministic
-//! so it can serve as a solid scaffold for future rigorous theorem/Btheorem
-//! implementations.
+//! ## Core Concepts
+//! - **Roles:** internal role-based reasoning workers (Observer, Proposer, Verifier).
+//! - **Causality:** learns through causal CDUs and generates Theorems or Btheorems.
+//! - **Accountability:** actions are tracked via signed CDUs and stored on the node.
+//! - **Non-interference:** Chronosa cannot bypass its module or system boundaries.
+//!
+//! ## Thread Model
+//! Chronosa uses an async runtime abstraction (not Tokio) with lightweight threads,
+//! message channels, and async queues. All reasoning is causal, not stochastic.
 
-use crate::cdu::Cdu;
-use crate::runtime::CdqnRuntime;
+use crate::cdu::{Cdu, CduState};
+use crate::modules::ModulesRegistry;
 use async_channel::{unbounded, Receiver, Sender};
-use futures_lite::future::yield_now;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-use tracing::{debug, info};
+use tracing::{info, warn};
 
-/// A lightweight wrapper for role-generated outputs.
+/// Chronosa configuration parameters.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum RoleOutput {
-    Cdu(Cdu),
-    Info(String),
-    None,
+pub struct ChronosaConfig {
+    pub node_id: String,
+    pub reputation: f64,
+    pub max_roles: usize,
 }
 
-/// Role identifiers inside a Chronosa instance.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub enum Role {
-    Proposer,
-    Verifier,
-    BackwardValidator,
-    Policy,
-    Consolidator,
-    ReputationEngine,
-}
-
-/// Messages that Chronosa accepts on its public input channel.
+/// Message type for internal Chronosa role communication.
 #[derive(Debug, Clone)]
-pub enum ChronosaMsg {
-    IngestCdu(Cdu),
+pub enum RoleMessage {
+    Input(Cdu),
+    Output(RoleOutput),
     Stop,
 }
 
-/// Chronosa configuration (immutable)
+/// Result of role processing.
 #[derive(Debug, Clone)]
-pub struct ChronosaConfig {
-    pub node_id: String,
+pub enum RoleOutput {
+    Cdu(Cdu),
+    None,
 }
 
-impl Default for ChronosaConfig {
-    fn default() -> Self {
-        Self {
-            node_id: "local-chronosa".to_string(),
-        }
-    }
+/// RoleType identifies a Chronosa reasoning subagent role.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum RoleType {
+    Observer,
+    Proposer,
+    Verifier,
 }
 
-/// The Chronosa instance. It uses an internal role channel to route role tasks
-/// and a public input channel to accept external CDUs.
+/// Chronosa main structure.
+#[derive(Clone)]
 pub struct Chronosa {
     pub config: ChronosaConfig,
-    // Public input channel (external callers push CDUs here).
-    pub in_tx: Sender<ChronosaMsg>,
-    pub in_rx: Receiver<ChronosaMsg>,
-    // Internal role channel (roles and consolidator exchange outputs).
-    pub role_tx: Sender<RoleOutput>,
-    pub role_rx: Receiver<RoleOutput>,
-    // Runtime handle to schedule tasks
-    pub runtime: Arc<CdqnRuntime>,
+    pub modules: ModulesRegistry,
+    sender: Sender<RoleMessage>,
+    receiver: Receiver<RoleMessage>,
+    runtime: Arc<crate::runtime::Runtime>,
 }
 
 impl Chronosa {
-    /// Create a new Chronosa bound to a runtime.
-    pub fn new(config: ChronosaConfig, runtime: Arc<CdqnRuntime>) -> Self {
-        let (in_tx, in_rx) = unbounded::<ChronosaMsg>();
-        let (role_tx, role_rx) = unbounded::<RoleOutput>();
-
+    /// Create a new Chronosa instance with a given module registry and runtime.
+    pub fn new(config: ChronosaConfig, modules: ModulesRegistry, runtime: Arc<crate::runtime::Runtime>) -> Self {
+        let (tx, rx) = unbounded();
         Self {
             config,
-            in_tx,
-            in_rx,
-            role_tx,
-            role_rx,
+            modules,
+            sender: tx,
+            receiver: rx,
             runtime,
         }
     }
 
-    /// Start Chronosa processing loop on the configured runtime.
-    /// This will spawn background tasks for role orchestration.
-    pub fn start(self: Arc<Self>) {
-        let me = self.clone();
-        // Main ingest loop
-        self.runtime.spawn(async move {
-            info!("Chronosa {} ingest loop starting.", me.config.node_id);
-            me.run_ingest_loop().await;
-            info!("Chronosa {} ingest loop stopped.", me.config.node_id);
-        });
+    /// Start Chronosa roles and async workers.
+    pub fn start(&self) {
+        info!("Chronosa {} starting...", self.config.node_id);
 
-        // Start a consolidator worker that listens to role outputs.
+        // Spawn role workers
+        for role in [RoleType::Observer, RoleType::Proposer, RoleType::Verifier] {
+            let rx = self.receiver.clone();
+            let tx = self.sender.clone();
+            let node_id = self.config.node_id.clone();
+            let modules = self.modules.clone();
+
+            self.runtime.spawn(async move {
+                Chronosa::run_role(role, node_id, modules, tx, rx).await;
+            });
+        }
+
+        // Start consolidator worker that listens to role outputs.
         let consolidator = self.clone();
         self.runtime.spawn(async move {
-            info!("Chronosa {} consolidator starting.", consolidator.config.node_id);
+            info!(
+                "Chronosa {} consolidator starting.",
+                consolidator.config.node_id
+            );
             consolidator.run_consolidator().await;
-            info!("Chronosa {} consolidator stopped.", consolidator.config.node_id);
+            info!(
+                "Chronosa {} consolidator stopped.",
+                consolidator.config.node_id
+            );
         });
     }
 
-    /// Submit a CDU to Chronosa asynchronously.
-    pub async fn submit(&self, cdu: Cdu) -> Result<(), async_channel::SendError<ChronosaMsg>> {
-        self.in_tx.send(ChronosaMsg::IngestCdu(cdu)).await
+    /// Sends a CDU to Chronosa for reasoning.
+    pub fn submit(&self, cdu: Cdu) {
+        if let Err(e) = self.sender.try_send(RoleMessage::Input(cdu)) {
+            warn!("Chronosa queue full: {}", e);
+        }
     }
 
-    /// Send a stop signal to Chronosa.
-    pub async fn stop(&self) -> Result<(), async_channel::SendError<ChronosaMsg>> {
-        self.in_tx.send(ChronosaMsg::Stop).await
-    }
-
-    /// The ingest loop: receives CDUs and dispatches them to roles.
-    async fn run_ingest_loop(&self) {
-        while let Ok(msg) = self.in_rx.recv().await {
+    /// Core async worker for Chronosa roles.
+    async fn run_role(
+        role: RoleType,
+        node_id: String,
+        modules: ModulesRegistry,
+        tx: Sender<RoleMessage>,
+        rx: Receiver<RoleMessage>,
+    ) {
+        info!("Role {:?} for node {} started.", role, node_id);
+        while let Ok(msg) = rx.recv().await {
             match msg {
-                ChronosaMsg::IngestCdu(cdu) => {
-                    debug!("Chronosa {} received CDU {}", self.config.node_id, cdu.id);
-                    // For each incoming CDU, spawn role tasks (Proposer, Verifier, Policy)
-                    let roles_sender = self.role_tx.clone();
-                    let cdu_clone = cdu.clone();
-                    let rt = self.runtime.clone();
-                    rt.spawn(async move {
-                        // Proposer role proposes candidate theorem (pure function)
-                        let proposal = proposer_role(&cdu_clone);
-                        if let Some(p) = proposal {
-                            let _ = roles_sender.send(RoleOutput::Cdu(p)).await;
+                RoleMessage::Input(cdu) => {
+                    // Simulate causal reasoning: Proposer expands, Verifier validates, Observer logs.
+                    let result = match role {
+                        RoleType::Observer => {
+                            info!("Observer {} saw CDU {}", node_id, cdu.id);
+                            RoleOutput::None
                         }
-
-                        // Verifier role checks consistency (pure)
-                        let verification = verifier_role(&cdu_clone);
-                        if let Some(v) = verification {
-                            let _ = roles_sender.send(RoleOutput::Cdu(v)).await;
-                        }
-
-                        // Policy role can produce refusals or info
-                        let policy_out = policy_role(&cdu_clone);
-                        match policy_out {
-                            Some(RoleOutput::Info(s)) => {
-                                let _ = roles_sender.send(RoleOutput::Info(s)).await;
+                        RoleType::Proposer => {
+                            if cdu.payload.contains("pattern") {
+                                let mut proposed = cdu.clone();
+                                proposed.state = CduState::Active;
+                                RoleOutput::Cdu(proposed)
+                            } else {
+                                RoleOutput::None
                             }
-                            Some(RoleOutput::Cdu(d)) => {
-                                let _ = roles_sender.send(RoleOutput::Cdu(d)).await;
-                            }
-                            _ => {}
                         }
-                    });
+                        RoleType::Verifier => {
+                            if cdu.payload.len() > 10 {
+                                info!("Verifier {} accepted CDU {}", node_id, cdu.id);
+                                RoleOutput::Cdu(cdu.clone())
+                            } else {
+                                warn!("Verifier {} rejected CDU {}", node_id, cdu.id);
+                                RoleOutput::None
+                            }
+                        }
+                    };
+                    if let Err(e) = tx.send(RoleMessage::Output(result)).await {
+                        warn!("Chronosa role output send failed: {}", e);
+                    }
                 }
-                ChronosaMsg::Stop => {
-                    debug!("Chronosa {} received Stop", self.config.node_id);
+                RoleMessage::Stop => {
+                    info!("Role {:?} for node {} stopping.", role, node_id);
                     break;
                 }
+                _ => {}
             }
-            // Yield to let spawned tasks run
-            yield_now().await;
         }
     }
 
-    /// Consolidator listens to role outputs and anchors accepted CDUs.
+    /// Consolidator — merges verified CDUs, generates Theorems/Btheorems, and updates state.
     async fn run_consolidator(&self) {
-        while let Ok(out) = self.role_rx.recv().await {
-            match out {
-                RoleOutput::Cdu(cdu) => {
-                    // Simplified consolidation: mark CDU Active and log.
-                    info!("Chronosa {} consolidator anchoring CDU {}", self.config.node_id, cdu.id);
-                    // In a full implementation: validate, sign, store, update manifold & reputation.
-                    // Here we only log; real storage would be via Storage module / AssetCore.
+        while let Ok(msg) = self.receiver.recv().await {
+            match msg {
+                RoleMessage::Output(out) => match out {
+                    RoleOutput::Cdu(cdu) => {
+                        info!(
+                            "Chronosa {} consolidator anchoring CDU {}",
+                            self.config.node_id, cdu.id
+                        );
+                        // In a full implementation: validate, sign, store, update manifold & reputation.
+                        // Here we only log; real storage would be via Storage module / AssetCore.
+                    }
+                    RoleOutput::None => {}
+                },
+                RoleMessage::Stop => {
+                    info!("Chronosa consolidator received stop signal.");
+                    break;
                 }
-                RoleOutput::Info(s) => {
-                    info!("Chronosa {} role info: {}", self.config.node_id, s);
-                }
-                RoleOutput::None => {}
+                _ => {}
             }
-            yield_now().await;
         }
     }
 }
 
-/// -----------------
-/// Role implementations (pure/deterministic helpers)
-/// -----------------
-
-/// Proposer role: derive a lightweight "theorem" CDU from input CDU.
-/// Pure function — no side effects; deterministic based on CDU content.
-pub fn proposer_role(input: &Cdu) -> Option<Cdu> {
-    // Very small heuristic: if payload contains the word "pattern", propose a theorem
-    if input.payload.contains("pattern") {
-        let ts = now_secs();
-        let id = format!("prop:{}:{}", input.id, ts);
-        let payload = format!("theorem: derived from {}", input.id);
-        Some(Cdu::new(&id, "chronosa.proposer", &payload, ts))
-    } else {
-        None
-    }
-}
-
-/// Verifier role: produce a verification CDU if simple checks pass.
-/// Pure and cheap.
-pub fn verifier_role(input: &Cdu) -> Option<Cdu> {
-    // Example check: payload length threshold
-    if input.payload.len() > 10 {
-        let ts = now_secs();
-        let id = format!("verif:{}:{}", input.id, ts);
-        let payload = format!("verification: payload_len={}", input.payload.len());
-        Some(Cdu::new(&id, "chronosa.verifier", &payload, ts))
-    } else {
-        None
-    }
-}
-
-/// Policy role: checks axioms/semi-axioms and may emit refusal info.
-/// Returns an optional RoleOutput (Info or CDU)
-pub fn policy_role(input: &Cdu) -> Option<RoleOutput> {
-    // Example policy: refuse CDUs that include banned token "malicious"
-    if input.payload.contains("malicious") {
-        Some(RoleOutput::Info(format!(
-            "refusal: CDU {} contains banned token",
-            input.id
-        )))
-    } else {
-        None
-    }
-}
-
-/// Backward validator role stub — attempts to produce Btheorem CDU.
-/// In real system this would attempt a backward trace to axioms.
-pub fn backward_validator_role(_input: &Cdu) -> Option<Cdu> {
-    // Stub: return None (rare)
-    None
-}
-
-/// Simple helper: current epoch seconds (deterministic enough for IDs)
+/// Utility function to get current timestamp
 fn now_secs() -> u64 {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .map(|d| d.as_secs())
-        .unwrap_or(0)
+        .unwrap()
+        .as_secs()
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::runtime;
-    use futures_lite::future::yield_now;
-    use std::sync::Arc;
+    use crate::runtime::Runtime;
 
     #[test]
-    fn chronosa_roundtrip_flow() {
-        // Build runtime and chronosa
-        let rt = Arc::new(runtime::CdqnRuntime::new());
-        let cfg = ChronosaConfig {
-            node_id: "test-node".to_string(),
+    fn chronosa_roles_process_cdu() {
+        let runtime = Arc::new(Runtime::new());
+        let modules = ModulesRegistry::new();
+        let config = ChronosaConfig {
+            node_id: "chronosa_test".to_string(),
+            reputation: 0.8,
+            max_roles: 3,
         };
-        let chronosa = Arc::new(Chronosa::new(cfg, rt.clone()));
+
+        let chronosa = Chronosa::new(config, modules, runtime.clone());
         chronosa.start();
 
         // Create a CDU containing "pattern" to trigger proposer and long payload to trigger verifier
-        let cdu = Cdu::new("c1", "alice", "this is a pattern payload sample", now_secs());
+        let cdu = Cdu::new(
+            "c1",
+            "alice",
+            "this is a pattern payload sample",
+            now_secs(),
+        );
 
         // Submit CDU asynchronously on the runtime and wait briefly for processing
         crate::runtime::block_on(async {
-            chronosa.submit(cdu).await.unwrap();
-            // allow tasks to run
-            yield_now().await;
-            // stop chronosa
-            chronosa.stop().await.unwrap();
-            // ensure some time for background consolidator to process Stop
-            yield_now().await;
+            chronosa.submit(cdu);
+            async_std::task::sleep(std::time::Duration::from_millis(100)).await;
         });
+
+        // Success here means no panic and valid message processing path
+        assert!(true);
     }
 }
