@@ -22,17 +22,17 @@
 //!
 //! This library is the base crate for building CDQN nodes, Chronosa instances, and causal applications.
 
-pub mod core;
-pub mod runtime;
 pub mod cdu;
 pub mod chronosa;
+pub mod core;
 pub mod modules;
+pub mod runtime;
 
-pub use core::*;
-pub use runtime::*;
 pub use cdu::*;
 pub use chronosa::*;
+pub use core::*;
 pub use modules::*;
+pub use runtime::*;
 
 /// CDQN version identifier.
 pub const CDQN_VERSION: &str = "0.1.0";
