@@ -84,7 +84,7 @@ impl Chronosa {
             runtime,
         }
     }
-    
+
     /// Start Chronosa roles and async workers.
     pub fn start(&self) {
         info!("Chronosa {} starting...", self.config.node_id);
