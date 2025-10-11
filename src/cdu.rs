@@ -71,15 +71,15 @@ impl CausalDataUnit {
 
     /// Verifies the CDU signature using the provided Ed25519 public key.
     pub fn verify(&self, verifying_key: &VerifyingKey) -> bool {
-    if let Some(sig_hex) = &self.signature {
-        if let Ok(sig_bytes) = hex::decode(sig_hex) {
-            if let Ok(signature) = Signature::from_bytes(&sig_bytes) {
-                return verifying_key
-                    .verify(self.hash.as_bytes(), &signature)
-                    .is_ok();
+        if let Some(sig_hex) = &self.signature {
+            if let Ok(sig_bytes) = hex::decode(sig_hex) {
+                if let Ok(signature) = Signature::from_bytes(&sig_bytes) {
+                    return verifying_key
+                        .verify(self.hash.as_bytes(), &signature)
+                        .is_ok();
+                }
             }
         }
-    }
         false
     }
 
