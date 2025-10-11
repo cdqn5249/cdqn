@@ -16,9 +16,9 @@
 //! - **Verifiable:** cryptographically signed and hashed (SHA3 + Ed25519).
 //! - **Lightweight:** pure structs, no blocking, no global state.
 
+use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use serde::{Deserialize, Serialize};
 use sha3::{Digest, Sha3_256 as Sha256};
-use ed25519_dalek::{Signer, SigningKey, Verifier, VerifyingKey, Signature};
 use std::fmt;
 
 /// Represents the state of a CDU in its lifecycle.
@@ -76,7 +76,7 @@ impl Cdu {
         if let Some(sig_hex) = &self.signature {
             if let Ok(sig_bytes) = hex::decode(sig_hex) {
                 if sig_bytes.len() == 64 {
-                    if let Ok(arr) = sig_bytes.clone().try_into() as Result<[u8; 64], _> {
+                    if let Ok(arr) = <[u8; 64]>::try_from(sig_bytes.clone()) {
                         let sig = Signature::from_bytes(&arr);
                         return key.verify(self.hash.as_bytes(), &sig).is_ok();
                     }
