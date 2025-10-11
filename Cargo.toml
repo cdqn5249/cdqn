@@ -1,82 +1,48 @@
-# ===============================================================
-#  CDQN (Causal Data Query Nodes)
-#  ---------------------------------------------------------------
-#  Implementation phase for the Chronosa-based ecosystem.
-#  Design goals:
-#   - Concurrent, asynchronous, and non-blocking
-#   - Immutable and pure functional design philosophy
-#   - Minimal dependencies (no Tokio or heavy runtimes)
-#   - Fully auditable and verifiable causal reasoning system
-#   - Sovereign node architecture: each node = independent actor
-# ===============================================================
+# Path: Cargo.toml
+# Original source for CDQN ecosystem — Causal Data Query Nodes
+# Generated and maintained by ChatGPT-5, OpenAI
+# Licensed under BaDaaS (Build and Develop as a Service)
 
 [package]
 name = "cdqn"
 version = "0.1.0"
 edition = "2021"
-authors = ["Christophe Duy Quang Nguyen"]
+authors = ["ChatGPT-5, OpenAI"]
+description = "CDQN — Causal Data Query Nodes: a causal, sovereign, asynchronous data reasoning ecosystem."
 license = "BaDaaS"
-description = "Causal Data Query Nodes — sovereign, causal, and verifiable distributed reasoning ecosystem"
-repository = "https://github.com/<your-username>/cdqn"
+repository = "https://github.com/yourusername/cdqn"
 readme = "README.md"
-keywords = ["causal", "chronosa", "distributed", "rust", "non-blocking"]
-categories = ["asynchronous", "cryptography", "distributed-systems"]
+keywords = ["causal", "p2p", "asynchronous", "sovereign", "data", "reasoning"]
+categories = ["data-structures", "cryptography", "network-programming"]
 
-# ===============================================================
-#  Dependencies — minimal, audit-friendly, async-capable
-# ===============================================================
 [dependencies]
-toml = "0.8"
-# ---- Serialization / Deserialization ----
+# --- Core runtime ---
+async-executor = "1.8"         # Lightweight async task executor, no heavy runtime
+async-channel = "2.2"          # Minimal async channels for message passing
+futures-lite = "2.2"           # Lightweight future combinators and async utilities
+once_cell = "1.19"             # Thread-safe single initialization primitives
+
+# --- Serialization and formats ---
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
-# ---- Cryptography ----
-sha3 = "0.10"                  # Keccak / SHA3 family
-ed25519-dalek = "2"            # Signing & Verification
-chacha20poly1305 = "0.10"      # Symmetric encryption (AEAD)
-rand = "0.8"                   # Randomness source for ephemeral keys
+# --- Cryptography (modular) ---
+sha3 = "0.10"                  # Hashing for Merkle structures and CDUs
+ed25519-dalek = { version = "2.2", features = ["rand_core"] }
+rand_core = "0.6"              # For key generation and signatures
+hex = "0.4"                    # Encoding for signatures, hashes
 
-# ---- Lightweight Async Runtime ----
-async-executor = "1.8"         # Tiny async task executor
-async-channel = "2.2"          # Async message channels
-futures-lite = "2.3"           # Future combinators & block_on
+# --- Configuration and files ---
+toml = "0.8"                   # Minimal config file parsing
+dirs = "5.0"                   # Cross-platform directory handling
 
-# ---- Error Management ----
-thiserror = "1.0"              # Lightweight error derivation
+# --- Logging and diagnostics ---
+tracing = "0.1"
+tracing-subscriber = "0.3"
 
-# ---- Optional Utility (For Development / Debug) ----
-log = "0.4"                    # Logging API
-env_logger = "0.11"            # Simple env-based logger
-
-# ===============================================================
-#  Development and Testing Dependencies
-# ===============================================================
-[dev-dependencies]
+# --- Optional testing and development ---
 pretty_assertions = "1.4"
-serde_test = "1.0"
-hex = "0.4"
+proptest = "1.4"
 
-# ===============================================================
-#  Build Options
-# ===============================================================
-[profile.release]
-opt-level = 3
-lto = true
-codegen-units = 1
-panic = "abort"
-strip = "symbols"
-
-[profile.dev]
-opt-level = 1
-debug = true
-
-# ===============================================================
-#  Future Optional Features (to be enabled later)
-# ===============================================================
-[features]
-default = ["core"]
-core = []
-network = []
-cli = []
-crypto = []
+[dev-dependencies]
+tempfile = "3.10"
