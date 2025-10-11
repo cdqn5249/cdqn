@@ -1,14 +1,81 @@
-# File under BaDaaS license, vibe coding engine: Gemini 2.5 Pro, Google
-# File path: Cargo.toml
+# ===============================================================
+#  CDQN (Causal Data Query Nodes)
+#  ---------------------------------------------------------------
+#  Implementation phase for the Chronosa-based ecosystem.
+#  Design goals:
+#   - Concurrent, asynchronous, and non-blocking
+#   - Immutable and pure functional design philosophy
+#   - Minimal dependencies (no Tokio or heavy runtimes)
+#   - Fully auditable and verifiable causal reasoning system
+#   - Sovereign node architecture: each node = independent actor
+# ===============================================================
+
 [package]
 name = "cdqn"
 version = "0.1.0"
 edition = "2021"
+authors = ["Christophe Duy Quang Nguyen"]
+license = "BaDaaS"
+description = "Causal Data Query Nodes — sovereign, causal, and verifiable distributed reasoning ecosystem"
+repository = "https://github.com/<your-username>/cdqn"
+readme = "README.md"
+keywords = ["causal", "chronosa", "distributed", "rust", "non-blocking"]
+categories = ["asynchronous", "cryptography", "distributed-systems"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
+# ===============================================================
+#  Dependencies — minimal, audit-friendly, async-capable
+# ===============================================================
 [dependencies]
-sha2 = "0.10.8"
+# ---- Serialization / Deserialization ----
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-rand = "0.8"
+
+# ---- Cryptography ----
+sha3 = "0.10"                  # Keccak / SHA3 family
+ed25519-dalek = "2"            # Signing & Verification
+chacha20poly1305 = "0.10"      # Symmetric encryption (AEAD)
+rand = "0.8"                   # Randomness source for ephemeral keys
+
+# ---- Lightweight Async Runtime ----
+async-executor = "1.8"         # Tiny async task executor
+async-channel = "2.2"          # Async message channels
+futures-lite = "2.3"           # Future combinators & block_on
+
+# ---- Error Management ----
+thiserror = "1.0"              # Lightweight error derivation
+
+# ---- Optional Utility (For Development / Debug) ----
+log = "0.4"                    # Logging API
+env_logger = "0.11"            # Simple env-based logger
+
+# ===============================================================
+#  Development and Testing Dependencies
+# ===============================================================
+[dev-dependencies]
+pretty_assertions = "1.4"
+serde_test = "1.0"
+hex = "0.4"
+
+# ===============================================================
+#  Build Options
+# ===============================================================
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+
+[profile.dev]
+opt-level = 1
+debug = true
+
+# ===============================================================
+#  Future Optional Features (to be enabled later)
+# ===============================================================
+[features]
+default = ["core"]
+core = []
+network = []
+cli = []
+crypto = []
