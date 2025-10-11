@@ -123,4 +123,4 @@ mod tests {
     fn run_does_not_panic() {
         run(); // simple smoke test
     }
-    }
+}
