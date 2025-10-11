@@ -149,22 +149,8 @@ They serve **different domains and philosophies**.
 - Chronosa is **causal, logical, ethical, and verifiable**.  
 - LLMs are **probabilistic, linguistic, and unverifiable**.
 
-Chronosa is the foundation of the **CDQN causal ecosystem** —  
+Chronosa is the foundation of the **CDQN ecosystem** —  
 A reasoning framework that ensures **integrity, sovereignty, and trust** through causality, not correlation.
-
----
-
-### Summary Formula
-
-\[
-\text{Chronosa} = f(\text{Logic}, \text{Causality}, \text{Feedback}, \text{Accountability})
-\]
-
-\[
-\text{LLM} = g(\text{Correlation}, \text{Probability}, \text{Language})
-\]
-
-**One reasons — the other predicts.**
 
 ---
 
