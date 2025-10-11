@@ -70,7 +70,11 @@ pub struct Chronosa {
 
 impl Chronosa {
     /// Create a new Chronosa instance with a given module registry and runtime.
-    pub fn new(config: ChronosaConfig, modules: ModulesRegistry, runtime: Arc<crate::runtime::Runtime>) -> Self {
+    pub fn new(
+        config: ChronosaConfig, 
+        modules: ModulesRegistry, 
+        runtime: Arc<crate::runtime::Runtime>
+    ) -> Self {
         let (tx, rx) = unbounded();
         Self {
             config,
@@ -80,7 +84,7 @@ impl Chronosa {
             runtime,
         }
     }
-
+    
     /// Start Chronosa roles and async workers.
     pub fn start(&self) {
         info!("Chronosa {} starting...", self.config.node_id);
