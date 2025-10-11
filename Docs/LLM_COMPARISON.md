@@ -5,7 +5,7 @@
 ## Executive summary
 - LLMs are powerful at **unstructured natural-language tasks** (summaries, translations, user-facing explanations).  
 - For **causal, verifiable, low-data, high-precision reasoning** (theorem discovery, backward validation, reputation-sensitive actions), the CDQN design favors **role-assembly micro-reasoners** (tiny recursive models / deterministic functions) governed by Chronosa and validated by CDU evidence.  
-- Use LLMs as *interfaces* and *summarizers*, not as primary validators of network state or theorem provenance. External papers on tiny recursive reasoning and interpolating neural networks are useful inspiration, but we adopt only the ideas that fit our causal & feedback-first model. 45
+- Use LLMs as *interfaces* and *summarizers*, not as primary validators of network state or theorem provenance. External papers on tiny recursive reasoning and interpolating neural networks are useful inspiration, but we adopt only the ideas that fit our causal & feedback-first model.
 
 ---
 
@@ -21,8 +21,8 @@
 | Best CDQN role(s) | UI / policy-level summarizer / translator | Proposer / Verifier / Backward-Validator / Policy | Scientific modules, sim solvers, signal processing |
 
 Notes:
-- Tiny recursive/role modules have been shown to outperform LLMs on specific reasoning puzzle tasks when constrained data is available (TRM/HRM research) — we use this as inspiration for Chronosa role design but keep the CDQN causal controls firmly in place. 6
-- Interpolating Neural Networks (INNs) offer very large efficiency gains in some scientific problems (PDE/simulation surrogates); they inspire our “specialized solver modules” not the Chronosa general reasoning pipeline. 7
+- Tiny recursive/role modules have been shown to outperform LLMs on specific reasoning puzzle tasks when constrained data is available (TRM/HRM research) — we use this as inspiration for Chronosa role design but keep the CDQN causal controls firmly in place.
+- Interpolating Neural Networks (INNs) offer very large efficiency gains in some scientific problems (PDE/simulation surrogates); they inspire our “specialized solver modules” not the Chronosa general reasoning pipeline.
 
 ---
 
@@ -42,7 +42,7 @@ Notes:
 3. **Security-critical decisions** (refusal, propagation blocking, legal/regulatory enforcement). Chronosa must emit explicit `refusal` CDUs with evidence pointers.
 4. **Low-energy mass inference.** Use bounded recursive micro-reasoners to cheaply reason over local CDU graphs and prime-axes.
 
-TRM-style tiny recursive models are a good blueprint for these roles because they achieve high generalization with small compute budgets on low-data reasoning tasks — but **only** use the specific patterns that integrate with CDU evidence and the axiomatic framework; do not adopt any component that bypasses traceability. 8
+TRM-style tiny recursive models are a good blueprint for these roles because they achieve high generalization with small compute budgets on low-data reasoning tasks — but **only** use the specific patterns that integrate with CDU evidence and the axiomatic framework; do not adopt any component that bypasses traceability.
 
 ---
 
@@ -55,13 +55,13 @@ TRM-style tiny recursive models are a good blueprint for these roles because the
 ---
 
 ## Energy, auditability & sustainability (brief)
-- Large LLMs are expensive and brittle for trust-critical tasks. Where possible, rely on add/multiply primitives, tiny recursion, or domain INN modules for heavy numeric tasks. The INN literature highlights substantial energy/compute savings for structured numerical problems; we use that as inspiration for scientific modules. 9
+- Large LLMs are expensive and brittle for trust-critical tasks. Where possible, rely on add/multiply primitives, tiny recursion, or domain INN modules for heavy numeric tasks. The INN literature highlights substantial energy/compute savings for structured numerical problems; we use that as inspiration for scientific modules.
 - Keep LLM use strictly for human-facing or non-authoritative drafts; this controls energy costs and reduces risk.
 
 ---
 
 ## Change log (this update)
-- Integrated TRM/HRM insights (tiny-recursive reasoning) as **inspiration for Chronosa roles**, not as replacements for causality-first logic. 11  
+- Integrated TRM/HRM insights (tiny-recursive reasoning) as **inspiration for Chronosa roles**, not as replacements for causality-first logic. 
 - Added INN (interpolating neural network) inspiration for specialized scientific modules.
 - Hardened the LLM usage policy: explicit draft-only role + Chronosa verification gating.  
 - Added compute/energy & auditability guidance.
