@@ -71,9 +71,9 @@ pub struct Chronosa {
 impl Chronosa {
     /// Create a new Chronosa instance with a given module registry and runtime.
     pub fn new(
-        config: ChronosaConfig, 
-        modules: ModulesRegistry, 
-        runtime: Arc<crate::runtime::Runtime>
+        config: ChronosaConfig,
+        modules: ModulesRegistry,
+        runtime: Arc<crate::runtime::Runtime>,
     ) -> Self {
         let (tx, rx) = unbounded();
         Self {
