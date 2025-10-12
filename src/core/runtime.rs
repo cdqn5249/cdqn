@@ -2,52 +2,42 @@
 // Original source for CDQN ecosystem — Causal Data Query Nodes
 // Generated and maintained by ChatGPT-5, OpenAI
 // Licensed under BaDaaS (Build and Develop as a Service)
+//
+//! Core runtime abstraction for CDQN ecosystem.
+//! Lightweight async executor based on `async-executor` and `futures-lite`.
+//! This runtime provides non-blocking scheduling, channel-based communication,
+//! and signal handling for Chronosa and module orchestration.
 
-//! Lightweight core runtime for CDQN
-//!
-//! This module provides a compact, dependency-light async runtime abstraction
-//! tailored to the CDQN design goals:
-//!  - No Tokio, minimal footprint
-//!  - Deterministic scheduling via a small executor
-//!  - Simple task spawn + graceful shutdown primitives
-//!  - Non-blocking channels for inter-task communication
-//!
-//! The `Runtime` type here is intentionally small and portable. It is meant
-//! to be the base runtime used by Chronosa instances and core modules.
-//!
-//! NOTE: This file is `core/runtime.rs` (part of the `core` module). If the
-//! crate also exposes a root `runtime` module, re-export `Runtime` there as
-//! appropriate (e.g. `pub use core::runtime::Runtime;`) so other modules can
-//! refer to `crate::runtime::Runtime`.
-
-use async_channel::{bounded, unbounded, Receiver, Sender};
+use async_channel::{bounded, Receiver, Sender};
 use async_executor::Executor;
-use futures_lite::future;
-use std::future::Future;
-use std::sync::Arc;
-use std::time::Duration;
+use futures_lite::{future, prelude::*};
+use std::{
+    future::Future,
+    sync::Arc,
+    time::{Duration, Instant},
+};
 use thiserror::Error;
 use tracing::{debug, error, info};
 
-/// Errors produced by the runtime API.
+/// Runtime-level errors for CDQN.
 #[derive(Debug, Error)]
 pub enum RuntimeError {
     #[error("task spawn failed: {0}")]
-    SpawnError(String),
+    SpawnFailed(String),
+
     #[error("channel send failed: {0}")]
-    ChannelSend(String),
+    ChannelSendFailed(String),
 }
 
-/// Runtime stop signal message.
+/// High-level signal that can be sent to the runtime.
 #[derive(Debug, Clone)]
 pub enum RuntimeSignal {
-    Shutdown, // Graceful shutdown
+    Stop,
+    Reload,
+    Custom(String),
 }
 
-/// A lightweight runtime handle.
-///
-/// - `executor` runs tasks
-/// - `signal_tx` allows sending a shutdown signal to workers
+/// Lightweight concurrent runtime for CDQN nodes.
 #[derive(Clone)]
 pub struct Runtime {
     executor: Arc<Executor<'static>>,
@@ -56,10 +46,11 @@ pub struct Runtime {
 }
 
 impl Runtime {
-    /// Create a new Runtime instance.
+    /// Creates a new runtime with its signal channels.
     pub fn new() -> Self {
         let executor = Arc::new(Executor::new());
-        let (signal_tx, signal_rx) = bounded::<RuntimeSignal>(1);
+        let (signal_tx, signal_rx) = bounded(64);
+
         Self {
             executor,
             signal_tx,
@@ -67,81 +58,60 @@ impl Runtime {
         }
     }
 
-    /// Spawn a `'static` async task on the runtime.
-    ///
-    /// The spawned task is detached and will run until completion or the
-    /// process exits. Use channels and signals for graceful coordination.
+    /// Spawns an async task on the executor.
     pub fn spawn<F>(&self, fut: F)
     where
         F: Future<Output = ()> + Send + 'static,
     {
-        self.executor.spawn(fut).detach();
+        let ex = self.executor.clone();
+        ex.spawn(fut).detach();
     }
 
-    /// Returns a cloneable sender which can be used to request a shutdown.
-    pub fn signal_sender(&self) -> Sender<RuntimeSignal> {
-        self.signal_tx.clone()
+    /// Sends a runtime signal (e.g. Stop, Reload).
+    pub async fn send_signal(&self, signal: RuntimeSignal) -> Result<(), RuntimeError> {
+        self.signal_tx
+            .send(signal)
+            .await
+            .map_err(|e| RuntimeError::ChannelSendFailed(e.to_string()))
     }
 
-    /// Returns a receiver that worker loops can use to observe shutdown signals.
-    pub fn signal_receiver(&self) -> Receiver<RuntimeSignal> {
-        self.signal_rx.clone()
+    /// Runs the executor event loop for a given duration.
+    pub fn run_for(&self, duration: Duration) {
+        let ex = self.executor.clone();
+        let until = Instant::now() + duration;
+
+        future::block_on(async move {
+            while Instant::now() < until {
+                ex.try_tick();
+                future::yield_now().await;
+            }
+        });
     }
 
-    /// Block the current thread until the provided future completes using the executor.
-    ///
-    /// Convenient helper used by tests and simple binaries.
-    pub fn block_on<F, T>(&self, fut: F) -> T
-    where
-        F: Future<Output = T>,
-    {
-        future::block_on(self.executor.run(fut))
-    }
-
-    /// Request a graceful shutdown and wait up to `timeout` for cooperative tasks.
-    ///
-    /// This sends a `Shutdown` signal on the runtime's internal channel and then
-    /// sleeps for the given timeout to allow running tasks to exit gracefully.
-    pub async fn shutdown_graceful(&self, timeout: Duration) {
-        // Best-effort send; ignore send errors (receiver may be dropped)
-        let _ = self.signal_tx.send(RuntimeSignal::Shutdown).await;
-        // Allow tasks to observe and wind down
-        // We use a simple sleep here; more complex coordination (join handles)
-        // can be implemented on top of this primitive.
-        futures_timer::Delay::new(timeout).await;
-        info!(
-            "Runtime graceful shutdown requested (waited {:?}).",
-            timeout
-        );
+    /// Waits for the next runtime signal asynchronously.
+    pub async fn next_signal(&self, timeout: Duration) -> Option<RuntimeSignal> {
+        let fut = self.signal_rx.recv();
+        future::or(fut, async {
+            let start = Instant::now();
+            while Instant::now().duration_since(start) < timeout {
+                future::yield_now().await;
+            }
+            None
+        })
+        .await
     }
 }
 
-/// Small helper: spawn a periodic task which checks for shutdown signals.
-///
-/// Example usage: monitoring, housekeeping, or cooperative cancellation loops.
-pub fn spawn_signal_watch<T, F>(runtime: &Runtime, mut work: F)
+/// Utility helper for signal watchers (Chronosa use).
+pub fn spawn_signal_watch<F>(runtime: &Runtime, mut handler: F)
 where
-    T: Send + 'static,
-    F: FnMut() -> T + Send + 'static,
-    T: Future<Output = ()> + Send + 'static,
+    F: FnMut(RuntimeSignal) + Send + 'static,
 {
-    let rx = runtime.signal_receiver();
-    let ex = runtime.clone();
-    ex.spawn(async move {
-        loop {
-            // Check for shutdown without blocking: try_recv is non-blocking.
-            match rx.try_recv() {
-                Ok(RuntimeSignal::Shutdown) | Err(async_channel::TryRecvError::Closed) => {
-                    debug!("Signal watch observed shutdown; exiting watch loop.");
-                    break;
-                }
-                Err(async_channel::TryRecvError::Empty) => {
-                    // Do work
-                    work().await;
-                    // Yield to allow other tasks to run
-                    futures_lite::future::yield_now().await;
-                }
-            }
+    let r = runtime.clone();
+    runtime.spawn(async move {
+        while let Some(sig) = r.next_signal(Duration::from_secs(1)).await {
+            debug!("Runtime received signal: {:?}", sig);
+            handler(sig);
         }
     });
 }
@@ -149,38 +119,22 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::time::Duration;
 
     #[test]
-    fn runtime_spawn_and_block_on() {
+    fn runtime_spawn_and_signal_flow() {
         let rt = Runtime::new();
-
-        // spawn a short-lived task that sets a flag via a channel
-        let (tx, rx) = unbounded::<bool>();
-        rt.spawn(async move {
-            let _ = tx.send(true).await;
-        });
-
-        // block on receiving the message
-        rt.block_on(async {
-            let v = rx.recv().await.unwrap();
-            assert!(v);
-        });
+        rt.spawn(async { debug!("hello from task") });
+        rt.run_for(Duration::from_millis(20));
     }
 
     #[test]
-    fn graceful_shutdown_signal() {
+    fn signal_handling_cycle() {
         let rt = Runtime::new();
-        let sender = rt.signal_sender();
+        let rt2 = rt.clone();
         rt.spawn(async move {
-            // request shutdown after a short delay
-            futures_timer::Delay::new(Duration::from_millis(10)).await;
-            let _ = sender.send(RuntimeSignal::Shutdown).await;
+            rt2.send_signal(RuntimeSignal::Stop).await.unwrap();
         });
 
-        // wait a bit to let the spawned task run
-        rt.block_on(async {
-            futures_timer::Delay::new(Duration::from_millis(20)).await;
-        });
+        rt.run_for(Duration::from_millis(10));
     }
 }
