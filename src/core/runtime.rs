@@ -4,20 +4,19 @@
 // Licensed under BaDaaS (Build and Develop as a Service)
 //
 //! Core runtime abstraction for CDQN ecosystem.
-//! Lightweight async executor based on `async-executor` and `futures-lite`.
-//! This runtime provides non-blocking scheduling, channel-based communication,
-//! and signal handling for Chronosa and module orchestration.
+//! This module defines a minimal async runtime built on `async-executor`
+//! and `futures-lite`, avoiding heavy runtimes like Tokio or async-std.
 
 use async_channel::{bounded, Receiver, Sender};
 use async_executor::Executor;
-use futures_lite::{future, prelude::*};
+use futures_lite::future;
 use std::{
     future::Future,
     sync::Arc,
     time::{Duration, Instant},
 };
 use thiserror::Error;
-use tracing::{debug, error, info};
+use tracing::{debug, error};
 
 /// Runtime-level errors for CDQN.
 #[derive(Debug, Error)]
@@ -29,7 +28,7 @@ pub enum RuntimeError {
     ChannelSendFailed(String),
 }
 
-/// High-level signal that can be sent to the runtime.
+/// High-level runtime signal (Stop, Reload, Custom).
 #[derive(Debug, Clone)]
 pub enum RuntimeSignal {
     Stop,
@@ -46,11 +45,10 @@ pub struct Runtime {
 }
 
 impl Runtime {
-    /// Creates a new runtime with its signal channels.
+    /// Create a new runtime with bounded signal channels.
     pub fn new() -> Self {
         let executor = Arc::new(Executor::new());
         let (signal_tx, signal_rx) = bounded(64);
-
         Self {
             executor,
             signal_tx,
@@ -58,7 +56,7 @@ impl Runtime {
         }
     }
 
-    /// Spawns an async task on the executor.
+    /// Spawn a background async task.
     pub fn spawn<F>(&self, fut: F)
     where
         F: Future<Output = ()> + Send + 'static,
@@ -67,7 +65,7 @@ impl Runtime {
         ex.spawn(fut).detach();
     }
 
-    /// Sends a runtime signal (e.g. Stop, Reload).
+    /// Send a runtime signal (Stop, Reload, etc.).
     pub async fn send_signal(&self, signal: RuntimeSignal) -> Result<(), RuntimeError> {
         self.signal_tx
             .send(signal)
@@ -75,11 +73,10 @@ impl Runtime {
             .map_err(|e| RuntimeError::ChannelSendFailed(e.to_string()))
     }
 
-    /// Runs the executor event loop for a given duration.
+    /// Run the executor for a fixed duration (non-blocking tick loop).
     pub fn run_for(&self, duration: Duration) {
         let ex = self.executor.clone();
         let until = Instant::now() + duration;
-
         future::block_on(async move {
             while Instant::now() < until {
                 ex.try_tick();
@@ -88,21 +85,26 @@ impl Runtime {
         });
     }
 
-    /// Waits for the next runtime signal asynchronously.
+    /// Wait for the next runtime signal, with a timeout.
     pub async fn next_signal(&self, timeout: Duration) -> Option<RuntimeSignal> {
-        let fut = self.signal_rx.recv();
-        future::or(fut, async {
+        let recv_future = self.signal_rx.recv();
+        let timed_future = async {
             let start = Instant::now();
-            while Instant::now().duration_since(start) < timeout {
+            loop {
+                if Instant::now().duration_since(start) >= timeout {
+                    return None;
+                }
+                if let Ok(sig) = recv_future.or(async { Err(async_channel::RecvError) }).await {
+                    return Some(sig);
+                }
                 future::yield_now().await;
             }
-            None
-        })
-        .await
+        };
+        timed_future.await
     }
 }
 
-/// Utility helper for signal watchers (Chronosa use).
+/// Helper for spawning a signal watcher that reacts to runtime events.
 pub fn spawn_signal_watch<F>(runtime: &Runtime, mut handler: F)
 where
     F: FnMut(RuntimeSignal) + Send + 'static,
@@ -121,20 +123,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn runtime_spawn_and_signal_flow() {
+    fn runtime_spawn_and_signal_cycle() {
         let rt = Runtime::new();
-        rt.spawn(async { debug!("hello from task") });
+        rt.spawn(async { debug!("runtime test task running") });
         rt.run_for(Duration::from_millis(20));
     }
 
     #[test]
-    fn signal_handling_cycle() {
+    fn signal_flow_test() {
         let rt = Runtime::new();
         let rt2 = rt.clone();
         rt.spawn(async move {
-            rt2.send_signal(RuntimeSignal::Stop).await.unwrap();
+            rt2.send_signal(RuntimeSignal::Custom("ping".into()))
+                .await
+                .unwrap();
         });
 
-        rt.run_for(Duration::from_millis(10));
+        rt.run_for(Duration::from_millis(30));
     }
 }
