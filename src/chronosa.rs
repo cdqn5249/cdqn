@@ -16,8 +16,8 @@
 //! - **Non-interference:** Chronosa cannot bypass its module or system boundaries.
 //!
 //! ## Thread Model
-//! Chronosa uses an async runtime abstraction (not Tokio) with lightweight threads,
-//! message channels, and async queues. All reasoning is causal, not stochastic.
+//! Chronosa uses a lightweight runtime abstraction (no Tokio) with async channels
+//! and a deterministic task scheduler. All reasoning is causal, not stochastic.
 
 use crate::cdu::{Cdu, CduState};
 use crate::modules::ModulesRegistry;
@@ -94,10 +94,10 @@ impl Chronosa {
             let rx = self.receiver.clone();
             let tx = self.sender.clone();
             let node_id = self.config.node_id.clone();
-            let modules = self.modules.clone();
+            let _modules = self.modules.clone(); // underscore to avoid warnings
 
             self.runtime.spawn(async move {
-                Chronosa::run_role(role, node_id, modules, tx, rx).await;
+                Chronosa::run_role(role, node_id, _modules, tx, rx).await;
             });
         }
 
@@ -127,7 +127,7 @@ impl Chronosa {
     async fn run_role(
         role: RoleType,
         node_id: String,
-        modules: ModulesRegistry,
+        _modules: ModulesRegistry,
         tx: Sender<RoleMessage>,
         rx: Receiver<RoleMessage>,
     ) {
