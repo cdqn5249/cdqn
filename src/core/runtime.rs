@@ -109,7 +109,10 @@ impl Runtime {
         // We use a simple sleep here; more complex coordination (join handles)
         // can be implemented on top of this primitive.
         futures_timer::Delay::new(timeout).await;
-        info!("Runtime graceful shutdown requested (waited {:?}).", timeout);
+        info!(
+            "Runtime graceful shutdown requested (waited {:?}).",
+            timeout
+        );
     }
 }
 
