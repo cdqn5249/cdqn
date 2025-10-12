@@ -13,7 +13,7 @@
 //! - The [`RuntimeSignal`] enum for graceful shutdown coordination.
 //! - The [`spawn_signal_watch`] helper for cooperative task management.
 
-pub use crate::core::runtime::{Runtime, RuntimeError, RuntimeSignal, spawn_signal_watch};
+pub use crate::core::runtime::{spawn_signal_watch, Runtime, RuntimeError, RuntimeSignal};
 
 /// Convenience helper to block the current thread on a future.
 ///
