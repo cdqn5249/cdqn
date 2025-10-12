@@ -17,9 +17,9 @@
 //! This registry enables runtime module lookup, version control, and
 //! safe concurrent access to module functions.
 
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
-use serde::{Deserialize, Serialize};
 use tracing::info;
 
 /// Core module trait — every module implements this.
