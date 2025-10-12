@@ -17,8 +17,8 @@
 //!
 //! This is the base runtime layer upon which Chronosa agents and node modules run.
 
-use async_executor::Executor;
 use async_channel::{unbounded, Receiver, Sender};
+use async_executor::Executor;
 use futures_lite::future;
 use once_cell::sync::Lazy;
 use std::sync::Arc;
