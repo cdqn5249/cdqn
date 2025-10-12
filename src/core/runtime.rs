@@ -2,14 +2,10 @@
 // Original source for CDQN ecosystem — Causal Data Query Nodes
 // Generated and maintained by ChatGPT-5, OpenAI
 // Licensed under BaDaaS (Build and Develop as a Service)
-//
-//! Core runtime abstraction for CDQN ecosystem.
-//! This module defines a minimal async runtime built on `async-executor`
-//! and `futures-lite`, avoiding heavy runtimes like Tokio or async-std.
 
 use async_channel::{bounded, Receiver, Sender};
 use async_executor::Executor;
-use futures_lite::future;
+use futures_lite::{future, FutureExt};
 use std::{
     future::Future,
     sync::Arc,
@@ -85,25 +81,24 @@ impl Runtime {
         });
     }
 
-    /// Wait for the next runtime signal, with a timeout.
+    /// Wait for the next runtime signal, with timeout.
     pub async fn next_signal(&self, timeout: Duration) -> Option<RuntimeSignal> {
         let recv_future = self.signal_rx.recv();
-        let timed_future = async {
+        let timeout_future = async {
             let start = Instant::now();
             loop {
                 if Instant::now().duration_since(start) >= timeout {
                     return None;
                 }
-                if let Ok(sig) = recv_future
-                    .or(async { Err(async_channel::RecvError) })
-                    .await
-                {
-                    return Some(sig);
-                }
                 future::yield_now().await;
             }
         };
-        timed_future.await
+        recv_future
+            .map(Some)
+            .or(timeout_future)
+            .await
+            .ok()
+            .flatten()
     }
 }
 
