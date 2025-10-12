@@ -19,6 +19,7 @@ categories = ["data-structures", "cryptography", "network-programming"]
 # --- Core runtime ---
 async-executor = "1.8"         # Lightweight async task executor, no heavy runtime
 async-channel = "2.2"          # Minimal async channels for message passing
+async-std = { version = "1.12", features = ["attributes"] }
 futures-lite = "2.2"           # Lightweight future combinators and async utilities
 once_cell = "1.19"             # Thread-safe single initialization primitives
 
