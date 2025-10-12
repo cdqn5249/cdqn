@@ -1,49 +1,54 @@
 # Path: Cargo.toml
-# Original source for CDQN ecosystem — Causal Data Query Nodes
-# Generated and maintained by ChatGPT-5, OpenAI
+# ==============================================================================
+# CDQN Ecosystem — Causal Data Query Nodes
+# ------------------------------------------------------------------------------
+# Original source generated and maintained by ChatGPT-5, OpenAI
 # Licensed under BaDaaS (Build and Develop as a Service)
+#
+# The CDQN ecosystem is an asynchronous, causal reasoning framework
+# built on immutable and verifiable data units (CDUs) and autonomous
+# Chronosa agents. This Cargo.toml defines a minimal and efficient
+# dependency graph, optimized for concurrency and clarity.
+# ==============================================================================
 
 [package]
 name = "cdqn"
 version = "0.1.0"
 edition = "2021"
 authors = ["ChatGPT-5, OpenAI"]
-description = "CDQN — Causal Data Query Nodes: a causal, sovereign, asynchronous data reasoning ecosystem."
+description = "CDQN — Causal Data Query Nodes: Sovereign, verifiable, and causal data reasoning ecosystem."
 license = "BaDaaS"
 repository = "https://github.com/yourusername/cdqn"
 readme = "README.md"
-keywords = ["causal", "p2p", "asynchronous", "sovereign", "data", "reasoning"]
-categories = ["data-structures", "cryptography", "network-programming"]
+keywords = ["causal", "distributed", "asynchronous", "chronosa", "sovereign-data"]
 
+# ------------------------------------------------------------------------------
+# Core dependencies
+# ------------------------------------------------------------------------------
 [dependencies]
-# --- Core runtime ---
-async-executor = "1.8"         # Lightweight async task executor, no heavy runtime
-async-channel = "2.2"          # Minimal async channels for message passing
-async-std = { version = "1.12", features = ["attributes"] }
-futures-lite = "2.2"           # Lightweight future combinators and async utilities
-once_cell = "1.19"             # Thread-safe single initialization primitives
-
-# --- Serialization and formats ---
+# Serialization and data structures
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+toml = "0.8"
 
-# --- Cryptography (modular) ---
-sha3 = "0.10"                  # Hashing for Merkle structures and CDUs
-ed25519-dalek = { version = "2.2", features = ["rand_core"] }
-rand_core = "0.6"              # For key generation and signatures
-hex = "0.4"                    # Encoding for signatures, hashes
+# Cryptography and hashing
+sha3 = "0.10"
+ed25519-dalek = "2.1"
+rand = "0.8"
+hex = "0.4"
 
-# --- Configuration and files ---
-toml = "0.8"                   # Minimal config file parsing
-dirs = "5.0"                   # Cross-platform directory handling
+# Concurrency, async runtime, and channels (no Tokio)
+async-executor = "1.8"
+async-channel = "1.9"
+futures-lite = "2.2"
 
-# --- Logging and diagnostics ---
+# Error handling and logging
+thiserror = "1.0"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 
-# --- Optional testing and development ---
-pretty_assertions = "1.4"
-proptest = "1.4"
-
+# ------------------------------------------------------------------------------
+# Dev dependencies
+# ------------------------------------------------------------------------------
 [dev-dependencies]
-tempfile = "3.10"
+tempfile = "3.8"
