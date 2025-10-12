@@ -94,7 +94,10 @@ impl Runtime {
                 if Instant::now().duration_since(start) >= timeout {
                     return None;
                 }
-                if let Ok(sig) = recv_future.or(async { Err(async_channel::RecvError) }).await {
+                if let Ok(sig) = recv_future
+                    .or(async { Err(async_channel::RecvError) })
+                    .await
+                {
                     return Some(sig);
                 }
                 future::yield_now().await;
