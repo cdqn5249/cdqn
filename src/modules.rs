@@ -223,7 +223,9 @@ mod tests {
         assert!(licenses.contains("BaDaaS"));
 
         // Test asset mint
-        let mint = registry.call("assetcore", "mint_asset", "new_artwork").unwrap();
+        let mint = registry
+            .call("assetcore", "mint_asset", "new_artwork")
+            .unwrap();
         assert!(mint.contains("new_artwork"));
     }
 }
