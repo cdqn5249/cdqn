@@ -8,11 +8,13 @@ description = "A Hybrid Logical Clock implementation for causal ordering in the 
 
 [dependencies]
 # The HLC needs to uniquely identify the node that creates the timestamp.
-# We will use the NodeId from cryptocore for this purpose.
-cryptocore = { path = "../cryptocore", workspace = true }
+cryptocore = { workspace = true }
 
 # We will need a way to get the physical system time.
 chrono = { version = "0.4", default-features = false, features = ["serde"] }
+
+# Required for the Display implementation to format the NodeId.
+hex = "0.4.3"
 
 # Inherit from workspace.
 serde = { workspace = true }
