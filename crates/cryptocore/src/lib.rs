@@ -3,7 +3,6 @@
 
 use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
 use rand::rngs::OsRng;
-use serde::{Deserialize, Serialize};
 use sha3::{Digest, Sha3_256};
 
 /// A unique, unforgeable identifier for a CDQN Node, which is its public key.
@@ -33,7 +32,8 @@ pub trait CryptoOperations {
 }
 
 /// A concrete implementation of `CryptoOperations` that holds a node's keypair.
-#[derive(Serialize, Deserialize)]
+/// NOTE: Serialization is no longer handled by serde. Key persistence must be
+/// managed by manually exporting and importing the signing_key bytes.
 pub struct NodeKeys {
     // The private part of the keypair, used for signing.
     // WARNING: This must be kept secret and handled securely.
@@ -46,6 +46,17 @@ impl NodeKeys {
     pub fn new() -> Self {
         let mut csprng = OsRng;
         let signing_key = SigningKey::generate(&mut csprng);
+        Self { signing_key }
+    }
+
+    /// Exports the secret signing key as a raw byte array for persistent storage.
+    pub fn to_bytes(&self) -> [u8; 32] {
+        self.signing_key.to_bytes()
+    }
+
+    /// Imports a secret signing key from a raw byte array.
+    pub fn from_bytes(bytes: &[u8; 32]) -> Self {
+        let signing_key = SigningKey::from_bytes(bytes);
         Self { signing_key }
     }
 }
@@ -138,7 +149,6 @@ mod tests {
 
         let signature = node.sign(&original_hash);
 
-        // Verification should fail because the signature was for the original hash, not the tampered one.
         let is_valid = NodeKeys::verify(node.node_id(), &tampered_hash, &signature);
 
         assert!(
@@ -150,18 +160,39 @@ mod tests {
     #[test]
     fn test_verify_fails_on_wrong_key() {
         let node_a = NodeKeys::new();
-        let node_b = NodeKeys::new(); // A different node with a different keypair.
+        let node_b = NodeKeys::new();
         let data = b"Data signed by Node A.";
 
         let hash = NodeKeys::hash(data);
         let signature_from_a = node_a.sign(&hash);
 
-        // Try to verify Node A's signature using Node B's public key.
         let is_valid = NodeKeys::verify(node_b.node_id(), &hash, &signature_from_a);
 
         assert!(
             !is_valid,
             "Verification must fail if performed with a public key that does not match the signing key."
         );
+    }
+
+    #[test]
+    fn test_key_export_import_roundtrip() {
+        let node1 = NodeKeys::new();
+        let node1_id = node1.node_id().clone();
+        let node1_bytes = node1.to_bytes();
+
+        let node2 = NodeKeys::from_bytes(&node1_bytes);
+        let node2_id = node2.node_id().clone();
+
+        assert_eq!(
+            node1_id, node2_id,
+            "Importing an exported key should result in the same public key."
+        );
+
+        // Verify that the imported key can still validate signatures made by the original key.
+        let data = b"test data";
+        let hash = NodeKeys::hash(data);
+        let signature = node1.sign(&hash);
+        let is_valid = NodeKeys::verify(node2.node_id(), &hash, &signature);
+        assert!(is_valid, "Imported key should be able to verify original signature.");
     }
 }
