@@ -105,7 +105,7 @@ This section describes the step-by-step processes that govern Chronosa's behavio
 
 ## **Workflow 1: The Cognitive Cycle (Reasoning and Learning)**
 
-This is the core loop, triggered by any new CDU.
+This is the core loop, triggered by any new CDU. Chronosa’s roles will check the cdu payload to create subtasks cdus and a goal cdu.
 
 1.  **Trigger:** A new CDU arrives at the `CDU Dispatcher`.
 2.  **Roles Involved:** `Verifier`, `Policy`.
