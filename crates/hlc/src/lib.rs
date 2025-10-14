@@ -40,10 +40,7 @@ impl Hlc {
         } else {
             // The physical clock has not advanced (or went backward), so we increment the counter
             // to ensure the new timestamp is logically greater.
-            self.counter = self
-                .counter
-                .checked_add(1)
-                .expect("HLC counter overflow");
+            self.counter = self.counter.checked_add(1).expect("HLC counter overflow");
         }
 
         Hlc {
@@ -75,7 +72,7 @@ impl PartialOrd for Hlc {
 impl fmt::Display for Hlc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         // A format similar to ISO 8601 but with the counter and a part of the node_id.
-        // We will need to add the `hex` crate to our dev-dependencies for this.
+        // NOTE: This will require adding `hex` to the dev-dependencies.
         write!(
             f,
             "{}-{:04x}-{}",
