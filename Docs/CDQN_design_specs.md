@@ -1,6 +1,6 @@
 *   **Version:** 1.0.0
 *   **Author:** Christophe Duy Quang Nguyen
-*   **AI engine:** Gemini 2.5 Pro, Google
+*   **AI assistant:** Gemini 2.5 Pro, Google
 *   **Date:** 2025-10-14
 *   **Location:** Đà Lạt, Việt Nam
 
