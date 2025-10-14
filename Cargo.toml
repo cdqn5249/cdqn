@@ -21,7 +21,8 @@ version = "1.0.0"
 # External Crate
 serde = { version = "1.0", features = ["derive"] }
 
-# --- CORRECTED PART ---
-# Local Workspace Crate
-# By defining it here, other crates can depend on it with `cryptocore = { workspace = true }`
+# Local Workspace Crates
 cryptocore = { path = "crates/cryptocore" }
+# --- CORRECTED PART ---
+# By adding 'hlc' here, it can now be inherited by other crates.
+hlc = { path = "crates/hlc" }
