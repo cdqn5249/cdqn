@@ -51,7 +51,7 @@ The CDU is the single, unified data model for all information.
 
 ## **2.2 The Manifold: The Fabric of Knowledge**
 
-The Manifold is the complete, sovereign knowledge base of a single CDQN Node.
+The Manifold is a dynamic emergent space projection and sovereign knowledge base of a single CDQN Node cdus.
 
 *   **Purpose:** To serve as the ground truth for all reasoning.
 *   **Logical Representation:** An in-memory, concurrent, thread-safe graph data structure (e.g., using `petgraph` with `Arc<RwLock<...>>` in Rust) that contains the logical representation of all non-archived CDUs.
@@ -65,10 +65,10 @@ Reasoning is grounded in a formal mathematical space.
 
 *   **Purpose:** To provide a deterministic and computationally efficient foundation for all logical operations.
 *   **RWorld Implementation:** RWorld is not a data structure. It is a conceptual space implemented via a single `r_coordinate: f64` field in the CDU metadata.
-*   **Prime Elements as Computational Anchors:** The prime numbers `(2)` and `(-2)` function as the **mathematical attractors** for the system's logic. All valid chains of reasoning must computationally converge towards axioms and semi-axioms anchored near these values. Each prime elements are building on semi-axioms of it last prime elements, for example, for semi-axioms of the pair (-5) and (5), they are compositions of the semi-axioms of (-2), (-3), (2) and (3) of the dedicated world.
+*   **Prime Elements as Computational Anchors:** The prime numbers `(2)` and `(-2)` function as the **mathematical attractors** for the system's logic. All valid chains of reasoning must computationally converge towards axioms and semi-axioms anchored near these values. Each prime elements are building on semi-axioms of it last prime elements, for example, for semi-axioms of the pair (-5) and (5), they are compositions of the semi-axioms of (-2), (-3), (2) and (3) of the dedicated world. for example, the semi-axiom "addition" on the MathsWorld exist because it has a counterpart that is the semi-axiom "subtraction", "addition" will be near a positive prime number and "subtraction" will on the negative prime number (it will be per example near (-11) if "addition" was near (11)). The semi-axioms ("addition","subtraction") will become an axiom because they are logically supported by cdus kn the UserWorld and at least more than 2 other worlds (MathsWorld, PhyWorld (physical world), TradeWorld, ChemWorld (Chemistry world), etc.).
 *   **Symmetry Enforcement Algorithm:** The `Verifier` enforces a hard constraint that a concept can only be formalized as a `SemiAxiomCDU` if it is submitted with its symmetric counterpart. The verification is a two-part check: `is_symmetric = (cdu_A.r_coordinate == -cdu_B.r_coordinate) && are_payloads_inverse(cdu_A.payload, cdu_B.payload)`.
 *   **The Zones of Meaning (Implementation Detail):**
-    *   **Neutral Gap `(-2, 2)`:** A CDU is considered neutral if its `r_coordinate` falls within this range.
+    *   **Neutral Gap `(-2, 2)`:** A CDU is considered neutral if its `r_coordinate` falls within this range. Per example, the semi-axiom for the object "knife", has no counterpart and can be harmful (near negative prime) or protective (near positive prime) depending on it context links of a dedicated world.
     *   **Impossibility Zone `[-1, 1]`:** When a contradiction is detected, the `Verifier` mutates the offending CDU's `r_coordinate` to a value in this range. This is the specific, deterministic trigger for the "I do not know" response and the evolution cycle.
 
 ## **2.4 Worlds: The Contextual Partitions**
