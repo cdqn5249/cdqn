@@ -30,6 +30,13 @@ jobs:
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
 
+      # --- FIX: ADDED THIS STEP ---
+      # This step downloads and compiles all dependencies.
+      # `cargo check` is faster than `cargo build` because it doesn't produce the final executable.
+      # This ensures that when Clippy runs next, all required crates are already available.
+      - name: Fetch and Compile Dependencies
+        run: cargo check --all-targets
+
       - name: Check Formatting
         run: cargo fmt --all -- --check
 
@@ -49,13 +56,16 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      # --- ADDED THIS CACHING STEP ---
-      # This will cache the compiled cargo-audit binary and its dependencies.
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
 
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked
+      
+      # This step needs to run after dependencies are available.
+      # `cargo install` doesn't fetch workspace dependencies, so we add a check.
+      - name: Fetch workspace dependencies for audit
+        run: cargo check --all-targets
 
       - name: Run Security Audit
         run: cargo audit
@@ -85,4 +95,4 @@ jobs:
         run: cargo build --verbose
 
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test --verbose```
