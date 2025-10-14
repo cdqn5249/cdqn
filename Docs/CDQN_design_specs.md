@@ -36,7 +36,7 @@ The CDU is the single, unified data model for all information.
 
 *   **Purpose:** To represent any piece of information as a self-contained, verifiable, and secure object.
 *   **Logical Schema (In-Memory Representation):**
-    *   `id_hlc: string` - The unique, deterministic, and permanent identifier, generated once at creation. It is the primary key for all lookups.
+    *   `id_hlc: string` - The unique, deterministic, and permanent identifier, generated once at creation. It is the primary key for all lookups. This is a Hybrid Logical Clock timestamp that establishes the CDU's place in the causal history of the Manifold. See Glossary for its full role.
     *   `payload: object` - The immutable core content. Its structure is defined by a `payload_type` field within it. Once created, this object is logically frozen.
     *   `payload_hash: string` - The cryptographic hash (SHA3) of the canonical byte representation of the `payload` object. This guarantees the payload's integrity.
     *   `metadata: object` - The mutable context that evolves around the payload. It contains:
@@ -150,6 +150,7 @@ This long-term background process is managed by the `ManifoldCurator`.
 
 # **Glossary**
 
+*   **id_hlc (Hybrid Logical Clock Identifier):** The unique, deterministic, and permanent identifier for a CDU. Crucially, this is not just a random ID; it is a Hybrid Logical Clock timestamp generated at the CDU's creation. Its primary function is to enforce causal ordering on all operations. If event A happens before event B, then id_hlc(A) will be less than id_hlc(B). This property is the foundation for resolving race conditions between asynchronous roles and creating a verifiable, deterministic history of all state changes.
 *   **CDU (Causal Data Unit):** The single, unified, and physically encrypted data structure for all information.
 *   **Chronosa:** The assembly of goal-driven, autonomous reasoning roles that act as the intelligence of a CDQN Node.
 *   **Manifold:** The complete, sovereign knowledge graph of a single Node, composed of all its CDUs.
