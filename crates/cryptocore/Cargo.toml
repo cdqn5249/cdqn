@@ -7,15 +7,12 @@ description = "Core cryptographic functionalities for the CDQN ecosystem."
 # Inherits version, authors, edition, license from the workspace root Cargo.toml
 
 [dependencies]
-# For Ed25519 digital signatures, a modern and highly-performant algorithm.
-ed25519-dalek = { version = "2.1.0", features = ["serde"] }
+# For Ed25519 digital signatures. Core functionality.
+# The 'serde' feature is no longer needed and has been removed.
+ed25519-dalek = "2.1.0"
 
-# For SHA3-256 hashing, a secure and standardized hashing algorithm.
+# For SHA3-256 hashing. Core functionality.
 sha3 = "0.10.8"
 
-# For generating cryptographically secure random numbers, required for key generation.
+# For generating cryptographically secure random numbers for new keys. Core functionality.
 rand = "0.8.5"
-
-# This dependency is inherited from the [workspace.dependencies] section
-# in the root Cargo.toml, ensuring version consistency across the project.
-serde = { workspace = true }
