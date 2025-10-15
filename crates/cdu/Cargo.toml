@@ -7,11 +7,9 @@ description = "The Causal Data Unit (CDU) implementation, the core data structur
 # Inherits version, authors, edition, license from the workspace root Cargo.toml
 
 [dependencies]
-# Required for NodeId, HashDigest, and the hash function.
-cryptocore = { workspace = true }
-
-# Required for the Hlc type.
-hlc = { workspace = true }
-
-# Provides the ToCanonicalBytes trait for serialization.
-common = { workspace = true }
+# --- THE CRITICAL FIX ---
+# We now depend on our local crates via a direct path instead of workspace inheritance.
+# This removes all ambiguity and resolves the dependency resolution error.
+cryptocore = { path = "../cryptocore" }
+hlc = { path = "../hlc" }
+common = { path = "../common" }
