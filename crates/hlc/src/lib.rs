@@ -140,7 +140,10 @@ impl HybridLogicalClock {
             }
 
             // If counter would overflow, advance wall time
-            if new_counter == 0 && candidate_wall == remote.wall_time_ns && remote.counter == u8::MAX {
+            if new_counter == 0
+                && candidate_wall == remote.wall_time_ns
+                && remote.counter == u8::MAX
+            {
                 new_wall = candidate_wall + 1;
             }
 
