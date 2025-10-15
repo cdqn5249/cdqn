@@ -4,13 +4,10 @@
 [package]
 name = "cryptocore"
 description = "Core cryptographic functionalities for the CDQN ecosystem."
-# Inherits version, authors, edition, license from the workspace root Cargo.toml
+# Inherits from workspace.
 
 [dependencies]
-# --- THE CRITICAL FIX ---
-# By adding `workspace = true`, we are explicitly telling Cargo to look for the
-# version and details of these dependencies in the [workspace.dependencies] table
-# of the root `Cargo.toml`. This is the missing link that resolves the errors.
+# These dependencies are inherited from the root [workspace.dependencies] table.
 ed25519-dalek = { workspace = true }
 sha3 = { workspace = true }
 rand = { workspace = true }
