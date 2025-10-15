@@ -7,8 +7,8 @@ description = "A Hybrid Logical Clock implementation for causal ordering in the 
 # Inherits version, authors, edition, license from the workspace root Cargo.toml
 
 [dependencies]
-# Required for the NodeId type used within the Hlc struct.
-cryptocore = { workspace = true }
-
-# Provides the ToCanonicalBytes trait for serialization.
-common = { workspace = true }
+# --- THE CRITICAL FIX ---
+# We now depend on our local crates via a direct path instead of workspace inheritance.
+# This removes all ambiguity and resolves the dependency resolution error.
+cryptocore = { path = "../cryptocore" }
+common = { path = "../common" }
