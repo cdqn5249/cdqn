@@ -193,6 +193,9 @@ mod tests {
         let hash = NodeKeys::hash(data);
         let signature = node1.sign(&hash);
         let is_valid = NodeKeys::verify(node2.node_id(), &hash, &signature);
-        assert!(is_valid, "Imported key should be able to verify original signature.");
+        assert!(
+            is_valid,
+            "Imported key should be able to verify original signature."
+        );
     }
 }
