@@ -12,6 +12,3 @@ publish = false
 [dependencies]
 cdqn-hlc = { path = "../hlc" }
 cdqn-cryptocore = { path = "../cryptocore" }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-thiserror = "1.0"
