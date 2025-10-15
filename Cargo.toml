@@ -17,9 +17,15 @@ license = "BaDaaS"
 version = "1.0.0"
 
 # --- THE CRITICAL FIX ---
-# The [workspace.dependencies] table is being removed completely.
-# While useful for large projects, it is the source of our current ambiguity.
-# Each crate will now define its dependencies explicitly, which is more robust
-# for a project of this size.
+# This section is now the single source of truth for all dependencies in the workspace.
+# All versions for external crates and paths for local crates are defined here and only here.
 [workspace.dependencies]
-# This section is now intentionally left empty.```
+# External Crates
+ed25519-dalek = "2.1.0"
+sha3 = "0.10.8"
+rand = "0.8.5"
+
+# Local Workspace Crates
+common = { path = "crates/common" }
+cryptocore = { path = "crates/cryptocore" }
+hlc = { path = "crates/hlc" }
