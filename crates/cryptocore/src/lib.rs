@@ -5,11 +5,75 @@
 //!
 //! Provides:
 //! - SHA3-256 hashing
-//! - HKDF-based key derivation (using byte slices as salt)
+//! - HKDF-based key derivation
 //! - ChaCha20Poly1305 for authenticated encryption
+//! - Ed25519 signatures (via external primitive)
 //! - Secure zeroization of secrets
 
 pub use chacha20poly1305::{AeadCore, AeadInPlace, ChaCha20Poly1305, Key, Nonce};
+pub use ed25519_dalek::{Keypair, PublicKey, SecretKey, Signature, Signer, Verifier};
 pub use hkdf::Hkdf;
 pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
+
+use std::convert::TryInto;
+
+/// Computes SHA3-256 hash of canonical byte input.
+#[must_use]
+pub fn hash_sha3_256(data: &[u8]) -> [u8; 32] {
+    let mut hasher = Sha3_256::new();
+    hasher.update(data);
+    hasher.finalize().into()
+}
+
+/// Derives a 32-byte encryption key using HKDF-SHA3-256 from a secret and context.
+#[must_use]
+pub fn derive_key(secret: &[u8], context: &[u8]) -> [u8; 32] {
+    let hk = Hkdf::<Sha3_256>::new(None, secret);
+    let mut okm = [0u8; 32];
+    hk.expand(context, &mut okm)
+        .expect("HKDF expand should not fail with correct output length");
+    okm
+}
+
+/// Generates a random 96-bit nonce for ChaCha20Poly1305 (e.g., from secure RNG).
+/// In production, this should use a CSPRNG. For now, placeholder.
+#[must_use]
+pub fn generate_nonce() -> Nonce {
+    // TODO: Replace with secure RNG (e.g., getrandom) when allowed
+    // For now, return zero nonce — DO NOT USE IN PRODUCTION
+    Nonce::from([0u8; 12])
+}
+
+/// Encrypts plaintext with ChaCha20Poly1305 using given key and nonce.
+/// Returns ciphertext + tag.
+#[must_use]
+pub fn encrypt(
+    key: &[u8; 32],
+    nonce: &Nonce,
+    plaintext: &[u8],
+    aad: &[u8],
+) -> Result<Vec<u8>, &'static str> {
+    let cipher = ChaCha20Poly1305::new(key.into());
+    let mut buffer = plaintext.to_vec();
+    cipher
+        .encrypt_in_place(nonce, aad, &mut buffer)
+        .map_err(|_| "Encryption failed")?;
+    Ok(buffer)
+}
+
+/// Decrypts ciphertext with ChaCha20Poly1305.
+#[must_use]
+pub fn decrypt(
+    key: &[u8; 32],
+    nonce: &Nonce,
+    ciphertext: &[u8],
+    aad: &[u8],
+) -> Result<Vec<u8>, &'static str> {
+    let cipher = ChaCha20Poly1305::new(key.into());
+    let mut buffer = ciphertext.to_vec();
+    cipher
+        .decrypt_in_place(nonce, aad, &mut buffer)
+        .map_err(|_| "Decryption failed")?;
+    Ok(buffer)
+}
