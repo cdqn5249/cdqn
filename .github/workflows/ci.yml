@@ -31,17 +31,17 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       # --- FIX: ADDED THIS STEP ---
-      # This step downloads and compiles all dependencies.
-      # `cargo check` is faster than `cargo build` because it doesn't produce the final executable.
-      # This ensures that when Clippy runs next, all required crates are already available.
-      - name: Fetch and Compile Dependencies
-        run: cargo check --all-targets
+      # This command explicitly downloads all external dependencies listed in all
+      # Cargo.toml files. It must be run before any step that compiles code,
+      # such as clippy or build. This will resolve all "unresolved import" errors.
+      - name: Fetch external dependencies
+        run: cargo fetch
 
       - name: Check Formatting
         run: cargo fmt --all -- --check
 
       - name: Run Clippy Linter
-        run: cargo clippy --all-targets -- -D warnings
+        run: cargo clippy --all-targets --all-features -- -D warnings
 
   ################################################################
   # Phase 2: Security Audit
@@ -62,10 +62,9 @@ jobs:
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked
       
-      # This step needs to run after dependencies are available.
-      # `cargo install` doesn't fetch workspace dependencies, so we add a check.
-      - name: Fetch workspace dependencies for audit
-        run: cargo check --all-targets
+      # We fetch dependencies here as well to ensure the audit database can be built.
+      - name: Fetch dependencies for audit
+        run: cargo fetch
 
       - name: Run Security Audit
         run: cargo audit
@@ -92,7 +91,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Build project
-        run: cargo build --verbose
+        run: cargo build --verbose --all-features
 
       - name: Run tests
-        run: cargo test --verbose```
+        run: cargo test --verbose --all-features
