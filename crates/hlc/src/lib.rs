@@ -43,10 +43,7 @@ impl Hlc {
             self.timestamp_nanos = physical_nanos;
             self.counter = 0;
         } else {
-            self.counter = self
-                .counter
-                .checked_add(1)
-                .expect("HLC counter overflow");
+            self.counter = self.counter.checked_add(1).expect("HLC counter overflow");
         }
 
         Hlc {
@@ -69,7 +66,7 @@ impl Ord for Hlc {
 }
 
 impl PartialOrd for Hlc {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {.
         Some(self.cmp(other))
     }
 }
@@ -162,6 +159,9 @@ mod tests {
         let bytes1 = hlc1.to_canonical_bytes().unwrap();
         let bytes2 = hlc2.to_canonical_bytes().unwrap();
 
-        assert_eq!(bytes1, bytes2, "Identical HLCs should produce identical canonical bytes.");
+        assert_eq!(
+            bytes1, bytes2,
+            "Identical HLCs should produce identical canonical bytes."
+        );
     }
-                     }
+}
