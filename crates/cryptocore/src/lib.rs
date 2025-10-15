@@ -7,16 +7,14 @@
 //! - SHA3-256 hashing
 //! - HKDF-based key derivation
 //! - ChaCha20Poly1305 for authenticated encryption
-//! - Ed25519 signatures (via external primitive)
+//! - Ed25519 signatures
 //! - Secure zeroization of secrets
 
-pub use chacha20poly1305::{AeadCore, AeadInPlace, ChaCha20Poly1305, Key, Nonce};
+pub use chacha20poly1305::{AeadCore, AeadInPlace, ChaCha20Poly1305, Key, KeyInit, Nonce};
 pub use ed25519_dalek::{Keypair, PublicKey, SecretKey, Signature, Signer, Verifier};
 pub use hkdf::Hkdf;
 pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
-
-use std::convert::TryInto;
 
 /// Computes SHA3-256 hash of canonical byte input.
 #[must_use]
@@ -36,17 +34,13 @@ pub fn derive_key(secret: &[u8], context: &[u8]) -> [u8; 32] {
     okm
 }
 
-/// Generates a random 96-bit nonce for ChaCha20Poly1305 (e.g., from secure RNG).
-/// In production, this should use a CSPRNG. For now, placeholder.
+/// Generates a zero nonce (placeholder — replace with secure RNG in production).
 #[must_use]
 pub fn generate_nonce() -> Nonce {
-    // TODO: Replace with secure RNG (e.g., getrandom) when allowed
-    // For now, return zero nonce — DO NOT USE IN PRODUCTION
     Nonce::from([0u8; 12])
 }
 
 /// Encrypts plaintext with ChaCha20Poly1305 using given key and nonce.
-/// Returns ciphertext + tag.
 #[must_use]
 pub fn encrypt(
     key: &[u8; 32],
