@@ -16,9 +16,7 @@ edition = "2021"
 license = "BaDaaS"
 version = "1.0.0"
 
-# --- THE CRITICAL FIX ---
-# This section is now the single source of truth for all dependencies in the workspace.
-# All versions for external crates and paths for local crates are defined here and only here.
+# This section is the single source of truth for all dependencies.
 [workspace.dependencies]
 # External Crates
 ed25519-dalek = "2.1.0"
