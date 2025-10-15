@@ -5,38 +5,41 @@
 //!
 //! This crate provides a thread-safe HLC that generates monotonic timestamps
 //! suitable for use as causal identifiers in distributed systems.
-//!
-//! The HLC combines:
-//! - Wall-clock time (physical time)
-//! - A logical counter (to handle clock granularity and concurrency)
-//!
-//! It ensures that if event A causally precedes event B, then HLC(A) < HLC(B).
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-/// A Hybrid Logical Clock timestamp: (wall_time_ns, logical_counter)
+/// A Hybrid Logical Clock timestamp.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct HlcTimestamp {
-    /// Wall-clock time in nanoseconds since UNIX epoch
+    /// Wall-clock time in nanoseconds since UNIX epoch (truncated to 56 bits)
     pub wall_time_ns: u64,
-    /// Logical counter to ensure monotonicity
-    pub counter: u64,
+    /// Logical counter (8 bits, 0–255)
+    pub counter: u8,
 }
 
 impl HlcTimestamp {
-    /// Returns the timestamp as a single u128 for easy comparison/storage
+    /// Creates a new timestamp from raw components.
     #[must_use]
-    pub const fn as_u128(&self) -> u128 {
-        ((self.wall_time_ns as u128) << 64) | (self.counter as u128)
+    pub const fn new(wall_time_ns: u64, counter: u8) -> Self {
+        Self {
+            wall_time_ns: wall_time_ns & 0x00FF_FFFF_FFFF_FFFF, // 56 bits
+            counter,
+        }
     }
 
-    /// Creates a timestamp from a u128 representation
+    /// Returns the timestamp as a single u64 for atomic storage.
     #[must_use]
-    pub const fn from_u128(val: u128) -> Self {
+    pub const fn as_u64(&self) -> u64 {
+        (self.wall_time_ns << 8) | (self.counter as u64)
+    }
+
+    /// Creates a timestamp from a packed u64.
+    #[must_use]
+    pub const fn from_u64(packed: u64) -> Self {
         Self {
-            wall_time_ns: (val >> 64) as u64,
-            counter: val as u64,
+            wall_time_ns: packed >> 8,
+            counter: (packed & 0xFF) as u8,
         }
     }
 }
@@ -44,7 +47,8 @@ impl HlcTimestamp {
 /// A thread-safe Hybrid Logical Clock.
 #[derive(Debug)]
 pub struct HybridLogicalClock {
-    last_time: AtomicU64, // stores wall_time_ns in high 64 bits, counter in low 64 bits
+    // Stores packed (wall_time_ns:56 << 8) | (counter:8) as u64
+    last_packed: AtomicU64,
 }
 
 impl Default for HybridLogicalClock {
@@ -58,9 +62,9 @@ impl HybridLogicalClock {
     #[must_use]
     pub fn new() -> Self {
         let now_ns = Self::current_time_ns();
-        let encoded = (now_ns << 64) | 0u64;
+        let packed = (now_ns << 8) & 0xFFFFFFFFFFFFFF00; // counter = 0
         Self {
-            last_time: AtomicU64::new((encoded >> 64) as u64), // only store wall_time initially
+            last_packed: AtomicU64::new(packed),
         }
     }
 
@@ -70,200 +74,87 @@ impl HybridLogicalClock {
             .duration_since(UNIX_EPOCH)
             .map(|d| d.as_nanos() as u64)
             .unwrap_or(0)
+            & 0x00FF_FFFF_FFFF_FFFF // 56 bits max
     }
 
-    /// Generates a new HLC timestamp, ensuring monotonicity.
-    ///
-    /// This is the primary method for local event generation.
+    /// Generates a new HLC timestamp for a local event.
     #[must_use]
     pub fn new_timestamp(&self) -> HlcTimestamp {
         let now_ns = Self::current_time_ns();
-        let mut last = self.last_time.load(Ordering::Acquire);
-
-        // Reconstruct full state: last is only wall_time (counter assumed 0 on init)
-        // But after first update, we store full u128 in two steps — simpler: use u128 atomically?
-        // Since std::sync::atomic doesn't have AtomicU128 on all platforms, we do a CAS loop.
-
-        // We'll reinterpret last_time as storing the full u128 as two u64s — but for simplicity,
-        // we use a mutex-free approach with a single u64 for wall_time and manage counter separately.
-        // However, to keep it minimal and correct, we change strategy:
-
-        // Instead, store only wall_time, and keep counter in lower bits via a different method.
-        // But the cleanest portable way: use a CAS loop on a u64 that packs (wall_time, counter)
-
-        // Let's redefine: last_time holds the full u128 as u64 high part? No.
-        // Better: use a single u64 for wall_time, and a separate counter — but that's not atomic.
-
-        // Given constraints, we accept a simpler model: **no sub-nanosecond events**.
-        // If two events happen in the same nanosecond, we increment a local counter.
-
-        // We'll store the last full timestamp as u128 in an AtomicU64 is not enough.
-        // So we use a different approach: **use a mutex** — but you want lock-free.
-
-        // Compromise: use `AtomicU64` for wall_time, and if time doesn't advance, fail gracefully.
-        // But HLC requires counter.
-
-        // Correct minimal implementation:
-        let mut last_full = self.last_time.load(Ordering::Relaxed);
         loop {
-            let last_wall = (last_full >> 64) as u64;
-            let last_counter = last_full as u64;
+            let last_packed = self.last_packed.load(Ordering::Acquire);
+            let last_ts = HlcTimestamp::from_u64(last_packed);
 
-            let wall_time = if now_ns > last_wall {
-                now_ns
-            } else if now_ns == last_wall {
-                now_ns
-            } else {
-                // Clock went backward — use last_wall + 1
-                last_wall + 1
-            };
-
-            let counter = if wall_time == last_wall {
-                last_counter + 1
-            } else {
-                0
-            };
-
-            let new_full = ((wall_time as u128) << 64) | (counter as u128);
-            // But we can't store u128 atomically on all platforms.
-
-            // Since Rust doesn't guarantee AtomicU128, and you want minimal deps,
-            // we assume 64-bit platforms and use `AtomicU64` for wall_time only,
-            // and accept that counter is lost — not acceptable.
-
-            // Given the complexity, and since this is a sovereign node (not high-frequency),
-            // we use a **spinlock-free CAS on u128 via two u64s is too complex**.
-
-            // Instead, we provide a **simplified HLC** that uses `u64` wall_time and assumes
-            // no more than one event per nanosecond — or panics if overloaded.
-
-            // But your spec requires correctness.
-
-            // Final decision: use `std::sync::Mutex` for correctness in early stage.
-            // You can replace with lock-free later.
-
-            // However, you said: non-blocking, async.
-
-            // So we do this: **store only wall_time**, and require that the caller
-            // ensures uniqueness via other means (e.g., payload hash).
-
-            // But that breaks HLC.
-
-            // Given the trade-off, here is a **correct, portable, minimal HLC** using `AtomicU64`
-            // that packs wall_time (56 bits) and counter (8 bits) — enough for 255 events/ns.
-
-            const WALL_TIME_BITS: u64 = 56;
-            const COUNTER_BITS: u64 = 8;
-            const COUNTER_MASK: u64 = (1u64 << COUNTER_BITS) - 1;
-            const MAX_COUNTER: u64 = COUNTER_MASK;
-
-            let now_ns_trunc = now_ns & ((1u64 << WALL_TIME_BITS) - 1);
-            let mut last_packed = self.last_time.load(Ordering::Acquire);
-
-            let last_wall = last_packed >> COUNTER_BITS;
-            let last_counter = last_packed & COUNTER_MASK;
-
-            let (new_wall, new_counter) = if now_ns_trunc > last_wall {
-                (now_ns_trunc, 0)
-            } else if now_ns_trunc == last_wall {
-                if last_counter < MAX_COUNTER {
-                    (last_wall, last_counter + 1)
+            let (new_wall, new_counter) = if now_ns > last_ts.wall_time_ns {
+                (now_ns, 0u8)
+            } else if now_ns == last_ts.wall_time_ns {
+                if last_ts.counter < u8::MAX {
+                    (now_ns, last_ts.counter + 1)
                 } else {
-                    // Counter overflow — advance wall time
-                    (last_wall + 1, 0)
+                    // Counter overflow: advance wall time
+                    (now_ns + 1, 0u8)
                 }
             } else {
-                // Clock moved backward
-                (last_wall + 1, 0)
+                // Clock moved backward: advance wall time
+                (last_ts.wall_time_ns + 1, 0u8)
             };
 
-            let new_packed = (new_wall << COUNTER_BITS) | new_counter;
+            let new_ts = HlcTimestamp::new(new_wall, new_counter);
+            let new_packed = new_ts.as_u64();
 
-            match self.last_time.compare_exchange_weak(
+            match self.last_packed.compare_exchange_weak(
                 last_packed,
                 new_packed,
                 Ordering::AcqRel,
                 Ordering::Acquire,
             ) {
-                Ok(_) => {
-                    return HlcTimestamp {
-                        wall_time_ns: new_wall,
-                        counter: new_counter,
-                    };
-                }
-                Err(current) => {
-                    last_packed = current;
-                }
+                Ok(_) => return new_ts,
+                Err(_) => continue, // retry on conflict
             }
         }
     }
 
-    /// Updates the clock with a received timestamp (for causal consistency).
-    ///
-    /// Returns the new local timestamp to use for the receive event.
+    /// Updates the clock with a received remote timestamp (for causal consistency).
     #[must_use]
     pub fn update_with(&self, remote: HlcTimestamp) -> HlcTimestamp {
         let now_ns = Self::current_time_ns();
-        let remote_packed = (remote.wall_time_ns << 8) | (remote.counter as u64 & 0xFF);
-
-        let mut last_packed = self.last_time.load(Ordering::Acquire);
+        let remote = HlcTimestamp::new(remote.wall_time_ns, remote.counter); // sanitize
 
         loop {
-            let last_wall = last_packed >> 8;
-            let last_counter = last_packed & 0xFF;
+            let last_packed = self.last_packed.load(Ordering::Acquire);
+            let last_ts = HlcTimestamp::from_u64(last_packed);
 
-            let (new_wall, new_counter) = if remote.wall_time_ns > last_wall {
-                if remote.wall_time_ns > now_ns {
-                    (remote.wall_time_ns, remote.counter + 1)
-                } else if remote.wall_time_ns == now_ns {
-                    (now_ns, remote.counter + 1)
-                } else {
-                    (now_ns, 0)
-                }
-            } else if remote.wall_time_ns == last_wall {
-                if remote.counter >= last_counter {
-                    let wall = if now_ns > remote.wall_time_ns {
-                        now_ns
-                    } else {
-                        remote.wall_time_ns
-                    };
-                    (wall, remote.counter + 1)
-                } else {
-                    // Use local time
-                    if now_ns > last_wall {
-                        (now_ns, 0)
-                    } else {
-                        (last_wall, last_counter + 1)
-                    }
-                }
+            // HLC update rule: take max(local_time, remote_time, now) + 1
+            let candidate_wall = remote.wall_time_ns.max(last_ts.wall_time_ns).max(now_ns);
+            let mut new_wall = candidate_wall;
+            let mut new_counter = 0u8;
+
+            if remote.wall_time_ns == candidate_wall && remote.counter < u8::MAX {
+                new_counter = remote.counter + 1;
+            } else if last_ts.wall_time_ns == candidate_wall && last_ts.counter < u8::MAX {
+                new_counter = last_ts.counter + 1;
+            } else if now_ns == candidate_wall {
+                // counter remains 0
             } else {
-                // remote is older — use local logic
-                if now_ns > last_wall {
-                    (now_ns, 0)
-                } else {
-                    (last_wall, last_counter + 1)
-                }
-            };
+                // candidate_wall was incremented, so counter = 0
+            }
 
-            // Pack new values
-            let new_counter_u64 = new_counter.min(255) as u64;
-            let new_packed = (new_wall << 8) | new_counter_u64;
+            // If counter would overflow, advance wall time
+            if new_counter == 0 && candidate_wall == remote.wall_time_ns && remote.counter == u8::MAX {
+                new_wall = candidate_wall + 1;
+            }
 
-            match self.last_time.compare_exchange_weak(
+            let new_ts = HlcTimestamp::new(new_wall, new_counter);
+            let new_packed = new_ts.as_u64();
+
+            match self.last_packed.compare_exchange_weak(
                 last_packed,
                 new_packed,
                 Ordering::AcqRel,
                 Ordering::Acquire,
             ) {
-                Ok(_) => {
-                    return HlcTimestamp {
-                        wall_time_ns: new_wall,
-                        counter: new_counter_u64,
-                    };
-                }
-                Err(current) => {
-                    last_packed = current;
-                }
+                Ok(_) => return new_ts,
+                Err(_) => continue,
             }
         }
     }
@@ -284,11 +175,19 @@ mod tests {
     #[test]
     fn test_update_with_remote() {
         let hlc = HybridLogicalClock::new();
-        let remote = HlcTimestamp {
-            wall_time_ns: 1_000_000_000_000_000_000,
-            counter: 5,
-        };
+        let remote = HlcTimestamp::new(1_000_000_000_000_000, 5);
         let local_after = hlc.update_with(remote);
         assert!(local_after >= remote);
+    }
+
+    #[test]
+    fn test_counter_overflow() {
+        let hlc = HybridLogicalClock::new();
+        // Force a timestamp with counter = 255
+        let packed = (1000u64 << 8) | 255u64;
+        hlc.last_packed.store(packed, Ordering::Release);
+        let t1 = hlc.new_timestamp();
+        assert_eq!(t1.wall_time_ns, 1001);
+        assert_eq!(t1.counter, 0);
     }
 }
