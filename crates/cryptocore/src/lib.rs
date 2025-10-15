@@ -39,7 +39,6 @@ pub fn generate_nonce() -> Nonce {
 }
 
 /// Encrypts plaintext with ChaCha20Poly1305 using given key and nonce.
-#[must_use]
 pub fn encrypt(
     key: &[u8; 32],
     nonce: &Nonce,
@@ -55,7 +54,6 @@ pub fn encrypt(
 }
 
 /// Decrypts ciphertext with ChaCha20Poly1305.
-#[must_use]
 pub fn decrypt(
     key: &[u8; 32],
     nonce: &Nonce,
