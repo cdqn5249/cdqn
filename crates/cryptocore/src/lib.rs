@@ -7,11 +7,9 @@
 //! - SHA3-256 hashing
 //! - HKDF-based key derivation
 //! - ChaCha20Poly1305 for authenticated encryption
-//! - Ed25519 signatures
 //! - Secure zeroization of secrets
 
 pub use chacha20poly1305::{AeadCore, AeadInPlace, ChaCha20Poly1305, Key, KeyInit, Nonce};
-pub use ed25519_dalek::{Keypair, PublicKey, SecretKey, Signature, Signer, Verifier};
 pub use hkdf::Hkdf;
 pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
