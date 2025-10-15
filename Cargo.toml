@@ -16,12 +16,10 @@ edition = "2021"
 license = "BaDaaS"
 version = "1.0.0"
 
-# This section is now heavily minimized.
-# Only dependencies shared by more than one crate AND which are external will be listed here.
-# Currently, there are none.
+# --- THE CRITICAL FIX ---
+# The [workspace.dependencies] table is being removed completely.
+# While useful for large projects, it is the source of our current ambiguity.
+# Each crate will now define its dependencies explicitly, which is more robust
+# for a project of this size.
 [workspace.dependencies]
-
-# Local Workspace Crates are defined here for easy inheritance.
-common = { path = "crates/common" }
-cryptocore = { path = "crates/cryptocore" }
-hlc = { path = "crates/hlc" }
+# This section is now intentionally left empty.```
