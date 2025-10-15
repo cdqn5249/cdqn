@@ -7,12 +7,10 @@ description = "Core cryptographic functionalities for the CDQN ecosystem."
 # Inherits version, authors, edition, license from the workspace root Cargo.toml
 
 [dependencies]
-# For Ed25519 digital signatures. Core functionality.
-# The 'serde' feature is no longer needed and has been removed.
-ed25519-dalek = "2.1.0"
-
-# For SHA3-256 hashing. Core functionality.
-sha3 = "0.10.8"
-
-# For generating cryptographically secure random numbers for new keys. Core functionality.
-rand = "0.8.5"
+# --- THE CRITICAL FIX ---
+# By adding `workspace = true`, we are explicitly telling Cargo to look for the
+# version and details of these dependencies in the [workspace.dependencies] table
+# of the root `Cargo.toml`. This is the missing link that resolves the errors.
+ed25519-dalek = { workspace = true }
+sha3 = { workspace = true }
+rand = { workspace = true }
