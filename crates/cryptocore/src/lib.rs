@@ -9,7 +9,7 @@
 //! - ChaCha20Poly1305 for authenticated encryption
 //! - Secure zeroization of secrets
 
-pub use sha3::{Digest, Sha3_256};
+pub use chacha20poly1305::{AeadCore, AeadInPlace, ChaCha20Poly1305, Key, Nonce};
 pub use hkdf::Hkdf;
-pub use chacha20poly1305::{ChaCha20Poly1305, Key, Nonce, AeadInPlace, AeadCore};
+pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
