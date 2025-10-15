@@ -7,12 +7,11 @@ description = "The Causal Data Unit (CDU) implementation, the core data structur
 # Inherits version, authors, edition, license from the workspace root Cargo.toml
 
 [dependencies]
-# The CDU needs hashing capabilities from cryptocore to create the payload_hash
-# and to combine it with the HLC for the final id_hlc.
+# Required for NodeId, HashDigest, and the hash function.
 cryptocore = { workspace = true }
 
-# The CDU's unique identifier is generated using a timestamp from the HLC module.
-hlc = { path = "../hlc", workspace = true }
+# Required for the Hlc type.
+hlc = { workspace = true }
 
-# Inherit from workspace.
-serde = { workspace = true }
+# Provides the ToCanonicalBytes trait for serialization.
+common = { workspace = true }
