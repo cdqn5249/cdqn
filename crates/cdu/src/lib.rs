@@ -85,3 +85,11 @@ impl Cdu {
         self
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn genesis_cdu_smoke() {
+        println!("GenesisCDU smoke test: OK (placeholder)");
+    }
+}
