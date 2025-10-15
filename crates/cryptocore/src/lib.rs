@@ -5,14 +5,11 @@
 //!
 //! Provides:
 //! - SHA3-256 hashing
-//! - HKDF-based key derivation
+//! - HKDF-based key derivation (using byte slices as salt)
 //! - ChaCha20Poly1305 for authenticated encryption
 //! - Secure zeroization of secrets
 
-// Re-export only the minimal necessary interfaces
 pub use sha3::{Digest, Sha3_256};
-pub use hkdf::{Hkdf, Salt};
+pub use hkdf::Hkdf;
 pub use chacha20poly1305::{ChaCha20Poly1305, Key, Nonce, AeadInPlace, AeadCore};
 pub use zeroize::Zeroize;
-
-// We will add pure, immutable helper functions here in future steps.
