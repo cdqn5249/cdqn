@@ -19,7 +19,7 @@ fn hex_encode(bytes: &[u8]) -> String {
 /// The immutable core content of a CDU.
 #[derive(Debug, Clone)]
 pub struct Payload {
-    pub data: Vec<u8>,
+    pub  Vec<u8>,
     pub payload_type: String,
 }
 
@@ -52,7 +52,7 @@ impl GenesisPayload {
             self.location.replace('"', "\\\"")
         );
         Payload {
-            data: json.into_bytes(),
+             json.into_bytes(),
             payload_type: "genesis/v1".to_string(),
         }
     }
@@ -119,6 +119,12 @@ impl Cdu {
     pub fn with_signature(mut self, signature: Signature) -> Self {
         self.signatures.push(signature);
         self
+    }
+
+    /// Returns true if this CDU is the Genesis CDU of the node.
+    #[must_use]
+    pub fn is_genesis(&self) -> bool {
+        self.payload.payload_type == "genesis/v1"
     }
 }
 
