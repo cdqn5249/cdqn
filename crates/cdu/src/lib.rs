@@ -88,8 +88,68 @@ impl Cdu {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use cdqn_hlc::HybridLogicalClock;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
     #[test]
     fn genesis_cdu_smoke() {
-        println!("GenesisCDU smoke test: OK (placeholder)");
+        // 1. Get OS name at runtime (works on Android, iOS, etc.)
+        let os_name = std::env::consts::OS;
+
+        // 2. Create a unique but deterministic seed for hardware fingerprint
+        //    (In real node: replace with actual hardware fingerprint)
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let seed = format!("cdqn-genesis-{}-{}-{}", env!("CARGO_PKG_NAME"), os_name, timestamp);
+        let hardware_fp = cdqn_cryptocore::hash_sha3_256(seed.as_bytes());
+
+        // 3. NodeId = hardware fingerprint
+        let node_id = hardware_fp.to_vec();
+
+        // 4. Create GenesisPayload
+        let genesis_payload = GenesisPayload {
+            hardware_fingerprint: hardware_fp,
+            os: os_name.to_string(),
+            timestamp: (timestamp / 1_000_000_000) as u64, // seconds
+            location: "CI Runner".to_string(),
+        };
+
+        // 5. Convert to generic Payload
+        let payload = genesis_payload.into_payload();
+
+        // 6. Create metadata
+        let metadata = Metadata {
+            author_node: node_id.clone(),
+            context_refs: vec![],
+            state: "active".to_string(),
+            weight: 1.0,
+            r_coordinate: 0.0,
+            world_context: "NodeWorld".to_string(),
+            hlc_timestamp: HlcTimestamp::new(0, 0),
+        };
+
+        // 7. Create Genesis CDU
+        let hlc = HybridLogicalClock::new();
+        let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
+
+        // 8. Print for CI visibility
+        println!("OS: {}", os_name);
+        println!("NodeId (hex): {}", hex_encode(&node_id));
+        println!("PayloadHash (hex): {}", hex_encode(&genesis_cdu.payload_hash));
+        println!("GenesisCDU ID (hex): {}", hex_encode(&genesis_cdu.id_hlc));
+        println!("Status: SUCCESS");
+    }
+
+    fn hex_encode(bytes: &[u8]) -> String {
+        const HEX_CHARS: &[u8] = b"0123456789abcdef";
+        let mut output = String::with_capacity(bytes.len() * 2);
+        for &b in bytes {
+            output.push(HEX_CHARS[(b >> 4) as usize] as char);
+            output.push(HEX_CHARS[(b & 0x0F) as usize] as char);
+        }
+        output
     }
 }
