@@ -19,7 +19,7 @@ fn hex_encode(bytes: &[u8]) -> String {
 /// The immutable core content of a CDU.
 #[derive(Debug, Clone)]
 pub struct Payload {
-    pub  Vec<u8>,
+    pub data: Vec<u8>,
     pub payload_type: String,
 }
 
@@ -52,7 +52,7 @@ impl GenesisPayload {
             self.location.replace('"', "\\\"")
         );
         Payload {
-             json.into_bytes(),
+            data: json.into_bytes(),
             payload_type: "genesis/v1".to_string(),
         }
     }
@@ -84,7 +84,7 @@ pub struct Cdu {
     pub id_hlc: Vec<u8>,
     pub payload: Payload,
     pub payload_hash: [u8; 32],
-    pub meta Metadata,
+    pub metadata: Metadata,
     pub signatures: Vec<Signature>,
 }
 
@@ -92,7 +92,7 @@ impl Cdu {
     #[must_use]
     pub fn new(
         payload: Payload,
-        mut meta Metadata,
+        mut metadata: Metadata,
         hlc: &HybridLogicalClock,
         node_id: &[u8],
     ) -> Self {
