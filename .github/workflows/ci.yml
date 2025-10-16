@@ -47,8 +47,6 @@ jobs:
           echo "OS: $(uname -a 2>/dev/null || ver 2>/dev/null)" >> ci-logs/${{ runner.os }}.log
           echo "Time: $(date -u)" >> ci-logs/${{ runner.os }}.log
           echo "---" >> ci-logs/${{ runner.os }}.log
-
-          # Run the smoke test (will pass even if minimal)
           cargo test --lib genesis_cdu_smoke -- --exact --nocapture 2>&1 >> ci-logs/${{ runner.os }}.log || echo "[WARNING] Smoke test not implemented yet"
 
         shell: bash
@@ -86,58 +84,40 @@ jobs:
 
       - name: Build deployment site
         run: |
-          # Start with your existing webGhPages content
           cp -r webGhPages _site
-
-          # Ensure ci-reports directory exists
           mkdir -p _site/ci-reports
 
-          # Create index.html for ci-reports
-          cat > _site/ci-reports/index.html <<'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>CDQN CI Reports</title>
-  <style>
-    body {
-      font-family: monospace;
-      padding: 20px;
-      background: #121212;
-      color: #e0e0e0;
-    }
-    a {
-      color: #bb86fc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <h1>CDQN CI Build Reports</h1>
-  <p>GenesisCDU build logs per operating system:</p>
-  <ul>
-EOF
+          # Generate ci-reports/index.html using printf to avoid heredoc
+          printf '%s\n' "<!DOCTYPE html>" > _site/ci-reports/index.html
+          printf '%s\n' "<html>" >> _site/ci-reports/index.html
+          printf '%s\n' "<head>" >> _site/ci-reports/index.html
+          printf '%s\n' "  <meta charset=\"utf-8\">" >> _site/ci-reports/index.html
+          printf '%s\n' "  <title>CDQN CI Reports</title>" >> _site/ci-reports/index.html
+          printf '%s\n' "  <style>" >> _site/ci-reports/index.html
+          printf '%s\n' "    body { font-family: monospace; padding: 20px; background: #121212; color: #e0e0e0; }" >> _site/ci-reports/index.html
+          printf '%s\n' "    a { color: #bb86fc; text-decoration: none; }" >> _site/ci-reports/index.html
+          printf '%s\n' "    a:hover { text-decoration: underline; }" >> _site/ci-reports/index.html
+          printf '%s\n' "  </style>" >> _site/ci-reports/index.html
+          printf '%s\n' "</head>" >> _site/ci-reports/index.html
+          printf '%s\n' "<body>" >> _site/ci-reports/index.html
+          printf '%s\n' "  <h1>CDQN CI Build Reports</h1>" >> _site/ci-reports/index.html
+          printf '%s\n' "  <p>GenesisCDU build logs per operating system:</p>" >> _site/ci-reports/index.html
+          printf '%s\n' "  <ul>" >> _site/ci-reports/index.html
 
-          # Copy logs and list them
           if ls downloaded-logs/*.log 1> /dev/null 2>&1; then
             cp downloaded-logs/*.log _site/ci-reports/
             for f in downloaded-logs/*.log; do
               base=$(basename "$f")
-              echo "    <li><a href=\"$base\">$base</a></li>" >> _site/ci-reports/index.html
+              printf '    <li><a href=\"%s\">%s</a></li>\n' "$base" "$base" >> _site/ci-reports/index.html
             done
           else
-            echo "    <li>No build logs available yet.</li>" >> _site/ci-reports/index.html
+            printf '    <li>No build logs available yet.</li>\n' >> _site/ci-reports/index.html
           fi
 
-          cat >> _site/ci-reports/index.html <<'EOF'
-  </ul>
-  <p><a href="/cdqn/">← Back to homepage</a></p>
-</body>
-</html>
-EOF
+          printf '%s\n' "  </ul>" >> _site/ci-reports/index.html
+          printf '%s\n' "  <p><a href=\"/cdqn/\">← Back to homepage</a></p>" >> _site/ci-reports/index.html
+          printf '%s\n' "</body>" >> _site/ci-reports/index.html
+          printf '%s\n' "</html>" >> _site/ci-reports/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
