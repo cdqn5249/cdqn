@@ -47,7 +47,9 @@ jobs:
           echo "OS: $(uname -a 2>/dev/null || ver 2>/dev/null)" >> ci-logs/${{ runner.os }}.log
           echo "Time: $(date -u)" >> ci-logs/${{ runner.os }}.log
           echo "---" >> ci-logs/${{ runner.os }}.log
-          cargo test --lib genesis_cdu_smoke -- --exact --nocapture 2>&1 >> ci-logs/${{ runner.os }}.log || echo "[WARNING] Smoke test not implemented yet"
+
+          # Use substring match to find the test regardless of module path
+          cargo test genesis_cdu_smoke -- --nocapture 2>&1 >> ci-logs/${{ runner.os }}.log || echo "[WARNING] Smoke test not found or failed"
 
         shell: bash
 
@@ -87,7 +89,7 @@ jobs:
           cp -r webGhPages _site
           mkdir -p _site/ci-reports
 
-          # Generate ci-reports/index.html using printf to avoid heredoc
+          # Generate index.html using printf (YAML-safe)
           printf '%s\n' "<!DOCTYPE html>" > _site/ci-reports/index.html
           printf '%s\n' "<html>" >> _site/ci-reports/index.html
           printf '%s\n' "<head>" >> _site/ci-reports/index.html
