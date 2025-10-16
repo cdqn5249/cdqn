@@ -9,9 +9,7 @@ This repository contains the complete source code, documentation, and infrastruc
 ## Quick Links
 
 *   **[Project Homepage]** - Visit the main UI to understand the project's vision.
-*   **[Live Repository Mirror]** - Explore the complete, live source code and documentation.
 *   **[Live System Actions]** - Observe the system's core services processing information in real-time.
 
 [Project Homepage]: https://cdqn5249.github.io/cdqn/
-[Live Repository Mirror]: https://cdqn5249.github.io/cdqn/repo-mirror/
 [Live System Actions]: https://github.com/cdqn5249/cdqn/actions
