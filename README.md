@@ -2,7 +2,7 @@
 
 # CDQN: Causal Data Query Nodes
 
-**CDQN** is a sovereign operating system for verifiable intelligence. Its mission is to provide a personal AI companion designed to learn from its mistakes, giving users a trustworthy and transparent tool for creativity and problem-solving.
+**CDQN** is a sovereign operating system for verifiable intelligence. Its mission is to provide a personal AI companion, Chronosa, designed to learn from its mistakes, giving users a trustworthy and transparent tool for creativity and problem-solving.
 
 This repository contains the complete source code, documentation, and infrastructure for the CDQN project, built on a foundation of immutable history, sovereign identity, and a pure functional core.
 
