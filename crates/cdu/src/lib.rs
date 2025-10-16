@@ -6,10 +6,20 @@
 use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 
+fn hex_encode(bytes: &[u8]) -> String {
+    const HEX_CHARS: &[u8] = b"0123456789abcdef";
+    let mut output = String::with_capacity(bytes.len() * 2);
+    for &b in bytes {
+        output.push(HEX_CHARS[(b >> 4) as usize] as char);
+        output.push(HEX_CHARS[(b & 0x0F) as usize] as char);
+    }
+    output
+}
+
 /// The immutable core content of a CDU.
 #[derive(Debug, Clone)]
 pub struct Payload {
-    pub data: Vec<u8>,
+    pub  Vec<u8>,
     pub payload_type: String,
 }
 
@@ -19,6 +29,32 @@ impl Payload {
         let mut canonical = self.payload_type.as_bytes().to_vec();
         canonical.extend_from_slice(&self.data);
         hash_sha3_256(&canonical)
+    }
+}
+
+/// Special payload type for the Genesis CDU.
+#[derive(Debug, Clone)]
+pub struct GenesisPayload {
+    pub hardware_fingerprint: [u8; 32],
+    pub os: String,
+    pub timestamp: u64,
+    pub location: String,
+}
+
+impl GenesisPayload {
+    #[must_use]
+    pub fn into_payload(self) -> Payload {
+        let json = format!(
+            r#"{{"hardware_fingerprint":"{}","os":"{}","timestamp":{},"location":"{}"}}"#,
+            hex_encode(&self.hardware_fingerprint),
+            self.os.replace('"', "\\\""),
+            self.timestamp,
+            self.location.replace('"', "\\\"")
+        );
+        Payload {
+             json.into_bytes(),
+            payload_type: "genesis/v1".to_string(),
+        }
     }
 }
 
@@ -48,7 +84,7 @@ pub struct Cdu {
     pub id_hlc: Vec<u8>,
     pub payload: Payload,
     pub payload_hash: [u8; 32],
-    pub metadata: Metadata,
+    pub meta Metadata,
     pub signatures: Vec<Signature>,
 }
 
@@ -56,7 +92,7 @@ impl Cdu {
     #[must_use]
     pub fn new(
         payload: Payload,
-        mut metadata: Metadata,
+        mut meta Metadata,
         hlc: &HybridLogicalClock,
         node_id: &[u8],
     ) -> Self {
@@ -89,38 +125,27 @@ impl Cdu {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use cdqn_hlc::HybridLogicalClock;
     use std::time::{SystemTime, UNIX_EPOCH};
 
     #[test]
     fn genesis_cdu_smoke() {
-        // 1. Get OS name at runtime (works on Android, iOS, etc.)
         let os_name = std::env::consts::OS;
-
-        // 2. Create a unique but deterministic seed for hardware fingerprint
-        //    (In real node: replace with actual hardware fingerprint)
         let timestamp = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_nanos();
         let seed = format!("cdqn-genesis-{}-{}-{}", env!("CARGO_PKG_NAME"), os_name, timestamp);
         let hardware_fp = cdqn_cryptocore::hash_sha3_256(seed.as_bytes());
-
-        // 3. NodeId = hardware fingerprint
         let node_id = hardware_fp.to_vec();
 
-        // 4. Create GenesisPayload
         let genesis_payload = GenesisPayload {
             hardware_fingerprint: hardware_fp,
             os: os_name.to_string(),
-            timestamp: (timestamp / 1_000_000_000) as u64, // seconds
+            timestamp: (timestamp / 1_000_000_000) as u64,
             location: "CI Runner".to_string(),
         };
 
-        // 5. Convert to generic Payload
         let payload = genesis_payload.into_payload();
-
-        // 6. Create metadata
         let metadata = Metadata {
             author_node: node_id.clone(),
             context_refs: vec![],
@@ -131,25 +156,13 @@ mod tests {
             hlc_timestamp: HlcTimestamp::new(0, 0),
         };
 
-        // 7. Create Genesis CDU
         let hlc = HybridLogicalClock::new();
         let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
 
-        // 8. Print for CI visibility
         println!("OS: {}", os_name);
         println!("NodeId (hex): {}", hex_encode(&node_id));
         println!("PayloadHash (hex): {}", hex_encode(&genesis_cdu.payload_hash));
         println!("GenesisCDU ID (hex): {}", hex_encode(&genesis_cdu.id_hlc));
         println!("Status: SUCCESS");
-    }
-
-    fn hex_encode(bytes: &[u8]) -> String {
-        const HEX_CHARS: &[u8] = b"0123456789abcdef";
-        let mut output = String::with_capacity(bytes.len() * 2);
-        for &b in bytes {
-            output.push(HEX_CHARS[(b >> 4) as usize] as char);
-            output.push(HEX_CHARS[(b & 0x0F) as usize] as char);
-        }
-        output
     }
 }
