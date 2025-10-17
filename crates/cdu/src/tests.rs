@@ -6,26 +6,30 @@ use crate::payloads::GenesisPayload;
 use crate::utils::{hex_encode, verify_causal_chain};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
-use std::env;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
+
+/// Finds the absolute path to the workspace root by traversing up from the
+/// current crate's manifest directory.
+fn find_workspace_root() -> PathBuf {
+    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    // The workspace root is the parent directory of the `crates/cdu` directory.
+    path.parent().unwrap_or_else(|| Path::new(".")).to_path_buf()
+}
 
 /// This test validates the creation of a Genesis CDU, which is the root of trust
 /// for a CDQN node. It ensures that a unique ID and NodeId can be generated
 /// based on environmental factors.
 ///
-/// NOTE: We write output to a file using the project root, determined by the
-/// `PROJECT_ROOT` environment variable if set, to ensure it is reliably found
-/// by the CI script.
+/// NOTE: This test is now self-sufficient and determines the project root
+/// programmatically to ensure the report file is written to a location the
+/// CI script can reliably find.
 #[test]
 fn genesis_cdu_smoke() {
-    // Determine the project root. Prefer the PROJECT_ROOT env var set by CI,
-    // otherwise fall back to the crate's manifest directory for local runs.
-    let project_root = env::var("PROJECT_ROOT")
-        .unwrap_or_else(|_| env!("CARGO_MANIFEST_DIR").to_string());
-    
-    let log_dir = PathBuf::from(project_root).join("ci-logs");
+    // Find the project root programmatically.
+    let project_root = find_workspace_root();
+    let log_dir = project_root.join("ci-logs");
     fs::create_dir_all(&log_dir).expect("Should be able to create ci-logs directory");
 
     let os_name = std::env::consts::OS;
@@ -68,6 +72,10 @@ fn genesis_cdu_smoke() {
 
     // Write the output to a file that the CI script can read.
     let path = log_dir.join("genesis_report.txt");
+    
+    // Print the path to the test's own stdout for debugging.
+    println!("TEST DEBUG: Writing genesis report to: {}", path.display());
+    
     fs::write(&path, output).expect("Unable to write genesis report file");
 
     assert!(!genesis_cdu.id_hlc.is_empty(), "Genesis CDU ID should not be empty");
