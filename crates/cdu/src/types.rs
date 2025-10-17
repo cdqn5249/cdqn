@@ -122,7 +122,7 @@ impl Cdu {
         validated_worlds.insert(World::LangCodingWorld);
 
         let metadata = Metadata {
-            author_node: author_node.clone(), // Clone to allow later use
+            author_node: author_node.clone(),
             context_refs: vec![],
             state: "active".to_string(),
             weight: 1.0,
@@ -138,6 +138,7 @@ impl Cdu {
 
     /// Creates a new Semi-Axiom CDU.
     /// The semi-axiom is initially only validated in its own world.
+    /// The `origin_world` is passed directly to the metadata to avoid ownership issues.
     #[must_use]
     pub fn new_semi_axiom(
         statement: String,
@@ -145,7 +146,7 @@ impl Cdu {
         author_node: Vec<u8>,
         hlc: &HybridLogicalClock,
     ) -> Self {
-        let axiom_payload = AxiomPayload { statement, origin_world };
+        let axiom_payload = AxiomPayload { statement };
         let payload = axiom_payload.into_payload();
         let payload_hash = payload.hash();
         let hlc_ts = hlc.new_timestamp();
@@ -159,12 +160,12 @@ impl Cdu {
         validated_worlds.insert(origin_world);
 
         let metadata = Metadata {
-            author_node, // Move, no clone.
+            author_node,
             context_refs: vec![],
             state: "active".to_string(),
             weight: 1.0,
             r_coordinate: 0.0,
-            world_context: origin_world, // `origin_world` is Copy, so this is fine.
+            world_context: origin_world,
             hlc_timestamp: hlc_ts,
             symmetric_counterpart: None,
             validated_worlds,
@@ -180,37 +181,33 @@ impl Cdu {
     }
 
     /// A performance-oriented convenience constructor for creating a `ConfigCDU`.
-    /// This function is written to avoid any memory allocations by reordering
-    /// operations to prevent cloning the `author_node`.
     #[must_use]
     pub fn new_config(
         settings: std::collections::HashMap<String, serde_json::Value>,
         author_node: Vec<u8>,
         hlc: &HybridLogicalClock,
-        parent_id: &[u8], // The ID of the parent CDU to link to.
+        parent_id: &[u8],
     ) -> Self {
         let config_payload = ConfigPayload { settings };
         let payload = config_payload.into_payload();
         let payload_hash = payload.hash();
         let hlc_ts = hlc.new_timestamp();
 
-        // Generate the ID while we can still borrow `author_node`.
         let mut id_input = hlc_ts.as_u64().to_be_bytes().to_vec();
         id_input.extend_from_slice(&author_node);
         id_input.extend_from_slice(&payload_hash);
         let id_hlc = hash_sha3_256(&id_input).to_vec();
 
-        // Now that hashing is done, we can move `author_node` into the metadata.
         let metadata = Metadata {
-            author_node, // Move, no clone.
-            context_refs: vec![parent_id.to_vec()], // Link to the parent.
+            author_node,
+            context_refs: vec![parent_id.to_vec()],
             state: "active".to_string(),
             weight: 1.0,
             r_coordinate: 0.0,
             world_context: World::UserWorld,
             hlc_timestamp: hlc_ts,
-            symmetric_counterpart: None, // Default for non-Axioms.
-            validated_worlds: HashSet::new(), // Default for non-Axioms.
+            symmetric_counterpart: None,
+            validated_worlds: HashSet::new(),
         };
 
         Self {
@@ -223,15 +220,12 @@ impl Cdu {
     }
 
     /// Validates this Semi-Axiom CDU in another world.
-    /// This would be called by the `Verifier` role in Chronosa.
     /// Returns `true` if the world was newly added, `false` if it was already present.
     pub fn validate_in_world(&mut self, world: World) -> bool {
         self.metadata.validated_worlds.insert(world)
     }
 
     /// Determines if a Semi-Axiom CDU has achieved the status of a full Axiom.
-    /// An Axiom is a Semi-Axiom that is validated in the UserWorld and at least
-    /// two other worlds.
     #[must_use]
     pub fn is_axiom(&self) -> bool {
         if self.payload.payload_type != "axiom/v1" {
