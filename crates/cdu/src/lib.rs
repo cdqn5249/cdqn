@@ -14,11 +14,9 @@ use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::fs;
-use std::io::Write;
-use std::path::Path;
 
 /// A simple utility to encode bytes as a hexadecimal string.
+#[allow(dead_code)] // Currently only used in tests, but is a general utility.
 fn hex_encode(bytes: &[u8]) -> String {
     const HEX_CHARS: &[u8] = b"0123456789abcdef";
     let mut output = String::with_capacity(bytes.len() * 2);
@@ -236,6 +234,7 @@ impl Cdu {
 /// A simple, in-memory verification function for testing causal chains.
 /// In a real implementation, this would be part of the `Manifold` crate and
 /// would load CDUs from persistent storage.
+#[allow(dead_code)] // Currently only used in tests, but will be part of the Manifold.
 fn verify_causal_chain(
     cdu: &Cdu,
     all_cdus: &[&Cdu],
@@ -260,7 +259,12 @@ fn verify_causal_chain(
 
 #[cfg(test)]
 mod tests {
+    // Explicitly import all items needed for the tests. This is more robust
+    // than `use super::*;` and resolves potential scoping issues.
     use super::*;
+    use std::fs;
+    use std::io::Write;
+    use std::path::Path;
     use std::time::{SystemTime, UNIX_EPOCH};
 
     /// This test validates the creation of a Genesis CDU, which is the root of trust
