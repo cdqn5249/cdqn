@@ -25,6 +25,27 @@ fn find_workspace_root() -> PathBuf {
     }
 }
 
+/// Helper to print a summary of a CDU for debugging.
+fn print_cdu_summary(name: &str, cdu: &Cdu) {
+    eprintln!("--- {} ---", name);
+    eprintln!("  Type: {}", cdu.payload.payload_type);
+    eprintln!("  ID (hex): {}", hex_encode(&cdu.id_hlc));
+    eprintln!("  World: {:?}", cdu.metadata.world_context);
+    if !cdu.metadata.context_refs.is_empty() {
+        eprintln!("  Parents (hex):");
+        for parent_id in &cdu.metadata.context_refs {
+            eprintln!("    - {}", hex_encode(parent_id));
+        }
+    } else {
+        eprintln!("  Parents: None");
+    }
+    if let Some(axiom_payload) = cdu.as_axiom() {
+        eprintln!("  Statement: {}", axiom_payload.statement);
+    }
+    eprintln!("  Is Axiom: {}", cdu.is_axiom());
+    eprintln!("-----------------");
+}
+
 /// This is an integrated test that simulates the full lifecycle of a node's
 /// first two CDUs, ensuring their logical and causal integrity.
 #[test]
@@ -64,6 +85,7 @@ fn test_node_lifecycle_and_causal_integrity() {
         validated_worlds: HashSet::new(),
     };
     let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
+    print_cdu_summary("Genesis CDU", &genesis_cdu);
 
     assert!(genesis_cdu.is_genesis(), "The first CDU created must be a Genesis CDU");
 
@@ -72,6 +94,7 @@ fn test_node_lifecycle_and_causal_integrity() {
     settings.insert("log_level".to_string(), serde_json::Value::String("info".to_string()));
     
     let config_cdu = Cdu::new_config(settings, node_id.clone(), &hlc, &genesis_cdu.id_hlc);
+    print_cdu_summary("Child Config CDU", &config_cdu);
     
     assert!(!config_cdu.is_genesis(), "The second CDU must not be a Genesis CDU");
     assert_eq!(
@@ -113,9 +136,11 @@ fn test_genesis_creates_foundational_axiom() {
         location: "test_location".to_string(),
     };
     let genesis_cdu = Cdu::create_genesis_cdu(genesis_payload, node_id.clone(), &hlc);
+    print_cdu_summary("Genesis CDU", &genesis_cdu);
 
     // 2. Create the foundational Axiom, which is a child of the Genesis CDU.
     let foundational_axiom = Cdu::create_foundational_axiom_for(&genesis_cdu.id_hlc, node_id, &hlc);
+    print_cdu_summary("Foundational Axiom", &foundational_axiom);
 
     // --- Assertions ---
     assert!(!genesis_cdu.is_axiom(), "The Genesis CDU itself must not be an Axiom.");
@@ -142,6 +167,7 @@ fn test_semi_axiom_to_axiom_promotion() {
         node_id,
         &hlc,
     );
+    print_cdu_summary("Initial Semi-Axiom", &semi_axiom);
 
     // 2. Initially, it's only validated in its own world, so it's not an Axiom.
     assert!(!semi_axiom.is_axiom(), "A semi-axiom should not be an axiom initially.");
@@ -150,6 +176,7 @@ fn test_semi_axiom_to_axiom_promotion() {
     // 3. The Verifier role validates it in two other worlds.
     semi_axiom.validate_in_world(World::RWorld);
     semi_axiom.validate_in_world(World::LangCodingWorld);
+    print_cdu_summary("Promoted Semi-Axiom", &semi_axiom);
 
     // 4. Now it is validated in UserWorld and two others, so it must be an Axiom.
     assert!(semi_axiom.is_axiom(), "A semi-axiom validated in 3 worlds must be an axiom.");
