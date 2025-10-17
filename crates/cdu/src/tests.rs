@@ -116,7 +116,7 @@ fn test_worlds_and_genesis_axiom_status() {
         timestamp: 0,
         location: "test_location".to_string(),
     };
-    let mut genesis_cdu = Cdu::create_genesis_cdu(genesis_payload, node_id, &hlc);
+    let genesis_cdu = Cdu::create_genesis_cdu(genesis_payload, node_id, &hlc);
 
     // --- Assertions ---
     assert!(genesis_cdu.is_genesis());
