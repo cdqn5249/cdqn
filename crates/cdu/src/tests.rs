@@ -27,23 +27,23 @@ fn find_workspace_root() -> PathBuf {
 
 /// Helper to print a summary of a CDU for debugging.
 fn print_cdu_summary(name: &str, cdu: &Cdu) {
-    eprintln!("--- {} ---", name);
-    eprintln!("  Type: {}", cdu.payload.payload_type);
-    eprintln!("  ID (hex): {}", hex_encode(&cdu.id_hlc));
-    eprintln!("  World: {:?}", cdu.metadata.world_context);
+    println!("--- {} ---", name);
+    println!("  Type: {}", cdu.payload.payload_type);
+    println!("  ID (hex): {}", hex_encode(&cdu.id_hlc));
+    println!("  World: {:?}", cdu.metadata.world_context);
     if !cdu.metadata.context_refs.is_empty() {
-        eprintln!("  Parents (hex):");
+        println!("  Parents (hex):");
         for parent_id in &cdu.metadata.context_refs {
-            eprintln!("    - {}", hex_encode(parent_id));
+            println!("    - {}", hex_encode(parent_id));
         }
     } else {
-        eprintln!("  Parents: None");
+        println!("  Parents: None");
     }
     if let Some(axiom_payload) = cdu.as_axiom() {
-        eprintln!("  Statement: {}", axiom_payload.statement);
+        println!("  Statement: {}", axiom_payload.statement);
     }
-    eprintln!("  Is Axiom: {}", cdu.is_axiom());
-    eprintln!("-----------------");
+    println!("  Is Axiom: {}", cdu.is_axiom());
+    println!("-----------------");
 }
 
 /// This is an integrated test that simulates the full lifecycle of a node's
