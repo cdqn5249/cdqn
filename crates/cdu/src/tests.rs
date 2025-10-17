@@ -21,7 +21,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 fn genesis_cdu_smoke() {
     // Use the CARGO_WORKSPACE_DIR environment variable provided by Cargo.
     // This is the most reliable way to find the project's root directory.
-    let project_root = env!("CARGO_WORKSPACE_DIR");
+    // We panic if it's not set, as it should always be set by `cargo test`.
+    let project_root = env::var("CARGO_WORKSPACE_DIR").expect("CARGO_WORKSPACE_DIR not set");
     let log_dir = PathBuf::from(project_root).join("ci-logs");
     fs::create_dir_all(&log_dir).expect("Should be able to create ci-logs directory");
 
