@@ -106,9 +106,7 @@ impl Cdu {
     }
 
     /// Creates the sovereign Genesis CDU for a node.
-    /// This CDU is a special case: it is a Semi-Axiom that is immediately
-    /// validated in `CdqnWorld`, `UserWorld`, and `LangCodingWorld`, thus
-    /// making it a full Axiom at birth.
+    /// This CDU is unique and serves as the root of trust.
     #[must_use]
     pub fn create_genesis_cdu(
         genesis_payload: GenesisPayload,
@@ -116,11 +114,6 @@ impl Cdu {
         hlc: &HybridLogicalClock,
     ) -> Self {
         let payload = genesis_payload.into_payload();
-        let mut validated_worlds = HashSet::new();
-        validated_worlds.insert(World::CdqnWorld);
-        validated_worlds.insert(World::UserWorld);
-        validated_worlds.insert(World::LangCodingWorld);
-
         let metadata = Metadata {
             author_node: author_node.clone(),
             context_refs: vec![],
@@ -130,15 +123,48 @@ impl Cdu {
             world_context: World::CdqnWorld,
             hlc_timestamp: HlcTimestamp::new(0, 0),
             symmetric_counterpart: None,
-            validated_worlds,
+            validated_worlds: HashSet::new(), // Genesis CDU is not validated in worlds itself.
         };
 
         Self::new(payload, metadata, hlc, &author_node)
     }
 
+    /// Creates the foundational Axiom CDU that represents the node's own existence.
+    /// This Axiom is a child of the Genesis CDU and is immediately validated
+    /// in the three worlds where the Genesis CDU is "present".
+    #[must_use]
+    pub fn create_foundational_axiom_for(
+        genesis_cdu_id: &[u8],
+        author_node: Vec<u8>,
+        hlc: &HybridLogicalClock,
+    ) -> Self {
+        let axiom_payload = AxiomPayload {
+            statement: "This node exists and its reasoning is sovereign.".to_string(),
+        };
+        let payload = axiom_payload.into_payload();
+
+        let mut validated_worlds = HashSet::new();
+        validated_worlds.insert(World::UserWorld);
+        validated_worlds.insert(World::LangCodingWorld);
+        validated_worlds.insert(World::CdqnWorld);
+
+        let metadata = Metadata {
+            author_node,
+            context_refs: vec![genesis_cdu_id.to_vec()], // Links to its parent, the Genesis CDU.
+            state: "active".to_string(),
+            weight: 1.0,
+            r_coordinate: 2.0, // A positive, foundational axiom.
+            world_context: World::UserWorld, // The primary context for this axiom.
+            hlc_timestamp: HlcTimestamp::new(0, 0),
+            symmetric_counterpart: None,
+            validated_worlds,
+        };
+
+        Self::new(payload, metadata, hlc, &[])
+    }
+
     /// Creates a new Semi-Axiom CDU.
     /// The semi-axiom is initially only validated in its own world.
-    /// The `origin_world` is passed directly to the metadata to avoid ownership issues.
     #[must_use]
     pub fn new_semi_axiom(
         statement: String,
@@ -225,7 +251,9 @@ impl Cdu {
         self.metadata.validated_worlds.insert(world)
     }
 
-    /// Determines if a Semi-Axiom CDU has achieved the status of a full Axiom.
+    /// Determines if a CDU has achieved the status of a full Axiom.
+    /// An Axiom is a Semi-Axiom that is validated in the UserWorld and at least
+    /// two other worlds.
     #[must_use]
     pub fn is_axiom(&self) -> bool {
         if self.payload.payload_type != "axiom/v1" {
