@@ -4,7 +4,6 @@
 use crate::types::{Cdu, Metadata};
 use crate::payloads::GenesisPayload;
 use crate::utils::{hex_encode, verify_causal_chain};
-use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
 use std::fs;
@@ -15,13 +14,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 /// for a CDQN node. It ensures that a unique ID and NodeId can be generated
 /// based on environmental factors.
 ///
-/// NOTE: We write output to a file to ensure it is captured by CI. The test
-/// is self-sufficient and creates the required directory.
+/// NOTE: We write output to a file using an absolute path to ensure it is
+/// reliably found by the CI script, regardless of the working directory.
 #[test]
 fn genesis_cdu_smoke() {
-    // Ensure the output directory exists before trying to write to it.
-    let log_dir = Path::new("ci-logs");
-    fs::create_dir_all(log_dir).expect("Should be able to create ci-logs directory");
+    // Use an absolute path to avoid any ambiguity in the CI environment.
+    let log_dir = std::env::current_dir().unwrap().join("ci-logs");
+    fs::create_dir_all(&log_dir).expect("Should be able to create ci-logs directory");
 
     let os_name = std::env::consts::OS;
     let timestamp = SystemTime::now()
@@ -63,7 +62,7 @@ fn genesis_cdu_smoke() {
 
     // Write the output to a file that the CI script can read.
     let path = log_dir.join("genesis_report.txt");
-    fs::write(path, output).expect("Unable to write genesis report file");
+    fs::write(&path, output).expect("Unable to write genesis report file");
 
     assert!(!genesis_cdu.id_hlc.is_empty(), "Genesis CDU ID should not be empty");
 }
