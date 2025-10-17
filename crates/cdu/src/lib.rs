@@ -6,6 +6,9 @@
 //! This crate defines the core CDU structure and its various subtypes.
 //! We use the `serde` crate for robust and verifiable serialization of payloads,
 //! ensuring data integrity and maintainability as the system evolves.
+//!
+//! Performance-critical constructors are written to avoid unnecessary allocations,
+//! as they may be called millions of times concurrently.
 
 use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
@@ -163,7 +166,9 @@ impl Cdu {
         }
     }
 
-    /// A convenience constructor for creating a `ConfigCDU`.
+    /// A performance-oriented convenience constructor for creating a `ConfigCDU`.
+    /// This function is written to avoid any memory allocations by reordering
+    /// operations to prevent cloning the `author_node`.
     #[must_use]
     pub fn new_config(
         settings: HashMap<String, serde_json::Value>,
@@ -172,18 +177,33 @@ impl Cdu {
     ) -> Self {
         let config_payload = ConfigPayload { settings };
         let payload = config_payload.into_payload();
+        let payload_hash = payload.hash();
+        let hlc_ts = hlc.new_timestamp();
 
+        // Generate the ID while we can still borrow `author_node`.
+        let mut id_input = hlc_ts.as_u64().to_be_bytes().to_vec();
+        id_input.extend_from_slice(&author_node);
+        id_input.extend_from_slice(&payload_hash);
+        let id_hlc = hash_sha3_256(&id_input).to_vec();
+
+        // Now that hashing is done, we can move `author_node` into the metadata.
         let metadata = Metadata {
-            author_node,
+            author_node, // Move, no clone.
             context_refs: vec![],
             state: "active".to_string(),
             weight: 1.0,
             r_coordinate: 0.0,
             world_context: "NodeWorld".to_string(),
-            hlc_timestamp: HlcTimestamp::new(0, 0), // Will be set in Cdu::new
+            hlc_timestamp: hlc_ts,
         };
 
-        Self::new(payload, metadata, hlc, &author_node)
+        Self {
+            id_hlc,
+            payload_hash,
+            payload,
+            metadata,
+            signatures: Vec::new(),
+        }
     }
 
     /// Adds a signature to the CDU's append-only log.
