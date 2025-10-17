@@ -48,7 +48,8 @@ jobs:
           echo "Time: $(date -u)" >> ci-logs/${{ runner.os }}.log
           echo "---" >> ci-logs/${{ runner.os }}.log
 
-          # Run all tests in the cdu crate to ensure full coverage
+          # Run all tests in the cdu crate, capturing both stdout and stderr.
+          # The `2>&1` is crucial to merge stderr into the stdout stream.
           cargo test -p cdqn-cdu -- --nocapture 2>&1 >> ci-logs/${{ runner.os }}.log || echo "[WARNING] CDU tests failed"
           
           # Use an absolute path for the report file to ensure it's found.
@@ -130,6 +131,7 @@ jobs:
           printf '%s\n' "  </ul>" >> _site/ci-reports/index.html
           printf '%s\n' "  <p><a href=\"/cdqn/\">← Back to homepage</a></p>" >> _site/ci-reports/index.html
           printf '%s\n' "</body>" >> _site/ci-reports/index.html
+          printf '%s\n' "</html>" >> _site/ci-reports/index.html
           printf '%s\n' "</html>" >> _site/ci-reports/index.html
 
       - name: Upload artifact
