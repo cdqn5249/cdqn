@@ -5,7 +5,8 @@ use serde::{Deserialize, Serialize};
 
 /// Defines the logical partitions (Worlds) within the CDQN ecosystem.
 /// The hierarchy is implicit in the relationships between the variants.
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+/// Adding `Copy` makes this simple enum cheap and easy to use without ownership issues.
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Copy)]
 pub enum World {
     /// The top-level world, representing the entirety of the real numbers and all
     /// that can be reasoned about.
