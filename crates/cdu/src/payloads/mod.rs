@@ -4,7 +4,9 @@
 // Declare the payload submodules.
 pub mod genesis;
 pub mod config;
+pub mod axiom;
 
 // Re-export the payload types for convenience.
 pub use genesis::GenesisPayload;
 pub use config::ConfigPayload;
+pub use axiom::AxiomPayload;
