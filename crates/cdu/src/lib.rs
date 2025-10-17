@@ -235,14 +235,15 @@ mod tests {
     // than `use super::*;` and resolves potential scoping issues.
     use super::*;
     use std::collections::HashMap;
+    use std::io::Write;
     use std::time::{SystemTime, UNIX_EPOCH};
 
     /// This test validates the creation of a Genesis CDU, which is the root of trust
     /// for a CDQN node. It ensures that a unique ID and NodeId can be generated
     /// based on environmental factors.
     ///
-    /// NOTE: We use `eprintln!` instead of `println!` to ensure the output is
-    /// immediately visible in CI logs, as `stdout` is buffered when redirected.
+    /// NOTE: We explicitly flush `stderr` after printing to ensure the output is
+    /// immediately visible in CI logs, regardless of buffering behavior.
     #[test]
     fn genesis_cdu_smoke() {
         let os_name = std::env::consts::OS;
@@ -280,6 +281,9 @@ mod tests {
         eprintln!("PayloadHash (hex): {}", hex_encode(&genesis_cdu.payload_hash));
         eprintln!("GenesisCDU ID (hex): {}", hex_encode(&genesis_cdu.id_hlc));
         eprintln!("Status: SUCCESS");
+        
+        // Force-flush stderr to ensure the output is written to the log file immediately.
+        std::io::stderr().flush().unwrap();
 
         // Add a final assertion to guarantee the test ran to completion.
         assert!(!genesis_cdu.id_hlc.is_empty(), "Genesis CDU ID should not be empty");
@@ -315,4 +319,4 @@ mod tests {
             Some(100)
         );
     }
-    }
+}
