@@ -51,9 +51,15 @@ jobs:
           # Run all tests in the cdu crate to ensure full coverage
           cargo test -p cdqn-cdu -- --nocapture 2>&1 >> ci-logs/${{ runner.os }}.log || echo "[WARNING] CDU tests failed"
           
-          # Append the specific genesis report if it exists
-          if [ -f "ci-logs/genesis_report.txt" ]; then
-            cat ci-logs/genesis_report.txt >> ci-logs/${{ runner.os }}.log
+          # Use an absolute path for the report file to ensure it's found.
+          REPORT_FILE="$(pwd)/ci-logs/genesis_report.txt"
+          echo "DEBUG: Looking for report file at $REPORT_FILE" >> ci-logs/${{ runner.os }}.log
+          
+          if [ -f "$REPORT_FILE" ]; then
+            echo "DEBUG: Report file found. Appending contents." >> ci-logs/${{ runner.os }}.log
+            cat "$REPORT_FILE" >> ci-logs/${{ runner.os }}.log
+          else
+            echo "DEBUG: Report file NOT FOUND." >> ci-logs/${{ runner.os }}.log
           fi
 
         shell: bash
