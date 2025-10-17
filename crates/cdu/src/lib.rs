@@ -14,6 +14,7 @@
 mod types;
 mod payloads;
 mod utils;
+mod worlds;
 
 // Move all tests into a separate module for better organization.
 #[cfg(test)]
@@ -21,4 +22,5 @@ mod tests;
 
 // Re-export the core public types so that users of this crate don't need to know our internal module structure.
 pub use types::{Cdu, Metadata, Payload, Signature};
-pub use payloads::{ConfigPayload, GenesisPayload};
+pub use payloads::{ConfigPayload, GenesisPayload, AxiomPayload};
+pub use worlds::World;
