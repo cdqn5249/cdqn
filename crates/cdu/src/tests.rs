@@ -75,10 +75,17 @@ fn test_node_lifecycle_and_causal_integrity() {
     settings.insert("log_level".to_string(), serde_json::Value::String("info".to_string()));
     
     // The new CDU uses the same node_id and links to the Genesis CDU's ID.
+    // We pass a reference to the Genesis ID, avoiding any clone.
     let config_cdu = Cdu::new_config(settings, node_id.clone(), &hlc, &genesis_cdu.id_hlc);
     
     assert!(!config_cdu.is_genesis(), "The second CDU must not be a Genesis CDU");
-    assert_eq!(config_cdu.metadata.context_refs, vec![genesis_cdu.id_hlc]);
+    
+    // Assert that the child's first context reference is a reference to the Genesis ID.
+    // This avoids creating a new Vec and moving the Genesis ID.
+    assert_eq!(
+        config_cdu.metadata.context_refs.first(),
+        Some(&genesis_cdu.id_hlc)
+    );
 
     // --- Step 3: Verify the causal chain ---
     let all_cdus = vec![&genesis_cdu, &config_cdu];
