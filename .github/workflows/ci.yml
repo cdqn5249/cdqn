@@ -50,6 +50,11 @@ jobs:
 
           # Run all tests in the cdu crate to ensure full coverage
           cargo test -p cdqn-cdu -- --nocapture 2>&1 >> ci-logs/${{ runner.os }}.log || echo "[WARNING] CDU tests failed"
+          
+          # Append the specific genesis report if it exists
+          if [ -f "ci-logs/genesis_report.txt" ]; then
+            cat ci-logs/genesis_report.txt >> ci-logs/${{ runner.os }}.log
+          fi
 
         shell: bash
 
