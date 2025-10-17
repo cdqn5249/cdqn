@@ -7,19 +7,21 @@ use crate::utils::{hex_encode, verify_causal_chain};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
 use std::fs;
-use std::path::Path;
+use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// This test validates the creation of a Genesis CDU, which is the root of trust
 /// for a CDQN node. It ensures that a unique ID and NodeId can be generated
 /// based on environmental factors.
 ///
-/// NOTE: We write output to a file using an absolute path to ensure it is
-/// reliably found by the CI script, regardless of the working directory.
+/// NOTE: We write output to a file using the project root to ensure it is
+/// reliably found by the CI script, regardless of the test's working directory.
 #[test]
 fn genesis_cdu_smoke() {
-    // Use an absolute path to avoid any ambiguity in the CI environment.
-    let log_dir = std::env::current_dir().unwrap().join("ci-logs");
+    // Construct an absolute path to the ci-logs directory in the project root.
+    // This ensures the test and the CI script agree on the file location.
+    let project_root = env!("CARGO_MANIFEST_DIR");
+    let log_dir = PathBuf::from(project_root).join("ci-logs");
     fs::create_dir_all(&log_dir).expect("Should be able to create ci-logs directory");
 
     let os_name = std::env::consts::OS;
