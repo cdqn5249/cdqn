@@ -7,7 +7,7 @@ use crate::utils::{hex_encode, verify_causal_chain};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf; // Removed unused `Path` import
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Finds the absolute path to the workspace root by traversing up from the
