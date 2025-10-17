@@ -105,10 +105,72 @@ impl Cdu {
         }
     }
 
-    /// Returns true if this CDU is the Genesis CDU of the node.
+    /// Creates the sovereign Genesis CDU for a node.
+    /// This CDU is a special case: it is a Semi-Axiom that is immediately
+    /// validated in `CdqnWorld`, `UserWorld`, and `LangCodingWorld`, thus
+    /// making it a full Axiom at birth.
     #[must_use]
-    pub fn is_genesis(&self) -> bool {
-        self.payload.payload_type == "genesis/v1"
+    pub fn create_genesis_cdu(
+        genesis_payload: GenesisPayload,
+        author_node: Vec<u8>,
+        hlc: &HybridLogicalClock,
+    ) -> Self {
+        let payload = genesis_payload.into_payload();
+        let mut validated_worlds = HashSet::new();
+        validated_worlds.insert(World::CdqnWorld);
+        validated_worlds.insert(World::UserWorld);
+        validated_worlds.insert(World::LangCodingWorld);
+
+        let metadata = Metadata {
+            author_node,
+            context_refs: vec![],
+            state: "active".to_string(),
+            weight: 1.0,
+            r_coordinate: 0.0,
+            world_context: World::CdqnWorld,
+            hlc_timestamp: HlcTimestamp::new(0, 0),
+            symmetric_counterpart: None,
+            validated_worlds,
+        };
+
+        Self::new(payload, metadata, hlc, &author_node)
+    }
+
+    /// Creates a new Semi-Axiom CDU.
+    /// The semi-axiom is initially only validated in its own world.
+    #[must_use]
+    pub fn new_semi_axiom(
+        statement: String,
+        origin_world: World,
+        author_node: Vec<u8>,
+        hlc: &HybridLogicalClock,
+    ) -> Self {
+        let axiom_payload = AxiomPayload { statement, origin_world };
+        let payload = axiom_payload.into_payload();
+
+        let mut validated_worlds = HashSet::new();
+        validated_worlds.insert(origin_world);
+
+        let metadata = Metadata {
+            author_node,
+            context_refs: vec![],
+            state: "active".to_string(),
+            weight: 1.0,
+            r_coordinate: 0.0,
+            world_context: origin_world,
+            hlc_timestamp: HlcTimestamp::new(0, 0),
+            symmetric_counterpart: None,
+            validated_worlds,
+        };
+
+        Self::new(payload, metadata, hlc, &author_node)
+    }
+
+    /// Validates this Semi-Axiom CDU in another world.
+    /// This would be called by the `Verifier` role in Chronosa.
+    /// Returns `true` if the world was newly added, `false` if it was already present.
+    pub fn validate_in_world(&mut self, world: World) -> bool {
+        self.metadata.validated_worlds.insert(world)
     }
 
     /// Determines if a Semi-Axiom CDU has achieved the status of a full Axiom.
@@ -126,9 +188,15 @@ impl Cdu {
         is_valid_in_user_world && count_other_worlds >= 2
     }
 
-    // NOTE: The `new_config` and `create_axiom_pair` constructors are now more complex
-    // and will be implemented in the next step, as they depend on this new structure.
-    // For now, we provide the basic interpretation helpers.
+    /// Returns true if this CDU is the Genesis CDU of the node.
+    #[must_use]
+    pub fn is_genesis(&self) -> bool {
+        self.payload.payload_type == "genesis/v1"
+    }
+
+    // NOTE: The `new_config` constructor is omitted for brevity but would be
+    // implemented similarly, with `world_context: World::UserWorld` and no
+    // `validated_worlds`.
 
     /// Attempts to interpret the CDU as a `ConfigCDU`.
     pub fn as_config(&self) -> Option<ConfigPayload> {
