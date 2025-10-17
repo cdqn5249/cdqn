@@ -14,6 +14,9 @@ use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fs;
+use std::io::Write;
+use std::path::Path;
 
 /// A simple utility to encode bytes as a hexadecimal string.
 fn hex_encode(bytes: &[u8]) -> String {
@@ -174,6 +177,7 @@ impl Cdu {
         settings: HashMap<String, serde_json::Value>,
         author_node: Vec<u8>,
         hlc: &HybridLogicalClock,
+        parent_id: &[u8], // The ID of the parent CDU to link to.
     ) -> Self {
         let config_payload = ConfigPayload { settings };
         let payload = config_payload.into_payload();
@@ -189,7 +193,7 @@ impl Cdu {
         // Now that hashing is done, we can move `author_node` into the metadata.
         let metadata = Metadata {
             author_node, // Move, no clone.
-            context_refs: vec![],
+            context_refs: vec![parent_id.to_vec()], // Link to the parent.
             state: "active".to_string(),
             weight: 1.0,
             r_coordinate: 0.0,
@@ -229,21 +233,42 @@ impl Cdu {
     }
 }
 
+/// A simple, in-memory verification function for testing causal chains.
+/// In a real implementation, this would be part of the `Manifold` crate and
+/// would load CDUs from persistent storage.
+fn verify_causal_chain(
+    cdu: &Cdu,
+    all_cdus: &[&Cdu],
+    expected_genesis_id: &[u8],
+) -> bool {
+    if cdu.is_genesis() {
+        return cdu.id_hlc == expected_genesis_id;
+    }
+
+    for parent_id in &cdu.metadata.context_refs {
+        if let Some(parent_cdu) = all_cdus.iter().find(|&p| p.id_hlc == *parent_id) {
+            if !verify_causal_chain(parent_cdu, all_cdus, expected_genesis_id) {
+                return false;
+            }
+        } else {
+            // Parent not found in the provided set, chain is broken.
+            return false;
+        }
+    }
+    true
+}
+
 #[cfg(test)]
 mod tests {
-    // Explicitly import all items needed for the tests. This is more robust
-    // than `use super::*;` and resolves potential scoping issues.
     use super::*;
-    use std::collections::HashMap;
-    use std::io::Write;
     use std::time::{SystemTime, UNIX_EPOCH};
 
     /// This test validates the creation of a Genesis CDU, which is the root of trust
     /// for a CDQN node. It ensures that a unique ID and NodeId can be generated
     /// based on environmental factors.
     ///
-    /// NOTE: We explicitly flush `stderr` after printing to ensure the output is
-    /// immediately visible in CI logs, regardless of buffering behavior.
+    /// NOTE: We write output to a file to ensure it is captured by CI, as this
+    /// is more reliable than relying on stdout/stderr buffering.
     #[test]
     fn genesis_cdu_smoke() {
         let os_name = std::env::consts::OS;
@@ -276,16 +301,18 @@ mod tests {
         let hlc = HybridLogicalClock::new();
         let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
 
-        eprintln!("OS: {}", os_name);
-        eprintln!("NodeId (hex): {}", hex_encode(&node_id));
-        eprintln!("PayloadHash (hex): {}", hex_encode(&genesis_cdu.payload_hash));
-        eprintln!("GenesisCDU ID (hex): {}", hex_encode(&genesis_cdu.id_hlc));
-        eprintln!("Status: SUCCESS");
-        
-        // Force-flush stderr to ensure the output is written to the log file immediately.
-        std::io::stderr().flush().unwrap();
+        let output = format!(
+            "OS: {}\nNodeId (hex): {}\nPayloadHash (hex): {}\nGenesisCDU ID (hex): {}\nStatus: SUCCESS\n",
+            os_name,
+            hex_encode(&node_id),
+            hex_encode(&genesis_cdu.payload_hash),
+            hex_encode(&genesis_cdu.id_hlc)
+        );
 
-        // Add a final assertion to guarantee the test ran to completion.
+        // Write the output to a file that the CI script can read.
+        let path = Path::new("ci-logs/genesis_report.txt");
+        fs::write(path, output).expect("Unable to write genesis report file");
+
         assert!(!genesis_cdu.id_hlc.is_empty(), "Genesis CDU ID should not be empty");
     }
 
@@ -303,7 +330,7 @@ mod tests {
         settings.insert("max_connections".to_string(), serde_json::Value::Number(serde_json::Number::from(100)));
 
         // Create the ConfigCDU using the convenience constructor
-        let config_cdu = Cdu::new_config(settings.clone(), node_id.clone(), &hlc);
+        let config_cdu = Cdu::new_config(settings.clone(), node_id.clone(), &hlc, &[]);
 
         // Verify the CDU's metadata
         assert_eq!(config_cdu.metadata.author_node, node_id);
@@ -318,5 +345,44 @@ mod tests {
             retrieved_payload.settings.get("max_connections").unwrap().as_u64(),
             Some(100)
         );
+    }
+
+    /// This test validates the core principle of causal integrity.
+    /// It creates a Genesis CDU and then a child CDU, and verifies that the
+    /// child's causal chain can be traced back to the Genesis.
+    #[test]
+    fn test_causal_integrity_chain() {
+        let hlc = HybridLogicalClock::new();
+        let node_id = vec![9, 8, 7, 6];
+
+        // 1. Create a Genesis CDU
+        let genesis_payload = GenesisPayload {
+            hardware_fingerprint: [0; 32],
+            os: "test_os".to_string(),
+            timestamp: 0,
+            location: "test_location".to_string(),
+        };
+        let payload = genesis_payload.into_payload();
+        let metadata = Metadata {
+            author_node: node_id.clone(),
+            context_refs: vec![],
+            state: "active".to_string(),
+            weight: 1.0,
+            r_coordinate: 0.0,
+            world_context: "NodeWorld".to_string(),
+            hlc_timestamp: HlcTimestamp::new(0, 0),
+        };
+        let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
+
+        // 2. Create a child ConfigCDU, linking it to the Genesis
+        let mut settings = HashMap::new();
+        settings.insert("key".to_string(), serde_json::Value::String("value".to_string()));
+        let child_cdu = Cdu::new_config(settings, node_id, &hlc, &genesis_cdu.id_hlc);
+
+        // 3. Verify the chain
+        let all_cdus = vec![&genesis_cdu, &child_cdu];
+        let is_valid = verify_causal_chain(&child_cdu, &all_cdus, &genesis_cdu.id_hlc);
+
+        assert!(is_valid, "The causal chain should be valid and traceable to the Genesis CDU");
     }
 }
