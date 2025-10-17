@@ -6,30 +6,23 @@ use crate::payloads::GenesisPayload;
 use crate::utils::{hex_encode, verify_causal_chain};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
+use std::env;
 use std::fs;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
-
-/// Finds the absolute path to the workspace root by traversing up from the
-/// current crate's manifest directory.
-fn find_workspace_root() -> PathBuf {
-    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    // The workspace root is the parent directory of the `crates/cdu` directory.
-    path.parent().unwrap_or_else(|| Path::new(".")).to_path_buf()
-}
 
 /// This test validates the creation of a Genesis CDU, which is the root of trust
 /// for a CDQN node. It ensures that a unique ID and NodeId can be generated
 /// based on environmental factors.
 ///
-/// NOTE: This test is now self-sufficient and determines the project root
-/// programmatically to ensure the report file is written to a location the
-/// CI script can reliably find.
+/// NOTE: This test is now self-sufficient and uses the `CARGO_WORKSPACE_DIR`
+/// environment variable to reliably find the project root.
 #[test]
 fn genesis_cdu_smoke() {
-    // Find the project root programmatically.
-    let project_root = find_workspace_root();
-    let log_dir = project_root.join("ci-logs");
+    // Use the CARGO_WORKSPACE_DIR environment variable provided by Cargo.
+    // This is the most reliable way to find the project's root directory.
+    let project_root = env!("CARGO_WORKSPACE_DIR");
+    let log_dir = PathBuf::from(project_root).join("ci-logs");
     fs::create_dir_all(&log_dir).expect("Should be able to create ci-logs directory");
 
     let os_name = std::env::consts::OS;
