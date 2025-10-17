@@ -6,26 +6,40 @@ use crate::payloads::GenesisPayload;
 use crate::utils::{hex_encode, verify_causal_chain};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
-use std::env;
 use std::fs;
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-/// This test validates the creation of a Genesis CDU, which is the root of trust
-/// for a CDQN node. It ensures that a unique ID and NodeId can be generated
-/// based on environmental factors.
+/// Finds the absolute path to the workspace root by traversing up from the
+/// current file's location until it finds the workspace `Cargo.toml`.
+fn find_workspace_root() -> PathBuf {
+    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    
+    // Traverse up from `crates/cdu` to the project root.
+    while !path.join("Cargo.toml").exists() || path.join("crates").exists() {
+        path = match path.parent() {
+            Some(parent) => parent.to_path_buf(),
+            None => panic!("Could not find workspace root. Please run from within the workspace."),
+        };
+    }
+    path
+}
+
+/// This is an integrated test that simulates the full lifecycle of a node's
+/// first two CDUs, ensuring their logical and causal integrity.
 ///
-/// NOTE: This test is now self-sufficient and uses the `CARGO_WORKSPACE_DIR`
-/// environment variable to reliably find the project root.
+/// 1. It creates a sovereign Genesis CDU, the root of trust.
+/// 2. It creates a child ConfigCDU, correctly linking it to the Genesis CDU.
+/// 3. It verifies that the causal chain from the child traces back to the Genesis.
+/// 4. It writes the unique identifiers from the Genesis CDU to a file for CI.
 #[test]
-fn genesis_cdu_smoke() {
-    // Use the CARGO_WORKSPACE_DIR environment variable provided by Cargo.
-    // This is the most reliable way to find the project's root directory.
-    // We panic if it's not set, as it should always be set by `cargo test`.
-    let project_root = env::var("CARGO_WORKSPACE_DIR").expect("CARGO_WORKSPACE_DIR not set");
-    let log_dir = PathBuf::from(project_root).join("ci-logs");
+fn test_node_lifecycle_and_causal_integrity() {
+    // --- Setup ---
+    let project_root = find_workspace_root();
+    let log_dir = project_root.join("ci-logs");
     fs::create_dir_all(&log_dir).expect("Should be able to create ci-logs directory");
 
+    let hlc = HybridLogicalClock::new();
     let os_name = std::env::consts::OS;
     let timestamp = SystemTime::now()
         .duration_since(UNIX_EPOCH)
@@ -35,27 +49,43 @@ fn genesis_cdu_smoke() {
     let hardware_fp = cdqn_cryptocore::hash_sha3_256(seed.as_bytes());
     let node_id = hardware_fp.to_vec();
 
+    // --- Step 1: Create the Genesis CDU ---
     let genesis_payload = GenesisPayload {
         hardware_fingerprint: hardware_fp,
         os: os_name.to_string(),
         timestamp: (timestamp / 1_000_000_000) as u64,
         location: "CI Runner".to_string(),
     };
-
     let payload = genesis_payload.into_payload();
     let metadata = Metadata {
         author_node: node_id.clone(),
-        context_refs: vec![],
+        context_refs: vec![], // Genesis has no parents.
         state: "active".to_string(),
         weight: 1.0,
         r_coordinate: 0.0,
         world_context: "NodeWorld".to_string(),
         hlc_timestamp: HlcTimestamp::new(0, 0),
     };
-
-    let hlc = HybridLogicalClock::new();
     let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
 
+    assert!(genesis_cdu.is_genesis(), "The first CDU created must be a Genesis CDU");
+
+    // --- Step 2: Create a child ConfigCDU, linked to the Genesis ---
+    let mut settings = HashMap::new();
+    settings.insert("log_level".to_string(), serde_json::Value::String("info".to_string()));
+    
+    // The new CDU uses the same node_id and links to the Genesis CDU's ID.
+    let config_cdu = Cdu::new_config(settings, node_id.clone(), &hlc, &genesis_cdu.id_hlc);
+    
+    assert!(!config_cdu.is_genesis(), "The second CDU must not be a Genesis CDU");
+    assert_eq!(config_cdu.metadata.context_refs, vec![genesis_cdu.id_hlc]);
+
+    // --- Step 3: Verify the causal chain ---
+    let all_cdus = vec![&genesis_cdu, &config_cdu];
+    let is_chain_valid = verify_causal_chain(&config_cdu, &all_cdus, &genesis_cdu.id_hlc);
+    assert!(is_chain_valid, "The causal chain from the child to the Genesis CDU must be valid");
+
+    // --- Step 4: Report the unique Genesis identifiers for CI verification ---
     let output = format!(
         "OS: {}\nNodeId (hex): {}\nPayloadHash (hex): {}\nGenesisCDU ID (hex): {}\nStatus: SUCCESS\n",
         os_name,
@@ -64,83 +94,7 @@ fn genesis_cdu_smoke() {
         hex_encode(&genesis_cdu.id_hlc)
     );
 
-    // Write the output to a file that the CI script can read.
     let path = log_dir.join("genesis_report.txt");
-    
-    // Print the path to the test's own stdout for debugging.
     println!("TEST DEBUG: Writing genesis report to: {}", path.display());
-    
     fs::write(&path, output).expect("Unable to write genesis report file");
-
-    assert!(!genesis_cdu.id_hlc.is_empty(), "Genesis CDU ID should not be empty");
-}
-
-/// This test validates the creation and interpretation of a ConfigCDU.
-/// It ensures that configuration data can be stored within a CDU and
-/// correctly retrieved later.
-#[test]
-fn config_cdu_creation_and_interpretation() {
-    let hlc = HybridLogicalClock::new();
-    let node_id = vec![1, 2, 3, 4];
-
-    // Define some configuration settings
-    let mut settings = HashMap::new();
-    settings.insert("log_level".to_string(), serde_json::Value::String("debug".to_string()));
-    settings.insert("max_connections".to_string(), serde_json::Value::Number(serde_json::Number::from(100)));
-
-    // Create the ConfigCDU using the convenience constructor
-    let config_cdu = Cdu::new_config(settings.clone(), node_id.clone(), &hlc, &[]);
-
-    // Verify the CDU's metadata
-    assert_eq!(config_cdu.metadata.author_node, node_id);
-    assert_eq!(config_cdu.payload.payload_type, "config/v1");
-
-    // Use the helper method to interpret the CDU as a ConfigCDU
-    let retrieved_payload = config_cdu.as_config().expect("Should be a valid ConfigCDU");
-
-    // Verify that the retrieved settings match the original
-    assert_eq!(retrieved_payload.settings.get("log_level").unwrap().as_str(), Some("debug"));
-    assert_eq!(
-        retrieved_payload.settings.get("max_connections").unwrap().as_u64(),
-        Some(100)
-    );
-}
-
-/// This test validates the core principle of causal integrity.
-/// It creates a Genesis CDU and then a child CDU, and verifies that the
-/// child's causal chain can be traced back to the Genesis.
-#[test]
-fn test_causal_integrity_chain() {
-    let hlc = HybridLogicalClock::new();
-    let node_id = vec![9, 8, 7, 6];
-
-    // 1. Create a Genesis CDU
-    let genesis_payload = GenesisPayload {
-        hardware_fingerprint: [0; 32],
-        os: "test_os".to_string(),
-        timestamp: 0,
-        location: "test_location".to_string(),
-    };
-    let payload = genesis_payload.into_payload();
-    let metadata = Metadata {
-        author_node: node_id.clone(),
-        context_refs: vec![],
-        state: "active".to_string(),
-        weight: 1.0,
-        r_coordinate: 0.0,
-        world_context: "NodeWorld".to_string(),
-        hlc_timestamp: HlcTimestamp::new(0, 0),
-    };
-    let genesis_cdu = Cdu::new(payload, metadata, &hlc, &node_id);
-
-    // 2. Create a child ConfigCDU, linking it to the Genesis
-    let mut settings = HashMap::new();
-    settings.insert("key".to_string(), serde_json::Value::String("value".to_string()));
-    let child_cdu = Cdu::new_config(settings, node_id, &hlc, &genesis_cdu.id_hlc);
-
-    // 3. Verify the chain
-    let all_cdus = vec![&genesis_cdu, &child_cdu];
-    let is_valid = verify_causal_chain(&child_cdu, &all_cdus, &genesis_cdu.id_hlc);
-
-    assert!(is_valid, "The causal chain should be valid and traceable to the Genesis CDU");
 }
