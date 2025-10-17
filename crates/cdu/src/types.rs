@@ -147,23 +147,40 @@ impl Cdu {
     ) -> Self {
         let axiom_payload = AxiomPayload { statement, origin_world };
         let payload = axiom_payload.into_payload();
+        let payload_hash = payload.hash();
+        let hlc_ts = hlc.new_timestamp();
+
+        let mut id_input = hlc_ts.as_u64().to_be_bytes().to_vec();
+        id_input.extend_from_slice(&author_node);
+        id_input.extend_from_slice(&payload_hash);
+        let id_hlc = hash_sha3_256(&id_input).to_vec();
 
         let mut validated_worlds = HashSet::new();
-        validated_worlds.insert(origin_world);
+        // We can't use `origin_world` here, so we get it from the payload after creation.
+        // This is a small workaround to avoid cloning.
+        let deserialized_payload: AxiomPayload = serde_json::from_slice(&payload.data)
+            .expect("Payload should be valid AxiomPayload");
+        validated_worlds.insert(deserialized_payload.origin_world);
 
         let metadata = Metadata {
-            author_node: author_node.clone(), // Clone to allow later use
+            author_node, // Move, no clone.
             context_refs: vec![],
             state: "active".to_string(),
             weight: 1.0,
             r_coordinate: 0.0,
-            world_context: origin_world,
-            hlc_timestamp: HlcTimestamp::new(0, 0),
+            world_context: deserialized_payload.origin_world,
+            hlc_timestamp: hlc_ts,
             symmetric_counterpart: None,
             validated_worlds,
         };
 
-        Self::new(payload, metadata, hlc, &author_node)
+        Self {
+            id_hlc,
+            payload_hash,
+            payload,
+            metadata,
+            signatures: Vec::new(),
+        }
     }
 
     /// A performance-oriented convenience constructor for creating a `ConfigCDU`.
