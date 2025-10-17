@@ -7,7 +7,7 @@ use crate::utils::{hex_encode, verify_causal_chain};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use std::collections::HashMap;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Finds the absolute path to the workspace root by traversing up from the
@@ -15,14 +15,17 @@ use std::time::{SystemTime, UNIX_EPOCH};
 fn find_workspace_root() -> PathBuf {
     let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     
-    // Traverse up from `crates/cdu` to the project root.
-    while !path.join("Cargo.toml").exists() || path.join("crates").exists() {
+    loop {
+        // The workspace root is the directory containing `Cargo.toml` where a `crates`
+        // subdirectory also exists.
+        if path.join("Cargo.toml").exists() && path.join("crates").exists() {
+            return path;
+        }
         path = match path.parent() {
             Some(parent) => parent.to_path_buf(),
             None => panic!("Could not find workspace root. Please run from within the workspace."),
         };
     }
-    path
 }
 
 /// This is an integrated test that simulates the full lifecycle of a node's
