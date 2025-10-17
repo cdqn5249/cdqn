@@ -156,11 +156,7 @@ impl Cdu {
         let id_hlc = hash_sha3_256(&id_input).to_vec();
 
         let mut validated_worlds = HashSet::new();
-        // We can't use `origin_world` here, so we get it from the payload after creation.
-        // This is a small workaround to avoid cloning.
-        let deserialized_payload: AxiomPayload = serde_json::from_slice(&payload.data)
-            .expect("Payload should be valid AxiomPayload");
-        validated_worlds.insert(deserialized_payload.origin_world);
+        validated_worlds.insert(origin_world);
 
         let metadata = Metadata {
             author_node, // Move, no clone.
@@ -168,7 +164,7 @@ impl Cdu {
             state: "active".to_string(),
             weight: 1.0,
             r_coordinate: 0.0,
-            world_context: deserialized_payload.origin_world,
+            world_context: origin_world, // `origin_world` is Copy, so this is fine.
             hlc_timestamp: hlc_ts,
             symmetric_counterpart: None,
             validated_worlds,
