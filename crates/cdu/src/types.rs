@@ -6,7 +6,7 @@ use crate::worlds::World;
 use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 /// The immutable core content of a CDU.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -122,7 +122,7 @@ impl Cdu {
         validated_worlds.insert(World::LangCodingWorld);
 
         let metadata = Metadata {
-            author_node,
+            author_node: author_node.clone(), // Clone to allow later use
             context_refs: vec![],
             state: "active".to_string(),
             weight: 1.0,
@@ -152,7 +152,7 @@ impl Cdu {
         validated_worlds.insert(origin_world);
 
         let metadata = Metadata {
-            author_node,
+            author_node: author_node.clone(), // Clone to allow later use
             context_refs: vec![],
             state: "active".to_string(),
             weight: 1.0,
@@ -164,6 +164,49 @@ impl Cdu {
         };
 
         Self::new(payload, metadata, hlc, &author_node)
+    }
+
+    /// A performance-oriented convenience constructor for creating a `ConfigCDU`.
+    /// This function is written to avoid any memory allocations by reordering
+    /// operations to prevent cloning the `author_node`.
+    #[must_use]
+    pub fn new_config(
+        settings: std::collections::HashMap<String, serde_json::Value>,
+        author_node: Vec<u8>,
+        hlc: &HybridLogicalClock,
+        parent_id: &[u8], // The ID of the parent CDU to link to.
+    ) -> Self {
+        let config_payload = ConfigPayload { settings };
+        let payload = config_payload.into_payload();
+        let payload_hash = payload.hash();
+        let hlc_ts = hlc.new_timestamp();
+
+        // Generate the ID while we can still borrow `author_node`.
+        let mut id_input = hlc_ts.as_u64().to_be_bytes().to_vec();
+        id_input.extend_from_slice(&author_node);
+        id_input.extend_from_slice(&payload_hash);
+        let id_hlc = hash_sha3_256(&id_input).to_vec();
+
+        // Now that hashing is done, we can move `author_node` into the metadata.
+        let metadata = Metadata {
+            author_node, // Move, no clone.
+            context_refs: vec![parent_id.to_vec()], // Link to the parent.
+            state: "active".to_string(),
+            weight: 1.0,
+            r_coordinate: 0.0,
+            world_context: World::UserWorld,
+            hlc_timestamp: hlc_ts,
+            symmetric_counterpart: None, // Default for non-Axioms.
+            validated_worlds: HashSet::new(), // Default for non-Axioms.
+        };
+
+        Self {
+            id_hlc,
+            payload_hash,
+            payload,
+            metadata,
+            signatures: Vec::new(),
+        }
     }
 
     /// Validates this Semi-Axiom CDU in another world.
@@ -193,10 +236,6 @@ impl Cdu {
     pub fn is_genesis(&self) -> bool {
         self.payload.payload_type == "genesis/v1"
     }
-
-    // NOTE: The `new_config` constructor is omitted for brevity but would be
-    // implemented similarly, with `world_context: World::UserWorld` and no
-    // `validated_worlds`.
 
     /// Attempts to interpret the CDU as a `ConfigCDU`.
     pub fn as_config(&self) -> Option<ConfigPayload> {
