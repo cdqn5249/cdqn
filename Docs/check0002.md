@@ -14,11 +14,11 @@ The project is a Rust workspace composed of five core crates, each with a specif
 
 *   **`cdqn-cdu`**: The central atom of knowledge, containing the core data structures (`Cdu`, `Payload`, `Metadata`, etc. It now supports multiple subtypes (`Genesis`, `Config`, `Axiom`) and is cleanly refactored into sub-modules for easier maintenance.
 *   **`cdqn-hlc`**: The heartbeat of the causality engine, providing a thread-safe HLC implementation.
-*   **`cdqn-cryptocore`: The security foundation, providing hashing, key derivation, and encryption primitives.
-*   **`cdqn-manifold` (Placeholder): The future knowledge graph, designed to be built from CDUs.
-*   **`cdqn-chronosa` (Placeholder): The cognitive engine, designed as an assembly of autonomous reasoning roles.
-*   **`cdqn-worlds` (New): Defines the logical partitions (Worlds) like `RWorld`, `UserWorld`, `CdqnWorld`, etc.
-*   **`.github/workflows/ci.yml` (Updated): A robust CI pipeline that builds, tests, and deploys a clean, verifiable report to GitHub Pages.
+*   **`cdqn-cryptocore`**: The security foundation, providing hashing, key derivation, and encryption primitives.
+*   **`cdqn-manifold`** (Placeholder): The future knowledge graph, designed to be built from CDUs.
+*   **`cdqn-chronosa`** (Placeholder): The cognitive engine, designed as an assembly of autonomous reasoning roles.
+*   **`cdqn-worlds`** (New): Defines the logical partitions (Worlds) like `RWorld`, `UserWorld`, `CdqnWorld`, etc.
+*   **`.github/workflows/ci.yml`** (Updated): A robust CI pipeline that builds, tests, and deploys a clean, verifiable report to GitHub Pages.
 
 ### **2. Core Achievements**
 
