@@ -1,5 +1,9 @@
 # **Consolidated Progress Report (check0002.md)**
 
+* **Date**: 2025-10-18 
+* **Author**: Christophe Duy Quang Nguyen
+* **License**: BaDaaS
+
 This document summarizes the successful completion of the core `cdu` crate, including its refactored structure and the implementation of Worlds, Axioms, and a robust CI pipeline.
 
 ---
