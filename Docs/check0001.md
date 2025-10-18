@@ -1,9 +1,9 @@
 # ✅ CDQN Implementation Checkpoint — `check0001.md`
 
-**Date**: 2025-10-16  
-**Author**: Christophe Duy Quang Nguyen
-**License**: BaDaaS  
-**Status**: Validated via CI on Linux, macOS, Windows
+* **Date**: 2025-10-16  
+* **Author**: Christophe Duy Quang Nguyen
+* **License**: BaDaaS  
+* **Status**: Validated via CI on Linux, macOS, Windows
 
 ---
 
