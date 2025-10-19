@@ -4,6 +4,7 @@
 use crate::types::Manifold;
 use cdqn_cdu::Cdu;
 use std::fs;
+use serde_json; // <-- FIX: Added serde_json import
 
 // NOTE: The `hex` crate is not in the Cargo.toml. We will use a local utility
 // for the placeholder to avoid adding an external dependency just for this.
