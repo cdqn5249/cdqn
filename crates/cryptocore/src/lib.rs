@@ -18,8 +18,8 @@ pub use zeroize::Zeroize;
 use ed25519_consensus::{
     SigningKey, VerificationKey, Signature,
 };
-// FIX: Import rand_core directly
-use rand_core::{CryptoRng, RngCore, OsRng}; 
+// FIX: Removed unused CryptoRng and RngCore imports
+use rand_core::OsRng; 
 
 // --- Type Aliases ---
 pub type SignatureBytes = Vec<u8>;
