@@ -19,7 +19,7 @@ use ed25519_dalek::{
     Keypair, PublicKey, Signature as EdSignature, Signer, Verifier,
     SignatureError,
 };
-use rand::rngs::OsRng; // <-- FIX: Added rand import
+use rand::rngs::OsRng;
 
 // --- Type Aliases ---
 pub type SignatureBytes = Vec<u8>;
@@ -151,7 +151,6 @@ pub fn verify_signature(
     message: &[u8],
     signature: &SignatureBytes,
 ) -> Result<(), SignatureError> {
-    // FIX: Use EdSignature::from_slice which returns a Result, allowing the ? operator.
     let ed_signature = EdSignature::from_slice(signature.as_slice())?;
     public_key.verify(&hash_sha3_256(message), &ed_signature)
 }
