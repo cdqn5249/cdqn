@@ -17,9 +17,9 @@ pub use zeroize::Zeroize;
 // Ed25519 imports from ed25519-consensus
 use ed25519_consensus::{
     SigningKey, VerificationKey, Signature,
-    rand_core::{CryptoRng, RngCore},
 };
-use rand_core::OsRng;
+// FIX: Import rand_core directly
+use rand_core::{CryptoRng, RngCore, OsRng}; 
 
 // --- Type Aliases ---
 pub type SignatureBytes = Vec<u8>;
@@ -92,7 +92,8 @@ impl SignerEntity {
             .map_err(|_| "Invalid signature length")?;
         let ed_signature = Signature::from(signature_array);
 
-        self.verification_key.verify(&message_hash, &ed_signature)
+        // FIX: Swapped arguments to match ed25519-consensus API: verify(signature, message)
+        self.verification_key.verify(&ed_signature, &message_hash)
             .map_err(|_| "Signature verification failed")
     }
 }
