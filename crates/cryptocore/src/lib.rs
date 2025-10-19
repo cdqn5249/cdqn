@@ -15,7 +15,7 @@ pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
 
 // Ed25519 imports
-// FIX: Changed the single problematic import to multiple explicit imports
+// FIX: Explicitly import Keypair and PublicKey from their respective modules
 use ed25519_dalek::Keypair;
 use ed25519_dalek::PublicKey;
 use ed25519_dalek::Signature as EdSignature;
