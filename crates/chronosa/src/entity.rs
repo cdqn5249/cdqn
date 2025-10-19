@@ -6,10 +6,8 @@
 //! This model replaces the traditional Actor Model, separating stateless execution
 //! (Worker) from stateful task management (Bot) and autonomous planning (Agent).
 
-use cdqn_cdu::Cdu;
-use std::sync::Arc;
+// FIX: Removed unused imports
 use std::thread::{self, JoinHandle};
-use std::future::Future;
 
 // --- Type Aliases ---
 pub type EntityId = String;
@@ -94,7 +92,7 @@ impl Agent {
     }
 
     /// The main loop for the Agent (e.g., subscribing to the CDU Dispatcher).
-    pub fn run_loop<F>(&mut self, loop_fn: F)
+    pub fn run_loop<F>(&mut self, _loop_fn: F)
     where
         F: FnMut(&mut Self) -> TaskResult + Send + 'static,
     {
