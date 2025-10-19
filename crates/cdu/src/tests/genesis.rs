@@ -3,7 +3,7 @@
 
 use crate::types::Cdu;
 use crate::payloads::GenesisPayload;
-use crate::tests::{find_workspace_root, print_cdu_summary_to_file, hex_encode};
+use crate::tests::{find_workspace_root, hex_encode}; // <-- FIX: Removed unused print_cdu_summary_to_file
 use cdqn_hlc::HybridLogicalClock;
 use std::fs;
 use std::time::{SystemTime, UNIX_EPOCH};
