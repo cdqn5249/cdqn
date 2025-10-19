@@ -19,7 +19,7 @@ pub use types::{Manifold, CduId, MerkleRoot};
 use cdqn_cdu::Cdu;
 use std::sync::Arc;
 use std::path::PathBuf;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet}; // <-- FIX: Added HashSet import
 
 impl Manifold {
     /// Creates a new Manifold, initialized with the Genesis CDU.
@@ -27,7 +27,7 @@ impl Manifold {
     pub fn new(genesis_cdu: Cdu, storage_path: PathBuf) -> Self {
         let genesis_id = genesis_cdu.id_hlc.clone();
         let mut cdus = HashMap::new();
-        let mut active_ids = HashSet::new(); // NOTE: HashSet is imported via types.rs
+        let mut active_ids = HashSet::new();
 
         // Insert the Genesis CDU as the first element
         cdus.insert(genesis_id.clone(), Arc::new(genesis_cdu));
