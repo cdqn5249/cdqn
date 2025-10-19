@@ -19,7 +19,7 @@ use ed25519_dalek::{
     Keypair, PublicKey, Signature as EdSignature, Signer, Verifier,
     SignatureError,
 };
-use rand::rngs::OsRng;
+use rand::rngs::OsRng; // <-- FIX: Added rand import
 
 // --- Type Aliases ---
 pub type SignatureBytes = Vec<u8>;
@@ -30,9 +30,9 @@ pub type PrivateKeyBytes = [u8; 32];
 /// capable of signing CDUs.
 pub struct SignerEntity {
     /// The Ed25519 keypair for signing (Optionally None for Verifier-only entities).
-    keypair: Option<Keypair>, // <-- FIX: Made optional for Verifier-only
+    keypair: Option<Keypair>,
     /// The public key for verification.
-    public_key: PublicKey, // <-- FIX: Stored public key explicitly
+    public_key: PublicKey,
     /// The public identifier of the entity (e.g., a public key hash, or a unique user ID).
     pub entity_id: String,
 }
@@ -56,7 +56,6 @@ impl SignerEntity {
     }
 
     /// Creates a Verifier-only entity from a known public key (for verification).
-    /// This is used by the Verifier Agent to check signatures from external entities.
     pub fn from_public_key(entity_id: String, public_key_bytes: &PublicKeyBytes) -> Result<Self, SignatureError> {
         let public_key = PublicKey::from_bytes(public_key_bytes)?;
         Ok(SignerEntity {
@@ -152,7 +151,7 @@ pub fn verify_signature(
     message: &[u8],
     signature: &SignatureBytes,
 ) -> Result<(), SignatureError> {
-    let message_hash = hash_sha3_256(message);
-    let ed_signature = EdSignature::from_bytes(signature.as_slice())?;
-    public_key.verify(&message_hash, &ed_signature)
+    // FIX: Use EdSignature::from_slice which returns a Result, allowing the ? operator.
+    let ed_signature = EdSignature::from_slice(signature.as_slice())?;
+    public_key.verify(&hash_sha3_256(message), &ed_signature)
 }
