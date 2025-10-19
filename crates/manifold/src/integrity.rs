@@ -9,41 +9,48 @@ use std::collections::HashSet;
 impl Manifold {
     /// Implements Workflow 5: The Sovereign Integrity Cycle.
     /// Traverses the context_refs backward to the Genesis CDU.
-    /// NOTE: This only checks the in-memory graph for existence.
+    /// NOTE: This checks the initial CDU's properties before starting the graph traversal.
     pub fn verify_cdu_chain(&self, cdu: &Cdu) -> Result<(), String> {
         if cdu.is_genesis() {
             return Ok(()); // Genesis is the root of trust.
         }
 
-        let mut current_cdu_id = cdu.id_hlc.clone();
+        // 1. Initial Check: Must have parents if it's not Genesis
+        if cdu.metadata.context_refs.is_empty() {
+            return Err(format!("Broken Chain: CDU ID {:?} is an orphan (no context_refs) and is not Genesis.", cdu.id_hlc));
+        }
+
+        let mut current_cdu_id: CduId;
         let mut visited_ids = HashSet::new();
+
+        // Start traversal from the CDU's parents
+        // We use the first parent as the starting point for the chain check.
+        let mut next_id_to_check = cdu.metadata.context_refs[0].clone();
 
         // Loop until we reach the Genesis CDU or hit an error
         loop {
-            // 1. Cycle Detection
+            current_cdu_id = next_id_to_check;
+
+            // 2. Cycle Detection
             if !visited_ids.insert(current_cdu_id.clone()) {
                 return Err(format!("Broken Chain: Cycle detected at CDU ID {:?}", current_cdu_id));
             }
 
-            // 2. Check for Parent References
+            // 3. Check if Parent Exists in Manifold
             let current_cdu = self.get_cdu(&current_cdu_id)
-                .ok_or_else(|| format!("Broken Chain: CDU ID {:?} not found in Manifold.", current_cdu_id))?;
-
-            if current_cdu.metadata.context_refs.is_empty() {
-                // If it's not Genesis, it must have parents.
-                return Err(format!("Broken Chain: CDU ID {:?} is an orphan (no context_refs) and is not Genesis.", current_cdu_id));
-            }
-
-            // 3. Traverse to the first parent (simplification: only check the first ref for chain integrity)
-            let parent_id = current_cdu.metadata.context_refs[0].clone();
+                .ok_or_else(|| format!("Broken Chain: Parent CDU ID {:?} not found in Manifold.", current_cdu_id))?;
 
             // 4. Check for Genesis Root
-            if parent_id == self.genesis_id {
+            if current_cdu_id == self.genesis_id {
                 return Ok(()); // Chain successfully traced back to Genesis!
             }
 
-            // 5. Continue traversal
-            current_cdu_id = parent_id;
+            // 5. Continue traversal to the next parent
+            if current_cdu.metadata.context_refs.is_empty() {
+                // A non-Genesis CDU in the chain must have parents.
+                return Err(format!("Broken Chain: Intermediate CDU ID {:?} is an orphan.", current_cdu_id));
+            }
+            next_id_to_check = current_cdu.metadata.context_refs[0].clone();
         }
     }
 
