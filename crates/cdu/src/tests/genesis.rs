@@ -24,9 +24,7 @@ fn genesis_cdu_smoke() {
         .unwrap()
         .as_nanos();
     
-    // NOTE: The original code had a syntax error in the format! macro here.
-    // Assuming the intent was to use the crate name, OS, and timestamp for the seed.
-    let seed = format!("cdqn-genesis-{}-{}-{}", "CDU Crate", os_name, timestamp);
+    let seed = format!("cdqn-genesis-{}-{}", os_name, timestamp);
     
     let hardware_fp = cdqn_cryptocore::hash_sha3_256(seed.as_bytes());
     let node_id = hardware_fp.to_vec();
@@ -39,9 +37,15 @@ fn genesis_cdu_smoke() {
     };
     let genesis_cdu = Cdu::create_genesis_cdu(genesis_payload, node_id.clone(), &hlc);
     
-    // NOTE: Assuming `format_args!` is a macro that works like `format!`.
+    // Verbose output for CI log
     let output = format_args!(
-        "OS: {}\nNodeId (hex): {}\nPayloadHash (hex): {}\nGenesisCDU (hex): {}\nStatus: SUCCESS\n",
+        "\n--- START: TEST REPORT (genesis_cdu_smoke) ---\n\
+        OS: {}\n\
+        NodeId (hex): {}\n\
+        PayloadHash (hex): {}\n\
+        GenesisCDU ID (hex): {}\n\
+        Status: SUCCESS\n\
+        --- END: TEST REPORT (genesis_cdu_smoke) ---\n",
         os_name,
         hex_encode(&node_id),
         hex_encode(&genesis_cdu.payload_hash),
@@ -51,6 +55,5 @@ fn genesis_cdu_smoke() {
     let path = log_dir.join("genesis_cdu_smoke.log");
     println!("TEST DEBUG: Writing genesis_cdu_smoke() output to: {}", path.display());
     
-    // FIX: Correctly format the error message for expect()
     fs::write(&path, output).expect(&format!("Unable to write genesis_cdu_smoke() output to: {}", path.display()));
 }
