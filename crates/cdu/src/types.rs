@@ -266,7 +266,8 @@ impl Cdu {
         };
 
         // Use a deterministic serialization format (standard JSON is used here)
-        serde_json::to_vec(&temp_cdu).expect("Failed to serialize CDU for signing")
+        let _message = serde_json::to_vec(&temp_cdu).expect("Failed to serialize CDU for signing");
+        _message
     }
 
     /// Signs the CDU using the provided SignerEntity and adds the signature to the audit trail.
