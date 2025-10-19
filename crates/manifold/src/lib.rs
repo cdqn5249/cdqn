@@ -19,7 +19,7 @@ pub use types::{Manifold, CduId, MerkleRoot};
 use cdqn_cdu::Cdu;
 use std::sync::Arc;
 use std::path::PathBuf;
-use std::collections::{HashMap, HashSet}; // <-- FIX: Added HashSet import
+use std::collections::{HashMap, HashSet};
 
 impl Manifold {
     /// Creates a new Manifold, initialized with the Genesis CDU.
@@ -55,19 +55,22 @@ impl Manifold {
         let id = cdu.id_hlc.clone();
         let arc_cdu = Arc::new(cdu);
 
-        // Acquire write locks
-        let mut cdus_writer = self.cdus.write().expect("Manifold write lock poisoned");
-        let mut ids_writer = self.active_ids.write().expect("Manifold write lock poisoned");
+        // Acquire write locks for the data structures
+        {
+            let mut cdus_writer = self.cdus.write().expect("Manifold write lock poisoned");
+            let mut ids_writer = self.active_ids.write().expect("Manifold write lock poisoned");
 
-        if cdus_writer.contains_key(&id) {
-            return Err(format!("CDU with ID {:?} already exists.", id));
-        }
+            if cdus_writer.contains_key(&id) {
+                return Err(format!("CDU with ID {:?} already exists.", id));
+            }
 
-        // 1. Insert the new CDU
-        cdus_writer.insert(id.clone(), arc_cdu);
-        ids_writer.insert(id);
+            // 1. Insert the new CDU
+            cdus_writer.insert(id.clone(), arc_cdu);
+            ids_writer.insert(id);
+        } // Locks are released here by dropping the writers
 
         // 2. Update the Global Merkle Root
+        // This call now safely acquires a READ lock on active_ids, as the WRITE lock is released.
         self.update_merkle_root();
 
         Ok(())
