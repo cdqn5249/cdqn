@@ -9,7 +9,7 @@
 // Core Modules
 mod dispatcher;
 mod entity;
-mod runtime; // Placeholder for the main runtime loop
+// mod runtime; // FIX: Removed, now in cdqn-runtime crate
 
 // Chronosa Roles (Agents)
 mod roles;
