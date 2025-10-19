@@ -7,23 +7,19 @@
 //! - SHA3-256 hashing
 //! - HKDF-based key derivation
 //! - ChaCha20Poly1305 for authenticated encryption
-//! - Ed25519 for digital signatures and SignerEntity management.
+//! - Ed25519 for digital signatures using ed25519-consensus.
 
 pub use chacha20poly1305::{AeadCore, AeadInPlace, ChaCha20Poly1305, Key, KeyInit, Nonce};
 pub use hkdf::Hkdf;
 pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
 
-// Ed25519 imports
-// FIX: Explicitly import Keypair and PublicKey from their respective modules
-use ed25519_dalek::Keypair;
-use ed25519_dalek::PublicKey;
-use ed25519_dalek::Signature as EdSignature;
-use ed25519_dalek::SignatureError;
-use ed25519_dalek::Signer;
-use ed25519_dalek::Verifier;
-
-use rand::rngs::OsRng;
+// Ed25519 imports from ed25519-consensus
+use ed25519_consensus::{
+    SigningKey, VerificationKey, Signature,
+    rand_core::{CryptoRng, RngCore},
+};
+use rand_core::OsRng;
 
 // --- Type Aliases ---
 pub type SignatureBytes = Vec<u8>;
@@ -33,10 +29,10 @@ pub type PrivateKeyBytes = [u8; 32];
 /// Represents an auditable entity (a user, another node, or a Chronosa role)
 /// capable of signing CDUs.
 pub struct SignerEntity {
-    /// The Ed25519 keypair for signing (Optionally None for Verifier-only entities).
-    keypair: Option<Keypair>,
+    /// The Ed25519 signing key (Optionally None for Verifier-only entities).
+    signing_key: Option<SigningKey>,
     /// The public key for verification.
-    public_key: PublicKey,
+    verification_key: VerificationKey,
     /// The public identifier of the entity (e.g., a public key hash, or a unique user ID).
     pub entity_id: String,
 }
@@ -46,45 +42,58 @@ impl SignerEntity {
     #[must_use]
     pub fn new_random(entity_name: &str) -> Self {
         let mut csprng = OsRng;
-        let keypair = Keypair::generate(&mut csprng);
-        let public_key = keypair.public;
-        let public_key_hash = hash_sha3_256(public_key.as_bytes());
+        let signing_key = SigningKey::new(&mut csprng);
+        let verification_key = signing_key.verification_key();
+        let public_key_hash = hash_sha3_256(verification_key.as_bytes());
         
         let entity_id = format!("{}:{}", entity_name, hex::encode(&public_key_hash));
 
         SignerEntity {
-            keypair: Some(keypair),
-            public_key,
+            signing_key: Some(signing_key),
+            verification_key,
             entity_id,
         }
     }
 
     /// Creates a Verifier-only entity from a known public key (for verification).
-    pub fn from_public_key(entity_id: String, public_key_bytes: &PublicKeyBytes) -> Result<Self, SignatureError> {
-        let public_key = PublicKey::from_bytes(public_key_bytes)?;
+    pub fn from_public_key(entity_id: String, public_key_bytes: &PublicKeyBytes) -> Result<Self, &'static str> {
+        let verification_key = VerificationKey::try_from(public_key_bytes.as_slice())
+            .map_err(|_| "Invalid public key bytes")?;
+        
         Ok(SignerEntity {
-            keypair: None,
-            public_key,
+            signing_key: None,
+            verification_key,
             entity_id,
         })
     }
 
     /// Signs a message using the entity's keypair. Fails if the entity is Verifier-only.
     pub fn sign_message(&self, message: &[u8]) -> Result<SignatureBytes, &'static str> {
-        let keypair = self.keypair.as_ref().ok_or("Cannot sign: SignerEntity is Verifier-only")?;
+        let signing_key = self.signing_key.as_ref().ok_or("Cannot sign: SignerEntity is Verifier-only")?;
         let message_hash = hash_sha3_256(message);
-        Ok(keypair.sign(&message_hash).to_bytes().to_vec())
+        
+        // NOTE: ed25519-consensus signs the message directly, not the hash.
+        // We will sign the hash to maintain consistency with the original design.
+        let signature = signing_key.sign(&message_hash);
+        Ok(signature.to_bytes().to_vec())
     }
 
     /// Returns the public key for verification.
     #[must_use]
-    pub fn public_key(&self) -> &PublicKey {
-        &self.public_key
+    pub fn verification_key(&self) -> &VerificationKey {
+        &self.verification_key
     }
 
     /// Verifies an Ed25519 signature against a message.
-    pub fn verify_message(&self, message: &[u8], signature: &SignatureBytes) -> Result<(), SignatureError> {
-        verify_signature(&self.public_key, message, signature)
+    pub fn verify_message(&self, message: &[u8], signature: &SignatureBytes) -> Result<(), &'static str> {
+        let message_hash = hash_sha3_256(message);
+        
+        let signature_array: [u8; 64] = signature.as_slice().try_into()
+            .map_err(|_| "Invalid signature length")?;
+        let ed_signature = Signature::from(signature_array);
+
+        self.verification_key.verify(&message_hash, &ed_signature)
+            .map_err(|_| "Signature verification failed")
     }
 }
 
@@ -147,14 +156,4 @@ pub fn decrypt(
         .decrypt_in_place(nonce, aad, &mut buffer)
         .map_err(|_| "Decryption failed")?;
     Ok(buffer)
-}
-
-/// Verifies an Ed25519 signature against a message and a public key.
-pub fn verify_signature(
-    public_key: &PublicKey,
-    message: &[u8],
-    signature: &SignatureBytes,
-) -> Result<(), SignatureError> {
-    let ed_signature = EdSignature::from_slice(signature.as_slice())?;
-    public_key.verify(&hash_sha3_256(message), &ed_signature)
 }
