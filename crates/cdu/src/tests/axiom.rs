@@ -3,33 +3,10 @@
 
 use crate::types::Cdu;
 use crate::worlds::World;
-use crate::tests::find_workspace_root;
+use crate::tests::{find_workspace_root, print_cdu_summary_to_file};
 use cdqn_hlc::HybridLogicalClock;
 use std::fs;
 use std::path::PathBuf;
-use std::collections::HashMap;
-use serde_json::json;
-
-// NOTE: The original snippet was missing the setup code. I am adding a minimal,
-// runnable setup to make the test complete and correct.
-
-/// Helper function to print a summary of a CDU to a dedicated log file.
-/// NOTE: This is a placeholder definition, as the full definition was not provided.
-pub fn print_cdu_summary_to_file(test_name: &str, cdu: &Cdu, project_root: &PathBuf) {
-    let log_dir = project_root.join("ci-logs");
-    let log_file = log_dir.join(format!("{}.log", test_name));
-    
-    let output = format!(
-        "--- Test: {}\nType: {}\nID (hex): {:?}\nWorld: {:?}\nIs Axiom: {}\n-----------------\n",
-        test_name,
-        cdu.payload.payload_type,
-        cdu.id_hlc,
-        cdu.metadata.world_context,
-        cdu.is_axiom()
-    );
-    
-    fs::write(&log_file, output).expect(&format!("Unable to write to test log file: {}", log_file.display()));
-}
 
 /// This test validates the lifecycle of a regular Semi-Axiom becoming an Axiom.
 #[test]
@@ -54,7 +31,6 @@ fn test_semi_axiom_to_axiom_promotion() {
     assert!(semi_axiom.metadata.validated_worlds.contains(&World::UserWorld));
 
     // 3. The Verifier role validates it in two other worlds.
-    // RWorld and LangCodingWorld are the two additional worlds.
     semi_axiom.validate_in_world(World::RWorld);
     semi_axiom.validate_in_world(World::LangCodingWorld);
     print_cdu_summary_to_file("test_semi_axiom_to_axiom_promotion_validated", &semi_axiom, &project_root);
