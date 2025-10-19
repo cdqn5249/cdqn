@@ -9,6 +9,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use std::collections::HashMap;
 use tempfile::tempdir;
 
+// Helper function to create a unique Genesis CDU for testing
 fn create_test_genesis() -> Cdu {
     let hlc = HybridLogicalClock::new();
     let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos();
