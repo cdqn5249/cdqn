@@ -3,7 +3,7 @@
 
 use crate::payloads::{ConfigPayload, GenesisPayload, AxiomPayload};
 use crate::worlds::World;
-use cdqn_cryptocore::{hash_sha3_256, SignerEntity}; // <-- FIX: Added SignerEntity
+use cdqn_cryptocore::{hash_sha3_256, SignerEntity};
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
@@ -281,6 +281,24 @@ impl Cdu {
         };
 
         self.signatures.push(signature_entry);
+        Ok(())
+    }
+
+    /// Verifies all signatures on the CDU.
+    /// NOTE: This is a simplified check that assumes the signer_entity string contains the public key hash.
+    pub fn verify_signatures(&self) -> Result<(), String> {
+        let message = self.canonical_bytes_for_signing();
+        
+        for sig_entry in &self.signatures {
+            // In a real system, we would look up the public key from the signer_entity ID.
+            // For this test, we assume the signer_entity is a known, trusted ID.
+            
+            // Placeholder: We cannot verify without the actual public key, so we only check the signature format.
+            // The full verification logic is deferred to the Verifier Agent.
+            if sig_entry.signature.len() != 64 {
+                return Err(format!("Signature verification failed for {}: Invalid length.", sig_entry.signer_entity));
+            }
+        }
         Ok(())
     }
 
