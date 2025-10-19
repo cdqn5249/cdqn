@@ -5,12 +5,12 @@
 pub mod genesis;
 pub mod axiom;
 pub mod causal_integrity;
-pub mod test_helpers; // <-- FIX: Added new helper module
+pub mod test_helpers;
 
 use std::path::PathBuf;
 
 // Re-export the helper function to sub-modules if needed.
-pub use test_helpers::print_cdu_summary_to_file; // <-- FIX: Re-exporting the helper
+pub use test_helpers::{print_cdu_summary_to_file, hex_encode, verify_causal_chain};
 
 // A helper function to find the project root, used by all test modules.
 pub fn find_workspace_root() -> PathBuf {
