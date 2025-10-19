@@ -6,8 +6,8 @@
 //! Prime Directive: Uphold logical consistency and detect Impossibilities.
 
 use crate::entity::{Agent, Bot, EntityId};
-use crate::dispatcher::CduDispatcher; // FIX: Corrected import
-use cdqn_cdu::{Cdu, World};
+use crate::dispatcher::CduDispatcher;
+use cdqn_cdu::Cdu; // FIX: Removed unused World import
 use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
@@ -42,17 +42,37 @@ impl VerifierAgent {
         loop {
             match self.dispatcher.try_recv() {
                 Ok(cdu_arc) => {
-                    let cdu = cdu_arc.as_ref();
+                    // FIX: Clone the Arc and the Manifold Arc to move ownership into the thread
+                    let cdu_clone = cdu_arc.clone();
+                    let manifold_clone = self.manifold.clone();
+                    
                     let mut bot = Bot::new("CduVerificationBot");
                     
                     // Delegate the complex, stateful task to a Bot
-                    let result = bot.execute_task("verify_cdu", || {
-                        self.verify_cdu_integrity(cdu)
+                    let result = bot.execute_task("verify_cdu", move || {
+                        // The closure now owns cdu_clone and manifold_clone
+                        let cdu = cdu_clone.as_ref();
+                        
+                        // 1. Sovereign Integrity Check (Causality First)
+                        manifold_clone.verify_cdu_chain(cdu)
+                            .map_err(|e| format!("Causal Chain Broken: {}", e))?;
+
+                        // 2. No Anonymous Entities Check (Security Guardrail)
+                        if cdu.signatures.is_empty() {
+                            return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
+                        }
+                        
+                        // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
+                        if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
+                            Ok(())
+                        } else {
+                            Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
+                        }
                     });
 
                     match result {
-                        Ok(_) => println!("{} verified CDU {} successfully.", self.agent.id, cdu.id_hlc.len()),
-                        Err(e) => eprintln!("{} failed to verify CDU {}: {}", self.agent.id, cdu.id_hlc.len(), e),
+                        Ok(_) => println!("{} verified CDU {} successfully.", self.agent.id, cdu_arc.id_hlc.len()),
+                        Err(e) => eprintln!("{} failed to verify CDU {}: {}", self.agent.id, cdu_arc.id_hlc.len(), e),
                     }
                 }
                 Err(e) if e.contains("Queue is empty") => {
@@ -68,26 +88,5 @@ impl VerifierAgent {
         }
     }
 
-    /// The core logic for the Verifier Agent (executed by a Bot/Worker).
-    /// Implements the initial checks of Workflow 1.
-    fn verify_cdu_integrity(&self, cdu: &Cdu) -> Result<(), String> {
-        // 1. Sovereign Integrity Check (Causality First)
-        self.manifold.verify_cdu_chain(cdu)
-            .map_err(|e| format!("Causal Chain Broken: {}", e))?;
-
-        // 2. No Anonymous Entities Check (Security Guardrail)
-        if cdu.signatures.is_empty() {
-            return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
-        }
-        
-        // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
-        if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
-            // NOTE: This is a simplified check. The full logic would check against Axioms.
-            // If it's outside the Impossibility Zone, it's provisionally consistent.
-            Ok(())
-        } else {
-            // If it's in the Impossibility Zone [-1, 1], it's a contradiction.
-            Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
-        }
-    }
+    // NOTE: The verify_cdu_integrity method is now inlined into the closure to simplify the Agent struct.
 }
