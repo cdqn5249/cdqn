@@ -15,10 +15,14 @@ pub use sha3::{Digest, Sha3_256};
 pub use zeroize::Zeroize;
 
 // Ed25519 imports
-use ed25519_dalek::{
-    Keypair, PublicKey, Signature as EdSignature, Signer, Verifier,
-    SignatureError,
-};
+// FIX: Changed the single problematic import to multiple explicit imports
+use ed25519_dalek::Keypair;
+use ed25519_dalek::PublicKey;
+use ed25519_dalek::Signature as EdSignature;
+use ed25519_dalek::SignatureError;
+use ed25519_dalek::Signer;
+use ed25519_dalek::Verifier;
+
 use rand::rngs::OsRng;
 
 // --- Type Aliases ---
