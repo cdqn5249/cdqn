@@ -13,7 +13,7 @@ publish = false
 sha3 = "0.10"
 hkdf = "0.12"
 chacha20poly1305 = "0.10"
-# FIX: Add features for ed25519-dalek and rand
-ed25519-dalek = { version = "2.0", features = ["rand_core"] }
+# FIX: Ensure all necessary features are enabled for ed25519-dalek
+ed25519-dalek = { version = "2.0", features = ["rand_core", "serde"] }
 zeroize = "1.7"
 rand = "0.8"
