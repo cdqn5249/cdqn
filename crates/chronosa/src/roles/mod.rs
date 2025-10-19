@@ -7,4 +7,4 @@ pub mod verifier;
 // pub mod consolidator; // Deferred
 
 // Re-export public types
-pub use verifier::VerifierAgent;
+pub use verifier::VerifierAgent; // FIX: Removed unused re-export
