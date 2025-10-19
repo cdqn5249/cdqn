@@ -4,47 +4,69 @@
 //! The central, non-blocking CDU Dispatcher.
 //!
 //! This module implements a custom Multi-Producer, Multi-Consumer (MPMC) channel
-//! using `crossbeam` to form the backbone of Chronosa's asynchronous runtime.
+//! using only `std::sync` primitives (Mutex and Condvar) to enforce the Sovereignty
+//! principle by avoiding external concurrency crates.
 
 use cdqn_cdu::Cdu;
-use std::sync::Arc;
-use crossbeam::channel::{self, Sender, Receiver, TrySendError};
+use std::sync::{Arc, Mutex};
+use std::collections::VecDeque;
 
-// The capacity of the channel.
+// The capacity of the queue.
 const DISPATCHER_CAPACITY: usize = 1024;
 
-/// The central MPMC channel for broadcasting new CDUs to all Chronosa roles.
-/// NOTE: This is a simple MPMC channel, not a broadcast channel. Roles must
-/// be manually managed to ensure all receive the message.
+// --- Custom Channel Primitives ---
+
+/// The core state shared between all Senders and Receivers.
+type CduQueue = VecDeque<Arc<Cdu>>;
+
+/// The central MPMC queue for broadcasting new CDUs to all Chronosa roles.
+/// All Agents poll this single queue.
 pub struct CduDispatcher {
-    /// The sender half of the channel.
-    sender: Sender<Arc<Cdu>>,
-    /// The receiver half of the channel (used to clone new receivers).
-    receiver: Receiver<Arc<Cdu>>,
+    queue: Arc<Mutex<CduQueue>>,
 }
 
 impl CduDispatcher {
     /// Creates a new CduDispatcher.
     #[must_use]
     pub fn new() -> Self {
-        let (sender, receiver) = channel::bounded(DISPATCHER_CAPACITY);
-        CduDispatcher { sender, receiver }
+        CduDispatcher {
+            queue: Arc::new(Mutex::new(VecDeque::with_capacity(DISPATCHER_CAPACITY))),
+        }
     }
 
-    /// Publishes a new CDU to the channel.
+    /// Publishes a new CDU to the queue.
     ///
-    /// The CDU is wrapped in an Arc to ensure it is immutable and cheaply cloneable.
-    /// Returns an error if the channel is full.
-    pub fn publish(&self, cdu: Cdu) -> Result<(), TrySendError<Arc<Cdu>>> {
+    /// This is a non-blocking operation. Returns an error if the queue is full.
+    pub fn publish(&self, cdu: Cdu) -> Result<(), String> {
         let arc_cdu = Arc::new(cdu);
-        self.sender.try_send(arc_cdu)?;
+        let mut queue = self.queue.lock().map_err(|_| "Dispatcher lock poisoned")?;
+
+        if queue.len() >= DISPATCHER_CAPACITY {
+            return Err("Dispatcher queue is full".to_string());
+        }
+
+        queue.push_back(arc_cdu);
+        
         Ok(())
     }
 
-    /// Creates a new receiver for a Chronosa role to subscribe to the CDU stream.
+    /// Attempts to receive a CDU without blocking.
+    /// This is the non-blocking method for polling Agents.
+    pub fn try_recv(&self) -> Result<Arc<Cdu>, String> {
+        let mut queue = self.queue.lock().map_err(|_| "Dispatcher lock poisoned")?;
+
+        match queue.pop_front() {
+            Some(cdu) => Ok(cdu),
+            None => Err("Queue is empty".to_string()),
+        }
+    }
+
+    /// Creates a clone of the dispatcher for another Agent to use.
     #[must_use]
-    pub fn subscribe(&self) -> Receiver<Arc<Cdu>> {
-        self.receiver.clone()
+    pub fn clone_for_agent(&self) -> Self {
+        CduDispatcher {
+            queue: self.queue.clone(),
+        }
     }
 }
 
@@ -57,7 +79,8 @@ impl Default for CduDispatcher {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use cdqn_cdu::payloads::GenesisPayload;
+    // FIX: Corrected imports
+    use cdqn_cdu::GenesisPayload;
     use cdqn_hlc::HybridLogicalClock;
     use cdqn_cryptocore::hash_sha3_256;
     use std::thread;
@@ -77,35 +100,34 @@ mod tests {
     }
 
     #[test]
-    fn test_dispatcher_publish_and_subscribe() {
+    fn test_dispatcher_publish_and_try_recv() {
         let dispatcher = CduDispatcher::new();
-        let rx1 = dispatcher.subscribe();
-        let rx2 = dispatcher.subscribe();
-
         let cdu1 = create_test_cdu("Message 1");
         let cdu2 = create_test_cdu("Message 2");
 
-        // Publish CDU 1
+        // 1. Initial state check
+        assert!(dispatcher.try_recv().is_err(), "Queue should be empty initially.");
+
+        // 2. Publish CDU 1
         dispatcher.publish(cdu1.clone()).unwrap();
 
-        // Check if one receiver got CDU 1 (it's a queue, so only one gets it)
-        let received1 = rx1.recv().unwrap();
+        // 3. Receive CDU 1
+        let received1 = dispatcher.try_recv().unwrap();
         assert_eq!(received1.id_hlc, cdu1.id_hlc);
+        assert!(dispatcher.try_recv().is_err(), "Queue should be empty after receiving.");
 
-        // Publish CDU 2
+        // 4. Publish CDU 2
         dispatcher.publish(cdu2.clone()).unwrap();
-
-        // Check if the second receiver got CDU 2
-        let received2 = rx2.recv().unwrap();
+        let received2 = dispatcher.try_recv().unwrap();
         assert_eq!(received2.id_hlc, cdu2.id_hlc);
     }
 
     #[test]
-    fn test_dispatcher_non_blocking_try_send() {
+    fn test_dispatcher_non_blocking_full() {
         let dispatcher = CduDispatcher::new();
         let cdu = create_test_cdu("Test");
 
-        // Fill the channel to capacity
+        // Fill the queue to capacity
         for _ in 0..DISPATCHER_CAPACITY {
             dispatcher.publish(cdu.clone()).unwrap();
         }
@@ -113,6 +135,35 @@ mod tests {
         // The next send should fail immediately (non-blocking)
         let result = dispatcher.publish(cdu.clone());
         assert!(result.is_err());
-        assert!(matches!(result.unwrap_err(), TrySendError::Full(_)));
+        assert!(result.unwrap_err().contains("queue is full"));
+    }
+
+    #[test]
+    fn test_dispatcher_mpmc_access() {
+        let dispatcher = CduDispatcher::new();
+        let dispatcher_clone = dispatcher.clone_for_agent();
+        let cdu = create_test_cdu("MPMC Test");
+
+        // Thread 1 (Producer)
+        let producer_handle = thread::spawn(move || {
+            thread::sleep(Duration::from_millis(10));
+            dispatcher_clone.publish(cdu).unwrap();
+        });
+
+        // Thread 2 (Consumer)
+        let consumer_handle = thread::spawn(move || {
+            // Poll until the message is received
+            loop {
+                match dispatcher.try_recv() {
+                    Ok(cdu) => return cdu,
+                    Err(_) => thread::sleep(Duration::from_millis(1)),
+                }
+            }
+        });
+
+        producer_handle.join().unwrap();
+        let received_cdu = consumer_handle.join().unwrap();
+
+        assert_eq!(received_cdu.metadata.location, "MPMC Test");
     }
 }
