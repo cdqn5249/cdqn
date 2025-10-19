@@ -4,11 +4,11 @@
 use crate::types::Manifold;
 use cdqn_cdu::Cdu;
 use std::fs;
-use serde_json; // <-- FIX: Added serde_json import
+use serde_json;
 
 // NOTE: The `hex` crate is not in the Cargo.toml. We will use a local utility
 // for the placeholder to avoid adding an external dependency just for this.
-mod hex {
+pub mod hex { // <-- FIX: Made module public
     #[must_use]
     pub fn encode(bytes: &[u8]) -> String {
         bytes.iter().map(|b| format!("{:02x}", b)).collect()
