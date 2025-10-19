@@ -5,17 +5,18 @@
 //!
 //! Prime Directive: Uphold logical consistency and detect Impossibilities.
 
-use crate::entity::{Agent, Bot, Worker, EntityId};
-use crate::dispatcher::CduDispatcher;
+use crate::entity::{Agent, Bot, EntityId};
+use crate::dispatcher::CduDispatcher; // FIX: Corrected import
 use cdqn_cdu::{Cdu, World};
 use cdqn_manifold::Manifold;
 use std::sync::Arc;
-use crossbeam::channel::Receiver;
+use std::thread;
+use std::time::Duration;
 
 /// The Verifier Agent: Autonomous entity responsible for Manifold integrity.
 pub struct VerifierAgent {
     agent: Agent,
-    dispatcher_rx: Receiver<Arc<Cdu>>,
+    dispatcher: CduDispatcher,
     manifold: Arc<Manifold>,
     // Agent-specific state: Cache of trusted public keys for signature verification
     trusted_signers: Vec<EntityId>,
@@ -27,7 +28,7 @@ impl VerifierAgent {
     pub fn new(dispatcher: &CduDispatcher, manifold: Arc<Manifold>) -> Self {
         VerifierAgent {
             agent: Agent::new("VerifierAgent"),
-            dispatcher_rx: dispatcher.subscribe(),
+            dispatcher: dispatcher.clone_for_agent(),
             manifold,
             trusted_signers: vec!["NodeId".to_string()], // Placeholder for known entities
         }
@@ -37,9 +38,9 @@ impl VerifierAgent {
     pub fn run(&mut self) {
         println!("{} is running and subscribed to CDU Dispatcher.", self.agent.id);
         
-        // The Agent's main loop: continuously wait for a new CDU
+        // The Agent's main loop: continuously poll for a new CDU
         loop {
-            match self.dispatcher_rx.recv() {
+            match self.dispatcher.try_recv() {
                 Ok(cdu_arc) => {
                     let cdu = cdu_arc.as_ref();
                     let mut bot = Bot::new("CduVerificationBot");
@@ -54,8 +55,12 @@ impl VerifierAgent {
                         Err(e) => eprintln!("{} failed to verify CDU {}: {}", self.agent.id, cdu.id_hlc.len(), e),
                     }
                 }
+                Err(e) if e.contains("Queue is empty") => {
+                    // Non-blocking: Sleep briefly to prevent a tight spin-lock on the CPU
+                    thread::sleep(Duration::from_millis(10));
+                }
                 Err(e) => {
-                    // If the channel is disconnected, the dispatcher is gone.
+                    // A critical error (e.g., lock poisoned)
                     eprintln!("VerifierAgent loop terminated: {}", e);
                     break;
                 }
