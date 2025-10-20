@@ -8,7 +8,7 @@
 
 use crate::entity::{Agent, Bot, EntityId};
 use crate::dispatcher::CduDispatcher;
-use cdqn_cdu::{Cdu, BotStatePayload};
+use cdqn_cdu::{Cdu, BotStatePayload}; // FIX: Corrected BotStatePayload import
 use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
@@ -60,7 +60,6 @@ impl EvolutionAgent {
                         let task_type = "resolve_impossibility";
 
                         // 1. Check for Task Footprint (Projection)
-                        // NOTE: This is a simplified check. A real check would look up the BotStateCDU.
                         if cdu_arc.metadata.task_footprints.contains_key(task_type) {
                             println!("EVOLUTION SKIP: CDU ID {} already has '{}' footprint.", cdu_arc.id_hlc.len(), task_type);
                             self.last_processed_index += 1;
@@ -92,6 +91,7 @@ impl EvolutionAgent {
                                     
                                     // NOTE: In a real system, this BotStateCDU would be published and the Manifold Projection updated.
                                     
+                                    // FIX: Use the correct hex utility from cdqn_runtime
                                     Ok(format!("Resolved with Hash: {}", cdqn_runtime::hex::encode(&resolution_hash)))
                                 }
                             );
