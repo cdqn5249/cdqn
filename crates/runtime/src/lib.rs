@@ -17,12 +17,12 @@ use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 #[cfg(test)]
-mod tests; // <-- FIX: Added test module declaration
+mod tests;
 
 /// The main CDQN Runtime struct (The Guardrail).
 pub struct CdqnRuntime {
-    pub manifold: Arc<Manifold>, // FIX: Made public for testing
-    pub dispatcher: CduDispatcher, // FIX: Made public for testing
+    pub manifold: Arc<Manifold>,
+    pub dispatcher: CduDispatcher,
     agent_handles: Vec<JoinHandle<()>>,
 }
 
@@ -89,7 +89,7 @@ impl CdqnRuntime {
 
         let handle = thread::spawn(move || {
             let mut verifier = VerifierAgent::new(&dispatcher_clone, manifold_clone);
-            verifier.run();
+            verifier.run(None); // FIX: Pass None for the test_report_tx in production code
         });
 
         self.agent_handles.push(handle);
