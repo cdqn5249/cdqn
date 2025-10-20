@@ -6,7 +6,7 @@ use crate::payloads::{ConfigPayload, GenesisPayload, AxiomPayload};
 use crate::worlds::World;
 use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::{HlcTimestamp, HybridLogicalClock};
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap}; // FIX: Added HashMap
 
 impl Cdu {
     /// Creates a new CDU with a given payload and metadata, generating its ID.
@@ -55,6 +55,7 @@ impl Cdu {
             hlc_timestamp: HlcTimestamp::new(0, 0),
             symmetric_counterpart: None,
             validated_worlds: HashSet::new(),
+            task_footprints: HashMap::new(), // FIX: Initialize new field
         };
 
         Self::new(payload, metadata, hlc, &author_node)
@@ -89,6 +90,7 @@ impl Cdu {
             hlc_timestamp: HlcTimestamp::new(0, 0),
             symmetric_counterpart: None,
             validated_worlds,
+            task_footprints: HashMap::new(), // FIX: Initialize new field
         };
 
         Self::new(payload, metadata, hlc, &[])
@@ -126,6 +128,7 @@ impl Cdu {
             hlc_timestamp: hlc_ts,
             symmetric_counterpart: None,
             validated_worlds,
+            task_footprints: HashMap::new(), // FIX: Initialize new field
         };
 
         Self {
@@ -165,6 +168,7 @@ impl Cdu {
             hlc_timestamp: hlc_ts,
             symmetric_counterpart: None,
             validated_worlds: HashSet::new(),
+            task_footprints: HashMap::new(), // FIX: Initialize new field
         };
 
         Self {
