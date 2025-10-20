@@ -55,10 +55,12 @@ impl VerifierAgent {
                 // Process the next CDU in the Causal Log
                 match self.dispatcher.get_cdu_by_index(self.last_processed_index) {
                     Ok(cdu_arc) => {
+                        // Clone the Arc and the Manifold Arc to move ownership into the thread
                         let cdu_clone = cdu_arc.clone();
                         let manifold_clone = self.manifold.clone();
                         
-                        let mut bot = Bot::new("CduVerificationBot");
+                        // FIX: Pass the source CDU's HLC to the Bot
+                        let mut bot = Bot::new("CduVerificationBot", cdu_arc.metadata.hlc_timestamp);
                         
                         // Delegate the complex, stateful task to a Bot
                         let result = bot.execute_task("verify_cdu", move || {
@@ -88,7 +90,8 @@ impl VerifierAgent {
                             Err(e) => format!("CONTRADICTION (RWorld: {}): {}", r_coord, e),
                         };
                         
-                        println!("VERIFIER OUTPUT: CDU ID {} -> {}", cdu_arc.id_hlc.len(), outcome);
+                        // FIX: Log the outcome with the Bot's Causal ID
+                        println!("VERIFIER OUTPUT: {} -> {}", bot.causal_task_id, outcome);
 
                         // Send the outcome back to the test thread
                         if let Some(tx) = &test_report_tx {
