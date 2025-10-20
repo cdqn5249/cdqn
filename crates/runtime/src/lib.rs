@@ -6,11 +6,11 @@
 //! This module initializes the Manifold, the Dispatcher, and spawns the Chronosa Agent threads.
 //! It is architecturally separate from the Chronosa cognitive engine.
 
-use cdqn_chronosa::{CduDispatcher, VerifierAgent};
+use cdqn_chronosa::{CduDispatcher, VerifierAgent, EvolutionAgent}; // FIX: Import EvolutionAgent
 use cdqn_cdu::{Cdu, GenesisPayload};
 use cdqn_manifold::Manifold;
 use cdqn_hlc::HybridLogicalClock;
-use cdqn_cryptocore::hash_sha3_256;
+use cdqn_cryptocore::{hash_sha3_256, hex_encode};
 use std::sync::Arc;
 use std::thread::{self, JoinHandle};
 use std::path::PathBuf;
@@ -23,7 +23,7 @@ mod tests;
 pub struct CdqnRuntime {
     pub manifold: Arc<Manifold>,
     pub dispatcher: CduDispatcher,
-    agent_handles: Vec<JoinHandle<()>>,
+    pub agent_handles: Vec<JoinHandle<()>>, // FIX: Made public for testing
 }
 
 impl CdqnRuntime {
@@ -41,7 +41,7 @@ impl CdqnRuntime {
         let manifold = Arc::new(Manifold::new(genesis_cdu, storage_path));
         let dispatcher = CduDispatcher::new();
 
-        println!("Manifold Initialized. Genesis ID: {}", hex::encode(&manifold.genesis_id));
+        println!("Manifold Initialized. Genesis ID: {}", hex_encode(&manifold.genesis_id));
         println!("CDU Dispatcher Ready.");
 
         let mut runtime = CdqnRuntime {
@@ -52,6 +52,7 @@ impl CdqnRuntime {
 
         // 2. Spawn Core Agents (The Chronosa Intelligence)
         runtime.spawn_verifier_agent();
+        runtime.spawn_evolution_agent(); // FIX: Spawn Evolution Agent
         // runtime.spawn_policy_agent(); // Deferred
         // runtime.spawn_proxy_agent(); // Deferred
 
@@ -89,11 +90,25 @@ impl CdqnRuntime {
 
         let handle = thread::spawn(move || {
             let mut verifier = VerifierAgent::new(&dispatcher_clone, manifold_clone);
-            verifier.run(None); // FIX: Pass None for the test_report_tx in production code
+            verifier.run(None); // Pass None for the test_report_tx in production code
         });
 
         self.agent_handles.push(handle);
         println!("Agent Spawned: VerifierAgent");
+    }
+
+    /// Spawns the Evolution Agent thread.
+    fn spawn_evolution_agent(&mut self) {
+        let manifold_clone = self.manifold.clone();
+        let dispatcher_clone = self.dispatcher.clone_for_agent();
+
+        let handle = thread::spawn(move || {
+            let mut evolution = EvolutionAgent::new(&dispatcher_clone, manifold_clone);
+            evolution.run(None); // Pass None for the test_report_tx in production code
+        });
+
+        self.agent_handles.push(handle);
+        println!("Agent Spawned: EvolutionAgent");
     }
 
     /// The main loop to keep the runtime alive.
