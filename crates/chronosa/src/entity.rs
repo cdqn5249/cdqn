@@ -7,7 +7,7 @@
 //! (Worker) from stateful task management (Bot) and autonomous planning (Agent).
 
 use std::thread::{self, JoinHandle};
-use cdqn_hlc::HlcTimestamp; // FIX: Import HlcTimestamp
+use cdqn_hlc::HlcTimestamp;
 
 // --- Type Aliases ---
 pub type EntityId = String;
@@ -44,11 +44,11 @@ impl Bot {
     /// FIX: Accepts the source CDU's HlcTimestamp for causal linking.
     #[must_use]
     pub fn new(task_name: &str, source_hlc: HlcTimestamp) -> Self {
-        // FIX: Causal Task ID is based on the source HLC and the current thread ID.
+        // FIX: Use stable API for thread ID and HLC for Causal Task ID
         let causal_task_id = format!(
             "Task:{}:{}:{}", 
             source_hlc.as_u64(), 
-            thread::current().id().as_u64().unwrap_or(0),
+            format!("{:?}", thread::current().id()), // Stable, unique thread ID string
             task_name
         );
         
