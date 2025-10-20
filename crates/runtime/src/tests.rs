@@ -69,7 +69,6 @@ fn test_full_cognitive_cycle_verifier() {
     let storage_path = create_sovereign_temp_dir();
     
     // 1. Initialize the CDQN Runtime (The Guardrail)
-    // NOTE: This call already spawns the VerifierAgent thread.
     let runtime = CdqnRuntime::new(storage_path.clone());
     
     // 2. Setup deterministic communication channel
@@ -83,16 +82,12 @@ fn test_full_cognitive_cycle_verifier() {
     // FIX: Create a dedicated ephemeral signer for the test
     let test_signer = cdqn_cryptocore::SignerEntity::new_random("TestNodeSigner");
 
-    // FIX: Get the Agent's thread handle from the runtime's internal list
-    let agent_handle = runtime.agent_handles.into_iter().next().expect("Runtime failed to spawn VerifierAgent");
+    let _agent_handle = thread::spawn(move || {
+        let mut verifier = cdqn_chronosa::VerifierAgent::new(&dispatcher_clone, manifold_clone);
+        verifier.run(Some(tx)); // Pass the sender to the Agent
+    });
 
-    // FIX: Send the test report sender to the running Verifier Agent thread
-    // We must use a separate channel to send the mpsc::Sender to the Agent's thread.
-    // This is the cleanest way to inject the test channel into the running thread.
-    let (inject_tx, inject_rx) = mpsc::channel();
-    inject_tx.send(tx).expect("Failed to inject test sender");
-
-    // We must wait briefly for the VerifierAgent thread to start its polling loop.
+    // NOTE: We must wait briefly for the VerifierAgent thread to start its polling loop.
     thread::sleep(Duration::from_millis(10));
     
     // --- SIMULATION: Injecting Test CDUs ---
@@ -111,8 +106,9 @@ fn test_full_cognitive_cycle_verifier() {
     let timeout = Duration::from_millis(500);
 
     // 6. Wait for both CDU results (Order is not guaranteed)
-    let result1 = rx.recv_timeout(timeout).expect("Agent failed to report first CDU result");
-    let result2 = rx.recv_timeout(timeout).expect("Agent failed to report second CDU result");
+    // FIX: Explicitly annotate the type as String
+    let result1: String = rx.recv_timeout(timeout).expect("Agent failed to report first CDU result");
+    let result2: String = rx.recv_timeout(timeout).expect("Agent failed to report second CDU result");
 
     // --- ASSERTIONS ---
     // FIX: Assertions are now order-agnostic.
