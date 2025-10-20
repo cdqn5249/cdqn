@@ -3,8 +3,8 @@
 
 //! The central, non-blocking CDU Dispatcher (Causal Event Bus).
 //!
-//! Implements the Causal Task Lock (CTL) mechanism to prevent redundant processing
-//! of the same task on the same CDU by multiple threads.
+//! This module implements a shared, indexed log using only `std::sync::Mutex`
+//! to enforce the Event Sourcing principle where the HLc defines the causal order.
 
 use cdqn_cdu::Cdu;
 use std::sync::{Arc, Mutex};
@@ -45,14 +45,18 @@ impl CduDispatcher {
     }
 
     /// Publishes a new CDU to the log (Send-and-Forget).
+    ///
+    /// This is a non-blocking operation. Returns an error if the log is full.
     pub fn publish(&self, cdu: Cdu) -> Result<(), String> {
         let arc_cdu = Arc::new(cdu);
         let mut shared = self.shared.lock().map_err(|_| "Dispatcher lock poisoned")?;
 
         if shared.log.len() >= DISPATCHER_CAPACITY {
+            // NOTE: In a real system, this would trigger a persistence/archival process.
             return Err("Causal Log is full (Archival needed)".to_string());
         }
 
+        // NOTE: The log is implicitly ordered by the HLC of the incoming messages.
         shared.log.push_back(arc_cdu);
         
         Ok(())
@@ -123,6 +127,7 @@ mod tests {
     use cdqn_cdu::GenesisPayload;
     use cdqn_hlc::HybridLogicalClock;
     use cdqn_cryptocore::hash_sha3_256;
+    use std::thread; // FIX: Added missing import
 
     // Helper to create a minimal CDU
     fn create_test_cdu(statement: &str) -> Cdu {
@@ -135,6 +140,47 @@ mod tests {
             location: statement.to_string(),
         };
         Cdu::create_genesis_cdu(payload, node_id, &hlc)
+    }
+
+    #[test]
+    fn test_dispatcher_publish_and_indexed_read() {
+        let dispatcher = CduDispatcher::new();
+        let cdu1 = create_test_cdu("Event 1");
+        let cdu2 = create_test_cdu("Event 2");
+
+        // 1. Publish CDU 1
+        dispatcher.publish(cdu1.clone()).unwrap();
+        assert_eq!(dispatcher.log_len(), 1);
+
+        // 2. Publish CDU 2
+        dispatcher.publish(cdu2.clone()).unwrap();
+        assert_eq!(dispatcher.log_len(), 2);
+
+        // 3. Read by index (Causal Order Check)
+        let received1 = dispatcher.get_cdu_by_index(0).unwrap();
+        let received2 = dispatcher.get_cdu_by_index(1).unwrap();
+        
+        assert_eq!(received1.id_hlc, cdu1.id_hlc);
+        assert_eq!(received2.id_hlc, cdu2.id_hlc);
+        
+        // 4. Check out of bounds
+        assert!(dispatcher.get_cdu_by_index(2).is_err());
+    }
+
+    #[test]
+    fn test_dispatcher_non_blocking_full() {
+        let dispatcher = CduDispatcher::new();
+        let cdu = create_test_cdu("Test");
+
+        // Fill the queue to capacity
+        for _ in 0..DISPATCHER_CAPACITY {
+            dispatcher.publish(cdu.clone()).unwrap();
+        }
+
+        // The next send should fail immediately (non-blocking)
+        let result = dispatcher.publish(cdu.clone());
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Log is full"));
     }
 
     #[test]
