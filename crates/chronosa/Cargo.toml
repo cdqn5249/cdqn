@@ -13,5 +13,5 @@ publish = false
 cdqn-cdu = { path = "../cdu" }
 cdqn-manifold = { path = "../manifold" }
 cdqn-hlc = { path = "../hlc" }
-# FIX: Removed crossbeam
-cdqn-cryptocore = { path = "../cryptocore" } # <-- FIX: Added missing dependency
+cdqn-cryptocore = { path = "../cryptocore" }
+cdqn-runtime = { path = "../runtime" } # FIX: Added dependency for hex utility
