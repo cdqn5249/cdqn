@@ -5,10 +5,16 @@ use cdqn_cdu::Cdu;
 use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, RwLock};
 use std::path::PathBuf;
+use std::thread::ThreadId; // FIX: Added ThreadId for LockValue
 
 // --- Type Aliases ---
 pub type CduId = Vec<u8>; // The id_hlc
 pub type MerkleRoot = [u8; 32]; // SHA3-256 hash
+
+// --- Type Aliases for CTL ---
+pub type TaskType = String;
+pub type LockKey = (CduId, TaskType);
+pub type LockValue = (ThreadId, String); // (ThreadId, CausalTaskId)
 
 /// The Manifold: A dynamic emergent space projection and sovereign knowledge base.
 /// Uses RwLock for concurrent read/write access.
@@ -24,6 +30,13 @@ pub struct Manifold {
     pub genesis_id: CduId,
     /// The path to the on-disk storage for encrypted CDUs.
     pub storage_path: PathBuf,
+    
+    // FIX: The Causal Task Lock (CTL) map
+    pub task_locks: RwLock<HashMap<LockKey, LockValue>>,
+    
+    // FIX: The Task Status Projection (Bot State Persistence)
+    // Key: (Original_CDU_ID, TaskType) -> Value: BotStateCDU_ID
+    pub task_status_projection: RwLock<HashMap<LockKey, CduId>>,
 }
 
 impl Manifold {
