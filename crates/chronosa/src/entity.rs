@@ -8,7 +8,7 @@
 
 use std::thread::{self, JoinHandle};
 use cdqn_hlc::HlcTimestamp;
-use crate::dispatcher::{CduDispatcher, LockValue};
+use crate::dispatcher::CduDispatcher; // FIX: Removed unused LockValue import
 
 // --- Type Aliases ---
 pub type EntityId = String;
@@ -104,7 +104,7 @@ impl Bot {
         };
 
         // 2. Release Causal Task Lock (CTL)
-        dispatcher.release_lock(cdu_id, task_type_string, lock_value)
+        dispatcher.release_lock(cdu_id, task_type_string, &lock_value) // FIX: Pass reference
             .map_err(|e| format!("CTL Release Failed: {}", e))?;
 
         result
