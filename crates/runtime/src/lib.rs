@@ -7,7 +7,7 @@
 //! It is architecturally separate from the Chronosa cognitive engine.
 
 use cdqn_chronosa::{CduDispatcher, VerifierAgent};
-use cdqn_cdu::{Cdu, payloads::GenesisPayload};
+use cdqn_cdu::{Cdu, GenesisPayload}; // FIX: Corrected import
 use cdqn_manifold::Manifold;
 use cdqn_hlc::HybridLogicalClock;
 use cdqn_cryptocore::hash_sha3_256;
