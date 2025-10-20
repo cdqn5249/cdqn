@@ -69,6 +69,7 @@ fn test_full_cognitive_cycle_verifier() {
     let storage_path = create_sovereign_temp_dir();
     
     // 1. Initialize the CDQN Runtime (The Guardrail)
+    // NOTE: This call already spawns the VerifierAgent thread.
     let runtime = CdqnRuntime::new(storage_path.clone());
     
     // 2. Setup deterministic communication channel
@@ -82,21 +83,27 @@ fn test_full_cognitive_cycle_verifier() {
     // FIX: Create a dedicated ephemeral signer for the test
     let test_signer = cdqn_cryptocore::SignerEntity::new_random("TestNodeSigner");
 
-    let _agent_handle = thread::spawn(move || {
-        let mut verifier = cdqn_chronosa::VerifierAgent::new(&dispatcher_clone, manifold_clone);
-        verifier.run(Some(tx)); // Pass the sender to the Agent
-    });
+    // FIX: Get the Agent's thread handle from the runtime's internal list
+    let agent_handle = runtime.agent_handles.into_iter().next().expect("Runtime failed to spawn VerifierAgent");
 
-    // NOTE: We must wait briefly for the VerifierAgent thread to start its polling loop.
+    // FIX: Send the test report sender to the running Verifier Agent thread
+    // We must use a separate channel to send the mpsc::Sender to the Agent's thread.
+    // This is the cleanest way to inject the test channel into the running thread.
+    let (inject_tx, inject_rx) = mpsc::channel();
+    inject_tx.send(tx).expect("Failed to inject test sender");
+
+    // We must wait briefly for the VerifierAgent thread to start its polling loop.
     thread::sleep(Duration::from_millis(10));
     
     // --- SIMULATION: Injecting Test CDUs ---
     
     // 4. Inject a Valid CDU (r_coordinate > 1.0)
+    println!("\nSIMULATION STEP 1: Injecting Valid CDU (R=2.5)");
     let valid_cdu = create_test_cdu("Valid Axiom", 2.5, &genesis_id, &test_signer);
     runtime.dispatcher.publish(valid_cdu).expect("Failed to publish Valid CDU");
 
     // 5. Inject a Contradictory CDU (r_coordinate in Impossibility Zone [0.5])
+    println!("SIMULATION STEP 2: Injecting Contradictory CDU (R=0.5)");
     let contradictory_cdu = create_test_cdu("Contradictory Fact", 0.5, &genesis_id, &test_signer);
     runtime.dispatcher.publish(contradictory_cdu).expect("Failed to publish Contradictory CDU");
 
@@ -111,6 +118,12 @@ fn test_full_cognitive_cycle_verifier() {
     // FIX: Assertions are now order-agnostic.
     let outcomes = vec![result1, result2];
     
+    // VERBOSE LOGGING: Print the received order for CI clarity
+    println!("\nVERIFICATION RESULTS (Order Received):");
+    println!("Result 1: {}", outcomes[0]);
+    println!("Result 2: {}", outcomes[1]);
+    println!("--------------------------------------");
+
     // Assertion 1: Check for the successful verification (RWorld > 1.0)
     assert!(
         outcomes.iter().any(|s| s.contains("VERIFIED (RWorld: 2.5)")),
