@@ -72,10 +72,14 @@ impl VerifierAgent {
                         }
                     });
 
-                    match result {
-                        Ok(_) => println!("{} verified CDU {} successfully.", self.agent.id, cdu_arc.id_hlc.len()),
-                        Err(e) => eprintln!("{} failed to verify CDU {}: {}", self.agent.id, cdu_arc.id_hlc.len(), e),
-                    }
+                    // FIX: Explicitly print the RWorld coordinate and the outcome
+                    let r_coord = cdu_arc.metadata.r_coordinate;
+                    let outcome = match result {
+                        Ok(_) => format!("VERIFIED (RWorld: {})", r_coord),
+                        Err(e) => format!("CONTRADICTION (RWorld: {}): {}", r_coord, e),
+                    };
+                    
+                    println!("VERIFIER OUTPUT: CDU ID {} -> {}", cdu_arc.id_hlc.len(), outcome);
                 }
                 Err(e) if e.contains("Queue is empty") => {
                     // Non-blocking: Sleep briefly to prevent a tight spin-lock on the CPU
