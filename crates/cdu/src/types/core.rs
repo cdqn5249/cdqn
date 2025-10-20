@@ -6,6 +6,7 @@ use cdqn_cryptocore::hash_sha3_256;
 use cdqn_hlc::HlcTimestamp;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
+use std::collections::HashMap; // FIX: Added HashMap
 
 /// The immutable core content of a CDU.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,6 +48,8 @@ pub struct Metadata {
     pub symmetric_counterpart: Option<Vec<u8>>,
     /// A set of worlds where this CDU has been validated as a semi-axiom.
     pub validated_worlds: HashSet<World>,
+    // FIX: Task Footprints - Records the last time a specific task was completed on this CDU.
+    pub task_footprints: HashMap<String, HlcTimestamp>, 
 }
 
 /// An entry in the append-only signature log of a CDU.
