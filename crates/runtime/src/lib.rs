@@ -6,15 +6,19 @@
 //! This module initializes the Manifold, the Dispatcher, and spawns the Chronosa Agent threads.
 //! It is architecturally separate from the Chronosa cognitive engine.
 
-use cdqn_chronosa::{CduDispatcher, VerifierAgent, EvolutionAgent}; // FIX: Import EvolutionAgent
+use cdqn_chronosa::{CduDispatcher, VerifierAgent, EvolutionAgent};
 use cdqn_cdu::{Cdu, GenesisPayload};
 use cdqn_manifold::Manifold;
 use cdqn_hlc::HybridLogicalClock;
 use cdqn_cryptocore::{hash_sha3_256, hex_encode};
-use std::sync::Arc;
+use std::sync::{Arc, Barrier};
 use std::thread::{self, JoinHandle};
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
+
+// FIX: Declare the new executor module
+mod executor; 
+use executor::Executor;
 
 #[cfg(test)]
 mod tests;
@@ -23,7 +27,10 @@ mod tests;
 pub struct CdqnRuntime {
     pub manifold: Arc<Manifold>,
     pub dispatcher: CduDispatcher,
-    pub agent_handles: Vec<JoinHandle<()>>, // FIX: Made public for testing
+    pub agent_handles: Vec<JoinHandle<()>>,
+    agent_startup_barrier: Arc<Barrier>, 
+    // FIX: The Sovereign Executor
+    executor: Executor,
 }
 
 impl CdqnRuntime {
@@ -44,17 +51,22 @@ impl CdqnRuntime {
         println!("Manifold Initialized. Genesis ID: {}", hex_encode(&manifold.genesis_id));
         println!("CDU Dispatcher Ready.");
 
+        // FIX: Initialize Executor and Barrier
+        let executor = Executor::new();
+        let num_agents = 2; // Verifier + Evolution
+        let agent_startup_barrier = Arc::new(Barrier::new(num_agents + 1));
+
         let mut runtime = CdqnRuntime {
             manifold,
             dispatcher,
             agent_handles: Vec::new(),
+            agent_startup_barrier,
+            executor,
         };
 
         // 2. Spawn Core Agents (The Chronosa Intelligence)
         runtime.spawn_verifier_agent();
-        runtime.spawn_evolution_agent(); // FIX: Spawn Evolution Agent
-        // runtime.spawn_policy_agent(); // Deferred
-        // runtime.spawn_proxy_agent(); // Deferred
+        runtime.spawn_evolution_agent();
 
         println!("--- Runtime Ready ---");
         runtime
@@ -87,10 +99,13 @@ impl CdqnRuntime {
     fn spawn_verifier_agent(&mut self) {
         let manifold_clone = self.manifold.clone();
         let dispatcher_clone = self.dispatcher.clone_for_agent();
+        let barrier_clone = self.agent_startup_barrier.clone();
 
         let handle = thread::spawn(move || {
             let mut verifier = VerifierAgent::new(&dispatcher_clone, manifold_clone);
-            verifier.run(None); // Pass None for the test_report_tx in production code
+            // FIX: Wait on the Barrier before running
+            barrier_clone.wait(); 
+            verifier.run(None); 
         });
 
         self.agent_handles.push(handle);
@@ -101,10 +116,13 @@ impl CdqnRuntime {
     fn spawn_evolution_agent(&mut self) {
         let manifold_clone = self.manifold.clone();
         let dispatcher_clone = self.dispatcher.clone_for_agent();
+        let barrier_clone = self.agent_startup_barrier.clone();
 
         let handle = thread::spawn(move || {
             let mut evolution = EvolutionAgent::new(&dispatcher_clone, manifold_clone);
-            evolution.run(None); // Pass None for the test_report_tx in production code
+            // FIX: Wait on the Barrier before running
+            barrier_clone.wait(); 
+            evolution.run(None); 
         });
 
         self.agent_handles.push(handle);
@@ -113,6 +131,9 @@ impl CdqnRuntime {
 
     /// The main loop to keep the runtime alive.
     pub fn run_forever(self) {
+        // FIX: Wait on the Barrier to ensure all Agents are ready before proceeding
+        self.agent_startup_barrier.wait(); 
+        
         println!("CDQN Runtime (Guardrail) is running. Press Ctrl+C to stop.");
         
         // Block the main thread, waiting for all agent threads to finish.
