@@ -8,6 +8,7 @@
 
 use std::thread::{self, JoinHandle};
 use cdqn_hlc::HlcTimestamp;
+use crate::dispatcher::{CduDispatcher, LockValue}; // FIX: Import Dispatcher and LockValue
 
 // --- Type Aliases ---
 pub type EntityId = String;
@@ -62,40 +63,51 @@ impl Bot {
 
     /// Executes a task using a Worker and waits for the result.
     /// The closure must return a Result<T, String>.
-    pub fn execute_task<F, T>(&mut self, task_name: &str, f: F) -> Result<T, String>
+    /// FIX: Added dispatcher and cdu_id for CTL
+    pub fn execute_task<F, T>(&mut self, task_type: &str, cdu_id: Vec<u8>, dispatcher: &CduDispatcher, f: F) -> Result<T, String>
     where
         F: FnOnce() -> Result<T, String> + Send + 'static,
         T: Send + 'static + std::fmt::Debug,
     {
-        self.state = format!("running: {}", task_name);
-        
-        // FIX: Log the start of the task with the Causal ID
+        let lock_value = (thread::current().id(), self.causal_task_id.clone());
+        let task_type_string = task_type.to_string();
+
+        // 1. Acquire Causal Task Lock (CTL)
+        dispatcher.acquire_lock(cdu_id.clone(), task_type_string.clone(), lock_value.clone())
+            .map_err(|e| format!("CTL Acquisition Failed: {}", e))?;
+
+        self.state = format!("running: {}", task_type);
         println!("BOT START: {} (Causal ID: {})", self.id, self.causal_task_id);
         
         let handle = Worker::spawn(f);
         
-        match handle.join() {
+        let result = match handle.join() {
             Ok(inner_result) => {
-                // FIX: Unwrap the inner Result from the closure
                 match inner_result {
                     Ok(val) => {
-                        self.state = format!("completed: {}", task_name);
+                        self.state = format!("completed: {}", task_type);
                         println!("BOT END: {} (Causal ID: {}) -> Success", self.id, self.causal_task_id);
                         Ok(val)
                     }
                     Err(e) => {
-                        self.state = format!("failed: {}", task_name);
+                        self.state = format!("failed: {}", task_type);
                         eprintln!("BOT END: {} (Causal ID: {}) -> Failure: {}", self.id, self.causal_task_id, e);
                         Err(e)
                     }
                 }
             },
             Err(_) => {
-                self.state = format!("failed: {}", task_name);
+                self.state = format!("failed: {}", task_type);
                 eprintln!("BOT END: {} (Causal ID: {}) -> Thread Panic", self.id, self.causal_task_id);
-                Err(format!("Worker thread for {} panicked.", task_name))
+                Err(format!("Worker thread for {} panicked.", task_type))
             }
-        }
+        };
+
+        // 2. Release Causal Task Lock (CTL)
+        dispatcher.release_lock(cdu_id, task_type_string, lock_value)
+            .map_err(|e| format!("CTL Release Failed: {}", e))?;
+
+        result
     }
 }
 
