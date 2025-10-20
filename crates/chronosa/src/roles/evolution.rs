@@ -8,12 +8,13 @@
 
 use crate::entity::{Agent, Bot, EntityId};
 use crate::dispatcher::CduDispatcher;
-use cdqn_cdu::{Cdu, BotStatePayload}; // FIX: Corrected BotStatePayload import
+use cdqn_cdu::{Cdu, BotStatePayload};
 use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 use std::sync::mpsc;
+use cdqn_cryptocore::hex_encode; // FIX: Import hex_encode from cryptocore
 
 // Type alias for the test reporting channel
 pub type TestReportSender = mpsc::Sender<String>;
@@ -91,8 +92,8 @@ impl EvolutionAgent {
                                     
                                     // NOTE: In a real system, this BotStateCDU would be published and the Manifold Projection updated.
                                     
-                                    // FIX: Use the correct hex utility from cdqn_runtime
-                                    Ok(format!("Resolved with Hash: {}", cdqn_runtime::hex::encode(&resolution_hash)))
+                                    // FIX: Use the correct hex utility from cdqn_cryptocore
+                                    Ok(format!("Resolved with Hash: {}", hex_encode(&resolution_hash)))
                                 }
                             );
 
