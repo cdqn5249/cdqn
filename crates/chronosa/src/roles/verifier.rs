@@ -7,7 +7,7 @@
 
 use crate::entity::{Agent, Bot, EntityId};
 use crate::dispatcher::CduDispatcher;
-use cdqn_cdu::Cdu; // FIX: Removed unused World import
+use cdqn_cdu::Cdu;
 use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
@@ -19,7 +19,7 @@ pub struct VerifierAgent {
     dispatcher: CduDispatcher,
     manifold: Arc<Manifold>,
     // Agent-specific state: Cache of trusted public keys for signature verification
-    _trusted_signers: Vec<EntityId>, // FIX: Added underscore to allow dead_code
+    _trusted_signers: Vec<EntityId>,
 }
 
 impl VerifierAgent {
@@ -64,8 +64,10 @@ impl VerifierAgent {
                         
                         // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
                         if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
+                            // If it's outside the Impossibility Zone, it's provisionally consistent.
                             Ok(())
                         } else {
+                            // If it's in the Impossibility Zone [-1, 1], it's a contradiction.
                             Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
                         }
                     });
