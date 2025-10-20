@@ -14,7 +14,7 @@ use std::thread;
 use std::time::Duration;
 use std::fs;
 use std::env;
-use std::sync::mpsc; // FIX: Added mpsc for deterministic communication
+use std::sync::mpsc;
 
 // Helper function to create a sovereign temporary directory
 fn create_sovereign_temp_dir() -> PathBuf {
@@ -71,11 +71,14 @@ fn test_full_cognitive_cycle_verifier() {
     let dispatcher_clone = runtime.dispatcher.clone_for_agent();
     let manifold_clone = runtime.manifold.clone();
 
-    let agent_handle = thread::spawn(move || {
+    let _agent_handle = thread::spawn(move || { // FIX: Added underscore to silence unused variable warning
         let mut verifier = cdqn_chronosa::VerifierAgent::new(&dispatcher_clone, manifold_clone);
         verifier.run(Some(tx)); // Pass the sender to the Agent
     });
 
+    // NOTE: We must wait briefly for the VerifierAgent thread to start its polling loop.
+    thread::sleep(Duration::from_millis(10));
+    
     // --- SIMULATION: Injecting Test CDUs ---
     
     // 4. Inject a Valid CDU (r_coordinate > 1.0)
