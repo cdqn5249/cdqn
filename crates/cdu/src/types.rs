@@ -266,8 +266,7 @@ impl Cdu {
         };
 
         // Use a deterministic serialization format (standard JSON is used here)
-        let message = serde_json::to_vec(&temp_cdu).expect("Failed to serialize CDU for signing");
-        message
+        serde_json::to_vec(&temp_cdu).expect("Failed to serialize CDU for signing")
     }
 
     /// Signs the CDU using the provided SignerEntity and adds the signature to the audit trail.
@@ -341,6 +340,14 @@ impl Cdu {
     /// Attempts to interpret the CDU as an `AxiomCDU`.
     pub fn as_axiom(&self) -> Option<AxiomPayload> {
         if self.payload.payload_type != "axiom/v1" {
+            return None;
+        }
+        serde_json::from_slice(&self.payload.data).ok()
+    }
+
+    /// Attempts to interpret the CDU as a `GenesisPayload`.
+    pub fn as_genesis(&self) -> Option<GenesisPayload> {
+        if self.payload.payload_type != "genesis/v1" {
             return None;
         }
         serde_json::from_slice(&self.payload.data).ok()
