@@ -8,7 +8,7 @@
 use crate::CdqnRuntime;
 use cdqn_cdu::{Cdu, AxiomPayload, World};
 use cdqn_hlc::HybridLogicalClock;
-use cdqn_cryptocore::hash_sha3_256;
+use cdqn_cryptocore::{hash_sha3_256, SignerEntity}; // FIX: Import SignerEntity
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -31,9 +31,12 @@ fn cleanup_sovereign_temp_dir(path: &PathBuf) {
 }
 
 // Helper function to create a test CDU for the simulation
-fn create_test_cdu(statement: &str, r_coordinate: f64) -> Cdu {
+// FIX: Added genesis_id and node_signer arguments
+fn create_test_cdu(statement: &str, r_coordinate: f64, genesis_id: &[u8], node_signer: &SignerEntity) -> Cdu {
     let hlc = HybridLogicalClock::new();
-    let node_id = hash_sha3_256(b"sim_node").to_vec();
+    
+    // NodeId is derived from the signer's public key hash
+    let node_id = hash_sha3_256(node_signer.verification_key().as_bytes()).to_vec();
     
     let axiom_payload = AxiomPayload {
         statement: statement.to_string(),
@@ -42,7 +45,8 @@ fn create_test_cdu(statement: &str, r_coordinate: f64) -> Cdu {
 
     let metadata = cdqn_cdu::Metadata {
         author_node: node_id.clone(),
-        context_refs: vec![],
+        // FIX: Link to the Genesis CDU
+        context_refs: vec![genesis_id.to_vec()], 
         state: "draft".to_string(),
         weight: 1.0,
         r_coordinate,
@@ -52,8 +56,12 @@ fn create_test_cdu(statement: &str, r_coordinate: f64) -> Cdu {
         validated_worlds: std::collections::HashSet::new(),
     };
 
-    // NOTE: We skip the full signing process for simplicity in main.rs
-    Cdu::new(payload, metadata, &hlc, &node_id)
+    let mut cdu = Cdu::new(payload, metadata, &hlc, &node_id);
+    
+    // FIX: Sign the CDU to satisfy the "No Anonymous Entities" rule
+    cdu.sign(node_signer, &hlc).expect("CDU signing failed in test helper");
+    
+    cdu
 }
 
 /// This test verifies the full Cognitive Cycle by injecting CDUs and checking the Agent's output.
@@ -70,8 +78,12 @@ fn test_full_cognitive_cycle_verifier() {
     // 3. Start the Verifier Agent on a separate thread
     let dispatcher_clone = runtime.dispatcher.clone_for_agent();
     let manifold_clone = runtime.manifold.clone();
+    let genesis_id = runtime.manifold.genesis_id.clone();
+    
+    // FIX: Create a dedicated ephemeral signer for the test
+    let test_signer = SignerEntity::new_random("TestNodeSigner");
 
-    let _agent_handle = thread::spawn(move || { // FIX: Added underscore to silence unused variable warning
+    let _agent_handle = thread::spawn(move || {
         let mut verifier = cdqn_chronosa::VerifierAgent::new(&dispatcher_clone, manifold_clone);
         verifier.run(Some(tx)); // Pass the sender to the Agent
     });
@@ -82,11 +94,13 @@ fn test_full_cognitive_cycle_verifier() {
     // --- SIMULATION: Injecting Test CDUs ---
     
     // 4. Inject a Valid CDU (r_coordinate > 1.0)
-    let valid_cdu = create_test_cdu("Valid Axiom", 2.5);
+    // FIX: Pass Genesis ID and Signer
+    let valid_cdu = create_test_cdu("Valid Axiom", 2.5, &genesis_id, &test_signer);
     runtime.dispatcher.publish(valid_cdu).expect("Failed to publish Valid CDU");
 
     // 5. Inject a Contradictory CDU (r_coordinate in Impossibility Zone [0.5])
-    let contradictory_cdu = create_test_cdu("Contradictory Fact", 0.5);
+    // FIX: Pass Genesis ID and Signer
+    let contradictory_cdu = create_test_cdu("Contradictory Fact", 0.5, &genesis_id, &test_signer);
     runtime.dispatcher.publish(contradictory_cdu).expect("Failed to publish Contradictory CDU");
 
     // --- DETERMINISTIC VERIFICATION ---
