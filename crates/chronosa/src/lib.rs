@@ -19,6 +19,3 @@ pub use dispatcher::CduDispatcher;
 pub use entity::{Worker, Bot, Agent};
 pub use roles::verifier::VerifierAgent;
 pub use roles::evolution::EvolutionAgent; // FIX: Added EvolutionAgent re-export
-
-// Placeholder for the main Chronosa runtime struct
-pub struct ChronosaNode;
