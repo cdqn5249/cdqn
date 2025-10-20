@@ -12,7 +12,7 @@ use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
-use std::sync::mpsc; // FIX: Added mpsc for synchronous test reporting
+use std::sync::mpsc;
 
 // Type alias for the test reporting channel
 pub type TestReportSender = mpsc::Sender<String>;
@@ -22,6 +22,8 @@ pub struct VerifierAgent {
     agent: Agent,
     dispatcher: CduDispatcher,
     manifold: Arc<Manifold>,
+    // FIX: Watermark for the Causal Log
+    last_processed_index: usize, 
     // Agent-specific state: Cache of trusted public keys for signature verification
     _trusted_signers: Vec<EntityId>,
 }
@@ -34,6 +36,8 @@ impl VerifierAgent {
             agent: Agent::new("VerifierAgent"),
             dispatcher: dispatcher.clone_for_agent(),
             manifold,
+            // FIX: Start processing from the current end of the log (or 0 for a fresh start)
+            last_processed_index: 0, 
             _trusted_signers: vec!["NodeId".to_string()], // Placeholder for known entities
         }
     }
@@ -43,61 +47,66 @@ impl VerifierAgent {
     pub fn run(&mut self, test_report_tx: Option<TestReportSender>) {
         println!("{} is running and subscribed to CDU Dispatcher.", self.agent.id);
         
-        // The Agent's main loop: continuously poll for a new CDU
+        // The Agent's main loop: continuously poll the log by index
         loop {
-            match self.dispatcher.try_recv() {
-                Ok(cdu_arc) => {
-                    // Clone the Arc and the Manifold Arc to move ownership into the thread
-                    let cdu_clone = cdu_arc.clone();
-                    let manifold_clone = self.manifold.clone();
-                    
-                    let mut bot = Bot::new("CduVerificationBot");
-                    
-                    // Delegate the complex, stateful task to a Bot
-                    let result = bot.execute_task("verify_cdu", move || {
-                        // The closure now owns cdu_clone and manifold_clone
-                        let cdu = cdu_clone.as_ref();
+            let log_len = self.dispatcher.log_len();
+
+            if self.last_processed_index < log_len {
+                // Process the next CDU in the Causal Log
+                match self.dispatcher.get_cdu_by_index(self.last_processed_index) {
+                    Ok(cdu_arc) => {
+                        let cdu_clone = cdu_arc.clone();
+                        let manifold_clone = self.manifold.clone();
                         
-                        // 1. Sovereign Integrity Check (Causality First)
-                        manifold_clone.verify_cdu_chain(cdu)
-                            .map_err(|e| format!("Causal Chain Broken: {}", e))?;
-
-                        // 2. No Anonymous Entities Check (Security Guardrail)
-                        if cdu.signatures.is_empty() {
-                            return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
-                        }
+                        let mut bot = Bot::new("CduVerificationBot");
                         
-                        // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
-                        if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
-                            Ok(())
-                        } else {
-                            Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
+                        // Delegate the complex, stateful task to a Bot
+                        let result = bot.execute_task("verify_cdu", move || {
+                            let cdu = cdu_clone.as_ref();
+                            
+                            // 1. Sovereign Integrity Check (Causality First)
+                            manifold_clone.verify_cdu_chain(cdu)
+                                .map_err(|e| format!("Causal Chain Broken: {}", e))?;
+
+                            // 2. No Anonymous Entities Check (Security Guardrail)
+                            if cdu.signatures.is_empty() {
+                                return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
+                            }
+                            
+                            // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
+                            if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
+                                Ok(())
+                            } else {
+                                Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
+                            }
+                        });
+
+                        // Report the outcome
+                        let r_coord = cdu_arc.metadata.r_coordinate;
+                        let outcome = match result {
+                            Ok(_) => format!("VERIFIED (RWorld: {})", r_coord),
+                            Err(e) => format!("CONTRADICTION (RWorld: {}): {}", r_coord, e),
+                        };
+                        
+                        println!("VERIFIER OUTPUT: CDU ID {} -> {}", cdu_arc.id_hlc.len(), outcome);
+
+                        // Send the outcome back to the test thread
+                        if let Some(tx) = &test_report_tx {
+                            tx.send(outcome).expect("Failed to send test report");
                         }
-                    });
 
-                    // FIX: Explicitly print the RWorld coordinate and the outcome
-                    let r_coord = cdu_arc.metadata.r_coordinate;
-                    let outcome = match result {
-                        Ok(_) => format!("VERIFIED (RWorld: {})", r_coord),
-                        Err(e) => format!("CONTRADICTION (RWorld: {}): {}", r_coord, e),
-                    };
-                    
-                    println!("VERIFIER OUTPUT: CDU ID {} -> {}", cdu_arc.id_hlc.len(), outcome);
-
-                    // FIX: Send the outcome back to the test thread
-                    if let Some(tx) = &test_report_tx {
-                        tx.send(outcome).expect("Failed to send test report");
+                        // FIX: Advance the watermark
+                        self.last_processed_index += 1;
+                    }
+                    Err(e) => {
+                        // Should not happen if log_len is correct, but handle critical error
+                        eprintln!("VerifierAgent critical error: {}", e);
+                        break;
                     }
                 }
-                Err(e) if e.contains("Queue is empty") => {
-                    // Non-blocking: Sleep briefly to prevent a tight spin-lock on the CPU
-                    thread::sleep(Duration::from_millis(1)); // Reduced sleep for efficiency
-                }
-                Err(e) => {
-                    // A critical error (e.g., lock poisoned)
-                    eprintln!("VerifierAgent loop terminated: {}", e);
-                    break;
-                }
+            } else {
+                // Log is empty: Sleep briefly to prevent a tight spin-lock on the CPU
+                thread::sleep(Duration::from_millis(1));
             }
         }
     }
