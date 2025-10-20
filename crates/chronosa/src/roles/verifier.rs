@@ -19,7 +19,7 @@ pub struct VerifierAgent {
     dispatcher: CduDispatcher,
     manifold: Arc<Manifold>,
     // Agent-specific state: Cache of trusted public keys for signature verification
-    trusted_signers: Vec<EntityId>,
+    _trusted_signers: Vec<EntityId>, // FIX: Added underscore to allow dead_code
 }
 
 impl VerifierAgent {
@@ -30,7 +30,7 @@ impl VerifierAgent {
             agent: Agent::new("VerifierAgent"),
             dispatcher: dispatcher.clone_for_agent(),
             manifold,
-            trusted_signers: vec!["NodeId".to_string()], // Placeholder for known entities
+            _trusted_signers: vec!["NodeId".to_string()], // Placeholder for known entities
         }
     }
 
@@ -42,7 +42,7 @@ impl VerifierAgent {
         loop {
             match self.dispatcher.try_recv() {
                 Ok(cdu_arc) => {
-                    // FIX: Clone the Arc and the Manifold Arc to move ownership into the thread
+                    // Clone the Arc and the Manifold Arc to move ownership into the thread
                     let cdu_clone = cdu_arc.clone();
                     let manifold_clone = self.manifold.clone();
                     
@@ -87,6 +87,4 @@ impl VerifierAgent {
             }
         }
     }
-
-    // NOTE: The verify_cdu_integrity method is now inlined into the closure to simplify the Agent struct.
 }
