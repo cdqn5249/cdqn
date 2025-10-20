@@ -7,6 +7,7 @@
 //! (Worker) from stateful task management (Bot) and autonomous planning (Agent).
 
 use std::thread::{self, JoinHandle};
+use cdqn_hlc::HlcTimestamp; // FIX: Import HlcTimestamp
 
 // --- Type Aliases ---
 pub type EntityId = String;
@@ -32,19 +33,29 @@ impl Worker {
 /// It manages Workers for workflows or long/complex tasks.
 pub struct Bot {
     pub id: EntityId,
+    // FIX: The Causal ID of the task, derived from the source CDU's HLc.
+    pub causal_task_id: String, 
     // State is managed internally by the Bot for its specific task.
-    // For example, a Bot might hold a counter or a temporary data structure.
     state: String,
 }
 
 impl Bot {
     /// Creates a new Bot instance for a specific task.
+    /// FIX: Accepts the source CDU's HlcTimestamp for causal linking.
     #[must_use]
-    pub fn new(task_name: &str) -> Self {
-        // NOTE: In a real system, the ID would be a hash of the task_name + HLC timestamp.
-        let id = format!("Bot:{}:{}", task_name, std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_millis());
+    pub fn new(task_name: &str, source_hlc: HlcTimestamp) -> Self {
+        // FIX: Causal Task ID is based on the source HLC and the current thread ID.
+        let causal_task_id = format!(
+            "Task:{}:{}:{}", 
+            source_hlc.as_u64(), 
+            thread::current().id().as_u64().unwrap_or(0),
+            task_name
+        );
+        
+        let id = format!("Bot:{}", task_name);
         Bot {
             id,
+            causal_task_id,
             state: "initialized".to_string(),
         }
     }
@@ -53,10 +64,14 @@ impl Bot {
     /// The closure must return a Result<T, String>.
     pub fn execute_task<F, T>(&mut self, task_name: &str, f: F) -> Result<T, String>
     where
-        F: FnOnce() -> Result<T, String> + Send + 'static, // FIX: Explicitly require Result<T, String>
+        F: FnOnce() -> Result<T, String> + Send + 'static,
         T: Send + 'static + std::fmt::Debug,
     {
         self.state = format!("running: {}", task_name);
+        
+        // FIX: Log the start of the task with the Causal ID
+        println!("BOT START: {} (Causal ID: {})", self.id, self.causal_task_id);
+        
         let handle = Worker::spawn(f);
         
         match handle.join() {
@@ -65,16 +80,19 @@ impl Bot {
                 match inner_result {
                     Ok(val) => {
                         self.state = format!("completed: {}", task_name);
+                        println!("BOT END: {} (Causal ID: {}) -> Success", self.id, self.causal_task_id);
                         Ok(val)
                     }
                     Err(e) => {
                         self.state = format!("failed: {}", task_name);
+                        eprintln!("BOT END: {} (Causal ID: {}) -> Failure: {}", self.id, self.causal_task_id, e);
                         Err(e)
                     }
                 }
             },
             Err(_) => {
                 self.state = format!("failed: {}", task_name);
+                eprintln!("BOT END: {} (Causal ID: {}) -> Thread Panic", self.id, self.causal_task_id);
                 Err(format!("Worker thread for {} panicked.", task_name))
             }
         }
