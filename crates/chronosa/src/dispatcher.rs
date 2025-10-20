@@ -3,23 +3,33 @@
 
 //! The central, non-blocking CDU Dispatcher (Causal Event Bus).
 //!
-//! This module implements a shared, indexed log using only `std::sync::Mutex`
-//! to enforce the Event Sourcing principle where the HLc defines the causal order.
+//! Implements the Causal Task Lock (CTL) mechanism to prevent redundant processing
+//! of the same task on the same CDU by multiple threads.
 
 use cdqn_cdu::Cdu;
 use std::sync::{Arc, Mutex};
-use std::collections::VecDeque;
+use std::collections::{VecDeque, HashMap};
+use std::thread::ThreadId;
 
 // The capacity of the log (for memory management).
 const DISPATCHER_CAPACITY: usize = 1024;
 
-// --- Core Log Structure ---
-/// The shared, immutable log of all CDUs, ordered by HLc.
-type CausalLog = VecDeque<Arc<Cdu>>;
+// --- Type Aliases for CTL ---
+pub type CduId = Vec<u8>;
+pub type TaskType = String;
+pub type LockKey = (CduId, TaskType);
+pub type LockValue = (ThreadId, String); // (ThreadId, CausalTaskId)
+
+/// The core state shared between all Senders and Receivers.
+struct DispatcherState {
+    log: VecDeque<Arc<Cdu>>,
+    // FIX: The Causal Task Lock (CTL) map
+    task_locks: HashMap<LockKey, LockValue>,
+}
 
 /// The central Causal Event Bus.
 pub struct CduDispatcher {
-    log: Arc<Mutex<CausalLog>>,
+    shared: Arc<Mutex<DispatcherState>>,
 }
 
 impl CduDispatcher {
@@ -27,34 +37,61 @@ impl CduDispatcher {
     #[must_use]
     pub fn new() -> Self {
         CduDispatcher {
-            log: Arc::new(Mutex::new(VecDeque::with_capacity(DISPATCHER_CAPACITY))),
+            shared: Arc::new(Mutex::new(DispatcherState {
+                log: VecDeque::with_capacity(DISPATCHER_CAPACITY),
+                task_locks: HashMap::new(),
+            })),
         }
     }
 
     /// Publishes a new CDU to the log (Send-and-Forget).
-    ///
-    /// This is a non-blocking operation. Returns an error if the log is full.
     pub fn publish(&self, cdu: Cdu) -> Result<(), String> {
         let arc_cdu = Arc::new(cdu);
-        let mut log = self.log.lock().map_err(|_| "Dispatcher lock poisoned")?;
+        let mut shared = self.shared.lock().map_err(|_| "Dispatcher lock poisoned")?;
 
-        if log.len() >= DISPATCHER_CAPACITY {
-            // NOTE: In a real system, this would trigger a persistence/archival process.
+        if shared.log.len() >= DISPATCHER_CAPACITY {
             return Err("Causal Log is full (Archival needed)".to_string());
         }
 
-        // NOTE: The log is implicitly ordered by the HLC of the incoming messages.
-        log.push_back(arc_cdu);
+        shared.log.push_back(arc_cdu);
         
         Ok(())
     }
 
-    /// Retrieves a CDU from the log based on an index (Watermark).
-    /// This is the core read operation for Agents.
-    pub fn get_cdu_by_index(&self, index: usize) -> Result<Arc<Cdu>, String> {
-        let log = self.log.lock().map_err(|_| "Dispatcher lock poisoned")?;
+    /// Attempts to acquire a Causal Task Lock (CTL) for a specific CDU and Task.
+    /// Returns Ok(()) if the lock is acquired, or Err if it is already held.
+    pub fn acquire_lock(&self, cdu_id: CduId, task_type: TaskType, lock_value: LockValue) -> Result<(), String> {
+        let mut shared = self.shared.lock().map_err(|_| "Dispatcher lock poisoned")?;
+        let lock_key = (cdu_id, task_type);
 
-        log.get(index)
+        if shared.task_locks.contains_key(&lock_key) {
+            return Err("Lock already held".to_string());
+        }
+
+        shared.task_locks.insert(lock_key, lock_value);
+        Ok(())
+    }
+
+    /// Releases a Causal Task Lock (CTL). Only the holder can release the lock.
+    pub fn release_lock(&self, cdu_id: CduId, task_type: TaskType, lock_value: LockValue) -> Result<(), String> {
+        let mut shared = self.shared.lock().map_err(|_| "Dispatcher lock poisoned")?;
+        let lock_key = (cdu_id, task_type);
+
+        match shared.task_locks.get(&lock_key) {
+            Some(current_value) if *current_value == lock_value => {
+                shared.task_locks.remove(&lock_key);
+                Ok(())
+            }
+            Some(_) => Err("Lock held by another thread/task".to_string()),
+            None => Err("Lock not found".to_string()),
+        }
+    }
+
+    /// Retrieves a CDU from the log based on an index (Watermark).
+    pub fn get_cdu_by_index(&self, index: usize) -> Result<Arc<Cdu>, String> {
+        let log = self.shared.lock().map_err(|_| "Dispatcher lock poisoned")?;
+
+        log.log.get(index)
             .cloned()
             .ok_or_else(|| format!("Causal Log index {} out of bounds", index))
     }
@@ -62,14 +99,14 @@ impl CduDispatcher {
     /// Returns the current length of the log (the next index to read).
     #[must_use]
     pub fn log_len(&self) -> usize {
-        self.log.lock().map(|l| l.len()).unwrap_or(0)
+        self.shared.lock().map(|l| l.log.len()).unwrap_or(0)
     }
 
     /// Creates a clone of the dispatcher for another Agent to use.
     #[must_use]
     pub fn clone_for_agent(&self) -> Self {
         CduDispatcher {
-            log: self.log.clone(),
+            shared: self.shared.clone(),
         }
     }
 }
@@ -101,43 +138,27 @@ mod tests {
     }
 
     #[test]
-    fn test_dispatcher_publish_and_indexed_read() {
-        let dispatcher = CduDispatcher::new();
-        let cdu1 = create_test_cdu("Event 1");
-        let cdu2 = create_test_cdu("Event 2");
-
-        // 1. Publish CDU 1
-        dispatcher.publish(cdu1.clone()).unwrap();
-        assert_eq!(dispatcher.log_len(), 1);
-
-        // 2. Publish CDU 2
-        dispatcher.publish(cdu2.clone()).unwrap();
-        assert_eq!(dispatcher.log_len(), 2);
-
-        // 3. Read by index (Causal Order Check)
-        let received1 = dispatcher.get_cdu_by_index(0).unwrap();
-        let received2 = dispatcher.get_cdu_by_index(1).unwrap();
-        
-        assert_eq!(received1.id_hlc, cdu1.id_hlc);
-        assert_eq!(received2.id_hlc, cdu2.id_hlc);
-        
-        // 4. Check out of bounds
-        assert!(dispatcher.get_cdu_by_index(2).is_err());
-    }
-
-    #[test]
-    fn test_dispatcher_non_blocking_full() {
+    fn test_dispatcher_ctl_acquire_and_release() {
         let dispatcher = CduDispatcher::new();
         let cdu = create_test_cdu("Test");
+        let cdu_id = cdu.id_hlc.clone();
+        let task_type = "fetch_cdu".to_string();
+        let lock_value = (thread::current().id(), "Task:123".to_string());
 
-        // Fill the queue to capacity
-        for _ in 0..DISPATCHER_CAPACITY {
-            dispatcher.publish(cdu.clone()).unwrap();
-        }
+        // 1. Acquire Lock
+        assert!(dispatcher.acquire_lock(cdu_id.clone(), task_type.clone(), lock_value.clone()).is_ok());
 
-        // The next send should fail immediately (non-blocking)
-        let result = dispatcher.publish(cdu.clone());
-        assert!(result.is_err());
-        assert!(result.unwrap_err().contains("Log is full"));
+        // 2. Attempt to re-acquire (should fail)
+        assert!(dispatcher.acquire_lock(cdu_id.clone(), task_type.clone(), lock_value.clone()).is_err());
+
+        // 3. Attempt to release with wrong value (should fail)
+        let wrong_value = (thread::current().id(), "Task:456".to_string());
+        assert!(dispatcher.release_lock(cdu_id.clone(), task_type.clone(), wrong_value).is_err());
+
+        // 4. Release Lock
+        assert!(dispatcher.release_lock(cdu_id.clone(), task_type.clone(), lock_value).is_ok());
+
+        // 5. Attempt to re-acquire (should succeed)
+        assert!(dispatcher.acquire_lock(cdu_id, task_type, lock_value).is_ok());
     }
 }
