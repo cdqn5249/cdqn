@@ -86,8 +86,12 @@ fn test_full_cognitive_cycle_verifier() {
     let test_signer = cdqn_cryptocore::SignerEntity::new_random("TestNodeSigner");
 
     // FIX: Get the Agent's thread handle from the runtime's internal list
-    let verifier_handle = runtime.agent_handles.into_iter().next().expect("Runtime failed to spawn VerifierAgent");
-    let evolution_handle = runtime.agent_handles.into_iter().next().expect("Runtime failed to spawn EvolutionAgent"); // FIX: Get Evolution Agent handle
+    let mut agent_handles = runtime.agent_handles; // Take ownership of the handles
+    
+    // NOTE: The handles are consumed by into_iter(), so we must collect them first.
+    // Since we know there are two, we can pop them.
+    let evolution_handle = agent_handles.pop().expect("Runtime failed to spawn EvolutionAgent");
+    let verifier_handle = agent_handles.pop().expect("Runtime failed to spawn VerifierAgent");
 
     // FIX: Inject the test report senders into the running threads
     // NOTE: This is a placeholder for a more complex injection mechanism, but it works for the test.
@@ -121,6 +125,13 @@ fn test_full_cognitive_cycle_verifier() {
     // --- ASSERTIONS ---
     let verifier_outcomes = vec![verifier_result1, verifier_result2];
     
+    // VERBOSE LOGGING: Print the received order for CI clarity
+    println!("\nVERIFICATION RESULTS (Order Received):");
+    println!("Result 1: {}", verifier_outcomes[0]);
+    println!("Result 2: {}", verifier_outcomes[1]);
+    println!("Evolution Result: {}", evolution_result);
+    println!("--------------------------------------");
+
     // Assertion 1: Check for the successful verification (RWorld > 1.0)
     assert!(
         verifier_outcomes.iter().any(|s| s.contains("VERIFIED (RWorld: 2.5)")),
