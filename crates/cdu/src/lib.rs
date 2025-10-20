@@ -11,7 +11,7 @@
 //! as they may be called millions of times concurrently.
 
 // Declare the submodules
-mod types; // <-- FIX: Now a module containing core, constructors, integrity
+mod types;
 mod payloads;
 mod utils;
 mod worlds;
@@ -22,5 +22,5 @@ mod tests;
 
 // Re-export the core public types so that users of this crate don't need to know our internal module structure.
 pub use types::{Cdu, Metadata, Payload, Signature};
-pub use payloads::{ConfigPayload, GenesisPayload, AxiomPayload};
+pub use payloads::{ConfigPayload, GenesisPayload, AxiomPayload, BotStatePayload}; // FIX: Added BotStatePayload re-export
 pub use worlds::World;
