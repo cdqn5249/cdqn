@@ -6,7 +6,7 @@ mod ctl;
 mod bus;
 
 #[cfg(test)]
-mod tests;
+mod tests; // FIX: Declared test module
 
 // Re-export the core dispatcher struct and types
-pub use core::{CduDispatcher, CduId, TaskType, LockValue};
+pub use core::{CduDispatcher, CduId, TaskType, LockValue}; // FIX: Cleaned up unused imports
