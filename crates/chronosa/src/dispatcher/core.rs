@@ -24,7 +24,8 @@ pub struct DispatcherState {
 /// The central Causal Event Bus.
 pub struct CduDispatcher {
     pub shared: Arc<Mutex<DispatcherState>>,
-    pub new_cdu_signal: Condvar, 
+    // FIX: Wrap Condvar in Arc for cloning
+    pub new_cdu_signal: Arc<Condvar>, 
 }
 
 impl CduDispatcher {
@@ -36,7 +37,7 @@ impl CduDispatcher {
                 log: VecDeque::with_capacity(DISPATCHER_CAPACITY),
                 task_locks: HashMap::new(),
             })),
-            new_cdu_signal: Condvar::new(),
+            new_cdu_signal: Arc::new(Condvar::new()), // FIX: Initialize with Arc
         }
     }
 
@@ -51,7 +52,7 @@ impl CduDispatcher {
     pub fn clone_for_agent(&self) -> Self {
         CduDispatcher {
             shared: self.shared.clone(),
-            new_cdu_signal: self.new_cdu_signal.clone(),
+            new_cdu_signal: self.new_cdu_signal.clone(), // FIX: Clone the Arc
         }
     }
 }
