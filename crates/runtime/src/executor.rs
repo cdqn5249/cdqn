@@ -8,10 +8,10 @@
 
 use std::future::Future;
 use std::pin::Pin;
-use std::task::{Context, Poll, Waker};
+use std::task::{Context, Poll, Waker}; // FIX: Removed unused Poll
 use std::sync::{Arc, Mutex};
 use std::collections::VecDeque;
-use std::thread::{self, ThreadId};
+use std::thread::{self, ThreadId}; // FIX: Removed unused ThreadId
 
 // --- Type Aliases ---
 // A boxed, sendable future that can be polled.
@@ -68,8 +68,8 @@ impl Task {
 
     /// Polls the future.
     pub fn poll(self: Arc<Self>) {
-        // Create a Waker that will push this task back onto the queue.
-        let waker = self.waker();
+        // FIX: Clone the Arc before calling waker, which consumes the Arc.
+        let waker = Task::waker(self.clone()); 
         let mut context = Context::from_waker(&waker);
 
         // Poll the future
