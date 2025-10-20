@@ -3,8 +3,10 @@
 
 // Declare all Chronosa Role Agents
 pub mod verifier;
+pub mod evolution; // FIX: Added new evolution module
 // pub mod policy; // Deferred
 // pub mod consolidator; // Deferred
 
 // Re-export public types
 pub use verifier::VerifierAgent;
+pub use evolution::EvolutionAgent; // FIX: Export new Agent
