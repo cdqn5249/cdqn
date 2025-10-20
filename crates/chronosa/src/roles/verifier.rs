@@ -12,6 +12,10 @@ use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
+use std::sync::mpsc; // FIX: Added mpsc for synchronous test reporting
+
+// Type alias for the test reporting channel
+pub type TestReportSender = mpsc::Sender<String>;
 
 /// The Verifier Agent: Autonomous entity responsible for Manifold integrity.
 pub struct VerifierAgent {
@@ -35,7 +39,8 @@ impl VerifierAgent {
     }
 
     /// The main run loop for the Verifier Agent.
-    pub fn run(&mut self) {
+    /// NOTE: Accepts a TestReportSender for deterministic testing.
+    pub fn run(&mut self, test_report_tx: Option<TestReportSender>) {
         println!("{} is running and subscribed to CDU Dispatcher.", self.agent.id);
         
         // The Agent's main loop: continuously poll for a new CDU
@@ -64,10 +69,8 @@ impl VerifierAgent {
                         
                         // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
                         if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
-                            // If it's outside the Impossibility Zone, it's provisionally consistent.
                             Ok(())
                         } else {
-                            // If it's in the Impossibility Zone [-1, 1], it's a contradiction.
                             Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
                         }
                     });
@@ -80,10 +83,15 @@ impl VerifierAgent {
                     };
                     
                     println!("VERIFIER OUTPUT: CDU ID {} -> {}", cdu_arc.id_hlc.len(), outcome);
+
+                    // FIX: Send the outcome back to the test thread
+                    if let Some(tx) = &test_report_tx {
+                        tx.send(outcome).expect("Failed to send test report");
+                    }
                 }
                 Err(e) if e.contains("Queue is empty") => {
                     // Non-blocking: Sleep briefly to prevent a tight spin-lock on the CPU
-                    thread::sleep(Duration::from_millis(10));
+                    thread::sleep(Duration::from_millis(1)); // Reduced sleep for efficiency
                 }
                 Err(e) => {
                     // A critical error (e.g., lock poisoned)
