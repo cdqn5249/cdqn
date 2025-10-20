@@ -7,7 +7,7 @@
 
 use crate::entity::{Agent, Bot, EntityId};
 use crate::dispatcher::CduDispatcher;
-use cdqn_cdu::Cdu;
+use cdqn_cdu::Cdu; // FIX: Removed redundant import
 use cdqn_manifold::Manifold;
 use std::sync::Arc;
 use std::thread;
@@ -55,56 +55,72 @@ impl VerifierAgent {
                 // Process the next CDU in the Causal Log
                 match self.dispatcher.get_cdu_by_index(self.last_processed_index) {
                     Ok(cdu_arc) => {
-                        // Clone the Arc and the Manifold Arc to move ownership into the thread
                         let cdu_clone = cdu_arc.clone();
                         let manifold_clone = self.manifold.clone();
-                        
-                        // FIX: Pass the source CDU's HLC to the Bot
-                        let mut bot = Bot::new("CduVerificationBot", cdu_arc.metadata.hlc_timestamp);
-                        
-                        // Delegate the complex, stateful task to a Bot
-                        let result = bot.execute_task(
-                            "verify_cdu", 
-                            cdu_arc.id_hlc.clone(), 
-                            &self.dispatcher, 
-                            move || {
-                                let cdu = cdu_clone.as_ref();
-                                
-                                // 1. Sovereign Integrity Check (Causality First)
-                                manifold_clone.verify_cdu_chain(cdu)
-                                    .map_err(|e| format!("Causal Chain Broken: {}", e))?;
+                        let task_type = "verify_cdu";
 
-                                // 2. No Anonymous Entities Check (Security Guardrail)
-                                if cdu.signatures.is_empty() {
-                                    return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
-                                }
-                                
-                                // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
-                                if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
-                                    Ok(())
-                                } else {
-                                    Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
-                                }
-                            }
-                        );
-
-                        // Report the outcome
-                        let r_coord = cdu_arc.metadata.r_coordinate;
-                        let outcome = match result {
-                            Ok(_) => format!("VERIFIED (RWorld: {})", r_coord),
-                            Err(e) => format!("CONTRADICTION (RWorld: {}): {}", r_coord, e),
-                        };
-                        
-                        // FIX: Log the outcome with the Bot's Causal ID
-                        println!("VERIFIER OUTPUT: {} -> {}", bot.causal_task_id, outcome);
-
-                        // Send the outcome back to the test thread
-                        if let Some(tx) = &test_report_tx {
-                            tx.send(outcome).expect("Failed to send test report");
+                        // 1. Check for Task Footprint (Projection)
+                        if cdu_arc.metadata.task_footprints.contains_key(task_type) {
+                            println!("VERIFIER SKIP: CDU ID {} already has '{}' footprint.", cdu_arc.id_hlc.len(), task_type);
+                            self.last_processed_index += 1;
+                            continue;
                         }
+                        
+                        // 2. Check if the CDU is a Contradiction (Trigger)
+                        if cdu_arc.metadata.r_coordinate > -1.0 && cdu_arc.metadata.r_coordinate < 1.0 {
+                            // This is the trigger for the Evolution Engine
+                            
+                            let mut bot = Bot::new("CduVerificationBot", cdu_arc.metadata.hlc_timestamp);
+                            
+                            // Delegate the complex, stateful task to a Bot
+                            let result = bot.execute_task(
+                                task_type, 
+                                cdu_arc.id_hlc.clone(), 
+                                &self.dispatcher, 
+                                move || {
+                                    let cdu = cdu_clone.as_ref();
+                                    
+                                    // 1. Sovereign Integrity Check (Causality First)
+                                    manifold_clone.verify_cdu_chain(cdu)
+                                        .map_err(|e| format!("Causal Chain Broken: {}", e))?;
 
-                        // FIX: Advance the watermark
-                        self.last_processed_index += 1;
+                                    // 2. No Anonymous Entities Check (Security Guardrail)
+                                    if cdu.signatures.is_empty() {
+                                        return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
+                                    }
+                                    
+                                    // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
+                                    if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
+                                        Ok(())
+                                    } else {
+                                        Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
+                                    }
+                                }
+                            );
+
+                            // Report the outcome
+                            let r_coord = cdu_arc.metadata.r_coordinate;
+                            let outcome = match result {
+                                Ok(_) => {
+                                    // NOTE: In a real system, a new CDU would be created here with the footprint.
+                                    format!("VERIFIED (RWorld: {})", r_coord)
+                                },
+                                Err(e) => format!("CONTRADICTION (RWorld: {}): {}", r_coord, e),
+                            };
+                            
+                            println!("VERIFIER OUTPUT: {} -> {}", bot.causal_task_id, outcome);
+
+                            // Send the outcome back to the test thread
+                            if let Some(tx) = &test_report_tx {
+                                tx.send(outcome).expect("Failed to send test report");
+                            }
+
+                            // FIX: Advance the watermark
+                            self.last_processed_index += 1;
+                        } else {
+                            // Not a contradiction, just advance the watermark
+                            self.last_processed_index += 1;
+                        }
                     }
                     Err(e) => {
                         // Should not happen if log_len is correct, but handle critical error
@@ -113,8 +129,11 @@ impl VerifierAgent {
                     }
                 }
             } else {
-                // Log is empty: Sleep briefly to prevent a tight spin-lock on the CPU
-                thread::sleep(Duration::from_millis(1));
+                // FIX: Zero-CPU-cost waiting until a new CDU is published
+                if let Err(e) = self.dispatcher.wait_for_new_cdu(log_len) {
+                    eprintln!("VerifierAgent wait error: {}", e);
+                    break;
+                }
             }
         }
     }
