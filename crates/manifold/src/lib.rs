@@ -14,10 +14,10 @@ mod storage;
 #[cfg(test)]
 mod tests;
 
-pub use types::{Manifold, CduId, MerkleRoot};
+pub use types::{Manifold, CduId, MerkleRoot, TaskType, LockKey, LockValue}; // FIX: Export new types
 
 use cdqn_cdu::Cdu;
-use std::sync::Arc;
+use std::sync::{Arc, RwLock}; // FIX: Added RwLock
 use std::path::PathBuf;
 use std::collections::{HashMap, HashSet};
 
@@ -37,11 +37,14 @@ impl Manifold {
         std::fs::create_dir_all(&storage_path).expect("Failed to create Manifold storage directory");
 
         let manifold = Manifold {
-            cdus: std::sync::RwLock::new(cdus),
-            active_ids: std::sync::RwLock::new(active_ids),
-            global_merkle_root: std::sync::RwLock::new([0u8; 32]), // Placeholder
+            cdus: RwLock::new(cdus),
+            active_ids: RwLock::new(active_ids),
+            global_merkle_root: RwLock::new([0u8; 32]), // Placeholder
             genesis_id,
             storage_path,
+            // FIX: Initialize new fields
+            task_locks: RwLock::new(HashMap::new()),
+            task_status_projection: RwLock::new(HashMap::new()),
         };
 
         // Calculate the initial Merkle Root
