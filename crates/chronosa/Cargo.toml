@@ -14,4 +14,4 @@ cdqn-cdu = { path = "../cdu" }
 cdqn-manifold = { path = "../manifold" }
 cdqn-hlc = { path = "../hlc" }
 cdqn-cryptocore = { path = "../cryptocore" }
-cdqn-runtime = { path = "../runtime" } # FIX: Added dependency for hex utility
+# FIX: Removed cdqn-runtime dependency to break the cycle
