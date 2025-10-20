@@ -6,15 +6,28 @@
 //! These tests verify the full Cognitive Cycle (Dispatcher -> Agent -> Logic).
 
 use crate::CdqnRuntime;
-use cdqn_cdu::Cdu;
+use cdqn_cdu::{Cdu, AxiomPayload, World};
 use cdqn_hlc::HybridLogicalClock;
 use cdqn_cryptocore::hash_sha3_256;
-use cdqn_cdu::payloads::AxiomPayload;
-use cdqn_cdu::World;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
-use tempfile::tempdir;
+use std::fs; // FIX: Added fs for directory management
+use std::env; // FIX: Added env for temp directory
+
+// Helper function to create a sovereign temporary directory
+fn create_sovereign_temp_dir() -> PathBuf {
+    let temp_dir = env::temp_dir().join(format!("cdqn_test_manifold_{}", std::process::id()));
+    fs::create_dir_all(&temp_dir).expect("Failed to create sovereign temp directory");
+    temp_dir
+}
+
+// Helper function to clean up the sovereign temporary directory
+fn cleanup_sovereign_temp_dir(path: &PathBuf) {
+    if path.exists() {
+        fs::remove_dir_all(path).expect("Failed to clean up sovereign temp directory");
+    }
+}
 
 // Helper function to create a test CDU for the simulation
 fn create_test_cdu(statement: &str, r_coordinate: f64) -> Cdu {
@@ -45,11 +58,10 @@ fn create_test_cdu(statement: &str, r_coordinate: f64) -> Cdu {
 /// This test verifies the full Cognitive Cycle by injecting CDUs and checking the Agent's output.
 #[test]
 fn test_full_cognitive_cycle_verifier() {
-    let temp_dir = tempdir().unwrap();
-    let storage_path = temp_dir.path().to_path_buf();
+    let storage_path = create_sovereign_temp_dir(); // FIX: Use sovereign helper
     
     // 1. Initialize the CDQN Runtime (The Guardrail)
-    let runtime = CdqnRuntime::new(storage_path);
+    let runtime = CdqnRuntime::new(storage_path.clone());
 
     // 2. Start the Verifier Agent on a separate thread
     let dispatcher_clone = runtime.dispatcher.clone_for_agent();
@@ -77,13 +89,9 @@ fn test_full_cognitive_cycle_verifier() {
     thread::sleep(Duration::from_millis(50));
     
     // --- Verification ---
-    // The Agent's output (println!) will now be captured by the CI log,
-    // providing the verifiable proof of the Cognitive Cycle.
-    
     // We check the thread is still running (i.e., it didn't panic on the first two messages)
     assert!(!agent_handle.is_finished(), "Verifier Agent thread should not have panicked.");
     
-    // To stop the Agent thread gracefully, we would need a shutdown signal,
-    // but for this test, we just let it run for a moment and then detach.
-    // The thread will be terminated when the test process exits.
+    // FIX: Clean up the temporary directory
+    cleanup_sovereign_temp_dir(&storage_path);
 }
