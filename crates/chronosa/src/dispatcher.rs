@@ -77,12 +77,12 @@ impl CduDispatcher {
     }
 
     /// Releases a Causal Task Lock (CTL). Only the holder can release the lock.
-    pub fn release_lock(&self, cdu_id: CduId, task_type: TaskType, lock_value: LockValue) -> Result<(), String> {
+    pub fn release_lock(&self, cdu_id: CduId, task_type: TaskType, lock_value: &LockValue) -> Result<(), String> { // FIX: Takes &LockValue
         let mut shared = self.shared.lock().map_err(|_| "Dispatcher lock poisoned")?;
         let lock_key = (cdu_id, task_type);
 
         match shared.task_locks.get(&lock_key) {
-            Some(current_value) if *current_value == lock_value => {
+            Some(current_value) if current_value == lock_value => { // FIX: Comparison is now correct
                 shared.task_locks.remove(&lock_key);
                 Ok(())
             }
@@ -127,7 +127,7 @@ mod tests {
     use cdqn_cdu::GenesisPayload;
     use cdqn_hlc::HybridLogicalClock;
     use cdqn_cryptocore::hash_sha3_256;
-    use std::thread; // FIX: Added missing import
+    use std::thread;
 
     // Helper to create a minimal CDU
     fn create_test_cdu(statement: &str) -> Cdu {
@@ -199,10 +199,10 @@ mod tests {
 
         // 3. Attempt to release with wrong value (should fail)
         let wrong_value = (thread::current().id(), "Task:456".to_string());
-        assert!(dispatcher.release_lock(cdu_id.clone(), task_type.clone(), wrong_value).is_err());
+        assert!(dispatcher.release_lock(cdu_id.clone(), task_type.clone(), &wrong_value).is_err()); // FIX: Pass reference
 
         // 4. Release Lock
-        assert!(dispatcher.release_lock(cdu_id.clone(), task_type.clone(), lock_value).is_ok());
+        assert!(dispatcher.release_lock(cdu_id.clone(), task_type.clone(), &lock_value).is_ok()); // FIX: Pass reference
 
         // 5. Attempt to re-acquire (should succeed)
         assert!(dispatcher.acquire_lock(cdu_id, task_type, lock_value).is_ok());
