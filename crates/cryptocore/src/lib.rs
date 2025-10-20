@@ -18,8 +18,8 @@ pub use zeroize::Zeroize;
 use ed25519_consensus::{
     SigningKey, VerificationKey, Signature,
 };
-// FIX: Removed unused CryptoRng and RngCore imports
-use rand_core::OsRng; 
+// FIX: Import rand_core directly
+use rand_core::{OsRng}; 
 
 // --- Type Aliases ---
 pub type SignatureBytes = Vec<u8>;
@@ -104,6 +104,9 @@ mod hex {
         bytes.iter().map(|b| format!("{:02x}", b)).collect()
     }
 }
+
+// FIX: Export the hex utility function
+pub use hex::encode as hex_encode;
 
 /// Computes SHA3-256 hash of canonical byte input.
 #[must_use]
