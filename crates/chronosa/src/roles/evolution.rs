@@ -56,6 +56,7 @@ impl EvolutionAgent {
                 // Process the next CDU in the Causal Log
                 match self.dispatcher.get_cdu_by_index(self.last_processed_index) {
                     Ok(cdu_arc) => {
+                        // Clone the Arc and the Manifold Arc to move ownership into the thread
                         let cdu_clone = cdu_arc.clone();
                         let manifold_clone = self.manifold.clone();
                         let task_type = "resolve_impossibility";
@@ -73,24 +74,28 @@ impl EvolutionAgent {
                             
                             let mut bot = Bot::new("ImpossibilityResolutionBot", cdu_arc.metadata.hlc_timestamp);
                             
+                            // FIX: Clone the Causal ID before the move closure
+                            let causal_task_id_clone = bot.causal_task_id.clone();
+                            
                             // Delegate the complex, stateful task to a Bot
                             let result = bot.execute_task(
                                 task_type, 
                                 cdu_arc.id_hlc.clone(), 
                                 &self.dispatcher, 
                                 move || {
+                                    // The closure now owns cdu_clone, manifold_clone, and causal_task_id_clone
+                                    let _cdu_clone = cdu_clone; // FIX: Added underscore to silence warning
+                                    let _manifold_clone = manifold_clone; // FIX: Added underscore to silence warning
+                                    
                                     // FIX: Placeholder for the complex resolution logic
-                                    // This is where the Bot would generate a new TheoremCDU.
                                     let resolution_hash = cdqn_cryptocore::hash_sha3_256(b"new_theorem_logic");
                                     
                                     // Create the BotStateCDU payload
-                                    let bot_state = BotStatePayload {
-                                        causal_task_id: bot.causal_task_id.clone(),
+                                    let _bot_state = BotStatePayload { // FIX: Added underscore to silence warning
+                                        causal_task_id: causal_task_id_clone, // Use the cloned ID
                                         last_step_completed: "THEOREM_GENERATED".to_string(),
                                         state_hash: resolution_hash,
                                     };
-                                    
-                                    // NOTE: In a real system, this BotStateCDU would be published and the Manifold Projection updated.
                                     
                                     // FIX: Use the correct hex utility from cdqn_cryptocore
                                     Ok(format!("Resolved with Hash: {}", hex_encode(&resolution_hash)))
@@ -103,6 +108,7 @@ impl EvolutionAgent {
                                 Err(e) => format!("RESOLUTION FAILED: {}", e),
                             };
                             
+                            // FIX: Log the outcome with the Bot's Causal ID
                             println!("EVOLUTION OUTPUT: {} -> {}", bot.causal_task_id, outcome);
 
                             // Send the outcome back to the test thread
