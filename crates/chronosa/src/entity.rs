@@ -6,7 +6,6 @@
 //! This model replaces the traditional Actor Model, separating stateless execution
 //! (Worker) from stateful task management (Bot) and autonomous planning (Agent).
 
-// FIX: Removed unused imports
 use std::thread::{self, JoinHandle};
 
 // --- Type Aliases ---
@@ -51,18 +50,28 @@ impl Bot {
     }
 
     /// Executes a task using a Worker and waits for the result.
+    /// The closure must return a Result<T, String>.
     pub fn execute_task<F, T>(&mut self, task_name: &str, f: F) -> Result<T, String>
     where
-        F: FnOnce() -> T + Send + 'static,
+        F: FnOnce() -> Result<T, String> + Send + 'static, // FIX: Explicitly require Result<T, String>
         T: Send + 'static + std::fmt::Debug,
     {
         self.state = format!("running: {}", task_name);
         let handle = Worker::spawn(f);
         
         match handle.join() {
-            Ok(result) => {
-                self.state = format!("completed: {}", task_name);
-                Ok(result)
+            Ok(inner_result) => {
+                // FIX: Unwrap the inner Result from the closure
+                match inner_result {
+                    Ok(val) => {
+                        self.state = format!("completed: {}", task_name);
+                        Ok(val)
+                    }
+                    Err(e) => {
+                        self.state = format!("failed: {}", task_name);
+                        Err(e)
+                    }
+                }
             },
             Err(_) => {
                 self.state = format!("failed: {}", task_name);
