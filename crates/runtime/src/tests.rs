@@ -8,7 +8,7 @@
 use crate::CdqnRuntime;
 use cdqn_cdu::{Cdu, AxiomPayload, World};
 use cdqn_hlc::HybridLogicalClock;
-use cdqn_cryptocore::{hash_sha3_256, SignerEntity}; // FIX: Import SignerEntity
+use cdqn_cryptocore::hash_sha3_256;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
@@ -31,8 +31,7 @@ fn cleanup_sovereign_temp_dir(path: &PathBuf) {
 }
 
 // Helper function to create a test CDU for the simulation
-// FIX: Added genesis_id and node_signer arguments
-fn create_test_cdu(statement: &str, r_coordinate: f64, genesis_id: &[u8], node_signer: &SignerEntity) -> Cdu {
+fn create_test_cdu(statement: &str, r_coordinate: f64, genesis_id: &[u8], node_signer: &cdqn_cryptocore::SignerEntity) -> Cdu {
     let hlc = HybridLogicalClock::new();
     
     // NodeId is derived from the signer's public key hash
@@ -81,7 +80,7 @@ fn test_full_cognitive_cycle_verifier() {
     let genesis_id = runtime.manifold.genesis_id.clone();
     
     // FIX: Create a dedicated ephemeral signer for the test
-    let test_signer = SignerEntity::new_random("TestNodeSigner");
+    let test_signer = cdqn_cryptocore::SignerEntity::new_random("TestNodeSigner");
 
     let _agent_handle = thread::spawn(move || {
         let mut verifier = cdqn_chronosa::VerifierAgent::new(&dispatcher_clone, manifold_clone);
@@ -94,38 +93,34 @@ fn test_full_cognitive_cycle_verifier() {
     // --- SIMULATION: Injecting Test CDUs ---
     
     // 4. Inject a Valid CDU (r_coordinate > 1.0)
-    // FIX: Pass Genesis ID and Signer
     let valid_cdu = create_test_cdu("Valid Axiom", 2.5, &genesis_id, &test_signer);
     runtime.dispatcher.publish(valid_cdu).expect("Failed to publish Valid CDU");
 
     // 5. Inject a Contradictory CDU (r_coordinate in Impossibility Zone [0.5])
-    // FIX: Pass Genesis ID and Signer
     let contradictory_cdu = create_test_cdu("Contradictory Fact", 0.5, &genesis_id, &test_signer);
     runtime.dispatcher.publish(contradictory_cdu).expect("Failed to publish Contradictory CDU");
 
     // --- DETERMINISTIC VERIFICATION ---
     let timeout = Duration::from_millis(500);
 
-    // 6. Wait for the first CDU result (Valid Axiom)
+    // 6. Wait for both CDU results (Order is not guaranteed)
     let result1 = rx.recv_timeout(timeout).expect("Agent failed to report first CDU result");
-    
-    // 7. Wait for the second CDU result (Contradictory Fact)
     let result2 = rx.recv_timeout(timeout).expect("Agent failed to report second CDU result");
 
     // --- ASSERTIONS ---
-    // The order of processing is not guaranteed, so we check for the presence of both outcomes.
+    // FIX: Assertions are now order-agnostic.
     let outcomes = vec![result1, result2];
     
     // Assertion 1: Check for the successful verification (RWorld > 1.0)
     assert!(
         outcomes.iter().any(|s| s.contains("VERIFIED (RWorld: 2.5)")),
-        "Verifier failed to confirm the Valid CDU."
+        "Verifier failed to confirm the Valid CDU. Outcomes: {:?}", outcomes
     );
 
     // Assertion 2: Check for the contradiction detection (RWorld in [-1, 1])
     assert!(
         outcomes.iter().any(|s| s.contains("CONTRADICTION (RWorld: 0.5)")),
-        "Verifier failed to detect the Contradictory CDU."
+        "Verifier failed to detect the Contradictory CDU. Outcomes: {:?}", outcomes
     );
 
     // FIX: Clean up the temporary directory
