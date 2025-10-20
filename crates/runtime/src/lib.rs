@@ -16,12 +16,12 @@ use std::thread::{self, JoinHandle};
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[cfg(test)]
+mod tests;
+
 // FIX: Declare the new executor module
 mod executor; 
 use executor::Executor;
-
-#[cfg(test)]
-mod tests;
 
 /// The main CDQN Runtime struct (The Guardrail).
 pub struct CdqnRuntime {
