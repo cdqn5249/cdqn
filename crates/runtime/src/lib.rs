@@ -7,7 +7,7 @@
 //! It is architecturally separate from the Chronosa cognitive engine.
 
 use cdqn_chronosa::{CduDispatcher, VerifierAgent};
-use cdqn_cdu::{Cdu, GenesisPayload}; // FIX: Corrected import
+use cdqn_cdu::{Cdu, GenesisPayload};
 use cdqn_manifold::Manifold;
 use cdqn_hlc::HybridLogicalClock;
 use cdqn_cryptocore::hash_sha3_256;
@@ -16,10 +16,13 @@ use std::thread::{self, JoinHandle};
 use std::path::PathBuf;
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[cfg(test)]
+mod tests; // <-- FIX: Added test module declaration
+
 /// The main CDQN Runtime struct (The Guardrail).
 pub struct CdqnRuntime {
-    manifold: Arc<Manifold>,
-    dispatcher: CduDispatcher,
+    pub manifold: Arc<Manifold>, // FIX: Made public for testing
+    pub dispatcher: CduDispatcher, // FIX: Made public for testing
     agent_handles: Vec<JoinHandle<()>>,
 }
 
