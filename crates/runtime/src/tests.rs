@@ -12,8 +12,9 @@ use cdqn_cryptocore::hash_sha3_256;
 use std::path::PathBuf;
 use std::thread;
 use std::time::Duration;
-use std::fs; // FIX: Added fs for directory management
-use std::env; // FIX: Added env for temp directory
+use std::fs;
+use std::env;
+use std::sync::mpsc; // FIX: Added mpsc for deterministic communication
 
 // Helper function to create a sovereign temporary directory
 fn create_sovereign_temp_dir() -> PathBuf {
@@ -58,40 +59,58 @@ fn create_test_cdu(statement: &str, r_coordinate: f64) -> Cdu {
 /// This test verifies the full Cognitive Cycle by injecting CDUs and checking the Agent's output.
 #[test]
 fn test_full_cognitive_cycle_verifier() {
-    let storage_path = create_sovereign_temp_dir(); // FIX: Use sovereign helper
+    let storage_path = create_sovereign_temp_dir();
     
     // 1. Initialize the CDQN Runtime (The Guardrail)
     let runtime = CdqnRuntime::new(storage_path.clone());
-
-    // 2. Start the Verifier Agent on a separate thread
+    
+    // 2. Setup deterministic communication channel
+    let (tx, rx) = mpsc::channel();
+    
+    // 3. Start the Verifier Agent on a separate thread
     let dispatcher_clone = runtime.dispatcher.clone_for_agent();
     let manifold_clone = runtime.manifold.clone();
 
     let agent_handle = thread::spawn(move || {
         let mut verifier = cdqn_chronosa::VerifierAgent::new(&dispatcher_clone, manifold_clone);
-        verifier.run();
+        verifier.run(Some(tx)); // Pass the sender to the Agent
     });
 
-    // NOTE: We must wait briefly for the VerifierAgent thread to start its polling loop.
-    thread::sleep(Duration::from_millis(10));
-    
     // --- SIMULATION: Injecting Test CDUs ---
     
-    // 3. Inject a Valid CDU (r_coordinate > 1.0)
+    // 4. Inject a Valid CDU (r_coordinate > 1.0)
     let valid_cdu = create_test_cdu("Valid Axiom", 2.5);
     runtime.dispatcher.publish(valid_cdu).expect("Failed to publish Valid CDU");
 
-    // 4. Inject a Contradictory CDU (r_coordinate in Impossibility Zone [0.5])
+    // 5. Inject a Contradictory CDU (r_coordinate in Impossibility Zone [0.5])
     let contradictory_cdu = create_test_cdu("Contradictory Fact", 0.5);
     runtime.dispatcher.publish(contradictory_cdu).expect("Failed to publish Contradictory CDU");
 
-    // 5. Give the Verifier Agent time to process the messages
-    thread::sleep(Duration::from_millis(50));
+    // --- DETERMINISTIC VERIFICATION ---
+    let timeout = Duration::from_millis(500);
+
+    // 6. Wait for the first CDU result (Valid Axiom)
+    let result1 = rx.recv_timeout(timeout).expect("Agent failed to report first CDU result");
     
-    // --- Verification ---
-    // We check the thread is still running (i.e., it didn't panic on the first two messages)
-    assert!(!agent_handle.is_finished(), "Verifier Agent thread should not have panicked.");
+    // 7. Wait for the second CDU result (Contradictory Fact)
+    let result2 = rx.recv_timeout(timeout).expect("Agent failed to report second CDU result");
+
+    // --- ASSERTIONS ---
+    // The order of processing is not guaranteed, so we check for the presence of both outcomes.
+    let outcomes = vec![result1, result2];
     
+    // Assertion 1: Check for the successful verification (RWorld > 1.0)
+    assert!(
+        outcomes.iter().any(|s| s.contains("VERIFIED (RWorld: 2.5)")),
+        "Verifier failed to confirm the Valid CDU."
+    );
+
+    // Assertion 2: Check for the contradiction detection (RWorld in [-1, 1])
+    assert!(
+        outcomes.iter().any(|s| s.contains("CONTRADICTION (RWorld: 0.5)")),
+        "Verifier failed to detect the Contradictory CDU."
+    );
+
     // FIX: Clean up the temporary directory
     cleanup_sovereign_temp_dir(&storage_path);
 }
