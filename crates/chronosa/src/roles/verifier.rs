@@ -63,25 +63,30 @@ impl VerifierAgent {
                         let mut bot = Bot::new("CduVerificationBot", cdu_arc.metadata.hlc_timestamp);
                         
                         // Delegate the complex, stateful task to a Bot
-                        let result = bot.execute_task("verify_cdu", move || {
-                            let cdu = cdu_clone.as_ref();
-                            
-                            // 1. Sovereign Integrity Check (Causality First)
-                            manifold_clone.verify_cdu_chain(cdu)
-                                .map_err(|e| format!("Causal Chain Broken: {}", e))?;
+                        let result = bot.execute_task(
+                            "verify_cdu", 
+                            cdu_arc.id_hlc.clone(), 
+                            &self.dispatcher, 
+                            move || {
+                                let cdu = cdu_clone.as_ref();
+                                
+                                // 1. Sovereign Integrity Check (Causality First)
+                                manifold_clone.verify_cdu_chain(cdu)
+                                    .map_err(|e| format!("Causal Chain Broken: {}", e))?;
 
-                            // 2. No Anonymous Entities Check (Security Guardrail)
-                            if cdu.signatures.is_empty() {
-                                return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
+                                // 2. No Anonymous Entities Check (Security Guardrail)
+                                if cdu.signatures.is_empty() {
+                                    return Err("Security Violation: CDU has no signatures (Anonymous Entity).".to_string());
+                                }
+                                
+                                // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
+                                if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
+                                    Ok(())
+                                } else {
+                                    Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
+                                }
                             }
-                            
-                            // 3. RWorld Consistency Check (Placeholder for Impossibility Detection)
-                            if cdu.metadata.r_coordinate < -1.0 || cdu.metadata.r_coordinate > 1.0 {
-                                Ok(())
-                            } else {
-                                Err(format!("Logical Contradiction: CDU RWorld coordinate {} is in the Impossibility Zone.", cdu.metadata.r_coordinate))
-                            }
-                        });
+                        );
 
                         // Report the outcome
                         let r_coord = cdu_arc.metadata.r_coordinate;
