@@ -6,7 +6,7 @@
 //! Prime Directive: Resolve logical contradictions by forging a new, more sophisticated understanding.
 //! This agent is the first to use the Bot State Persistence (Temporal-inspired) logic.
 
-use crate::entity::{Agent, Bot, EntityId};
+use crate::entity::{Agent, Bot}; // FIX: Removed unused EntityId import
 use crate::dispatcher::CduDispatcher;
 use cdqn_cdu::{Cdu, BotStatePayload};
 use cdqn_manifold::Manifold;
@@ -14,7 +14,7 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 use std::sync::mpsc;
-use cdqn_cryptocore::hex_encode; // FIX: Import hex_encode from cryptocore
+use cdqn_cryptocore::hex_encode;
 
 // Type alias for the test reporting channel
 pub type TestReportSender = mpsc::Sender<String>;
