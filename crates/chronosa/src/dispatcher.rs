@@ -3,9 +3,8 @@
 
 //! The central, non-blocking CDU Dispatcher.
 //!
-//! This module implements a custom Multi-Producer, Multi-Consumer (MPMC) channel
-//! using only `std::sync` primitives (Mutex and Condvar) to enforce the Sovereignty
-//! principle by avoiding external concurrency crates.
+//! This module implements a simplified, sovereign MPMC queue using only `std::sync::Mutex`
+//! to enforce the Isolation principle (like WebAssembly) and use the CDU as the message.
 
 use cdqn_cdu::Cdu;
 use std::sync::{Arc, Mutex};
@@ -80,7 +79,7 @@ impl Default for CduDispatcher {
 mod tests {
     use super::*;
     // FIX: Corrected imports
-    use cdqn_cdu::GenesisPayload;
+    use cdqn_cdu::{GenesisPayload, Cdu};
     use cdqn_hlc::HybridLogicalClock;
     use cdqn_cryptocore::hash_sha3_256;
     use std::thread;
@@ -164,6 +163,8 @@ mod tests {
         producer_handle.join().unwrap();
         let received_cdu = consumer_handle.join().unwrap();
 
-        assert_eq!(received_cdu.metadata.location, "MPMC Test");
+        // FIX: Extract location from the payload
+        let received_payload = received_cdu.as_genesis().expect("CDU must be GenesisPayload");
+        assert_eq!(received_payload.location, "MPMC Test");
     }
 }
