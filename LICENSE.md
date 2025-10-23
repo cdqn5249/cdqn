@@ -3,7 +3,6 @@
 * **Version**: V1.0.0  
 * **Date**: 11 July 2025
 * **Author**: Christophe Duy Quang Nguyen
-* **Vibe Coding Engine**: Gemini 2.5 Pro, Google
 ---
 
 ## **Overview**
