@@ -1,4 +1,5 @@
 * **Date:** 2025-10-24
+* **Version:** v1.0.0.md
 * **Author:** Christophe Duy Quang Nguyen
 * **Github repo:** https://github.com/cdqn5249/cdqn
 * **Github page:** https://cdqn5249.github.io/cdqn/
