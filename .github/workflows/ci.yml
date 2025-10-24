@@ -1,0 +1,43 @@
+# BaDaaS License
+# File Path: .github/workflows/ci.yml
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: stable
+
+      - name: Build all crates
+        run: cargo build --workspace --all-targets --release
+
+      - name: Run tests
+        run: cargo test --workspace --all-targets
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Lint (clippy)
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Security audit (cryptography only)
+        run: |
+          if grep -q 'sha2\|ring\|aes\|hmac' Cargo.lock; then
+            cargo install cargo-audit
+            cargo audit
+          else
+            echo "No cryptography crates detected, skipping audit."
+          fi
