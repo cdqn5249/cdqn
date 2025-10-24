@@ -2,6 +2,7 @@
 * **Author:** Christophe Duy Quang Nguyen
 * **Github repo:** https://github.com/cdqn5249/cdqn
 * **Github page:** https://cdqn5249.github.io/cdqn/
+* **File path:** Docs/cdqn_Design0001.md
 
 ---
 
