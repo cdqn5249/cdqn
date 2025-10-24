@@ -1,0 +1,9 @@
+# BaDaaS License
+# File Path: Cargo.toml
+
+[workspace]
+members = [    "crates/cdqn_core",
+    "crates/cdqn_causal_engine",
+    "crates/cdqn_chaos_engine",
+    "crates/cdqn_cli"
+]
