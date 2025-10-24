@@ -1,0 +1,17 @@
+# BaDaaS License
+# File Path: crates/cdqn_core/Cargo.toml
+
+[package]
+name        = "cdqn_core"
+version     = "0.1.0"
+edition     = "2021"
+authors     = ["Christophe Duy Quang Nguyen <cdqn5249@gmail.com>"]
+description = "Core data structures (CUID, HLC, CDU, Glyph) for the CDQN ecosystem."
+license     = "BaDaaS"
+
+[dependencies]
+# ────────────────────────────────────────────────────────────────
+# To honor the “standard Rust only” rule, we add no external
+# crates at this stage.  Cryptographic primitives (e.g., `sha2`)
+# will be included later behind an explicit feature flag.
+# ────────────────────────────────────────────────────────────────
