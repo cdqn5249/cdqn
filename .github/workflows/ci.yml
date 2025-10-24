@@ -1,5 +1,10 @@
 # BaDaaS License
 # File Path: .github/workflows/ci.yml
+#
+# Continuous-Integration workflow for the CDQN workspace.
+# Uses the community-maintained `actions-rs/toolchain` action
+# to install the Rust toolchain because an official
+# `actions/setup-rust` action does not exist.
 
 name: CI
 
@@ -9,35 +14,51 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
-  build-test:
+  build-test-lint:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Rust
-        uses: actions/setup-rust@v1
+      - name: Install Rust toolchain (stable)
+        uses: actions-rs/toolchain@v1
         with:
-          rust-version: stable
+          toolchain: stable
+          profile: minimal
+          components: clippy,rustfmt
+          override: true
 
-      - name: Build all crates
+      - name: Cache Cargo registry + build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Build workspace (release, all targets)
         run: cargo build --workspace --all-targets --release
 
-      - name: Run tests
-        run: cargo test --workspace --all-targets
+      - name: Run tests (debug, all targets)
+        run: cargo test --workspace --all-targets -- --nocapture
 
       - name: Check formatting
         run: cargo fmt --all -- --check
 
-      - name: Lint (clippy)
-        run: cargo clippy --all-targets --all-features -- -D warnings
+      - name: Lint with clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
 
-      - name: Security audit (cryptography only)
+      - name: Security audit for cryptography crates
         run: |
-          if grep -q 'sha2\|ring\|aes\|hmac' Cargo.lock; then
-            cargo install cargo-audit
+          if grep -qE 'sha(1|2)|aes|hmac|ring' Cargo.lock; then
+            cargo install --locked cargo-audit
             cargo audit
           else
-            echo "No cryptography crates detected, skipping audit."
+            echo "No cryptography primitives detected; skipping cargo-audit security scan."
           fi
