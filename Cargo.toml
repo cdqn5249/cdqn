@@ -1,9 +1,32 @@
 # BaDaaS License
 # File Path: Cargo.toml
+#
+# Root workspace manifest for CDQN.
+# Temporary minimal workspace to unblock CI builds:
+# only `cdqn_core` is included until the other crates are created.
+# We will re-add `cdqn_causal_engine`, `cdqn_chaos_engine`, and `cdqn_cli`
+# once their skeletons (Cargo.toml + src/lib.rs/main.rs) exist.
 
 [workspace]
-members = [    "crates/cdqn_core",
-    "crates/cdqn_causal_engine",
-    "crates/cdqn_chaos_engine",
-    "crates/cdqn_cli"
+members = [
+    "crates/cdqn_core",
 ]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Christophe Duy Quang Nguyen <cdqn5249@gmail.com>"]
+license = "BaDaaS"
+description = "CDQN workspace (temporary minimal configuration)"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = 0
+debug = true
+incremental = true
