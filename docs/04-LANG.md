@@ -2,7 +2,7 @@
 
 * **File:** `docs/04-LANG.md`
 * **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.0 (Initial Architecture)
+* **Version:** 1.2 (Bounded Execution Update)
 * **Date:** November 25, 2025
 * **Author:** Christophe Duy Quang Nguyen
 
@@ -12,87 +12,94 @@
 
 ## 1. Philosophy: The Geometrization of Code
 
-Traditional programming languages (C, Python, Rust) manage **Linear Memory**. The programmer must worry about stack, heap, pointers, and garbage collection.
+Traditional programming languages (C, Python, Rust) manage **Linear Memory** (Stack/Heap). The programmer must worry about allocation, pointers, and garbage collection.
 
-**cdqnLang** eliminates this burden. It operates on **Topological Memory**.
-*   **No Addresses:** You do not store data at `0xAF40`. You store data at `Prime(User) * Prime(ID)`.
-*   **No Allocation:** You do not `malloc`. You **Fold** (Compress) or **Unfold** (Access).
-*   **No Loops:** You do not write `while(true)`. You define a **Pulse** (Frequency).
+**cdqnLang** eliminates this burden. It is a **Domain Specific Language (DSL)** for orchestrating Agents, Logic, and Data Flows on a **Topological Memory** model.
 
-It is a **Declarative Language** for the CDQN Virtual Chip. You define the *State* and the *Rules*, and the Physics Engine handles the execution.
+*   **Immutability:** Data is never overwritten. It is **Folded** (Compressed) or **Unfolded** (Accessed).
+*   **Bounded Execution:** It is a **Total Functional Language**. It forbids infinite loops and unbound recursion to guarantee system stability and predictable energy costs.
 
 ---
 
 ## 2. The Layered Stack
 
-`cdqnLang` is omnipresent, existing at every layer of the system to ensure coherence from the metal up to the user.
+We address the physical constraints of binary hardware by splitting concerns into a fractal stack.
 
-### Level 0: The Geometrization (LLVM IR)
-*   **Role:** The Translator.
-*   **Mechanism:** Maps binary hardware operations to Lattice Coordinates.
-*   **The Trick:** It uses **Content-Addressable Memory (Hashing)**. Every variable is a Hash. If the value changes, the address changes (Immutability). This removes the class of bugs related to "Memory Corruption."
+### Level 0: The Hybrid Addressing (Storage)
+To achieve high performance on consumer hardware, we separate Storage from Logic.
+*   **Physical Layer (Storage):** Uses **Cryptographic Hashes (Blake3)**.
+    *   *Mechanism:* `Store(Data)` $\to$ `Hash` $\to$ `mmap` location. Uses Content-Addressed Storage (CAS) via Hash Maps (Blake3). Avoids sequential scanning by using Hash-based direct addressing (Pointer Swizzling).
+    *   *Performance:* $O(1)$ lookup speed.
+*   **Logical Layer (Identity):** Uses **Prime Elements**.
+    *   *Mechanism:* Types and Concepts are defined by Prime Factorization.
+    *   *Performance:* Semantic validation is done via integer math (divisibility checks), not string parsing.
 
-### Level 1: The Rust Bootstrap (The Kernel)
+### Level 1: The Kernel (Rust Bootstrap)
 *   **Role:** The Mother Mold.
-*   **Current State:** The compiler is written in Rust for performance and safety.
-*   **Future State:** Once mature, `cdqnLang` will become self-hosting (written in itself).
+*   **Function:** The compiler is written in **Rust**. It translates `cdqnLang` syntax into the optimized ECS (Entity Component System) schedule used by the Runtime.
 
-### Level 2: The Logic Layer (Quantale Constraints)
+### Level 2: The Logic Layer (Bounded Quantales)
 *   **Role:** The Safety Switch.
-*   **Mechanism:** The Compiler calculates the **Energy Cost** (`cdqnStar`) of every function *before* it runs.
-*   **Benefit:** It is impossible to write code that crashes the node via resource exhaustion. If a script is too expensive for the hardware, the compiler rejects it with: `Error: Insufficient Pulse Energy.`
+*   **Mechanism:** The Compiler calculates the **Worst-Case Energy Cost** (`cdqnStar`) of every function *before* it runs.
+*   **The Guarantee:** If a script exceeds the Node's energy limit or contains a potential infinite loop, **It Will Not Compile.** This makes the system crash-proof by design.
 
 ### Level 3: The Interface (Deck Building)
-*   **Role:** The User Experience.
+*   **Role:** The Developer Experience (DX).
 *   **Metaphor:**
     *   **Function** $\to$ **Card**.
-    *   **Library** $\to$ **Deck**.
-    *   **Program** $\to$ **Game State**.
-*   **Usage:** The user combines Cards to create effects. The language ensures that only "Compatible Primes" (Valid Types) can be connected.
+    *   **Module** $\to$ **Deck**.
+    *   **Scope** $\to$ **Table**.
+*   **Safety:** The Prime Math ensures Type Safety. You cannot connect a "Fire Card" ($P_{Fire}$) to a "Water Slot" ($P_{Water}$) unless a valid Functor exists to bridge them.
 
 ---
 
 ## 3. Syntax Specification (Draft)
 
-The syntax fuses **Functional Programming** with **Number Theory**.
+The syntax fuses Functional Programming patterns with Resource Physics.
 
-### 3.1 Defining a Card (The Object)
-A Card is a container for Identity, Cost, and Logic.
+### 3.1 Defining a Card (The Logic Object)
 
 ```cdqn
 CARD #Analyze_Sentiment {
-    // Identity: Defined by Prime Elements
+    // Identity: Logical Type defined by Primes
     PRIME: [Analysis * Text * Emotion]
     WORLD: SocialWorld
 
-    // Physics: The Cost to run this logic
+    // Physics: Bounded Execution Constraints
+    // The compiler verifies this function cannot exceed these limits
     COST: 5 Star
-    PULSE: Instant // Runs once immediately
+    TIMEOUT: 500ms 
 
-    // Logic: The deterministic script (No LLM guessing)
+    // Logic: Deterministic Script
     EFFECT: |input| => {
-        // 1. Vector Search (Echo)
+        // ECHO is a Vector Search (Approximate Match)
         let resonance = ECHO(input, target: #Positive_Vibe);
         
-        // 2. Quantale Check
-        if resonance > 0.8 {
-            return #Happy;
-        } else {
-            return #Neutral;
+        // Control Flow is strict (Match/Switch)
+        match resonance {
+            case > 0.8 -> {
+                PULSE(High); // Signal excitement
+                return #Happy;
+            }
+            case _ -> {
+                PULSE(Low);
+                return #Neutral;
+            }
         }
     }
 }
 ```
 
-### 3.2 The Feedback Loop (The Training)
-`cdqnLang` supports **"Crystallization"**—saving the result of a computation as a new hardcoded rule.
+### 3.2 The Learning Loop (Crystallization)
+Used to turn "Vague AI Output" (Cloud) into "Strict Local Logic" (Rust).
 
 ```cdqn
-// Learning Mode
+// The Parasite Interface
 LEARN from #Google_API {
     INPUT: "Extract date from: Meeting at 5pm tomorrow"
     
-    // The logic returned by the Cloud is saved as a local Regex
+    // The logic returned by the Cloud is compiled into a Regex/Rule
+    // Neural weights are discarded; only the Logic remains.
     CRYSTALLIZE into CARD #Extract_Date
 }
 ```
@@ -103,11 +110,11 @@ LEARN from #Google_API {
 
 We are building a **Just-In-Time (JIT) Logic Simulator**.
 
-1.  **Input:** The User's Deck (`.cdqn` file).
-2.  **Analysis:** The Compiler checks the **Topology** (Are the connections valid?) and the **Energy** (Can the hardware afford this?).
-3.  **Compilation:** It generates a **QIR (Quantale Intermediate Representation)**—a highly compressed binary manifest.
-4.  **Execution:** The Rust Runtime loads the QIR and "plays" the cards in the Lattice.
+1.  **Static Analysis:** Check Prime compatibility (Type Safety).
+2.  **Cost Bounding:** Verify the Energy Budget (Halting Safety).
+3.  **Hashing:** Generate Content IDs for storage mapping.
+4.  **Execution:** The Rust Runtime loads the manifest and executes the graph on the Virtual Chip.
 
 ---
 
-> *"We do not write code to control the machine. We write rules to structure the chaos."*
+> *"We restrict the language to liberate the logic."*
