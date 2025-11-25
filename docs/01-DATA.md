@@ -2,115 +2,121 @@
 
 * **File:** `docs/01-DATA.md`
 * **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.2 (Sparse Factor Update)
+* **Version:** 1.5 (Unified Pipeline Update)
 * **Date:** November 25, 2025
 * **Author:** Christophe Duy Quang Nguyen
 
 > **Mathematical Specification for the Card Data Unit (CDU).**
-> *Defining the Dual Addressing Model, Sparse Semantic Factors, and Omni-Modal Glyphs.*
+> *Defining the pipeline from Prime Anchors to Holographic Glyphs.*
 
 ---
 
-## 1. The Hybrid Addressing Model
+## 1. The Archipelago Topology
 
-To achieve "Tiny AI" performance on consumer hardware while maintaining mathematical rigor, we utilize a split addressing system:
+We reject the rigid "Dictionary Model" of standard databases. In CDQN, Meaning is not static; it is **Geographic**. We separate the **Immutable Map** from the **Mutable Territory**.
 
-1.  **Physical Address (Storage):** **Cryptographic Hash (Blake3).**
-    *   Data is stored in Content-Addressable Memory (mmap). Access is $O(1)$.
-    *   *Role:* The "Pointer."
-2.  **Logical Identity (Reasoning):** **Prime Elements.**
-    *   Concepts are defined by Number Theory relations.
-    *   *Role:* The "Type System."
+### 1.1 The Rocks (Prime Elements)
+*   **Definition:** Prime Numbers ($P_2, P_3, \dots$) are the **Immutable Anchors** of the Lattice.
+*   **Function:** They act as "Geodetic Markers." Rock $P_7$ has no inherent human meaning (it is not "Red"). It is a **Coordinate** that never moves.
+
+### 1.2 The Origamis (Semantic Concepts)
+*   **Definition:** Meanings (e.g., "Time", "Risk") are **Fluid Structures** (Origamis).
+*   **Tethering:** An Origami "anchors" itself to specific Rocks via a **Tethering Vector**.
+*   **Agility:** This tether is dynamic. As the user's understanding evolves, a Concept can re-anchor to different Primes without breaking the underlying Lattice History.
 
 ---
 
-## 2. The Semantic Architecture: Prime Elements ($P$)
+## 2. The Semantic Structure: Sparse Factors
 
-We treat meaning as a **Composite Material** made of fundamental atoms (Primes).
+To avoid Integer Overflow and capture Nuance, we do not store a single product number. We store the **Recipe** (The Vector of Tethers).
 
-### 2.1 Sparse Factor Representation
-To avoid Integer Overflow from multiplying large primes, we do not store the resulting product. We store the **Pre-Factored Vector**.
+### 2.1 The Semantic Tuple
+A Tether is the atomic bond between a Concept and a Prime.
+$$Tether = (P, \alpha, \phi)$$
 
-*   **The Structure:**
-    A Logical ID is not a single number. It is a **Tensor of Tuples**:
-    $$ID = [ (P_1, \alpha_1, \phi_1), (P_2, \alpha_2, \phi_2), \dots ]$$
+*   **$P$ (The Anchor):** The Prime Element ID.
+*   **$\alpha$ (Amplitude):** The **Intensity**. This acts as the **Coefficient** for the generating function.
+*   **$\phi$ (Phase):** The **Orientation** (Spin).
+    *   $0^\circ$: Positive/Active.
+    *   $180^\circ$: Negative/Passive.
+    *   $90^\circ$: Orthogonal/Nuanced.
 
-    Where for each Prime Element $P$:
-    *   **$P$ (Identity):** The fundamental concept (e.g., $P_{Time}=2$).
-    *   **$\alpha$ (Amplitude/Exponent):** The intensity or weight of the concept.
-    *   **$\phi$ (Phase/Spin):** The orientation (e.g., Positive/Love vs Negative/Hate).
+### 2.2 The Sparse Tensor
+A Card ID is the collection of all its Tethers.
+$$ID = [ (P_1, \alpha_1, \phi_1), (P_2, \alpha_2, \phi_2), \dots ]$$
 
-*   **Example: "Urgent Risk"**
-    *   $P_{Risk} = 7$, Amplitude = 10 (High).
-    *   $P_{Time} = 2$, Amplitude = 5 (Urgent), Phase = -90° (Approaching).
-    *   **Storage:** `[(7, 10, 0), (2, 5, -90)]`.
-
-### 2.2 Semantic Arithmetic
-This structure allows the Physics Engine to perform logic using simple vector math:
-*   **Composition:** Merging two cards = Union of Vectors.
-*   **Comparison:** Vector Dot Product = Semantic Resonance.
-*   **Validation:** Prime divisibility checks = Type Safety.
+*   **Storage:** This Vector is hashed (Blake3) to create the physical filename.
+*   **Arithmetic:** Merging two cards is **Vector Addition**.
+    *   If Card A has $(P_7, 10, 0)$ and Card B has $(P_7, 5, 0)$, the result is $(P_7, 15, 0)$.
 
 ---
 
 ## 3. The Visual Glyph: Zagier’s Modular Forms
 
-The CDU acts as a **Holographic Seed** capable of generating Omni-Modal content (Text, Image, Audio) from a single compressed signature.
+The CDU acts as a **Holographic Seed**. The Semantic Tensor (Section 2) *is* the code that generates the Media (Section 3).
 
 ### 3.1 The Generating Function
-Inspired by Don Zagier’s work on **Modular Forms**, we treat data as a continuous function on a Lattice, rather than a static bitmap.
+We treat data as a continuous function anchored to the Lattice. We use **Wavelets** as the implementation of Zagier's Modular Forms.
 
-*   **Implementation:** **Wavelet Coefficients.**
-    *   We store the **Spectral Signature** of the data (the "Sheet Music") rather than the raw pixels (the "Recording").
-    *   This allows for resolution independence. The same Glyph can be "played back" (rendered) at low resolution for icons or high resolution for analysis.
+*   **The Input:** The Semantic Tensor (The Tethers).
+*   **The Process:**
+    $$f(z) = \sum \alpha_n q^{P_n} e^{i\phi_n}$$
+    *   The **Amplitudes ($\alpha$)** drive the Wavelet coefficients.
+    *   The **Phases ($\phi$)** drive the interference pattern.
+*   **The Output:** A **Spectral Map** (The Glyph).
 
-### 3.2 Projections (The Universal Player)
-The **World (CWM)** acts as the decoder for the Wavelet:
-*   **Visual Projection:** Maps coefficients to Spatial $(X,Y)$ frequencies $\to$ Image.
-*   **Audio Projection:** Maps coefficients to Temporal $(T,Hz)$ frequencies $\to$ Sound.
-*   **Logic Projection:** Maps coefficients to Logic Gates $\to$ Code.
+### 3.2 Projections (Runtime Only)
+The CDU stores the **Invariant Glyph**. The **World (CWM)** determines how that Glyph is *perceived* at runtime.
+
+*   **Visual Projection:** Maps the Spectral Map to $X,Y$ pixels.
+*   **Audio Projection:** Maps the Spectral Map to $Time,Freq$ audio.
+*   **Note:** The file on disk does **not** change when the World changes. Only the "Shadow" cast by the Glyph changes.
 
 ---
 
-## 4. Topology: Recursive Folding (Origami)
+## 4. Topology: Recursive Folding
 
-The CDU is a **Fractal Manifold**. It manages complexity through "Folding" (Abstraction).
+The CDU is a **Fractal Manifold**.
 
 ### 4.1 The Fold State
-*   **Unfolded (Hot):** The Vector of Factors is loaded in RAM. Full semantic resolution.
-*   **Folded (Cold):** The Vector is hashed into a single **Singularity**. Details are hidden but verifiable via the Hash.
+*   **Unfolded (Hot):** The Semantic Tensor is loaded in RAM. The Generating Function is active.
+*   **Folded (Cold):** The Tensor is hashed. The data is "sedimented" to disk.
 
 ### 4.2 Mock Forms (The Shadow)
-To handle "Noisy" or "Incomplete" data (Real World inputs), we utilize the concept of **Mock Modular Forms**.
-*   **The Structure:** `MockCDU = { Ideal_Vector + Shadow_Vector }`.
-*   **The Shadow:** Stores the "Error" or "Noise" that deviates from the ideal concept.
-*   **Usage:** Chronosa uses the Shadow to calculate **Nuance** (Stochastic Resonance) without corrupting the purity of the Ideal Prime definitions.
+To handle "Noisy" or "Incomplete" data:
+*   **The Shadow:** We store the "Ideal Tensor" plus a "Noise Vector."
+*   **Usage:** Chronosa uses the Noise Vector to calculate **Stochastic Resonance** (Creativity). It is the "Grit" that gives the digital asset texture.
 
 ---
 
 ## 5. Rust Implementation Strategy
 
 ```rust
-/// The Atomic Unit of Meaning
-struct PrimeFactor {
-    prime: u64,      // The Concept ID
-    amplitude: f32,  // The Intensity (Exponent)
-    phase: f32,      // The Spin/Nuance
+/// The Atomic Connection
+#[derive(Serialize, Deserialize)]
+struct Tether {
+    prime_anchor: u64, // P
+    amplitude: f32,    // Alpha (Coefficient)
+    phase: f32,        // Phi (Spin)
 }
 
-/// The "Card" Identity
-struct SemanticTensor {
-    factors: Vec<PrimeFactor>, // Sparse representation
-    hash: [u8; 32],            // Physical Address (Blake3)
-}
-
-/// The Omni-Modal Content
-struct Glyph {
-    coefficients: Vec<Complex<f64>>, // Wavelet/Modular Form data
-    mock_shadow: Option<Vec<f64>>,   // Noise/Error data
+/// The Card Data Unit (Immutable on Disk)
+#[derive(Serialize, Deserialize)]
+struct OrigamiCDU {
+    // The Definition (The DNA)
+    // This is hashed to generate the Content Address
+    semantic_tensor: Vec<Tether>, 
+    
+    // The Representation (The Body)
+    // Generated from the Tensor via Wavelet Transform
+    glyph_cache: Option<Vec<u8>>, 
+    
+    // The Deviation (The Shadow)
+    // Stores noise/error for Mock Forms
+    shadow_vector: Option<Vec<f32>>,
 }
 ```
 
 ---
 
-> *"We do not calculate the Universe. We factor it."*
+> *"The Tethers are the DNA. The Glyph is the Body. The World is the Environment."*
