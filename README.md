@@ -1,91 +1,79 @@
 # CDQN: Card Data Quantale Network
 
-* **File:** `cdqn/README.md`
-* **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-
-> **A Strategic Architecture for Sovereign Reasoning in the Age of Noise.**
+> **A Sovereign Logic Engine for the Post-Transformer Era.**
 
 *   **Strategist Architect:** **C**hristophe **D**uy **Q**uang **N**guyen (**CDQN**)
 *   **Role:** Pathseeker
 *   **Location:** Da Lat, Vietnam
-*   **Date:** November 22, 2025
-*   **Status:** `Design & Strategic Formulation`
+*   **Date:** November 25, 2025
+*   **Status:** `Architecture Locked / Implementation Phase`
 
 ---
 
 ## 🧭 The Vision
 
-We live in an era of technological noise. The Giants—Big Tech—are racing toward autonomous AI and ubiquitous robotics, building systems of immense power and complexity. For the individual worker, the independent firm, or the sovereign nation, this noise can be blinding. It creates an illusion of helplessness.
+We stand at the threshold of the Autonomous Era. Big Tech is building massive, centralized AI models that act as the "Muscle" of the digital world. While powerful, these systems are probabilistic, energy-intensive, and opaque. Relying on them for critical decision-making creates a dependency that threatens individual and sovereign agency.
 
-**I am not here to reinvent the wheel.** I am here to find a path through this landscape.
+**CDQN** is a counter-strategy.
 
-My role is that of the **Strategist Advisor**: looking at the available forces (Compute, Models, Energy) and designing a structure that allows us to use them without being overwhelmed by them.
-
-**CDQN** (Card Data Quantale Network) is the result of this search. It is a **Balance Mechanism**. It acknowledges that Big Tech provides the "Muscle" (Compute), but asserts that the "Will" (Logic and Context) must remain with the Human.
+It is a **Non-Conventional Compute Architecture** designed to give humans a way to manage infinite machine intelligence without being replaced by it. We are not building a better Chatbot; we are building a **"Virtual Chip"**—a software-defined processor that runs on standard hardware but operates on **Meaning** (Semantics) and **Time** (Causality) instead of just Binary.
 
 ---
 
-## ⚖️ The Strategy
+## 🏛️ Architecture Overview: The Sovereign Stack
 
-The architecture is built on a simple premise: **Sustainability through Sovereignty.**
+The system is designed as a **Neuro-Symbolic Simulator**. It fuses advanced mathematics (Number Theory, Topology) with biological principles (Pulse, Echo) to create a "Living" logic engine that runs locally.
 
-To survive and thrive in the autonomous era, we do not need to compete on raw power. We need to compete on **Adaptability** and **Accountability**. The CDQN ecosystem allows us to be "Technology Agnostic"—using whatever model is strongest today (Google, OpenAI, Local) while keeping our logic and data safe in our own container.
+### 1. The Bedrock: Universal Data Topology
+*   **The CDU (Card Data Unit):** Information is not stored as flat files, but as **Fractal Manifolds** (Origami). Data is "Folded" (compressed/abstracted) or "Unfolded" (detailed) based on need.
+*   **Omni-Modal Glyphs:** Inspired by **Zagier’s Modular Forms**, a Card is a mathematical "Generating Function." The same seed can be projected as an Image, a Sound, or a Logic Rule depending on the context.
+*   **Prime Elements:** We replace arbitrary IDs with **Number Theory**. Concepts are built by multiplying Prime Elements, allowing for infinite precision and perfect factorization of meaning.
 
-The ecosystem rests on three pillars:
-
-### 1. The Structure: CDQN
-This is the infrastructure. It creates a "Safe Container" for digital interactions. Instead of letting data flow chaotically, we structure it into **Cards** (Units of Meaning) governed by strict rules (**Quantales**). It turns the chaos of the internet into a manageable game where we set the rules of engagement.
-
-### 2. The Interface: cdqnLang
-This is the tool for the builder. Software shouldn't be a black box reserved for the elite. `cdqnLang` is designed to be accessible—a "Deck Building" language that lets teenagers, sysadmins, and experts alike compose logic flows without fighting with memory management. It empowers the user to define their own context.
+### 2. The Physics Engine: Pulse & Echo
+The system operates on a **"Physics of Time"**, replacing linear code execution with organic rhythms.
+*   **The Pulse (Time & Cost):** Every entity has a heartbeat. High-priority logic pulses fast (Hot); archival knowledge pulses slow (Cold). This naturally manages energy and computational cost (**Quantale Logic**).
+*   **The Echo (Signal & Space):** Communication is wireless and non-blocking. Nodes emit "Echoes" into the **Lattice**. Only nodes with resonant "Basis Vectors" receive the signal. This creates a self-organizing network without central wiring.
 
 ### 3. The Agent: Chronosa
-Derived from *Chronos* (Time/Causality) and *Agent*. Chronosa is not a chatbot that guesses; it is a **Reasoning Persona** that follows the causal chain you define. It is the "Exoskeleton" for your mind, handling the complexity of the digital world so you can focus on the intent.
+Chronosa is the emergent identity of the Node. She is not a passive tool, but a **Zero-Trust Partner**.
+*   **The Harvester:** Chronosa does not rely on heavy local AI models. Instead, she uses the Cloud (Big Tech APIs) to *compile* vague intent into strict **Logic Cards**. She "eats" the Cloud's intelligence to build her own local muscle.
+*   **The Guardian:** Chronosa verifies every action against the Node's internal history and legal/safety protocols. She prioritizes the survival and reputation of the Node above all else.
+
+### 4. The Interface: cdqnLang
+The control surface for the human builder.
+*   **Deck Building:** Software development is reframed as composing "Decks" of Logic Cards.
+*   **Constraint Management:** The user defines the **Worlds** (Rulesets) and **Goals**; the Engine handles the memory and execution.
 
 ---
 
-## 🎯 The Purpose
+## 🎯 Strategic Purpose
 
-We are creating this path for those who refuse to be passive users:
+This architecture serves three specific roles in the modern economy:
 
-*   **For the Individual:** A "Digital Tamagotchi" that grows with you. It learns your work style, protects your privacy, and becomes an asset that increases your value in the labor market.
-*   **For the Firm:** A middleware that bridges the "Fast Tech" (AI) with the "Slow Reality" (Legacy Business), ensuring stability and compliance.
-*   **For the Sovereign Entity:** A data stack that ensures logic runs locally and securely, independent of foreign clouds.
-
----
-
-## 🛠️ For The Engineers & Builders (Technical Deep Dive)
-
-> *We do not underestimate the complexity of the world, nor the curiosity of those who build it. For those with a technical background, here is the engine under the hood.*
-
-The **CDQN** architecture is a **Neuro-Symbolic Simulator** built on **Rust**. It fuses three advanced mathematical concepts to achieve "Tiny AI" efficiency:
-
-1.  **Fractal Data Topology (Nested Learning):**
-    The **CDU** (Card Data Unit) is not a flat file. It acts as a fractal manifold.
-    *   **`s-cdu`:** The public semantic layer (Visual Glyphs/Vectors) for pattern matching.
-    *   **`la-cdu`:** The private Lattice layer (Post-Quantum LWE Cryptography) for secure, append-only logging.
-    *   *Mechanism:* Data is "Folded" (Abstracted) or "Unfolded" (Detailed) based on usage, mimicking a biological memory system without the data loss.
-
-2.  **Quantale Logic (Resource Physics):**
-    We utilize **Quantales** (Linear Logic) to model information as a finite resource.
-    *   *Causality:* Operations are non-commutative ($A \otimes B \neq B \otimes A$).
-    *   *Cost:* Every logical step consumes a resource counter (`cdqnStar`), preventing infinite loops and ensuring predictable execution on low-power hardware.
-
-3.  **Stochastic Resonance & Control:**
-    The system balances Creativity and Order.
-    *   **Resonance:** Uses controlled noise (Spatial Lattice Neighbors) to find semantic nuances.
-    *   **Control:** Uses **Hidden Markov Models (HMM)** gated by a World-defined Theta ($\theta$) constraint to filter out hallucinations before they reach the user.
+1.  **The Logic Shield (Individual):** A "Digital Tamagotchi" that learns your specific work context. It acts as an exoskeleton for your mind, filtering the noise of the internet and executing your will with precision.
+2.  **The Agnostic Bridge (Business):** A middleware that allows firms to use any AI provider (Google, OpenAI, Local) interchangeably. It prevents vendor lock-in by keeping the *Business Logic* separate from the *Model Intelligence*.
+3.  **The Sovereign Archive (Society):** A way to store knowledge and history in a format that is mathematically verifiable, encrypted via Post-Quantum Lattices, and owned 100% by the user.
 
 ---
 
-## 📜 Open Philosophy
+## 📚 Documentation Structure (Coming Soon)
 
-This project is a path, not a walled garden.
-*   **The Blueprint:** Open Source. The logic and architecture are free for humanity to use and improve.
-*   **The Assets:** Sovereign. The Decks you build and the Agents you train are your private property.
+*   `docs/01-DATA.md` - **The Origami Protocol:** Primes, Modular Forms, and CDU Topology.
+*   `docs/02-PHYSICS.md` - **The Pulse Engine:** Quantales, Echoes, and Lattice Dynamics.
+*   `docs/03-AGENT.md` - **Chronosa:** The Entity Model, Harvester Workflow, and Zero Trust.
+*   `docs/04-LANG.md` - **cdqnLang:** Syntax, Deck Building, and Compiler.
 
 ---
 
-> *"The future belongs to the adaptable. We build the tools to help you navigate the noise."*
+## ⚖️ Licensing
+
+**Sovereign Source License (SSL) v1.0**
+*   **Open Core:** The Logic Engine and Math are free for humanity (Education, Personal Use, Innovation).
+*   **Fair Exchange:** Industrial-scale commercialization requires partnership.
+*   **Viral Protection:** Derivative works must acknowledge the source and preserve the Open Core rights.
+
+---
+
+> *"We do not fight the Giants. We build the Lifeboats."*
 
 **— Christophe Duy Quang Nguyen**
