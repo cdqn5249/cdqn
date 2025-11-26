@@ -2,8 +2,8 @@
 
 * **File:** `docs/04-LANG.md`
 * **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.2 (Bounded Execution Update)
-* **Date:** November 25, 2025
+* **Version:** 1.3 (Tether & Topology Update)
+* **Date:** November 26, 2025
 * **Author:** Christophe Duy Quang Nguyen
 
 > **The Logic of the Virtual Chip. Programming with Physics, not Memory.**
@@ -12,73 +12,69 @@
 
 ## 1. Philosophy: The Geometrization of Code
 
-Traditional programming languages (C, Python, Rust) manage **Linear Memory** (Stack/Heap). The programmer must worry about allocation, pointers, and garbage collection.
+Traditional programming languages manage **Linear Memory**. **cdqnLang** manages **Topological Memory**.
 
-**cdqnLang** eliminates this burden. It is a **Domain Specific Language (DSL)** for orchestrating Agents, Logic, and Data Flows on a **Topological Memory** model.
-
-*   **Immutability:** Data is never overwritten. It is **Folded** (Compressed) or **Unfolded** (Accessed).
-*   **Bounded Execution:** It is a **Total Functional Language**. It forbids infinite loops and unbound recursion to guarantee system stability and predictable energy costs.
+It is a **Domain Specific Language (DSL)** for orchestrating Agents, Logic, and Data Flows. It enforces **Total Functional Programming**: no infinite loops, no unbound recursion, and strict resource accounting via **Quantales**.
 
 ---
 
 ## 2. The Layered Stack
 
-We address the physical constraints of binary hardware by splitting concerns into a fractal stack.
+We address the physical constraints of binary hardware by splitting concerns.
 
 ### Level 0: The Hybrid Addressing (Storage)
-To achieve high performance on consumer hardware, we separate Storage from Logic.
-*   **Physical Layer (Storage):** Uses **Cryptographic Hashes (Blake3)**.
-    *   *Mechanism:* `Store(Data)` $\to$ `Hash` $\to$ `mmap` location. Uses Content-Addressed Storage (CAS) via Hash Maps (Blake3). Avoids sequential scanning by using Hash-based direct addressing (Pointer Swizzling).
-    *   *Performance:* $O(1)$ lookup speed.
-*   **Logical Layer (Identity):** Uses **Prime Elements**.
-    *   *Mechanism:* Types and Concepts are defined by Prime Factorization.
-    *   *Performance:* Semantic validation is done via integer math (divisibility checks), not string parsing.
+*   **Physical Layer:** **Content-Addressed Storage (CAS)** via Blake3 Hashing. Data is immutable and deduplicated.
+*   **Logical Layer:** **Prime Elements**. Types are defined by factorization, allowing for mathematical type safety ($P_A \times P_B = P_{AB}$).
 
 ### Level 1: The Kernel (Rust Bootstrap)
-*   **Role:** The Mother Mold.
-*   **Function:** The compiler is written in **Rust**. It translates `cdqnLang` syntax into the optimized ECS (Entity Component System) schedule used by the Runtime.
+*   **Role:** The Compiler. Written in Rust to translate `cdqnLang` into the optimized ECS schedule.
 
 ### Level 2: The Logic Layer (Bounded Quantales)
 *   **Role:** The Safety Switch.
-*   **Mechanism:** The Compiler calculates the **Worst-Case Energy Cost** (`cdqnStar`) of every function *before* it runs.
-*   **The Guarantee:** If a script exceeds the Node's energy limit or contains a potential infinite loop, **It Will Not Compile.** This makes the system crash-proof by design.
+*   **Mechanism:** The Compiler calculates the **Worst-Case Energy Cost** (`cdqnStar`) pre-runtime.
+*   **Constraint:** Code that exceeds the Node's Pulse budget or threatens infinite execution **fails to compile**.
 
 ### Level 3: The Interface (Deck Building)
-*   **Role:** The Developer Experience (DX).
-*   **Metaphor:**
-    *   **Function** $\to$ **Card**.
-    *   **Module** $\to$ **Deck**.
-    *   **Scope** $\to$ **Table**.
-*   **Safety:** The Prime Math ensures Type Safety. You cannot connect a "Fire Card" ($P_{Fire}$) to a "Water Slot" ($P_{Water}$) unless a valid Functor exists to bridge them.
+*   **Role:** The Developer Experience.
+*   **Metaphor:** Functions are **Cards**. Modules are **Decks**.
+*   **Safety:** Connections between cards are validated by **Morphisms**. You cannot connect incompatible Primes unless a Functor (Translation) exists.
 
 ---
 
 ## 3. Syntax Specification (Draft)
 
-The syntax fuses Functional Programming patterns with Resource Physics.
+The syntax allows users to define **Tethers** (Nuance) and **Topology** (State).
 
-### 3.1 Defining a Card (The Logic Object)
+### 3.1 Defining a Ship (Anchored Logic)
+A "Ship" is a fully defined, active logic unit.
 
 ```cdqn
 CARD #Analyze_Sentiment {
-    // Identity: Logical Type defined by Primes
-    PRIME: [Analysis * Text * Emotion]
+    // Topology: Anchored to specific Primes
+    STATE: SHIP 
     WORLD: SocialWorld
 
-    // Physics: Bounded Execution Constraints
-    // The compiler verifies this function cannot exceed these limits
+    // Identity: The Tether Vector (Prime, Amplitude, Phase)
+    // Syntax: @Prime ^Intensity /Phase
+    TETHERS: [
+        @Analysis ^1.0,       // Standard
+        @Emotion  ^2.0,       // High Intensity
+        @Text     ^1.0 /0.0   // Positive Phase
+    ]
+
+    // Physics: Bounded Execution
     COST: 5 Star
     TIMEOUT: 500ms 
 
     // Logic: Deterministic Script
     EFFECT: |input| => {
-        // ECHO is a Vector Search (Approximate Match)
+        // ECHO is a Vector Search (Wavelet Propagation)
+        // Returns a Resonance score (0.0 to 1.0)
         let resonance = ECHO(input, target: #Positive_Vibe);
         
-        // Control Flow is strict (Match/Switch)
         match resonance {
             case > 0.8 -> {
-                PULSE(High); // Signal excitement
+                PULSE(High); 
                 return #Happy;
             }
             case _ -> {
@@ -90,17 +86,49 @@ CARD #Analyze_Sentiment {
 }
 ```
 
-### 3.2 The Learning Loop (Crystallization)
-Used to turn "Vague AI Output" (Cloud) into "Strict Local Logic" (Rust).
+### 3.2 Defining a Kite (Draft Logic)
+A "Kite" is ambiguous data deployed to the Void.
 
 ```cdqn
-// The Parasite Interface
-LEARN from #Google_API {
-    INPUT: "Extract date from: Meeting at 5pm tomorrow"
+CARD #Unknown_Signal {
+    STATE: KITE
+    WORLD: Void // The CVM
     
-    // The logic returned by the Cloud is compiled into a Regex/Rule
-    // Neural weights are discarded; only the Logic remains.
-    CRYSTALLIZE into CARD #Extract_Date
+    // Strings: Weak connections (Low Tension)
+    STRINGS: [
+        @Finance ~0.3, // 30% probability
+        @Scam    ~0.4
+    ]
+    
+    // Behavior: Wait for context
+    EFFECT: |context| => {
+        if context.confirms(@Finance) {
+            // Pull down to Reality
+            return ANCHOR(to: FinanceWorld);
+        } else {
+            return FLOAT;
+        }
+    }
+}
+```
+
+### 3.3 The Network Handshake (Consensus)
+How to talk to the Public Lattice without Semantic Drift.
+
+```cdqn
+FUNCTION #Send_Public_Message {
+    INPUT: private_card
+    
+    PROCESS: {
+        // 1. Check Global Consensus
+        let map = QUERY_CONSENSUS(target: PublicLattice);
+        
+        // 2. Translate Private Primes to Public Primes
+        let public_card = TRANSLATE(private_card, using: map);
+        
+        // 3. Emit the Echo
+        EMIT(public_card);
+    }
 }
 ```
 
@@ -108,12 +136,10 @@ LEARN from #Google_API {
 
 ## 4. The Compiler Strategy
 
-We are building a **Just-In-Time (JIT) Logic Simulator**.
-
-1.  **Static Analysis:** Check Prime compatibility (Type Safety).
-2.  **Cost Bounding:** Verify the Energy Budget (Halting Safety).
-3.  **Hashing:** Generate Content IDs for storage mapping.
-4.  **Execution:** The Rust Runtime loads the manifest and executes the graph on the Virtual Chip.
+1.  **Static Analysis:** Validate Tethers and Phase alignments.
+2.  **Cost Bounding:** Verify Energy Budget.
+3.  **Hashing:** Generate CAS addresses.
+4.  **Execution:** Rust Runtime executes the Logic Graph.
 
 ---
 
