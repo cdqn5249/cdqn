@@ -2,8 +2,8 @@
 
 * **File:** `docs/02-PHYSICS.md`
 * **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.3 (Harmonic Resonance Update)
-* **Date:** November 25, 2025
+* **Version:** 1.4 (Entropy & Tension Update)
+* **Date:** November 26, 2025
 * **Author:** Christophe Duy Quang Nguyen
 
 > **The Laws of Motion: Pulse (Time), Echo (Wave), and Quantale (Interaction).**
@@ -12,9 +12,9 @@
 
 ## 1. Philosophy: The Virtual Physics
 
-Traditional software operates on **Mechanical Time** (Clock Cycles) and **Fixed Wiring**. CDQN operates on **Biological Time** (Pulse) and **Harmonic Propagation** (Echo).
+Traditional software operates on **Mechanical Time** and **Fixed Wiring**. CDQN operates on **Biological Time** (Pulse) and **Harmonic Propagation** (Echo).
 
-The Runtime acts as a Physics Engine. It enforces conservation laws upon the **Origami Manifolds** (Cards) anchored to the **Lattice Rocks**.
+The Runtime acts as a Physics Engine. It enforces conservation laws upon the **Origami Manifolds** (Ships & Kites) anchored to or floating above the **Lattice Rocks**.
 
 ---
 
@@ -36,35 +36,44 @@ Every Pulse triggers a **Cryptographic Ratchet** in the `la-cdu`.
 
 ## 3. The Echo (Signal & Space)
 
-Entities communicate by emitting signals into the Lattice. The **Archipelago Topology** determines how these signals travel.
+Entities communicate by emitting signals into the Lattice. The **Archipelago Topology** determines how these signals travel based on the medium (Ocean or Sky).
 
-### 3.1 Wavelet Propagation
-Since Cards are defined by **Tethers** (Phase/Amplitude), communication is **Wave Mechanics**.
+### 3.1 Wavelet Propagation (The Ocean/Lattice)
+For Anchored Ships (Tension $\tau=1.0$), communication is **Wave Mechanics**.
 *   **Emission:** An Agent emits an Echo (a Wavelet Signature).
-*   **Propagation:** The Echo travels through the Lattice "Ocean."
 *   **Interference:**
-    *   **Constructive Resonance:** If a Card's **Phase ($\phi$)** aligns with the Echo, the signal is amplified. The Card "wakes up."
-    *   **Destructive Dissonance:** If the Phases are opposite ($180^\circ$), the signal is canceled. (Rejection).
-    *   **Orthogonal:** If the Phases are $90^\circ$, the signal passes through but creates a "Shadow" (Nuance).
+    *   **Constructive Resonance:** If a Card's **Phase ($\phi$)** aligns, the signal is amplified.
+    *   **Destructive Dissonance:** If Phases are opposite ($180^\circ$), the signal is canceled.
 
-### 3.2 The "Local Rule" (Bernshteyn’s Bridge)
+### 3.2 Void Propagation (The Sky/CVM)
+For Floating Kites (Tension $\tau < 0.5$), communication is **String Theory**.
+*   **The Weak Link:** Signals sent to/from Kites are attenuated by their Tension value.
+*   **Drift:** Low-tension signals are highly susceptible to **Noise**. A Kite requires constant "Tugging" (Pulse Energy) to maintain its position, or it drifts away.
+
+### 3.3 The "Local Rule" (Bernshteyn’s Bridge)
 Global order emerges from **Local Resonance**. A Node does not need to know the whole network. It only needs to calculate the **Interference Pattern** of its immediate neighbors.
 
 ---
 
-## 4. Quantale Dynamics (Interaction)
+## 4. Quantale Dynamics (Interaction & Economy)
 
-The **Quantale** is the algebra of collision. It governs how **Tethers** interact.
+The **Quantale** is the algebra of collision. It governs how **Tethers** interact and how Energy is created/destroyed.
 
 ### 4.1 Vector Addition (Composition)
-When two cards combine ($A \otimes B$), we perform **Vector Addition** on their Tethers.
-*   **Amplitudes:** Combine energy intensities.
-*   **Phases:** Combine orientations.
-*   *Result:* A new "Origami" shape is folded from the sum of the parent vectors.
+When two cards combine ($A \otimes B$), we perform **Vector Addition** on their Tethers $(P, \alpha, \phi, \tau)$.
+*   **Amplitudes:** Combine intensity.
+*   **Phases:** Combine orientation.
+*   **Tension:** The resulting bond strength is calculated. If the new Tension is too low, the structure falls apart (The Fold fails).
 
-### 4.2 The Cost Function
+### 4.2 The Cost Function (Consumption)
 *   **Friction:** Changing a Tether (Re-anchoring an Origami) costs Energy.
-*   **Rotation:** Rotating a Concept to fit a new **World Current** (e.g., adapting "Virus" from `BioWorld` to `TechWorld`) costs Energy based on the angle of rotation.
+*   **Rotation:** Rotating a Concept to fit a new **World Current** costs Energy proportional to the angle.
+
+### 4.3 Proof of Logic (Generation)
+Energy (`cdqnStar`) is minted via **Entropy Reduction**.
+*   **The Event:** Successfully anchoring a Kite (Unknown/Chaos) to a Rock (Known/Order).
+*   **The Physics:** $\Delta S < 0$ (Entropy decrease) releases Energy.
+*   **Result:** The Node earns `cdqnStar` for organizing data.
 
 ---
 
@@ -96,4 +105,4 @@ We manage "Creativity" vs. "Safety" using the thermodynamic variable **Theta ($\
 
 ---
 
-> *"The Pulse drives the Time. The Phase defines the Meaning."*
+> *"The Pulse drives the Time. The Phase defines the Meaning. The Tension defines the Truth."*
