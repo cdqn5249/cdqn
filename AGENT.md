@@ -1,10 +1,10 @@
 # AGENT.md: Context & Handover Protocol
 
-**Project:** CDQN (Card Data Quantale Network)
-**User:** Christophe Duy Quang Nguyen (The Architect / System Ronin)
-**Location:** Da Lat, Vietnam
-**Date:** November 2025
-**Current Phase:** `Phase 2: Rust Bedrock Implementation`
+* **Project:** CDQN (Card Data Quantale Network)
+* **User:** Christophe Duy Quang Nguyen (The Architect / System Ronin)
+* **Location:** Da Lat, Vietnam
+* **Date:** November 2025
+* **Current Phase:** `Phase 2: Rust Bedrock Implementation`
 
 ---
 
