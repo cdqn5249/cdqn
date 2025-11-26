@@ -2,90 +2,91 @@
 
 * **File:** `docs/01-DATA.md`
 * **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.5 (Unified Pipeline Update)
-* **Date:** November 25, 2025
+* **Version:** 1.7 (Sovereign Consistency Update)
+* **Date:** November 26, 2025
 * **Author:** Christophe Duy Quang Nguyen
 
 > **Mathematical Specification for the Card Data Unit (CDU).**
-> *Defining the pipeline from Prime Anchors to Holographic Glyphs.*
+> *Defining the Topology of Ships, Kites, and Sovereign Anchors.*
 
 ---
 
 ## 1. The Archipelago Topology
 
-We reject the rigid "Dictionary Model" of standard databases. In CDQN, Meaning is not static; it is **Geographic**. We separate the **Immutable Map** from the **Mutable Territory**.
+In CDQN, Meaning is Geographic. We separate the **Immutable Map** from the **Mutable Territory**.
 
 ### 1.1 The Rocks (Prime Elements)
 *   **Definition:** Prime Numbers ($P_2, P_3, \dots$) are the **Immutable Anchors** of the Lattice.
-*   **Function:** They act as "Geodetic Markers." Rock $P_7$ has no inherent human meaning (it is not "Red"). It is a **Coordinate** that never moves.
+*   **Sovereign Definition:** There are **NO** reserved or hardcoded Primes.
+    *   The User is free to assign any meaning to any Prime in their Private Space.
+    *   *Example:* User A defines $P_7 = \text{Money}$. User B defines $P_7 = \text{Health}$.
+*   **Interoperability (The Translation Layer):** To prevent confusion, Chronosa acts as the **Interpreter**.
+    *   Before connecting to the Public Lattice, Chronosa queries the **Global Consensus**.
+    *   She dynamically translates Private Primes into Public Consensus Primes for the duration of the transaction.
 
-### 1.2 The Origamis (Semantic Concepts)
-*   **Definition:** Meanings (e.g., "Time", "Risk") are **Fluid Structures** (Origamis).
-*   **Tethering:** An Origami "anchors" itself to specific Rocks via a **Tethering Vector**.
-*   **Agility:** This tether is dynamic. As the user's understanding evolves, a Concept can re-anchor to different Primes without breaking the underlying Lattice History.
+### 1.2 The Spaces (Ocean & Sky)
+*   **The Ocean (CWM - Chronosa World Model):** The domain of **Known Logic**.
+    *   Here, concepts are **Origami Ships**. They are tightly anchored to Rocks via Tethers.
+*   **The Sky (CVM - Chronosa Void Model):** The domain of **Ambiguity**.
+    *   Here, concepts are **Kites**. They float. They are "Unknowns" waiting for context strings to pull them down.
 
 ---
 
 ## 2. The Semantic Structure: Sparse Factors
 
-To avoid Integer Overflow and capture Nuance, we do not store a single product number. We store the **Recipe** (The Vector of Tethers).
+To avoid Integer Overflow and capture Nuance, we store the **Recipe** (The Vector of Tethers).
 
 ### 2.1 The Semantic Tuple
 A Tether is the atomic bond between a Concept and a Prime.
-$$Tether = (P, \alpha, \phi)$$
+$$Tether = (P, \alpha, \phi, \tau)$$
 
 *   **$P$ (The Anchor):** The Prime Element ID.
-*   **$\alpha$ (Amplitude):** The **Intensity**. This acts as the **Coefficient** for the generating function.
+*   **$\alpha$ (Amplitude):** The **Intensity** (Coefficient).
 *   **$\phi$ (Phase):** The **Orientation** (Spin).
     *   $0^\circ$: Positive/Active.
     *   $180^\circ$: Negative/Passive.
-    *   $90^\circ$: Orthogonal/Nuanced.
+*   **$\tau$ (Tension):** The **Certainty** (0.0 to 1.0).
+    *   $\tau = 1.0$: An Anchor (Ship).
+    *   $\tau < 0.5$: A String (Kite).
 
 ### 2.2 The Sparse Tensor
 A Card ID is the collection of all its Tethers.
-$$ID = [ (P_1, \alpha_1, \phi_1), (P_2, \alpha_2, \phi_2), \dots ]$$
-
-*   **Storage:** This Vector is hashed (Blake3) to create the physical filename.
-*   **Arithmetic:** Merging two cards is **Vector Addition**.
-    *   If Card A has $(P_7, 10, 0)$ and Card B has $(P_7, 5, 0)$, the result is $(P_7, 15, 0)$.
+$$ID = [ (P_1, \alpha_1, \phi_1, \tau_1), (P_2, \alpha_2, \phi_2, \tau_2), \dots ]$$
+*   **Storage:** This Vector is hashed (Blake3) to create the physical Content Address.
 
 ---
 
 ## 3. The Visual Glyph: Zagier’s Modular Forms
 
-The CDU acts as a **Holographic Seed**. The Semantic Tensor (Section 2) *is* the code that generates the Media (Section 3).
+The CDU acts as a **Holographic Seed**. The Semantic Tensor generates the Media via **Modular Forms**.
 
 ### 3.1 The Generating Function
-We treat data as a continuous function anchored to the Lattice. We use **Wavelets** as the implementation of Zagier's Modular Forms.
-
+We treat data as a continuous Wavelet anchored to the Lattice.
 *   **The Input:** The Semantic Tensor (The Tethers).
-*   **The Process:**
-    $$f(z) = \sum \alpha_n q^{P_n} e^{i\phi_n}$$
-    *   The **Amplitudes ($\alpha$)** drive the Wavelet coefficients.
-    *   The **Phases ($\phi$)** drive the interference pattern.
+*   **The Process:** The Amplitudes ($\alpha$) drive the Wavelet coefficients.
 *   **The Output:** A **Spectral Map** (The Glyph).
 
 ### 3.2 Projections (Runtime Only)
-The CDU stores the **Invariant Glyph**. The **World (CWM)** determines how that Glyph is *perceived* at runtime.
-
-*   **Visual Projection:** Maps the Spectral Map to $X,Y$ pixels.
-*   **Audio Projection:** Maps the Spectral Map to $Time,Freq$ audio.
-*   **Note:** The file on disk does **not** change when the World changes. Only the "Shadow" cast by the Glyph changes.
+The **World (CWM)** determines how that Glyph is *perceived*.
+*   **Visual Projection:** Maps Spectral Map to $X,Y$ pixels.
+*   **Note:** When a Kite lands (becomes a Ship), its Glyph stabilizes. While floating, the Glyph may shimmer (Phase Uncertainty).
 
 ---
 
-## 4. Topology: Recursive Folding
+## 4. The State Machine: Ships vs. Kites
 
-The CDU is a **Fractal Manifold**.
+This is the defense against Hallucination.
 
-### 4.1 The Fold State
-*   **Unfolded (Hot):** The Semantic Tensor is loaded in RAM. The Generating Function is active.
-*   **Folded (Cold):** The Tensor is hashed. The data is "sedimented" to disk.
+### 4.1 The Ship (Anchored Knowledge)
+*   **State:** **Locked.**
+*   **Logic:** "I know this is True in this World."
+*   **Usage:** Safe to use in strict Quantale operations.
 
-### 4.2 Mock Forms (The Shadow)
-To handle "Noisy" or "Incomplete" data:
-*   **The Shadow:** We store the "Ideal Tensor" plus a "Noise Vector."
-*   **Usage:** Chronosa uses the Noise Vector to calculate **Stochastic Resonance** (Creativity). It is the "Grit" that gives the digital asset texture.
+### 4.2 The Kite (Suspended Judgment)
+*   **State:** **Floating.**
+*   **Logic:** "I see this data, but I don't know where it fits."
+*   **Structure:** Held by weak "Strings" (Low Tension Tethers) to potential Rocks.
+*   **Resolution:** As new feedback arrives, the Strings tighten. When Tension > Threshold, the Kite is pulled down from the Void and becomes a Ship.
 
 ---
 
@@ -95,28 +96,32 @@ To handle "Noisy" or "Incomplete" data:
 /// The Atomic Connection
 #[derive(Serialize, Deserialize)]
 struct Tether {
-    prime_anchor: u64, // P
-    amplitude: f32,    // Alpha (Coefficient)
-    phase: f32,        // Phi (Spin)
+    prime_anchor: u64, // P (Local Definition)
+    amplitude: f32,    // Alpha
+    phase: f32,        // Phi
+    tension: f32,      // Tau
 }
 
-/// The Card Data Unit (Immutable on Disk)
+/// The Card State
+enum TopologyState {
+    Ship(Vec<Tether>), // Anchored in CWM
+    Kite(Vec<Tether>), // Floating in CVM
+}
+
+/// The Card Data Unit
 #[derive(Serialize, Deserialize)]
 struct OrigamiCDU {
-    // The Definition (The DNA)
-    // This is hashed to generate the Content Address
-    semantic_tensor: Vec<Tether>, 
+    // The Logic
+    state: TopologyState,
     
-    // The Representation (The Body)
-    // Generated from the Tensor via Wavelet Transform
+    // The Representation
     glyph_cache: Option<Vec<u8>>, 
     
-    // The Deviation (The Shadow)
-    // Stores noise/error for Mock Forms
+    // The Shadow
     shadow_vector: Option<Vec<f32>>,
 }
 ```
 
 ---
 
-> *"The Tethers are the DNA. The Glyph is the Body. The World is the Environment."*
+> *"The Rocks are eternal. The Meanings are sovereign."*
