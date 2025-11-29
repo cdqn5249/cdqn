@@ -1,12 +1,12 @@
 # 05-NETWORK: The Sovereign Mesh
 
-* **File:** `docs/05-NETWORK.md`
-* **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.1 (Entropy & Consensus Update)
-* **Date:** November 26, 2025
-* **Author:** Christophe Duy Quang Nguyen
+*   **File:** `docs/05-NETWORK.md`
+*   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
+*   **Version:** 1.2 (Dual-Token Alignment)
+*   **Date:** November 29, 2025
+*   **Author:** Christophe Duy Quang Nguyen
 
-> **Protocols for Minting, Connecting, and Translating in the Dark Forest.**
+> **Protocols for Connecting, Translating, and Trading in the Dark Forest.**
 
 ---
 
@@ -15,7 +15,7 @@
 The network is not a flat namespace. It is strictly divided to ensure sovereignty while allowing trade.
 
 ### 1.1 Private Space (The Node)
-*   **Content:** User's `la-cdu` (Log), Private Decks, and internal Logic.
+*   **Content:** User's `OriginCdu`, Private Decks, and internal Logic.
 *   **Rules:** Total Sovereignty. You define the Primes ($P_7 = \text{My Cat}$). You define the Truth.
 *   **Visibility:** **Invisible.** It exists only on your hardware.
 
@@ -58,20 +58,25 @@ The network assumes a hostile environment (The Internet/Abyss).
 
 ---
 
-## 4. The Economic Physics: Entropy Minting
+## 4. The Economic Interface
 
-We reject "Proof of Work" (Burning Electricity) in favor of **Proof of Logic** (Creating Order).
+We reject "Proof of Work" (Burning Electricity) in favor of **Proof of Logic** (Creating Order) and **Proof of Trade** (Barter).
 
-### 4.1 Minting `cdqnStar`
-Currency is generated when the Node reduces local entropy.
-*   **Action:** Transforming a **Kite** (Unsorted Data/Chaos) into a **Ship** (Anchored Logic/Order).
-*   **The Physics:** $\Delta S < 0$ (Entropy Decrease) releases Energy.
-*   **Reward:** The system mints `cdqnStar` proportional to the complexity of the organization task.
-*   *Philosophy:* You earn energy by organizing your own life.
+*(For the full thermodynamic laws, see `docs/07-ECONOMY.md`)*
 
-### 4.2 The Hardware Constraint (Sybil Defense)
-*   **Pulse Limit:** Minting speed is tied to the **Hardware Salt** (Physical CPU).
-*   **Anti-Spam:** An attacker cannot spin up 1 million VMs to mint currency, because the Pulse rate on virtual hardware is throttled. To spam the network, they would need to perform massive amounts of useful logical work, making the attack economically negative.
+### 4.1 Local Fuel (`cdqnE`)
+*   **Source:** **Entropy Reduction.**
+    *   Transforming a **Kite** (Unsorted Data/Chaos) into a **Ship** (Anchored Logic/Order) releases energy.
+    *   This energy (`cdqnE`) is credited to the Node's local battery.
+*   **Usage:** Powering the **Runtime**. Every tick of a Worker or Agent consumes `cdqnE`.
+*   **Constraint:** You cannot trade `cdqnE`. You must earn it by organizing your own data.
+
+### 4.2 Global Value (`cdqnStar`)
+*   **Source:** **Trade Only.**
+    *   You cannot mint `cdqnStar` locally.
+    *   You acquire it by selling a valid `Ship` (Data/Logic) to another Node that values it.
+*   **Usage:** Buying external services or data from the Mesh.
+*   **Constraint:** Value is derived from **Peer Acceptance**, not local CPU cycles. This prevents "Gold Farming" (creating fake value in a vacuum).
 
 ---
 
