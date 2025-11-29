@@ -1,10 +1,10 @@
 # 03-AGENT: Chronosa & The Entity Model
 
-* **File:** `docs/03-AGENT.md`
-* **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-* **Version:** 1.4 (Void & Consensus Update)
-* **Date:** November 26, 2025
-* **Author:** Christophe Duy Quang Nguyen
+*   **File:** `docs/03-AGENT.md`
+*   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
+*   **Version:** 1.5 (Airlock & Security Update)
+*   **Date:** November 29, 2025
+*   **Author:** Christophe Duy Quang Nguyen
 
 > **The Definition of the Sovereign Self, the Entity Trinity, and the Parasite Model.**
 
@@ -23,6 +23,8 @@
 ## 2. The Entity Model (EM): The Trinity
 
 The system rejects anonymous processes. Every action is performed by a specific class of **Entity** (Resonator) with a defined **Pulse**.
+
+*(For the full technical specification of the Hierarchy, see `docs/06-ENTITY.md`)*
 
 ### 2.1 Workers (The Kinetic Hands)
 *   **Role:** Stateless execution.
@@ -44,7 +46,7 @@ The system rejects anonymous processes. Every action is performed by a specific 
 
 ---
 
-## 3. The Parasite Model: Harvester & Void
+## 3. The Parasite Model: Harvester & Airlock
 
 Chronosa achieves intelligence not by training a massive model, but by **harvesting** logic and managing **ambiguity**.
 
@@ -53,15 +55,17 @@ Chronosa is agnostic to the source of intelligence.
 *   **Agentic Mode:** She launches a headless browser to use free tiers of Big Tech AI.
 *   **Strategy:** "Freeloading." She utilizes the free compute to perform complex reasoning tasks.
 
-### 3.2 The Void Protocol (Anti-Hallucination)
+### 3.2 The Airlock Protocol (Security)
+Because the Harvester interacts with the Hostile Web, it must be isolated to prevent infection (XSS/Payloads).
+*   **The Airlock Module:** The Harvester runs inside a restricted **Module** with **Zero Read Access** to the `OriginCdu`.
+*   **The One-Way Valve:** The Harvester can only emit **Kites** (Untrusted Data) into the Void. It cannot write to Ships.
+*   **Crash Safety:** If the Headless Browser is compromised, the Airlock Module is jettisoned (Deleted) and re-spawned from its Blueprint. The core system remains untouched.
+
+### 3.3 The Void Protocol (Anti-Hallucination)
 When the Host returns ambiguous data (e.g., "Flying Apple"), Chronosa does **not** guess.
-*   **Action:** She deploys a **CDU-Kite** into the **Void (CVM)**.
+*   **Action:** She deploys the data as a **Kite** into the **Void (CVM)**.
 *   **State:** The data is held in "Suspended Judgment" (Floating).
 *   **Resolution:** She waits for more strings (context) to pull the Kite down into a specific World. She never commits to False Logic.
-
-### 3.3 Synthetic Genesis & Minting
-*   **Deep Loop:** Chronosa uses the Host to generate Synthetic Data to test her local logic.
-*   **Economic Generation:** When Chronosa successfully organizes this data (turning Kites into Ships), the reduction in Entropy **Mints `cdqnStar`** (Proof of Logic). This powers the Node.
 
 ---
 
