@@ -2,12 +2,12 @@
 
 *   **File:** `docs/07-ECONOMY.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-*   **Version:** 1.0 (Dual Token & Fatigue Model)
-*   **Date:** November 28, 2025
+*   **Version:** 2.0 (Artifact-Driven Minting)
+*   **Date:** November 30, 2025
 *   **Author:** Christophe Duy Quang Nguyen
 
 > **The Thermodynamic Laws of the Sovereign Mesh.**
-> *Defining the interaction between Local Fuel (`cdqnE`) and Global Value (`cdqnStar`).*
+> *Defining the interaction between Local Fuel (`cdqnE`) and Global Value (`cdqnStar`) via Cryptographic Proofs.*
 
 ---
 
@@ -42,18 +42,22 @@ $$State_{New} = State_{Old} \otimes Resource$$
 
 ### 3.1 Properties
 *   **Scope:** Local Only (Non-Transferable).
-*   **Source:** **Entropy Reduction**.
-    *   Creating Order (Ship) from Chaos (Kite) releases Energy.
-*   **Sink:** **Runtime Execution**.
-    *   Every Pulse (Tick) of a Worker/Agent burns `cdqnE`.
+*   **Sink:** **Runtime Execution**. Every Pulse of a Worker/Agent burns `cdqnE`.
 
-### 3.2 The Homeostatic Quota (Anti-Hoarding)
-To prevent a node from stockpiling infinite energy for a sudden attack, the system mimics biology.
+### 3.2 Source-Weighted Minting (Entropy Reduction)
+Fuel is generated when a Worker organizes data. To prevent "Entropy Farming" (creating fake chaos to fix it), we enforce strict source rules.
 
-*   **The Prediction:** The `SystemModule` calculates a 7-day Moving Average of energy consumption.
-*   **The Cap:** `Max_Storage = Predicted_Need \times 1.5`.
-*   **The Cutoff:** If `Stored_E > Max_Storage`, minting efficiency drops to zero. You cannot store fat you don't need.
-*   **Anomaly Detection:** A sudden +500% spike in generation triggers a "Metabolic Lock," freezing the Runtime until Guardian authorization.
+1.  **Local Source (Difficulty 0):**
+    *   *Action:* Organizing user-generated data.
+    *   *Reward:* **Zero.** Maintenance is its own reward.
+2.  **External Source (Difficulty 1):**
+    *   *Action:* Harvesting and organizing data from the Void (Web).
+    *   *Proof:* The Kite must bear a cryptographic signature from the **Airlock Module**.
+    *   *Reward:* **Mint `cdqnE`.** You are extracting order from the chaos of the world.
+
+### 3.3 The Homeostatic Quota
+*   **The Cap:** You cannot stockpile more than `1.5x` your 7-day average consumption.
+*   **The Cutoff:** If `Stored_E > Max`, minting efficiency drops to zero.
 
 ---
 
@@ -63,50 +67,49 @@ To prevent a node from stockpiling infinite energy for a sudden attack, the syst
 
 ### 4.1 Properties
 *   **Scope:** Global (Transferable).
-*   **Source:** **Proof of Trade (Barter).**
-    *   Minted *only* when a successful Atomic Swap (Data for Token) occurs between two unique Nodes.
-*   **Sink:** **Purchasing Services.**
-    *   Buying a "News Deck" or a "Stock Predictor" from another Ronin.
+*   **Sink:** Purchasing Decks/Services from the Mesh.
 
-### 4.2 The Fatigue Model (Anti-Mafia)
+### 4.2 Proof of Trade (Minting)
+`cdqnStar` is minted *only* via the **Atomic Barter Protocol** (see `docs/05-NETWORK.md`).
+1.  **The Event:** A successful trade of a valid Deck.
+2.  **The Artifact:** A **`Cdu::Certificate`** signed by both parties, referencing the Deck's `Manifest`.
+3.  **The Mint:** The `Treasurer` accepts the Certificate and mints `cdqnStar`.
+
+### 4.3 The Fatigue Model (Anti-Mafia)
 To prevent "Wash Trading" (Node A selling garbage to Node B repeatedly), we enforce **Interaction Fatigue**.
-
 *   **The Curve:** Minting efficiency decays with frequency per Peer.
-    *   **Trade #1:** 100% Minting.
-    *   **Trade #2:** 50% Minting.
-    *   **Trade #3:** 10% Minting.
-    *   **Trade #4+:** 0% Minting.
+    *   Trade #1: 100% Value.
+    *   Trade #4+: 0% Value.
 *   **Recovery:** Efficiency recovers linearly over 24 hours.
-*   **Result:** A Mafia requires millions of unique IPs to farm value, making the attack economically unfeasible.
+*   **Result:** A Mafia requires millions of unique Node IDs (hardware) to farm value.
 
 ---
 
 ## 5. The Thermodynamic Tax (The Link)
 
-This is the central security mechanism.
-**"It costs Energy to make Money."**
+This is the central security mechanism. **"It costs Energy to make Money."**
 
-*   **The Rule:** Executing a Trade Protocol (Encryption, Handshake, Transfer) burns **`cdqnE`** (Real Electricity).
+*   **The Rule:** Executing the **Tether-Shake** (Handshake, Encryption, Transfer, Audit) burns **`cdqnE`** (Real Electricity).
 *   **The Profit Equation:**
     $$Profit = Value(Star_{Earned}) - Cost(E_{Burned})$$
-*   **The Trap:**
-    *   If you Wash Trade (Fake), you hit the **Fatigue Limit**.
-    *   `Star_Earned` drops to 0.
-    *   `E_Burned` remains constant.
-    *   **Result:** The attacker burns real electricity for zero gain.
+*   **The Trap:** If you Wash Trade, you hit the **Fatigue Limit**. `Star` drops to 0, but `E_Burned` remains constant. The attack becomes economically negative.
 
 ---
 
 ## 6. The Economic Entities
 
 ### 6.1 `Agent::Treasurer` (System Root)
-*   **Role:** The Central Bank.
-*   **Task:** Manages the `cdqnE` Homeostatic Quota and credits the Origin.
+*   **Role:** The Sovereign Accountant.
+*   **Task:** Verifies `Cdu::Certificate` and `EntropyReceipt`, credits the Origin, and sets the Homeostatic Quota.
 
 ### 6.2 `Bot::Bursar` (Module Level)
 *   **Role:** The Payroll Manager.
-*   **Task:** Requests `cdqnE` grants from the Treasurer and distributes to local Workers.
+*   **Task:** Requests `cdqnE` grants from the Treasurer and distributes to local Agents/Workers.
 
 ### 6.3 `Agent::Trader` (Network Level)
 *   **Role:** The Merchant.
-*   **Task:** Negotiates prices in `cdqnStar`, tracks Peer Fatigue, and executes Atomic Swaps.
+*   **Task:** Negotiates prices, tracks Peer Fatigue, and manages the `Cdu::Certificate` signing process.
+
+---
+
+> *"Energy is burned locally. Value is recognized globally."*
