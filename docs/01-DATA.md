@@ -1,6 +1,6 @@
 # 01-DATA: The Origami Protocol
 
-*   **File:** `docs/01-DATA-v2.0.md`
+*   **File:** `docs/01-DATA.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Version:** 2.0 (Consolidated Master)
 *   **Date:** November 29, 2025
