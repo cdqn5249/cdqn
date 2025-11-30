@@ -2,23 +2,23 @@
 
 *   **File:** `docs/06-ENTITY.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-*   **Version:** 1.2 (System Holarchy)
-*   **Date:** November 28, 2025
+*   **Version:** 2.0 (Adaptive Holarchy & Staff Update)
+*   **Date:** November 30, 2025
 *   **Author:** Christophe Duy Quang Nguyen
 
 > **Technical Specification for the Entity Model (EM).**
-> *Defining the Fractal Hierarchy of Modules, Agents, Bots, and Workers, and their physical persistence in the Lattice.*
+> *Defining the Fractal Hierarchy, the Adaptive Pulse, and the System Staff.*
 
 ---
 
 ## 1. Philosophy: The Fractal Holarchy
 
-We reject flat, anonymous actor systems (like standard Erlang/Akka). We adopt a **Fractal Holarchy**.
+We reject flat, anonymous actor systems. We adopt a **Fractal Holarchy**.
 
 ### 1.1 The End of Anonymity
-In CDQN, every executing process must have a **Cryptographic Lineage**.
+Every executing process must have a **Cryptographic Lineage**.
 *   **Traceability:** If a process crashes or burns excess energy, we must know exactly *who* spawned it.
-*   **Sovereignty:** Identity is not a random UUID. It is a Semantic Path rooted in the `OriginCdu`.
+*   **Identity:** A Semantic Path rooted in the `OriginCdu` (e.g., `Origin::Finance::Trader`).
 
 ### 1.2 The Holon Principle
 Every entity is simultaneously a **Whole** (to its children) and a **Part** (to its parent).
@@ -29,115 +29,85 @@ Every entity is simultaneously a **Whole** (to its children) and a **Part** (to 
 
 ## 2. The Entity Types (The Quartet)
 
-We classify existence into four fundamental forms, ranging from static infrastructure to kinetic execution.
+We classify existence into four fundamental forms.
 
-### 2.1 The Module (The Container / Root)
-*   **Analogy:** The Building / The Hull.
+### 2.1 The Module (The Container)
+*   **Analogy:** The Hull / The Building.
 *   **Role:** **Supervision & Resource Allocation.**
-*   **Identity:** Root Level (e.g., `FinanceDeck`). anchored to the `SystemNode`.
 *   **Physics:**
-    *   **The Tank:** Holds the master Energy Budget (`cdqnStar`) for its entire subtree.
-    *   **The Bulkhead:** Acts as a failure barrier. If a Module crashes, it resets internally; it does not crash the Node.
-*   **Use Case:** Deployable "Decks" or Libraries.
+    *   **The Tank:** Holds the `cdqnE` (Fuel) budget for its subtree.
+    *   **The Lens:** Holds the `Cdu::Registry` (RAM Index) to route signals to sleeping children.
+*   **Use Case:** Deployable Decks (e.g., `FinanceDeck`).
 
-### 2.2 The Agent (The Architect)
-*   **Analogy:** The Brain / The Captain.
-*   **Role:** **Strategy & Decision.**
-*   **Parent:** Spawned by a Module or another Agent.
-*   **Physics:** **High Cost.** Agents simulate futures (Shadow Waves) and manage ambiguity.
-*   **Use Case:** Chronosa, Strategic Planning, User Interaction.
+### 2.2 The Agent (The Mind)
+*   **Analogy:** The Architect / The Captain.
+*   **Role:** **Strategy & Reasoning.**
+*   **Physics:** **Adaptive Pulse.**
+    *   Unlike standard actors, Agents can "Time Dilitate."
+    *   They can burn extra `cdqnE` to run internal **Shadow Waves** (Simulations) before committing an action.
+*   **Use Case:** Chronosa, Trader, Orchestrator.
 
-### 2.3 The Bot (The Machine)
-*   **Analogy:** The Organs / The Nervous System.
-*   **Role:** **Maintenance & State Management.**
-*   **Parent:** Spawned by Module or Agent.
-*   **Physics:** **Medium Cost.** They run steady pulses (listeners, cron jobs).
-*   **Use Case:** The Diplomat (Network Listener), The Janitor (Cleanup), The Harvester (Scraper).
+### 2.3 The Bot (The Organs)
+*   **Analogy:** The Nervous System / The Staff.
+*   **Role:** **Infrastructure & Maintenance.**
+*   **Physics:** **Steady Pulse.** Rigid State Machines.
+*   **Use Case:**
+    *   `Bot::Registrar`: Manages the `Registry` index.
+    *   `Bot::Bursar`: Manages the `cdqnE` payroll.
+    *   **`Bot::Auditor`**: Verifies `Cdu::Manifest` integrity (Kelly's Lemma).
+    *   **`Bot::Diplomat`**: Manages P2P handshakes.
 
 ### 2.4 The Worker (The Hand)
 *   **Analogy:** The Tool.
 *   **Role:** **Pure Execution.**
-*   **Parent:** Spawned by any Entity.
-*   **Physics:** **Low Cost.** They are stateless, fire-and-forget execution units.
-*   **Use Case:** Hashing, Math, Rendering, Parsing HTML.
+*   **Physics:** **Low Cost.** Stateless, Fire & Die.
+*   **Use Case:** Hashing, Math, Rendering, Web Scraping.
 
 ---
 
 ## 3. The Formal Hierarchy
 
-To ensure **Modularity** and **Performance**, we define the hierarchy rules mathematically.
-
 ### 3.1 Identity Composition (Lineage)
 Identity is a Recursive Path.
 $$ID_{Child} = ID_{Parent} + "::" + Hash(Role)$$
 
-*   **Example Lineage:**
-    1.  **Origin:** `OriginCdu` (The Node)
-    2.  **Module:** `Origin::FinanceDeck` (The Application)
-    3.  **Agent:** `Origin::FinanceDeck::SniperAgent` (The Strategist)
-    4.  **Bot:** `Origin::FinanceDeck::SniperAgent::TickerListener` (The Sensor)
-    5.  **Worker:** `...::TickerListener::ParseJSON` (The Hand)
-
 ### 3.2 Resource Cascade (The Waterfall)
-Resources (`cdqnStar`) flow down. Penalties bubble up.
-1.  **Allocation:** The Kernel gives `FinanceDeck` 1000 Star. The Module distributes this to its Agents.
-2.  **The Parent Pay Principle:** A Child does not own resources. It burns its Parent's budget.
-3.  **Containment:** If a Worker leaks memory or energy, the Parent Agent detects the drain and kills the Worker.
+1.  **Allocation:** The `Treasurer` (System) grants `cdqnE` to a `Module`.
+2.  **Distribution:** The Module's `Bursar` allocates fuel to Agents.
+3.  **Parent Pay:** A Child does not own resources. It burns its Parent's tank.
+4.  **Containment:** If a Worker loops, the Parent runs dry and the Kernel kills the branch.
 
 ---
 
 ## 4. The Physics: Pulse & Resonance
 
 ### 4.1 Virtual Existence (Hibernation)
-To run on consumer hardware (Laptops) rather than Cloud Clusters, Entities use **Virtual Existence**.
-*   **Active State:** Loaded in RAM. Processing Pulses.
-*   **Hibernation State:** Serialized to Disk (Lattice). Zero RAM Cost.
-*   **The Trigger:**
-    *   `if energy < threshold` -> **Die**.
-    *   `if idle_time > 10s` -> **Hibernate**.
-    *   `if signal_received` -> **Wake**.
+To run on consumer hardware, Entities use **Virtual Existence**.
+*   **Active:** Loaded in RAM. Burning Fuel.
+*   **Hibernating:** Serialized to Lattice (`Cdu::Snapshot`). Zero Cost.
+*   **The Registrar:** When a Signal enters a Module, the `Bot::Registrar` checks its RAM index (`Phase -> ID`). It wakes up **only** the relevant entities. (No disk scanning).
 
 ### 4.2 The Signal (Echo)
-Entities do not call functions directly. They emit Signals.
-*   **Mechanism:** An Entity emits a `Signal { phase, payload }`.
-*   **Resonance:** Only Entities aligned to that **Phase** (Context) receive the signal.
-*   **Backpressure (Dissonance):** If a target Mailbox is full, it reflects the signal with **Dissonance**, forcing the sender to throttle.
+Entities do not call functions. They emit Signals.
+*   **Resonance:** Only Entities aligned to the Signal's **Phase** receive it.
+*   **Backpressure (Dissonance):** If a Mailbox is full, the Signal reflects with **Dissonance**, forcing the sender to throttle.
 
 ---
 
 ## 5. Persistence: The Lattice Connection
 
-The Runtime (RAM) is volatile. The Lattice (Disk) is eternal.
 Every Entity is a projection of a **Card Data Unit (CDU)**.
 
-### 5.1 The Origin Root
-Every Node begins with the **`OriginCdu`**. This is the Genesis Block of your Personal Sovereignty. All Modules are anchored as children of the Origin.
+### 5.1 Reserved Subtypes
+*   **`Cdu::Blueprint`:** The Code (WASM/Hash). Immutable.
+*   **`Cdu::Snapshot`:** The State (RAM Dump). Mutable.
+*   **`Cdu::Registry`:** The Routing Table.
+*   **`Cdu::Manifest`:** The Structural Integrity Proof (Vertex/Edge counts).
 
-### 5.2 Reserved CDU Subtypes
-The Kernel recognizes three specific CDU layouts for Entity Management:
-
-#### A. The Blueprint (`Cdu::Blueprint`)
-*   **Role:** The DNA / Class Definition.
-*   **Content:** The WASM binary or Rust dylib hash, default config, and permissions.
-*   **Immutability:** Strict. (Changing code = New Prime).
-
-#### B. The Snapshot (`Cdu::Snapshot`)
-*   **Role:** The Save File / Hibernation Pod.
-*   **Content:**
-    *   **Target:** Link to the `Blueprint`.
-    *   **Memory:** Serialized vector of internal variables.
-    *   **Mailbox:** Pending messages.
-    *   **Energy:** Remaining budget.
-*   **Mutability:** Fluid. Overwritten on Hibernation.
-
-#### C. The Ledger (`Cdu::Ledger`)
-*   **Role:** The Black Box.
-*   **Content:** Security logs (Guardian Violations) and Economic history (Minting).
-*   **Mutability:** Append-Only.
-
-### 5.3 The Inflation/Deflation Cycle
-1.  **Inflation (Wake):** Loader reads `Snapshot` from Disk -> Deserializes to RAM.
-2.  **Deflation (Sleep):** Runtime Serializes RAM -> Writes `Snapshot` to Disk.
+### 5.2 The Inflation/Deflation Cycle
+1.  **Inflation (Wake):** `Worker::Waker` reads `Snapshot`, deserializes to RAM.
+2.  **Execution:** Entity runs, burns `cdqnE`.
+3.  **Deflation (Sleep):** Entity detects idle, serializes to `Snapshot`, frees RAM.
 
 ---
 
@@ -145,10 +115,10 @@ The Kernel recognizes three specific CDU layouts for Entity Management:
 
 *   **The Interceptor:** Before any Entity executes an **Effect** (Disk Write, Network Request), the Runtime invokes the Guardian.
 *   **Hierarchy of Norms:**
-    1.  **Golden Layer:** Hardware/Existential Safety.
-    2.  **Silver Layer:** Legal/Constitutional Constraints.
-    3.  **Iron Layer:** Reputation/Social Constraints.
-*   **Veto:** If an action violates a Norm, the Guardian freezes the Entity and logs the attempt in the `Ledger`.
+    1.  **Golden:** Existential/Hardware Safety.
+    2.  **Silver:** Legal/Constitutional.
+    3.  **Iron:** Reputation.
+*   **The Airlock:** Network-facing entities (Harvester) run in restricted Modules with **Zero Read Access** to the Core.
 
 ---
 
