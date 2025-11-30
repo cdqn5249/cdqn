@@ -2,11 +2,11 @@
 
 *   **File:** `docs/05-NETWORK.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-*   **Version:** 1.2 (Dual-Token Alignment)
-*   **Date:** November 29, 2025
+*   **Version:** 2.0 (Holographic Integrity & Atomic Barter)
+*   **Date:** November 30, 2025
 *   **Author:** Christophe Duy Quang Nguyen
 
-> **Protocols for Connecting, Translating, and Trading in the Dark Forest.**
+> **Protocols for Connectivity, Integrity, and Trade in the Dark Forest.**
 
 ---
 
@@ -36,48 +36,56 @@ Before sending a message to the Shared Space:
 2.  **Translation:** She maps your Private Concept (e.g., anchored to $P_{7}$) to the Public Concept (e.g., anchored to $P_{19}$).
 3.  **Transmission:** The message is sent using **Public Coordinates**.
 
-### 2.2 The Drift Monitor
-Chronosa periodically checks the distance between Private and Public meanings.
-*   *Action:* If the Public Consensus shifts (Language evolves), she updates her internal Translation Table. The User does not need to rewrite their data.
+---
+
+## 3. The Structural Defense (Holographic Integrity)
+
+In a P2P network, you cannot trust the sender. You must verify the **Structure** of the data.
+
+### 3.1 The Airlock Protocol
+All incoming data is received into a **Restricted Module (Airlock)**. It has no read access to the Node's core.
+
+### 3.2 The Holographic Manifest Check (Kelly's Lemma)
+Every Deck transfer must include a **`Cdu::Manifest`**. The Receiver's `Bot::Auditor` performs a mathematical census before accepting the data.
+1.  **Counting:** The Auditor counts the actual Vertices ($N$) and Tethers ($E$) in the received bundle.
+2.  **Reconstruction:** It verifies the **Degree Sequence** against the Manifest.
+3.  **Closure:** It ensures the Graph is **Closed** (no Tethers pointing to missing nodes).
+4.  **Verdict:** If the math fails, the Deck is rejected as "Corrupted" or "Tampered."
 
 ---
 
-## 3. The Dark Forest Defense (Solving DDoS)
+## 4. The Atomic Barter Protocol (Trade)
 
-The network assumes a hostile environment (The Internet/Abyss).
+We replace "Trust" with "Cryptographic Proof."
 
-### 3.1 Connection States
-*   **SILENT (Default):** The Node ignores all external signals. Invisible to scanners.
-*   **OPEN:** The Node emits a Beacon to solicit trade.
-*   **GUARDED:** The Node listens only to whitelisted identities.
+### 4.1 The Handshake (Tether-Shake)
+**Scenario:** Alice sends a Deck to Bob.
+1.  **Proposal:** Alice sends `Signal::Offer` with the Deck's Manifest.
+2.  **Review:** Bob's Diplomat checks the Manifest against his **Fatigue Limit** (Have we traded too much with Alice?).
+3.  **Transfer:** Alice sends the encrypted Deck to Bob's Airlock.
+4.  **Audit:** Bob's Auditor runs the **Manifest Check** (Section 3.2).
 
-### 3.2 Consensual Connection Protocol (CCP)
-1.  **The Knock:** Sender emits a micro-signal: `[Signature] + [Intent]`.
-2.  **The Diplomat:** The Receiver's Bot evaluates the Knock against the **White/Black Lists**.
-3.  **The Tunnel:** If accepted, a P2P encrypted tunnel is opened. If rejected, silence.
+### 4.2 The Certification (Minting)
+If the Audit passes:
+1.  **Signing:** Bob signs a partial **`Cdu::Certificate`**: *"I certify I received valid Deck [Hash]."*
+2.  **Exchange:** Bob sends the Certificate to Alice.
+3.  **Finalization:** Alice signs it. The Certificate is now a valid **Proof of Trade**.
 
 ---
 
-## 4. The Economic Interface
+## 5. The Economic Interface
 
-We reject "Proof of Work" (Burning Electricity) in favor of **Proof of Logic** (Creating Order) and **Proof of Trade** (Barter).
+*(For full physics, see `docs/07-ECONOMY.md`)*
 
-*(For the full thermodynamic laws, see `docs/07-ECONOMY.md`)*
+### 5.1 Local Fuel (`cdqnE`)
+*   **Source:** **Entropy Reduction.** Organizing Chaos (Kites) into Order (Ships).
+*   **Constraint:** Only **External Entropy** (verified by Airlock signature) generates fuel. You cannot mint fuel by shuffling your own files.
 
-### 4.1 Local Fuel (`cdqnE`)
-*   **Source:** **Entropy Reduction.**
-    *   Transforming a **Kite** (Unsorted Data/Chaos) into a **Ship** (Anchored Logic/Order) releases energy.
-    *   This energy (`cdqnE`) is credited to the Node's local battery.
-*   **Usage:** Powering the **Runtime**. Every tick of a Worker or Agent consumes `cdqnE`.
-*   **Constraint:** You cannot trade `cdqnE`. You must earn it by organizing your own data.
-
-### 4.2 Global Value (`cdqnStar`)
+### 5.2 Global Value (`cdqnStar`)
 *   **Source:** **Trade Only.**
-    *   You cannot mint `cdqnStar` locally.
-    *   You acquire it by selling a valid `Ship` (Data/Logic) to another Node that values it.
-*   **Usage:** Buying external services or data from the Mesh.
-*   **Constraint:** Value is derived from **Peer Acceptance**, not local CPU cycles. This prevents "Gold Farming" (creating fake value in a vacuum).
+*   **Mechanism:** The `Treasurer` accepts valid **`Cdu::Certificates`** to mint `cdqnStar`.
+*   **Constraint:** **Interaction Fatigue.** Repeated trades with the same Peer yield diminishing returns, preventing "Gold Farming" (Wash Trading).
 
 ---
 
-> *"We speak a common language in public, but we keep our own counsel in private."*
+> *"Trust is not required. Mathematics is sufficient."*
