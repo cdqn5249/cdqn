@@ -4,8 +4,8 @@
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Location:** Da Lat, Vietnam
-*   **Date:** November 30, 2025
-*   **Status:** `Draft v1.1` (Foundation Research)
+*   **Date:** December 3, 2025
+*   **Status:** `Draft v1.2` (Updated with Dec 2025 Economic Data)
 
 > **The Economic Physics of the Artificial Entity Era.**
 > *An objective analysis of the "Working Sector Shock" through the lens of Thermodynamics, Timeline Evolution, and Automation Theory.*
@@ -31,7 +31,7 @@ The Human Worker (Biological Entity or **BE**) operates on a high-cost metabolic
 
 ### 2.2 The Artificial Advantage
 The Robot/Model (Artificial Entity or **AE**) operates on an electric substrate.
-*   **Cost Efficiency:** According to forecasts by *Goldman Sachs* and *RethinkX*, the operating cost of a humanoid robot is trending toward **$3.00 USD/hour** (amortized over a 5-year lifespan).
+*   **Cost Efficiency:** According to forecasts by *Goldman Sachs* and *RethinkX* (validated by 2025 deployment data), the operating cost of a humanoid robot is trending toward **$3.00 USD/hour** (amortized over a 5-year lifespan).
 *   **Availability:** An AE offers 24/7 availability with zero downtime for sleep or illness.
 
 **Conclusion:** Once an AE achieves capability parity in a task, the BE becomes economically obsolete due to thermodynamic constraints. This is a physics problem, not a policy problem.
@@ -48,9 +48,9 @@ The shock is not instantaneous. It follows a predictable trajectory of **Capabil
 *   **Impact:** The "Junior" white-collar role evaporates. Entry-level knowledge work is automated. The internet becomes saturated with synthetic content (The Dark Forest).
 
 ### Phase II: The Physical Penetration (2026–2028)
-*   **Target:** Unstructured Manual Labor (Warehousing, Delivery, Construction).
+*   **Target:** Unstructured Manual Labor and Civic Duties.
 *   **Mechanism:** VLA (Vision-Language-Action) models enable Humanoid Robots to navigate human spaces without retrofitting.
-*   **Impact:** The breakdown of the "Blue Collar Safety Net." Labor shortages in trades ease, but wages in these sectors begin to decouple from inflation.
+*   **Impact:** The breakdown of the "Blue Collar Safety Net." Robots move from private warehouses to public spaces (Security, Customs, Last-Mile Delivery), displacing state and service workers.
 
 ### Phase III: The Structural Realignment (2028+)
 *   **Target:** Complex Management and Strategic Execution.
@@ -63,15 +63,15 @@ The shock is not instantaneous. It follows a predictable trajectory of **Capabil
 
 Why does this lead to stagnation rather than utopia? The answer lies in the **Displacement-Reinstatement Gap**.
 
-### 4.1 The Acemoglu Principle
-Nobel Laureates Daron Acemoglu and Simon Johnson define two forces:
-1.  **Displacement:** Technology replacing human tasks.
-2.  **Reinstatement:** Technology creating new, complex tasks that require humans.
+### 4.1 The Cognitive Pincer (The IntuitionLabs Data)
+As of December 2025, data confirms the **"Junior Wipeout."**
+*   **The Statistic:** **66%** of global enterprises have cut entry-level hiring specifically due to AI integration (*IntuitionLabs Report, Dec 2025*).
+*   **The Reality:** The apprenticeship model is broken. Companies are using AI to replace "learning" roles with "execution" roles. We are destroying the path to expertise.
 
-### 4.2 The Imbalance
-Current AI fits the profile of **"So-So Automation."** It is highly effective at *Displacement* but fails to generate *Reinstatement* at a matching speed.
-*   **The Broken Loop:** The economy destroys wage-paying roles (Demand) faster than it creates new value sectors.
-*   **Result:** A decoupled economy where **Productivity skyrockets** (due to AEs) while **Median Income stagnates** (due to BE obsolescence).
+### 4.2 The Physical Pincer (Civic Displacement)
+The shock has breached the physical barrier.
+*   **The Deployment:** Humanoid robots (e.g., UBTech Walker S2) are now deploying in **Civic Roles** such as border crossings and security checkpoints.
+*   **The Shift:** Automation is no longer hidden in factories. It is replacing the "Buffer Jobs" (guards, inspectors) that previously absorbed displaced industrial workers. The "Physical Safety Net" is eroding.
 
 ---
 
@@ -81,7 +81,7 @@ If AEs create infinite supply of execution, what remains scarce?
 
 The **NIST AI Risk Management Framework** confirms that Generative AI is probabilistic. It is prone to "Hallucination" and "Bias."
 *   **The Legal Gap:** An algorithm cannot be sued. A robot cannot be jailed. An AE has no "Skin in the Game."
-*   **The Value Shift:** As the cost of *Generation* falls, the value of *Verification* rises. The market stops paying for "Labor" (Input) and begins paying exclusively for "Liability" (Risk Acceptance).
+*   **The Value Shift:** As the cost of *Generation* falls, the value of *Verification* rises. The market stops paying for "Labor" (Input) and begins paying exclusively for **"Liability"** (Risk Acceptance).
 
 ---
 
@@ -90,34 +90,34 @@ The **NIST AI Risk Management Framework** confirms that Generative AI is probabi
 There is no single determined future. We observe four potential trajectories for the human workforce:
 
 ### Scenario A: Managed Dependence (The State Solution)
-*   **Mechanism:** Governments tax Automation Capital to fund Universal Basic Income (UBI) or Need-Based Subsidies.
-*   **Outcome:** Stability is maintained. The population survives but relies entirely on State allowances. Economic mobility freezes.
+*   **Mechanism:** Governments tax Automation Capital to fund Universal Basic Income (UBI).
+*   **Outcome:** Stability is maintained. The population survives but relies entirely on State allowances. Agency is lost.
 
 ### Scenario B: Hyper-Productivity (The Centaur Model)
 *   **Mechanism:** A small elite of highly skilled humans leverage AI to perform the work of hundreds.
-*   **Outcome:** Extreme inequality. The "10x Engineer" becomes the "1000x Engineer." The middle class hollows out completely, leaving only Owners and Super-Users.
+*   **Outcome:** Extreme inequality. The "1000x Engineer" replaces the department.
 
 ### Scenario C: The Liability Economy (The Sovereign Solution)
 *   **Mechanism:** A new market emerges based on **Human Verification**. Humans are paid not to *do* work, but to *sign* for it—providing the legal and ethical guarantee that machines cannot.
 *   **Outcome:** A shift from "Laborer" to "Officer/Auditor." Value is derived from Reputation and Identity Lineage.
 
 ### Scenario D: Systemic Instability (The Friction Scenario)
-*   **Mechanism:** Regulatory lag prevents effective taxation or adaptation. Wages collapse before social safety nets are deployed.
-*   **Outcome:** Civil unrest, fragmentation of the internet into "Human-Only" enclaves, and a rejection of digital integration (Neo-Luddism).
+*   **Mechanism:** Regulatory lag prevents effective taxation. Wages collapse before safety nets are deployed.
+*   **Outcome:** Civil unrest and fragmentation of the internet into "Human-Only" enclaves.
 
 ---
 
 ## 7. Conclusion
 
-The "Working Sector Shock" is the permanent decoupling of biological labor from economic value. The timeline suggests a rapid acceleration of this trend through 2028. Solutions must move beyond "Upskilling" (which competes with AI) and focus on "Reskilling" into domains where Biology holds a structural advantage: **Liability, Empathy, and Sovereignty**.
+The "Working Sector Shock" is the permanent decoupling of biological labor from economic value. Recent data from late 2025 confirms that both cognitive and civic physical roles are being automated faster than new roles are created. Solutions must move beyond "Upskilling" and focus on **"Reskilling"** into domains where Biology holds a structural advantage: **Liability, Empathy, and Sovereignty**.
 
 ---
 
 ### 📂 Bibliography & References
 
-1.  **Acemoglu, D., & Restrepo, P.** (2019). *"Robots and Jobs: Evidence from US Labor Markets."* Journal of Political Economy.
-2.  **Acemoglu, D., Johnson, S.** (2023). *"Power and Progress."*
+1.  **Acemoglu, D., & Restrepo, P.** (2019). *"Robots and Jobs."*
+2.  **IntuitionLabs.** (Dec 2025). *"AI’s Impact on Graduate Jobs & Entry Level Hiring."*
 3.  **International Monetary Fund (IMF).** (2024). *"Gen-AI: Artificial Intelligence and the Future of Work."*
-4.  **National Institute of Standards and Technology (NIST).** (2023). *"AI Risk Management Framework (AI RMF 1.0)."*
-5.  **RethinkX.** (2021/2024). *"Rethinking Labor" and Cost Curve Forecasts.*
-6.  **Ministry of Industry and Information Technology (MIIT), China.** (2023). *"Robot+ Application Action Plan."*
+4.  **National Institute of Standards and Technology (NIST).** (2023). *"AI Risk Management Framework."*
+5.  **RethinkX.** (2021/2024). *"Rethinking Labor."*
+6.  **UBTech / MIIT China.** (Dec 2025). *Announcements regarding Walker S2 deployment in Guangxi.*
