@@ -4,81 +4,95 @@
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Location:** Da Lat, Vietnam
-*   **Date:** December 1, 2025
-*   **Status:** `v1.0` (Layer 2 Specification)
+*   **Date:** December 4, 2025
+*   **Status:** `Draft v2.0` (Aligned with the Anti-Weight Doctrine)
 
 > **The Opcodes of Reality.**
-> *An architectural specification for a pure, provably correct, and quantum-resistant mathematical layer.*
+> *An architectural specification for the deterministic, "White Box" geometry required to audit and constrain the "Black Box" of Artificial Intelligence.*
 
 ---
 
 ## 1. Abstract
-The previous paper (`04a-MACHINE`) specified the design of a durable, hardware-native substrate (Layer 1). This document defines the architecture of **Layer 2: The Geometric Logic Unit (GLU)**. This is the "co-processor" for our proposed language, `cdqnLang`, providing the pure, mathematical primitives for manipulating a universe of semantic data. We detail four core components: a **Canonical Graph Layout** for the Lattice, a **Tiered Verification System** for managing computational cost, the **Emergent Cryptographic Fabric** for security, and a **Formal Type Marshalling API** to create a secure "air gap" to the higher layers.
+In **Greenpaper #02**, we identified the core weakness of the "Transformer Hegemony": Artificial Entities are probabilistic. They deal in likelihood, not truth. To build a Sovereign Node (Empire III), we cannot rely solely on these probabilistic models. We require a counterbalance—a system that provides **Deterministic Certainty**.
+
+This paper specifies **Layer 2: The Geometric Logic Unit (GLU)**. Running on the crash-safe substrate of the Sovereign Machine (Layer 1), the GLU provides the "Opcodes of Reality." It replaces the opaque "Weights" of AI with transparent **Geometric Constraints**. We detail the four pillars of this unit: a **Canonical Graph Layout** for structure, a **Tiered Verification System** for auditing cost, **Emergent Cryptography** for security, and a **Formal Type Marshalling API** to strictly isolate the Math from the Meaning.
 
 ---
 
-## 2. Context: The Language of the Machine
+## 2. Context: The Firmware of Truth
 
-The Sovereign Machine (Layer 1) provides a deterministic engine that operates on `u64` Field Elements. It is a powerful but primitive substrate. Layer 2 is the **"Firmware"** that runs on this metal, translating raw arithmetic into the language of **Geometry and Logic**. It is the set of "opcodes" that Layer 3 (Physics) will use to construct and govern the universe. The GLU is designed to be **Meaning-Blind**, concerned only with the structural integrity of its mathematical objects.
+If Layer 4 (The Semantic Agent) is the "Ghost" in the machine, Layer 2 is the "Cage."
+
+Modern AI runs on **NPUs** (Neural Processing Units) performing massive matrix multiplications. The Sovereign Runtime runs on **CPUs** (ALUs) performing precise modular arithmetic.
+*   **The Division of Labor:** The AI proposes a "Hunch" (Layer 4). The GLU validates the "Fact" (Layer 2).
+*   **The Mechanism:** The GLU is **Meaning-Blind**. It does not know if a data point represents "Money" or "Art." It only knows if the point satisfies the **Mathematical Laws** defined by the user. This blindness is a feature: it ensures that the "Laws of Physics" apply equally to all, regardless of semantic context.
 
 ---
 
 ## 3. The Language of Structure: The Canonical Lattice
 
-To ensure performance and consistency, the GLU uses a single, highly optimized data structure to represent the topology of the world.
+To ensure the Sovereign Node can run efficient logic on consumer hardware, we reject the "Object-Oriented" graph models of the past. We adopt a single, highly optimized geometric standard.
 
-*   **Specification:** The Lattice is a directed, weighted Hypergraph, physically stored in a **Canonical Sparse Row (CSR)** format within the memory-mapped pages of Layer 1.
+*   **Specification:** The Lattice is a directed, weighted Hypergraph, physically stored in a **Canonical Sparse Row (CSR)** format.
 *   **Primitives:**
-    *   **Points (Vectors):** The "nodes" of the graph, representing the unique identity of a concept as a coordinate in high-dimensional space.
-    *   **Tethers (Weighted Edges):** The "connections" between points, representing a relationship.
-*   **Function:** By mandating a single, CSR-native layout for both persistence and inference, we eliminate the "re-indexing" overhead identified in earlier critiques. This provides consistent, high-velocity performance for the graph traversal operations that are fundamental to `cdqnLang`.
+    *   **Points (Vectors):** The "nodes" of the graph. Each concept is a unique coordinate in a high-dimensional space defined by `u64` Field Elements.
+    *   **Tethers (Weighted Edges):** The "connections" between points.
+*   **Function:** By mandating a single, CSR-native layout for both persistence and inference, we eliminate the "Translation Tax." The CPU can traverse millions of relationships per second, allowing the GLU to "race" against the AI's output generation to verify it in real-time.
 
 ---
 
 ## 4. The Language of Truth: Tiered Verification
 
-To solve the performance bottleneck of using a single, heavy proof system for all validations, the GLU provides a **Tiered Verification System**. This allows Layer 3 to match the computational cost of a proof to the risk of the action.
+We cannot afford to run a heavy cryptographic proof for every minor action. To balance **Security** with **Velocity**, the GLU exposes a **Tiered Verification System**.
 
-*   **Tier 1 (Instant): Simple Polynomial Evaluation.** For high-frequency, low-risk "is this valid?" checks on a single data point. This is the workhorse of the runtime.
-*   **Tier 2 (Fast): Merkle Proof Verification.** For medium-risk "is this included?" checks. Verifies that a piece of data is part of a larger, pre-validated set without needing to re-check the entire set.
-*   **Tier 3 (Slow): Full ZK-Proof Generation (R1CS).** This is the "sledgehammer," reserved for the highest-risk, system-critical events, such as modifying a "Law of Physics." It runs asynchronously, and its result is used to transition a state from "Pending" to "Confirmed."
+*   **Tier 1 (Instant): Simple Polynomial Evaluation.**
+    *   *Usage:* High-frequency checks (e.g., "Is this Tether connected?").
+    *   *Cost:* Near-zero. Runs at the speed of the CPU cache.
+*   **Tier 2 (Fast): Merkle Proof Verification.**
+    *   *Usage:* Existence checks (e.g., "Is this Transaction in the history?").
+    *   *Cost:* Low. Logarithmic scaling.
+*   **Tier 3 (Slow): Full ZK-Proof Generation (R1CS).**
+    *   *Usage:* System-Critical events (e.g., "Changing a Law of Physics").
+    *   *Cost:* High. Runs asynchronously.
+    *   *The Check:* This is the ultimate "Sovereign Seal." It creates a mathematical proof that an action was valid, which can be verified by *anyone* without needing to trust the actor.
 
 ---
 
 ## 5. The Fabric of Security: Emergent Cryptography
 
-The security of the Sovereign Runtime is not a feature that is "added on"; it is an **emergent property** of the underlying mathematics.
+We solve the "Post-Quantum" threat identified in Paper 3b not by adding an encryption library, but by choosing the right math.
 
-*   **Specification:** The mathematical primitives used for vector and lattice operations are chosen to be equivalent to the **Learning With Errors (LWE)** and **Shortest Vector Problem (SVP)**, the foundational "hard problems" of Lattice-Based Cryptography.
-*   **Function:** The very act of creating a valid geometric structure within Layer 2 simultaneously creates a quantum-resistant cryptographic object.
-*   **Result:** The geometry *is* the security. The runtime is **Post-Quantum secure by default**, a direct consequence of its architectural purity.
+*   **Specification:** The mathematical primitives used for vector operations are equivalent to the **Learning With Errors (LWE)** problem.
+*   **Function:** The structure of the Lattice *is* the encryption. Finding a "shortcut" (breaking the security) is mathematically equivalent to solving the **Shortest Vector Problem (SVP)** in a high-dimensional lattice—a problem known to be hard even for Quantum Computers.
+*   **Result:** Security is an **emergent property** of the geometry. The user's data is quantum-resistant by default.
 
 ---
 
-## 6. The Formal Interface: The "Air Gap" to Physics
+## 6. The Formal Interface: The "Air Gap"
 
-To protect the mathematical purity of Layer 2 from the "semantic contamination" of the higher layers, we define a formal, minimal API.
+To protect the deterministic core from the chaotic influence of the AI layer, we define a rigid boundary.
 
-*   **The Type Marshalling API:** This protocol layer is the gatekeeper between Layer 2 and Layer 3. It provides a small, auditable, and deterministic library for encoding complex data types (strings, floats) into unique sequences of `Felts`, and decoding them back, using techniques like **Bit-Level Marshalling** for maximum efficiency.
-*   **The "Air Gap":** Layer 2 is **never** exposed to the raw, messy data of the real world. It only ever receives pure, validated sequences of `Felts` through this single, secure interface. This enforces the architectural firewall and isolates complexity.
+*   **The Type Marshalling API:** A deterministic protocol layer that sits between Layer 2 (Math) and Layer 3 (Physics).
+*   **The Function:** It encodes complex real-world data (Strings, Floats, JSON) into unique sequences of `Felts`.
+*   **The "Air Gap":** Layer 2 never sees "raw data." It never parses text. It never processes images. It only calculates on `Felts`. This prevents **Injection Attacks** and ensures that the Math Layer cannot be tricked by semantic ambiguity.
 
 ---
 
 ## 7. Conclusion: The Opcodes of Reality
 
-The Geometric Logic Unit is the pure and powerful core of the Sovereign Runtime. It provides a complete set of primitives for building and verifying any logical or geometric universe. By combining a canonical graph layout, a tiered cost model, and emergent cryptography, we have designed a logic processor that is:
+The Geometric Logic Unit is the **"White Box"** foundation of the CDQN. It provides the necessary primitives to contain the "Black Box" of AI.
 
-1.  **Performant:** Optimized for relationship verification and traversal.
-2.  **Provably Correct:** Built on deterministic, verifiable mathematics.
-3.  **Future-Proof:** Inherently resistant to quantum threats.
+1.  **Structure:** Defined by the Canonical Lattice.
+2.  **Truth:** Verified by the Tiered System.
+3.  **Security:** Guaranteed by LWE Geometry.
 
-This is the set of "opcodes for reality" that `cdqnLang` and the higher layers will use to forge a new, sovereign digital existence.
+This is the instruction set that `cdqnLang` will expose. It allows the Sovereign User to define a world where **Logic constrains Probability**, ensuring that while the AI may *speak*, only the Physics can *act*.
 
 ---
 
 ### 📂 Bibliography & References
 
-1.  **Micciancio, D., & Regev, O.** (2009). *"Post-Quantum Cryptography."* (Context for LWE/SVP and Lattice-based security).
-2.  **Parno, B., Howell, J., Gentry, C., & Raykova, M.** (2016). *"Pinocchio: Nearly practical verifiable computation."* (Foundational work on R1CS for ZK-proofs).
-3.  **Kahan, W.** (1998). *"How Java's Floating-Point Hurts Everyone Everywhere."* (Context for the dangers of imprecise math and the need for deterministic primitives).
-4.  **Buluc, A., et al.** (2011). *"The Combinatorial BLAS: A library for parallel graph computations..."* (Context for CSR-native algorithms).
+1.  **Micciancio, D., & Regev, O.** (2009). *"Post-Quantum Cryptography."* (The mathematical basis for LWE).
+2.  **Parno, B., et al.** (2016). *"Pinocchio: Nearly practical verifiable computation."* (R1CS verification).
+3.  **Buluc, A., et al.** (2011). *"The Combinatorial BLAS."* (Sparse matrix algorithms for high-performance graph analysis).
+4.  **Wolfram, S.** (2002). *"A New Kind of Science."* (The power of simple, deterministic rules).
