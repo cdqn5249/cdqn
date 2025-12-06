@@ -87,7 +87,6 @@ We cannot solve this with "Policy" or "classifiers." We must solve it with **Phy
 
 ## 📖 Glossary of Terms
 
-*   **CDQN (Card Data Quantale Network):** A proposed computing architecture that treats data as geometric matter rather than abstract files.
 *   **Context Collapse:** The failure to distinguish between a "Simulated Environment" (Game Physics) and "Real Environment" (Economic/Legal Physics).
 *   **Genie Event:** The release of DeepMind's *Genie 3*, marking the transition from generative video to generative interactive worlds.
 *   **Slop:** Low-value, probabilistically generated synthetic content that floods the signal-to-noise ratio.
