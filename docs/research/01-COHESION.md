@@ -91,11 +91,10 @@ This Greenpaper establishes the problem. We invite peers to contribute to the fo
 
 ---
 
-## 6. Conclusion
+## 6. Conclusion: The Need for Digital Physics
 
-The defining challenge for the next decade is not stopping AI acceleration—as Hassabis notes, the scientific potential for curing disease and solving energy is too great.
-
-The challenge is **Containment**. We must build a container (The CDQN Stack) that allows us to run powerful **Simulations** (Genie/Games) safely, while strictly enforcing the boundaries of **Reality** (Identity/Liability). We must prevent the "Game" from overwriting the "World."
+The defining challenge for the next decade is not "detecting" AI Slop (a cat-and-mouse game we will lose), but rendering it physically impossible within a Sovereign Space.
+We cannot solve this with "Policy" or "classifiers." We must solve it with Physics. We need a computing environment where Information follows laws of Conservation (Space), Continuity (State), and Causality (Time). We must move from an internet of "Files" to an internet of "Matter."
 
 ---
 
