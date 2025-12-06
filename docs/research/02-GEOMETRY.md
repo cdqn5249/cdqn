@@ -89,6 +89,7 @@ This is the foundation for the **Loom Virtual Machine** (Paper 03).
 
 ## 📖 Glossary of Terms
 
+*   **CDQN (Card Data Quantale Network):** A proposed computing architecture that treats data as geometric matter rather than abstract files.
 *   **Grassmannian Manifold:** A geometric space representing all possible subspaces (planes) of a vector space. Used in CDQN for agile reasoning (Liquid Phase).
 *   **HoTT (Homotopy Type Theory):** A mathematical logic where equality is defined as a path between two points. Used for consensus.
 *   **Matroid:** A structure that generalizes the concept of linear independence. Used in CDQN to enforce resource scarcity (no cloning).
