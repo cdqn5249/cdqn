@@ -61,7 +61,7 @@ CDQN is built on three pillars of **Sovereign Engineering**:
 
 ## 5. Licensing & Sovereignty
 
-This project is governed by the **Universal Sovereign Source License (USSL) v1.2**.
+This project is governed by the **Universal Sovereign Source License (USSL) v2.0**.
 
 *   **Open for Genesis:** You are free to study, audit, and build Worlds using this logic.
 *   **Protected Lineage:** The "Structure of the Logic" is protected. Patent trolling or enclosing the math triggers the **Iron Shield Clause** (immediate termination of rights).
