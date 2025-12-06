@@ -129,4 +129,4 @@ This architecture frames the "Computer" not as a tool for processing files, but 
 
 ---
 
-**License:** This document is part of the **CDQN Source Complex** and is governed by the **Universal Sovereign Source License (USSL) v1.2**. See `LICENSE.md` in the repository root for full terms.
+**License:** This document is part of the **CDQN Source Complex** and is governed by the **Universal Sovereign Source License (USSL) v2.0**. See `LICENSE.md` in the repository root for full terms.
