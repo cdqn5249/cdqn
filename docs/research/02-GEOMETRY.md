@@ -5,106 +5,108 @@
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Matroid Theory, Grassmannian Manifolds & Tropical Geometry
 *   **Date:** December 6, 2025
-*   **Status:** `Release Candidate v2.3` (Post-Scaling Consensus)
+*   **Status:** `Release Candidate v2.4` (Algorithmic Hardening)
 
 > **From Probabilistic Entropy to Geometric Physics.**
-> *Establishing a "Liquid Crystal" architecture for computing. We propose a synthesis of Matroid Exclusion (Space), Grassmannian Fluidity (State), and Tropical Causality (Time) to create a substrate where information is rivalrous, agile, and historically immutable.*
+> *Establishing a "Liquid Crystal" architecture for computing. We propose a synthesis of Matroid Rank Logic (Space), Grassmannian Optimization (State), and Tropical Monotonicity (Time) to create a substrate where information is rivalrous, agile, and historically immutable.*
 
 ---
 
 ## 1. Abstract
 
-**Greenpaper 01** established that the "Trust-Entropy Ratio" has collapsed due to the flood of probabilistic "Slop" and interactive hallucinations. The root cause is that current digital information has zero mass: it can be cloned and backdated with zero energy cost.
+**Greenpaper 01** established that the "Trust-Entropy Ratio" has collapsed due to the flood of probabilistic "Slop" and interactive hallucinations. Current AI models generate content with zero marginal cost because digital data lacks "Mass"—it can be cloned and backdated without friction.
 
-Current industry consensus (DeepMind, late 2025) indicates that "Scaling Laws" alone are insufficient to achieve reliable Reasoning and Planning. This paper proposes the mathematical foundation of **`cdqnLang`**: a **Geometric Physics Engine**. We reject the "File" metaphor. Instead, we model data as **Matter** within a high-dimensional Lattice. By enforcing **Matroid Exclusion** (two objects cannot occupy the same space) and **Tropical Causality** (time only moves forward), we create a "Crystalline" substrate where AI Hallucination is **Topologically Impossible**.
-
----
-
-## 2. The Law of Space: Matroid Exclusion
-
-We replace the concept of "Memory Address" with **"Geometric Resource."**
-
-### 2.1 The Mathematics: Matroid Theory
-*   **Definition:** A Matroid defines a set of elements where "Independence" is strictly conserved.
-*   **The CDQN Primitive:** **The Indivisible Dot.**
-    *   In the 10,000-dimension lattice, a "Dot" is a fundamental particle.
-    *   **Rule:** **The Pauli Exclusion Principle.** If a Dot is "bound" to Concept A, it cannot be "bound" to Concept B.
-*   **The Security:** This prevents **Infinite Cloning**. An AI cannot generate 1,000,000 spam agents because it would exhaust the **Rank** of the local Matroid. The geometry physically runs out of space.
+This paper proposes the mathematical foundation of **`cdqnLang`**: a **Geometric Physics Engine**. We move beyond metaphorical descriptions to define the specific algebraic structures that the Loom Virtual Machine (LVM) enforces. By utilizing **Matroid Rank Checks** to prevent data collisions, **Riemannian Optimization** for fluid reasoning, and **Tropical Polynomials** for causal ordering, we create a substrate where "Hallucination" is treated as a **Topological Error** and rejected at the compiler level.
 
 ---
 
-## 3. The Law of Agility: Grassmannian Fluidity
+## 2. The Law of Space: Matroid Rank Logic
 
-A "Crystal" sounds rigid. To ensure the system remains **Agile** and capable of learning (like DeepMind's systems), we introduce **Phase Transitions**.
+We replace the "Memory Address" (which is infinite and overwriteable) with **"Geometric Rank"** (which is finite and collision-resistant).
+
+### 2.1 The Mathematics: Matroid Independence
+*   **Definition:** A Matroid $M = (E, \mathcal{I})$ is a structure that generalizes linear independence.
+*   **The LVM Algorithm:** **Rank-Based Locking.**
+    *   The LVM treats the 10,000-dimension lattice as the ground set $E$.
+    *   When an Entity writes data, it requests a set of basis vectors $A$.
+    *   **The Check:** The LVM calculates the Rank. If $Rank(Existing \cup A) < Rank(Existing) + Rank(A)$, a **Dependency Collision** is detected.
+*   **The Result:** **Simulated Exclusion.**
+    *   Instead of "overwriting" memory, the operation fails.
+    *   This algorithmically enforces "Scarcity." An AI cannot generate 1,000,000 agents because it would exhaust the **Rank Capacity** of the local lattice. The system throws a `Geometric_Exhaustion_Error`.
+
+---
+
+## 3. The Law of Agility: Grassmannian Optimization
+
+To prevent the system from becoming brittle, we introduce a mechanism for **Continuous Reasoning** before the "Lock."
 
 ### 3.1 The Mathematics: Grassmannian Manifolds
-*   **Definition:** The Grassmannian $Gr(k, n)$ is the space of all $k$-dimensional subspaces (planes) in an $n$-dimensional vector space.
-*   **The CDQN Primitive:** **The Rotating Subspace.**
-    *   Data is not a static point; it is a **Plane** cutting through the lattice.
-    *   **Agility:** The AI can **Rotate** this plane continuously. This allows for fluid reasoning ("Is this apple food or tech?") by adjusting the angle of the subspace.
-*   **The Mechanism:** **Liquid Crystal State.**
-    *   *Reasoning Phase (Liquid):* The Subspace rotates freely. Low energy cost.
-    *   *Commit Phase (Solid):* The Subspace "Crystallizes" (locks) into the Matroid. This creates an immutable record.
+*   **Definition:** The Grassmannian $Gr(k, n)$ is the smooth manifold of all $k$-dimensional subspaces in $\mathbb{R}^n$.
+*   **The LVM Algorithm:** **Riemannian Geodesic Descent.**
+    *   Data is stored as a **Subspace** (Plane), not a fixed point.
+    *   **Reasoning Phase:** The AI explores relationships ("Is this apple food or tech?") by moving the subspace along the **Geodesic** of the manifold. This is a continuous optimization process.
+    *   **Commit Phase:** When the AI reaches a decision (local minimum), the LVM **Discretizes** the subspace, locking it into the Matroid (Section 2).
+*   **The Benefit:** We achieve the agility of a Neural Network (continuous weights) with the safety of a File System (discrete storage).
 
 ---
 
-## 4. The Law of Time: Tropical Causality
+## 4. The Law of Time: Tropical Monotonicity
 
-We solve the "Ordering Problem" (Time Travel / Deepfakes) without relying on central clocks.
+We solve the "Ordering Problem" (Deepfakes/Backdating) by using a geometry that only grows in one direction.
 
 ### 4.1 The Mathematics: Tropical Geometry
-*   **Definition:** A geometry based on the **Max-Plus Algebra** where operations are defined by Maximization ($\max$) and Addition ($+$).
-*   **The CDQN Primitive:** **The Tropical Spine.**
-    *   Time is not a number; it is a **Geometric Growth**.
-    *   **Rule:** **Monotonicity.** In Tropical math, a shape can only grow **Outward** (Convex Hull). It is mathematically impossible for the shape to fold back inside itself.
+*   **Definition:** The **Tropical Semiring** $(\mathbb{R} \cup \{-\infty\}, \oplus, \otimes)$ where $x \oplus y = \max(x, y)$ and $x \otimes y = x + y$.
+*   **The LVM Algorithm:** **The Tropical Clock.**
+    *   The Entity's history is modeled as a **Tropical Polynomial**.
+    *   **The Rule:** Because the addition operation is `max()`, the value of the "Time Coordinate" can **never decrease**.
 *   **The Security:** **Anti-Retroactivity.**
-    *   If an attacker tries to "insert" a fake event into the past, the Tropical Geometry rejects it because the "coordinates" are inside the solidified volume.
-    *   This creates a **Time Crystal**—a history that is geometrically verified.
+    *   If an attacker tries to insert a fake event with timestamp $T_{past}$, the Tropical Algebra evaluates: $\max(T_{current}, T_{past}) = T_{current}$.
+    *   The fake event is mathematically absorbed and nullified. It is impossible to alter the **Convex Hull** of the history once it is formed.
 
 ---
 
-## 5. Semantic Consistency: The "Genesis" Basis
+## 5. Semantic Consistency: Path Induction
 
-How do we agree on what "Apple" means across different cultures and devices?
+How do we ensure "Apple" means the same thing across devices without a central dictionary?
 
 *   **The Mathematics:** **Homotopy Type Theory (HoTT).**
-*   **The Rule:** **Equality is a Path.**
-    *   An object is defined by its **Construction Path** through the Lattice.
-    *   *Consensus:* If User A (Vietnam) and User B (France) execute the same Matroid operations in the same Tropical order, they arrive at the **exact same geometric shape**.
-    *   *Result:* Universal Consensus without a central dictionary.
+*   **The LVM Algorithm:** **Path Hashing.**
+    *   In HoTT, "Equality is a Path."
+    *   The LVM identifies an object not by its name, but by the **Cryptographic Hash of its Construction Path** (The sequence of Matroid operations used to create it).
+    *   *Result:* If User A and User B build an "Apple" using the same Axioms ($\mathbb{I}, \mathbb{L}, \mathbb{T}$), the Hash is identical.
+    *   This is **Content-Addressable Meaning**.
 
 ---
 
 ## 6. Conclusion: The Sovereign Substrate
 
-By implementing these three mathematical laws, we transform the computer from a "Symbol Processor" (Python) into a **"Reality Engine"** (CDQN).
+This paper moves beyond metaphors to define the **Algorithmic Constraints** of `cdqnLang`.
 
-1.  **Matroids** give us **Scarcity** (Space).
-2.  **Grassmannians** give us **Agility** (Thought).
-3.  **Tropical Geometry** gives us **Truth** (Time).
+1.  **Matroid Rank** creates algorithmic scarcity (Space).
+2.  **Grassmannian Geodesics** create fluid reasoning (State).
+3.  **Tropical Max-Plus** creates immutable history (Time).
 
-This is the foundation for the **Loom Virtual Machine** (Paper 03).
+By enforcing these algebraic structures at the kernel level, the **Loom Virtual Machine** (Paper 03) renders dangerous AI behaviors (infinite cloning, history rewriting) computationally impossible.
 
 ---
 
 ## 📖 Glossary of Terms
 
-*   **CDQN (Card Data Quantale Network):** A proposed computing architecture that treats data as geometric matter rather than abstract files.
-*   **Grassmannian Manifold:** A geometric space representing all possible subspaces (planes) of a vector space. Used in CDQN for agile reasoning (Liquid Phase).
-*   **HoTT (Homotopy Type Theory):** A mathematical logic where equality is defined as a path between two points. Used for consensus.
-*   **Matroid:** A structure that generalizes the concept of linear independence. Used in CDQN to enforce resource scarcity (no cloning).
-*   **Quantale:** An algebraic structure that handles "Resource Logic" (Linear Logic).
-*   **Tropical Geometry:** A branch of geometry based on `max` and `+` operations. Used in CDQN to model irreversible Time (Crystalline Growth).
+*   **Geodesic:** The shortest path between two points on a curved surface (Manifold). Used for efficient reasoning updates.
+*   **Grassmannian Manifold:** A geometric space representing all possible subspaces. Used to allow "Fluid" reasoning before data is crystallized.
+*   **HoTT (Homotopy Type Theory):** Logic where equality is defined by the existence of a path. Used for verifiable object identity.
+*   **Matroid Rank:** A measure of the "size" or "independence" of a set of vectors. Used to enforce memory limits and prevent overlap.
+*   **Tropical Semiring:** An algebraic structure based on `max` and `+`. Used to enforce irreversible time.
 
 ---
 
 ### 📂 Bibliography & References
 
-1.  **Oxley, J.** (2011). *"Matroid Theory."* (The physics of independence).
-2.  **Maclagan, D. & Sturmfels, B.** (2015). *"Introduction to Tropical Geometry."* (The math of causality).
-3.  **Hassabis, D.** (2025). *"The Need for Hard Constraints in Reasoning."* (Validating the move beyond probability).
-4.  **Absil, P-A., et al.** (2008). *"Optimization Algorithms on Matrix Manifolds."* (Grassmannian agility).
-5.  **Wigner, E.** (1960). *"The Unreasonable Effectiveness of Mathematics in the Natural Sciences."*
+1.  **Oxley, J.** (2011). *"Matroid Theory."* (Standard text on Rank Logic).
+2.  **Absil, P-A., et al.** (2008). *"Optimization Algorithms on Matrix Manifolds."* (Riemannian Optimization).
+3.  **Maclagan, D. & Sturmfels, B.** (2015). *"Introduction to Tropical Geometry."* (Max-Plus Algebra).
+4.  **Speyer, D. & Sturmfels, B.** (2004). *"The Tropical Grassmannian."* (Intersection of fluid and discrete geometry).
+5.  **Univalent Foundations Program.** (2013). *"Homotopy Type Theory."* (Path Induction).
 
 ---
 
