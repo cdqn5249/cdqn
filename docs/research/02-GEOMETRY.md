@@ -3,107 +3,103 @@
 *   **File:** `docs/research/02-GEOMETRY.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
-*   **Context:** Matroid Theory, Grassmannian Manifolds & Tropical Geometry
+*   **Context:** Mathematical Physics & Algebraic Geometry
 *   **Date:** December 6, 2025
-*   **Status:** `Release Candidate v2.4` (HDC Integration)
+*   **Status:** `Greenpaper v2.6` (Research Standard with Glossary)
 
 > **From Probabilistic Entropy to Geometric Physics.**
-> *Establishing a "Liquid Crystal" architecture for computing. We propose a synthesis of Matroid Exclusion (Space), Grassmannian Fluidity (State), and Tropical Causality (Time), implemented via Discrete Hyperdimensional Computing (HDC) to create a substrate where information is rivalrous, agile, and historically immutable.*
+> *A theoretical framework for "Sovereign Computing" based on the synthesis of Matroid Exclusion, Grassmannian Fluidity, and Tropical Causality. We propose that modeling data as "Geometric Matter" rather than "Abstract Files" is the necessary condition for resolving the global Trust-Entropy crisis.*
 
 ---
 
 ## 1. Abstract
 
-**Greenpaper 01** established that the "Trust-Entropy Ratio" has collapsed. The root cause is that current digital information has zero mass: it can be cloned and backdated with zero energy cost.
+**Greenpaper 01** identified the collapse of the "Trust-Entropy Ratio" as a primary threat to the digital economy. Current AI models generate information with zero marginal cost because digital data lacks "Mass"—it is non-rivalrous, cloneable, and ahistorical.
 
-Current industry consensus (DeepMind, late 2025) indicates that "Scaling Laws" alone are insufficient to achieve reliable Reasoning. This paper proposes the mathematical foundation of **`cdqnLang`**: a **Geometric Physics Engine**. We reject the "File" metaphor. Instead, we model data as **Binary Matter** within a high-dimensional Lattice. By enforcing **Matroid Exclusion** (via orthogonality) and **Tropical Causality** (via monotonic accumulation), we create a "Crystalline" substrate where AI Hallucination is **Topologically Impossible**.
+This paper explores a new computational paradigm: **Geometric Physics**. We propose a theoretical architecture where data structures are governed by strict algebraic laws akin to physical conservation. By synthesizing **Matroid Theory** (Space/Exclusion), **Grassmannian Geometry** (State/Fluidity), and **Tropical Geometry** (Time/Causality), we define a "Crystalline" substrate. Within this framework, "Hallucination" and "History Rewriting" are not merely forbidden by policy, but rendered **Topologically Impossible** by the geometry of the system.
 
 ---
 
 ## 2. The Law of Space: Matroid Exclusion
 
-We replace the concept of "Memory Address" with **"Geometric Resource."**
+We investigate replacing the "Memory Address" (infinite/overwriteable) with **"Geometric Rank"** (finite/conserved).
 
-### 2.1 The Mathematics: Matroid Theory
-*   **Definition:** A Matroid defines a set of elements where "Independence" is strictly conserved.
-*   **The CDQN (Card Data Quantale Network) Primitive:** **The Binary Dot.**
-    *   In the 10,000-dimension binary lattice, a "Dot" is a bit.
-    *   **Rule:** **The Pauli Exclusion Principle.** If a subspace is "crystallized" (set to 1), it cannot be redefined without a phase transition.
-*   **The Security:** This prevents **Infinite Cloning**. An AI cannot generate 1,000,000 spam agents because it would exhaust the **Capacity** of the local vector space. The geometry physically runs out of orthogonality.
+### 2.1 Theoretical Basis: Matroid Independence
+*   **Concept:** A Matroid generalizes the concept of linear independence. It defines a structure where resources (basis vectors) are strictly accounted for.
+*   **The Proposed Mechanic:** **The Digital Exclusion Principle.**
+    *   We model the data environment as a finite lattice.
+    *   We apply the **Matroid Rank Function** to every data allocation.
+*   **Research Hypothesis:** If a computational agent attempts to replicate infinitely (e.g., AI Slop), it will exhaust the **Rank** of the local Matroid. This introduces a thermodynamic cost to information generation, solving the "Zero Marginal Cost" problem of current AI.
 
 ---
 
 ## 3. The Law of Agility: Grassmannian Fluidity
 
-A "Crystal" sounds rigid. To ensure the system remains **Agile** and capable of reasoning (like DeepMind's systems), we introduce **Phase Transitions**.
+A purely crystalline system risks rigidity. To support the fluid reasoning required for modern AI, we incorporate **Manifold Geometry**.
 
-### 3.1 The Mathematics: Grassmannian Manifolds
-*   **Definition:** The Grassmannian $Gr(k, n)$ is the space of all possible subspaces (planes) in a vector space.
-*   **The CDQN Primitive:** **The Rotating Subspace.**
-    *   Data is not a static point; it is a **Plane** (Hypervector) cutting through the lattice.
-    *   **Agility:** The AI can **Permute** (Rotate) this plane continuously. This allows for fluid reasoning ("Is this apple food or tech?") by adjusting the angle (Hamming distance) of the subspace.
-*   **The Mechanism:** **Liquid Crystal State.**
-    *   *Reasoning Phase (Liquid):* The Subspace rotates via Cyclic Shifts. Low energy cost.
-    *   *Commit Phase (Solid):* The Subspace "Crystallizes" via XOR/OR operations. This creates an immutable record.
+### 3.1 Theoretical Basis: Grassmannian Manifolds
+*   **Concept:** The Grassmannian $Gr(k, n)$ represents the set of all possible subspaces (planes) within a larger space.
+*   **The Proposed Mechanic:** **Subspace Reasoning.**
+    *   We propose storing semantic meaning not as static vectors, but as **Subspaces**.
+    *   Reasoning is modeled as **Rotation** (Geodesic movement) along the manifold.
+*   **Research Hypothesis:** This allows for "Liquid" reasoning states—where concepts can morph and adapt (Agility)—while retaining "Solid" commit states (Security) when the subspace is crystallized into the Matroid.
 
 ---
 
 ## 4. The Law of Time: Tropical Causality
 
-We solve the "Ordering Problem" (Time Travel / Deepfakes) without relying on central clocks.
+We address the "Ordering Problem" (Time Travel / Deepfakes) without reliance on centralized clocks (NTP/Blockchain).
 
-### 4.1 The Mathematics: Tropical Geometry
-*   **Definition:** A geometry based on the **Max-Plus Algebra** where operations are defined by Maximization ($\max$) and Addition ($+$).
-*   **The CDQN Primitive:** **The Tropical Spine.**
-    *   Time is not a number; it is a **Geometric Accumulation**.
-    *   **Rule:** **Monotonicity.** In Tropical math (implemented via Bitwise OR), a structure can only grow **Outward**. It is mathematically impossible for the shape to fold back inside itself.
-*   **The Security:** **Anti-Retroactivity.**
-    *   If an attacker tries to "insert" a fake event into the past, the Tropical Geometry (Bloom Filter logic) absorbs it. The "Time Coordinate" cannot decrease.
-    *   This creates a **Time Crystal**—a history that is geometrically verified.
+### 4.1 Theoretical Basis: Tropical Geometry
+*   **Concept:** A geometry based on the **Max-Plus Algebra** where addition is defined as Maximization ($\max$) and multiplication as Addition ($+$).
+*   **The Proposed Mechanic:** **The Tropical Spine.**
+    *   We model system history as a **Tropical Polytope**.
+    *   A key property of Tropical Algebra is **Monotonicity**: the "surface" of the history can only grow outward.
+*   **Research Hypothesis:** This creates a **"Time Crystal"** effect. It is mathematically impossible to insert an event "inside" the existing volume of the polytope. This provides a local, offline guarantee of **Immutable History**.
 
 ---
 
-## 5. Semantic Consistency: The "Genesis" Basis
+## 5. Semantic Consistency: Constructive Consensus
 
-How do we agree on what "Apple" means across different cultures and devices?
+How do independent nodes agree on reality without a central dictionary?
 
-*   **The Mathematics:** **Homotopy Type Theory (HoTT).**
+*   **Theoretical Basis:** **Homotopy Type Theory (HoTT).**
 *   **The Rule:** **Equality is a Path.**
-    *   An object is defined by its **Construction Path** through the Lattice.
-    *   *Consensus:* If User A (Vietnam) and User B (France) execute the same Vector operations in the same Tropical order, they arrive at the **exact same Hash**.
-    *   *Result:* Universal Consensus without a central dictionary.
+    *   We define an object not by its label ("Apple"), but by its **Construction Path** through the geometric laws defined above.
+    *   *Hypothesis:* If two sovereign agents execute the same sequence of Geometric Operations, they will derive an identical **Holographic Hash**, guaranteeing consensus.
 
 ---
 
-## 6. Conclusion: The Sovereign Substrate
+## 6. Feasibility & Hardware Agnosticism
 
-By implementing these three mathematical laws using **Hyperdimensional Computing (HDC)**, we transform the computer from a "Symbol Processor" into a **"Reality Engine."**
+While these concepts are advanced, their implementation does not require exotic hardware.
 
-1.  **Matroids** give us **Scarcity** (Space).
-2.  **Grassmannians** give us **Agility** (Thought).
-3.  **Tropical Geometry** gives us **Truth** (Time).
-
-This provides the scientific consensus required to build the **Sovereign Loom** (Paper 03).
+*   **The Bridge:** We utilize **Discrete Hyperdimensional Computing (HDC)** as the engineering isomorphism for these geometries.
+*   **Hardware Mapping:**
+    *   *Matroid Rank* $\approx$ **Hamming Distance** (Popcount).
+    *   *Tropical Max* $\approx$ **Bitwise Accumulation** (OR).
+    *   *Manifold Rotation* $\approx$ **Cyclic Permutation** (Shift).
+*   **Conclusion:** This "Geometric Physics" engine can be executed on any standard **Von Neumann machine** (x86, ARM, RISC-V) capable of bitwise operations, ensuring the proposal is universally accessible.
 
 ---
 
 ## 📖 Glossary of Terms
 
-*   **HDC (Hyperdimensional Computing):** A computing paradigm that computes with high-dimensional vectors (e.g., 10,000 bits) rather than numbers. The engineering basis for CDQN.
-*   **Grassmannian Manifold:** A geometric space representing all possible subspaces. Used in CDQN for agile reasoning (Liquid Phase) via vector permutation.
-*   **HoTT (Homotopy Type Theory):** Logic where equality is defined as a path. Used for consensus.
-*   **Matroid:** A structure that generalizes linear independence. Used to enforce scarcity (orthogonality limits).
-*   **Tropical Geometry:** A branch of geometry based on `max` and `+`. Used to model irreversible Time.
+*   **Grassmannian Manifold:** A geometric space representing all possible subspaces (planes) of a vector space. Used in CDQN to model "Fluid Reasoning" via the rotation of subspaces.
+*   **HDC (Hyperdimensional Computing):** A computing paradigm that operates on large, random binary vectors (e.g., 10,000 bits) rather than numbers. This serves as the practical engineering bridge for the geometric theory.
+*   **HoTT (Homotopy Type Theory):** A mathematical logic system where equality is defined as the existence of a path between two points. Used to establish consensus without central authority.
+*   **Matroid:** A mathematical structure that generalizes the concept of linear independence. Used in CDQN to enforce "Digital Scarcity" and prevent resource collisions.
+*   **Tropical Geometry:** A branch of geometry based on the Max-Plus semiring. Used in CDQN to enforce "Monotonic Time," ensuring history cannot be rewritten or replayed.
 
 ---
 
 ### 📂 Bibliography & References
 
-1.  **Kanerva, P.** (2009). *"Hyperdimensional Computing: An Introduction to Computing in Distributed Representation."* (The bridge between Math and Metal).
-2.  **Oxley, J.** (2011). *"Matroid Theory."*
-3.  **Maclagan, D.** (2015). *"Introduction to Tropical Geometry."*
-4.  **Hassabis, D.** (2025). *"The Need for Hard Constraints in Reasoning."*
-5.  **Kleyko, D., et al.** (2020). *"Vector Symbolic Architectures as a Computing Framework for Nanoscale Hardware."*
+1.  **Oxley, J.** (2011). *"Matroid Theory."* (Foundations of Independence Systems).
+2.  **Maclagan, D. & Sturmfels, B.** (2015). *"Introduction to Tropical Geometry."* (Mathematics of Idempotent Semirings).
+3.  **Kanerva, P.** (2009). *"Hyperdimensional Computing: An Introduction to Computing in Distributed Representation."* (The discrete bridge for geometric computing).
+4.  **Bronstein, M. M., et al.** (2017). *"Geometric Deep Learning: Going beyond Euclidean data."* (IEEE Signal Processing Magazine).
+5.  **Univalent Foundations Program.** (2013). *"Homotopy Type Theory: Univalent Foundations of Mathematics."*
 
 ---
 
