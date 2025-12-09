@@ -3,7 +3,7 @@
 *   **File:** `docs/research/02a-MATHS.md`
 *   **Context:** High-Dimensional Geometry & Probability Theory
 *   **Date:** December 9, 2025
-*   **Status:** `v1.0` (Rigorous Standard / EED Approved)
+*   **Status:** `v1.1` (Security Seeding)
 
 > **The Geometric Substrate.**
 > *We define the mathematical axioms required to treat the Binary System not as an arithmetic calculator, but as a high-dimensional geometric space. We demonstrate how the "Concentration of Measure" phenomenon provides the rigorous foundation for robust, hallucination-free computing.*
@@ -37,6 +37,9 @@ $$
 
 **Engineering Implication:**
 This allows the **LVM** to generate unique IDs, states, and symbols **deterministically** without a central registry (UUID database). The geometry guarantees uniqueness.
+
+**Cryptographic Implication:**
+This high-dimensional space not only provides geometric robustness but also serves as the foundation for the **LWE (Learning With Errors)** problem. The difficulty of finding a specific "secret" vector within this vast sea of near-orthogonal noise vectors makes it computationally hard to reverse-engineer the system's state. As detailed in `03a-METAL`, this allows us to build a post-quantum secure obfuscation layer.
 
 ---
 
@@ -126,6 +129,7 @@ By treating the binary system as a **Hamming Space**, we gain:
 2.  **Gromov, M.** (1983). *"Structure of algebraic actions of infinite groups."* (Geometric Group Theory).
 3.  **Shannon, C. E.** (1948). *"A Mathematical Theory of Communication."* (Definition of Entropy/Information).
 4.  **Kleywegt, A.** (2025). *"The Geometry of High-Dimensional Probability."* (Concentration of Measure proofs).
+5.  **Regev, O.** (2009). *"On Lattices, Learning with Errors, Random Linear Codes, and Cryptography."*
 
 ---
 [^1]: **Note on Notation:** In standard HDC literature, Bundling is often denoted by the summation sign ($+$). In the binary domain, this operation is implemented as bitwise summation followed by a threshold check (Majority Rule) to return the result to the $\{0,1\}$ domain.
