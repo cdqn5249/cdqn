@@ -23,10 +23,10 @@ In **CDQN**, data is **Reactive**. A CDU (Card) carries its own "Valency"—a de
 We replace the Boolean Lattice (Infinite Copying) with a **Quantale** structure to model resources that must be conserved.
 
 ### 2.1 Definition: The Quantale $Q$
-A Quantale is a complete lattice $(Q, \le)$ equipped with an associative binary operation $\&$ (multiplication) that distributes over suprema.
+A Quantale is a complete lattice $(Q, \le)$ equipped with an associative binary operation $\otimes$ (multiplication) that distributes over suprema.
 
 $$
-a \ \& \ (\bigvee_{i} b_i) = \bigvee_{i} (a \ \& \ b_i)
+a \otimes (\bigvee_{i} b_i) = \bigvee_{i} (a \otimes b_i)
 $$
 
 ### 2.2 The "No-Cloning" Theorem
