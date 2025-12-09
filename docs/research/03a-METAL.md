@@ -3,20 +3,20 @@
 *   **File:** `docs/research/03a-METAL.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
-*   **Context:** Layer 1 Specification (The Hardware Abstraction Layer & Signal Processing)
+*   **Context:** Layer 1 Specification (Continuum Memory, Hardware Abstraction, & Signal Processing)
 *   **Date:** December 9, 2025
-*   **Status:** `v3.3` (The Hypervisor Standard)
+*   **Status:** `v3.5` (Ironclad Release)
 
 > **The Physics of the Machine.**
-> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics (Papers 02a-02c) are enforced consistently, maximizing the capabilities of Sovereign Hardware while maintaining compatibility with Consumer Devices via a "Hypervisor" strategy.*
+> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics (Papers 02a-02c) are enforced consistently, implementing a **Continuum Memory System** that unifies "Processing" and "Storage" into a single nested optimization loop capable of infinite scaling on finite silicon.*
 
 ---
 
-## 1. Abstract: The Universal Constant
+## 1. Abstract: The Nested Learning Module
 
-The Loom Virtual Machine (LVM) is designed to be the **"JVM of the Post-AI Era."** Just as the Java Virtual Machine abstracted the CPU to run "Write Once, Run Anywhere" logic, the LVM abstracts the **Entropy** of the underlying system to run **"Compute Once, Trust Anywhere"** physics.
+The Loom Virtual Machine (LVM) is designed to be the **"JVM of the Post-AI Era."** Current operating systems treat "Memory" (RAM) and "Storage" (Disk) as separate physical domains, leading to the "Memory Wall" that cripples large-scale AI. Following the **Nested Learning** paradigm (Behrouz et al., 2025), the LVM rejects this dichotomy.
 
-This paper defines the **Layer 1 (Metal)** Specification. It establishes the **SovereignVector** (10,240 bits) as the atomic unit of computation and defines the **Hardware Abstraction Layer (HAL)** that maps high-level "Chemical Reactions" (Valency/Bonding) onto physical silicon. It adopts a "VMware Strategy"—starting as a guest library on consumer devices (`libcdqn`) and evolving into a bare-metal hypervisor (`cdqnOS`) for sovereign infrastructure.
+We define the machine as a **Continuum Memory System (CMS)** composed of nested optimization loops operating at different frequencies. The **SovereignVector** (10,240 bits) is the atomic unit that flows through these levels. The LVM abstracts the underlying silicon to enforce **"Compute Once, Trust Anywhere"** physics, utilizing disk-resident indexing to decouple capacity from RAM limits.
 
 ---
 
@@ -35,22 +35,49 @@ The LVM ignores the host's native word size (32/64-bit). It enforces a uniform g
 ### 2.2 The "L1 Streaming" Model
 Contrary to standard databases that rely on RAM random access, the LVM operates as a **Streaming Engine**.
 *   **The Prefetcher:** The LVM anticipates vector usage based on Chemical Valency (Paper 02c). It prefetches the specific "Active Vectors" (Liquid Phase) into the L1 Cache *before* the operation cycle.
-*   **The Guarantee:** While the total dataset lives in RAM (L2/L3), the **Interaction Point** always occurs in L1, ensuring deterministic latency for the critical path.
+*   **The Guarantee:** While the total dataset lives in the Continuum, the **Interaction Point** always occurs in L1, ensuring deterministic latency for the critical path.
 
 ---
 
-## 3. The Quad-State Physics (The Instruction Set)
+## 3. The Continuum Memory System (CMS)
 
-The LVM vISA defines four classes of operations, modeled as states of matter. The Execution Engine translates these into the host's native assembly.
+We replace the "RAM vs Disk" model with a **Frequency-Based Hierarchy**. The Lattice is a single address space sorted by **Update Frequency ($\omega$)**.
 
-| State | Matter | Physics | LVM Opcode | Host Translation (e.g., x86/ARM) |
+### Level 1: The Fovea (High Frequency $\omega_{high}$)
+*   **Physics:** **Liquid Phase** (Fluid/Reactive).
+*   **Hardware Mapping:** **L1/L2 Cache & NPU Registers**.
+*   **Function:** **In-Context Learning.** Vectors here are updated constantly (Per-Token Optimization).
+*   **Capacity:** ~50 - 100 Vectors.
+
+### Level 2: The Context (Mid Frequency $\omega_{mid}$)
+*   **Physics:** **Gas Phase** (Diffusive/Associative).
+*   **Hardware Mapping:** **System RAM (ChaCha20 Encrypted).**
+*   **Function:** **Short-Term Memory.** Vectors here are "floating," waiting to be pulled into the Fovea.
+*   **Security:** To prevent "Metadata Leakage," the Perceptual Index residing here is also encrypted. It is only decrypted in "Page Fault" bursts when the Fovea requests a search.
+*   **Capacity:** ~1M - 10M Vectors.
+
+### Level 3: The Deep Lattice (Low Frequency $\omega_{low}$)
+*   **Physics:** **Crystal Phase** (Solid/Immutable).
+*   **Hardware Mapping:** **NVMe SSD / Disk-Resident Graph.**
+*   **Function:** **Long-Term Knowledge.**
+    *   **The Scalability:** We utilize **Disk-Resident Indexing** (e.g., DiskANN topology). The Graph Structure lives on the SSD, not in RAM. This allows the system to store **Billions of Vectors** on a standard laptop without causing an Out-Of-Memory (OOM) crash.
+    *   **Async Entropy:** Retrieving from disk takes time (~50µs). The LVM spawns a high-priority **Entropy Worker Thread** that utilizes this I/O wait-time to generate ChaCha20 noise for Level 2, converting latency into security.
+*   **Capacity:** Infinite (Bounded only by physical storage).
+
+---
+
+## 4. The Quad-State Physics (The Instruction Set)
+
+The LVM vISA defines four classes of operations, modeled as states of matter within the CMS.
+
+| State | Matter | Physics | LVM Opcode | Function |
 | :--- | :--- | :--- | :--- | :--- |
-| **1** | **Crystal** | **Solid** | `LVM_ACC` | `OR` / `APPEND` (Log updates) |
-| **2** | **Liquid** | **Fluid** | `LVM_BIND` | `XOR` / `POPCNT` (VSA Search) |
-| **3** | **Gas** | **Diffusion** | `LVM_MOV` | `SHL` / `ROL` (Context Shift) |
-| **4** | **Plasma** | **Energy** | `LVM_MASK` | `ANDN` / `PDEP` (Error Isolation) |
+| **1** | **Crystal** | **Solid** | `LVM_ACC` | **Consolidate.** (Move from $\omega_{mid} \to \omega_{low}$). |
+| **2** | **Liquid** | **Fluid** | `LVM_BIND` | **React.** (High frequency $\omega_{high}$ update / XOR). |
+| **3** | **Gas** | **Diffusion** | `LVM_MOV` | **Contextualize.** (Shift within $\omega_{mid}$). |
+| **4** | **Plasma** | **Energy** | `LVM_MASK` | **Isolate.** (Error/collision handling). |
 
-### 3.1 The Plasma Reflex (Masking)
+### 4.1 The Plasma Reflex (Masking)
 Plasma acts as the system's "Immune Response."
 *   **Event:** A Matroid Exclusion failure (Collision) or Logic Violation.
 *   **Reflex:** The LVM generates a **Plasma Mask** (Bitmask `0` at Index $N$).
@@ -58,7 +85,7 @@ Plasma acts as the system's "Immune Response."
 
 ---
 
-## 4. The Runtime Topology: From App to Sovereign
+## 5. The Runtime Topology: From App to Sovereign
 
 To ensure universal adoption while maintaining sovereign capabilities, the LVM Specification defines two primary modes of operation.
 
@@ -66,7 +93,7 @@ To ensure universal adoption while maintaining sovereign capabilities, the LVM S
 *   **Target:** Android (APK), Windows, Linux (User Space).
 *   **Implementation:** `libcdqn` (Rust).
 *   **Physics:** **Logical Consistency.**
-*   **Constraint:** Subject to OS scheduling and W^X (Write XOR Execute) security policies on mobile.
+*   **Constraint:** Subject to OS scheduling and W^X security policies.
 *   **Solution:** Uses a **Bytecode Interpreter** or **Ahead-of-Time (AOT)** compilation to comply with mobile store rules while enforcing LVM logic.
 *   **Use Case:** Education, Wallets, Gaming (Diablo-class Laptops).
 
@@ -74,13 +101,13 @@ To ensure universal adoption while maintaining sovereign capabilities, the LVM S
 *   **Target:** Raspberry Pi, RISC-V Boards, Robotics, Industrial Servers.
 *   **Implementation:** `cdqnOS` (Unikernel / Type-1 Hypervisor).
 *   **Physics:** **Temporal Consistency (Zero-Jitter).**
-*   **Constraint:** Requires dedicated hardware or virtualization.
+*   **Constraint:** Requires dedicated hardware.
 *   **Solution:** The LVM *is* the Kernel. It manages the hardware directly, offering real-time guarantees.
 *   **Use Case:** Critical Infrastructure, Drone Flight Controllers, Nuclear Safety.
 
 ---
 
-## 5. The Tri-Guard Security Protocol
+## 6. The Tri-Guard Security Protocol
 
 We implement "Defense in Depth" within the Hardware Abstraction Layer (HAL).
 
@@ -88,19 +115,17 @@ We implement "Defense in Depth" within the Hardware Abstraction Layer (HAL).
 | :--- | :--- | :--- | :--- |
 | **1. Spatial** | **Virtual Arena** | *"Is this stack safe?"* | **Stack Safety.** A pre-allocated Arena prevents recursion overflows. |
 | **2. Logical** | **Provenance Tag** | *"Is this vector tainted?"* | **Taint Tracking.** Headers tag data origin (Network vs. Kernel). |
-| **3. Spectral** | **LWE Noise** | *"Is this memory visible?"* | **Obfuscation.** (See 5.1). |
+| **3. Spectral** | **LWE Noise** | *"Is this memory visible?"* | **Obfuscation.** (See 6.1). |
 
-### 5.1 Adaptive Thermodynamics (The Dark Mode)
+### 6.1 Adaptive Thermodynamics (The Dark Mode)
 To balance Security with Usability (Battery Life), the LVM implements **Adaptive Obfuscation**.
-
 *   **Green Mode (Default on Battery):** Unused RAM is zeroed. High efficiency.
 *   **Dark Mode (Default on Plugged/Panic):** Unused RAM is filled with **ChaCha20** noise.
-    *   **Effect:** To an external observer (Hardware Probe or Host OS), the LVM memory bank is mathematically indistinguishable from Gaussian Noise (Learning With Errors problem).
-    *   **User Override:** A user in a hostile environment (e.g., protest) can force **Dark Mode** on battery, trading energy for maximum obfuscation.
+*   **Effect:** To an external observer, the LVM memory bank is mathematically indistinguishable from Gaussian Noise (Learning With Errors problem).
 
 ---
 
-## 6. The Execution Engine (The Bridge)
+## 7. The Execution Engine (The Bridge)
 
 The LVM acts as a bridge between the **Chemical Logic** of the user and the **Binary Logic** of the chip.
 
@@ -112,27 +137,15 @@ The LVM acts as a bridge between the **Chemical Logic** of the user and the **Bi
 
 ---
 
-## 📖 Glossary
-
-*   **Amber Capsule:** A diagnostic snapshot preserving the physics of a crash.
-*   **Adaptive Thermodynamics:** The protocol for balancing LWE security with battery life.
-*   **Library Mode:** LVM running as a guest application (Logical Consistency).
-*   **Sovereign Mode:** LVM running as a Host/Unikernel (Real-Time Consistency).
-*   **SovereignVector:** The 10,240-bit atomic unit of the LVM.
-*   **Quad-State:** The instruction set mapped to states of matter (Crystal, Liquid, Gas, Plasma).
-*   **vISA:** Virtual Instruction Set Architecture.
-
----
-
 ### 📂 Bibliography & References
-1.  **Lindholm, T. et al.** (2014). *"The Java Virtual Machine Specification."* (The Virtual Machine model).
-2.  **Armstrong, J.** (2007). *"Programming Erlang."* (The BEAM VM and fault tolerance).
-3.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."*
-4.  **Bernstein, D. J.** *"ChaCha, a variant of Salsa20."*
-5.  **Madhavapeddy, A. et al.** (2013). *"Unikernels: Library Operating Systems for the Cloud."* (Sovereign Mode foundation).
+1.  **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* Google Research. (The Continuum Memory foundation).
+2.  **Jayaram, S. et al.** (2019). *"DiskANN: Fast Accurate Billion-Point Nearest Neighbor Search on a Single Node."* (The Disk-Resident Indexing foundation).
+3.  **Lindholm, T. et al.** (2014). *"The Java Virtual Machine Specification."* (The Virtual Machine model).
+4.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."*
+5.  **Bernstein, D. J.** *"ChaCha, a variant of Salsa20."*
 
 ---
 
-**Transition:** With the Virtual Substrate defined and the deployment modes clarified, we move to **03b-KERNEL**, where we implement the Rust code that powers this Specification.
+**Transition:** With the Continuum Memory defined, we move to **03b-KERNEL**, where we implement the Rust code that powers this Specification.
 
 **License:** Universal Sovereign Source License (USSL) v2.0.
