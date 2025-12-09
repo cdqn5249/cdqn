@@ -3,7 +3,7 @@
 *   **File:** `docs/research/02b-PHYSICS.md`
 *   **Context:** Tropical Geometry, Statistical Mechanics & Phase Transitions
 *   **Date:** December 9, 2025
-*   **Status:** `v1.0` (Rigorous Standard)
+*   **Status:** `v1.2` (Trilogy Sync)
 
 > **The Thermodynamic Substrate.**
 > *We define the Arrow of Time within the LVM using Tropical Algebra (Max-Plus), ensuring history is monotonic and immutable. We further model data not as static files, but as matter undergoing Phase Transitions (Crystal, Liquid, Gas, Plasma) based on its semantic energy.*
