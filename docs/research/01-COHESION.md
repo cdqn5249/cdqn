@@ -3,7 +3,7 @@
 *   **File:** `docs/research/01-COHESION.md`
 *   **Context:** Macro-Strategy & Geopolitical Efficiency
 *   **Date:** December 9, 2025
-*   **Status:** `v2.2` (Security Seeding)
+*   **Status:** `v2.3` (Consolidated Research)
 
 > **The Trap of Volume.**
 > *Why the "Brute Force" AI era creates a dead end for sovereign nations, and why the next phase of computing belongs to those who master "Digital Physics" over "Probabilistic Scaling."*
@@ -27,19 +27,19 @@ For nations like **France** (Rank #5 in compute) and emerging powerhouses like *
 
 ---
 
-## 2. The Cognitive Crisis: The "Python Tax"
+## 2. The Cognitive Crisis: The "Python Tax" & The Brain Rot Effect
 
-The second crisis is not technological, but **Educational**.
+The second crisis is not technological, but **Educational and Systemic**. Recent research validates that the dominant AI paradigm has inherent, dangerous limitations.
 
-### 2.1 The "Prompt Engineer" Fallacy
-We are currently training a generation of engineers to be "Consumers of Black Boxes."
-*   **The Shift:** Education is moving from **"Coding"** (Defining Logic) to **"Prompting"** (Begging for Answers).
-*   **The Risk:** This leads to **Cognitive Atrophy**. An engineer who cannot define the *structure* of a system cannot build **Physical AI** (Robots, Nuclear Systems, Precision Medicine).
+### 2.1 The Inefficiency of the Stack & The "Prompt Engineer" Fallacy
+The world runs on the **"Python Tax"**: a fragile, inefficient tower of abstraction layers. We are now training a generation to be "Consumers of Black Boxes," moving from "Coding" to "Prompting." This leads to **Cognitive Atrophy** and cripples our ability to build robust **Physical AI** (Robotics, Nuclear Systems, Precision Medicine).
 
-### 2.2 The Inefficiency of the Stack
-The world runs on the **"Python Tax"**.
-*   We use Python (slow, high-level) to glue together C++ kernels (fast, low-level) to run on GPUs (massive parallel).
-*   **The Result:** A "Robot Operating System" (ROS) stack today is a fragile tower of abstraction layers. It is inefficient, energy-hungry, and difficult to formally verify. This is acceptable for a Chatbot; it is unacceptable for a **Nuclear Reactor** or a **Surgical Robot**.
+### 2.2 The Inevitability of Failure
+Academic consensus is forming that the core architectural flaws of Large Language Models are not bugs, but fundamental properties:
+*   **Hallucination is Inevitable:** Probabilistic models are designed to guess, not to know. This is a feature of their design, not a fixable error.
+*   **Cognitive Decay ("Brain Rot"):** Models continuously pre-trained on low-quality, high-engagement "junk" data (e.g., social media) demonstrate a catastrophic decline in reasoning, safety, and alignment.
+
+The pursuit of "Volume" is actively making our tools less reliable.
 
 ---
 
@@ -62,28 +62,23 @@ To break the "Volume Trap," we propose a new computing substrate designed for **
 ### 4.1 The Node: LVM (Loom Virtual Machine)
 *   **The Single Cell:** The LVM is the device-level runtime.
 *   **The Abstraction:** It treats data not as "Files" but as **Card Data Units (CDUs)**.
-*   **The Physics:** It enforces Matroid Exclusion and Tropical Causality on the metal (Layer 1), ensuring that a single robot or drone can operate with **Zero Hallucination** efficiency on standard hardware (ARM/RISC-V).
+*   **The Physics:** It enforces Matroid Exclusion and Tropical Causality on the metal, ensuring a single robot can operate with **Zero Hallucination** on standard hardware (ARM/RISC-V).
 
 ### 4.2 The Lattice: CDQN (Card Data Quantale Network)
 *   **The Tissue:** The CDQN is the **Aggregation Layer** sitting on top of the LVM nodes.
-*   **The Mechanism:** It acts as a Hybrid P2P Compute Layer.
-    *   Unlike a standard Cloud (Centralized), it forms a **Lattice**.
-    *   LVM nodes "trade" cards and compute tasks based on **Quantale Logic** (Resource-Aware Bonding).
-*   **The Result:** A decentralized supercomputer formed by the aggregation of efficient, sovereign devices.
+*   **The Mechanism:** It acts as a Hybrid P2P Compute Layer where nodes "trade" cards and compute tasks based on **Quantale Logic** (Resource-Aware Bonding).
 
 ### 4.3 The "Efficiency Republic" Strategy
 This is the Soft Power instrument for the **Paris-Dalat Axis**:
-1.  **For Education:** A tool that teaches students "Systemic Thinking" via visual cards (`cdqnLang`), allowing them to grasp complex AI logic without getting lost in Python syntax.
-2.  **For Industry:** A runtime that brings **Formal Verification** to the edge (Robots/IoT), bypassing the need for massive H100 clusters.
+1.  **For Education:** A tool that teaches "Systemic Thinking" via visual cards (`cdqnLang`), removing the "Python Tax."
+2.  **For Industry:** A runtime that brings **Formal Verification** to the edge (Robots/IoT), bypassing the need for H100 clusters.
 3.  **For Sovereignty:** A stack where the 'Logic' is owned by the user, enforced by Math, and rendered opaque to the host system via **post-quantum lattice cryptography**.
 
 ---
 
 ## 5. The Mandate
 
-We are not building a "Better Database." We are building the **Instrument of Understanding** for the Post-Volume Era.
-
-Our mission is to aggregate the fragmented experts—the Nuclear Physicists in Dalat, the Formal Verification peers in France, and the Systems Engineers of Vietnam—around a single, rigorous standard: **Digital Physics.**
+We are not building a "Better Database." We are building the **Instrument of Understanding** for the Post-Volume Era. Our mission is to aggregate the fragmented experts around a single, rigorous standard: **Digital Physics.**
 
 > *"We do not compete on the size of the furnace. We compete on the purity of the crystal."*
 
@@ -91,23 +86,22 @@ Our mission is to aggregate the fragmented experts—the Nuclear Physicists in D
 
 ## 📖 Glossary
 
-*   **CDQN (Card Data Quantale Network):**
-    *   *Technical Definition:* The Hybrid P2P aggregation layer that connects individual LVM nodes into a lattice, governing the exchange of Cards (Data) and Quantales (Resources).
-    *   *Origin:* The acronym also corresponds to the initials of the Architect, **Christophe Duy Quang Nguyen**. This dual meaning symbolizes the core philosophy: the **Sovereign Individual** (The Name) forming the foundation of the **Sovereign Network** (The Architecture).
-*   **CDU (Card Data Unit):** The atomic unit of the LVM. A discrete, visual container of logic that behaves like a chemical element (with Valency and Mass) rather than a fluid stream of bits.
-*   **Lattice-Based Cryptography:** A class of cryptographic schemes resistant to attack by quantum computers, used in the LVM to make the memory substrate indistinguishable from random noise.
-*   **LVM (Loom Virtual Machine):** The single-node runtime environment that executes CDUs on standard hardware.
-*   **Quantale:** An algebraic structure used to model resources that cannot be cloned (Linear Logic), ensuring the network respects physical conservation laws.
+*   **CDQN (Card Data Quantale Network):** The Hybrid P2P aggregation layer that connects LVM nodes. The acronym also stands for the Architect's initials, **Christophe Duy Quang Nguyen**, symbolizing the link between the Sovereign Individual and the Sovereign Network.
+*   **CDU (Card Data Unit):** The atomic unit of the LVM. A discrete, visual container of logic.
+*   **Lattice-Based Cryptography:** A class of post-quantum cryptographic schemes used to make the LVM's memory substrate indistinguishable from random noise.
+*   **LVM (Loom Virtual Machine):** The single-node runtime that executes CDUs.
+*   **Quantale:** An algebraic structure used to model resource-aware logic.
 
 ---
 
 ### 📂 Bibliography & Data Sources
-
-1.  **Voronoi / Visual Capitalist.** (2025). *"Who Holds the World's AI Compute?"* (US Dominance vs. Global South).
-2.  **Sensor Tower.** (Nov 2025). *"Global AI User Growth Report: Gemini vs. ChatGPT."* (The shifting usage patterns in the Global South).
-3.  **Nature.** (2024). *"AlphaFold 3 predicts the structure and interactions of all of life's molecules."* (The Geometric Proof).
-4.  **Government of Vietnam.** (2021). *"National Strategy on R&D and Application of Artificial Intelligence by 2030."* (Decision 127/QD-TTg).
+1.  **Voronoi / Visual Capitalist.** (2025). *"Who Holds the World's AI Compute?"*
+2.  **Sensor Tower.** (Nov 2025). *"Global AI User Growth Report: Gemini vs. ChatGPT."*
+3.  **Nature.** (2024). *"AlphaFold 3 predicts the structure and interactions of all of life's molecules."*
+4.  **Gov. of Vietnam.** (2021). *"National Strategy on R&D and Application of AI by 2030."*
 5.  **France 2030.** *"National Strategy for AI: Sovereignty and Talent."*
+6.  **Jones, L., et al.** (2025). *"Continuous Thought Machines."* (NeurIPS).
+7.  **Stanford / Berkeley.** (2025). *"Fundamental Limits of Large Language Models."* (arXiv).
 
 ---
 
