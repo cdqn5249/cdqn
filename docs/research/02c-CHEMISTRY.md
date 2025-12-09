@@ -38,7 +38,7 @@ In Quantale logic (specifically **Linear Logic**), we treat data as **Matter**:
 **Meaning:** If I have a "Coin" card ($A$), using it to buy an "Apple" consumes the Coin. The interaction is a **Chemical Reaction**, not a logical reference.
 
 **Engineering Implication:**
-This solves the "Double Spend" problem and the "Pointer Aliasing" problem without a Garbage Collector. Resources are accounted **for** by the algebra.
+This solves the "Double Spend" problem and the "Pointer Aliasing" problem without a Garbage Collector. Resources are accounted **FOR** by the algebra.
 
 ---
 
