@@ -5,7 +5,7 @@
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Systems Architecture & Full-Stack Ontology
 *   **Date:** December 9, 2025
-*   **Status:** `v3.1` (Release Candidate)
+*   **Status:** `v3.2` (Strategic Update)
 
 > **The Machine of Applied Physics.**
 > *We propose the design for the Loom Virtual Machine (LVM). Unlike legacy operating systems that manage "Files" and "Threads," the LVM manages "Digital Matter." It implements the 9-Layer Genesis Stack, enforcing the laws of Matroid Exclusion, Tropical Time, and Chemical Valency to create a "Glass Box" computing environment.*
@@ -66,10 +66,8 @@ We introduce a semantic firewall known as the **World**.
 
 *   **Layer 5: WORLDS.**
     *   The LVM does not run in a void. It runs inside a **World Context**.
-    *   **UserWorld:** High Stakes. Strict Physics. (Identity, Banking, Voting).
-    *   **SimulateWorld:** High Physics, Low Stakes. (Robot Training, AlphaFold).
-    *   **FictionalWorld:** Loose Physics. (Gaming, Art).
-    *   *Innovation:* The "Laws of Physics" (Layers 1-4) can be tuned *per World*.
+    *   **Innovation:** The "Laws of Physics" (Layers 1-4) can be tuned per World. This acts as a **Cognitive Firewall**, preventing the **"Model Collapse"** (or "Brain Rot") documented by Shumailov et al. (Nature, 2024).
+    *   **Mechanism:** By enforcing strict structural consistency, the World layer ensures that a "UserWorld" (Truth) cannot be contaminated by the loose physics or generated sludge of a "FictionalWorld," effectively quarantining hallucination.
 
 ---
 
@@ -139,7 +137,8 @@ By implementing this stack, we achieve the **Efficiency Imperative** (Paper 01):
 2.  **Kay, A.** (1972). *"A Personal Computer for Children of All Ages."* (The Dynabook/Smalltalk vision of "Biological" software).
 3.  **Apple Computer.** (1987). *"HyperCard User's Guide."* (The Stack/Card metaphor).
 4.  **DeepMind.** (2024). *"AlphaFold 3: modelling the molecular machinery of life."*
-5.  **Matsakis, N. & Klock, F.** (2014). *"The Rust Language."* (Memory Safety without Garbage Collection).
+5.  **Shumailov, I. et al.** (2024). *"The Curse of Recursion: Training on Generated Data Makes Models Forget."* (Nature).
+6.  **Matsakis, N. & Klock, F.** (2014). *"The Rust Language."* (Memory Safety without Garbage Collection).
 
 ---
 
