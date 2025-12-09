@@ -30,7 +30,10 @@ Two random vectors $A, B \in \{0,1\}^D$ are approximately orthogonal if their Ha
 
 **The Proof of Space:**
 For $D=10,000$, the number of vectors that are *not* orthogonal to a chosen vector is **infinitesimally** small relative to the total space $2^D$.
-$$ P(\text{Collision}) \approx 0 \quad \text{for} \quad k \ll 2^D $$
+
+$$
+P(\text{Collision}) \approx 0 \quad \text{for} \quad k \ll 2^D
+$$
 
 **Engineering Implication:**
 This allows the **LVM** to generate unique IDs, states, and symbols **deterministically** without a central registry (UUID database). The geometry guarantees uniqueness.
@@ -46,12 +49,19 @@ Let $E$ be the set of all active CDUs (vectors) in a local system. We define a M
 
 ### 3.2 The Rank Function $r(S)$
 The Rank function $r: 2^E \to \mathbb{N}$ measures the "Information Content" (Mass) of a set of vectors.
-$$ r(A \cup B) + r(A \cap B) \le r(A) + r(B) $$
+
+$$
+r(A \cup B) + r(A \cap B) \le r(A) + r(B)
+$$
 *(Submodular Inequality)*
 
 **Applied Physics:**
 In the LVM, we enforce that for any valid memory slot $S$:
-$$ r(S) \le \text{Capacity}_{\text{max}} $$
+
+$$
+r(S) \le \text{Capacity}_{\text{max}}
+$$
+
 If a process attempts to spawn a duplicate Agent (Clone) or inject Slop that overlaps with existing Truth, the **Rank** does not increase.
 *   **Result:** The operation is physically Null.
 *   **Engineering Feasibility:** This is calculated via `POPCNT(XOR)` (Hamming Distance) in 1 CPU cycle. We do not need complex "AI Classifiers" to detect Slop; we measure its geometric rank.
