@@ -3,7 +3,7 @@
 *   **File:** `docs/research/02a-MATHS.md`
 *   **Context:** High-Dimensional Geometry & Probability Theory
 *   **Date:** December 9, 2025
-*   **Status:** `v1.1` (Security Seeding)
+*   **Status:** `v1.2` (Trilogy Sync)
 
 > **The Geometric Substrate.**
 > *We define the mathematical axioms required to treat the Binary System not as an arithmetic calculator, but as a high-dimensional geometric space. We demonstrate how the "Concentration of Measure" phenomenon provides the rigorous foundation for robust, hallucination-free computing.*
@@ -39,7 +39,7 @@ $$
 This allows the **LVM** to generate unique IDs, states, and symbols **deterministically** without a central registry (UUID database). The geometry guarantees uniqueness.
 
 **Cryptographic Implication:**
-This high-dimensional space not only provides geometric robustness but also serves as the foundation for the **LWE (Learning With Errors)** problem. The difficulty of finding a specific "secret" vector within this vast sea of near-orthogonal noise vectors makes it computationally hard to reverse-engineer the system's state. As detailed in `03a-METAL`, this allows us to build a post-quantum secure obfuscation layer.
+This high-dimensional space not only provides geometric robustness but also serves as the foundation for the **LWE (Learning With Errors)** problem. The difficulty of finding a specific "secret" vector within this vast sea of near-orthogonal noise vectors makes it computationally hard to reverse-engineer the system's state.
 
 ---
 
