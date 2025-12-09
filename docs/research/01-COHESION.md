@@ -3,7 +3,7 @@
 *   **File:** `docs/research/01-COHESION.md`
 *   **Context:** Macro-Strategy & Geopolitical Efficiency
 *   **Date:** December 9, 2025
-*   **Status:** `v2.1` (The CDQN Definition)
+*   **Status:** `v2.2` (Security Seeding)
 
 > **The Trap of Volume.**
 > *Why the "Brute Force" AI era creates a dead end for sovereign nations, and why the next phase of computing belongs to those who master "Digital Physics" over "Probabilistic Scaling."*
@@ -75,6 +75,7 @@ To break the "Volume Trap," we propose a new computing substrate designed for **
 This is the Soft Power instrument for the **Paris-Dalat Axis**:
 1.  **For Education:** A tool that teaches students "Systemic Thinking" via visual cards (`cdqnLang`), allowing them to grasp complex AI logic without getting lost in Python syntax.
 2.  **For Industry:** A runtime that brings **Formal Verification** to the edge (Robots/IoT), bypassing the need for massive H100 clusters.
+3.  **For Sovereignty:** A stack where the 'Logic' is owned by the user, enforced by Math, and rendered opaque to the host system via **post-quantum lattice cryptography**.
 
 ---
 
@@ -94,6 +95,7 @@ Our mission is to aggregate the fragmented experts—the Nuclear Physicists in D
     *   *Technical Definition:* The Hybrid P2P aggregation layer that connects individual LVM nodes into a lattice, governing the exchange of Cards (Data) and Quantales (Resources).
     *   *Origin:* The acronym also corresponds to the initials of the Architect, **Christophe Duy Quang Nguyen**. This dual meaning symbolizes the core philosophy: the **Sovereign Individual** (The Name) forming the foundation of the **Sovereign Network** (The Architecture).
 *   **CDU (Card Data Unit):** The atomic unit of the LVM. A discrete, visual container of logic that behaves like a chemical element (with Valency and Mass) rather than a fluid stream of bits.
+*   **Lattice-Based Cryptography:** A class of cryptographic schemes resistant to attack by quantum computers, used in the LVM to make the memory substrate indistinguishable from random noise.
 *   **LVM (Loom Virtual Machine):** The single-node runtime environment that executes CDUs on standard hardware.
 *   **Quantale:** An algebraic structure used to model resources that cannot be cloned (Linear Logic), ensuring the network respects physical conservation laws.
 
