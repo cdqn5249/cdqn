@@ -3,7 +3,7 @@
 *   **File:** `docs/research/02c-CHEMISTRY.md`
 *   **Context:** Quantale Theory, Linear Logic & Graph Theory
 *   **Date:** December 9, 2025
-*   **Status:** `v1.0` (Rigorous Standard)
+*   **Status:** `v1.2` (Trilogy Sync)
 
 > **The Reactive Substrate.**
 > *We define the interaction rules of the LVM using Quantales and Linear Logic. Unlike standard boolean logic (where truth can be cloned), our logic is "Resource Aware." Data behaves like chemical elements with specific Valency, allowing for the deterministic construction of complex semantic molecules.*
@@ -111,6 +111,8 @@ With **02c-CHEMISTRY**, the Theoretical Foundation is complete.
 2.  **02b-PHYSICS:** We defined the **Time** (Tropical Monotonicity).
 3.  **02c-CHEMISTRY:** We defined the **Life** (Linear Logic Interaction).
 
+This trilogy establishes a framework for computation based on stateful, iterative logic. This approach, which diverges from the one-shot nature of standard Transformers, is now being validated by emerging research from pioneers in the field, such as the **'Continuous Thought Machine'** architecture proposed by **Darlow, Jones, et al. (Sakana AI, 2025)**. This confirms that the future of AI lies in systems that reason over time, not just across tokens.
+
 We have proven that a **Sovereign Machine** can be built not on "AI Magic," but on rigorous, verifiable **Digital Physics**. This Trilogy serves as the "Constitution" for the **LVM**, providing the experts in Dalat and Paris with the formal proofs they require to trust the architecture.
 
 *Next Step:* We must now aggregate these theories into the practical **Greenpaper 03 (ARCHITECTURE)** update, ensuring the "Blueprint" matches the "Theory."
@@ -123,6 +125,7 @@ We have proven that a **Sovereign Machine** can be built not on "AI Magic," but 
 2.  **Rosenthal, K. I.** (1990). *"Quantales and their Applications."* (Algebraic structure of resource systems).
 3.  **Abramsky, S.** (1993). *"Computational Interpretations of Linear Logic."* (Applied logic for CS).
 4.  **Baez, J. & Stay, M.** (2010). *"Physics, Topology, Logic and Computation: A Rosetta Stone."* (Mapping Category Theory to Physics).
+5.  **Darlow, L., Jones, L., et al.** (2025). *"Continuous Thought Machines."* (Sakana AI).
 
 ---
 
