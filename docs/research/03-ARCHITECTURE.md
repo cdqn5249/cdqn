@@ -3,130 +3,144 @@
 *   **File:** `docs/research/03-ARCHITECTURE.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
-*   **Context:** Systems Architecture & Digital Physics Implementation
-*   **Date:** December 6, 2025
-*   **Status:** `Greenpaper v2.4` (Entity-Native Kernel)
+*   **Context:** Systems Architecture & Full-Stack Ontology
+*   **Date:** December 9, 2025
+*   **Status:** `v3.1` (Release Candidate)
 
-> **Architectural Determinism for the Post-AI Era.**
-> *A proposal for the "Loom Virtual Machine" (LVM): A 7-Layer research architecture where the Kernel (Layers 1–4) natively enforces Matroid Physics and Durable Entity Sovereignty on standard silicon.*
-
----
-
-## 1. Abstract
-
-**Greenpaper 02 (GEOMETRY)** proposed "Geometric Physics" as a theoretical solution to the Entropy Crisis. It defined a substrate where information behaves like matter: occupying space (Matroid), flowing fluidly (Grassmannian), and growing historically (Tropical).
-
-This paper outlines the engineering requirements for a physical machine capable of enforcing these laws. We propose the **Sovereign Loom**: a design for a **Process Virtual Machine (LVM)**. Unlike legacy kernels (Linux/Windows) that manage files and threads, the LVM Kernel extends up to **Layer 4**, treating the **Sovereign Entity** as an atomic primitive. This stack aims to operationalize the mathematics of Paper 02 using **Hyperdimensional Computing (HDC)** to render fatal failures—such as Memory Races, Hallucinations, and Crash Amnesia—**Topologically Impossible**.
+> **The Machine of Applied Physics.**
+> *We propose the design for the Loom Virtual Machine (LVM). Unlike legacy operating systems that manage "Files" and "Threads," the LVM manages "Digital Matter." It implements the 9-Layer Genesis Stack, enforcing the laws of Matroid Exclusion, Tropical Time, and Chemical Valency to create a "Glass Box" computing environment.*
 
 ---
 
-## 2. The Implementation Gap (Transition from Paper 02)
+## 1. Abstract: The Organism Metaphor
 
-In Paper 02, data was defined as a **"Crystalline Structure"** within a 10,000-dimension lattice.
-*   **The Challenge:** Legacy systems treat data as "Files" and processes as "Ephemeral Threads." This creates an impedance mismatch: the OS doesn't know *who* owns the data or *what* the physics are.
-*   **Proposed Solution:** The LVM is an **Entity-Native Machine**. It does not just run code; it manages the lifecycle of **Durable Actors** directly in the kernel.
+**Greenpaper 01** identified the "Cognitive Crisis": we cannot compete on Volume (Brute Force); we must compete on **Efficiency** (Structure).
+**Greenpaper 02** defined the "Laws": Space (Matroid), Time (Tropical), and Interaction (Chemistry).
 
----
+This paper defines **The Machine**. Current Operating Systems are administrative bureaucrats; they shuffle files without understanding content. The **LVM (Loom Virtual Machine)** is designed as a **Digital Organism**. It possesses:
+1.  **Proprioception:** It knows its own resource limits (Layer 1-2).
+2.  **Memory:** It has an immutable causal history (Layer 3).
+3.  **Metabolism:** It consumes resources to bond data (Layer 4).
 
-## 3. The 7-Layer Stack (The Engine of Reality)
-
-We propose a 7-layer hierarchy. The **Kernel** (Layers 1-4) enforces Physics and Identity. The **Surface** (Layers 5-7) handles Meaning and Connection.
-
-| Layer | Name | Function | The Core Physics (The "Trap" Addressed) |
-| :--- | :--- | :--- | :--- |
-| **7** | **Rendering** | View | **The Void State** (Addressed: Hallucination) |
-| **6** | **Network** | Graph | **Fractal Renormalization** (Addressed: Surveillance) |
-| **5** | **Semantics** | Meaning | **Fibration Binding** (Addressed: Vector Collapse) |
-| **4** | **Entities** | **Kernel** | **Durable Sovereign Actors** (Addressed: Ephemeral State) |
-| **3** | **Physics** | **Kernel** | **Tropical Causality** (Addressed: History Tampering) |
-| **2** | **Maths** | **Kernel** | **Matroid Exclusion** (Addressed: Memory Leaks) |
-| **1** | **Metal** | **Kernel** | **L1 Cache Residency** (Addressed: I/O Latency) |
+The result is not a "Computer" in the traditional sense, but a **Sovereign Actor** capable of holding Truth in a hostile network.
 
 ---
 
-## 4. The LVM Kernel: The Sovereign Core (Layers 1-4)
+## 2. The 9-Layer Genesis Stack
 
-The LVM Kernel is monolithic in scope but micro in size. It integrates Hardware, Safety, Physics, and Identity into a single atomic execution unit.
+We replace the OSI Model and the Von Neumann architecture with an evolutionary stack that builds complexity from the bottom up. We collapse the distance between **Metal** (Code) and **Intent** (UI).
 
-### Layer 1: METAL (The I/O Hypothesis)
-*   **The Problem:** The Memory Wall (100ns RAM latency).
-*   **Proposed Mechanism:** **Static Vectorization ($D=10^4$).**
-    *   *Implementation:* We hypothesize that forcing data units to be **10,000-Dimension Binary Vectors** (~1.25KB) allows for **L1 Cache Residency** on standard ARM/RISC-V chips.
-    *   *Expected Outcome:* **Zero-Wait Execution** for logic operations.
-
-### Layer 2: MATHS (The Space Law)
-*   **The Problem:** Buffer Overflows and invalid memory access.
-*   **Proposed Mechanism:** **Matroid Exclusion (Orthogonality).**
-    *   *Implementation:* The LVM calculates **Hamming Distance** between vectors. If they are not orthogonal (Collision), the operation is rejected.
-    *   *Expected Outcome:* **Mathematical Safety** enforced in 1-3 CPU cycles without Garbage Collection.
-
-### Layer 3: PHYSICS (The Time Law)
-*   **The Problem:** Race Conditions and Replay Attacks.
-*   **Proposed Mechanism:** **Tropical Causality (Bitwise Accumulation).**
-    *   *Implementation:* History is a **Bloom Filter** using Bitwise OR. Bits flip $0 \to 1$ but never back.
-    *   *Expected Outcome:* **Immutable History**. Time is strictly monotonic; past events cannot be inserted or modified.
-
-### Layer 4: ENTITIES (The Identity Law)
-*   **The Problem:** Anonymous threads and Crash Amnesia.
-*   **Proposed Mechanism:** **The Tropical Spine (Durable Execution).**
-    *   *Integration:* The Kernel does not manage "Threads"; it manages **Entity Spines**.
-    *   *Implementation:* The Entity's state is its **Geometric History** (stored in Layer 3).
-    *   *Crash Recovery:* On reboot, the Kernel simply "re-plays" the Spine. The Entity effectively never dies, it just pauses.
-    *   *Expected Outcome:* **Sovereign Provenance.** Every instruction is cryptographically signed by the Entity ID before execution.
+| Phase | Layer | Name | Function | The Physics (Constraint) |
+| :--- | :--- | :--- | :--- | :--- |
+| **IV. Interface** | **9** | **Rendering** | **Visual Engine** | **The Common Ground.** (AlphaFold View). |
+| | **8** | **Social** | **Lattice** | **Network Topology.** (P2P Interface). |
+| | **7** | **Language** | **cdqnLang** | **The Bridge.** (Rust DSL $\leftrightarrow$ Visual Card). |
+| **III. Actors** | **6** | **Entities** | **Artificial Self** | **The Card Data Unit (CDU).** |
+| **II. Context** | **5** | **Worlds** | **Boundaries** | **Consistency Rules.** (User/Sim/Fic). |
+| **I. Laws** | **4** | **Chemistry** | **Interaction** | **Valency & Quantales.** |
+| | **3** | **Physics** | **Time/State** | **Tropical Causality.** |
+| | **2** | **Maths** | **Space** | **Matroid Exclusion.** |
+| | **1** | **Metal** | **Substrate** | **Finite Energy & Alignment.** |
 
 ---
 
-## 5. The Semantic Surface: Meaning & Connection (Layers 5-7)
+## 3. Phase I: The Laws (The Hard Kernel)
 
-These layers run in "User Space" on top of the LVM Kernel, translating human intent into Kernel Physics.
+These layers run in **Kernel Space**. They are immutable constraints enforced by the LVM runtime (built in **Rust `no_std`** for safety).
 
-### Layer 5: SEMANTICS (The Agility Fix)
-*   **Proposed Mechanism:** **Grassmannian Fluidity.**
-    *   Data is stored as a **Subspace** (Plane). The AI utilizes **Cyclic Shifts** to "rotate" the plane, exploring semantic nuances without breaking the Matroid locks in the Kernel.
-
-### Layer 6: NETWORK (The Scaling Fix)
-*   **Proposed Mechanism:** **Fractal Holography (FHN).**
-    *   *Structure:* Based on **Renormalization Group Theory**. The Kernel (LL) zooms out to the User (SSL) and the World (PubNL).
-    *   *Protocol:* **Dark Forest Gossip.** Nodes broadcast **Noise Vectors** that only resonate with trusted peers.
-
-### Layer 7: RENDERING (The Truth Fix)
-*   **Proposed Mechanism:** **The Void State.**
-    *   In the Lattice, unlinked nodes have **Undefined Distance**. The Renderer translates this state into visual **Fog/Blur**, providing the user with an intuitive boundary of knowledge.
+*   **Layer 1: METAL (The Limit).**
+    *   The machine acknowledges it exists on finite silicon. It manages 10,240-bit vectors aligned to CPU cache lines to ensure **Zero-Wait Execution**.
+*   **Layer 2: MATHS (The Space).**
+    *   **Matroid Theory** enforces "Digital Mass." Two objects cannot occupy the same semantic coordinate. This prevents "Buffer Overflows" and "Ghost Data" at the geometric level.
+*   **Layer 3: PHYSICS (The Arrow).**
+    *   **Tropical Geometry** enforces the arrow of time. History is a monotonic accumulation of events ($S_{t+1} = \max(S_t, S_{new})$). It is mathematically impossible to "undo" an event inside the Kernel.
+*   **Layer 4: CHEMISTRY (The Bond).**
+    *   **Linear Logic** enforces resource conservation. Data behaves like matter. A "Token" is consumed when used.
+    *   **Valency:** Defines which cards can bond. A `Kernel` card has Valency 0 (Inert). A `User` card has high Valency (Reactive).
 
 ---
 
-## 6. Conclusion: The Sovereign Machine
+## 4. Phase II: The Context (The Container)
 
-The **Sovereign Loom** is the proposed machine to validate the math of Paper 02.
+We introduce a semantic firewall known as the **World**.
 
-By extending the Kernel definition to include **Layer 4 (Entities)**, we move beyond "Memory Safety" (Rust) to **"Existential Safety."** The machine ensures that:
-1.  **Space** is Rivalrous (Matroid).
-2.  **Time** is Immutable (Tropical).
-3.  **Identity** is Durable (Entity).
-
-This architecture frames the "Computer" not as a tool for processing files, but as a **Sovereign Actor** capable of holding truth in a hostile network.
+*   **Layer 5: WORLDS.**
+    *   The LVM does not run in a void. It runs inside a **World Context**.
+    *   **UserWorld:** High Stakes. Strict Physics. (Identity, Banking, Voting).
+    *   **SimulateWorld:** High Physics, Low Stakes. (Robot Training, AlphaFold).
+    *   **FictionalWorld:** Loose Physics. (Gaming, Art).
+    *   *Innovation:* The "Laws of Physics" (Layers 1-4) can be tuned *per World*.
 
 ---
 
-## 📖 Glossary of Terms
+## 5. Phase III: The Actors (The Artificial Self)
 
-*   **Dark Forest:** A network protocol where nodes remain silent and invisible unless recognized by a specific geometric key.
-*   **Fractal Holographic Network (FHN):** A network structure that uses renormalization (zooming out) to scale infinitely while maintaining data integrity.
-*   **HDC (Hyperdimensional Computing):** The engineering method of using large binary vectors to approximate complex geometry.
-*   **LVM (Loom Virtual Machine):** The Entity-Native runtime that enforces geometric physics on the hardware (Layers 1-4).
-*   **Matroid Exclusion:** The rule that prevents data collisions (implemented via Orthogonality).
-*   **Sovereign Entity:** An actor in the system that owns its identity and state history cryptographically, managed directly by the Kernel.
+This is the emergence of the "Agent."
+
+*   **Layer 6: ENTITIES (The CDU).**
+    *   **The Atom:** The **Card Data Unit (CDU)**.
+    *   **Structure:** A CDU is a vector bundle containing:
+        1.  **Face:** The UI representation (Layer 9).
+        2.  **Stats:** The Mathematical/Chemical properties (Layers 2-4).
+        3.  **Spine:** The Tropical History (Layer 3).
+    *   **Proprioception:** The Entity *knows* its own Rank and Energy cost. It does not "crash" when overloaded; it "refuses" action based on Capacity constraints.
+
+---
+
+## 6. Phase IV: The Interface (The Bridge)
+
+This is where the Human meets the Machine. We solve the "Abstraction Gap" by synthesizing the history of programming languages.
+
+### Layer 7: LANGUAGE (`cdqnLang`)
+*   **The Mission:** To be the **"Fortran of Semantic Meaning."** Just as Fortran standardized Math, `cdqnLang` standardizes Meaning (Hamming Distance).
+*   **The Bridge:** It is a Domain Specific Language (DSL) built on **Rust**.
+    *   **Rust (The Anvil):** Handles the Physics (Memory Safety, Borrow Checker) at Layer 1-4.
+    *   **cdqnLang (The Weave):** Allows the user to define logic via "Card Interactions" without writing low-level code.
+
+### Layer 8: SOCIAL (The CDQN Interface)
+*   **The Lattice:** LVM nodes connect to form the **Card Data Quantale Network**.
+*   **Protocol:** Nodes trade Cards. A "Network Packet" is a "Card Transfer" governed by Quantale Logic (Ownership moves, it is not copied).
+*   *Note:* The distributed consensus mechanism is defined in the forthcoming **Greenpaper 03e-LATTICE**.
+
+### Layer 9: RENDERING (The Visual Engine)
+*   **The Ancestry:** The spiritual successor to **HyperCard** and **Smalltalk**.
+*   **The AlphaFold Insight:** Humans and Machines align best on **Geometry**.
+*   **The View:** The user does not see text logs; they see the **Lattice**.
+    *   *Healthy System:* Crystalline structure.
+    *   *Hallucinating System:* Gaseous fog.
+    *   *Logic:* Cards stacking, bonding, and reacting visually via the LVM Toolchain.
+
+---
+
+## 7. The Strategy: The "Efficiency Republic"
+
+By implementing this stack, we achieve the **Efficiency Imperative** (Paper 01):
+
+1.  **For Education:** A student in Dalat can build a "Robot Controller" by arranging Visual Cards (CDUs) in Layer 9. The LVM handles the Physics (Layer 3) and Safety (Layer 2). The "Python Tax" is removed.
+2.  **For Industry:** We provide a **Formal Verification** platform that runs on cheap chips. A drone running LVM does not need an H100; it needs an ARM Cortex because the logic is optimized at the bit level.
+3.  **For Sovereignty:** The user owns the **World** (Layer 5). The Logic is transparent ("Glass Box"), rivalrous, and immutable.
+
+---
+
+## 📖 Glossary
+
+*   **CDU (Card Data Unit):** The atomic unit of the LVM (Layer 6). A discrete container of logic and state.
+*   **cdqnLang:** The DSL enabling the construction of Semantic Worlds, acting as a bridge between Rust safety and Visual Intent.
+*   **Genesis Stack:** The 9-Layer architectural model of the LVM, evolving from Metal to Rendering.
+*   **Lattice:** The visual and topological representation of the system state.
+*   **Proprioception:** The machine's ability to sense its own internal resource state and capacity.
+*   **World:** A container with specific physical and chemical laws where Entities reside.
 
 ---
 
 ### 📂 Bibliography & References
 
-1.  **Armstrong, J.** (2007). *"Programming Erlang: Software for a Concurrent World."* (Inspiration for Entity-Native VM).
-2.  **Song, C., et al.** (2005). *"Self-similarity of complex networks."* **Nature**.
-3.  **Oxley, J.** (2011). *"Matroid Theory."*
-4.  **Temporal.io.** (2020). *"The Durable Execution Model."*
-5.  **Sutton, R.** (2019). *"The Bitter Lesson."* (Hardware Optimization).
+1.  **Armstrong, J.** (2007). *"Programming Erlang."* (The Entity/Process model).
+2.  **Kay, A.** (1972). *"A Personal Computer for Children of All Ages."* (The Dynabook/Smalltalk vision of "Biological" software).
+3.  **Apple Computer.** (1987). *"HyperCard User's Guide."* (The Stack/Card metaphor).
+4.  **DeepMind.** (2024). *"AlphaFold 3: modelling the molecular machinery of life."*
+5.  **Matsakis, N. & Klock, F.** (2014). *"The Rust Language."* (Memory Safety without Garbage Collection).
 
 ---
 
-**License:** This document is part of the **CDQN Source Complex** and is governed by the **Universal Sovereign Source License (USSL) v2.0**. See `LICENSE.md` in the repository root for full terms.
+**License:** Universal Sovereign Source License (USSL) v2.0.
