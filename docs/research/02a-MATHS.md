@@ -48,11 +48,12 @@ We use **Matroid Theory** to formalize the concept of "Digital Mass" (Exclusion)
 Let $E$ be the set of all active CDUs (vectors) in a local system. We define a Matroid $M = (E, \mathcal{I})$ where $\mathcal{I}$ is the collection of independent sets.
 
 ### 3.2 The Rank Function $r(S)$
-The Rank function $r: 2^E \to \mathbb{N}$ measures the "Information Content" (Mass) of a set of vectors.
+The Rank function $r: 2^{E} \to \mathbb{N}$ measures the "Information Content" (Mass) of a set of vectors.
 
 $$
 r(A \cup B) + r(A \cap B) \le r(A) + r(B)
 $$
+
 *(Submodular Inequality)*
 
 **Applied Physics:**
