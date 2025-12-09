@@ -1,148 +1,138 @@
-# 03a-METAL: The Vector Substrate
+# 03a-METAL: The Virtual Substrate
 
 *   **File:** `docs/research/03a-METAL.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
-*   **Context:** Layer 1 Research (Hardware Physics, Memory Topology, & Signal Processing)
+*   **Context:** Layer 1 Specification (The Hardware Abstraction Layer & Signal Processing)
 *   **Date:** December 9, 2025
-*   **Status:** `Release Candidate v2.1` (Definitive Physics Model)
+*   **Status:** `v3.3` (The Hypervisor Standard)
 
 > **The Physics of the Machine.**
-> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the atomic unit of the system. At Layer 1, we do not speak of Geometry or Meaning. We speak only of Alignment, Latency, Entropy, and the physical laws that govern the flow of information.*
+> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics (Papers 02a-02c) are enforced consistently, maximizing the capabilities of Sovereign Hardware while maintaining compatibility with Consumer Devices via a "Hypervisor" strategy.*
 
 ---
 
-## 1. Abstract
+## 1. Abstract: The Universal Constant
 
-The Loom Virtual Machine (LVM) requires a computational substrate that is **Deterministic** (Zero-Jitter), **Fast** (L1 Cache Resident), and **Opaque** (Post-Quantum Obfuscated). Standard high-level memory models (Heap allocation, Garbage Collection) violate these constraints, creating the "Memory Wall" that makes verifying truth prohibitively expensive.
+The Loom Virtual Machine (LVM) is designed to be the **"JVM of the Post-AI Era."** Just as the Java Virtual Machine abstracted the CPU to run "Write Once, Run Anywhere" logic, the LVM abstracts the **Entropy** of the underlying system to run **"Compute Once, Trust Anywhere"** physics.
 
-This paper defines the methodology for **Layer 1 (Metal)**. We propose a fixed-width **10,240-bit Sovereign Vector** as the fundamental data type. We establish a **Quad-State Physics** model (Crystal, Liquid, Gas, Plasma) to handle logic, search, locality, and attention. To secure this substrate, we implement a **Tri-Guard Protocol** (Spatial, Logical, Spectral) that validates data provenance at the silicon level, ensuring the system is immune to both noise flooding and geometric deepfakes.
+This paper defines the **Layer 1 (Metal)** Specification. It establishes the **SovereignVector** (10,240 bits) as the atomic unit of computation and defines the **Hardware Abstraction Layer (HAL)** that maps high-level "Chemical Reactions" (Valency/Bonding) onto physical silicon. It adopts a "VMware Strategy"—starting as a guest library on consumer devices (`libcdqn`) and evolving into a bare-metal hypervisor (`cdqnOS`) for sovereign infrastructure.
 
 ---
 
 ## 2. The Physical Atom: `SovereignVector`
 
-We define the vector not by its content, but by its impact on the CPU Cache and SIMD registers.
+The LVM ignores the host's native word size (32/64-bit). It enforces a uniform geometric standard.
 
-### 2.1 The Dimensions
+### 2.1 The Virtual Specification
 *   **Logical Size:** 10,000 bits (The "Canvas" for the Lattice).
-*   **Physical Size:** 10,240 bits ($160 \times 64$-bit words).
-*   **Rationale:** 10,240 is the Lowest Common Multiple (LCM-adjacent) for hardware alignment. It divides cleanly by:
-    *   **64-bit:** Standard Scalar.
-    *   **128-bit:** ARM NEON (Mobile).
-    *   **256-bit:** AVX2 / RISC-V (Desktop).
-    *   **512-bit:** AVX-512 / SVE (Server).
+*   **Physical Alignment:** 10,240 bits ($160 \times 64$-bit words).
+*   **Rationale:** This dimension is the **Least Common Multiple (LCM)** of modern hardware vector lanes. It aligns perfectly with:
+    *   **Mobile:** ARM NEON (128-bit) $\times$ 80 cycles.
+    *   **Desktop:** AVX2 (256-bit) $\times$ 40 cycles.
+    *   **Server:** AVX-512 (512-bit) $\times$ 20 cycles.
 
-### 2.2 Memory Alignment & Prefetching
-*   **Constraint:** All Vectors must be **64-byte Aligned** to prevent Cache Line Splitting.
-*   **Mechanism:** We utilize explicit software prefetching. The Metal Layer anticipates vector usage 50 cycles in advance, hiding the latency of the RAM bus and ensuring the CPU always feeds on L1 Cache.
+### 2.2 The "L1 Streaming" Model
+Contrary to standard databases that rely on RAM random access, the LVM operates as a **Streaming Engine**.
+*   **The Prefetcher:** The LVM anticipates vector usage based on Chemical Valency (Paper 02c). It prefetches the specific "Active Vectors" (Liquid Phase) into the L1 Cache *before* the operation cycle.
+*   **The Guarantee:** While the total dataset lives in RAM (L2/L3), the **Interaction Point** always occurs in L1, ensuring deterministic latency for the critical path.
 
 ---
 
-## 3. The Quad-State Physics (The Engine)
+## 3. The Quad-State Physics (The Instruction Set)
 
-The LVM does not just "process" data; it transitions data between four states of matter to optimize for specific tasks.
+The LVM vISA defines four classes of operations, modeled as states of matter. The Execution Engine translates these into the host's native assembly.
 
-| State | Matter | Physics | Metal Instruction | Function | Good For |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **1** | **Crystal** | **Solid** | `AND` / `OR` | **Accumulate** | **Deep Logic / Truth.** Building immutable history via Tropical Causality. |
-| **2** | **Liquid** | **Fluid** | `XOR` / `POPCNT` | **Compare** | **Search / Similarity.** Implementing **VSA Binding** (XOR) and **Bundling** (Majority). |
-| **3** | **Gas** | **Diffusion** | `SHIFT` / `ROT` | **Move** | **Locality.** Cellular automata and local context shifting. |
-| **4** | **Plasma** | **Energy** | `MASK` / `PDEP` | **Focus** | **Attention / Reflex.** Surgical isolation of errors without data loss. |
+| State | Matter | Physics | LVM Opcode | Host Translation (e.g., x86/ARM) |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | **Crystal** | **Solid** | `LVM_ACC` | `OR` / `APPEND` (Log updates) |
+| **2** | **Liquid** | **Fluid** | `LVM_BIND` | `XOR` / `POPCNT` (VSA Search) |
+| **3** | **Gas** | **Diffusion** | `LVM_MOV` | `SHL` / `ROL` (Context Shift) |
+| **4** | **Plasma** | **Energy** | `LVM_MASK` | `ANDN` / `PDEP` (Error Isolation) |
 
 ### 3.1 The Plasma Reflex (Masking)
-Plasma is the system's nervous system.
-*   **Event:** A bit corruption or logic violation is detected at Index $N$.
-*   **Reflex:** The system generates a **Plasma Mask** (0 at Index $N$).
-*   **Effect:** Subsequent operations apply this mask. The corrupted bit is electrically "insulated." It exists as **Scar Tissue** but does not propagate errors.
-*   **Shedding:** At the end of the Epoch (Renormalization), the mask is used as a negative filter. The Scar Tissue is left behind in the dead shell; the new generation is born clean.
+Plasma acts as the system's "Immune Response."
+*   **Event:** A Matroid Exclusion failure (Collision) or Logic Violation.
+*   **Reflex:** The LVM generates a **Plasma Mask** (Bitmask `0` at Index $N$).
+*   **Result:** The corrupted bit is electrically insulated. Logic flows around the damage. This prevents the "Null Pointer Exception" crashes typical of legacy systems; the organism survives with "Scar Tissue."
 
 ---
 
-## 4. Memory Topology: The Fortress
+## 4. The Runtime Topology: From App to Sovereign
 
-We reject the flat memory model. We implement a **Zonal Topology** to enforce security via physics.
+To ensure universal adoption while maintaining sovereign capabilities, the LVM Specification defines two primary modes of operation.
 
-### 4.1 The Arena (Virtual Stack)
-*   **Problem:** Recursion blows the OS Stack.
-*   **Solution:** The LVM pre-allocates a contiguous **Arena**. Logic execution is strictly **Iterative**. We manage a Virtual Stack Pointer manually, guaranteeing immunity to Stack Overflow exploits.
+### Tier 1: Library Mode (The Guest)
+*   **Target:** Android (APK), Windows, Linux (User Space).
+*   **Implementation:** `libcdqn` (Rust).
+*   **Physics:** **Logical Consistency.**
+*   **Constraint:** Subject to OS scheduling and W^X (Write XOR Execute) security policies on mobile.
+*   **Solution:** Uses a **Bytecode Interpreter** or **Ahead-of-Time (AOT)** compilation to comply with mobile store rules while enforcing LVM logic.
+*   **Use Case:** Education, Wallets, Gaming (Diablo-class Laptops).
 
-### 4.2 The Ring Buffer (Crystalline WAL)
-*   **Problem:** Disk I/O is too slow for the CPU.
-*   **Solution:** A circular buffer in RAM that stores **Deltas** (XOR differences).
-    *   **Async Mode:** CPU writes to Ring, continues immediately. (Liquid/Gas operations).
-    *   **Sync Mode:** CPU stalls until Ring flushes to Disk. (Crystal/Value operations).
-
-### 4.3 Zonal Segregation
-*   **Zone 0 (Kernel):** Trusted internal logic.
-*   **Zone 1 (I/O):** Untrusted network/disk buffers.
-*   **Zone 2 (User):** `cdqnLang` script execution.
+### Tier 2: Sovereign Mode (The Host)
+*   **Target:** Raspberry Pi, RISC-V Boards, Robotics, Industrial Servers.
+*   **Implementation:** `cdqnOS` (Unikernel / Type-1 Hypervisor).
+*   **Physics:** **Temporal Consistency (Zero-Jitter).**
+*   **Constraint:** Requires dedicated hardware or virtualization.
+*   **Solution:** The LVM *is* the Kernel. It manages the hardware directly, offering real-time guarantees.
+*   **Use Case:** Critical Infrastructure, Drone Flight Controllers, Nuclear Safety.
 
 ---
 
 ## 5. The Tri-Guard Security Protocol
 
-We implement "Defense in Depth" by verifying the source of every vector using three independent physics checks.
+We implement "Defense in Depth" within the Hardware Abstraction Layer (HAL).
 
-| Guard Layer | Mechanism | The Check | When it Happens |
+| Guard Layer | Mechanism | The Check | Behavior |
 | :--- | :--- | :--- | :--- |
-| **1. Spatial** | **Zonal Memory** | *"Is this data in the correct RAM bank?"* | **On Allocation.** Prevents external data from masquerading as Kernel data. |
-| **2. Logical** | **Provenance Header** | *"Does the bitwise tag match the Zone?"* | **On Access.** A 4-bit tag in the header confirms origin (CPU/NPU/Net). |
-| **3. Spectral** | **Entanglement** | *"Does the geometry match the Key?"* | **On Commit.** A `POPCNT(XOR)` check against the User's Geometric Key. |
+| **1. Spatial** | **Virtual Arena** | *"Is this stack safe?"* | **Stack Safety.** A pre-allocated Arena prevents recursion overflows. |
+| **2. Logical** | **Provenance Tag** | *"Is this vector tainted?"* | **Taint Tracking.** Headers tag data origin (Network vs. Kernel). |
+| **3. Spectral** | **LWE Noise** | *"Is this memory visible?"* | **Obfuscation.** (See 5.1). |
 
-### 5.1 LWE Obfuscation
-*   **Primitive:** **ChaCha20** (The only external dependency).
-*   **Application:** Unused memory is filled with deterministic noise.
-*   **Result:** To an observer (OS/Attacker), the Local Lattice is mathematically indistinguishable from Gaussian Noise (Learning With Errors problem).
+### 5.1 Adaptive Thermodynamics (The Dark Mode)
+To balance Security with Usability (Battery Life), the LVM implements **Adaptive Obfuscation**.
 
----
-
-## 6. The Amber Protocol (Diagnostics)
-
-Layer 1 cannot "reason" about errors. It can only preserve the crime scene.
-
-*   **Trigger:** Physical Violation (Collision, Saturation, Zonal Mismatch).
-*   **Action:**
-    1.  **Freeze:** Copy State + Input + Mask to an **Amber Capsule**.
-    2.  **Alert:** Wake the **Layer 4 Entity** (Supervisor).
-    3.  **Throttle:** If Error Rate > Threshold, stop logging and enter **Panic Mode** (Drop Packets) to prevent DoS.
-*   **Purpose:** Allows the upper layers to perform semantic autopsy without crashing the physics engine.
+*   **Green Mode (Default on Battery):** Unused RAM is zeroed. High efficiency.
+*   **Dark Mode (Default on Plugged/Panic):** Unused RAM is filled with **ChaCha20** noise.
+    *   **Effect:** To an external observer (Hardware Probe or Host OS), the LVM memory bank is mathematically indistinguishable from Gaussian Noise (Learning With Errors problem).
+    *   **User Override:** A user in a hostile environment (e.g., protest) can force **Dark Mode** on battery, trading energy for maximum obfuscation.
 
 ---
 
-## 7. Hardware Acceleration: The Hybrid Model
+## 6. The Execution Engine (The Bridge)
 
-We acknowledge the ubiquity of NPUs in consumer devices (Apple M-Series, Snapdragon).
+The LVM acts as a bridge between the **Chemical Logic** of the user and the **Binary Logic** of the chip.
 
-*   **The CPU (Latency Engine):** Handles Crystal/Gas operations. Optimized for branching and bitwise logic.
-*   **The NPU (Throughput Engine):** Handles Liquid operations (Murmuration/Search).
-*   **The Watchdog:** A hysteresis timer ensures we only offload to NPU if the batch size justifies the bus transfer cost.
+*   **The Scheduler:** Translates `cdqnLang` interactions ($A \multimap B$) into Vector Operations.
+*   **The Hysteresis Loop:** To prevent bus saturation on consumer devices, the engine batches operations.
+    *   *Small Batch (< 1k vectors):* Processed on CPU (L1 Cache) for low latency.
+    *   *Large Batch (> 1k vectors):* Offloaded to NPU/GPU (Vulkan/Compute) for high throughput.
+*   **Result:** The same binary scales seamlessly from a smartphone (using the NPU for efficiency) to a workstation (using the GPU for massive simulation).
 
 ---
 
-## 📖 Glossary of Terms
+## 📖 Glossary
 
-*   **Amber Capsule:** A snapshot of the LVM state at the moment of a crash, used for forensics.
-*   **Arena:** A pre-allocated memory block for the Virtual Stack.
-*   **Entanglement:** A geometric check that verifies a vector belongs to the local user's lattice.
-*   **Plasma Mask:** A bitmask used to isolate corrupted bits (Scar Tissue) without stopping computation.
-*   **Quad-State:** The four modes of vector operation: Crystal (Logic), Liquid (Search), Gas (Move), Plasma (Focus).
+*   **Amber Capsule:** A diagnostic snapshot preserving the physics of a crash.
+*   **Adaptive Thermodynamics:** The protocol for balancing LWE security with battery life.
+*   **Library Mode:** LVM running as a guest application (Logical Consistency).
+*   **Sovereign Mode:** LVM running as a Host/Unikernel (Real-Time Consistency).
 *   **SovereignVector:** The 10,240-bit atomic unit of the LVM.
-*   **Tri-Guard:** The three-layer security check (Zone, Header, Geometry) for data provenance.
-*   **VSA (Vector Symbolic Architectures):** A method of representing symbols and logic using high-dimensional vectors (Liquid State).
+*   **Quad-State:** The instruction set mapped to states of matter (Crystal, Liquid, Gas, Plasma).
+*   **vISA:** Virtual Instruction Set Architecture.
 
 ---
 
 ### 📂 Bibliography & References
-1.  **Domingos, P.** (2025). *"Tensor Logic: The Language of AI."* (arXiv:2510.12269).
-2.  **Zhang, P. et al.** (2020). *"Tropical Tensor Network for Ground States."* (PRL).
-3.  **Kanerva, P.** (2009). *"Hyperdimensional Computing: An Introduction."* (VSA Foundation).
-4.  **Gayler, R. W.** (2004). *"Vector Symbolic Architectures."* (Binding/Bundling Logic).
-5.  **Bernstein, D. J.** *"ChaCha, a variant of Salsa20."*
-6.  **Regev, O.** (2009). *"On Lattices, Learning with Errors, Random Linear Codes, and Cryptography."*
+1.  **Lindholm, T. et al.** (2014). *"The Java Virtual Machine Specification."* (The Virtual Machine model).
+2.  **Armstrong, J.** (2007). *"Programming Erlang."* (The BEAM VM and fault tolerance).
+3.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."*
+4.  **Bernstein, D. J.** *"ChaCha, a variant of Salsa20."*
+5.  **Madhavapeddy, A. et al.** (2013). *"Unikernels: Library Operating Systems for the Cloud."* (Sovereign Mode foundation).
 
 ---
 
-**Transition:** With the physical substrate (Layer 1) secured and defined, we move to **03b-MATHS**, where we define the **Cascading Logic** that runs upon this metal.
+**Transition:** With the Virtual Substrate defined and the deployment modes clarified, we move to **03b-KERNEL**, where we implement the Rust code that powers this Specification.
 
-**License:** This document is part of the **CDQN Source Complex** and is governed by the **Universal Sovereign Source License (USSL) v2.0**.
+**License:** Universal Sovereign Source License (USSL) v2.0.
