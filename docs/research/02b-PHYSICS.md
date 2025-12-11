@@ -48,7 +48,7 @@ Since $x \oplus y = \max(x, y)$, the accumulation of truth is irreversible.
 To achieve **Post-Quantum Forward Secrecy**, the `GenesisSeed` ($S$) cannot be static. It behaves like fuel: it is consumed to generate the Next Tick.
 
 $$
-S_{t+1} = \text{LWE\_Function}(S_t)
+S_{t+1} = \text{LWE Function}(S_t)
 $$
 
 *   **The Law of Erasure:** Immediately after generating $S_{t+1}$, the system **securely erases** $S_t$ from memory.
