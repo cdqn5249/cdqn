@@ -27,9 +27,9 @@ In **CDQN**, data behaves like **Matter** and Time behaves like **Entropy**.
 Time is not a clock; it is a **Chain of Events**.
 
 ### 2.1 The Unforgeable Timeline
-We anchor the "Tropical Semiring" to the Sovereign Stream.
+We anchor the "Tropical Semiring" to the Sovereign Stream defined in **Paper 02a**.
 *   **The Tick ($t$):** A logical index derived from the user's `GenesisSeed`.
-*   **The Ratchet:** The history hash $H_t$ is a cryptographic function of the previous state.
+*   **The Ratchet:** The history hash $H_t$ is a cryptographic function of the previous state and the unique entropy of that moment.
 
 $$
 H_{t+1} = \text{Hash}(H_t \oplus \text{Stream}(t) \oplus \text{Event})
