@@ -5,7 +5,7 @@
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Tropical Geometry, Thermodynamics, Newtonian Mechanics & Post-Quantum Cryptography
 *   **Date:** December 11, 2025
-*   **Status:** `v1.5` (The Ouroboros Standard)
+*   **Status:** `v1.6` (The Ouroboros Standard)
 
 > **The Thermodynamic Substrate.**
 > *We define the Arrow of Time, the States of Matter, and the Laws of Inertia within the LVM. We integrate **Tropical Geometry** (Time), **Martin-Olalla Stability** (Temperature), and **Compositional Theory** (Mass) to create a physics engine where data is physical matter. Crucially, we introduce the **Ouroboros Principle** (Entropic Ratchet) to guarantee **Post-Quantum Forward Secrecy**: the key to the present consumes the key to the past.*
@@ -54,6 +54,11 @@ $$
 *   **The Law of Erasure:** Immediately after generating $S_{t+1}$, the system **securely erases** $S_t$ from memory.
 *   **The Quantum Barrier:** Because the mutation function is based on the **Shortest Vector Problem (SVP)** (Lattice Hardness), even a Quantum Computer possessing $S_{t+1}$ cannot invert the function to derive $S_t$.
 *   **Result:** The past is cryptographically burned. If a node is compromised today, the attacker cannot decrypt yesterday's data.
+
+> **IMPORTANT CONSTRAINT (See `02e-RITUALS`):**
+> The "Law of Erasure" is a physical imperative. However, its enforcement depends on the hardware substrate:
+> *   **Tier 2 (Sovereign Mode):** Guaranteed via **Trusted Execution Environment (TEE)** or Secure Enclave direct memory access.
+> *   **Tier 1 (Guest Mode):** Approximated via `memset`. This is **"Best Effort"** forward secrecy, as it is subject to Host OS paging, swapping, and memory remanence vulnerabilities.
 
 ---
 
@@ -117,7 +122,7 @@ $$
 
 ## 6. Conclusion: The Physical Record
 
-**02b-PHYSICS (v1.5)** defines a system where:
+**02b-PHYSICS (v1.6)** defines a system where:
 1.  **Time** is unforgeable (Ouroboros Ratchet).
 2.  **Truth** is stable (Thermal Law).
 3.  **Meaning** is heavy (Newtonian Mass).
