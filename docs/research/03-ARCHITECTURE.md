@@ -60,7 +60,12 @@ $$
 S_{t+1} = \max(S_t, S_{new})
 $$
 
-    *   **Thermodynamics:** Data transitions between Gas (Context) and Crystal (Truth) based on **Thermal Stability** ($T \to 0$).
+*   **Thermodynamics:** Data transitions between Gas (Context) and Crystal (Truth) based on **Thermal Stability**
+
+$$
+    ($T \to 0$).
+$$
+    
 *   **Layer 4: CHEMISTRY (The Economy).**
     *   **Quantale Logic:** Interaction requires Energy. Data is rivalrous. You cannot copy a "Coin" without destroying the original.
     *   **Valency:** Defines bond strength. High-mass concepts (Truths) have high Valency; low-mass concepts (Noise) have low Valency.
