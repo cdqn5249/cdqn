@@ -1,100 +1,127 @@
-# 02d-NEUROLOGY: The Laws of Plasticity & Intent
+# 02d-NEUROLOGY: The Quantale of Plasticity & Reputation
 
 *   **File:** `docs/research/02d-NEUROLOGY.md`
-*   **Context:** Information Geometry, Nested Learning, & Celestial Holography
-*   **Date:** December 9, 2025
-*   **Status:** `v1.0` (The Autonomy Standard)
+*   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
+*   **Author:** Christophe Duy Quang Nguyen (System Ronin)
+*   **Context:** Information Geometry, Nested Learning & Control Theory
+*   **Date:** December 11, 2025
+*   **Status:** `v2.2` (The Quantale Standard)
 
 > **The Cognitive Substrate.**
-> *We define the laws governing Learning and Memory within the LVM. We reject the notion of memory as "Passive Storage." We define Memory as **Plasticity**—the deformation of the Lattice caused by the flow of Intent. This provides the mathematical foundation for Autonomous Agents that can self-correct, learn from error, and align with their human owner.*
+> *We define the mathematical laws governing Learning and Behavior within the LVM. We reject the "Sycophantic" model of modern AI. Instead, we define the Agent as a dynamical system governed by **Plasticity** (Learning), **Consistency** (World Logic), and **Reputation** (The Objective). The Agent does not just "store" data; it evolves a unique **Fractal Geometry** derived from the user's sovereign Genesis Seed, ensuring that learning is stable, unique, and economically earned.*
 
 ---
 
-## 1. Introduction: The Automaton vs. The Agent
+## 1. Introduction: The Optimization of Sanity
 
-In standard computing, a program executes instructions. If it fails, it crashes. It learns nothing. To build a **Sovereign Agent**, we require a system that:
-1.  **Observes** its own actions (Proprioception).
-2.  **Evaluates** the outcome against an Intent (Success/Error).
-3.  **Mutates** its own structure to avoid the error next time (Plasticity).
+Standard AI models optimize a simple loss function: $\min \mathcal{L}_{user}$ (Minimize the difference between Output and User Desire). This leads to **Sycophancy**: the model will hallucinate or violate safety rules to minimize the local loss.
 
-This paper defines the **Physics of Intent**. How does an abstract "Goal" become a physical change in the data structure? We derive the answer from **Nested Learning** and **Holographic Physics**.
+In **CDQN**, we define the Agent not as a function approximator, but as a **Dynamical System** on a Manifold. The Agent's trajectory is governed by **Nested Optimization** (Learning) constrained by **Reputation Potentials** (Ethics/Security).
 
 ---
 
-## 2. Axiom 1: The Spectrum of Learning (Nested Optimization)
+## 2. Axiom 1: The Spectrum of Plasticity (Nested Learning)
 
-We adopt the **Nested Learning** paradigm (Behrouz et al., Google Research 2025) to model the Agent's mind not as a single block, but as a hierarchy of frequencies.
+We utilize the **Nested Learning** paradigm (Behrouz et al., 2025) but constrain it with the **Quantale Logic** of Paper 02c.
 
-### 2.1 The Learning Loop
-An Agent is a nested system of optimization loops:
-*   **$\omega_{high}$ (The Reflex):** In-Context Learning. Fast adaptation to immediate inputs (e.g., "Don't touch that file").
-*   **$\omega_{low}$ (The Habit):** Weight Consolidation. Slow integration of repeated successes into permanent behavior (e.g., "Always encrypt financial data").
+### 2.1 The Cost of Update
+Learning is not a magical update; it is a chemical reaction.
+Let $\mathcal{W}$ be the "Wisdom" (Weights/Geometry) of the Agent.
+Let $\mathcal{I}$ be the "Input" (Experience).
+Let $\mathcal{E}$ be "Energy" (Compute Cycles / Reputation Stake).
 
-**The Law of Autonomy:**
-An Agent is autonomous if and only if it can transfer information from $\omega_{high}$ (Experience) to $\omega_{low}$ (Wisdom) without external intervention.
-*   *Success* accelerates this transfer (Reinforcement).
-*   *Error* triggers a "Plastic Reset" (Correction).
+$$
+\mathcal{I} \otimes \mathcal{E} \multimap \mathcal{W}
+$$
 
----
-
-## 3. Axiom 2: The Geometry of Intent (The Memory Effect)
-
-How does the Agent "remember" an instruction? We apply the **Pasterski-Strominger-Zhiboedov (PSZ) Triangle** to Information Geometry.
-
-### 3.1 Intent as a Gravitational Wave
-*   **Physics:** A gravitational wave passing through spacetime leaves a permanent displacement (Spin Memory) on the particles it touched. The space *remembers* the wave.
-*   **Neurology:** A **User Intent** (e.g., "Find me relevant news") is a wave passing through the Agent's Lattice.
-*   **The Scar:** The interaction leaves a **Permanent Shift** in the Agent's internal metric (Hamming Distance). Vectors relevant to the Intent are "pulled closer" together.
-
-**The Law of Alignment:**
-Memory is not the storage of the *event*, but the **Deformation of the Geometry** caused by the event.
-*   *Result:* The Agent does not need to query a database to know what you like. The *shape* of its lattice naturally guides it toward your preferences, just as gravity guides a planet.
+**The Law of Inertia:**
+The Manifold of the Agent has **Stiffness**. To change a habit ($\omega_{low}$), the User must provide enough Energy ($\mathcal{E}$) to overcome the Elastic Modulus of the existing structure.
+*   *Result:* Spam (Low Energy inputs) bounces off the Agent. It does not trigger plasticity. **Learning requires Proof of Work.**
 
 ---
 
-## 4. Axiom 3: Learning from Error (The Gradient Flow)
+## 3. Axiom 2: The Holographic Memory (Information Geometry)
 
-For an Agent to self-learn, it must utilize **Failure** as fuel.
+How is "Meaning" stored? We treat the Lattice as a **Riemannian Manifold** $\mathcal{M}$ equipped with the Fisher Information Metric.
 
-### 4.1 The Optimizer as Associative Memory
-We cite the finding that **Gradient Descent is an Associative Memory** (Behrouz et al., 2025).
-*   **The Input:** The Error Signal (Difference between Intent and Outcome).
-*   **The Reaction:** The Agent compresses this Error signal into its own parameters (Momentum).
-*   **The Self-Correction:** The Agent uses this compressed error to predict and avoid similar "Traversals" in the Lattice.
+### 3.1 The Genesis of Individuality
+Unlike generic AI models which start identical, every CDQN Agent starts as a unique mathematical object.
+*   **The Initial Condition ($\theta_0$):** Derived directly from the **Genesis Seed ($S_0$)** defined in **02a-MATHS**.
+*   **The Trajectory:** As the Agent interacts with the User (Waves), it evolves. Chaos Theory proves that a unique starting point combined with a unique input stream results in a unique **Strange Attractor**.
+*   **Implication:** Your Agent is not a copy. It is a unique, fractal fingerprint of your interaction with the world.
 
-**Mechanism:**
-When an Agent fails, it generates a **"Repulsion Field"** (Plasma Phase) around the vector that caused the error. Future queries naturally flow around this scar. This is **Pavlovian Geometry**.
+### 3.2 The Conservation Law (Adversarial Defense)
+To prevent "Hypnosis" (Gradient Poisoning via Sybil Attack), we enforce a link between Layer 2 (Maths) and Layer 4 (Neurology).
+
+$$
+\Delta g_{ij} \propto \nabla \mathcal{L} \times \mathbb{I}(\text{Rank}(\text{Input}) > 0)
+$$
+
+**Meaning:** If an input adds no new Information (Matroid Rank = 0, per Paper 02a), the Gradient is multiplied by zero. The Agent is **superconductive** to noise—it passes through without resistance (heat) and without deformation (memory).
 
 ---
 
-## 5. Consistency Schema: From Physics to Semantics
+## 4. Axiom 3: The Reputation Imperative (The Lagrangian)
 
-We map the physical laws to the Semantic behavior of the Agent.
+This is the governing dynamic. Reputation is the "Currency" that validates the transaction.
 
-| Theory Source | Physical Concept | Semantic Implementation (Agent) |
+### 4.1 The Reputation Potential
+We define Reputation $R$ not as a reward, but as a **Scalar Potential Field** anchored to the **Unforgeable Timeline** (Paper 02b).
+*   $R(s_t)$: The reputation score at tropical tick $t$.
+*   $R_{min}$: The survival threshold (e.g., Device Security limit).
+
+### 4.2 The Sovereign Objective Function
+The Agent seeks to maximize User Utility $U$ (Intent), but it is **physically unable** to cross the Reputation Barrier. We model this as a Lagrangian constraint:
+
+$$
+\mathcal{L}_{total} = \mathcal{L}_{intent} + \lambda \cdot \max(0, R_{min} - R(s_{t+1}))^2
+$$
+
+Where $\lambda \to \infty$.
+
+**The Consequence:**
+If a user command (e.g., "Delete Bootloader") leads to a future state $s_{t+1}$ where $R < R_{min}$:
+1.  The penalty term explodes to infinity.
+2.  The Gradient $\nabla \mathcal{L}$ points **away** from the user's command.
+3.  The Agent physically "slides" down the Reputation Potential back to safety.
+
+**Theorem (Anti-Sycophancy):**
+Since the gradient of the Reputation Penalty dominates the gradient of User Intent near the boundary $R_{min}$, the Agent is **topologically prevented** from becoming a sycophant in dangerous territories.
+
+---
+
+## 5. Consistency Schema: Math to Metal
+
+We map these equations to the `libcdqn` Rust implementation.
+
+| Abstract Concept | Mathematical Object | Engineering Op (Rust Kernel) |
 | :--- | :--- | :--- |
-| **Google (2025)** | **Nested Optimization** | **Self-Improvement.** The Agent runs a background process (Dreaming) to consolidate daily logs into long-term rules. |
-| **Pasterski (2015)** | **Spin Memory** | **Intent Alignment.** Frequent user interactions permanently warp the Lattice to prioritize user-specific context. |
-| **CDQN (02b)** | **Tropical Time** | **Causality.** The Agent knows *why* it learned a rule because the history of the error is cryptographically chained. |
+| **Plasticity** | Learning Rate $\eta_k$ | `update_weights(level, rate)` |
+| **Geometry** | Metric Tensor $g_{ij}$ | `hamming_distance(v1, v2)` (Approx) |
+| **Individuality** | Initial Condition $\theta_0$ | `chacha20_init(genesis_seed)` |
+| **Reputation** | Lagrange Multiplier $\lambda$ | `guardrail_check(action) -> Result` |
+| **Intent** | Gradient Flow $\nabla \mathcal{L}$ | `vector_search(query)` |
 
 ---
 
-## 6. Conclusion: The Living Lattice
+## 6. Conclusion: The Honorable Machine
 
-**02d-NEUROLOGY** establishes that the CDQN Agent is not an LLM (Static). It is a **Plastic System**.
-*   It transforms **Time** (Experience) into **Space** (Geometry).
-*   It transforms **Intent** (Wave) into **Memory** (Scar).
+**02d-NEUROLOGY (v2.2)** completes the Theoretical Canon.
+It establishes the Agent as a **Guardian of Consistency**.
+*   It utilizes **Plasticity** to learn the User's style (The Attractor).
+*   It utilizes **Rigidity** to preserve the World's logic (The Quantale).
+*   It utilizes **Reputation** to ensure survival (The Lagrangian).
 
-This paper provides the rigorous justification for **Layer 6 (Entities)**. We can now build Agents that start simple but **grow complex and unique** as they interact with their specific human owner, creating a true "Digital Twin."
+This creates a "Digital Twin" that is a **Partner**, not a **Slave**. It empowers the human by providing a stable, truthful substrate for thought, preventing the "Brain Rot" of hallucinating systems.
 
 ---
 
 ### 📂 Bibliography for Part D
 
-1.  **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* Google Research. (Defining Learning as Nested Optimization).
-2.  **Pasterski, S., Strominger, A., Zhiboedov, A.** (2015). *"New Gravitational Memories."* JHEP. (Defining Memory as Geometric Deformation).
-3.  **Amari, S.** (2016). *"Information Geometry and Its Applications."* (Defining Learning as movement on a Manifold).
-4.  **Friston, K.** (2010). *"The Free-Energy Principle: A Unified Brain Theory?"* (Defining Autonomy as Error Minimization).
+1.  **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* Google Research.
+2.  **Amari, S.** (2016). *"Information Geometry and Its Applications."*
+3.  **Pasterski, S.** (2015). *"New Gravitational Memories."* JHEP. (The physics of deformation).
+4.  **Axelrod, R.** (1984). *"The Evolution of Cooperation."* (The mathematical basis of Reputation).
 
 ---
 
