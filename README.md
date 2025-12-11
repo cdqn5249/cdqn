@@ -1,38 +1,39 @@
-# CDQN: The Sovereign Loom
+# CDQN: The Geometric Standard
 
-![Status](https://img.shields.io/badge/Status-Research_Phase-blue) ![License](https://img.shields.io/badge/License-USSL_v1.2-purple) ![Physics](https://img.shields.io/badge/Physics-Geometric-orange)
+![Status](https://img.shields.io/badge/Status-Implementation_Phase-blue) ![License](https://img.shields.io/badge/License-USSL_v2.0-purple) ![Physics](https://img.shields.io/badge/Physics-Thermodynamic-orange)
 
 > **Card Data Quantale Network**
-> *Establishing Digital Physics for the Post-AI Era.*
+> *The International Laboratory for Sovereign Computing.*
 
 ---
 
-## 1. The Mission
+## 1. The Mission: Digital Physics
 
-We stand at the precipice of an **Entropy Crisis**. The marginal cost of generating information has hit zero. The internet is flooding with probabilistic "Slop," hallucinations, and deepfakes. The boundary between *Reality* and *Simulation* is collapsing.
+We stand at the **Efficiency Horizon**. The era of "Probabilistic Scaling" (Big Data / Large Models) has hit three hard walls: **Energy**, **Verification**, and **Sovereignty**.
 
-**CDQN** is not just a software project; it is a proposal for a new computational substrate. We reject the "File" metaphor. We model data as **Geometric Matter**—information that occupies space, follows causality, and cannot be cloned without cost.
+**CDQN** is not just a software project; it is a proposal for a **Geometric Standard**. We reject the "Black Box" model of AI. We treat information as **Digital Matter**—data that possesses Mass, Temperature, and Geometry.
 
-Our goal is to build the **Loom Virtual Machine (LVM)**: a runtime that enforces **Matroid Exclusion** and **Tropical Causality** at the silicon level, rendering AI hallucination and history tampering **Topologically Impossible**.
+Our goal is to build the **Loom Virtual Machine (LVM)**: a "Glass Box" runtime that enforces **Conservation Laws** and **Thermodynamic Stability** at the silicon level. This creates a computational substrate where hallucination is topologically impossible and human intent is the primary force.
 
 ---
 
 ## 2. The Research Complex (Greenpapers)
 
-The core intellectual property of CDQN is contained in our **Greenpaper Series**. These documents evolve through peer review and rigorous "Red Teaming."
+The core intellectual property is defined in our **Greenpaper Series**. These documents serve as the Constitution for the **International Laboratory**.
 
-### 📘 [01-COHESION: The Entropy-Automation Paradox](docs/research/01-COHESION.md)
-*   **The Crisis:** Analysis of the "Genie Event" (Interactive Simulations) and the collapse of the Trust-Entropy Ratio ($R_{te}$).
-*   **The Consensus:** Why "Scaling Laws" alone cannot solve reasoning (DeepMind validation) and why we need a verification layer grounded in physics.
+### 📘 [01-COHESION: The Human Standard](docs/research/01-COHESION.md)
+*   **The Crisis:** The "Suicide of Scale" and the economic risk of replacing the human workforce.
+*   **The Solution:** The **Empowerment Doctrine**. Using **Chronosa** and **CDQN** to upgrade the global population into "Mass Smart" System Architects.
 
-### 📕 [02-GEOMETRY: The Crystalline Lattice](docs/research/02-GEOMETRY.md)
-*   **The Theory:** A synthesis of **Matroid Theory** (Space), **Grassmannian Manifolds** (State), and **Tropical Geometry** (Time).
-*   **The Physics:** Defining a "Liquid Crystal" architecture where data is rivalrous (no cloning) and history is monotonic (no rewriting).
+### 📕 The Theoretical Canon (02-Series)
+*   **[02a-MATHS: Space](docs/research/02a-MATHS.md)** — *The Genesis Seed.* Defining the 10,240-dimensional **Sovereign Vector Space**.
+*   **[02b-PHYSICS: Time](docs/research/02b-PHYSICS.md)** — *The Ouroboros Ratchet.* Defining **Immutable History** and **Forward Secrecy** via key consumption.
+*   **[02c-CHEMISTRY: Interaction](docs/research/02c-CHEMISTRY.md)** — *The Quantale Economy.* Defining **Valency** and the cost of action. Nothing is free.
+*   **[02d-NEUROLOGY: Mind](docs/research/02d-NEUROLOGY.md)** — *The Fractal Self.* Defining the Agent as a **Strange Attractor** governed by **Reputation** and **Plasticity**.
 
-### 📗 [03-ARCHITECTURE: The Sovereign Loom](docs/research/03-ARCHITECTURE.md)
-*   **The Machine:** The blueprint for the **Loom Virtual Machine (LVM)**.
-*   **The Implementation:** How we map complex geometry to single-cycle **Bitwise Operations** (HDC) on standard ARM/RISC-V chips.
-*   **The Stack:** A 7-Layer architecture featuring **Durable Sovereign Entities** and a **Fractal Holographic Network**.
+### 📗 The Implementation (03-Series)
+*   **[03-ARCHITECTURE: The Machine](docs/research/03-ARCHITECTURE.md)** — The 9-Layer Genesis Stack, from Metal to Rendering.
+*   **[03a-METAL: The Substrate](docs/research/03a-METAL.md)** — The Hardware Specification. Implementing the **Continuum Memory System (CMS)** and **Lattice Ratchet** on consumer silicon.
 
 ---
 
@@ -42,30 +43,46 @@ CDQN is built on three pillars of **Sovereign Engineering**:
 
 | Pillar | Concept | Implementation |
 | :--- | :--- | :--- |
-| **Compute** | **Hyperdimensional (HDC)** | 10,000-bit Vectors fitting in **L1 Cache**. Zero-wait execution. |
+| **Compute** | **Continuum Memory** | A nested hierarchy (Fovea $\to$ Context $\to$ Deep Lattice) that scales infinitely on finite RAM. |
 | **Logic** | **Quantale Algebra** | Resource-aware computing. Data follows **Linear Logic** (Move, don't Copy). |
-| **Network** | **Fractal Holography** | **Dark Forest** protocol. Nodes are invisible noise unless recognized by a geometric key. |
+| **Security** | **Genesis Seed** | A deterministic, sovereign source of entropy. Every user lives in a mathematically unique universe. |
 
 ---
 
-## 4. The Architect
+## 4. The Roadmap: The "VMware Strategy"
 
-**Christophe Duy Quang Nguyen (System Ronin)**
-*   **Location:** Da Lat, Vietnam.
-*   **Background:** French/Vietnamese Dual Citizen.
-*   **Vision:** Leveraging the "Regulatory Arbitrage" between the Global North (Legal Trust) and Global South (Edge Efficiency) to build a sovereign computing standard.
+We are not building an OS from scratch immediately. We are infiltrating the existing stack to secure it.
 
-> *"We do not predict the future. We construct the geometry where the future can safely reside."*
+1.  **Phase 1: The Library (`libcdqn`)** — A portable Rust core that runs on Android, Windows, and Linux. It validates the **Tensor Logic** and **Thermal Physics** on consumer hardware.
+2.  **Phase 2: The Hypervisor (`cdqnVisor`)** — A Type-2 Hypervisor that runs secure "UserWorlds" in isolation, creating a **Virtual Lattice** overlay.
+3.  **Phase 3: The Sovereign OS (`cdqnOS`)** — The LVM becomes the Kernel. A Unikernel for Robotics, Critical Infrastructure, and Sovereign Servers.
 
 ---
 
-## 5. Licensing & Sovereignty
+## 5. The International Laboratory
+
+We propose the formation of a **Global Consortium** to standardize the Agentic Era.
+
+This initiative brings together the complementary strengths of global science:
+*   **Formal Verification:** Utilizing rigorous logic to prove that Agents cannot violate safety protocols.
+*   **Edge Engineering:** Developing low-latency, low-energy runtimes for the physical world.
+*   **Thermodynamic Computing:** Creating memory systems that optimize for energy per bit.
+
+**The Open Invitation:**
+We invite participation from **Sovereign Nations**, **Big Tech**, and **Academic Experts**.
+*   **To Industry:** We provide the **Safety Chassis** for your models.
+*   **To Nations:** We provide the **Sovereign Infrastructure** for your data.
+*   **To Researchers:** We provide a new field of **Digital Physics**.
+
+---
+
+## 6. Licensing & Sovereignty
 
 This project is governed by the **Universal Sovereign Source License (USSL) v2.0**.
 
-*   **Open for Genesis:** You are free to study, audit, and build Worlds using this logic.
-*   **Protected Lineage:** The "Structure of the Logic" is protected. Patent trolling or enclosing the math triggers the **Iron Shield Clause** (immediate termination of rights).
-*   **Commercial Threshold:** Industrial-scale use (>$1M revenue or >10k users) requires a partnership.
+*   **Open for Genesis:** Free for research, education, and sovereign creation.
+*   **Protected Lineage:** The "Structure of the Logic" is protected against enclosure.
+*   **Commercial Threshold:** Industrial-scale use requires partnership.
 
 *See `LICENSE.md` for the full legal text.*
 
@@ -73,7 +90,6 @@ This project is governed by the **Universal Sovereign Source License (USSL) v2.0
 
 ### 📡 Contact & Contribution
 
-We are currently in the **Research & Validation Phase**.
-We invite mathematicians, systems engineers, and cryptographers to critique the Greenpapers via GitHub Issues.
-
 **Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
+
+> *"We do not predict the future. We construct the geometry where the future can safely reside."*
