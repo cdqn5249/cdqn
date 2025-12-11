@@ -1,12 +1,14 @@
 # 02c-CHEMISTRY: The Logic of Interaction
 
 *   **File:** `docs/research/02c-CHEMISTRY.md`
+*   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
+*   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Quantale Theory, Linear Logic & Graph Theory
-*   **Date:** December 9, 2025
-*   **Status:** `v1.2` (Trilogy Sync)
+*   **Date:** December 11, 2025
+*   **Status:** `v1.3` (The Quantale Standard)
 
 > **The Reactive Substrate.**
-> *We define the interaction rules of the LVM using Quantales and Linear Logic. Unlike standard boolean logic (where truth can be cloned), our logic is "Resource Aware." Data behaves like chemical elements with specific Valency, allowing for the deterministic construction of complex semantic molecules.*
+> *We define the interaction rules of the LVM using Quantales and Linear Logic. Unlike standard boolean logic (where truth can be cloned), our logic is "Resource Aware." Data behaves like chemical elements with specific Valency, constrained by World Gravity. Every interaction is a transaction where resources are consumed, not copied.*
 
 ---
 
@@ -14,7 +16,7 @@
 
 In standard computing, data integration is manual. A SQL JOIN or a JSON merge requires an external script to define the relationship. The data itself is inert.
 
-In **CDQN**, data is **Reactive**. A CDU (Card) carries its own "Valency"—a definition of what it can bond with. This allows the system to self-assemble into valid structures (Worlds) while rejecting invalid bonds (Logic Errors) at the atomic level.
+In **CDQN**, data is **Reactive**. A CDU (Card) carries its own "Valency"—a definition of what it can bond with. This allows the system to self-assemble into valid structures while enforcing the "Conservation of Value" defined by the Quantale.
 
 ---
 
@@ -33,7 +35,9 @@ $$
 In Boolean logic, $A \land A = A$ (Idempotence). I can use a fact as many times as I want.
 In Quantale logic (specifically **Linear Logic**), we treat data as **Matter**:
 
-*   $A \otimes A \ne A$
+$$
+A \otimes A \ne A
+$$
 
 **Meaning:** If I have a "Coin" card ($A$), using it to buy an "Apple" consumes the Coin. The interaction is a **Chemical Reaction**, not a logical reference.
 
@@ -44,39 +48,36 @@ This solves the "Double Spend" problem and the "Pointer Aliasing" problem withou
 
 ## 3. Axiom 2: Valency & Bonding (The Graph Topology)
 
-We define the "Shape" of the data using Graph Theory constraints, which we term **Valency**.
+We define the "Shape" of the data using Graph Theory constraints, modulated by the **World Gravity** (from 02b).
 
 ### 3.1 The Valence Function $\nu(C)$
-Let $C$ be a CDU type (e.g., `User`, `Device`, `File`).
-We define a function $\nu: C \to \mathbb{N}$ that limits the number of active edges (bonds) a card can sustain.
+Let $C$ be a CDU type. We define a function $\nu: C \to \mathbb{N}$ that limits the number of active edges (bonds) a card can sustain.
 
 $$
 \text{deg}(v) \le \nu(\text{type}(v))
 $$
 
 ### 3.2 Bond Types (The Interaction Spectrum)
-We define three types of bonds based on their binding strength (Hamming/Logic proximity):
+The strength of a bond is determined by the **Thermal Stability** (02b) and the **World Constants** ($\lambda$).
 
 1.  **Covalent Bond (Strong):** **Identity / Ownership.**
+    *   *Physics:* High Binding Energy. Breaking this requires massive "Reputation" expenditure.
     *   *Example:* `User` $\leftrightarrow$ `Private Key`.
-    *   *Physics:* Breaking this bond destroys the Entity (Identity Death).
 2.  **Ionic Bond (Medium):** **Access / Session.**
+    *   *Physics:* Medium Energy. Soluble in specific contexts (e.g., Timeouts).
     *   *Example:* `User` $\leftrightarrow$ `Server`.
-    *   *Physics:* Can be dissolved (Log out) without damaging the particles.
 3.  **Hydrogen Bond (Weak):** **Context / Reference.**
-    *   *Example:* `User` $\leftrightarrow$ `Song Preference`.
-    *   *Physics:* Ephemeral connections (The "Gas" phase from 02b).
-
-**Red Team Note:** These are **Logical Constraints** enforced by the Matroid Rank check during the Link operation.
+    *   *Physics:* Low Energy. Ephemeral connections (The "Gas" phase).
+    *   *Example:* `User` $\leftrightarrow$ `Search Query`.
 
 ---
 
 ## 4. Axiom 3: The Reaction Equation
 
-How do we process a transaction or an event? We model it as a chemical equation.
+How do we process a transaction? We model it as a chemical equation where **Nothing is Free**.
 
 $$
-\text{Reagents} \xrightarrow{\text{Rule}} \text{Products}
+\text{Reagents} + \text{Energy} \xrightarrow{\text{Rule}} \text{Products} + \text{Waste}
 $$
 
 ### 4.1 Linear Implication ($A \multimap B$)
@@ -87,7 +88,7 @@ The operator $\multimap$ (Lolly) represents a function that *consumes* its input
 ### 4.2 Catalysts ($!A$)
 Some data is not consumed (e.g., the Code itself, or a Public Key). We denote this with the exponential modality $!A$ ("Of Course A").
 *   **Rule:** $!A \otimes B \multimap C$
-*   **Execution:** $A$ is used to transform $B$ into $C$, but $A$ remains unchanged. $A$ is the **Catalyst**.
+*   **Execution:** $A$ is used to transform $B$ into $C$, but $A$ remains unchanged. However, using the Catalyst still incurs a **Thermodynamic Cost** (Compute/Battery).
 
 ---
 
@@ -99,7 +100,7 @@ Some data is not consumed (e.g., the Code itself, or a Public Key). We denote th
 | **Reaction** | $\multimap$ (Consume) | `FREE` / `MOVE` | **Transactions** |
 | **Catalyst** | $!A$ (Bang) | `READ_ONLY` Ptr | **Code / Rules** |
 | **Bond** | $\otimes$ (Tensor) | `LINK` (Pointer) | **Graph Edges** |
-| **Choice** | $\oplus$ (Plus) | `BRANCH` (Switch) | **Menu / Options** |
+| **Cost** | $E$ (Energy) | `CYCLES` / `BATTERY` | **The Price of Logic** |
 
 ---
 
@@ -107,15 +108,13 @@ Some data is not consumed (e.g., the Code itself, or a Public Key). We denote th
 
 With **02c-CHEMISTRY**, the Theoretical Foundation is complete.
 
-1.  **02a-MATHS:** We defined the **Space** (10,240-bit Lattice).
-2.  **02b-PHYSICS:** We defined the **Time** (Tropical Monotonicity).
-3.  **02c-CHEMISTRY:** We defined the **Life** (Linear Logic Interaction).
+1.  **02a-MATHS:** We defined the **Space** (Sovereign Unique Geometry).
+2.  **02b-PHYSICS:** We defined the **Time** (Unforgeable History) and **Mass** (Inertia).
+3.  **02c-CHEMISTRY:** We defined the **Interaction** (Quantale Economy).
 
-This trilogy establishes a framework for computation based on stateful, iterative logic. This approach, which diverges from the one-shot nature of standard Transformers, is now being validated by emerging research from pioneers in the field, such as the **'Continuous Thought Machine'** architecture proposed by **Darlow, Jones, et al. (Sakana AI, 2025)**. This confirms that the future of AI lies in systems that reason over time, not just across tokens.
+This trilogy establishes a framework for computation based on stateful, iterative logic. This approach, which diverges from the one-shot nature of standard Transformers, is now being validated by emerging research from pioneers in the field, such as the **'Continuous Thought Machine'** architecture proposed by **Darlow, Jones, et al. (Sakana AI, 2025)**. This confirms that the future of AI lies in systems that reason over time (Reaction), not just across tokens.
 
-We have proven that a **Sovereign Machine** can be built not on "AI Magic," but on rigorous, verifiable **Digital Physics**. This Trilogy serves as the "Constitution" for the **LVM**, providing the experts in Dalat and Paris with the formal proofs they require to trust the architecture.
-
-*Next Step:* We must now aggregate these theories into the practical **Greenpaper 03 (ARCHITECTURE)** update, ensuring the "Blueprint" matches the "Theory."
+We have proven that a **Sovereign Machine** can be built not on "AI Magic," but on rigorous, verifiable **Digital Physics**. This Trilogy serves as the "Constitution" for the **LVM**.
 
 ---
 
