@@ -5,19 +5,19 @@
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Systems Architecture & Full-Stack Ontology
 *   **Date:** December 11, 2025
-*   **Status:** `v3.3` (The Thermodynamic Blueprint)
+*   **Status:** `v3.4` (The Global Standard)
 
 > **The Machine of Applied Physics.**
-> *We propose the design for the Loom Virtual Machine (LVM). Unlike legacy operating systems that manage "Files" and "Threads," the LVM manages "Digital Matter." It implements the 9-Layer Genesis Stack, enforcing the laws of Sovereign Uniqueness, Tropical Time, and Quantale Reputation to create a "Glass Box" computing environment.*
+> *We propose the design for the Loom Virtual Machine (LVM). Unlike legacy operating systems that manage "Files" and "Threads," the LVM manages "Digital Matter." It implements the 9-Layer Genesis Stack, enforcing the laws of Sovereign Uniqueness, Tropical Time, and Quantale Reputation to create a "Glass Box" computing environment empowering the Human-in-the-loop.*
 
 ---
 
 ## 1. Abstract: The Organism Metaphor
 
-**Greenpaper 01** identified the "Cognitive Crisis": we cannot compete on Volume (Brute Force); we must compete on **Efficiency** (Structure).
+**Greenpaper 01** identified the "Cognitive Crisis": the need for a **Human Standard** in an era of automation.
 **Greenpaper 02** defined the "Laws": Space (Genesis), Time (Tropical), Interaction (Quantale), and Memory (Fractal).
 
-This paper defines **The Machine**. Current Operating Systems are administrative bureaucrats; they shuffle files without understanding content. The **LVM (Loom Virtual Machine)** is designed as a **Digital Organism**. It possesses:
+This paper defines **The Machine**. The **LVM (Loom Virtual Machine)** is designed as a **Digital Organism**. It possesses:
 1.  **Proprioception:** It knows its own resource limits (Layer 1-2).
 2.  **Memory:** It has an immutable causal history and a plastic fractal mind (Layer 3-4).
 3.  **Metabolism:** It consumes resources to bond data (Layer 4).
@@ -60,12 +60,7 @@ $$
 S_{t+1} = \max(S_t, S_{new})
 $$
 
-*   **Thermodynamics:** Data transitions between Gas (Context) and Crystal (Truth) based on **Thermal Stability**
-
-$$
-    ($T \to 0$).
-$$
-    
+    *   **Thermodynamics:** Data transitions between Gas (Context) and Crystal (Truth) based on **Thermal Stability** ($T \to 0$).
 *   **Layer 4: CHEMISTRY (The Economy).**
     *   **Quantale Logic:** Interaction requires Energy. Data is rivalrous. You cannot copy a "Coin" without destroying the original.
     *   **Valency:** Defines bond strength. High-mass concepts (Truths) have high Valency; low-mass concepts (Noise) have low Valency.
@@ -123,13 +118,13 @@ This is where the Human meets the Machine. We solve the "Abstraction Gap" by syn
 
 ---
 
-## 7. The Strategy: The "Efficiency Republic"
+## 7. The Strategy: The Human Standard
 
-By implementing this stack, we achieve the **Efficiency Imperative** (Paper 01):
+By implementing this stack, we enable the **International Laboratory** to deliver on the promises of Paper 01:
 
-1.  **For Education:** A student in Dalat can build a "Robot Controller" by arranging Visual Cards (CDUs) in Layer 9. The LVM handles the Physics (Layer 3) and Safety (Layer 2). The "Python Tax" is removed.
-2.  **For Industry:** We provide a **Formal Verification** platform that runs on cheap chips. A drone running LVM does not need an H100; it needs an ARM Cortex because the logic is optimized at the bit level.
-3.  **For Sovereignty:** The user owns the **Genesis Seed** (Layer 2) and the **World** (Layer 5). The Logic is transparent ("Glass Box"), rivalrous, and immutable.
+1.  **Workforce Empowerment (Education):** We provide the tools for "Mass Smart People." The visual interface (Layer 7-9) allows non-programmers to build complex, verified logic, securing their economic future in an automated world.
+2.  **Infrastructure Stability (Industry):** We provide the "Safety Chassis" for Big Tech. The LVM (Layer 1-4) wraps probabilistic models in a deterministic shell, enabling safe deployment in critical sectors.
+3.  **Digital Sovereignty (Government):** We provide the "Sovereign Seed" (Layer 2). Nations and individuals own their geometry, their history, and their truth, independent of foreign cloud providers.
 
 ---
 
