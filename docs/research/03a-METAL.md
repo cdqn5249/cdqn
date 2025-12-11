@@ -5,10 +5,10 @@
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Layer 1 Specification (Continuum Memory, Hardware Abstraction, & Signal Processing)
 *   **Date:** December 11, 2025
-*   **Status:** `v3.7` (The Forward Secrecy Standard)
+*   **Status:** `v3.8` (The Tiered Sovereignty Standard)
 
 > **The Physics of the Machine.**
-> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics are enforced consistently, implementing a **Continuum Memory System** and a **Lattice Ratchet** that physically erases past keys to ensure Post-Quantum Forward Secrecy.*
+> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics are enforced consistently, implementing a **Continuum Memory System** and a **Lattice Ratchet**. Crucially, it defines the **Two Tiers of Sovereignty**, distinguishing between software privacy on guest OSs and true hardware sovereignty on bare metal.*
 
 ---
 
@@ -80,20 +80,25 @@ Plasma acts as the system's "Immune Response."
 
 ---
 
-## 5. The Runtime Topology: From App to Sovereign
+## 5. The Runtime Topology: Tiered Sovereignty
 
-To ensure universal adoption while maintaining sovereign capabilities, the LVM Specification defines two primary modes of operation.
+Following the security axioms defined in **`02e-RITUALS`**, the LVM implementation is strictly divided into two tiers based on the hardware trust model.
 
-### Tier 1: Library Mode (The Guest)
+### Tier 1: Library Mode (Guest Sovereignty)
 *   **Target:** Android (APK), Windows, Linux (User Space).
 *   **Implementation:** `libcdqn` (Rust).
-*   **Constraint:** Subject to OS scheduling and W^X (Write XOR Execute) security policies.
-*   **Solution:** Uses a **Bytecode Interpreter** or **Ahead-of-Time (AOT)** compilation. Uses **Async Entropy Workers** to pay the "Security Tax" during I/O waits.
+*   **Security Context:** **Privacy.**
+    *   **Constraint:** The Host OS controls memory and I/O. The LVM cannot enforce "Physical Erasure" or "Antimatter" protocols against a Root attacker.
+    *   **Rituals:** Emulated via software. Useful for preventing accidents, but not secure against "God Mode" attacks.
+    *   **Entropy:** Derived from Host OS CSPRNG.
 
-### Tier 2: Sovereign Mode (The Host)
-*   **Target:** Raspberry Pi, RISC-V Boards, Robotics.
-*   **Implementation:** `cdqnOS` (Unikernel / Type-1 Hypervisor).
-*   **Physics:** Real-Time Consistency.
+### Tier 2: Sovereign Mode (Hardware Sovereignty)
+*   **Target:** Raspberry Pi, RISC-V Boards, Robotics (Bare Metal).
+*   **Implementation:** `cdqnOS` (Unikernel / Type-1 Hypervisor) + **TEE**.
+*   **Security Context:** **Sovereignty.**
+    *   **Constraint:** The LVM controls the silicon. The `GenesisSeed` is anchored in the **Trusted Execution Environment (TEE)**.
+    *   **Rituals:** Enforced via Hardware Interrupts (The Totem).
+    *   **Antimatter:** Active. The system can physically destroy keys if a VDF violation is detected.
 
 ---
 
@@ -104,13 +109,17 @@ We implement "Defense in Depth" within the Hardware Abstraction Layer (HAL).
 | Guard Layer | Mechanism | The Check | Behavior |
 | :--- | :--- | :--- | :--- |
 | **1. Spatial** | **Virtual Arena** | *"Is this stack safe?"* | **Stack Safety.** Pre-allocated Arena prevents recursion overflows. |
-| **2. Temporal** | **The Ouroboros** | *"Is this key fresh?"* | **Forward Secrecy.** Old keys are physically overwritten in RAM after use. |
-| **3. Spectral** | **LWE Noise** | *"Is this memory visible?"* | **Obfuscation.** Adaptive Thermodynamics (Green/Dark Mode). |
+| **2. Temporal** | **The Ouroboros** | *"Is this key fresh?"* | **Forward Secrecy.** See Constraint 6.2 below. |
+| **3. Spectral** | **LWE Noise** | *"Is this memory visible?"* | **Obfuscation.** Adaptive Thermodynamics. |
 
 ### 6.1 Adaptive Thermodynamics (The Dark Mode)
 To balance Security with Usability (Battery Life), the LVM implements **Adaptive Obfuscation**.
 *   **Green Mode (Default on Battery):** Unused RAM is zeroed. High efficiency.
 *   **Dark Mode (Default on Plugged/Panic):** Unused RAM is filled with **ChaCha20** noise.
+
+### 6.2 The Ouroboros Constraint
+*   **In Tier 2 (Sovereign):** Old keys are overwritten with `0x00` and the memory cell is flushed via direct hardware instruction.
+*   **In Tier 1 (Guest):** Old keys are overwritten via `volatile_memset`, but the OS Paging system may have created swap copies. **Forward Secrecy is "Best Effort."**
 
 ---
 
