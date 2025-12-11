@@ -3,22 +3,22 @@
 *   **File:** `docs/research/02b-PHYSICS.md`
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
-*   **Context:** Tropical Geometry, Thermodynamics & Newtonian Mechanics
+*   **Context:** Tropical Geometry, Thermodynamics, Newtonian Mechanics & Post-Quantum Cryptography
 *   **Date:** December 11, 2025
-*   **Status:** `v1.4` (The Thermodynamic Standard)
+*   **Status:** `v1.5` (The Ouroboros Standard)
 
 > **The Thermodynamic Substrate.**
-> *We define the Arrow of Time, the States of Matter, and the Laws of Inertia within the LVM. We integrate **Tropical Geometry** (Time), **Martin-Olalla Stability** (Temperature), and **Compositional Theory** (Mass) to create a physics engine where data is not just "stored," but exists as physical matter that resists modification based on its history and thermal stability.*
+> *We define the Arrow of Time, the States of Matter, and the Laws of Inertia within the LVM. We integrate **Tropical Geometry** (Time), **Martin-Olalla Stability** (Temperature), and **Compositional Theory** (Mass) to create a physics engine where data is physical matter. Crucially, we introduce the **Ouroboros Principle** (Entropic Ratchet) to guarantee **Post-Quantum Forward Secrecy**: the key to the present consumes the key to the past.*
 
 ---
 
 ## 1. Introduction: From Data to Matter
 
-In standard computing, data is weightless and timeless. It can be overwritten instantly.
-In **CDQN**, data behaves like **Matter**.
-1.  It flows through an **Immutable Time** (Tropical History).
-2.  It exists in **Thermodynamic Phases** (Crystal/Liquid).
-3.  It possesses **Inertia** (Mass) that resists tampering.
+In standard computing, data is weightless and timeless. Keys are static.
+In **CDQN**, data behaves like **Matter** and Time behaves like **Entropy**.
+1.  **Time is Irreversible:** History is a Tropical Ratchet.
+2.  **Keys are Consumable:** The Genesis Seed burns itself to create the future (Forward Secrecy).
+3.  **Meaning has Inertia:** Concepts possess Mass that resists tampering.
 
 ---
 
@@ -27,9 +27,9 @@ In **CDQN**, data behaves like **Matter**.
 Time is not a clock; it is a **Chain of Events**.
 
 ### 2.1 The Unforgeable Timeline
-We anchor the "Tropical Semiring" to the Sovereign Stream defined in **Paper 02a**.
+We anchor the "Tropical Semiring" to the Sovereign Stream.
 *   **The Tick ($t$):** A logical index derived from the user's `GenesisSeed`.
-*   **The Ratchet:** The history hash $H_t$ is a cryptographic function of the previous state and the unique entropy of that moment.
+*   **The Ratchet:** The history hash $H_t$ is a cryptographic function of the previous state.
 
 $$
 H_{t+1} = \text{Hash}(H_t \oplus \text{Stream}(t) \oplus \text{Event})
@@ -42,7 +42,18 @@ $$
 S_{t+1} = S_t \oplus \Delta
 $$
 
-Since $x \oplus y = \max(x, y)$, the accumulation of truth is irreversible. You cannot "undo" a transaction; you can only append a correction.
+Since $x \oplus y = \max(x, y)$, the accumulation of truth is irreversible.
+
+### 2.3 The Ouroboros Principle (The Entropic Ratchet)
+To achieve **Post-Quantum Forward Secrecy**, the `GenesisSeed` ($S$) cannot be static. It behaves like fuel: it is consumed to generate the Next Tick.
+
+$$
+S_{t+1} = \text{LWE\_Function}(S_t)
+$$
+
+*   **The Law of Erasure:** Immediately after generating $S_{t+1}$, the system **securely erases** $S_t$ from memory.
+*   **The Quantum Barrier:** Because the mutation function is based on the **Shortest Vector Problem (SVP)** (Lattice Hardness), even a Quantum Computer possessing $S_{t+1}$ cannot invert the function to derive $S_t$.
+*   **Result:** The past is cryptographically burned. If a node is compromised today, the attacker cannot decrypt yesterday's data.
 
 ---
 
@@ -65,8 +76,7 @@ How do we know if a concept is "True"? We measure its **Temperature**.
 
 ### 4.1 The Vanishing of Plasticity
 Following **Martín-Olalla (2025)**, we define stability at the Phase Space Boundary ($T=0$).
-*   **Plasticity ($C$):** The ability of a vector to change (Specific Heat).
-*   **The Law:** As a concept approaches Truth (Crystal Phase), its Plasticity must vanish.
+*   **The Law:** As a concept approaches Truth (Crystal Phase), its Plasticity ($C$) must vanish.
 
 $$
 C \propto T
@@ -77,10 +87,8 @@ $$
 ### 4.2 Thermal Isomorphism (The Consensus)
 How do two nodes with different `GenesisSeeds` agree on "Apple"?
 They compare **Thermal Geometry**.
-*   If Node A has "Apple" at $T \approx 0$ (Stable).
-*   And Node B has "Apple" at $T \approx 0$ (Stable).
-*   And the **Relative Distances** to neighbors (Red, Fruit) are identical.
-*   **Then:** The concepts are semantically equivalent, even if the bits differ.
+*   If $\text{Shape}(A) \approx \text{Shape}(B)$ AND $T_A \approx T_B \approx 0$:
+*   **Then:** The concepts are semantically equivalent. Meaning is defined as **Shape stabilized by Temperature**.
 
 ---
 
@@ -103,31 +111,27 @@ F > \frac{m(V)}{T(V) + \epsilon}
 $$
 
 *   **Scenario:** Attacker tries to redefine "Apple" as "Car".
-*   **Defense:**
-    1.  The concept "Apple" has high Mass (bonded to Fruit, Nature).
-    2.  The concept is Cold (Crystal Phase, $T \approx 0$).
-    3.  **Result:** The Inertia is near-infinite. The attacker's Force is insufficient. The overwrite fails.
-*   **World Gravity:** In `NatureWorld`, "Fruit" is heavy ($\lambda=100$). In `TechWorld`, "Silicon" is heavy. The "World" determines which definition wins.
+*   **Defense:** "Apple" has high Mass (bonded to Fruit). "Apple" is Cold ($T \approx 0$). The Inertia is infinite. The overwrite fails.
 
 ---
 
 ## 6. Conclusion: The Physical Record
 
-**02b-PHYSICS (v1.4)** defines a system where:
-1.  **Time** is unforgeable (Genesis Stream).
+**02b-PHYSICS (v1.5)** defines a system where:
+1.  **Time** is unforgeable (Ouroboros Ratchet).
 2.  **Truth** is stable (Thermal Law).
 3.  **Meaning** is heavy (Newtonian Mass).
 
-This ensures that the LVM does not just "process data"; it **accretes reality**.
+This ensures that the LVM does not just "process data"; it **accretes reality** in a way that can never be reversed or decrypted by future adversaries.
 
 ---
 
 ### 📂 Bibliography for Part B
 
 1.  **Heidergott, B.** (2006). *"Max Plus at Work."* (Tropical Algebra).
-2.  **Martín-Olalla, J.M.** (2025). *"Thermal stability originates the vanishing of the specific heats."* Physica Scripta. (The thermodynamic basis of stability).
-3.  **Shapiro, M.** (2011). *"Conflict-free Replicated Data Types."* (Monotonic History).
-4.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."* (Compositional Structure).
+2.  **Martín-Olalla, J.M.** (2025). *"Thermal stability originates the vanishing of the specific heats."* Physica Scripta.
+3.  **Peikert, C.** (2016). *"A Decade of Lattice Cryptography."* (Foundation for LWE Forward Secrecy).
+4.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."*
 
 ---
 
