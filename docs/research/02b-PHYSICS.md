@@ -30,11 +30,18 @@ Time is not a clock; it is a **Chain of Events**.
 We anchor the "Tropical Semiring" to the Sovereign Stream defined in **Paper 02a**.
 *   **The Tick ($t$):** A logical index derived from the user's `GenesisSeed`.
 *   **The Ratchet:** The history hash $H_t$ is a cryptographic function of the previous state and the unique entropy of that moment.
-    $$ H_{t+1} = \text{Hash}(H_t \oplus \text{Stream}(t) \oplus \text{Event}) $$
+
+$$
+H_{t+1} = \text{Hash}(H_t \oplus \text{Stream}(t) \oplus \text{Event})
+$$
 
 ### 2.2 The State Equation (Max-Plus)
 History is monotonic.
-$$ S_{t+1} = S_t \oplus \Delta $$
+
+$$
+S_{t+1} = S_t \oplus \Delta
+$$
+
 Since $x \oplus y = \max(x, y)$, the accumulation of truth is irreversible. You cannot "undo" a transaction; you can only append a correction.
 
 ---
@@ -58,10 +65,14 @@ How do we know if a concept is "True"? We measure its **Temperature**.
 
 ### 4.1 The Vanishing of Plasticity
 Following **Martín-Olalla (2025)**, we define stability at the Phase Space Boundary ($T=0$).
-*   **Plasticity ($C$):** The ability of a vector to change.
+*   **Plasticity ($C$):** The ability of a vector to change (Specific Heat).
 *   **The Law:** As a concept approaches Truth (Crystal Phase), its Plasticity must vanish.
-    $$ C \propto T $$
-    *   *Implication:* You cannot easily edit a "Cold" fact. To change a Crystal, you must inject massive energy to "melt" it back to Liquid state first.
+
+$$
+C \propto T
+$$
+
+*   *Implication:* You cannot easily edit a "Cold" fact. To change a Crystal, you must inject massive energy to "melt" it back to Liquid state first.
 
 ### 4.2 Thermal Isomorphism (The Consensus)
 How do two nodes with different `GenesisSeeds` agree on "Apple"?
@@ -79,11 +90,17 @@ How do we distinguish "Apple (Fruit)" from "Apple (Phone)"? We weigh them.
 
 ### 5.1 Compositional Mass ($m$)
 A vector is a bundle of its parts. Its **Mass** is the sum of the weights of its components, scaled by the **World Gravity**.
-$$ m(V) = \sum (w_{\text{component}} \times \lambda_{\text{World}}) $$
+
+$$
+m(V) = \sum (w_{\text{component}} \times \lambda_{\text{World}})
+$$
 
 ### 5.2 The Law of Overwrite (Inertia)
 To overwrite or redefine a concept, the **Force of Intent ($F$)** must exceed the **Structural Inertia**.
-$$ F > \frac{m(V)}{T(V) + \epsilon} $$
+
+$$
+F > \frac{m(V)}{T(V) + \epsilon}
+$$
 
 *   **Scenario:** Attacker tries to redefine "Apple" as "Car".
 *   **Defense:**
