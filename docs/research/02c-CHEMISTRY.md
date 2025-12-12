@@ -4,11 +4,11 @@
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Quantale Theory, Linear Logic & Graph Theory
-*   **Date:** December 11, 2025
-*   **Status:** `v1.3` (The Quantale Standard)
+*   **Date:** December 12, 2025
+*   **Status:** `v1.4` (The Metabolic Standard)
 
 > **The Reactive Substrate.**
-> *We define the interaction rules of the LVM using Quantales and Linear Logic. Unlike standard boolean logic (where truth can be cloned), our logic is "Resource Aware." Data behaves like chemical elements with specific Valency, constrained by World Gravity. Every interaction is a transaction where resources are consumed, not copied.*
+> *We define the interaction rules of the LVM using Quantales and Linear Logic. Unlike standard boolean logic (where truth can be cloned), our logic is "Resource Aware." Data behaves like chemical elements with specific Valency, constrained by World Gravity. Crucially, we introduce the **Law of Metabolism**, defining how Energy is generated not just by CPU cycles, but by **Human Attention** (Symbiosis) and **Recycling**, creating a circular, bio-mimetic economy.*
 
 ---
 
@@ -83,38 +83,60 @@ $$
 ### 4.1 Linear Implication ($A \multimap B$)
 The operator $\multimap$ (Lolly) represents a function that *consumes* its input.
 *   **Rule:** `Token` $\multimap$ `Access`
-*   **Execution:** The system consumes the `Token` card and produces the `Access` card. The `Token` is mathematically annihilated (sent to the Heat Sink).
+*   **Execution:** The system consumes the `Token` card and produces the `Access` card. The `Token` is mathematically annihilated.
 
 ### 4.2 Catalysts ($!A$)
 Some data is not consumed (e.g., the Code itself, or a Public Key). We denote this with the exponential modality $!A$ ("Of Course A").
 *   **Rule:** $!A \otimes B \multimap C$
-*   **Execution:** $A$ is used to transform $B$ into $C$, but $A$ remains unchanged. However, using the Catalyst still incurs a **Thermodynamic Cost** (Compute/Battery).
+*   **Execution:** $A$ is used to transform $B$ into $C$, but $A$ remains unchanged. However, using the Catalyst still incurs a **Thermodynamic Cost** (Wear/Entropy).
 
 ---
 
-## 5. Consistency Schema: Logic to Metal
+## 5. Axiom 4: The Law of Metabolism (Energy Sources)
+
+Where does the Energy ($\mathcal{E}$) come from? We define three valid sources of negative entropy, creating a hierarchy of value.
+
+### 5.1 Mechanical Work (CPU)
+*   **Source:** Silicon.
+*   **Physics:** Reducing entropy via brute-force computation (Proof of Work).
+*   **Role:** The baseline metabolism. Slow, steady, universal.
+
+### 5.2 Symbiotic Work (Human Attention)
+*   **Source:** Biology.
+*   **Physics:** When a Human clarifies a concept or resolves a conflict, they inject **High-Quality / Low-Entropy** information directly into the system.
+*   **Valuation:** Because Human Attention is scarce and biologically expensive, the system values it at a **premium multiplier** (e.g., 10x CPU). This allows a smartphone user to compete with a server farm by being *smarter*, not just faster.
+
+### 5.3 Recycling (Circular Economy)
+*   **Source:** Waste Heat (Plasma).
+*   **Physics:** A broken bond releases energy. While some is lost to the environment (inefficiency), a portion can be recaptured.
+*   **Role:** The "Detritivore" loop. It ensures that destruction feeds creation, allowing established nodes to maintain themselves efficiently.
+
+---
+
+## 6. Consistency Schema: Logic to Metal
+
+We map these equations to the `libcdqn` Rust implementation.
 
 | Chemical Concept | Linear Logic Symbol | Engineering Op (Layer 1) | Application |
 | :--- | :--- | :--- | :--- |
-| **Resource** | $A$ (Atom) | `MALLOC` (Allocation) | **Tokens / Assets** |
+| **Resource** | $A$ (Atom) | `MALLOC` | **Tokens / Assets** |
 | **Reaction** | $\multimap$ (Consume) | `FREE` / `MOVE` | **Transactions** |
+| **Metabolism** | $\mathcal{E}_{in}$ | `POW` / `TEE_SIGN` | **Minting Energy** |
 | **Catalyst** | $!A$ (Bang) | `READ_ONLY` Ptr | **Code / Rules** |
 | **Bond** | $\otimes$ (Tensor) | `LINK` (Pointer) | **Graph Edges** |
-| **Cost** | $E$ (Energy) | `CYCLES` / `BATTERY` | **The Price of Logic** |
+| **Cost** | $E$ (Energy) | `CYCLES` | **The Price of Logic** |
 
 ---
 
-## 6. Conclusion of the Trilogy
+## 7. Conclusion: The Metabolist Machine
 
-With **02c-CHEMISTRY**, the Theoretical Foundation is complete.
+**02c-CHEMISTRY (v1.4)** completes the Thermodynamic model.
+It establishes that:
+1.  **Interaction costs Energy.** (Conservation).
+2.  **Energy comes from Work.** (Mechanical or Biological).
+3.  **Human Attention is the Gold Standard.** By valuing Symbiotic Work higher than Mechanical Work, we economically enforce the **Empowerment Doctrine** (`01`).
 
-1.  **02a-MATHS:** We defined the **Space** (Sovereign Unique Geometry).
-2.  **02b-PHYSICS:** We defined the **Time** (Unforgeable History) and **Mass** (Inertia).
-3.  **02c-CHEMISTRY:** We defined the **Interaction** (Quantale Economy).
-
-This trilogy establishes a framework for computation based on stateful, iterative logic. This approach, which diverges from the one-shot nature of standard Transformers, is now being validated by emerging research from pioneers in the field, such as the **'Continuous Thought Machine'** architecture proposed by **Darlow, Jones, et al. (Sakana AI, 2025)**. This confirms that the future of AI lies in systems that reason over time (Reaction), not just across tokens.
-
-We have proven that a **Sovereign Machine** can be built not on "AI Magic," but on rigorous, verifiable **Digital Physics**. This Trilogy serves as the "Constitution" for the **LVM**.
+This creates a system that is not just a computer, but an **Organism** that lives in symbiosis with its user.
 
 ---
 
