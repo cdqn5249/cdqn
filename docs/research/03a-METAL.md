@@ -4,11 +4,11 @@
 *   **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Layer 1 Specification (Continuum Memory, Hardware Abstraction, & Signal Processing)
-*   **Date:** December 11, 2025
-*   **Status:** `v3.8` (The Tiered Sovereignty Standard)
+*   **Date:** December 12, 2025
+*   **Status:** `v3.9` (The Safe-Guard Standard)
 
 > **The Physics of the Machine.**
-> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics are enforced consistently, implementing a **Continuum Memory System** and a **Lattice Ratchet**. Crucially, it defines the **Two Tiers of Sovereignty**, distinguishing between software privacy on guest OSs and true hardware sovereignty on bare metal.*
+> *From the high-level architecture of the Sovereign Loom (Paper 03), we descend to the metal. This paper defines the LVM not merely as software, but as a rigid **Virtual Instruction Set Architecture (vISA)**. It guarantees that the laws of Digital Physics are enforced consistently, implementing a **Continuum Memory System** and a **Lattice Ratchet**. Crucially, it defines the **Conditional Compilation** rules that prevent "Sovereign" defenses from becoming liabilities on insecure "Guest" platforms.*
 
 ---
 
@@ -59,6 +59,11 @@ We replace the "RAM vs Disk" model with a **Frequency-Based Hierarchy**.
     *   **Scalability:** Uses Disk-Resident Indexing (e.g., DiskANN).
     *   **Entropy Interleaving:** Retrieving from disk takes time (~50µs). The LVM spawns a high-priority **Entropy Worker Thread** that utilizes this I/O wait-time to generate ChaCha20 noise.
 
+### 3.1 The Boot Protocol: Temporal Consistency
+To prevent the **"Ghost Tick"** vulnerability where old RAM data pollutes a new timeline:
+*   **Volatile by Default:** On boot or recovery, the LVM Kernel **MUST** perform a `Force-Zero` overwrite of the entire Fovea and Context (RAM) allocation *before* loading the `GenesisSeed`.
+*   **Reasoning:** Data from a previous session belongs to a dead Ouroboros timeline. It is mathematically invalid (Matroid Rank 0) in the new session and must be purged to prevent Logic Paradoxes.
+
 ---
 
 ## 4. The Quad-State Physics (The Instruction Set)
@@ -82,23 +87,23 @@ Plasma acts as the system's "Immune Response."
 
 ## 5. The Runtime Topology: Tiered Sovereignty
 
-Following the security axioms defined in **`02e-RITUALS`**, the LVM implementation is strictly divided into two tiers based on the hardware trust model.
+Following the security axioms defined in **`02e-RITUALS`**, the LVM implementation is strictly divided into two tiers via **Conditional Compilation**.
 
 ### Tier 1: Library Mode (Guest Sovereignty)
 *   **Target:** Android (APK), Windows, Linux (User Space).
 *   **Implementation:** `libcdqn` (Rust).
 *   **Security Context:** **Privacy.**
-    *   **Constraint:** The Host OS controls memory and I/O. The LVM cannot enforce "Physical Erasure" or "Antimatter" protocols against a Root attacker.
-    *   **Rituals:** Emulated via software. Useful for preventing accidents, but not secure against "God Mode" attacks.
+    *   **Compile Constraint:** The **Antimatter Protocol** (Self-Destruct) is **excluded from the binary** (`#[cfg(not(feature = "sovereign"))]`).
+    *   **Reasoning:** Software cannot enforce hardware laws. Including self-destruct code in a library creates a "False Prophet" vulnerability where malware can trigger it to grief the user.
     *   **Entropy:** Derived from Host OS CSPRNG.
 
 ### Tier 2: Sovereign Mode (Hardware Sovereignty)
 *   **Target:** Raspberry Pi, RISC-V Boards, Robotics (Bare Metal).
 *   **Implementation:** `cdqnOS` (Unikernel / Type-1 Hypervisor) + **TEE**.
 *   **Security Context:** **Sovereignty.**
-    *   **Constraint:** The LVM controls the silicon. The `GenesisSeed` is anchored in the **Trusted Execution Environment (TEE)**.
+    *   **Compile Constraint:** The **Antimatter Protocol** is **active** (`#[cfg(feature = "sovereign")]`).
+    *   **Capability:** The LVM controls the silicon. The `GenesisSeed` is anchored in the **Trusted Execution Environment (TEE)**.
     *   **Rituals:** Enforced via Hardware Interrupts (The Totem).
-    *   **Antimatter:** Active. The system can physically destroy keys if a VDF violation is detected.
 
 ---
 
