@@ -5,21 +5,22 @@
 *   **Author:** Christophe Duy Quang Nguyen (System Ronin)
 *   **Context:** Layer 3 Specification (Time, State, Inertia & The Ouroboros Ratchet)
 *   **Date:** December 12, 2025
-*   **Status:** `v1.2` (The Constant-Time Standard)
+*   **Status:** `v1.3` (The Sovereign Inertia Standard)
 
 > **The Engine of Consequence.**
-> *Layer 2 gave us Space. Layer 3 gives us Time and Consequence. This API governs the transition of data between states of matter (Phase Transitions). It enforces the **Ouroboros Ratchet** (to secure history) and the **Laws of Inertia** (to govern belief updates). It is the final arbiter of whether a concept is a fleeting thought (Liquid) or a foundational truth (Crystal).*
+> *Layer 2 gave us Space. Layer 3 gives us Time and Consequence. This API governs the transition of data between states of matter. It enforces the **Ouroboros Ratchet** (to secure history) and the **Laws of Inertia** (to govern belief updates). It rejects the concept of external "Truth" overwriting the user; instead, it implements a **Sovereign Inertia Model** where beliefs are durable structures that only change through massive Energy (Work) or fade through Entropy (Neglect).*
 
 ---
 
 ## 1. The Physics Mandate
 
 The functions defined herein enforce the physical constraints of the Digital Universe.
+
 1.  **Irreversibility:** Time moves forward. History cannot be rewritten (Ouroboros).
-2.  **Inertia:** Changing a state requires Energy proportional to Mass (Thermodynamics).
-3.  **Logic over Mass:** A geometric contradiction (Deduction) shatters a crystal regardless of its weight (Induction).
-4.  **Conservation of Energy:** Operations consume defined resources. Waste heat is generated to ensure constant-time execution (preventing side-channels).
-5.  **Sovereignty Awareness:** The physics engine adapts to the hardware tier (Guest vs. Sovereign).
+2.  **Conservation of Energy:** Nothing is free. Every state change consumes an `EnergyToken`.
+3.  **Sovereign Inertia:** A concept's resistance to change is proportional to its Mass and its Structural Bonds.
+4.  **Entropy:** All mass decays over time unless maintained (Annealed) or structurally supported (Bonded).
+5.  **Arbitration:** When Physics cannot resolve a conflict (High Force vs. High Inertia), the system yields to the Owner (Dichotomy).
 
 ---
 
@@ -30,22 +31,24 @@ We explicitly define the four phases of information.
 
 ```rust
 #[repr(u8)]
-#[derive(PartialEq, PartialOrd)]
+#[derive(PartialEq, PartialOrd, Copy, Clone)]
 pub enum Phase {
     Crystal = 0, // Solid. Low Temp, High Mass. (Deep Lattice / Immutable Truth)
     Liquid = 1,  // Fluid. Med Temp, Med Mass. (Fovea / Active Thought)
     Gas = 2,     // Volatile. High Temp, Low Mass. (RAM / Context)
-    Plasma = 3,  // Error/Destruction. Max Temp. (Rejection / Logic Failure)
+    Plasma = 3,  // Error. Max Temp. (Rejection / Logic Failure)
 }
 ```
 
 ### 2.2 The Vector Body (The Physical Entity)
-Layer 2 defined the `SovereignVector` (the shape). Layer 3 wraps it in a physical body.
+Layer 2 defined the `SovereignVector` (the shape). Layer 3 wraps it in a physical body, adding Mass and Bonding data.
 
 ```rust
+#[repr(C)]
 pub struct VectorBody {
     pub shape: SovereignVector, // The Layer 2 Geometry
-    pub mass: u32,              // Semantic Weight (Sum of Bonds)
+    pub mass: u32,              // Semantic Weight (Proof of Work)
+    pub bonds: u16,             // Structural Support (Number of attached concepts)
     pub temp: u16,              // Volatility (0 = Absolute Truth)
     pub phase: Phase,           // Current State
     pub birth_tick: u64,        // Time of creation (Ouroboros Index)
@@ -83,98 +86,72 @@ fn lvm_anchor_event(event_hash: [u8; 32]) -> [u8; 32];
 
 ---
 
-## 4. The Thermodynamics API (State & Inertia)
+## 4. The Thermodynamics API (Inertia & Decay)
 
-This implementation distinguishes between **Inductive Updates** (Mass vs. Mass) and **Deductive Updates** (Logic vs. Structure). It enforces the **Activation Energy** principle (Tollbooth) to prevent Logic DoS attacks.
+This section implements the **Sovereign Inertia Model**.
 
 ### 4.1 Inertia Calculation
+Resistance is calculated based on Mass and Structure.
+*   **Formula:** $R = \frac{Mass \times (1 + Bonds)}{Temp + \epsilon}$
+*   **Logic:** A heavy concept ($Mass$) is hard to move. A concept connected to many others ($Bonds$) is even harder to move. A hot concept ($Temp$) is easy to move.
+
 ```rust
-/// Calculates the Resistance of a body to Inductive Change.
-/// Formula: R = Mass / (Temp + epsilon)
-/// A Cold, Heavy object has near-Infinite Resistance.
+/// Calculates the Resistance of a body to external force.
 fn lvm_resistance(body: &VectorBody) -> u32;
 ```
 
 ### 4.2 The Impact (Phase Transition)
-This is the core function for updating beliefs. It applies a "Force" (new evidence) to an existing "Body" (current belief).
+This function attempts to update a belief. It requires an `EnergyToken` to prevent DoS (The Socrates Attack).
 
 ```rust
-pub const MELTING_THRESHOLD: u32 = 2; // Latent Heat (Hysteresis)
+pub const MELTING_THRESHOLD: u32 = 2; // Hysteresis factor (Latent Heat)
 
 /// Applies an informational force to a target vector.
 ///
-/// @param target: The existing belief.
-/// @param force_vector: The new evidence.
+/// @param target: The existing belief (e.g., "Earth is Flat").
 /// @param force_mass: The weight of the new evidence.
-/// @param energy_token: The up-front cost paid to perform this check.
+/// @param energy: The cost paid to perform this physical interaction.
 ///
 /// @return Result<Phase, Plasma>
+/// - Liquid: If Force > Resistance (Melting).
+/// - Crystal: If Force < Resistance (Bouncing).
+/// - Plasma: If Energy is insufficient (Starvation).
 fn lvm_apply_force(
     target: &mut VectorBody, 
-    force_vector: &SovereignVector, 
     force_mass: u32,
-    energy_token: EnergyToken
-) -> Result<Phase, Plasma> {
-    
-    // 1. DEDUCTIVE CHECK (The Shattering)
-    // We check if the new evidence creates a logical paradox with the existing belief.
-    // Uses Layer 2 Matroid Oracle. This consumes the EnergyToken.
-    let rank = lvm_rank_superposition(&target.shape, force_vector);
-    
-    if rank == 0 {
-        // Logical Contradiction Detected.
-        // Logic overrides Mass. The target is Falsified.
-        target.phase = Phase::Plasma; 
-        return Ok(Phase::Plasma); // The Crystal Shatters.
-    }
-
-    // 2. INDUCTIVE CHECK (The Melting)
-    // If logic holds, we check if the evidence is heavy enough to reshape the belief.
-    let resistance = lvm_resistance(target);
-    
-    // Hysteresis: We need extra energy to overcome Latent Heat.
-    if force_mass > (resistance * MELTING_THRESHOLD) {
-        // Melting Point Reached.
-        target.temp += force_mass as u16; // Absorb Energy
-        target.phase = Phase::Liquid;     // Becomes Plastic
-        return Ok(Phase::Liquid);
-    } else {
-        // Insufficient Force. Input Bounces.
-        // NOTE: Implementation must burn wait-cycles here to match 
-        // the time taken by the 'Liquid' branch (Constant Time).
-        return Ok(target.phase);
-    }
-}
+    energy: EnergyToken
+) -> Result<Phase, Plasma>;
 ```
 
-### 4.3 Annealing (Learning)
-How does a new truth become permanent? By cooling down over time.
+### 4.3 The Dichotomy (Arbitration)
+When Physics fails to resolve a conflict, it escalates to the Sovereign.
 
 ```rust
-/// Reduces the temperature of a body based on successful use.
-/// @param body: The vector to anneal.
-/// @param energy_released: The success metric.
-fn lvm_anneal(body: &mut VectorBody, energy_released: u32);
+/// Checks if a rejected force was significant enough to warrant user attention.
+/// @param target: The belief that resisted change.
+/// @param force_mass: The size of the rejected input.
+/// @return true if Force > (Resistance / 2).
+fn lvm_detect_dichotomy(target: &VectorBody, force_mass: u32) -> bool;
 ```
 
-### 4.4 Entropy Decay (Background Radiation)
-This prevents "Heat Death" (Database Bloat) by cleaning up unused concepts.
+### 4.4 Entropy Decay (The Cleanup)
+This prevents database bloat ("Heat Death") and implements natural forgetting.
 
 ```rust
-pub const LVM_BACKGROUND_TEMP: u16 = 10; // Ambient Noise
+pub const LVM_DECAY_RATE: u32 = 1;
 
-/// Runs the decay cycle. Called during idle ticks.
-/// 1. If Temp < Background, Body absorbs heat (Temp increases).
-/// 2. If Mass is low and Temp is high, Phase -> Gas.
-/// 3. If in Gas phase for too long, Phase -> Plasma (Garbage Collection).
-fn lvm_entropy_decay(body: &mut VectorBody, current_tick: u64);
+/// Runs the decay cycle on a body.
+/// 1. Reduces Mass by (LVM_DECAY_RATE / Bonds).
+///    (Heavily bonded concepts decay slower).
+/// 2. If Mass drops below threshold, Phase transitions Crystal -> Gas.
+fn lvm_entropy_decay(body: &mut VectorBody);
 ```
 
 ---
 
 ## 5. The Sovereignty Oracle
 
-The physics engine must know the hardware reality to enable or disable "God Mode" protections.
+The physics engine must know the hardware reality to enable or disable "God Mode" protections (Antimatter).
 
 ```rust
 #[repr(u8)]
@@ -193,30 +170,32 @@ fn lvm_get_tier() -> SovereigntyTier;
 
 ## 6. Implementation Notes for `libcdqn`
 
-*   **Logic vs. Mass:** The implementation of `lvm_apply_force` must prioritize the Matroid check. This ensures that a single valid counter-example can overthrow a massive dogma (The "Black Swan" effect).
-*   **Constant Time Physics:** To prevent side-channel attacks (Finding #4), the `lvm_apply_force` function must execute in constant time regardless of whether the state changes or bounces. Dummy cycles must be burned if the resistance check fails.
-*   **Hysteresis:** The `MELTING_THRESHOLD` constant is critical for DoS protection. It prevents "flickering" between states under constant medium-load attacks.
-*   **Concurrency:** `lvm_tick` is a global barrier operation. It requires a write lock on the Ouroboros state.
+*   **Constant Time Physics:** To prevent side-channel attacks (Thermodynamic Leak), `lvm_apply_force` must execute in constant time. If a vector "Bounces" (retains Crystal phase), the CPU must burn wait-cycles equivalent to the time required for a "Melt" operation.
+*   **Bonding Check:** `lvm_resistance` assumes the `bonds` count is accurate. Layer 4 (Chemistry) is responsible for incrementing/decrementing this counter when links are created/destroyed.
+*   **Boot Protocol:** As per `03a-METAL`, `lvm_tick` must ensure Fovea is zeroed on boot to maintain Ouroboros integrity.
 
 ---
 
-### Appendix: Test Vector Specification
+### **Appendix: Test Vector Specification**
 
 The correctness of this API will be validated by `docs/validation/03d_physics.check`.
 
-**Example Test Case (`check/shatter.test`):**
+**Example Test Case (`check/inertia.test`):**
 ```
-// Test Case: Deductive Logic shatters Inductive Mass.
+// Test Case: Bonds increase Inertia against Decay.
 
-// 1. GIVEN: A massive "Flat Earth" crystal.
-let target = VectorBody { mass: 1_000_000, temp: 0, phase: Crystal ... };
+// 1. GIVEN: Two identical bodies, one bonded, one isolated.
+let mut isolated = VectorBody { mass: 100, bonds: 0, ... };
+let mut bonded   = VectorBody { mass: 100, bonds: 10, ... };
 
-// 2. WHEN: We apply a Logical Contradiction (Rank 0 superposition).
-// Even if the input mass is small (1).
-let result = lvm_apply_force(&mut target, &contradiction, 1, token);
+// 2. WHEN: We apply 50 cycles of Entropy Decay.
+for _ in 0..50 {
+    lvm_entropy_decay(&mut isolated);
+    lvm_entropy_decay(&mut bonded);
+}
 
-// 3. THEN: The target must SHATTER (Plasma), not Resist.
-ASSERT result == Phase::Plasma;
+// 3. THEN: The isolated body should have lost more mass.
+ASSERT isolated.mass < bonded.mass;
 ```
 
 **License:** Universal Sovereign Source License (USSL) v2.0.
