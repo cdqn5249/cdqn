@@ -3,105 +3,121 @@
 *   **File:** `docs/research/02c-CHEMISTRY.md`
 *   **Context:** Quantale Theory, Linear Logic & The Metabolic Laws
 *   **Date:** December 14, 2025
-*   **Status:** `v1.6` (The Deductive Standard)
+*   **Status:** `v1.8` (The Quantale Standard)
 
 > **The Reactive Substrate.**
-> *We derive the laws of Interaction directly from the Geometry of Space (`02a`) and the Physics of Energy (`02b`). We demonstrate that "Chemistry" is not an arbitrary set of rules, but the inevitable mechanism required to manage **Finite Resources** in a **Thermodynamic System**. We rigorously define Valency as a geometric limit and Bond Strength as stored work, establishing the **Quantale Economy**.*
+> *We derive the laws of Interaction directly from the Geometry of Space (`02a`) and the Physics of Tension (`02b`). To manage the "Work Energy" required to resolve Tension, we cannot use simple arithmetic. We must use **Quantale Theory**. We define the system's economy as a **Commutative Unital Quantale**, where logical implication is mathematically identical to resource cost.*
 
 ---
 
-## 1. Introduction: The Derivation of Chemistry
+## 1. Introduction: Why a Quantale?
 
-In `02b-PHYSICS`, we defined Truth as a low-energy equilibrium state.
-In `02c`, we answer the question: **"How does the system move from one state to another?"**
+In standard computing, resources are managed by the OS (counters). In CDQN, resources are managed by the **Algebra**.
 
-We model this as **Chemistry**.
-*   **Logic:** If $E_{total} = \sum (Distance \times Weight)$, then modifying the graph (Changing Weights) changes the Energy.
-*   **Deduction:** Since Energy is conserved, any operation that lowers the system's entropy (creates structure) must be paid for by an external injection of Work.
+We need a mathematical structure that can handle:
+1.  **Ordering:** ($A$ is more expensive than $B$).
+2.  **Combination:** ($A$ plus $B$ creates a new state).
+3.  **Implication:** (If I have $A$, how much more do I need to get $B$?).
+
+The algebraic structure that does this is the **Quantale** ($Q$).
 
 ---
 
-## 2. Axiom 1: Conservation of Value (Linear Logic)
+## 2. Axiom 1: The Structure of Value (The Quantale)
 
-**Premise:** In `02a-MATHS`, we defined "Intrinsic Mass" ($m_0$) as Matroid Rank (Information). Information cannot be created from nothing.
+We define the "Energy" of the system not as a float, but as an element $q \in Q$.
 
-**Deduction:** Therefore, Data violates Boolean Logic ($A \land A = A$) and obeys **Linear Logic** ($A \otimes A \neq A$). You cannot "spend" the same Mass twice.
+### 2.1 Definition
+Our Quantale is the tuple $(Q, \leq, \otimes, 1)$.
+*   **$Q$ (The Set):** The set of all possible Energy states (e.g., $[0, \infty]$).
+*   **$\leq$ (The Order):** Defines value comparison. $a \leq b$ means $a$ is "cheaper" or "less energetic" than $b$.
+*   **$\otimes$ (The Tensor):** The combination operator.
+    *   *Chemistry:* Combining Reagent A and Reagent B creates a composite energy state $A \otimes B$.
+    *   *Math:* This replaces Boolean "AND" with Resource "PLUS".
+
+### 2.2 The Internal Hom (The Cost Function)
+This is the most critical operator. In a Quantale, we can calculate the "Distance" or "Cost" between any two states using the **Internal Hom** (written $A \multimap B$).
+
+$$A \multimap B = \bigvee \{x \mid A \otimes x \leq B\}$$
+
+*   **Translation:** "What is the smallest resource $x$ I need to add to $A$ to reach state $B$?"
+*   **Application:** When the system wants to bond two vectors, it calculates `Current_State` $\multimap$ `Bonded_State`. The result *is* the **Activation Energy**.
+
+---
+
+## 3. Axiom 2: Conservation of Value (Linear Logic)
+
+**Premise:** Linear Logic is simply the internal logic of a specific type of Quantale (a Girard Quantale).
+**Deduction:** Because we are operating in $Q$, resources are naturally consumed.
 
 **The No-Cloning Theorem:**
-*   In the LVM, a Vector is a **Resource**.
-*   If you use Vector A to build Concept B, Vector A is "bound" (consumed) in that relationship. It cannot simultaneously be used to build Concept C without first breaking the bond (paying Energy).
-*   **Result:** This prevents "Double Spending" of semantic validity.
+*   In Boolean logic (Lattice), $A \land A = A$. (Facts are free).
+*   In Quantale logic, $A \otimes A \neq A$. (Resources are rivalrous).
+*   **Result:** The Quantale structure mathematically prevents "Double Spending." You cannot use the same Energy Token twice because the algebra doesn't support it.
 
 ---
 
-## 3. Axiom 2: Valency as a Geometric Limit
+## 4. Axiom 3: Valency as a Geometric Limit
 
-**Premise:** In `02a-MATHS`, we established that the space $D=10,240$ allows for a finite number of orthogonal vectors.
-**Deduction:** A single vector cannot maintain orthogonality with an infinite number of partners. As bonds are added, the "Signal-to-Noise" ratio of the superposition decreases.
+**Premise:** Space (`02a`) is finite.
+**Deduction:** A single vector cannot bond to infinite others.
 
 **The Valency Limit:**
-We define **Valency ($\nu$)** not as an arbitrary number, but as a function of Mass.
+We define **Valency ($\nu$)** as a function of Mass.
 $$\nu(V) \approx \log_2(\text{Mass}(V))$$
 
-*   **Physical Meaning:** A "Heavy" concept (High Rank) creates a deep gravity well, stabilizing many connections. A "Light" concept (Low Rank) is unstable; it can only hold 1 or 2 bonds before collapsing into noise.
-*   **Consequence:** This physically prevents "Spam" nodes. You cannot connect everything to everything. You must earn the *Mass* required to support the *Connections*.
+*   **Physical Meaning:** A "Heavy" concept (High Rank) creates a deep gravity well, stabilizing many connections.
+*   **Consequence:** This physically prevents "Spam" nodes.
 
 ---
 
-## 4. Axiom 3: The Endothermic Nature of Bonding
+## 5. Axiom 4: The Endothermic Reaction
 
-**Premise:** In `02b-PHYSICS`, we established the Landauer Limit: erasing information releases heat.
+We now write the Chemical Equation using Quantale notation.
 
-**Deduction:** The contrapositive is true: **Writing information (Creating a Bond) absorbs Energy.**
+**The Equation:**
+$$A \otimes B \otimes \mathcal{E}_{work} \multimap (A-B)$$
 
-**The Reaction Equation:**
-
-$$
-A + B + \mathcal{E}_{work} \xrightarrow{\text{R}} (A-B) + \mathcal{E}_{waste}
-$$
-
-*   **Bond Strength ($W$):** The strength of the resulting bond is proportional to the Work ($\mathcal{E}_{work}$) put into it.
-*   **Implication:** A "Strong Belief" is simply a bond that has absorbed a massive amount of Verification Work. To break it, you must supply an equal amount of Activation Energy.
+*   **Logic:** To transition from separate atoms ($A, B$) to a bonded molecule ($A-B$), the system must supply Energy $\mathcal{E}_{work}$.
+*   **Calculation:** The required $\mathcal{E}$ is exactly $(A \otimes B) \multimap (A-B)$.
+*   **Result:** The "Cost" of a transaction is not a number we made up; it is the **Residuation** of the vectors' states within the Quantale.
 
 ---
 
-## 5. Axiom 4: The Law of Metabolism (Energy Sources)
+## 6. Axiom 5: The Law of Metabolism
 
-Where does the Work ($\mathcal{E}$) come from? We define the **Metabolic Pathways**.
+Where does the element $q \in Q$ (Energy) come from?
 
-### 5.1 Mechanical Work (CPU)
-*   **Source:** Brute-force computation (hashing/searching).
-*   **Value:** Baseline. $1 \text{ Cycle} = 1 \text{ Unit}$.
+### 6.1 Mechanical Work (CPU)
+*   **Source:** Hashing cycles.
+*   **Quantale Mapping:** $Cycles \to q_{mech}$.
 
-### 5.2 Symbiotic Work (Human Attention)
-*   **Source:** The User manually correcting or linking concepts via Chronosa (`01a`).
-*   **Physics:** This acts as **Maxwell's Demon**. A human can reduce entropy (sort information) with orders of magnitude more efficiency than a random search.
-*   **Value:** Premium. $1 \text{ Human Action} \approx 1000 \text{ Cycles}$. This economically privileges the Human Owner over automated scripts.
+### 6.2 Symbiotic Work (Human Attention)
+*   **Source:** User Interaction (Chronosa).
+*   **Quantale Mapping:** $Attention \to q_{sym}$. (Where $q_{sym} \gg q_{mech}$).
 
-### 5.3 Recycling (Conservation)
-*   **Source:** Breaking a bond.
-*   **Physics:** When a structure is destroyed, its Binding Energy is released. The system captures a fraction of this (efficiency $< 100\%$).
-*   **Value:** Recovery. This ensures the economy is circular, not purely extractive.
+### 6.3 Recycling
+*   **Source:** Breaking a bond releases the stored $q$ back into the system (minus entropy loss).
 
 ---
 
-## 6. Conclusion: The Unified System
+## 7. Conclusion: The Unified System
 
-**02c-CHEMISTRY** completes the deduction.
-1.  **Space (`02a`)** defines the limit of connections (Valency).
-2.  **Physics (`02b`)** defines the cost of change (Inertia).
-3.  **Chemistry (`02c`)** defines the transaction mechanism (Metabolism).
+**02c-CHEMISTRY** provides the rigorous algebra for the economy.
+1.  **Space (`02a`)** defines the Elements.
+2.  **Physics (`02b`)** defines the Tension.
+3.  **Chemistry (`02c`)** defines the **Quantale** that calculates the Cost to resolve that Tension.
 
-We have proven that "Economic Value" in the LVM is not a token; it is a **measure of the Physical Work** stored in the geometry of the Lattice.
+We have proven that "Economic Value" is not a token; it is the **Internal Hom** of the system's state vector.
 
 ---
 
 ### 📂 Bibliography for Part C
 
-1.  **Girard, J-Y.** (1987). *"Linear Logic."* (The logic of resources).
-2.  **Bennett, C. H.** (1982). *"The Thermodynamics of Computation."* (The proof that structure requires work).
-3.  **Baez, J. & Stay, M.** (2010). *"Physics, Topology, Logic and Computation: A Rosetta Stone."* (The map between Physics and Category Theory).
-4.  **Odum, H. T.** (1971). *"Environment, Power, and Society."* (The principles of bio-energetic economics).
+1.  **Rosenthal, K. I.** (1990). *"Quantales and their Applications."* (The definitive text on the algebra).
+2.  **Girard, J-Y.** (1987). *"Linear Logic."* (The logic of resources derived from Quantales).
+3.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion."* (Uses internal homs for cost/distance).
+4.  **Bennett, C. H.** (1982). *"The Thermodynamics of Computation."*
 
 ---
 
