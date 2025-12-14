@@ -48,6 +48,7 @@ $$A \multimap B = \bigvee \{x \mid A \otimes x \leq B\}$$
 ## 3. Axiom 2: Conservation of Value (Linear Logic)
 
 **Premise:** Linear Logic is simply the internal logic of a specific type of Quantale (a Girard Quantale).
+
 **Deduction:** Because we are operating in $Q$, resources are naturally consumed.
 
 **The No-Cloning Theorem:**
@@ -60,6 +61,7 @@ $$A \multimap B = \bigvee \{x \mid A \otimes x \leq B\}$$
 ## 4. Axiom 3: Valency as a Geometric Limit
 
 **Premise:** Space (`02a`) is finite.
+
 **Deduction:** A single vector cannot bond to infinite others.
 
 **The Valency Limit:**
