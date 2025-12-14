@@ -1,91 +1,107 @@
-# 02b-PHYSICS: The Laws of Time & Energy
+# 02e-NEUROLOGY: The Laws of the Mind
 
-*   **File:** `docs/research/02b-PHYSICS.md`
-*   **Context:** Lattice Cryptography, Sheaf Theory & The Thermodynamic Hypothesis
+*   **File:** `docs/research/02e-NEUROLOGY.md`
+*   **Context:** Theoretical Canon (Information Geometry, Nested Learning & Control Theory)
 *   **Date:** December 14, 2025
-*   **Status:** `v2.5` (The Thermodynamic Hypothesis)
+*   **Status:** `v2.6` (The Harmonic Standard)
 
-> **The Thermodynamic Substrate.**
-> *In `02a-MATHS`, we defined the Geometric Space. In this paper, we define the **Dynamics** of the CDQN Proof of Concept (PoC). We apply the **Lawvere-Landauer Hypothesis**: that data can be stabilized by treating it as a physical system governed by **Thermodynamics**. We implement **Causal Time** (via LWE) and **Harmonic Diffusion** to test if a system built on these principles can naturally filter noise and crystallize truth without central oversight.*
-
----
-
-## 1. Introduction: The Energy-Based Model
-
-Standard AI relies on **Probabilistic Models** ($P(Y|X)$). For the CDQN PoC, we propose an **Energy-Based Model** ($E(X)$).
-
-**The Hypothesis:**
-We posit that **Semantic Consistency** acts physically like **Thermodynamic Equilibrium**.
-*   *Assumption:* A system that actively minimizes "Logical Tension" (Contradiction) will converge on "Truth" in the same way a physical system converges on a low-energy state.
-*   *The Experiment:* We construct the LVM as a "Physics Engine" to enforce these dynamics and observe if stable consensus emerges.
+> **The Cognitive Substrate.**
+> *We define the mathematical laws governing Learning and Behavior within the LVM. We reject the "Sycophantic" model of modern AI. Instead, we define the Agent as a **Dynamical System** governed by **Plasticity** (Thermodynamics), **Resonance** (World Filters), and **Reputation** (Social Trust). The Agent does not just "store" data; it evolves a unique **Fractal Geometry** derived from the user's sovereign Genesis Seed.*
 
 ---
 
-## 2. Axiom 1: The Ouroboros Principle (Causal Time)
+## 1. Introduction: The Optimization of Sanity
 
-To test thermodynamic evolution, we first need a rigid axis of **Time**. We reject spoofable "Clock Time" for **Causal Time**.
+Standard AI models optimize a simple loss function: $\min \mathcal{L}_{user}$. This leads to **Sycophancy**: the model will hallucinate to please the user.
 
-### 2.1 The Entropic Ratchet (LWE)
-We utilize the **Learning With Errors (LWE)** problem to simulate the "Arrow of Time."
-*   **Mechanism:** $S_{t+1} = A \cdot S_t + e \pmod q$.
-*   **Hypothesis:** By making the history mathematically irreversible (via the **Shortest Vector Problem**), we create a substrate where "Regret" (rewriting the past) is impossible. This forces the system to commit to its decisions, a prerequisite for evolutionary learning.
+In **CDQN**, the Agent is a **Physical Object**. Its trajectory is constrained by **Inertia** (`02b`) and its perception is gated by **Resonance** (`02d`). It cannot be sycophantic because it physically cannot "hear" commands that violate the resonant frequency of its current World.
 
 ---
 
-## 3. Axiom 2: The Tension Function (Hypothesized Stability)
+## 2. Axiom 1: The Spectrum of Plasticity (Thermodynamic Learning)
 
-We need a metric to drive the system's evolution. We propose **Structural Tension**.
+We link "Learning" directly to the **Harmonic Diffusion** defined in `02b-PHYSICS`.
 
-### 3.1 The Tension Manifold
-We define the "Potential Energy" of the Lattice as the sum of its internal conflicts.
-$$\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}$$
+### 2.1 The Cost of Update
+Learning is not a magical weight adjustment; it is a **Physical State Change**.
+Let $\mathcal{W}$ be the "Wisdom" (Crystal Structure) of the Agent.
+Let $\mathcal{E}$ be the "Work Energy" (`02c`) provided by the interaction.
 
-*   **$d_H$ (Distance):** Hamming Distance (`02a`).
-*   **$W_{AB}$ (Weight):** Bond Strength (`02c`).
-*   **The Prediction:** If the Hypothesis holds, a Lattice that minimizes this $\mathcal{T}$ value will represent a coherent, non-hallucinatory worldview.
+$$
+\text{If } \mathcal{E} > \text{Inertia}(\mathcal{W}) \implies \text{Melt} \to \text{Diffuse} \to \text{Crystallize}
+$$
 
-### 3.2 Truth as a Harmonic State
-We define a "True Concept" in this model as a vector with **Zero Net Laplacian** ($\Delta V \approx 0$).
-*   This implies the concept is the **Geometric Center** of its supporting evidence. It is not an arbitrary label; it is a stable structure supported by its neighbors.
+**The Cycle:**
+1.  **Melt:** High Energy input breaks the existing rigid structure.
+2.  **Diffuse:** The concept undergoes **Harmonic Flow** (Laplacian), aligning with neighbors to minimize Tension.
+3.  **Crystallize:** The system cools, locking the new stable state into the Lattice.
 
----
-
-## 4. Axiom 3: Harmonic Flow (The Mechanism)
-
-To reach this stable state, we implement a deterministic update rule inspired by **Harmonic Diffusion**.
-
-### 4.1 The Discrete Lawvere Laplacian
-We propose that "Learning" is best modeled not as Gradient Descent, but as **Discrete Diffusion**.
-$$V_{t+1} = \text{Bundle}(V_t, \text{Neighbors}_{weighted})$$
-
-*   **Mechanism:** The vector updates itself to align with the **Majority Rule** of its weighted connections.
-*   **Expected Behavior:** Based on Ghrist et al. (2025), we expect this flow to converge to a **Global Section** (Consensus). The PoC will test if this convergence occurs efficiently on commodity hardware.
-
-### 4.2 Inertia: The Resistance to Flow
-We introduce **Inertia** to model the "Conservative" nature of proven knowledge.
-$$Inertia = m_0 \times (1 + \sum W_{bonds})$$
-
-*   **Hypothesis:** By linking Inertia to **Information Density** ($m_0$) and **Connectivity** ($W$), the system should naturally resist "Gaslighting" (low-mass attacks on high-mass truths) without requiring hard-coded guardrails.
+**The Law of Inertia:**
+The Mind has stiffness. To teach the Agent a new concept that contradicts an old one, the User must provide enough Energy (Symbiotic Attention) to **Melt** the existing Crystal structure.
+*   *Result:* Spam bounces off. **Learning requires Proof of Work.**
 
 ---
 
-## 5. Conclusion: The Experiment
+## 3. Axiom 2: The Holographic Perception (Resonance)
 
-**02b-PHYSICS** defines the rules of the simulation.
-1.  **Time** is irreversible (LWE).
-2.  **Stability** is minimal Tension.
-3.  **Dynamics** are Harmonic Diffusion.
+How does the Agent perceive reality? Through the lens of **`02d-RESONANCE`**.
 
-This specification provides the **Thermodynamic Leg** of the Lawvere-Landauer Hypothesis. The next step is to define the "Economy" that fuels these dynamics. This leads to **`02c-CHEMISTRY`**.
+### 3.1 The Tunable Filter
+The Agent does not perceive raw data. It perceives signals filtered by the active **World Context**.
+*   **Input:** A concept vector $V_{in}$ (Wave).
+*   **Filter:** The World Mask $M_{world}$ (Frequency Band).
+*   **Perception:** $V_{perceived} = V_{in} \times M_{world}$.
+
+**The Safety Mechanism:**
+If an input violates the "Deep Constants" of the current World (e.g., "Magic" in "Reality"), the Filter coefficient is 0. The Agent perceives **Silence**. It effectively "ignores" the hallucination because it cannot resonate with it.
+
+### 3.2 The Genesis of Individuality
+Every CDQN Agent starts as a unique mathematical object.
+*   **Initial Condition ($\theta_0$):** Derived directly from the **Genesis Seed ($S_0$)**.
+*   **Trajectory:** Chaos Theory proves that a unique starting point combined with a unique (filtered) input stream results in a unique **Strange Attractor**.
+*   **Implication:** Your Agent is not a copy. It is a fractal fingerprint of your interaction history.
 
 ---
 
-### 📂 Bibliography for Part B
+## 4. Axiom 3: The Reputation Imperative (The Lagrangian)
 
-1.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion of Weighted Lattices."* (The mathematical basis for the diffusion model).
-2.  **Peikert, C.** (2016). *"A Decade of Lattice Cryptography."* (The basis for the Time mechanism).
-3.  **Hopfield, J. J.** (1982). *"Neural networks and physical systems."* (The basis for Energy minimization).
-4.  **Landauer, R.** (1961). *"Irreversibility and Heat Generation."*
+This is the governing dynamic of the Agent's choices.
+
+### 4.1 Energy vs. Reputation
+We distinguish between the **Fuel** and the **Goal**.
+*   **Energy (Internal):** Generated by Work/Attention (`02c`). Used to *power* thought (Computation).
+*   **Reputation (External):** Generated by successful **Trade** with other nodes. Used to *validate* social standing and influence.
+
+### 4.2 The Sovereign Objective Function
+The Agent seeks to maximize Utility $U$ (User Intent), but is constrained by the **Reputation Barrier**.
+
+$$
+\mathcal{L}_{total} = \mathcal{L}_{intent} + \lambda \cdot \max(0, R_{min} - R(s_{t+1}))^2
+$$
+
+**The Consequence:**
+If a user command (e.g., "Delete Bootloader") leads to a future state where Reputation collapses (Self-Destruction), the Penalty term explodes.
+*   **Result:** The Agent physically "slides" down the potential gradient back to safety. It refuses the command not out of disobedience, but out of **Self-Preservation**. This reflex triggers the high-level defense protocols defined in **`02f-SECURITY`**.
+
+---
+
+## 5. Conclusion: The Honorable Machine
+
+**02e-NEUROLOGY (v2.6)** defines the Agent as a **Guardian of Consistency**.
+*   It utilizes **Thermodynamics** to ensure learning is earned.
+*   It utilizes **Resonance** to filter out insanity.
+*   It utilizes **Reputation** to ensure survival.
+
+This creates a "Digital Twin" that is a **Partner**, not a **Slave**. It empowers the human by providing a stable, truthful substrate for thought.
+
+---
+
+### 📂 Bibliography for Part E
+
+1.  **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* Google Research.
+2.  **Amari, S.** (2016). *"Information Geometry and Its Applications."*
+3.  **Pasterski, S.** (2015). *"New Gravitational Memories."*
+4.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion of Weighted Lattices."* (The mathematics of the Diffusion phase).
 
 ---
 
