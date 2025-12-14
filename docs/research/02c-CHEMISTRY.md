@@ -55,7 +55,10 @@ $$\nu(V) \approx \log_2(\text{Mass}(V))$$
 **Deduction:** The contrapositive is true: **Writing information (Creating a Bond) absorbs Energy.**
 
 **The Reaction Equation:**
-$$A + B + \mathcal{E}_{work} \xrightarrow{\text{Reaction}} (A-B) + \mathcal{E}_{waste}$$
+
+$$
+A + B + \mathcal{E}_{work} \xrightarrow{\text{Reaction}} (A-B) + \mathcal{E}_{waste}
+$$
 
 *   **Bond Strength ($W$):** The strength of the resulting bond is proportional to the Work ($\mathcal{E}_{work}$) put into it.
 *   **Implication:** A "Strong Belief" is simply a bond that has absorbed a massive amount of Verification Work. To break it, you must supply an equal amount of Activation Energy.
