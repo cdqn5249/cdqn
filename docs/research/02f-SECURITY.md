@@ -2,7 +2,7 @@
 
 *   **File:** `docs/research/02f-SECURITY.md`
 *   **Context:** Theoretical Canon (Security Strategy & The 3 Tiers of Trust)
-*   **Date:** December 12, 2025
+*   **Date:** December 14, 2025
 *   **Status:** `v2.1` (The Asset Protection Standard)
 
 > **The Chain of Custody for Human Value.**
@@ -25,8 +25,8 @@ We use a **Merkle Tree of Reputation** (to be specified in `03e-WORLDS`) to crea
 *   **Promise:** **Accountability & Privacy.**
 *   **Security Context:** We assume the Host OS could be compromised (a "God Mode" attacker at the OS level).
     *   **Defense:** We can't stop the attacker from reading memory. But because our history is an **Ouroboros Ratchet** (`02b-PHYSICS`), the attacker cannot *silently rewrite the past*. They can steal the data, but the cryptographic journal remains a valid record of what happened up to the point of compromise.
-    *   **Attestation:** If the OS is pirated, `libcdqn` can detect this. It cannot stop the OS, but it can **warn the user**. The UI will display "Red Alert: Running on Untrusted Substrate."
-*   **Conclusion:** Tier 1 provides a robust "drafting table" for your experience, protected from casual fraud.
+    *   **Attestation:** If the OS is pirated, `libcdqn` can detect this via heuristic checks. It cannot stop the OS, but it can **warn the user**. The UI will display "Red Alert: Running on Untrusted Substrate."
+*   **Conclusion:** Tier 1 provides a robust "drafting table" for your experience, protected from casual fraud and peer-level snooping.
 
 ---
 
@@ -36,9 +36,9 @@ We use a **Merkle Tree of Reputation** (to be specified in `03e-WORLDS`) to crea
 *   **Asset Value:** **"Notarized" Experience.** Secure enough for job applications, contracts, and high-stakes proof of skill.
 *   **Promise:** **Sovereignty.**
 *   **Security Context:** The **Sovereign Rituals** are active. The TEE protects the `GenesisSeed` from all software-level attacks. The ledger is protected from forgery.
-    *   **Defense:** The TEE enforces the Time-Locks (`Hysteresis`) and Physical Presence checks (`Totem`) defined in this paper.
+    *   **Defense:** The TEE enforces the Time-Locks (`Hysteresis`) and Physical Presence checks (`Totem`) defined in the early research. Even a Rootkit cannot force a key export or instant wipe.
 *   **The Gap:** This tier relies on trust in the TEE manufacturer. A hardware backdoor could compromise the notarization.
-*   **Conclusion:** Tier 2 provides a cryptographically secure ledger, vulnerable only to nation-state level supply chain attacks.
+*   **Conclusion:** Tier 2 provides a cryptographically secure ledger, vulnerable only to nation-state level supply chain attacks or physical hardware disassembly.
 
 ---
 
