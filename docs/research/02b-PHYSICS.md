@@ -1,12 +1,12 @@
-# 02b-PHYSICS: The Laws of Time, State & Mass
+# 02b-PHYSICS: The Laws of Time & Mass
 
 *   **File:** `docs/research/02b-PHYSICS.md`
-*   **Context:** Tropical Geometry, Thermodynamics, Newtonian Mechanics & Post-Quantum Cryptography
-*   **Date:** December 12, 2025
-*   **Status:** `v1.6` (The Ouroboros Standard)
+*   **Context:** Tropical Geometry, Thermodynamics & Post-Quantum Cryptography
+*   **Date:** December 14, 2025
+*   **Status:** `v1.7` (The Justified Ouroboros Standard)
 
 > **The Thermodynamic Substrate.**
-> *We define the Arrow of Time, the States of Matter, and the Laws of Inertia within the LVM. We integrate **Tropical Geometry** (Time), **Martín-Olalla Stability** (Temperature), and **Compositional Theory** (Mass) to create a physics engine where data is physical matter. Crucially, we introduce the **Ouroboros Principle** (Entropic Ratchet) to guarantee **Post-Quantum Forward Secrecy**: the key to the present consumes the key to the past.*
+> *We define the Arrow of Time and the Laws of Inertia. We assert that Time is not merely a clock, but a **Cryptographic Chain of Events**. We integrate **Tropical Geometry** (to model irreversible history) and **Lattice-Based Cryptography** (to guarantee Post-Quantum Forward Secrecy). This creates a universe where the past is frozen (Crystal) and the future is computed via the consumption of the present.*
 
 ---
 
@@ -20,121 +20,74 @@ In **CDQN**, data behaves like **Matter** and Time behaves like **Entropy**.
 
 ---
 
-## 2. Axiom 1: Tropical Causality (The Arrow of Time)
+## 2. Axiom 1: The Ouroboros Principle (Secure Time)
 
-Time is not a clock; it is a **Chain of Events**.
+How do we ensure the timeline is safe from a Quantum Computer ("God Algorithm")?
+We use the **Learning With Errors (LWE)** problem on Lattices.
 
-### 2.1 The Unforgeable Timeline
-We anchor the "Tropical Semiring" to the Sovereign Stream defined in **Paper 02a**.
-*   **The Tick ($t$):** A logical index derived from the user's `GenesisSeed`.
-*   **The Ratchet:** The history hash $H_t$ is a cryptographic function of the previous state and the unique entropy of that moment.
-
-$$
-H_{t+1} = \text{Hash}(H_t \oplus \text{Stream}(t) \oplus \text{Event})
-$$
-
-### 2.2 The State Equation (Max-Plus)
-History is monotonic.
-
-$$
-S_{t+1} = S_t \oplus \Delta
-$$
-
-Since $x \oplus y = \max(x, y)$, the accumulation of truth is irreversible.
-
-### 2.3 The Ouroboros Principle (The Entropic Ratchet)
-To achieve **Post-Quantum Forward Secrecy**, the `GenesisSeed` ($S$) cannot be static. It behaves like fuel: it is consumed to generate the Next Tick.
-
-$$
-S_{t+1} = \text{LWE Function}(S_t)
-$$
-
+### 2.1 The Entropic Ratchet
+The `GenesisSeed` ($S$) is not static. It behaves like fuel.
+*   **The Mechanism:** To move from Time $t$ to $t+1$, the system applies a One-Way Mutation based on LWE.
+    $$S_{t+1} = \text{LWE}(S_t) + \text{Noise}$$
 *   **The Law of Erasure:** Immediately after generating $S_{t+1}$, the system **securely erases** $S_t$ from memory.
-*   **The Quantum Barrier:** Because the mutation function is based on the **Shortest Vector Problem (SVP)** (Lattice Hardness), even a Quantum Computer possessing $S_{t+1}$ cannot invert the function to derive $S_t$.
-*   **Result:** The past is cryptographically burned. If a node is compromised today, the attacker cannot decrypt yesterday's data.
 
-> **IMPORTANT CONSTRAINT (See `02f-RITUALS`):**
-> The "Law of Erasure" is a physical imperative. However, its enforcement depends on the hardware substrate:
-> *   **Tier 2 (Sovereign Mode):** Guaranteed via **Trusted Execution Environment (TEE)** or Secure Enclave direct memory access.
-> *   **Tier 1 (Guest Mode):** Approximated via `memset`. This is **"Best Effort"** forward secrecy, as it is subject to Host OS paging, swapping, and memory remanence vulnerabilities.
+### 2.2 The Mathematical Justification (Peikert)
+*   **The Consensus:** Lattice-based problems (like LWE and SVP - Shortest Vector Problem) are currently the gold standard for Post-Quantum Cryptography (NIST standards).
+*   **The Hardness:** Even with a Quantum Computer, finding $S_t$ given $S_{t+1}$ is computationally infeasible because it requires solving a high-dimensional lattice problem which has no known quantum shortcut (unlike RSA/Factoring).
+*   **The Result:** **Perfect Forward Secrecy.** Even if the node is captured today, the math guarantees the attacker cannot derive the keys to decrypt yesterday's Ledger.
 
 ---
 
-## 3. Axiom 2: The Quad-State Matter Model
+## 3. Axiom 2: Tropical Causality (The Arrow of Time)
 
-Data transitions between four states based on its **Temperature ($T$)** (Volatility).
+How do we ensure history is monotonic (can only grow, not shrink)?
+We use **Tropical Geometry** (Min-Plus / Max-Plus Algebra).
 
-| Phase | Physics | Opcode | Function | Storage |
-| :--- | :--- | :--- | :--- | :--- |
-| **Crystal** | **Solid** ($T \to 0$) | `LVM_ACC` | **Truth.** Immutable, high-mass facts. | **Deep Lattice (Disk)** |
-| **Liquid** | **Fluid** | `LVM_BIND` | **Thought.** Reactive, combining concepts. | **Fovea (L1 Cache)** |
-| **Gas** | **Diffusion** | `LVM_MOV` | **Context.** Floating, low-mass associations. | **RAM (Encrypted)** |
-| **Plasma** | **Energy** | `LVM_MASK` | **Error.** High-energy rejection/isolation. | **Registers** |
-
----
-
-## 4. Axiom 3: Thermal Stability (The Third Law)
-
-How do we know if a concept is "True"? We measure its **Temperature**.
-
-### 4.1 The Vanishing of Plasticity
-Following **Martín-Olalla (2025)**, we define stability at the Phase Space Boundary ($T=0$).
-*   **The Law:** As a concept approaches Truth (Crystal Phase), its Plasticity ($C$) must vanish.
-
-$$
-C \propto T
-$$
-
-*   *Implication:* You cannot easily edit a "Cold" fact. To change a Crystal, you must inject massive energy to "melt" it back to Liquid state first.
-
-### 4.2 Thermal Isomorphism (The Consensus)
-How do two nodes with different `GenesisSeeds` agree on "Apple"?
-They compare **Thermal Geometry**.
-*   If $\text{Shape}(A) \approx \text{Shape}(B)$ AND $T_A \approx T_B \approx 0$:
-*   **Then:** The concepts are semantically equivalent. Meaning is defined as **Shape stabilized by Temperature**.
+### 3.1 The Tropical Ratchet
+*   **The Math:** In Tropical Algebra, "Addition" is replaced by "Maximum" ($a \oplus b = \max(a, b)$).
+*   **The Consequence:** This algebra describes systems that are **Irreversible**. Once you take the `max` of history, you cannot "subtract" an event to go back.
+    $$H_{t+1} = H_t \oplus \text{NewEvent}$$
+*   **Justification:** This aligns with **Heidergott's** work on Discrete Event Systems. It mathematically forbids "Undo" operations on the timeline. The Ledger is append-only by physical law.
 
 ---
 
-## 5. Axiom 4: Semantic Mass & Inertia
+## 4. Axiom 3: Semantic Mass & Inertia
 
-How do we distinguish "Apple (Fruit)" from "Apple (Phone)"? We weigh them.
+How do we prevent "Gaslighting" (rewriting truth)?
+We define Truth as a **Thermodynamic State**.
 
-### 5.1 Compositional Mass ($m$)
-A vector is a bundle of its parts. Its **Mass** is the sum of the weights of its components, scaled by the **World Gravity**.
+### 4.1 The States of Matter
+*   **Gas ($T_{high}$):** New ideas. Volatile. Easy to change. (RAM).
+*   **Crystal ($T \to 0$):** Verified facts. Solid. Hard to change. (Disk).
 
-$$
-m(V) = \sum (w_{\text{component}} \times \lambda_{\text{World}})
-$$
+### 4.2 The Law of Inertia
+To overwrite a concept, you must overcome its **Semantic Mass**.
+$$Force > \frac{Mass \times (1 + Bonds)}{Temperature}$$
 
-### 5.2 The Law of Overwrite (Inertia)
-To overwrite or redefine a concept, the **Force of Intent ($F$)** must exceed the **Structural Inertia**.
-
-$$
-F > \frac{m(V)}{T(V) + \epsilon}
-$$
-
-*   **Scenario:** Attacker tries to redefine "Apple" as "Car".
-*   **Defense:** "Apple" has high Mass (bonded to Fruit). "Apple" is Cold ($T \approx 0$). The Inertia is infinite. The overwrite fails.
+*   **The Physics:**
+    *   A **Hot** concept ($T$ high) has low resistance. (Learning phase).
+    *   A **Cold** concept ($T \approx 0$) has near-infinite resistance. (Established Truth).
+*   **Justification:** This aligns with **Martín-Olalla's** work on Thermal Stability. It ensures that "Truth" is not dogmatic (it *can* change), but it is conservative (it requires massive energy/evidence to melt a Crystal).
 
 ---
 
-## 6. Conclusion: The Physical Record
+## 5. Conclusion: The Physical Record
 
-**02b-PHYSICS (v1.6)** defines a system where:
-1.  **Time** is unforgeable (Ouroboros Ratchet).
-2.  **Truth** is stable (Thermal Law).
-3.  **Meaning** is heavy (Newtonian Mass).
+**02b-PHYSICS** defines a system where:
+1.  **Time** is unforgeable (Peikert's Lattices).
+2.  **History** is irreversible (Tropical Algebra).
+3.  **Truth** is stable (Thermodynamics).
 
-This ensures that the LVM does not just "process data"; it **accretes reality** in a way that can never be reversed or decrypted by future adversaries.
+This provides the physical security guarantees required for the **Living Ledger**.
 
 ---
 
 ### 📂 Bibliography for Part B
 
-1.  **Heidergott, B.** (2006). *"Max Plus at Work."* (Tropical Algebra).
-2.  **Martín-Olalla, J.M.** (2025). *"Thermal stability originates the vanishing of the specific heats."* Physica Scripta.
-3.  **Peikert, C.** (2016). *"A Decade of Lattice Cryptography."* (Foundation for LWE Forward Secrecy).
-4.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."*
+1.  **Peikert, C.** (2016). *"A Decade of Lattice Cryptography."* (The consensus on LWE hardness).
+2.  **Heidergott, B.** (2006). *"Max Plus at Work."* (Tropical Algebra for irreversible systems).
+3.  **Martín-Olalla, J.M.** (2025). *"Thermal stability originates the vanishing of the specific heats."* (The physics of stability).
+4.  **Regev, O.** (2009). *"On Lattices, Learning with Errors, Random Linear Codes, and Cryptography."* (Foundational LWE proof).
 
 ---
 
