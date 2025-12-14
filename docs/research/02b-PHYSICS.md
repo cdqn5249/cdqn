@@ -44,7 +44,7 @@ How do we ensure history is monotonic (can only grow, not shrink)?
 We use **Tropical Geometry** (Min-Plus / Max-Plus Algebra).
 
 ### 3.1 The Tropical Ratchet
-*   **The Math:** In Tropical Algebra, "Addition" is replaced by "Maximum" ($a \oplus b = \max(a, b)$).
+*   **The Math:** In Tropical Algebra, "Addition" is replaced by "Maximum" ( $a \oplus b = \max(a, b)$ ).
 *   **The Consequence:** This algebra describes systems that are **Irreversible**. Once you take the `max` of history, you cannot "subtract" an event to go back.
     $$H_{t+1} = H_t \oplus \text{NewEvent}$$
 *   **Justification:** This aligns with **Heidergott's** work on Discrete Event Systems. It mathematically forbids "Undo" operations on the timeline. The Ledger is append-only by physical law.
