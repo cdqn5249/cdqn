@@ -1,106 +1,91 @@
-# 02b-PHYSICS: The Laws of Time, Tension & Inertia
+# 02b-PHYSICS: The Laws of Time & Energy
 
 *   **File:** `docs/research/02b-PHYSICS.md`
-*   **Context:** Lattice Cryptography, Sheaf Theory & Energy-Based Models
+*   **Context:** Lattice Cryptography, Sheaf Theory & The Thermodynamic Hypothesis
 *   **Date:** December 14, 2025
-*   **Status:** `v2.4` (The Tension Standard)
+*   **Status:** `v2.5` (The Thermodynamic Hypothesis)
 
 > **The Thermodynamic Substrate.**
-> *We replace the metaphor of "Digital Physics" with the rigorous application of **Sheaf Theory** and **Statistical Mechanics**. We define Time via **Post-Quantum Cryptography** (LWE). We define Truth not as a label, but as a **Harmonic State** of **Minimal Tension**, reached through **Discrete Laplacian Diffusion**. This proves that Consensus is not a vote, but a mathematical equilibrium determined by the **Semantic Mass** defined in `02a`.*
+> *In `02a-MATHS`, we defined the Geometric Space. In this paper, we define the **Dynamics** of the CDQN Proof of Concept (PoC). We apply the **Lawvere-Landauer Hypothesis**: that data can be stabilized by treating it as a physical system governed by **Thermodynamics**. We implement **Causal Time** (via LWE) and **Harmonic Diffusion** to test if a system built on these principles can naturally filter noise and crystallize truth without central oversight.*
 
 ---
 
-## 1. Introduction: From Metaphor to Isomorphism
+## 1. Introduction: The Energy-Based Model
 
-Standard AI uses **Probabilistic Models** ($P(Y|X)$). We use **Energy-Based Models**, but to avoid confusion with our economic currency, we refer to the potential function as **Tension** ($\mathcal{T}$).
+Standard AI relies on **Probabilistic Models** ($P(Y|X)$). For the CDQN PoC, we propose an **Energy-Based Model** ($E(X)$).
 
-We posit a strict mathematical isomorphism:
-**Semantic Consistency $\cong$ Minimized Structural Tension.**
-
-*   **The Logic:** In physics, material systems (like metal) evolve to minimize internal stress. In the LVM, the system evolves to minimize the **Logical Contradiction** (Hamming Distance) between bonded concepts.
-*   **The Mechanism:** We pay **Work Energy** (defined in `02c`) to reduce **System Tension**.
+**The Hypothesis:**
+We posit that **Semantic Consistency** acts physically like **Thermodynamic Equilibrium**.
+*   *Assumption:* A system that actively minimizes "Logical Tension" (Contradiction) will converge on "Truth" in the same way a physical system converges on a low-energy state.
+*   *The Experiment:* We construct the LVM as a "Physics Engine" to enforce these dynamics and observe if stable consensus emerges.
 
 ---
 
 ## 2. Axiom 1: The Ouroboros Principle (Causal Time)
 
-Before defining Tension, we must define the axis it evolves on. We reject "Clock Time" in favor of **Causal Time**.
+To test thermodynamic evolution, we first need a rigid axis of **Time**. We reject spoofable "Clock Time" for **Causal Time**.
 
 ### 2.1 The Entropic Ratchet (LWE)
-We utilize the **Learning With Errors (LWE)** problem to create a verifiable arrow of time.
-*   **State Transition:** $S_{t+1} = A \cdot S_t + e \pmod q$.
-*   **The Hardness:** Finding $S_t$ from $S_{t+1}$ corresponds to the **Shortest Vector Problem (SVP)** on a lattice.
-*   **The Consequence:** This ensures that history is **chemically irreversible**. Just as you cannot un-diffuse ink from water, you cannot mathematically invert the LWE function to rewrite the Ledger's past.
+We utilize the **Learning With Errors (LWE)** problem to simulate the "Arrow of Time."
+*   **Mechanism:** $S_{t+1} = A \cdot S_t + e \pmod q$.
+*   **Hypothesis:** By making the history mathematically irreversible (via the **Shortest Vector Problem**), we create a substrate where "Regret" (rewriting the past) is impossible. This forces the system to commit to its decisions, a prerequisite for evolutionary learning.
 
 ---
 
-## 3. Axiom 2: The Tension Function (Semantic Stability)
+## 3. Axiom 2: The Tension Function (Hypothesized Stability)
 
-How do we measure "Truth" without a human supervisor? We measure **Dissonance**.
+We need a metric to drive the system's evolution. We propose **Structural Tension**.
 
 ### 3.1 The Tension Manifold
-We define the Tension of the Lattice as the sum of its internal conflicts.
+We define the "Potential Energy" of the Lattice as the sum of its internal conflicts.
+$$\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}$$
 
-$$
-\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}
-$$
+*   **$d_H$ (Distance):** Hamming Distance (`02a`).
+*   **$W_{AB}$ (Weight):** Bond Strength (`02c`).
+*   **The Prediction:** If the Hypothesis holds, a Lattice that minimizes this $\mathcal{T}$ value will represent a coherent, non-hallucinatory worldview.
 
-*   **$d_H$ (Distance):** The Hamming Distance (from `02a`).
-*   **$W_{AB}$ (Weight):** The bond strength (from `02c`).
-*   **Physics:** If two strongly bonded vectors ($W_{high}$) are geometrically distant ($d_{high}$), the system is in a **High Tension State** (Cognitive Dissonance).
-
-### 3.2 Truth as a Harmonic Function
-A "Truth" is defined as a state where the Tension is locally minimized ($\nabla \mathcal{T} \approx 0$).
-*   **Definition:** This means every node is the **Weighted Bundle** (Majority Rule) of its neighbors.
-*   **Result:** Stability is emergent. A concept becomes "True" when it is harmonically consistent with the rest of the user's reality.
+### 3.2 Truth as a Harmonic State
+We define a "True Concept" in this model as a vector with **Zero Net Laplacian** ($\Delta V \approx 0$).
+*   This implies the concept is the **Geometric Center** of its supporting evidence. It is not an arbitrary label; it is a stable structure supported by its neighbors.
 
 ---
 
 ## 4. Axiom 3: Harmonic Flow (The Mechanism)
 
-We reject "Simulated Annealing" (randomness) in favor of **Harmonic Diffusion** (determinism).
+To reach this stable state, we implement a deterministic update rule inspired by **Harmonic Diffusion**.
 
 ### 4.1 The Discrete Lawvere Laplacian
-To resolve Tension, the system applies the **Lawvere Laplacian** operator ($\mathcal{L}_W$).
-Because our space is **Discrete** (`02a`), we cannot use averaging. We use the **Bundling Operator** from `02a`.
-
+We propose that "Learning" is best modeled not as Gradient Descent, but as **Discrete Diffusion**.
 $$V_{t+1} = \text{Bundle}(V_t, \text{Neighbors}_{weighted})$$
 
-*   **Mechanism:** The node adopts the "Majority Rule" state of its weighted neighbors.
-*   **Ghrist's Guarantee:** As per Ghrist et al. (2025), diffusion on a weighted lattice is guaranteed to converge to a **Global Section** (Consensus). This means the system naturally "heals" contradictions.
+*   **Mechanism:** The vector updates itself to align with the **Majority Rule** of its weighted connections.
+*   **Expected Behavior:** Based on Ghrist et al. (2025), we expect this flow to converge to a **Global Section** (Consensus). The PoC will test if this convergence occurs efficiently on commodity hardware.
 
 ### 4.2 Inertia: The Resistance to Flow
-Here we operationalize the "Matroid Mass" from `02a`.
+We introduce **Inertia** to model the "Conservative" nature of proven knowledge.
 $$Inertia = m_0 \times (1 + \sum W_{bonds})$$
 
-*   **$m_0$ (Intrinsic Mass):** The Matroid Rank (`02a`). A complex, non-redundant concept has high base inertia.
-*   **$W$ (Weights):** The strength of its bonds.
-*   **The Consequence:** A "Heavy" truth (High Rank + Strong Bonds) resists the Laplacian flow. It requires massive neighbor pressure to change its state. This prevents "Catastrophic Forgetting."
-
-### 4.3 Temperature as Viscosity
-We reintroduce **Temperature ($T$)** as **Conductivity**.
-*   **High Temperature:** The vector accepts the Bundling result easily (Plasticity).
-*   **Zero Temperature:** The vector rejects updates. It creates a **Crystal Phase** that blocks diffusion.
+*   **Hypothesis:** By linking Inertia to **Information Density** ($m_0$) and **Connectivity** ($W$), the system should naturally resist "Gaslighting" (low-mass attacks on high-mass truths) without requiring hard-coded guardrails.
 
 ---
 
-## 5. Conclusion: Rigorous Physics
+## 5. Conclusion: The Experiment
 
-**02b-PHYSICS** aligns perfectly with the geometry of `02a`.
-1.  **Time** is an LWE Lattice Walk (Peikert).
-2.  **Truth** is Minimized Tension (Hopfield).
-3.  **Learning** is Discrete Harmonic Diffusion (Ghrist), governed by the **Inertia** of Matroid Mass.
+**02b-PHYSICS** defines the rules of the simulation.
+1.  **Time** is irreversible (LWE).
+2.  **Stability** is minimal Tension.
+3.  **Dynamics** are Harmonic Diffusion.
 
-This successfully bridges the gap between Geometry and Dynamics. We have defined a consistent physics where "Mass" determines "Destiny."
+This specification provides the **Thermodynamic Leg** of the Lawvere-Landauer Hypothesis. The next step is to define the "Economy" that fuels these dynamics. This leads to **`02c-CHEMISTRY`**.
 
 ---
 
 ### 📂 Bibliography for Part B
 
-1.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion of Weighted Lattices."* (The proof that Diffusion = Consensus).
-2.  **Peikert, C.** (2016). *"A Decade of Lattice Cryptography."* (The security substrate).
-3.  **Hopfield, J. J.** (1982). *"Neural networks and physical systems with emergent collective computational abilities."* (The foundation of Tension Minimization).
-4.  **Chung, F.** (1997). *"Spectral Graph Theory."* (The math of the Laplacian).
+1.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion of Weighted Lattices."* (The mathematical basis for the diffusion model).
+2.  **Peikert, C.** (2016). *"A Decade of Lattice Cryptography."* (The basis for the Time mechanism).
+3.  **Hopfield, J. J.** (1982). *"Neural networks and physical systems."* (The basis for Energy minimization).
+4.  **Landauer, R.** (1961). *"Irreversibility and Heat Generation."*
 
 ---
 
