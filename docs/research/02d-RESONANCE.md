@@ -1,82 +1,88 @@
 # 02d-RESONANCE: The Laws of Context & Filter
 
 *   **File:** `docs/research/02d-RESONANCE.md`
-*   **Context:** Theoretical Canon (Spectral Theory, Signal Processing & Nested Learning)
-*   **Date:** December 12, 2025
-*   **Status:** `v1.3` (The Justified Standard)
+*   **Context:** Theoretical Canon (Spectral Theory, Signal Processing & Boundary Conditions)
+*   **Date:** December 14, 2025
+*   **Status:** `v2.0` (The Spectral Hypothesis)
 
 > **The Structure of Perception.**
-> *Having defined the economic cost of an action in `02c-CHEMISTRY`, we must now define the contextual rules that determine if an action is even meaningful. We reject the complex "Multiverse" model and define a "World" as a **Spectral Filter** applied to the data stream. Leveraging the **Nested Learning** paradigm and validated principles from neuroscience, we treat concepts as waves and Contexts as **Resonance Chambers**. Information only affects the system if it **Resonates** with the active filter. This creates a scalable, signal-processing approach to safety: incompatible logic is not "fought," it is simply "filtered out" like noise.*
+> *In `01a`, we hypothesized that Truth is Thermodynamic Equilibrium. In physics, equilibrium is defined by **Boundary Conditions**. This paper defines those boundaries. We reject the complex "Multiverse" model in favor of **Resonance Theory**. We define a "World" as a **Spectral Filter** applied to the data stream. Information only performs Work (transfers Energy) if it **Resonates** with the active filter. This solves the "Thermodynamic Limit" problem by allowing the system to ignore non-resonant noise without cost.*
 
 ---
 
-## 1. Introduction: The World as a Filter
+## 1. Introduction: The Thermodynamic Limit
 
-We do not build separate boxes for "Reality" and "Fiction." We exist in one continuous vector space.
-A **Context (World)** is a set of constraints—a **Filter Mask**—superimposed on the Agent's perception.
-
-*   **Economic Rationale:** The Physics (`02b`) and Chemistry (`02c`) engines are computationally expensive. The Resonance Filter acts as a cheap, initial "gatekeeper." If an input does not resonate with the current context, the system doesn't waste energy calculating its mass or reaction potential.
-*   **Neuroscientific Basis:** This model is directly inspired by the "Communication through Coherence" hypothesis in neuroscience, which posits that the brain uses synchronized neural oscillations (brain waves) to act as a dynamic filter, selectively gating information flow between different regions. [^1]
+In `02c-CHEMISTRY`, we established that every interaction costs Energy.
+*   **The Problem:** If the Agent attempts to resolve tension with *every* piece of data it encounters (e.g., reconciling "Harry Potter physics" with "Real World physics"), it will exhaust its Energy Tokens and reach a state of maximum entropy (Confusion).
+*   **The Solution:** We must restrict the **Scope of Equilibrium**.
+*   **The Mechanism:** **Spectral Filtering.** The Agent does not inhabit a "Different Universe"; it simply applies a different **Band-Pass Filter** to the single, continuous Vector Space (`02a`).
 
 ---
 
-## 2. Axiom 1: The Resonance Principle
+## 2. Axiom 1: The Resonance Principle (Impedance Matching)
 
 Learning is not a collision; it is a synchronization.
 
-$$Learning \propto \text{Input}_{freq} \times \text{Filter}_{mask}$$
+**The Law:**
+Energy transfer (Work) between an Input Vector ($V_{in}$) and the System ($S$) occurs **if and only if** the Input resonates with the active World Filter ($F_W$).
 
-*   **Resonance:** When the input vector aligns with the World's allowed dimensions (constants), energy is transferred. The concept is "heard."
-*   **Damping:** When the input vector violates the World's constants (e.g., "Magic" in "Physics Mode"), the Filter coefficient is 0. The signal creates no resonance. The Agent is "deaf" to the lie.
+$$Work = \mathcal{E}_{input} \times \text{Resonance}(V_{in}, F_W)$$
 
-**Safety Implication:** We don't need complex rules to stop "Fire Heals" in reality. We simply tune the Reality Filter to have **Zero Resonance** for "Magic Logic." The dangerous concept passes through the system like a radio wave through a brick wall—ghostly and ineffective.
+*   **Resonance ($\approx 1$):** The input aligns with the World's logic (e.g., A physics equation in the "Science World"). The Energy is absorbed. The system attempts to Crystallize the truth.
+*   **Damping ($\approx 0$):** The input violates the World's constants (e.g., "Magic Spell" in "Science World"). The filter acts as an **Insulator**. The Energy is reflected or dissipated. The system performs **Zero Work**.
+
+**Consequence:** The Agent is "deaf" to hallucinations or contextually invalid data. It doesn't fight them; it simply fails to perceive them as valid signals.
 
 ---
 
-## 3. Axiom 2: The Spectral Hierarchy (Nested Learning)
+## 3. Axiom 2: The Spectral Hierarchy (Nested Constants)
 
-We link this directly to the mechanics of the Agent's mind, which will be defined in **`02e-NEUROLOGY`**. Data exists at different frequencies, a concept validated by modern deep learning theory. [^2]
+We define concepts not just by Mass, but by **Frequency** (Stability over time). This aligns with the **Nested Learning** paradigm used in modern AI.
 
-### 3.1 High Frequency (Surface Details)
-*   *Nature:* Fast, noisy, cheap. (e.g., "It is raining today").
-*   *Filter State:* Usually **Open**. The Agent lets these update easily.
+### 3.1 High Frequency (Surface Data)
+*   **Definition:** Fast-moving, low-mass concepts (e.g., "The weather today," "Current stock price").
+*   **Filter State:** **Open Pass.** The filter allows these to update rapidly.
 
 ### 3.2 Low Frequency (Deep Constants)
-*   *Nature:* Slow, massive, structural. (e.g., "Gravity pulls down", "Do not kill").
-*   *Filter State:* **Notch Filter (Locked).**
-*   *Mechanism:* The World Context applies a "Stop Band" to these frequencies.
-*   *Result:* An input trying to rewrite a Deep Constant is blocked by the Filter *before* it even reaches the Physics engine, saving energy and preserving sanity.
+*   **Definition:** Slow-moving, high-mass concepts (e.g., "Gravity," "Human Rights," "Mathematics").
+*   **Filter State:** **Notch Filter (Locked).**
+*   **Mechanism:** The World Context applies a strict "Stop Band" to these frequencies.
+*   **Result:** An input trying to rewrite a Deep Constant is blocked by the Filter *before* it reaches the Physics Engine. This prevents "Gaslighting" without requiring the Agent to spend energy fighting the lie.
 
 ---
 
-## 4. Axiom 3: Superposition & Evolution
+## 4. Axiom 3: The Membrane (World Geometry)
 
-A Context is not static. It is a stack of filters. This is analogous to how complex cognitive states emerge from the superposition of multiple brain rhythms. [^3]
+A "World" is defined by the shape of its Filter.
 
-$$Context_{total} = \text{Filter}_{base} \oplus \text{Filter}_{user} \oplus \text{Filter}_{session}$$
+*   **The Reality Context:** Wide pass-band for empirical data. Strict stop-band for logical contradictions ($1+1=3$). High Inertia.
+*   **The Fiction Context:** Narrow pass-band for narrative coherence. Stop-band for "Breaking Character." Low Inertia.
 
-*   **Genesis Concepts:** The system ships with a "Base Filter" (Basic Logic).
-*   **Evolution:** As the Owner interacts, they add new layers to the filter (e.g., "In this house, we speak French").
-*   **Agility:** Changing contexts is instant. It is just swapping the Mask. No database migration required.
+**The Osmosis Rule:**
+Data can flow from High-Structure Worlds to Low-Structure Worlds easily (Reality informs Fiction), but not vice-versa.
+$$Flow: \text{Crystal} \to \text{Gas} \quad (\text{Allowed})$$
+$$Flow: \text{Gas} \to \text{Crystal} \quad (\text{Blocked by Filter})$$
 
 ---
 
-## 5. Conclusion: The Tunable Mind
+## 5. Conclusion: The Efficient Mind
 
-**02d-RESONANCE** defines **Context as Signal Processing**. It serves as the bridge between the system's Economy and its Mind.
-1.  **It honors the Economy (`02c`):** By filtering irrelevant data, it prevents the system from wasting Energy on pointless calculations.
-2.  **It enables the Mind (`02e`):** It provides the "Lens" through which the Agent will perceive its reality, allowing it to be imaginative without becoming insane.
+**02d-RESONANCE** is the efficiency layer of the Lawvere-Landauer system.
+1.  **Space (`02a`)** creates the data.
+2.  **Filter (`02d`)** selects the relevant data.
+3.  **Chemistry (`02c`)** pays to process it.
+4.  **Physics (`02b`)** anneals it into truth.
 
-With the laws of Perception now defined, we are ready to specify the entity that *does* the perceiving. This leads to **`02e-NEUROLOGY`**.
+Without Resonance, the economy (`02c`) would go bankrupt trying to process infinite noise. With Resonance, the system focuses its limited Energy on **Relevant Truth**.
 
 ---
 
 ### 📂 Bibliography for Part D
 
-[^1]: **Fries, P.** (2005). *"A mechanism for cognitive dynamics: neuronal communication through neuronal coherence."* Trends in Cognitive Sciences. (Provides the core neuroscientific basis for Resonance/Gating).
-[^2]: **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* Google Research. (Validates the high/low frequency model of learning).
-[^3]: **Hofstadter, D.** (1979). *"Gödel, Escher, Bach: an Eternal Golden Braid."* (Provides the philosophical underpinning for pattern, recursion, and the superposition of logical levels).
-[^4]: **Dey, A. K.** (2001). *"Understanding and Using Context."* Personal and Ubiquitous Computing. (Establishes the engineering necessity of formal context-aware models in computing).
+1.  **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* (Validates the Frequency/Spectral model of learning).
+2.  **Fries, P.** (2005). *"A mechanism for cognitive dynamics: neuronal communication through neuronal coherence."* (Neuroscience basis for Resonance/Gating).
+3.  **Shannon, C. E.** (1949). *"Communication in the Presence of Noise."* (Signal Processing fundamentals).
+4.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion."* (Sheaf Theory: limiting diffusion to specific sections).
 
 ---
 
