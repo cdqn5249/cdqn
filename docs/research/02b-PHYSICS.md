@@ -40,7 +40,10 @@ How do we measure "Truth" without a human supervisor? We measure **Dissonance**.
 
 ### 3.1 The Tension Manifold
 We define the Tension of the Lattice as the sum of its internal conflicts.
-$$\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}$$
+
+$$
+\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}
+$$
 
 *   **$d_H$ (Distance):** The Hamming Distance (from `02a`).
 *   **$W_{AB}$ (Weight):** The bond strength (from `02c`).
