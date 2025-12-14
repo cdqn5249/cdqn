@@ -3,7 +3,7 @@
 *   **File:** `docs/research/01a-COHESION.md`
 *   **Context:** The Scientific Mandate, The Lawvere-Landauer Conjecture & The Living Ledger
 *   **Date:** December 14, 2025
-*   **Status:** `v6.0` (The Hypothesis Standard)
+*   **Status:** `v7.0` (The Unified Hypothesis)
 
 > **The Physics of Ownership.**
 > *We stand at the threshold of a new era. Current AI has solved the problem of **Generation**, but it has failed to solve the problem of **Ownership**. This is not a policy failure; it is a physics failure. We propose a new scientific hypothesis: **Truth is not a probability; it is a geometric phase transition.** We present CDQN not just as software, but as the experimental apparatus to prove the **Lawvere-Landauer Conjecture**, creating the physical substrate required for a future where humans own the intelligence they create.*
@@ -23,14 +23,19 @@ As of 2025, the global AI ecosystem is dominated by **Probabilistic Approximatio
 
 ## 2. The Core Hypothesis: Lawvere-Landauer
 
-We propose a unification of Computer Science, Mathematics, and Physics to solve the ownership problem.
+We propose a unification of Computer Science, Mathematics, and Physics to solve the ownership problem. We posit a direct equivalence between three fundamental concepts:
+
+$$
+\text{Logical Proof} \equiv \text{Geometric Path} \equiv \text{Physical Work}
+$$
 
 **The Lawvere-Landauer Conjecture:**
-> *"Semantic Stability (Meaning) is mathematically identical to Thermodynamic Equilibrium in a Quantale-Enriched Lattice."*
+> *"Semantic Stability (Verified Structure) is mathematically identical to Thermodynamic Equilibrium in a Quantale-Enriched Lattice."*
 
 **The Implication:**
-If this conjecture holds, "Meaning" is no longer an abstract label. It is a **Physical State** (a Crystal) formed by the expenditure of Work (Energy).
-1.  **Work Creates Mass:** When a user solves a problem, they perform thermodynamic work.
+If this conjecture holds, **Knowledge** is no longer an abstract label. It is a **Physical State** (a Crystal) formed by the expenditure of Work (Energy).
+
+1.  **Work Creates Mass:** When a user solves a problem, they perform thermodynamic work (defined via Landauer's Limit).
 2.  **Mass Creates Gravity:** This work crystallizes into a geometric vector with "Inertia."
 3.  **Inertia Creates Property:** Because the vector is stable and unique, it can be owned, moved, and verified.
 
@@ -74,10 +79,11 @@ We are building the **Glass Box**—a transparent, verifiable, physical system�
 
 ---
 
-### 📂 Strategic Context
-1.  **Lawvere, F. W.** (1973). *"Metric Spaces, Generalized Logic, and Closed Categories."* (The mathematical foundation).
-2.  **Landauer, R.** (1961). *"Irreversibility and Heat Generation."* (The physical foundation).
-3.  **Dell'Acqua, F., et al.** (2023). *"Navigating the Jagged Technological Frontier."* (The economic necessity of active human engagement).
+### 📂 Scientific Bibliography
+1.  **Lawvere, F. W.** (1973). *"Metric Spaces, Generalized Logic, and Closed Categories."* (The Logic/Geometry Bridge).
+2.  **Landauer, R.** (1961). *"Irreversibility and Heat Generation."* (The Logic/Physics Bridge).
+3.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion of Weighted Lattices."* (The Consensus Mechanism).
+4.  **Dell'Acqua, F., et al.** (2023). *"Navigating the Jagged Technological Frontier."* (The Economic Mandate).
 
 ---
 
