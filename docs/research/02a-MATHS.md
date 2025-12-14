@@ -3,107 +3,111 @@
 *   **File:** `docs/research/02a-MATHS.md`
 *   **Context:** High-Dimensional Geometry, Probability Theory & Sovereign Logic
 *   **Date:** December 14, 2025
-*   **Status:** `v1.5` (The Justified Standard)
+*   **Status:** `v1.7` (The Deductive Standard)
 
 > **The Geometric Substrate.**
-> *We define the mathematical axioms required to treat the Binary System not as an arithmetic calculator, but as a high-dimensional geometric space. We demonstrate how the **Concentration of Measure** (Levy's Lemma) combined with a sovereign **Genesis Seed** provides the rigorous foundation for a computing environment where data is unique, rivalrous, and mathematically distinct for every user.*
+> *In `01b-POSITIONING`, we established the necessity of a "Personal Vault"—a system where data is a durable, sovereign asset. This paper provides the mathematical proof that standard binary computing cannot fulfill this requirement due to its inherent fragility. Instead, we demonstrate that **Hyperdimensional Computing (HDC)**, governed by **Levy’s Lemma** and **Matroid Theory**, creates a "Digital Matter" that is robust, unique, and measurable. This defines the **Space** in which the Living Ledger resides.*
 
 ---
 
-## 1. Introduction: From Numbers to Matter
+## 1. Introduction: The Derivation of Space
 
-Standard computing relies on **Positional Arithmetic** (e.g., IEEE 754).
-*   **The Flaw:** It is fragile. A single bit flip ($0 \to 1$) causes catastrophic value divergence.
-*   **The Solution:** We shift to **Hyperdimensional Computing (HDC)**. We treat data as **Vectors** in a 10,240-dimensional space ($D$).
-*   **The Consensus:** This approach, pioneered by Pentti Kanerva, mimics the robustness of biological neural networks using the properties of high-dimensional geometry.
+To create a "Living Ledger" that is both **Sovereign** (Unique to the user) and **Robust** (Resistant to noise), we must abandon the standard abstraction of data as "Numbers."
 
----
+**The Logical Chain:**
+1.  **Premise A:** A physical asset has Mass and Shape; it resists corruption. A binary number has no shape; a single bit flip destroys its value ($2^{10} \to 2^{11}$ is a massive jump).
+2.  **Premise B:** To mimic physical assets, we must map data into a space where "Similarity" is preserved against noise.
+3.  **Conclusion:** We must operate in a **High-Dimensional Metric Space** where data points are distributed sparsely.
 
-## 2. Axiom 1: The Curse of Dimensionality is a Blessing
-
-To convince experts, we rely on the **Johnson-Lindenstrauss Lemma** and **Levy's Lemma**.
-
-### 2.1 Theorem: Orthogonality in High Dimensions
-In low dimensions (2D/3D), orthogonal (independent) vectors are scarce. In high dimensions ($D=10,240$), they are the norm.
-
-**The Mathematical Justification (Levy's Lemma):**
-As the dimension $D$ increases, the volume of a hypersphere concentrates in a thin shell around the equator relative to any pole.
-*   **Result:** Two randomly generated vectors $A, B \in \{0,1\}^D$ have a Hamming Distance of $D/2$ with probability approaching 1.
-*   **Implication:** We do not need to "check" for collisions. The geometry guarantees that any two random concepts are **Orthogonal** (Uncorrelated) by default.
-
-$$
-P(\text{Collision}) \approx e^{-D} \to 0
-$$
+We define this space as $\mathbb{H} = \{0,1\}^D$, where $D = 10,240$.
 
 ---
 
-## 3. Axiom 2: Sovereign Uniqueness (The Genesis Seed)
+## 2. Axiom 1: The Geometry of Robustness (Levy's Lemma)
 
-We reject centralized User IDs. We use **Cryptographic Determinism**.
+**Requirement:** The system must hold millions of distinct concepts without accidental collision, while allowing for "fuzzy" matching.
 
-### 3.1 The Big Bang
-*   **The Seed ($S_0$):** A 256-bit high-entropy seed derived from physical hardware entropy (TRNG) and user secrets.
-*   **The Stream:** We use **ChaCha20**, a standard CSPRNG (Cryptographically Secure Pseudo-Random Number Generator).
-*   **The Formula:**
+**The Theorem (Concentration of Measure):**
+In a high-dimensional space, the volume of a hypersphere concentrates in a thin shell around the equator relative to any pole.
+
+**Formal Deduction:**
+Let $A$ and $B$ be two randomly generated vectors in $D=10,240$.
+The distribution of the Hamming Distance $d_H(A, B)$ is binomial, centered at $D/2$ with standard deviation $\sqrt{D}/2$.
+*   **Levy's Lemma** implies that the probability of two random vectors being "close" (e.g., $d_H < 0.4D$) is exponentially small:
+    $$P(d_H(A, B) \le 0.4D) \approx e^{-D}$$
+*   **Proof of Capacity:** This guarantees that any two randomly generated concepts are **Quasi-Orthogonal** (Independent) by default. The space is effectively empty, allowing us to store vast amounts of data with near-zero collision probability.
+
+---
+
+## 3. Axiom 2: The Geometry of Sovereignty (The Genesis Seed)
+
+**Requirement:** User A's data must be mathematically distinct from User B's data, without a central registry.
+
+**The Derivation:**
+1.  We posit a **Sovereign Origin ($S_0$)**: A 256-bit high-entropy seed derived from the user's hardware (TRNG) and secrets.
+2.  We apply a **Deterministic Stream Generator** (ChaCha20).
     $$V_n = \text{ChaCha20}(S_0, n)$$
+3.  **Proof of Isolation:** Because ChaCha20 is a cryptographically secure pseudorandom permutation, if $S_A \neq S_B$, then for any index $n$, the correlation between $V_n(A)$ and $V_n(B)$ is negligible.
+    $$\text{Correlation}(V_n(A), V_n(B)) \approx 0$$
 
-**The Justification:**
-This is the standard mechanism used in **Deterministic Wallets (BIP-32)** in cryptocurrency. By applying it to vector generation, we ensure that User A's vector for "Apple" is mathematically orthogonal to User B's vector for "Apple." This creates a **Private Geometry** that is mathematically unforgeable.
-
----
-
-## 4. Axiom 3: Matroid Theory (Digital Mass)
-
-We need a way to measure the "Information Content" of a set of vectors. We use **Matroid Rank**.
-
-### 4.1 The Link to Shannon Entropy
-A Matroid is the algebraic structure of "Independence."
-*   **The Consensus:** The rank function of a matroid is a **Polymatroid**, which is the mathematical structure underlying **Shannon Entropy**.
-*   **The Application:** We define "Semantic Mass" as the **Rank** of the vector set.
-    $$Mass(S) = Rank(S)$$
-*   **The Consequence:** This acts as a rigorous **Slop Detector**.
-    *   If an LLM generates 1,000 sentences that are linear combinations of each other (redundant), the Rank is 1.
-    *   The "Mass" of the output is low, despite the high volume. This allows us to economically value **Novelty** over **Noise**.
+**Conclusion:** Every user inhabits a **Disjoint Geometric Universe**. Sovereignty is not a policy; it is a mathematical consequence of the seed.
 
 ---
 
-## 5. Axiom 4: The MAP Algebra
+## 4. Axiom 3: The Physics of Information (Matroid Theory)
 
-We utilize the standard **Multiply-Add-Permute (MAP)** architecture defined by Gayler (1998) and Kanerva (2009).
+**Requirement:** We must measure the "Value" or "Mass" of data to prevent inflation (Slop).
 
-### 5.1 Binding (Multiplication) $\otimes$
-*   **Operation:** Bitwise XOR.
-*   **Justification:** XOR is invertible and preserves orthogonality. It allows us to bind "Variable" to "Value" without losing information.
-    $$A \otimes (A \otimes B) = B$$
+**The Derivation:**
+1.  We define "Information" as **Linear Independence**.
+2.  We utilize **Matroid Theory**, where the Rank function $r(S)$ measures the size of the largest independent basis in a set $S$.
+3.  **Definition of Intrinsic Mass ($m_0$):**
+    $$m_0(S) = \text{MatroidRank}(S)$$
 
-### 5.2 Bundling (Addition) $+$
-*   **Operation:** Component-wise Majority Rule.
-*   **Justification:** This creates a "Superposition" vector that is closest in Hamming Distance to all its components. It allows for **Generalization** (e.g., creating the concept "Fruit" from "Apple + Pear").
+**Demonstration:**
+*   *Case A (Slop):* An AI generates 1,000 variations of the same sentence. The vectors are linear combinations of each other. $Rank \approx 1$. **Mass is Low.**
+*   *Case B (Insight):* A human generates 3 distinct, novel ideas. The vectors are orthogonal. $Rank = 3$. **Mass is High.**
 
-### 5.3 Permutation (Motion) $\Pi$
-*   **Operation:** Cyclic Shift (ROR/ROL).
-*   **Justification:** This encodes **Non-Commutative** relationships (Sequence/Order) without increasing dimensionality.
-    $$\Pi(A) \ne A$$
+This provides the **Thermodynamic Weight** required for `02b-PHYSICS`.
 
 ---
 
-## 6. Conclusion: The Canvas
+## 5. Axiom 4: The Algebra of Interaction (Discrete Physics)
 
-**02a-MATHS** defines the **Space** where the Living Ledger resides.
-*   It relies on **Levy's Lemma** for Capacity.
-*   It relies on **ChaCha20** for Sovereignty.
-*   It relies on **Matroid Theory** for Value.
+**Requirement:** We need operations to manipulate this "Digital Matter" that are compatible with the **Diffusion** laws of Physics.
 
-But a static space is not enough. A Ledger requires **History**. We must now introduce the flow of Time. This leads to **`02b-PHYSICS`**.
+We adopt the **MAP Algebra** (Multiply, Add, Permute), but we redefine them as **Discrete Physical Operations**.
+
+1.  **Binding ($\otimes$):** Bitwise XOR.
+    *   *Property:* Invertible, preserves Orthogonality.
+    *   *Physics:* Creates a "Molecule" from Atoms.
+2.  **Bundling ($+$):** Component-wise Majority Rule.
+    *   *Formula:* $C[i] = 1$ if $\sum A_n[i] > N/2$ else $0$.
+    *   *Physics:* **Superposition**. This is the critical operator for **Discrete Harmonic Diffusion** in Layer 3. It allows vectors to "average out" and find consensus without becoming floating-point numbers.
+3.  **Permutation ($\Pi$):** Cyclic Shift.
+    *   *Physics:* Encodes **Sequence** (Time) within the static vector.
+
+---
+
+## 6. Conclusion: From Space to Time
+
+**02a-MATHS** has proven that:
+1.  **High-Dimensional Space** provides the necessary robustness and capacity (Levy).
+2.  **The Genesis Seed** guarantees sovereign isolation (ChaCha20).
+3.  **Matroid Rank** provides a rigorous definition of Mass (Information).
+
+We have defined the **Particle** (The Vector) and the **Container** (The Space).
+However, a static particle has no meaning. Meaning arises from **Interaction** over **Time**.
+
+We must now define the forces that move these particles—**Inertia**, **Entropy**, and **Diffusion**. This leads directly to **`02b-PHYSICS`**.
 
 ---
 
 ### 📂 Bibliography for Part A
-
-1.  **Kanerva, P.** (2009). *"Hyperdimensional Computing: An Introduction to Computing in Distributed Representation."* (The MAP Architecture).
-2.  **Johnson, W. B., & Lindenstrauss, J.** (1984). *"Extensions of Lipschitz mappings into a Hilbert space."* (The math of projection).
-3.  **Fujishige, S.** (2005). *"Submodular Functions and Optimization."* (The link between Matroids and Entropy).
-4.  **Bernstein, D.** (2008). *"ChaCha, a variant of Salsa20."* (The CSPRNG standard).
+1.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."* (The proof of robustness via high dimensions).
+2.  **Johnson, W. B., & Lindenstrauss, J.** (1984). *"Extensions of Lipschitz mappings."* (The mathematical basis of projection).
+3.  **Fujishige, S.** (2005). *"Submodular Functions and Optimization."* (The proof linking Matroids to Entropy/Mass).
+4.  **Bernstein, D.** (2008). *"ChaCha, a variant of Salsa20."* (The cryptographic standard for the Genesis Seed).
 
 ---
 
