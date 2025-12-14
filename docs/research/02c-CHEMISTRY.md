@@ -24,6 +24,7 @@ We model this as **Chemistry**.
 ## 2. Axiom 1: Conservation of Value (Linear Logic)
 
 **Premise:** In `02a-MATHS`, we defined "Intrinsic Mass" ($m_0$) as Matroid Rank (Information). Information cannot be created from nothing.
+
 **Deduction:** Therefore, Data violates Boolean Logic ($A \land A = A$) and obeys **Linear Logic** ($A \otimes A \neq A$). You cannot "spend" the same Mass twice.
 
 **The No-Cloning Theorem:**
@@ -50,6 +51,7 @@ $$\nu(V) \approx \log_2(\text{Mass}(V))$$
 ## 4. Axiom 3: The Endothermic Nature of Bonding
 
 **Premise:** In `02b-PHYSICS`, we established the Landauer Limit: erasing information releases heat.
+
 **Deduction:** The contrapositive is true: **Writing information (Creating a Bond) absorbs Energy.**
 
 **The Reaction Equation:**
