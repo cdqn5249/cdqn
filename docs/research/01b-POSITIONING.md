@@ -1,79 +1,72 @@
-# 01b-POSITIONING: The Geometric Standard as an Architecture for Accountable Systems
+# 01b-POSITIONING: The Architecture of Ownership
 
 *   **File:** `docs/research/01b-POSITIONING.md`
-*   **Context:** Scientific Positioning & The Case for Verifiable AI
-*   **Date:** December 12, 2025
-*   **Status:** `v3.0` (Refactored for Canon Consistency)
+*   **Context:** Scientific Positioning, The "Universal vs. Personal" Split
+*   **Date:** December 14, 2025
+*   **Status:** `v4.0` (The Asset Class Standard)
 
-> **The Mantra of the Glass Box.**
-> *"Behind every decision made by an artificial entity, there must be an accountable human or legal entity."*
+> **The Mantra of the Sovereign.**
+> *"Intelligence is a Utility. Wisdom is an Asset."*
 >
-> *This document positions the CDQN project not as a competitor to the dominant Transformer-based paradigm, but as a vital parallel field of research. While the industry makes strides in optimizing probabilistic models (Path A), we are building the alternative: an architecture where **accountability is a physical property** (Path B). We do this because accountability is the non-negotiable foundation required to deliver the promise of mass **Human Empowerment** outlined in `01a-COHESION`.*
+> *This document positions CDQN not as a competitor to the powerful AI models of Big Tech, but as the necessary vessel for the user's value. While the industry builds the "Universal Engine" (Path A), we are building the "Personal Vault" (Path B). We argue that to fulfill the mission of `01a` (Ownership), we must transition from Probabilistic architectures to Geometric ones, because you can only truly own what you can measure, move, and verify.*
 
 ---
 
-## 1. Introduction: The Two Paths of AI's Evolution
+## 1. Introduction: The Universal and the Personal
 
-As of 2025, the development of artificial intelligence is proceeding along two distinct, though not mutually exclusive, paths.
+As we approach the singularity of competence, the computing landscape is bifurcating into two distinct, necessary infrastructures.
 
-**Path A: The Optimization of Probabilistic Systems.**
-This is the dominant path. It is focused on mitigating the weaknesses of the Transformer architecture through massive engineering. It is characterized by efforts like **Google's Mira** (memory architectures), **DeepSeek 3.2** (efficiency optimizations), and **Z.AI's GLM-4.6** (multimodal capabilities). The ultimate destination of this path is **Peak Performance and Capability**.
+**Path A: The Universal Engine (The Utility).**
+*   **Leaders:** Google, DeepSeek, Z.AI, OpenAI.
+*   **Nature:** Massive, centralized, probabilistic.
+*   **Role:** To provide raw intelligence, creativity, and multimodal processing capabilities. It is the "Electricity" of the new age.
+*   **The Limit:** It is a utility you rent. It does not know *you* specifically, and if it does, it owns that knowledge.
 
-**Path B: The Construction of Verifiable Systems.**
-This is the path we propose. It is motivated by a different class of problems centered on **Trust, Governance, and Liability**. To create a "Mass Smart Workforce" (`01a`), we must provide tools that are inherently safe, auditable, and trustworthy for the non-expert user. The ultimate destination of this path is **Provable Accountability**.
-
----
-
-## 2. On State & Auditability: Performance Memory vs. Verifiable History
-
-*   **The Probabilistic Mitigation (Path A):** The challenge of giving AI a persistent memory is being solved with sophisticated retrieval architectures (like Google's Mira). This gives the *effect* of a continuous state, improving the quality of the output.
-*   **The Geometric Alternative (Path B):** Our goal is not just to provide retrievable memory, but to create a **cryptographically secure audit trail**.
-    *   **Our Architecture:** The **Ouroboros Ratchet** (See `02b-PHYSICS`) creates an unforgeable, post-quantum hash chain of every state transition. The historical record cannot be altered, providing a **provable, immutable record** of all past decisions. This is the bedrock of accountability.
+**Path B: The Personal Vault (The Asset).**
+*   **Project:** CDQN / LVM.
+*   **Nature:** Local, sovereign, geometric (`02a`).
+*   **Role:** To capture, structure, and secure the specific **Tacit Knowledge** of the user. It is the "Battery" that stores the value.
+*   **The Goal:** To ensure that when you use the Utility (Path A), the resulting value crystallizes in your Vault (Path B), not just in the cloud.
 
 ---
 
-## 3. On Logic & Verifiability: Capable Perception vs. Provable Action
+## 2. On Identity: Account vs. Genesis
 
-*   **The Probabilistic Mitigation (Path A):** The expansion of models into new modalities (like GLM-4.6 Vision) allows AI to understand the world with incredible nuance. The focus is on increasing the *scope* of perception.
-*   **The Geometric Alternative (Path B):** Our focus is on the **verifiability of the action** that follows perception.
-    *   **Our Architecture:** We do not enforce rules at the application layer; we build them into the physics. The **Quantale Economy** (`02c`) and **Inertia** (`02b`) ensure that an attempt to violate a core axiom fails at a physical level. We move the guarantee of reliability from "statistically unlikely" to **"topologically impossible."**
+To own your experience, you must first own your identity.
 
----
-
-## 4. On Efficiency & Governance: Optimization vs. Thermodynamic Audit
-
-*   **The Probabilistic Mitigation (Path A):** The industry is addressing the energy crisis with architectural innovations (DeepSeek 3.2) and specialized silicon. The goal is to make the existing paradigm *more sustainable*.
-*   **The Geometric Alternative (Path B):** Our focus on thermodynamics is not solely about reducing energy use, but about creating a system of **explicit resource governance**.
-    *   **Our Architecture:** Every operation in the LVM has a defined cost under the **Metabolist Economy** (`02c`). This allows for a verifiable audit of the exact computational resources consumed to produce a result—a prerequisite for fair billing and legal accountability in autonomous systems.
+*   **The Tenant Model (Path A):** Your identity is an entry in a corporate database (Account ID). It can be deleted, banned, or analyzed by the landlord.
+*   **The Owner Model (Path B):** We define identity mathematically. As we will specify in **`02a-MATHS`**, every user generates a **Sovereign Genesis Seed**.
+    *   This is not a login; it is the mathematical "Big Bang" of your universe.
+    *   Every piece of data you create is derived from this seed. To own the Seed is to own the universe it generates, independent of any platform.
 
 ---
 
-## 5. Summary: A Framework for Choosing the Right Path
+## 3. On Knowledge: Probability vs. Geometry
 
-| Domain of Concern | The Probabilistic Optimization Approach (Path A) | The Geometric Standard Approach (Path B) |
-| :--- | :--- | :--- |
-| **State & Memory** | **Exemplar:** Google Mira. **Goal:** Performance via retrieval. | **Goal:** Empowerment via **Auditability**. **Mechanism:** The `Ouroboros Ratchet` provides an immutable history. |
-| **Logic & Action** | **Exemplar:** GLM-4.6 Vision. **Goal:** Capability via perception. | **Goal:** Empowerment via **Verifiability**. **Mechanism:** `Quantale Chemistry` makes core logic violations impossible. |
-| **Efficiency** | **Exemplar:** DeepSeek 3.2. **Goal:** Sustainability via optimization. | **Goal:** Empowerment via **Governance**. **Mechanism:** The `LVM vISA` creates a thermodynamically auditable system. |
+To treat knowledge as an asset, it must be tangible.
+
+*   **The Tenant Model (Path A):** Knowledge is "Weights in a Neural Network." It is diffuse, probabilistic, and inextricably mixed with the knowledge of billions of others. You cannot "extract" your contribution.
+*   **The Owner Model (Path B):** Knowledge is **Geometry**. In the LVM, a concept is a vector with a specific position and "Mass" (See `02b-PHYSICS`).
+    *   Because it is geometric, it is discrete.
+    *   Because it is discrete, it can be **Moved**. You can take your "Medical Knowledge Lattice" out of one AI tool and plug it into another. This is the technical definition of Freedom.
 
 ---
 
-## 6. Conclusion: A Call for a Parallel Field of Study
+## 4. The Strategic Bet: Portability is Power
 
-The continued optimization of probabilistic models is essential. The work on systems like Mira, DeepSeek, and GLM-V is pushing the boundaries of what is possible.
+We believe the future workforce will not be loyal to a specific AI Model (GPT vs. Claude vs. Gemini). They will be loyal to their **Living Ledger**.
 
-We formally propose that a parallel field of research, dedicated to building **Accountable Systems**, is equally necessary. The "Glass Box" is the only machine that can be safely placed in the hands of everyone, enabling the "Mass Smart Workforce" we envision.
+*   **The Strategy:** We build the infrastructure that allows users to project their **Sovereign Lattice** into *any* AI Engine.
+*   **The Result:** The AI Engine provides the *Horsepower*; the User's Lattice provides the *Steering* and *Destination*.
 
-The `02-Series` documents that follow define the **Theoretical Canon**—the "Digital Physics"—required to build such a system.
+This requires a system built on rigid, verifiable laws—a **Digital Physics**—which we define in the **02-Series** that follows.
 
 ---
 
 ### 📂 Bibliography & References
-1.  **Google Research.** (2025). *"Titan's Mira: Helping AI Have Long-Term Memory."*
-2.  **DeepSeek AI.** (2025). *"DeepSeek-V3: Pushing the Limits of MoE Models."* arXiv:2512.02556.
-3.  **Z.AI.** (2025). *"GLM-V: A Vision Model for the Future."*
-4.  **Arockiaraj, J., et al.** (2025). *"NysX: An Accurate and Energy-Efficient FPGA Accelerator..."* (Validation of HDC efficiency).
-5.  **Rajendran, B., et al.** (2024). *"Phase-Change Memory for Thermodynamic AI..."* IBM Research.
+1.  **The Lawvere-Landauer Conjecture (`02g`).** (Our foundational hypothesis that connects logic to physical ownership).
+2.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion."* (The math of separating local data from global processing).
+3.  **Zuboff, S.** (2019). *"The Age of Surveillance Capitalism."* (The warning against non-sovereign data structures).
 
 ---
 
