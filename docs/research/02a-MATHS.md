@@ -1,54 +1,54 @@
 # 02a-MATHS: The Axioms of Digital Matter
 
 *   **File:** `docs/research/02a-MATHS.md`
-*   **Context:** The Sovereign Vector Space & The Genesis Seed
+*   **Context:** High-Dimensional Geometry, Probability Theory & Sovereign Logic
 *   **Date:** December 14, 2025
-*   **Status:** `v1.4` (The Sovereign Space Standard)
+*   **Status:** `v1.5` (The Justified Standard)
 
 > **The Geometric Substrate.**
-> *In `01b-POSITIONING`, we argued that to own intelligence, we must transition from Probabilistic models to Geometric ones. This paper defines that geometry. We abandon the fragile "Binary Logic" of standard computing in favor of **Hyperdimensional Computing (HDC)**. We demonstrate how a unique **Genesis Seed** creates a private, 10,240-dimensional universe for every user, ensuring that their data is mathematically distinct from all others.*
+> *We define the mathematical axioms required to treat the Binary System not as an arithmetic calculator, but as a high-dimensional geometric space. We demonstrate how the **Concentration of Measure** (Levy's Lemma) combined with a sovereign **Genesis Seed** provides the rigorous foundation for a computing environment where data is unique, rivalrous, and mathematically distinct for every user.*
 
 ---
 
 ## 1. Introduction: From Numbers to Matter
 
-Standard computing treats data as **Numbers** (Integer values).
-*   **The Problem:** Numbers are fungible and fragile. A single bit flip ($0 \to 1$) changes the value catastrophically.
-*   **The CDQN Approach:** We treat data as **Matter** (Vectors in High-Dimensional Space).
-    *   In a 10,000-dimensional space, a single bit flip moves the point slightly, but it remains in the same semantic region. The data has "Mass" and "Stability."
-
-This is the foundational requirement for the **Living Ledger**. You cannot build a permanent structure on fragile sand; you need solid stone.
+Standard computing relies on **Positional Arithmetic** (e.g., IEEE 754).
+*   **The Flaw:** It is fragile. A single bit flip ($0 \to 1$) causes catastrophic value divergence.
+*   **The Solution:** We shift to **Hyperdimensional Computing (HDC)**. We treat data as **Vectors** in a 10,240-dimensional space ($D$).
+*   **The Consensus:** This approach, pioneered by Pentti Kanerva, mimics the robustness of biological neural networks using the properties of high-dimensional geometry.
 
 ---
 
-## 2. Axiom 1: Sovereign Uniqueness (The Genesis Seed)
+## 2. Axiom 1: The Curse of Dimensionality is a Blessing
 
-How do we ensure *your* AI is truly yours? By giving it a unique mathematical origin.
+To convince experts, we rely on the **Johnson-Lindenstrauss Lemma** and **Levy's Lemma**.
 
-### 2.1 The Big Bang
-We reject centralized User IDs. Instead, identity is cryptographic.
-*   **The Seed ($S_0$):** When a User initializes their Node, the system generates a 256-bit high-entropy seed derived from physical hardware entropy and user secrets.
-*   **The Stream:** This seed initializes a **ChaCha20** deterministic stream.
-*   **The Law:** Every "Atom" (concept vector) in your universe is cut from this stream.
+### 2.1 Theorem: Orthogonality in High Dimensions
+In low dimensions (2D/3D), orthogonal (independent) vectors are scarce. In high dimensions ($D=10,240$), they are the norm.
+
+**The Mathematical Justification (Levy's Lemma):**
+As the dimension $D$ increases, the volume of a hypersphere concentrates in a thin shell around the equator relative to any pole.
+*   **Result:** Two randomly generated vectors $A, B \in \{0,1\}^D$ have a Hamming Distance of $D/2$ with probability approaching 1.
+*   **Implication:** We do not need to "check" for collisions. The geometry guarantees that any two random concepts are **Orthogonal** (Uncorrelated) by default.
 
 $$
-V_n = \text{ChaCha20}(S_0, n)
+P(\text{Collision}) \approx e^{-D} \to 0
 $$
-
-### 2.2 Mathematical Private Property
-Because $S_0$ is unique to you:
-*   Your vector for "Concept A" is orthogonal (mathematically unrelated) to my vector for "Concept A."
-*   **Result:** Data cannot "leak" between users. Our universes are geometrically disjoint. To share data requires a deliberate act of translation (Trade), enforcing the **Sovereignty** promised in `01a`.
 
 ---
 
-## 3. Axiom 2: The Logic of Space (Concentration of Measure)
+## 3. Axiom 2: Sovereign Uniqueness (The Genesis Seed)
 
-Why do we use 10,240 dimensions?
+We reject centralized User IDs. We use **Cryptographic Determinism**.
 
-*   **The Curse/Blessing of Dimensionality:** In high-dimensional space ($D=10,240$), almost all random vectors are **Orthogonal** (Hamming Distance $\approx 0.5$).
-*   **The Capacity:** This space is vast enough to hold the sum total of human experience without accidental collision.
-*   **The Robustness:** We use **Holographic Representation**. Information is not stored in a specific "neuron"; it is distributed across the entire vector. This makes the Ledger resistant to corruption (bit rot).
+### 3.1 The Big Bang
+*   **The Seed ($S_0$):** A 256-bit high-entropy seed derived from physical hardware entropy (TRNG) and user secrets.
+*   **The Stream:** We use **ChaCha20**, a standard CSPRNG (Cryptographically Secure Pseudo-Random Number Generator).
+*   **The Formula:**
+    $$V_n = \text{ChaCha20}(S_0, n)$$
+
+**The Justification:**
+This is the standard mechanism used in **Deterministic Wallets (BIP-32)** in cryptocurrency. By applying it to vector generation, we ensure that User A's vector for "Apple" is mathematically orthogonal to User B's vector for "Apple." This creates a **Private Geometry** that is mathematically unforgeable.
 
 ---
 
@@ -56,32 +56,43 @@ Why do we use 10,240 dimensions?
 
 We need a way to measure the "Information Content" of a set of vectors. We use **Matroid Rank**.
 
-*   **The Definition:** The Rank $r(S)$ measures the number of linearly independent vectors in a set.
-*   **The Application:** This is our **Slop Detector**.
-    *   If an AI generates 1,000 sentences that all mean the same thing, the **Rank** of that set is 1.
-    *   If a Human generates 3 distinct, novel ideas, the **Rank** is 3.
-*   **The Consequence:** We can quantitatively value the "Mass" of the Living Ledger. We reward **Novelty** (Rank Increase), not Volume.
+### 4.1 The Link to Shannon Entropy
+A Matroid is the algebraic structure of "Independence."
+*   **The Consensus:** The rank function of a matroid is a **Polymatroid**, which is the mathematical structure underlying **Shannon Entropy**.
+*   **The Application:** We define "Semantic Mass" as the **Rank** of the vector set.
+    $$Mass(S) = Rank(S)$$
+*   **The Consequence:** This acts as a rigorous **Slop Detector**.
+    *   If an LLM generates 1,000 sentences that are linear combinations of each other (redundant), the Rank is 1.
+    *   The "Mass" of the output is low, despite the high volume. This allows us to economically value **Novelty** over **Noise**.
 
 ---
 
-## 5. The Operational Algebra
+## 5. Axiom 4: The MAP Algebra
 
-We replace Arithmetic with Geometry.
+We utilize the standard **Multiply-Add-Permute (MAP)** architecture defined by Gayler (1998) and Kanerva (2009).
 
-1.  **Binding ($\otimes$):** Linking two concepts (e.g., "Name" + "Alice"). Implemented via `XOR`.
-2.  **Bundling ($+$):** Creating a category from examples (e.g., "Cat" = "Persian" + "Siamese"). Implemented via `Majority Rule`.
-3.  **Permutation ($\Pi$):** Encoding sequence and time (e.g., "A then B"). Implemented via `Cyclic Shift`.
+### 5.1 Binding (Multiplication) $\otimes$
+*   **Operation:** Bitwise XOR.
+*   **Justification:** XOR is invertible and preserves orthogonality. It allows us to bind "Variable" to "Value" without losing information.
+    $$A \otimes (A \otimes B) = B$$
 
-These operations allow us to build complex **Semantic Structures** (Molecules) out of raw atomic vectors.
+### 5.2 Bundling (Addition) $+$
+*   **Operation:** Component-wise Majority Rule.
+*   **Justification:** This creates a "Superposition" vector that is closest in Hamming Distance to all its components. It allows for **Generalization** (e.g., creating the concept "Fruit" from "Apple + Pear").
+
+### 5.3 Permutation (Motion) $\Pi$
+*   **Operation:** Cyclic Shift (ROR/ROL).
+*   **Justification:** This encodes **Non-Commutative** relationships (Sequence/Order) without increasing dimensionality.
+    $$\Pi(A) \ne A$$
 
 ---
 
 ## 6. Conclusion: The Canvas
 
 **02a-MATHS** defines the **Space** where the Living Ledger resides.
-*   It is **Sovereign** (Unique Seed).
-*   It is **Robust** (Holographic).
-*   It is **Measurable** (Matroid Rank).
+*   It relies on **Levy's Lemma** for Capacity.
+*   It relies on **ChaCha20** for Sovereignty.
+*   It relies on **Matroid Theory** for Value.
 
 But a static space is not enough. A Ledger requires **History**. We must now introduce the flow of Time. This leads to **`02b-PHYSICS`**.
 
@@ -89,9 +100,10 @@ But a static space is not enough. A Ledger requires **History**. We must now int
 
 ### 📂 Bibliography for Part A
 
-1.  **Kanerva, P.** (2009). *"Hyperdimensional Computing."* (The foundation of the geometry).
-2.  **Kleywegt, A.** (2025). *"The Geometry of High-Dimensional Probability."* (The proof of capacity).
-3.  **Shannon, C. E.** (1948). *"A Mathematical Theory of Communication."* (The definition of information).
+1.  **Kanerva, P.** (2009). *"Hyperdimensional Computing: An Introduction to Computing in Distributed Representation."* (The MAP Architecture).
+2.  **Johnson, W. B., & Lindenstrauss, J.** (1984). *"Extensions of Lipschitz mappings into a Hilbert space."* (The math of projection).
+3.  **Fujishige, S.** (2005). *"Submodular Functions and Optimization."* (The link between Matroids and Entropy).
+4.  **Bernstein, D.** (2008). *"ChaCha, a variant of Salsa20."* (The CSPRNG standard).
 
 ---
 
