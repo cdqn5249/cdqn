@@ -57,7 +57,7 @@ $$\nu(V) \approx \log_2(\text{Mass}(V))$$
 **The Reaction Equation:**
 
 $$
-A + B + \mathcal{E}_{work} \xrightarrow{\text{Reaction}} (A-B) + \mathcal{E}_{waste}
+A + B + \mathcal{E}_{work} \xrightarrow{\text{R}} (A-B) + \mathcal{E}_{waste}
 $$
 
 *   **Bond Strength ($W$):** The strength of the resulting bond is proportional to the Work ($\mathcal{E}_{work}$) put into it.
