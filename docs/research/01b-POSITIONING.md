@@ -3,7 +3,7 @@
 *   **File:** `docs/research/01b-POSITIONING.md`
 *   **Context:** Scientific Positioning, The "Universal vs. Personal" Split & The Lawvere-Landauer Methodology
 *   **Date:** December 14, 2025
-*   **Status:** `v4.0` (The Asset Class Standard)
+*   **Status:** `v4.1` (The Asset Class Standard)
 
 > **The Mantra of the Sovereign.**
 > *"Intelligence is a Utility. Wisdom is an Asset."*
@@ -23,7 +23,7 @@ As we approach the singularity of competence, the computing landscape is bifurca
 
 **Path B: The Personal Vault (The Asset).**
 *   **Project:** CDQN / LVM.
-*   **Method:** **Thermodynamic Derivation** (The Lawvere-Landauer Conjecture).
+*   **Method:** **Thermodynamic Derivation** (The Lawvere-Landauer Conjecture defined in `01a`).
 *   **Role:** To capture, structure, and secure the specific **Tacit Knowledge** of the user. It is the "Battery" that stores the value.
 *   **The Goal:** To ensure that when you use the Utility (Path A), the resulting value crystallizes in your Vault (Path B), not just in the cloud.
 
@@ -46,7 +46,7 @@ To treat knowledge as an asset, it must be tangible.
 
 *   **The Tenant Model (Path A):** Knowledge is "Weights in a Neural Network." It is diffuse, probabilistic, and inextricably mixed with the knowledge of billions of others. You cannot "extract" your contribution.
 *   **The Owner Model (Path B):** Knowledge is **Geometry**. In the LVM, a concept is a vector with a specific position and **Thermodynamic Mass** (See `02b-PHYSICS`).
-    *   **The Conjecture Applied:** Because we treat Meaning as a Phase Transition (Crystallization), your knowledge becomes a discrete object.
+    *   **The Conjecture Applied:** Because we treat "Verified Structure" as a Phase Transition (Crystallization), your knowledge becomes a discrete object.
     *   **Portability:** Because it is discrete, it can be **Moved**. You can take your "Medical Knowledge Lattice" out of one AI tool and plug it into another. This is the technical definition of Freedom.
 
 ---
@@ -63,7 +63,7 @@ We are betting that **Path B**—building a computer that respects the **Lawvere
 ---
 
 ### 📂 Bibliography & References
-1.  **The Lawvere-Landauer Conjecture (`01a`).** (Our foundational hypothesis that connects logic to physical ownership).
+1.  **The Lawvere-Landauer Conjecture.** (Defined in `01a-COHESION`).
 2.  **Ghrist, R., et al.** (2025). *"Categorical Diffusion of Weighted Lattices."* (The math of separating local data from global processing).
 3.  **Zuboff, S.** (2019). *"The Age of Surveillance Capitalism."* (The warning against non-sovereign data structures).
 4.  **Google Research.** (2025). *"Titan's Mira."* (The state-of-the-art in probabilistic memory).
