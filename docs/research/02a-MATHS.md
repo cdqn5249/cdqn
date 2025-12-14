@@ -3,19 +3,19 @@
 *   **File:** `docs/research/02a-MATHS.md`
 *   **Context:** High-Dimensional Geometry, Probability Theory & Sovereign Logic
 *   **Date:** December 14, 2025
-*   **Status:** `v1.8` (The Validated Deductive Standard)
+*   **Status:** `v1.9` (The Deductive Standard)
 
 > **The Geometric Substrate.**
-> *In `01b-POSITIONING`, we established the necessity of a "Personal Vault." This paper provides the mathematical proof that such a vault requires a transition from Positional Arithmetic to **Hyperdimensional Geometry**. We demonstrate that while standard binary systems require complex external correction (ECC) to maintain stability, **Hyperdimensional Computing (HDC)** possesses inherent, holographic robustness derived from **Levy’s Lemma**. Furthermore, we utilize **Matroid Theory** to rigorously define "Semantic Mass," providing the necessary variable for the thermodynamic interactions defined in `02b`.*
+> *In `01b-POSITIONING`, we established the necessity of a "Personal Vault"—a system where data is a durable, sovereign asset. This paper provides the mathematical proof that such a vault requires a transition from Positional Arithmetic to **Hyperdimensional Geometry**. We demonstrate that while standard binary systems require complex external correction (ECC) to maintain stability, **Hyperdimensional Computing (HDC)** possesses inherent, holographic robustness derived from **Levy’s Lemma**. Furthermore, we utilize **Matroid Theory** to rigorously define "Semantic Mass," providing the necessary variable for the thermodynamic interactions defined in `02b`.*
 
 ---
 
 ## 1. Introduction: From Fragility to Holography
 
 Standard computing relies on **Positional Arithmetic** (e.g., IEEE 754).
-*   **The Limitation:** It is locally fragile. A single bit flip ($0 \to 1$) can catastrophically alter value. To solve this, standard systems wrap data in layers of **Error Correcting Codes (ECC)**.
+*   **The Limitation:** It is locally fragile. A single bit flip ($0 \to 1$) can catastrophically alter value. To solve this, standard systems wrap data in layers of **Error Correcting Codes (ECC)**. This protects the *container*, not the *content*.
 *   **The CDQN Approach:** We move the robustness from the *wrapper* to the *substrate*. By treating data as **Vectors in High-Dimensional Space**, we achieve **Holographic Robustness**.
-    *   In a 10,240-dimensional space, a bit flip is not a catastrophe; it is a negligible movement along the manifold. The semantic meaning remains intact without external correction.
+    *   In a 10,240-dimensional space, a bit flip is not a catastrophe; it is a negligible movement along the manifold ($d \ll D$). The semantic meaning remains intact without external correction.
 
 ---
 
@@ -51,7 +51,7 @@ The distribution of the Hamming Distance $d_H(A, B)$ is binomial, centered at $D
 
 ## 4. Axiom 3: The Physics of Information (Matroid Theory)
 
-**Requirement:** We must measure the "Value" or "Inertia" of data to enable the thermodynamic logic of `02b`.
+**Requirement:** We must measure the "Value" or "Inertia" of data to enable the thermodynamic logic of `02b`. We cannot use file size; we must use **Information Density**.
 
 **The Derivation:**
 1.  We define "Information Content" as **Linear Independence**.
@@ -60,16 +60,15 @@ The distribution of the Hamming Distance $d_H(A, B)$ is binomial, centered at $D
     $$m_0(S) = \text{MatroidRank}(S)$$
 
 **Physical Interpretation:**
-*   We reinterpret **Rank** as **Semantic Mass**.
-*   A "Heavy" concept is one that is constituted by many linearly independent vectors (High Information Density).
+*   A "Heavy" concept is one constituted by many linearly independent vectors (High Information Density).
 *   A "Light" concept is one constituted by redundant vectors (Low Information Density).
-*   *Note:* This allows us to apply Newtonian metaphors (Inertia, Force) in `02b` based on rigorous Information Theoretic measurements.
+*   *Note:* This scalar value $m_0$ is the direct input for the **Inertia Equation** in `02b-PHYSICS`.
 
 ---
 
 ## 5. Axiom 4: The Algebra of Interaction (Discrete Physics)
 
-**Requirement:** We need operations to manipulate this "Digital Matter" that preserve the geometric properties defined above.
+**Requirement:** We need operations to manipulate this "Digital Matter" that are compatible with the **Diffusion** laws of Physics.
 
 We adopt the **MAP Algebra** (Multiply, Add, Permute), reframed as the "physics" of our system:
 
@@ -78,7 +77,7 @@ We adopt the **MAP Algebra** (Multiply, Add, Permute), reframed as the "physics"
     *   *Role:* Creates a "Molecule" from Atoms.
 2.  **Bundling ($+$):** Component-wise Majority Rule.
     *   *Formula:* $C[i] = 1$ if $\sum A_n[i] > N/2$ else $0$.
-    *   *Role:* **Superposition**. This is the mechanism for **Discrete Harmonic Diffusion** in Layer 3. It allows vectors to "average out" and find consensus without becoming floating-point numbers.
+    *   *Role:* **Superposition**. Crucially, this operation acts as the **Discrete Laplacian Operator**. It allows the system to find the "center of gravity" between conflicting vectors without converting them to floating-point numbers.
 3.  **Permutation ($\Pi$):** Cyclic Shift.
     *   *Role:* Encodes **Sequence** (Time) within the static vector.
 
@@ -89,7 +88,8 @@ We adopt the **MAP Algebra** (Multiply, Add, Permute), reframed as the "physics"
 **02a-MATHS** has proven that:
 1.  **High-Dimensional Space** provides the necessary robustness and capacity (Levy).
 2.  **The Genesis Seed** guarantees sovereign isolation (ChaCha20).
-3.  **Matroid Rank** provides a rigorous definition of Mass (Information).
+3.  **Matroid Rank** provides a rigorous definition of Mass ($m_0$).
+4.  **Bundling** provides the mechanism for Discrete Diffusion.
 
 We have defined the **Particle** (The Vector) and the **Container** (The Space).
 However, a static particle has no meaning. Meaning arises from **Interaction** over **Time**.
