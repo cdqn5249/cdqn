@@ -42,7 +42,10 @@ We need a metric to drive the system's evolution. We propose **Structural Tensio
 
 ### 3.1 The Tension Manifold
 We define the "Potential Energy" of the Lattice as the sum of its internal conflicts.
-$$\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}$$
+
+$$
+\mathcal{T}_{total} = \sum_{\text{bonds}} d_H(V_A, V_B) \times W_{AB}
+$$
 
 *   **$d_H$ (Distance):** Hamming Distance (`02a`).
 *   **$W_{AB}$ (Weight):** Bond Strength (`02c`).
