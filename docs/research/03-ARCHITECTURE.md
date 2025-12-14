@@ -2,96 +2,117 @@
 
 *   **File:** `docs/research/03-ARCHITECTURE.md`
 *   **Context:** Systems Architecture & Full-Stack Ontology
-*   **Date:** December 12, 2025
-*   **Status:** `v3.5` (The Refactored Standard)
+*   **Date:** December 14, 2025
+*   **Status:** `v4.0` (The Apparatus Standard)
 
 > **The Machine of Applied Physics.**
-> *This paper defines the design for the Loom Virtual Machine (LVM). Unlike legacy operating systems that manage "Files" and "Threads," the LVM manages "Digital Matter." It implements the 9-Layer Genesis Stack, enforcing the laws of Sovereign Uniqueness, Tropical Time, and Quantale Economics to create a "Glass Box" computing environment that empowers the Human-in-the-loop, as mandated by our mission in `01a-COHESION`.*
+> *In `01a-COHESION`, we hypothesized that Meaning is a physical state. In the `02-Series`, we defined the laws of that physics (Space, Time, Energy, Resonance). This paper defines the **Machine** built to execute those laws. The **Loom Virtual Machine (LVM)** is not a standard OS; it is a **Digital Organism** designed to metabolize information into a sovereign, immutable **Living Ledger**.*
 
 ---
 
 ## 1. Abstract: The Organism Metaphor
 
-**Papers `01a` & `01b`** identified the "Cognitive Crisis" and positioned our work as a new path towards accountable systems.
-**The `02-Series` Canon** defined the "Laws": Space (Genesis), Time (Tropical), Interaction (Quantale), Perception (Resonance), Mind (Neurology), and Defense (Rituals).
+Standard computers are **Clerks**; they file data where they are told.
+The LVM is an **Organism**; it consumes data, digests it using energy, and grows a structural memory.
 
-This paper defines **The Machine**. The **LVM (Loom Virtual Machine)** is designed as a **Digital Organism**. It possesses:
-1.  **Proprioception:** It knows its own resource limits and security tier (Layers 1-2).
-2.  **Memory:** It has an immutable causal history and a plastic fractal mind (Layers 3-4).
-3.  **Perception:** It filters reality through contextual lenses (Layer 5).
-
-The result is not a "Computer" in the traditional sense, but a **Sovereign Actor** capable of holding Truth in a hostile network.
+To prove the **Lawvere-Landauer Conjecture**, the machine must possess:
+1.  **A Body (Metal/Maths):** To occupy space (`02a`).
+2.  **Metabolism (Physics/Chemistry):** To perform work and resolve tension (`02b`, `02c`).
+3.  **An Immune System (Resonance/Rituals):** To reject harmful noise and attacks (`02d`, `02f`).
 
 ---
 
 ## 2. The 9-Layer Genesis Stack
 
-We replace the OSI Model and the Von Neumann architecture with an evolutionary stack that builds complexity from the bottom up. We collapse the distance between **Metal** (Code) and **Intent** (UI).
+We replace the Von Neumann architecture with an evolutionary stack. Complexity emerges from the bottom up.
 
-| Phase | Layer | Name | Function | The Physics (Constraint) |
+| Phase | Layer | Name | Function | The Physics (Theory Link) |
 | :--- | :--- | :--- | :--- | :--- |
-| **IV. Interface** | **9** | **Rendering** | **Visual Engine** | The Common Ground. (Visual Logic). |
-| | **8** | **Social** | **Lattice** | Holographic Network. (Thermal Isomorphism). |
-| | **7** | **Language** | **cdqnLang** | The Bridge. (Decks -> Bytecode). |
-| **III. Actors** | **6** | **Entities** | **Fractal Self** | The Strange Attractor. (`02e-NEUROLOGY`). |
-| **II. Context** | **5** | **Worlds** | **Filter** | The Lens of Perception. (`02d-RESONANCE`). |
-| **I. Laws** | **4** | **Chemistry** | **Interaction** | Valency & Quantales. (`02c-CHEMISTRY`). |
-| | **3** | **Physics** | **Time/State** | Tropical Causality & Inertia. (`02b-PHYSICS`). |
-| | **2** | **Maths** | **Space** | Sovereign Uniqueness. (`02a-MATHS`). |
+| **IV. Interface** | **9** | **Rendering** | **Visual Engine** | The Glass Box. (Visual Logic). |
+| | **8** | **Social** | **Lattice** | Holographic Network. (Peer-to-Peer). |
+| | **7** | **Language** | **cdqnLang** | The Bridge. (Visual Decks $\to$ Bytecode). |
+| **III. Actors** | **6** | **Entities** | **Fractal Self** | The Dynamical Agent. (`02e-NEUROLOGY`). |
+| **II. Context** | **5** | **Worlds** | **Filter** | The Spectral Mask. (`02d-RESONANCE`). |
+| **I. Laws** | **4** | **Chemistry** | **Interaction** | The Quantale Economy. (`02c-CHEMISTRY`). |
+| | **3** | **Physics** | **Time/State** | Thermodynamics & Ouroboros. (`02b-PHYSICS`). |
+| | **2** | **Maths** | **Space** | Sovereign Vectors. (`02a-MATHS`). |
 | | **1** | **Metal** | **Substrate** | Continuum Memory & Tiers. (`02f-SECURITY`). |
 
 ---
 
-## 3. Phase I: The Laws (The Hard Kernel)
+## 3. Phase I: The Hard Kernel (The Physics Engine)
 
-These layers run in **Kernel Space**. They are immutable constraints enforced by the LVM runtime (built in **Rust `no_std`** for safety). They will be specified in papers `03a` through `03d`.
+These layers run in **Kernel Space** (Rust `no_std`). They are immutable laws.
 
-*   **Layer 1: METAL (The Continuum).**
-    *   The machine acknowledges it exists on finite silicon. It manages memory via the **Continuum Memory System** and is aware of its **Sovereignty Tier** (Guest vs. Sovereign).
-*   **Layer 2: MATHS (The Seed).**
-    *   **Sovereign Uniqueness:** Space is generated by a deterministic **Genesis Seed** unique to the user (`02a`).
-    *   **Matroid Exclusion:** Two objects cannot occupy the same semantic coordinate.
-*   **Layer 3: PHYSICS (The Arrow).**
-    *   **Thermodynamics:** Data transitions between Gas (Context) and Crystal (Truth) based on **Thermal Stability** (`02b`).
-    *   **Tropical Geometry:** History is a cryptographic hash chain. Time is monotonic.
-*   **Layer 4: CHEMISTRY (The Economy).**
-    *   **Quantale Logic:** Interaction requires Energy (`02c`). Data is rivalrous.
-    *   **Valency:** Defines bond strength and structural limits.
+### Layer 1: METAL (The Continuum)
+*   **Spec:** `03a-METAL`
+*   **Role:** The "Vacuum Chamber."
+*   **Function:** Manages the **Continuum Memory System** (Fovea $\to$ Context $\to$ Lattice) and enforces the **Security Tiers** (Guest vs. Sovereign). It ensures that the physics runs on a stable substrate.
 
----
+### Layer 2: MATHS (The Particles)
+*   **Spec:** `03b-MATHS`
+*   **Role:** The "Matter Generator."
+*   **Function:** Implements the **Genesis Seed** (ChaCha20) and the **MAP Algebra**. It generates the 10,240-bit `SovereignVectors` that serve as the atoms of the system.
 
-## 4. Phase II: The Context (The Filter)
+### Layer 3: PHYSICS (The Forces)
+*   **Spec:** `03c-PHYSICS`
+*   **Role:** The "Thermodynamic Engine."
+*   **Function:** Implements **Causal Time** (LWE Ratchet) and **Harmonic Diffusion** (Inertia). It decides whether a vector stays liquid (Plasticity) or freezes (Truth) based on the **Lawvere-Landauer** equations.
 
-We introduce a semantic firewall specified in `03e-WORLDS`.
-
-*   **Layer 5: WORLDS.**
-    *   The LVM does not run in a void. It runs inside a **World Context**, which is a **Spectral Filter** (`02d`).
-    *   **The Filter:** The World defines which frequencies of logic are allowed to resonate. It prevents **"Cognitive Contamination"** by blocking "Fiction" logic from entering the "Reality" context.
-    *   **The Lineage:** The World filter also manages the **Merkle Tree of Reputation**, verifying the provenance of code and data.
+### Layer 4: CHEMISTRY (The Economy)
+*   **Spec:** `03d-CHEMISTRY`
+*   **Role:** The "Transaction Layer."
+*   **Function:** Implements the **Quantale Economy**. It calculates the energy cost of every action (Work) and mints tokens via **Metabolism** (CPU or Human Attention).
 
 ---
 
-## 5. Phase III: The Actors (The Artificial Self)
+## 4. Phase II: The Context (The Environment)
 
-This is the emergence of the "Agent," specified in `03f-ENTITIES`.
+### Layer 5: WORLDS (The Filter)
+*   **Spec:** `03e-WORLDS`
+*   **Role:** The "Reality Tuner."
+*   **Function:** Implements **Resonance Theory**. It applies Spectral Filters to incoming data, blocking "Magic" logic from entering "Reality" contexts. It also manages the **Merkle Tree of Reputation** to verify code lineage.
 
-*   **Layer 6: ENTITIES (The Attractor).**
-    *   **The Structure:** An Entity is a **Dynamical System** (`02e`) evolving on the memory manifold.
-    *   **The Driver:** It maximizes **Reputation** subject to the constraints of the active **World Filter**.
-    *   **Proprioception:** The Entity *knows* its own Rank and Energy cost. It does not "crash"; it "refuses" action based on Quantale constraints.
+---
+
+## 5. Phase III: The Actors (The Self)
+
+### Layer 6: ENTITIES (The Agent)
+*   **Spec:** `03f-ENTITIES`
+*   **Role:** The "Observer."
+*   **Function:** An Entity is not a script; it is a **Strange Attractor** evolving on the manifold. It navigates the Lattice to maximize **Reputation** while minimizing **Thermodynamic Tension**.
 
 ---
 
 ## 6. Phase IV: The Interface (The Bridge)
 
-This is where the Human meets the Machine, specified in `03g` and beyond.
+### Layer 7: LANGUAGE (`cdqnLang`)
+*   **Spec:** `03g-LANGUAGE`
+*   **Function:** A domain-specific language that compiles Visual Logic (Cards) into LVM Vector Operations. It is the "Fortran of Semantics."
 
-*   **Layer 7: LANGUAGE (`cdqnLang`)**
-    *   A DSL that compiles Visual Logic (Card Decks) into LVM Bytecode.
-*   **Layer 8: SOCIAL (The CDQN Interface)**
-    *   Nodes connect to form the **Card Data Quantale Network**. Communication is governed by Quantale Logic (Ownership moves, it is not copied).
-*   **Layer 9: RENDERING (The Visual Engine)**
-    *   The user sees the **Lattice**: a visual representation of the system's state, structure, and history.
+### Layer 8: SOCIAL (The Network)
+*   **Spec:** `03h-SOCIAL`
+*   **Function:** Enables **Thermal Isomorphism**. Nodes can compare the "Temperature" and "Shape" of their crystals to reach consensus without revealing private data (Zero-Knowledge Proofs).
+
+### Layer 9: RENDERING (The View)
+*   **Spec:** `03i-RENDERING`
+*   **Function:** The **Glass Box**. It renders the high-dimensional Lattice as a navigable 3D structure, allowing the user to "see" the shape of their Living Ledger.
+
+---
+
+## 7. Strategic Deployment
+
+To prove the Conjecture, we build this stack bottom-up.
+1.  **Kernel Alpha (`libcdqn`):** Layers 1-4. Proves the Physics.
+2.  **Runtime Beta (`cdqnVisor`):** Layers 5-6. Proves the Agency.
+3.  **System Gamma (`Chronosa`):** Layers 7-9. Proves the Human Utility.
+
+---
+
+### 📂 Bibliography
+1.  **Armstrong, J.** (2007). *"Programming Erlang."* (The Actor Model basis for Layer 6).
+2.  **Kay, A.** (1972). *"A Personal Computer for Children of All Ages."* (The UI philosophy for Layer 9).
+3.  **The 02-Series Canon.** (The theoretical basis for Layers 1-5).
 
 ---
 
