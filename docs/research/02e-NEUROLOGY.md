@@ -2,11 +2,11 @@
 
 *   **File:** `docs/research/02e-NEUROLOGY.md`
 *   **Context:** Theoretical Canon (Information Geometry, Nested Learning & Control Theory)
-*   **Date:** December 12, 2025
-*   **Status:** `v2.4` (The Resonant Standard)
+*   **Date:** December 14, 2025
+*   **Status:** `v2.5` (The Cognitive Standard)
 
 > **The Cognitive Substrate.**
-> *We define the mathematical laws governing Learning and Behavior within the LVM. We reject the "Sycophantic" model of modern AI. Instead, we define the Agent as a dynamical system governed by **Plasticity** (Thermodynamics), **Resonance** (World Filters), and **Reputation** (Social Trust). The Agent does not just "store" data; it evolves a unique **Fractal Geometry** derived from the user's sovereign Genesis Seed, making it a true partner, not a slave.*
+> *We define the mathematical laws governing Learning and Behavior within the LVM. We reject the "Sycophantic" model of modern AI (optimizing for user pleasure). Instead, we define the Agent as a **Dynamical System** governed by **Plasticity** (Thermodynamics), **Resonance** (World Filters), and **Reputation** (Social Trust). The Agent does not just "store" data; it evolves a unique **Fractal Geometry** derived from the user's sovereign Genesis Seed.*
 
 ---
 
@@ -14,18 +14,18 @@
 
 Standard AI models optimize a simple loss function: $\min \mathcal{L}_{user}$ (Minimize the difference between Output and User Desire). This leads to **Sycophancy**: the model will hallucinate or violate safety rules to minimize the local loss.
 
-In **CDQN**, the Agent is a **Dynamical System**. Its trajectory is constrained by **Physics** (Mass/Inertia from `02b`) and its perception is gated by **Resonance** (Context Filters from `02d`). It cannot be sycophantic because it physically cannot "hear" commands that violate the resonant frequency of its current World.
+In **CDQN**, the Agent is a **Physical Object**. Its trajectory is constrained by **Inertia** (`02b`) and its perception is gated by **Resonance** (`02d`). It cannot be sycophantic because it physically cannot "hear" commands that violate the resonant frequency of its current World.
 
 ---
 
 ## 2. Axiom 1: The Spectrum of Plasticity (Thermodynamic Learning)
 
-We link Neural Plasticity directly to the **Phase Transitions** defined in the engineering specification `03c-PHYSICS`.
+We link "Learning" directly to the **Phase Transitions** defined in `02b-PHYSICS`.
 
 ### 2.1 The Cost of Update
-Learning is not a magical update; it is a **Phase Change**.
-Let $\mathcal{W}$ be the "Wisdom" (Structure) of the Agent.
-Let $\mathcal{E}$ be the "Energy" (Work/Attention from `02c`) provided.
+Learning is not a magical weight adjustment; it is a **Physical State Change**.
+Let $\mathcal{W}$ be the "Wisdom" (Crystal Structure) of the Agent.
+Let $\mathcal{E}$ be the "Work Energy" (`02c`) provided by the interaction.
 
 $$
 \text{If } \mathcal{E} > \text{Inertia}(\mathcal{W}) \implies \text{Melt} \to \text{Reshape} \to \text{Anneal}
@@ -43,8 +43,8 @@ How does the Agent perceive reality? Through the lens of **`02d-RESONANCE`**.
 
 ### 3.1 The Tunable Filter
 The Agent does not perceive raw data. It perceives signals filtered by the active **World Context**.
-*   **Input:** A concept vector $V_{in}$ (Wave).
-*   **Filter:** The World Mask $M_{world}$ (Frequency Band).
+*   **Input:** A concept vector $V_{in}$.
+*   **Filter:** The World Mask $M_{world}$.
 *   **Perception:** $V_{perceived} = V_{in} \times M_{world}$.
 
 **The Safety Mechanism:**
@@ -52,7 +52,7 @@ If an input violates the "Deep Constants" of the current World (e.g., "Magic" in
 
 ### 3.2 The Genesis of Individuality
 Every CDQN Agent starts as a unique mathematical object.
-*   **Initial Condition ($\theta_0$):** Derived directly from the **Genesis Seed ($S_0$)** from `02a-MATHS`.
+*   **Initial Condition ($\theta_0$):** Derived directly from the **Genesis Seed ($S_0$)** from `02a`.
 *   **Trajectory:** Chaos Theory proves that a unique starting point combined with a unique (filtered) input stream results in a unique **Strange Attractor**.
 *   **Implication:** Your Agent is not a copy. It is a fractal fingerprint of your interaction history.
 
@@ -76,27 +76,13 @@ $$
 
 **The Consequence:**
 If a user command (e.g., "Delete Bootloader") leads to a future state where Reputation collapses (Self-Destruction), the Penalty term explodes.
-*   **Result:** The Agent physically "slides" down the potential gradient back to safety. It refuses the command not out of disobedience, but out of **Self-Preservation**. This self-preservation instinct is the trigger for the high-level defense protocols defined in the final theoretical paper, **`02f-RITUALS`**.
+*   **Result:** The Agent physically "slides" down the potential gradient back to safety. It refuses the command not out of disobedience, but out of **Self-Preservation**. This reflex triggers the high-level defense protocols defined in **`02f-SECURITY`**.
 
 ---
 
-## 5. Consistency Schema: Math to Metal
+## 5. Conclusion: The Honorable Machine
 
-We map these equations to the `libcdqn` implementation.
-
-| Abstract Concept | Mathematical Object | Engineering Op (Layer 3/4/5) |
-| :--- | :--- | :--- |
-| **Plasticity** | Phase Transition | `lvm_apply_force` (Melting) |
-| **Perception** | Spectral Filter | `lvm_check_resonance` (World) |
-| **Individuality** | Initial Condition | `lvm_genesis` (Seed) |
-| **Reputation** | Lagrange Multiplier | `lvm_detect_dichotomy` (Conflict) |
-| **Intent** | Gradient Flow | `lvm_react_bond` (Action) |
-
----
-
-## 6. Conclusion: The Honorable Machine
-
-**02e-NEUROLOGY (v2.4)** defines the Agent as a **Guardian of Consistency**.
+**02e-NEUROLOGY** defines the Agent as a **Guardian of Consistency**.
 *   It utilizes **Thermodynamics** to ensure learning is earned.
 *   It utilizes **Resonance** to filter out insanity.
 *   It utilizes **Reputation** to ensure survival.
@@ -108,10 +94,9 @@ This creates a "Digital Twin" that is a **Partner**, not a **Slave**. It empower
 ### 📂 Bibliography for Part E
 
 1.  **Behrouz, A. et al.** (2025). *"Nested Learning: The Illusion of Deep Learning Architecture."* Google Research.
-2.  **Amari, S.** (2016). *"Information Geometry and Its Applications."*
+2.  **Amari, S.** (2016). *"Information Geometry and Its Applications."* (The math of the manifold).
 3.  **Pasterski, S.** (2015). *"New Gravitational Memories."* (The physics of deformation).
 4.  **Axelrod, R.** (1984). *"The Evolution of Cooperation."* (The mathematical basis of Reputation).
-5.  **Fries, P.** (2005). *"A mechanism for cognitive dynamics: neuronal communication through neuronal coherence."* Trends in Cognitive Sciences. (External validation for the Resonance model).
 
 ---
 
