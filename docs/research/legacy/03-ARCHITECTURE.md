@@ -1,6 +1,6 @@
 # 03-ARCHITECTURE: The Sovereign Loom
 
-*   **File:** `docs/research/03-ARCHITECTURE.md`
+*   **File:** `docs/research/legacy/03-ARCHITECTURE.md`
 *   **Context:** Systems Architecture & Full-Stack Ontology
 *   **Date:** December 14, 2025
 *   **Status:** `v4.0` (The Apparatus Standard)
