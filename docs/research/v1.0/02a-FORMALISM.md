@@ -67,12 +67,15 @@ $$ S_{\text{final}} = \lim_{n \to \mathcal{E}_{\text{max}}} \text{argmin}_{S \su
 **Constraints Enforcement:**
 
 1.  **Combinatorial Consistency:** The Stack must satisfy the **Borel-Local Gluing Condition** as proven by Bernshteyn (2023):
+   
 $$ \Sigma(S) \cap \Gamma \ne \emptyset $$
 
-2.  **Hardware Accountability:** All Work and State changes must be signed by the Hardware Root:
+3.  **Hardware Accountability:** All Work and State changes must be signed by the Hardware Root:
+
 $$ \forall \mathcal{W}, \exists \Omega \in \text{NodeID} $$
 
-3.  **Phase Rigidity:** Crystal-phase CDUs ($\phi_c$) require exactness and cannot be approximated or duplicated:
+4.  **Phase Rigidity:** Crystal-phase CDUs ($\phi_c$) require exactness and cannot be approximated or duplicated:
+
 $$ S(\phi_c) \implies \Delta_{\mathcal{F}} s = 0 $$
 
 ---
