@@ -3,50 +3,47 @@
 *   **File:** `docs/research/v1.0/02f-AUTOMATA.md`
 *   **Context:** Theoretical Canon v1.0 (The Computational Projection)
 *   **Date:** December 22, 2025
-*   **Status:** `v3.3` (Verified Standard - GitHub Optimized)
+*   **Status:** `v4.0` (Verified Standard - GitHub Optimized)
 *   **Preceding Paper:** `02e-OUROBOROS`
 *   **Next Paper:** `02g-ACCOUNTABILITY`
 
 ---
 
 ## 1. Abstract
-This document provides the mathematical derivation for the **Computational Mechanism** of the CDQN Formalism. We propose the **Entity Model (EM)** as the topological evolution of the **Actor Model (AM)**. We model the system as a **Concurrent Cellular Automaton (CCA)** where specialized Entities interact via the exchange of **Card Data Units (CDUs)**. By integrating **Sheaf Gluing** into the communication protocol and enforcing **Endothermic Instantiation**, we solve the classical limitations of actor-based systems—specifically state-opacity, unverified composition, and the no-cloning paradox. We establish that execution is a continuous-time process of state-alignment, ensuring that the concurrent swarm converges on a stable Global Section (Truth).
+This document provides the mathematical derivation for the **Computational Mechanism** of the CDQN Formalism. We propose the **Entity Model (EM)** as the topological evolution of the **Actor Model**, optimized for non-Von Neumann substrates. We model the system as a **Concurrent Cellular Automaton (CCA)** where specialized Entities interact via the exchange of **Card Data Units (CDUs)**. By integrating **Sheaf Gluing** into the communication protocol and enforcing **Endothermic Instantiation**, we solve the classical limitations of actor-based systems—specifically state-opacity and the no-cloning paradox. We establish that execution is a continuous-time process of state-alignment authored in **cdqnLang**, ensuring that the concurrent swarm converges on a stable Global Section.
 
 ---
 
 ## 2. The Entity Model (EM): The Active Observer
-In the CDQN Formalism, an **Entity** is an "Active Lattice." While the CDU serves as the discrete particle of data (the Field), the Entity is the "Automaton" that observes and transforms that field.
+In the CDQN Formalism, an **Entity** is an "Active Lattice." While the CDU serves as the discrete particle of data, the Entity is the "Automaton" that observes and transforms that field according to a policy authored in **cdqnLang**.
 
 ### 2.1 The Entity State Vector
-An Entity $E$ is a local section of the system sheaf possessing an internal state, a behavioral policy, and a hardware-bound identity:
+An Entity is a local section of the system sheaf possessing an internal state, a behavioral policy, and a hardware-bound identity:
 
 $$E = \{ \mathcal{L}_{\text{int}}, \tau_{\text{loc}}, \Pi, \Omega \}$$
 
 *   **Lattice-Internal:** The continuous tensor representing the Entity's current knowledge-state.
-*   **Causal-State-Local:** The local Ouroboros hash chain of the Entity's history.
-*   **Policy-Behavior:** The differential equation determining how the Entity reacts to incoming CDUs.
-*   **Identity-Omega:** The Hardware-bound signature ensuring non-repudiation.
+*   **Causal-State-Local:** The local Ouroboros hash chain documenting the Entity's specific history.
+*   **Policy-Behavior (Pi):** The differential equation (authored in **cdqnLang**) determining how the Entity reacts to incoming CDUs.
+*   **Identity-Omega:** The Hardware-bound signature ensuring all Entity actions are non-repudiable.
 
 ### 2.2 Particle-Observer Duality
-Execution occurs when an Entity (Observer) "absorbs" a CDU (Particle). The Entity's policy attempts to minimize the **Geometric Tension** between its internal state and the CDU, resulting in an update to its local Ouroboros chain or the emission of a new CDU.
+Execution is the result of an Entity (Observer) absorbing a CDU (Particle). The Entity's policy acts to minimize the **Geometric Tension** between its internal lattice and the CDU's field. This interaction is not a sequence of instructions but a **Topological Handshake** that results in a state update or the emission of a resultant CDU.
 
 ---
 
 ## 3. Specialized Entity Taxonomy
-To facilitate a complete computing environment, we define a set of specialized Entities that manage the lifecycle and routing of the Laminated Sheaf.
+To facilitate a complete computing environment, we define a set of specialized Entities derived from the **Module Entity** templates.
 
 ### 3.1 The Module Entity (M) - The Template Anchor
-The Module serves as the "Genotype Provider." It stores the read-only behavioral templates required to define new entities.
-*   **Axiom of Instantiation:** To satisfy the **No-Cloning Theorem** (`02c`), the Module does not "copy" code. It performs an **Endothermic Instantiation**.
-*   **Mechanism:** To spawn a Worker or Bot, the Module consumes an energy reagent from the Quantale budget to "organize" raw memory tiles into a new active state.
+The Module serves as the "Genotype Provider." It stores the read-only templates required to instantiate new entities.
+*   **Endothermic Instantiation:** To satisfy the **No-Cloning Axiom** (`02c`), the Module does not "copy" code. It consumes an energy reagent from the Quantale budget to organize raw memory tiles into a new active state.
+*   **Blueprint Fidelity:** Because templates are Crystal-phase CDUs, the "Birth" of a new Entity is mathematically guaranteed to be isomorphic to its parent Module's specification.
 
 ### 3.2 The Router Entity (R) - The Switchboard
-The Router is the "Topological Map." It manages the **Restriction Morphisms** between entities.
+The Router manages the **Restriction Morphisms** between entities, acting as the system's "Topological Map."
 *   **Role:** It verifies that Entity-A is permitted to "Talk" to Entity-B based on their **Type Signatures** ($\Sigma$).
-*   **Pre-Flight Logic:** It calculates the **Quantale Cost** of an interaction before the entities are permitted to bond, preventing "Spam" or "Denial of Service" at the architectural level.
-
-### 3.3 The NodeID Entity (Omega) - The Root
-The NodeID is the "Hardware Anchor." It is the only entity with direct access to the Hardware Root of Trust. It signs the Ouroboros hashes of the entire Entity Swarm, ensuring the network is physically bound to the device.
+*   **Pre-Flight Resonance:** The Router calculates the **Quantale Cost** of an interaction before the entities are permitted to bond, preventing high-entropy "Spam" from entering an Entity's processing fovea.
 
 ---
 
@@ -54,17 +51,17 @@ The NodeID is the "Hardware Anchor." It is the only entity with direct access to
 We reject the discrete "Fetch-Execute" cycle. Following the **Liquid Automata** consensus (2025), the CDQN system evolves via **Asynchronous State Diffusion**.
 
 ### 4.1 The Update Rule
-The state transition of an Entity is a gradient flow on the energy landscape defined by the User Attractor ($\Gamma$) and the Causal Past ($\tau$):
+The state transition of an Entity is a gradient flow on the energy landscape defined by the User Attractor and the Causal Past:
 
 $$\frac{dE}{dt} = -\nabla H(E, \text{Neighbors}, \Gamma, \tau)$$
 
 ### 4.2 Borel-Local Consistency
-Following **Bernshteyn (2023)**, we utilize the **Lovász Local Lemma (LLL)** to prove that a decentralized swarm of entities will converge on a consistent Global Section. This ensures that hallucination is prevented by the mathematical guarantee that local sections are **Topologically Compatible**.
+As proven by **Bernshteyn (2023)**, we utilize the **Lovász Local Lemma (LLL)** to ensure that a decentralized swarm of entities will converge on a consistent Global Section. This ensures that hallucination is prevented by the mathematical guarantee that local sections are **Topologically Compatible**.
 
 ---
 
 ## 5. Tensor Message Passing (TMP)
-Entities do not communicate via bit-streams, but via the **Transfer of CDU Ownership** (Pointer-Swap Semantics).
+Entities do not communicate via arbitrary bit-streams, but via the **Transfer of CDU Ownership** (Pointer-Swap Semantics).
 
 ### 5.1 The Handshake Morphism
 Communication between Entity-A and Entity-B is a topological handshake. The Router validates that the message (CDU) "Glues" to the recipient's internal context:
@@ -72,35 +69,32 @@ Communication between Entity-A and Entity-B is a topological handshake. The Rout
 $$\rho_{AB}(\mathcal{L}_{\text{msg}}) \oplus \mathcal{L}_{\text{target}} \implies \text{Tension} < \epsilon$$
 
 ### 5.2 Consumption and Residuation
-Upon successful gluing, the CDU is superposed onto the recipient's internal lattice. The "Message" ceases to exist as a separate particle and becomes an integral part of the recipient's state, obeying the **Linear Logic** constraints of the system.
+Following **Linear Logic**, upon successful gluing, the CDU is superposed onto the recipient's internal lattice. The message ceases to exist as a separate particle in the original scope and becomes an integral part of the recipient's state, satisfying the **No-Cloning Axiom** at the algebraic level.
 
 ---
 
 ## 6. Solving Actor Model (AM) Limitations
-The CDQN Formalism addresses the critical failures of SOTA Actor Models (e.g., Erlang, Akka).
+The CDQN Formalism addresses the failures of SOTA Actor Models through Sheaf Topology and Causal Spacetime.
 
-### 6.1 From Black-Box to Glass-Box (Transparency)
-In classical AM, actor states are opaque. In the EM, the internal state is a **Lattice Section**. An Auditor can verify the **Geometric Tension** of an entity’s state without side-effects, ensuring no "Shadow States" exist.
+### 6.1 State Transparency (Glass-Box Logic)
+In classical AM, actor states are opaque. In the EM, the internal state is a **Lattice Section**. An Auditor Entity can verify the **Geometric Tension** of an entity’s state without triggering side-effects, making "Shadow States" or hidden logic impossible.
 
 ### 6.2 Causal Integrity and Durable Execution
-Classical AM suffers from message loss or race conditions. The EM uses the **Ouroboros Ratchet** to force every transition to include its **Causal Interval**. Entities use the **Durable Execution** model (Temporal.io) to replay their history after failure, ensuring the "Liquid" state always converges back to its last "Crystal" checkpoint.
+The EM uses the **Ouroboros Ratchet** to force every transition to include its **Causal Interval**. Entities utilize the **Durable Execution** model to replay their local history after failure, ensuring the "Liquid" state always converges back to its last "Crystal" checkpoint defined in the ratchet.
 
 ---
 
 ## 7. Persistence Taxonomy (The EM Lifecycle)
-We categorize execution by three levels of temporal persistence.
+We categorize execution by three levels of temporal persistence, mirroring the Phase States of digital matter.
 
-1.  **Workers (Ephemeral):** Stateless. They process high-speed Fluid transformations (Video/Sensory) and evaporate. They leave zero history debt.
-2.  **Bots (Durable):** Stateful. They manage background workflows and persist across power cycles using Ouroboros replay.
-3.  **Agents (Sovereign):** Self-directed. They manage the Node's energy budget and are the only entities permitted to generate **Sovereign Work** to override system blocks.
+1.  **Workers (Ephemeral):** Stateless CCA sites. They process high-speed Fluid transformations (Video/Sensory) and evaporate. They leave zero history debt.
+2.  **Bots (Durable):** Stateful workflows. They manage background tasks and persist across power cycles using Ouroboros replay.
+3.  **Agents (Sovereign):** Self-directed entities. They manage the Node's energy budget and are the only actors permitted to generate **Sovereign Work** to override system blocks.
 
 ---
 
 ## 8. Conclusion: The Machine of State
-We have established that:
-1.  **Execution** is a distributed, continuous-time relaxation into equilibrium.
-2.  **Birth** is an energy-consuming instantiation (No-Cloning).
-3.  **Communication** is a verified topological gluing.
+We have established that execution in the CDQN is a distributed, continuous-time relaxation into equilibrium. By treating birth as instantiation and communication as gluing, we create a software environment that is physically grounded and causally accountable.
 
 The 02-Series has now derived the Space, Algebra, Physics, Time, and Computation of the CDQN. We proceed to **`02g-ACCOUNTABILITY`**, to define the final steering force of **Sovereign Work**.
 
@@ -111,6 +105,7 @@ The 02-Series has now derived the Space, Algebra, Physics, Time, and Computation
 2.  **Bernshteyn, A.** (2023). *"Distributed algorithms, the Lovász local lemma, and descriptive combinatorics."* Inventiones Mathematicae.
 3.  **Hasani, R., et al.** (2025). *"Liquid Neural Networks in Continuous-Time Automata."*
 4.  **Temporal.io.** (2025). *"Durable Execution Standards for Agentic Systems."*
+5.  **Won, J., et al.** (2025). *"The Continuous Tensor Abstraction."* (MIT CSAIL).
 
 ---
 
