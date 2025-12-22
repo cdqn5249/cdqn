@@ -1,6 +1,6 @@
 # 02b-PHYSICS: The Laws of Time & Energy
 
-*   **File:** `docs/research/02b-PHYSICS.md`
+*   **File:** `docs/research/legacy/02b-PHYSICS.md`
 *   **Context:** Lattice Cryptography, Sheaf Theory & The Thermodynamic Hypothesis
 *   **Date:** December 14, 2025
 *   **Status:** `v2.5` (The Thermodynamic Hypothesis)
