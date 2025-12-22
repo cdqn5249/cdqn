@@ -1,6 +1,6 @@
 # 02e-NEUROLOGY: The Laws of the Mind
 
-*   **File:** `docs/research/02e-NEUROLOGY.md`
+*   **File:** `docs/research/legacy/02e-NEUROLOGY.md`
 *   **Context:** Theoretical Canon (Information Geometry, Nested Learning & Control Theory)
 *   **Date:** December 14, 2025
 *   **Status:** `v2.6` (The Harmonic Standard)
