@@ -1,6 +1,6 @@
 # 02f-SECURITY: The Roadmap for Securing Verifiable Experience
 
-*   **File:** `docs/research/02f-SECURITY.md`
+*   **File:** `docs/research/legacy/02f-SECURITY.md`
 *   **Context:** Theoretical Canon (Security Strategy & The 3 Tiers of Trust)
 *   **Date:** December 14, 2025
 *   **Status:** `v2.1` (The Asset Protection Standard)
