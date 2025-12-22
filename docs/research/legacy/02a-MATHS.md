@@ -1,6 +1,6 @@
 # 02a-MATHS: The Axioms of Digital Matter
 
-*   **File:** `docs/research/02a-MATHS.md`
+*   **File:** `docs/research/legacy/02a-MATHS.md`
 *   **Context:** High-Dimensional Geometry, Probability Theory & The Geometric Hypothesis
 *   **Date:** December 14, 2025
 *   **Status:** `v2.1` (The Geometric Hypothesis)
