@@ -1,6 +1,6 @@
 # 03b-MATHS: The Geometric Substrate API
 
-*   **File:** `docs/research/03b-MATHS.md`
+*   **File:** `docs/research/legacy/03b-MATHS.md`
 *   **Context:** Layer 2 Specification (Geometric Primitives & The Sovereign Uniqueness API)
 *   **Date:** December 14, 2025
 *   **Status:** `v2.0` (The Discrete Physics Standard)
