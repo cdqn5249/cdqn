@@ -1,6 +1,6 @@
 # 03d-CHEMISTRY: The Interaction API
 
-*   **File:** `docs/research/03d-CHEMISTRY.md`
+*   **File:** `docs/research/legacy/03d-CHEMISTRY.md`
 *   **Context:** Layer 4 Specification (Valency, Bonding, Linear Logic & The Quantale Economy)
 *   **Date:** December 14, 2025
 *   **Status:** `v2.0` (The Metabolist Standard)
