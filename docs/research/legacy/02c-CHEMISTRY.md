@@ -1,6 +1,6 @@
 # 02c-CHEMISTRY: The Logic of Interaction
 
-*   **File:** `docs/research/02c-CHEMISTRY.md`
+*   **File:** `docs/research/legacy/02c-CHEMISTRY.md`
 *   **Context:** Quantale Theory, Linear Logic & The Metabolic Laws
 *   **Date:** December 14, 2025
 *   **Status:** `v2.0` (The Quantale Hypothesis)
