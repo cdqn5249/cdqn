@@ -1,6 +1,6 @@
 # 03a-METAL: The Virtual Substrate
 
-*   **File:** `docs/research/03a-METAL.md`
+*   **File:** `docs/research/legacy/03a-METAL.md`
 *   **Context:** Layer 1 Specification (Continuum Memory, Hardware Abstraction, & Security Tiers)
 *   **Date:** December 14, 2025
 *   **Status:** `v4.0` (The Apparatus Standard)
