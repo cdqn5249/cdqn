@@ -1,6 +1,6 @@
 # 02d-RESONANCE: The Laws of Context & Filter
 
-*   **File:** `docs/research/02d-RESONANCE.md`
+*   **File:** `docs/research/legacy/02d-RESONANCE.md`
 *   **Context:** Theoretical Canon (Spectral Theory, Signal Processing & Boundary Conditions)
 *   **Date:** December 14, 2025
 *   **Status:** `v2.0` (The Spectral Hypothesis)
