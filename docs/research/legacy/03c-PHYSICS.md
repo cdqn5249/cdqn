@@ -1,6 +1,6 @@
 # 03c-PHYSICS: The Thermodynamics API
 
-*   **File:** `docs/research/03c-PHYSICS.md`
+*   **File:** `docs/research/legacy/03c-PHYSICS.md`
 *   **Context:** Layer 3 Specification (Time, Tension, Inertia & The Ouroboros Ratchet)
 *   **Date:** December 14, 2025
 *   **Status:** `v2.0` (The Harmonic Tension Standard)
