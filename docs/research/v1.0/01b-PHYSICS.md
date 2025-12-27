@@ -28,11 +28,13 @@ We posit that information is structured as a **Rough Sheaf** ($\Psi$) over a con
 ### 3.1 Regularity and Renormalization
 Following breakthroughs in **Noncommutative Regularity Structures** (Hairer, 2025), we define a **Lattice ($\mathcal{L}$)** not as a smooth function, but as a rough path. 
 *   **The Mechanism:** Data is stored as a manifold that incorporates physical hardware noise ($\epsilon$) as a signature. 
-*   ** Renormalization:** The system performs an internal expansion to "subtract" irregular noise, revealing the **Topological Invariant** (Meaning). This ensures that the "Truth" of a Card Data Unit (CDU) is invariant across heterogeneous NPUs (e.g., Exynos, Snapdragon).
+*   **Renormalization:** The system performs an internal expansion to "subtract" irregular noise, revealing the **Topological Invariant** (Meaning). This ensures that the "Truth" of a Card Data Unit (CDU) is invariant across heterogeneous NPUs (e.g., Exynos, Snapdragon).
 
 ### 3.2 The Gluing Condition
 Consistency is a geometric requirement. A state is "True" iff local sections agree on their overlaps:
+
 $$ \rho_{ij}(\mathcal{L}_i) = \rho_{ji}(\mathcal{L}_j) $$
+
 Failure to satisfy this condition generates **Geometric Tension**, which manifests as internal heat, providing a physical signal of hallucination that the system must minimize through work.
 
 ---
@@ -42,7 +44,9 @@ Sovereignty requires a causal spine. We define Time ($\tau$) as a **Causal Set**
 
 ### 4.1 Causal Irreversibility
 Hsieh (2025) proved that information transmission is thermodynamically equivalent to energy-transmitting tasks. We apply this to the **Ouroboros Ratchet**:
+
 $$ \tau_{t} = \text{Hash}(\mathcal{L}_{t} + \tau_{t-1} + \Omega) $$
+
 Every causal step is an irreversible state change that dissipates heat. This ensures that history cannot be "re-reasoned" by a probabilistic model without violating the second law of thermodynamics.
 
 ---
@@ -56,7 +60,9 @@ We categorize Digital Matter by its thermodynamic response to energy, enforcing 
 
 ### 5.2 The Thermodynamic Penalty
 To resolve the crisis of **Executive Hallucination**, the vLPU shim enforces the $k_B T \ln 2$ cost for any operation that attempts to erase or overwrite a Crystal CDU:
+
 $$ \Delta E_{\text{tax}} \ge \mathcal{E}_{\text{melt}} \cdot \text{Mass}(C) $$
+
 If the energy budget is insufficient, the crystal physically **Shatters** (Phase Transition to Plasma). The system halts rather than allowing a probabilistic "Guess" to alter a sovereign fact.
 
 ---
