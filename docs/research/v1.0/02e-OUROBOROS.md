@@ -32,7 +32,9 @@ To ensure the absolute irreversibility of history, the ratchet utilizes a "Tilt"
 
 ### 3.1 The Ratchet Equation
 The current state of the Ouroboros $\tau$ is a non-linear projection of the previous state and the current lattice differential:
+
 $$\tau_t = \text{LWE}(\nabla \mathcal{L}_t, \tau_{t-1}, \Omega, \mathcal{Z})$$
+
 *   **$\nabla \mathcal{L}_t$:** The differential gradient of the rough manifold.
 *   **$\Omega$:** The hardware-bound Identity Lattice.
 *   **$\mathcal{Z}$:** The physical Time Zone anchor.
