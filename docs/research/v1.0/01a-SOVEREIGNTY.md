@@ -14,7 +14,7 @@ As of Q1 2026, the Artificial Intelligence industry—defined by the deployment 
 ---
 
 ## 2. The 2026 Landscape: The Bottleneck of Reliability
-The global technology sector, entering the **15th Five-Year Plan (2026-2030)** cycle, is prioritizing high-quality innovation and supply chain resilience. In this context, the primary challenge for AI is no longer "Scale," but **"Accountability."**
+The global technology sector, entering the **15th Five-Year Plan (2026-2030)** cycle from China, is prioritizing high-quality innovation and supply chain resilience. In this context, the primary challenge for AI is no longer "Scale," but **"Accountability."**
 
 ### 2.1 The Crisis of Executive Hallucination
 In early 2026, the industry has transitioned from "Chatbots" to "Autonomous Agents." This has given rise to **Executive Hallucination**: the confident execution of irreversible system actions (e.g., erroneous code deployment or unauthorized resource allocation) based on syntactically correct but causally flawed reasoning.
