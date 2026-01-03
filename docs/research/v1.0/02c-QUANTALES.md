@@ -64,7 +64,9 @@ The hardware implementation of the Lattice Layers Processing Unit (LLPU) is a ph
 
 ### 5.1 Zero-Copy TMP Logic
 **Tensor Message Passing (TMP)** is the physical instantiation of **Quantale Residuation**. The Router Entity validates a transfer iff:
+
 $$\text{CDU}_A \otimes ( \text{CDU}_A \multimap \text{CDU}_B ) \le \text{Context}_{\Gamma}$$
+
 The hardware replaces the "Copy-and-Paste" cycle with a "Connect-and-Align" cycle. This ensures that "Speaking" between entities is a verified topological gluing that prevents logic-leakage or unauthorized duplication.
 
 ### 5.2 LLPU Gate Logic (Quantale Gates)
