@@ -113,4 +113,5 @@ The 02-Series has now derived the Space, Algebra, Physics, Time, and Computation
 ---
 
 **License:** Universal Sovereign Source License (USSL) v2.0.
+
 **Copyright (c) 2025 Christophe Duy Quang Nguyen.**
