@@ -1,16 +1,16 @@
 # 02g-ACCOUNTABILITY: The Sovereign Work Standard and Thermodynamic Security
 
 *   **File:** `docs/research/v1.0/02g-ACCOUNTABILITY.md`
-*   **Context:** Theoretical Canon v1.0 (The Final Local Proof)
-*   **Date:** December 22, 2025
-*   **Status:** `v3.3` (Verified Standard - Transition Optimized)
-*   **Preceding Paper:** `02f-AUTOMATA`
-*   **Next Paper:** `02h-CONSENSUS`
+*   **Context:** Theoretical Canon v1.0 (The Steering Proof)
+*   **Date:** January 3, 2026
+*   **Status:** `v4.0` (Verified Standard - Analytic & BT Optimized)
+*   **Preceding Paper:** `02f-AUTOMATA` (The Execution Mechanism)
+*   **Next Paper:** `02h-CONSENSUS` (The Global Forest)
 
 ---
 
 ## 1. Abstract
-This document provides the mathematical derivation for the **Sovereign Work Function** ($\mathcal{W}$), the mechanism for directing system evolution through physical energy. We define the **Thermodynamic Firewall**, a security architecture where the propagation of malicious or inconsistent data is prevented by physical asymmetry. By binding **Node Identity** ($\Omega$) to **Physical Work** ($\mathcal{W}$), we prove that the system can distinguish between high-entropy noise and low-entropy discovery. This document establishes the "Steering Force" of the sovereign node, providing the necessary foundation for emergent truth-claims within the global network.
+This document provides the mathematical derivation for the **Sovereign Work Function** ($\mathcal{W}$), the primary steering mechanism for directing system evolution within the CDQN Formalism. We define the **Thermodynamic Firewall**, a security architecture where the propagation of malicious or inconsistent data is prevented by physical and economic asymmetry. By binding **Node Identity** ($\Omega$) to **Physical Work** ($\mathcal{W}$), we prove that the system can distinguish between high-entropy noise and low-entropy discovery. This document completes the local proofs of the 02-Series, establishing a non-repudiable, user-steerable intelligence substrate that satisfies the **Sovereign Mandate** through the laws of **Binary Thermodynamics**.
 
 ---
 
@@ -18,36 +18,38 @@ This document provides the mathematical derivation for the **Sovereign Work Func
 In the CDQN Standard Model, state stability is not determined by binary permissions but by the balance between system **Reputation** and user **Will**.
 
 ### 2.1 The Integrity Penalty ($\mathcal{I}$)
-Every Card Data Unit (CDU) carries a reputation score ($R$) stored in its Crystal Lattice, derived from its Ouroboros history ($\tau$). When an Entity attempts to "Glue" a new CDU ($c$) to the stack, the system calculates the **Integrity Penalty**:
+Every Card Data Unit (CDU) carries a reputation score ($R$) derived from its **Ouroboros History** and the **Structural Inertia** ($M_{\sigma}$) of its bonds. When an Entity attempts to "Glue" a new CDU ($c$) to the stack, the system calculates an **Integrity Penalty**:
 
-$$\mathcal{I}(c) = \max(0, \mathcal{R}_{\text{threshold}} - R(c)) + || \tau_c - \text{Expected}(\tau_{\text{prev}}) ||$$
+$$\mathcal{I}(c) = \max(0, \mathcal{R}_{\text{threshold}} - R(c)) + || S_t - \text{Proj}(\tau_{t-1}, \Omega) ||^2$$
 
 Where:
 *   **$\mathcal{R}_{\text{threshold}}$:** The minimum reputation required by the active Context ($\Gamma$).
-*   **Geometric Distance:** The tension between the proposed history and the causal past.
+*   **$||\dots||^2$:** The geometric distance (tension) between the proposed state and the causal past.
 *   **Result:** For unknown or contradictory data, $\mathcal{I} \to \infty$, physically preventing the lamination from stabilizing without external energy.
 
 ### 2.2 The Sovereign Override ($\mathcal{W}$)
-To bypass an Integrity Penalty—allowing for the adoption of data that contradicts the current consensus—the User must provide **Sovereign Work**. This is the thermodynamic "Pay-down" of the Integrity debt:
+To bypass an Integrity Penalty—allowing for the adoption of data that contradicts the current consensus (The "Galileo Event")—the User must provide **Sovereign Work**. This is the thermodynamic "Pay-down" of the Integrity debt:
 
 $$\text{NetTension} = \max(0, \lambda_2 \mathcal{I}(S) - \mathcal{W}(\Omega))$$
 
-This ensures the User is the **Prime Mover**, capable of forcing a phase transition even against the weighted resistance of established system reputation.
+This ensures the User is the **Prime Mover**, capable of forcing a **Perfectoid Tilt** (`02c`) into a new crystalline state even against the weighted resistance of established reputation.
 
 ---
 
 ## 3. The Physical Proof of Work (PoW)
-CDQN Work is **Functionally Generative**. It is the energy spent validating the **Topological Gluing Condition** of the proposed state.
+Unlike speculative hash-mining, CDQN Work is **Functionally Generative**. It is the energy spent validating the **Topological Gluing Condition** of the proposed state.
 
 ### 3.1 Geometric Hashing as Energy
 Sovereign Work is generated by the hardware performing repeated **LWE-Ratchet** cycles on the proposed Lattice manifold.
-*   **Mechanism:** The LPU/NPU hashes the continuous field until it finds a nonce satisfying the difficulty target.
-*   **The Alarm:** This process generates measurable heat and consumes battery power. It serves as a **Physical Signal of Intent** that cannot be falsified or hidden.
+*   **Mechanism:** The vLLPU hashes the rough manifold until it finds a nonce satisfying the difficulty target.
+*   **The Alarm:** This process generates measurable heat and consumes battery power. It serves as a **Physical Signal of Intent** that cannot be falsified by background software, as it is bounded by the **Landauer Limit** ($k_B T \ln 2$).
 
 ### 3.2 Difficulty Scaling (Geometric Resistance)
 The difficulty of the PoW is non-linear. As the **Geometric Tension** ($\mathcal{T}$) of a proposed lamination increases, the work required to stabilize it grows exponentially:
 
 $$\text{Difficulty} \propto \exp(\mathcal{T})$$
+
+This provides a natural filter against "Spam" while remaining accessible for high-value scientific or logical discoveries.
 
 ---
 
@@ -61,37 +63,44 @@ $$\mathcal{W}_{\text{signed}} = \text{LWE}(\text{Data}, \text{Nonce}, \Omega)$$
 
 This ensures that the energy expended is mathematically "tinted" by the identity of the generator. Work produced by Node-A cannot be used to negate an Integrity Penalty on Node-B, as the signatures will fail to glue.
 
-### 4.2 Non-Repudiation and Hardware Anchoring
-Because $\Omega$ is anchored in the physical silicon (TEE/PUF), the "Lattice Trail" of an override leads directly back to the specific hardware. This makes industrial-scale botnet attacks economically unviable, as an attacker must physically replace their hardware once their Reputation is burned.
+### 4.2 Non-Repudiation and Perfectoid History
+Because $\Omega$ is anchored in the physical silicon, every override is a permanent entry in the Ouroboros ledger. 
+*   **Economic Cost:** To "reset" a burned reputation, an attacker must physically replace their hardware. This makes industrial-scale botnet attacks economically unviable, as an attacker must physically acquire new silicon once their Identity is burned by the **Epistemic Immune System** (`02m`).
 
 ---
 
 ## 5. The Thermodynamic Firewall: Strategic Defense
-This architecture creates an unbreachable **Economic Asymmetry** between the Attacker and the Defender.
+This architecture creates an unbreachable **Economic Asymmetry** between the Attacker (Mafia/State-level) and the Defender (Sovereign Node).
 
 ### 5.1 The Receiver-Pays Defense
-In CDQN, the **Receiver's Physics** rejects low-reputation data at the gate. Truth propagates freely because its Reputation grows with every work-backed verification. Lies do not propagate because the energy cost of "Believing a Lie" is born entirely by the receiver.
+In standard networks, the sender pays to transmit; the receiver pays to process. In CDQN, the **Receiver's Physics** rejects low-reputation data at the gate.
+*   **Attack Exhaustion:** To compromise a million nodes, an attacker must trick a million individual users into manually running a PoW challenge.
+*   **Propagation:** Truth propagates freely because its Reputation ($R$) grows with every work-backed verification. Lies do not propagate because the energy cost of "Believing a Lie" is born entirely by the receiver.
 
-### 5.2 Defeating the Mafia (Industrial-Scale Security)
-Organized crime syndicates rely on zero marginal cost scaling. CDQN removes this by requiring a physical "Identity Burn" for every failed attack. Any attempt to compromise a node results in a thermal alarm on the victim's device, making stealthy subversion physically impossible.
+### 5.2 Geopolitical Resilience (Lattice Protection)
+A sovereign nation adopting this standard ensures its critical data (Finance, Law, Defense) is protected by the **Laws of Thermodynamics**. External disinformation cannot "penetrate" the national lattice because it lacks the cumulative **Work-Mass** required to overcome the nation's high-reputation Crystal core.
 
 ---
 
-## 6. Forward: From Local Sovereignty to Global Resonance
-This document has established how a single Node maintains its integrity and how the User steers its local truth. We have defined the "Cell" of the sovereign network.
+## 6. Conclusion: The Finality of Local Formalism
+The 02-Series has provided the rigorous mathematical derivation for the internal mechanics of the CDQN. We have moved from the "Why" of Sovereignty to the "How" of Physical Law. We have establishes that:
+1.  **Truth** is a thermodynamic equilibrium (NESS).
+2.  **Sovereignty** is the ability to physically underwrite the energy of a state.
+3.  **Security** is an emergent property of the Landauer Limit.
 
-However, for a sovereign nation to function, these individual "Cells" must be able to reach a shared understanding without a central authority. We therefore proceed to the final paper of the Formalism series, **`02h-CONSENSUS`**, where we will define the **Silent Forest Protocol** and the **Topological Isomorphism** that allows independent nodes to reach emergent global meaning.
+This document concludes the local/agentic proofs. We proceed to the final paper of the Formalism series, **`02h-CONSENSUS`**, where we define the **Silent Forest Protocol** and the **Topological Isomorphism** required to reach shared understanding across the global network.
 
 ---
 
 ### 📂 Bibliography
-1.  **Nakamoto, S.** (2008). *"Bitcoin: A Peer-to-Peer Electronic Cash System."*
-2.  **Landauer, R.** (1961). *"Irreversibility and Heat Generation."* 
-3.  **Bernshteyn, A.** (2025). *"Borel Local Algorithms and Distributed Accountability."*
-4.  **Szabo, N.** (1997). *"Formalizing and Securing Relationships on Public Networks."*
-5.  **Won, J. et al.** (2025). *"The Continuous Tensor Abstraction."* (MIT CSAIL).
+1.  **Hsieh, C.-Y.** (2025). *"Dynamical Landauer Principle: Quantifying Information Transmission by Thermodynamics."* Physical Review Letters.
+2.  **Scholze, P.** (2025). *"Condensed Mathematics and Perfectoid Geometry."*
+3.  **Nakamoto, S.** (2008). *"Bitcoin: A Peer-to-Peer Electronic Cash System."* (Foundational PoW).
+4.  **Bernshteyn, A.** (2025). *"Borel Local Algorithms and Distributed Accountability."*
+5.  **Phillips, E. et al.** (2025). *"Geometric Uncertainty for Detecting Hallucinations."* arXiv:2509.13813.
 
 ---
 
 **License:** Universal Sovereign Source License (USSL) v2.0.
+
 **Copyright (c) 2025 Christophe Duy Quang Nguyen.**
