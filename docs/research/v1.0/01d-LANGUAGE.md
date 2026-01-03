@@ -1,89 +1,87 @@
-# 01d-LANGUAGE: cdqnLang – The Categorical Programming Standard for Sovereign Silicon
+# 01d-LANGUAGE: cdqnLang – The Categorical Interface for Binary Thermodynamics
 
 *   **File:** `docs/research/v1.0/01d-LANGUAGE.md`
 *   **Context:** The Industrial Mandate (The "Interface")
-*   **Date:** December 27, 2025
-*   **Status:** `v4.0` (Technical Greenpaper Standard)
+*   **Date:** January 1, 2026
+*   **Status:** `v5.0` (Technical Greenpaper Standard)
 *   **Target Audience:** Programming Language Theorists, Compiler Architects, Formal Methods Researchers.
-*   **Preceding Paper:** `01c-STRATEGY`
-*   **Next Paper:** `02a-FORMALISM`
+*   **Preceding Paper:** `01c-STRATEGY` (The Decadal Bridge)
+*   **Succeeding Series:** `02a-FORMALISM` (The Standard Model)
 
 ---
 
 ## 1. Abstract
-Traditional programming models are structurally coupled to Von Neumann architectures, prioritizing sequential instruction flow and unconstrained data replication. These paradigms are fundamentally incompatible with **Binary Thermodynamics (BT)** and the **Lattice Processor Unit (LPU)**. We propose **`cdqnLang`**: a domain-specific, categorical programming language designed to serve as the universal interface for Lattice-based computing. Synthesizing the hypermedia navigation of **HyperCard** with the combinatorial capability logic of **Trading Card Games (TCGs)**, `cdqnLang` treats computation as the **Lamination of Sheaves**. This paper defines the language’s substructural type system, its resource-aware semantics, and its role as the software bridge for Sovereign Silicon.
+Traditional programming models are structurally coupled to the Von Neumann architecture, prioritizing sequential instruction flow and unconstrained data replication. These paradigms are fundamentally incompatible with **Binary Thermodynamics (BT)** and the **Lattice Layers Processing Unit (LLPU)**. We propose **`cdqnLang`**: a domain-specific, categorical programming language designed to serve as the universal interface for Lattice-based computing. By synthesizing the hypermedia navigation of **HyperCard** with the combinatorial capability logic of **Trading Card Games (TCGs)**, `cdqnLang` enables the authoring of **Laminated Sheaves** via a tiered "Web-to-Native" substrate. This paper defines the language’s substructural type system, its resource-aware semantics, and its role as the software bridge for Sovereign Silicon.
 
 ---
 
-## 2. The Architectural Pivot: From Instructions to Topologies
-Current languages (C++, Rust, Python) move bits through a central processor. `cdqnLang` is designed to anchor and laminate manifolds within memory tiles.
+## 2. The Architectural Pivot: From Calculation to Alignment
+The "Memory Wall" and the "Stochastic Crisis" identified in `01a` necessitate a transition from **Instruction Sequencing** to **State Alignment**. In `cdqnLang`, a program is not a list of operations performed *on* data; it is a definition of the **Topological Consistency** *between* data layers. 
 
-### 2.1 The Semantic CUDA
-NVIDIA’s dominance was secured by CUDA, which allowed developers to map linear algebra to silicon. `cdqnLang` provides the same bridge for the Post-Lithography Era, mapping **Sheaf Topology** and **Quantale Interaction** to LPU/vLPU substrates. It moves the developer from "Calculating Answers" to "Defining Stable Manifolds."
+### 2.1 The Semantic Loom
+`cdqnLang` provides the bridge for the Post-Lithography Era, mapping **Sheaf Topology** and **Quantale Interaction** to LLPU/vLLPU substrates. It moves the developer from managing registers to managing **Resonance** across memory tiles. Unlike imperative code, logic in `cdqnLang` is expressed as a **Global Section**—a state where disparate context layers (CDUs) reach thermodynamic equilibrium.
 
-### 2.2 Geometric Programming (State Alignment)
-Unlike imperative programming, logic in `cdqnLang` is expressed as a **Global Section**—a state where disparate context layers (CDUs) reach thermodynamic resonance. The language provides the syntax for defining the **Differential Equations** that govern these lattices, allowing for the specification of stability rather than just sequence.
+### 2.2 Substrate Polymorphism (Web-to-Native)
+Following the 2025 consensus on the **WebAssembly (Wasm) Component Model** (WASI Preview 3), `cdqnLang` utilizes a dual-track deployment strategy:
+*   **The Fluid Gateway (Web):** A "No-Install" environment leveraging **WebAssembly** and **WebGPU** for browser-based interaction (**Chronosa Web**). This enables rapid social lamination and "Fiction World" simulations.
+*   **The Crystal Anchor (Native):** A native Rust-based vLLPU shim for mobile (Galaxy A56) and server hardware. This track enables **Hard BT Security**, enforcing the **Landauer Penalty** and **Time Consistency (TC)** anchors which are physically inaccessible within the browser sandbox.
 
 ---
 
-## 3. Structural Abstractions: Decks and Keywords
-`cdqnLang` democratizes formal verification by adopting high-level metaphors grounded in rigorous computer science.
+## 3. Structural Abstractions: Stacks and Keywords
+`cdqnLang` democratizes formal verification by adopting high-level metaphors grounded in rigorous Category Theory.
 
-### 3.1 The Hypermedia Stack (The Sheaf Metaphor)
-Drawing from the "Stack" metaphor of **HyperCard**, `cdqnLang` utilizes a discrete structural primitive:
-*   **The Card (CDU):** A discrete topological section containing both a continuous tensor lattice and a local behavioral policy.
-*   **Linear Navigation:** Movement through semantic space is handled as a traversal of a **Directed Acyclic Graph (DAG)** of cards, ensuring that context is always preserved via the **Ouroboros axis** (`01b`).
+### 3.1 The HyperCard Metaphor (The Sheaf)
+`cdqnLang` utilizes the **Card** as its discrete structural primitive. 
+*   **The Card (CDU):** A discrete topological section containing a continuous rough manifold and a local behavioral policy.
+*   **The Stack:** Programming is the act of "Stacking" Cards into a **Laminated Sheaf**. Each card added refines the semantic "Image" of the truth, moving the system from a blurry probability to a sharp physical state.
 
-### 3.2 Combinatorial Capability Logic (The TCG Paradigm)
+### 3.2 TCG Combinatorial Logic (The Interaction)
 Inspired by the functional interplay of **Trading Card Games**, `cdqnLang` replaces the "API Call" with **Keyword-based Resonance**:
-*   **Signatures:** Every CDU exposes a set of capability keywords (e.g., `Crystal`, `Inelastic`, `Gravity_Active`).
-*   **Interaction:** Interaction occurs when two cards are placed in the same **Foveated Context**. The system checks the **Combinatorial Validity** of their keywords against the active **Context Attractor** ($\Gamma$).
+*   **Signatures:** Every CDU exposes a set of capability keywords (e.g., `Crystal`, `Linear`, `Inelastic`).
+*   **Combinatorial Validity:** Interaction occurs only when cards placed in the same **Foveated Context** satisfy a **Topological Handshake**. If keywords conflict, the compiler identifies a **Geometric Tension** spike, rejecting the build as a "Logic Hallucination."
 
 ---
 
 ## 4. The Type System: Linear and Transfinite
-`cdqnLang` implements a **Substructural Type System** to enforce the physical laws of Binary Thermodynamics.
+`cdqnLang` implements a **Substructural Type System** to enforce the physical laws of Digital Matter defined in `01b`.
 
 ### 4.1 Linear Resource Enforcement (No-Cloning)
-To satisfy the **No-Cloning Axiom** (`02c`), `cdqnLang` treats Crystal-phase CDUs as **Linear Types**. 
-*   **Ownership:** A CDU cannot be duplicated; it must be **Moved**. Passing a Card to an Entity consumes the reference in the original scope.
-*   **Zero-Copy Hardware Mapping:** These move-semantics map directly to hardware **Pointer-Swaps** in the LPU, ensuring that data sovereignty is physically enforced by the compiler.
+To satisfy the **No-Cloning Axiom**, `cdqnLang` treats Crystal-phase CDUs as **Linear Types**. 
+*   **Move Semantics:** A CDU cannot be duplicated; it must be **Moved**. Passing a Card to an Entity consumes the reference in the original scope.
+*   **Zero-Copy Hardware Mapping:** Move-semantics compile to hardware **Pointer-Swaps**, ensuring that data sovereignty is physically enforced by the LVM's memory controller.
 
 ### 4.2 The Bang Operator (!) and Fluid Elasticity
-For Fluid-phase data, `cdqnLang` utilizes the **Bang Operator (!)** from Linear Logic to manage approximations:
-*   **Elasticity:** Types annotated with `!` allow for **Exponential Expansion** (Copying/Blurring).
-*   **Convergent Accuracy:** This provides the syntax for handling noisy sensory data (Video/Audio) where bit-perfection is traded for energy-efficient semantic consistency, following the "Pi-Approximation" model.
+For Fluid-phase data, `cdqnLang` utilizes the **Bang Operator (!)**. Types annotated with `!` allow for **Exponential Expansion** (Copying/Blurring), providing the syntax for handling noisy sensory data where bit-perfection is traded for energy efficiency.
 
 ---
 
-## 5. Execution Semantics: Quantales and Compilation
-The language makes the thermodynamic cost of computation an explicit part of the development lifecycle.
+## 5. Execution Semantics: Quantale Metabolism
+The language makes the thermodynamic cost of computation an explicit part of the syntax, grounding it in **Binary Thermodynamics**.
 
-### 5.1 Endothermic Morphisms (Quantale Costing)
+### 5.1 Endothermic Morphisms (The Landauer Penalty)
 Every operator in the language (e.g., `glue`, `melt`, `ratchet`) is an **Endothermic Morphism**. 
-*   **The Landauer Penalty:** The compiler enforces the $k_B T \ln 2$ cost signature for any operation that alters or erases Crystal matter.
-*   **Static Budgeting:** The toolchain provides a deterministic estimate of the **Joules-per-Thought** required to execute a stack, allowing for real-time energy-aware scheduling.
+*   **Cost Signatures:** The compiler enforces the $k_B T \ln 2$ cost for any operation that alters or erases Crystal matter, based on the CDU's **Structural Inertia ($M_\sigma$)**.
+*   **Thermal Feedback:** The syntax provides real-time feedback on the **Effective Temperature ($T_{\text{eff}}$)** of a stack, allowing developers to optimize for battery life or precision.
 
-### 5.2 Heterogeneous Target Compilation
-The `cdqnLang` toolchain is designed for **Heterogeneous Sovereignty**, ensuring logic portability:
-*   **Virtual Target (vLPU):** For mobile hardware (Galaxy A56), it compiles to **Continuous Tensor Einsums** (Won et al., 2025) to emulate lamination via the NPU.
-*   **Native Target (LPU):** For custom hardware, it maps interactions directly to **Quantale Gates** within memory tiles, ensuring code is physically enforced by the bit-lines.
+### 5.2 Deterministic Compilation
+The `cdqnLang` toolchain maps logic to the **vLLPU Scheduler**, ensuring **Deterministic Dataflow**. It tells the silicon exactly which NPU tiles to fire, eliminating the "Stochastic Jitter" identified as an attack surface in our security audits.
 
 ---
 
 ## 6. Conclusion: The Final Piece of the Mandate
-`cdqnLang` concludes the **01-Series Industrial Mandate**. It provides the interface through which the Sovereign Architect directs the CDQN engine, transforming sovereignty into a type-system constraint and intelligence into a verifiable geometric structure.
+`cdqnLang` concludes the **01-Series Industrial Mandate**. It provides the interface through which the Sovereign Architect directs the CDQN engine, transforming sovereignty into a type-system constraint and intelligence into a verifiable physical state.
 
-With the mandate for the **Crisis** (`01a`), **Physics** (`01b`), **Hardware** (`01c`), and **Language** (`01d`) now established, we proceed to the **Series 02-FORMALISM**, to provide the rigorous mathematical proofs for the **Unified Equation of State**.
+With the mandate for the **Crisis** (`01a`), **Physics** (`01b`), **Strategy** (`01c`), and **Language** (`01d`) now established, we proceed to the **Series 02-FORMALISM**, to provide the rigorous mathematical proofs for the **Unified Equation of State**.
 
 ---
 
 ### 📂 Bibliography
-1.  **Goodman, D.** (1987). *"The Complete HyperCard Handbook."* (Precedent for Stack-based Logic).
-2.  **Elias, G. S. et al.** (2012). *"Characteristics of Games."* MIT Press. (Combinatorial Capability Systems).
-3.  **Wadler, P.** (1990). *"Linear types can change the world!"* (Resource Logic).
-4.  **Moggi, E.** (1991). *"Notions of computation and monads."* (Categorical Syntax).
-5.  **Won, J., et al.** (2025). *"The Continuous Tensor Abstraction."* OOPSLA 2025.
+1.  **Moggi, E.** (1991). *"Notions of computation and monads."* (Basis for Categorical Syntax).
+2.  **Wadler, P.** (1990). *"Linear types can change the world!"* (Foundational for Resource Logic).
+3.  **Won, J., et al.** (2025). *"The Continuous Tensor Abstraction."* OOPSLA 2025. (Basis for Manifold Sampling).
+4.  **Hsieh, C.-Y.** (2025). *"Dynamical Landauer Principle."* Physical Review Letters. (Basis for Section 5.1).
+5.  **Goodman, D.** (1987). *"The Complete HyperCard Handbook."* (Precedent for Stack-based UI).
 
 ---
 
