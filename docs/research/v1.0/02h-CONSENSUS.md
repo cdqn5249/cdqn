@@ -30,7 +30,7 @@ Semantic Meaning is resolved through recursive lamination loops across the hiera
 
 ### 3.1 Multi-Scale Sampling
 Truth is maintained via **Canonical Sampling** (defined in `02b`) adapted to the Holon scale:
-1.  **Micro-Scale (LPU Tile):** Resolves the local differential of a Continuous Lattice.
+1.  **Micro-Scale (LLPU Tile):** Resolves the local differential of a Continuous Lattice.
 2.  **Meso-Scale (Sovereign Node/Swarm):** Resolves the lamination of the User's Deck (The "View").
 3.  **Macro-Scale (Lattice Forest):** Resolves the Global Section across the network.
 
