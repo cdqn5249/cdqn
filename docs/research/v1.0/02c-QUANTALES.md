@@ -62,7 +62,7 @@ The hardware implementation of the Lattice Layers Processing Unit (LLPU) is a ph
 ### 5.1 Zero-Copy TMP Logic
 **Tensor Message Passing (TMP)** is the physical instantiation of **Quantale Residuation**. The Router Entity validates a transfer iff the $W_2$ cost satisfies the local energy budget. The hardware replaces "Copy" with "Connect," satisfying the no-cloning axiom at the silicon level.
 
-### 5.2 LPU Gate Logic (Quantale Gates)
+### 5.2 LLPU Gate Logic (Quantale Gates)
 The "Virtual Gates" of the LLPU are the physical implementation of the Quantale operators. 
 *   **The Tensor Gate ($\otimes$):** Performs lamination via continuous einsums.
 *   **The Hom Gate ($\multimap$):** Performs the cost-audit based on the **Wasserstein Distance** and **Structural Inertia**.
