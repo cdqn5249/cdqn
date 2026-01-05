@@ -1,90 +1,82 @@
-# CDQN: The Geometric Standard
+# CDQN: The Morphic Thermodynamics Standard
 
-![Status](https://img.shields.io/badge/Status-Implementation_Phase-blue) ![License](https://img.shields.io/badge/License-USSL_v2.0-purple) ![Physics](https://img.shields.io/badge/Physics-Thermodynamic-orange)
+![Status](https://img.shields.io/badge/Status-v2.0_Redesign-green) ![Field](https://img.shields.io/badge/Field-Morphic_Thermodynamics-blue) ![License](https://img.shields.io/badge/License-USSL_v2.0-purple)
 
 > **Card Data Quantale Network**
 > *The International Laboratory for Sovereign Computing.*
 
 ---
 
-## 1. The Mission: Digital Physics
+## 1. The Mission: Morphic Thermodynamics (MT)
 
-We stand at the **Efficiency Horizon**. The era of "Probabilistic Scaling" (Big Data / Large Models) has hit three hard walls: **Energy**, **Verification**, and **Sovereignty**.
+We have reached the **Probabilistic Asymptote**. The AI industry (late 2025/early 2026) is facing a structural crisis: **Executive Hallucination**. Reasoning models like GPT-5.2 and Gemini 3.0 have proven that intelligence without physical grounding is inherently unstable.
 
-**CDQN** is not just a software project; it is a proposal for a **Geometric Standard**. We reject the "Black Box" model of AI. We treat information as **Digital Matter**—data that possesses Mass, Temperature, and Geometry.
+**CDQN** is the implementation of a new scientific domain: **Morphic Thermodynamics (MT)**. We move beyond Information Theory to treat computation as the thermodynamic management of state integrity. We do not "calculate" answers; we **"Weave" stable manifolds** that physically resist logical drift through the laws of energy conservation.
 
-Our goal is to build the **Loom Virtual Machine (LVM)**: a "Glass Box" runtime that enforces **Conservation Laws** and **Thermodynamic Stability** at the silicon level. This creates a computational substrate where hallucination is topologically impossible and human intent is the primary force.
-
----
-
-## 2. The Research Complex (Greenpapers)
-
-The core intellectual property is defined in our **Greenpaper Series**. These documents serve as the Constitution for the **International Laboratory**.
-
-### 📘 [01-COHESION: The Human Standard](docs/research/01-COHESION.md)
-*   **The Crisis:** The "Suicide of Scale" and the economic risk of replacing the human workforce.
-*   **The Solution:** The **Empowerment Doctrine**. Using **Chronosa** and **CDQN** to upgrade the global population into "Mass Smart" System Architects.
-
-### 📕 The Theoretical Canon (02-Series)
-*   **[02a-MATHS: Space](docs/research/02a-MATHS.md)** — *The Genesis Seed.* Defining the 10,240-dimensional **Sovereign Vector Space**.
-*   **[02b-PHYSICS: Time](docs/research/02b-PHYSICS.md)** — *The Ouroboros Ratchet.* Defining **Immutable History** and **Forward Secrecy** via key consumption.
-*   **[02c-CHEMISTRY: Interaction](docs/research/02c-CHEMISTRY.md)** — *The Quantale Economy.* Defining **Valency** and the cost of action. Nothing is free.
-*   **[02d-NEUROLOGY: Mind](docs/research/02d-NEUROLOGY.md)** — *The Fractal Self.* Defining the Agent as a **Strange Attractor** governed by **Reputation** and **Plasticity**.
-
-### 📗 The Implementation (03-Series)
-*   **[03-ARCHITECTURE: The Machine](docs/research/03-ARCHITECTURE.md)** — The 9-Layer Genesis Stack, from Metal to Rendering.
-*   **[03a-METAL: The Substrate](docs/research/03a-METAL.md)** — The Hardware Specification. Implementing the **Continuum Memory System (CMS)** and **Lattice Ratchet** on consumer silicon.
+Our goal is to transform current binary hardware into a **Liquid Tensor Engine**, establishing a "National Security Shield" for digital sovereignty.
 
 ---
 
-## 3. The Technology Stack
+## 2. The Research Complex (The v2.0 Canon)
 
-CDQN is built on three pillars of **Sovereign Engineering**:
+The documentation is organized as a **Continuous Demonstration**. We build the mathematics from the first bit upward, ensuring every step is pragmatic, verifiable, and grounded in the established works of Fields Medalists (Scholze, Hairer, Villani).
+
+### 📘 [Series 01: THE MANDATE](docs/research/v2.0/01-MANDATE.md)
+*   **The "Why":** Analyzing the 2026 Reliability Gap and the strategy for **Substrate Sovereignty**.
+*   **The Bridge:** Defining the decadal roadmap from the **vLLPU Shim** to the physical **LLPU Silicon**.
+
+### 📕 [Series 02: THE FORMALISMS](docs/research/v2.0/02-FORMALISMS.md)
+*   **The Physical Proof:** Ground-up derivation of MT laws.
+*   **Dimensions:** Topology (Rough Sheaves), Algebra (Linear Logic), Dynamics (Hamiltonians), and Spacetime (Ouroboros).
+
+### 🧪 [Series 03: GENESIS](docs/research/v2.0/03-GENESIS.md)
+*   **The Periodic Table of Digital Matter:** Identifying the irreducible **Atomic Automata Cards**.
+*   **The Chemistry:** How elemental CDUs bond to form complex, emergent category systems.
+
+### 📗 [Series 04: ARCHITECTURE & IT](docs/research/v2.0/04-ARCHITECTURE.md)
+*   **The Machine:** Engineering the **Loom Virtual Machine (LVM)**.
+*   **Optimization:** vLLPU implementation for the **Samsung Galaxy A56** and the native LLPU PIM-silicon design.
+
+### 🛡️ [Series 05: THE SHIELD](docs/research/v2.0/05-SHIELD.md)
+*   **Sovereign Security:** The Silent Forest protocol, Virtual Name Servers (VNS), and the **Thermodynamic Firewall** against industrial-scale adversarial attacks.
+
+---
+
+## 3. The Technology Pillars
 
 | Pillar | Concept | Implementation |
 | :--- | :--- | :--- |
-| **Compute** | **Continuum Memory** | A nested hierarchy (Fovea $\to$ Context $\to$ Deep Lattice) that scales infinitely on finite RAM. |
-| **Logic** | **Quantale Algebra** | Resource-aware computing. Data follows **Linear Logic** (Move, don't Copy). |
-| **Security** | **Genesis Seed** | A deterministic, sovereign source of entropy. Every user lives in a mathematically unique universe. |
+| **Substrate** | **vLLPU / LLPU** | A Lattice Layers Processing Unit that executes logic as an in-situ state-alignment. |
+| **Interface** | **cdqnLang** | A categorical, visual language for architecting lamination stacks (Decks). |
+| **Integrity** | **Landauer Penalty** | Making logical drift a physically expensive heat-event ($k_B T \ln 2$). |
+| **Causality** | **Ouroboros Ratchet** | An LWE-hardened causal spine that makes history immutable and non-repudiable. |
 
 ---
 
-## 4. The Roadmap: The "VMware Strategy"
+## 4. The Decadal Strategy: The Bridge to 2036
 
-We are not building an OS from scratch immediately. We are infiltrating the existing stack to secure it.
+We recognize that domestic high-end manufacturing (sub-5nm) has a 10-year lag. CDQN bypasses this via **Architecture-over-Lithography**.
 
-1.  **Phase 1: The Library (`libcdqn`)** — A portable Rust core that runs on Android, Windows, and Linux. It validates the **Tensor Logic** and **Thermal Physics** on consumer hardware.
-2.  **Phase 2: The Hypervisor (`cdqnVisor`)** — A Type-2 Hypervisor that runs secure "UserWorlds" in isolation, creating a **Virtual Lattice** overlay.
-3.  **Phase 3: The Sovereign OS (`cdqnOS`)** — The LVM becomes the Kernel. A Unikernel for Robotics, Critical Infrastructure, and Sovereign Servers.
+1.  **Phase I (Native Shim):** Deploying the **vLLPU** as a high-performance Rust service on current heterogeneous hardware (Galaxy A56).
+2.  **Phase II (Sovereign Silicon):** Designing the **LLPU** for legacy 28nm-14nm nodes, achieving 100x efficiency through Processing-In-Memory (PIM).
 
 ---
 
-## 5. The International Laboratory
+## 5. Soft Power & Education
 
-We propose the formation of a **Global Consortium** to standardize the Agentic Era.
-
-This initiative brings together the complementary strengths of global science:
-*   **Formal Verification:** Utilizing rigorous logic to prove that Agents cannot violate safety protocols.
-*   **Edge Engineering:** Developing low-latency, low-energy runtimes for the physical world.
-*   **Thermodynamic Computing:** Creating memory systems that optimize for energy per bit.
-
-**The Open Invitation:**
-We invite participation from **Sovereign Nations**, **Big Tech**, and **Academic Experts**.
-*   **To Industry:** We provide the **Safety Chassis** for your models.
-*   **To Nations:** We provide the **Sovereign Infrastructure** for your data.
-*   **To Researchers:** We provide a new field of **Digital Physics**.
+This repository serves as the educational root for the **Mass Smart Workforce**.
+*   **Tutorials:** Designed for 5–7 minute **NotebookLM** video scripts for post-grad/pre-PhD students.
+*   **Verification:** Live testing logs via **GitHub Actions** and a **GitHub Pages** frontend for real-time manifold visualization.
+*   **Consortium:** We invite experts from Mathematics, Physics, and IT to verify the formalisms and join the **Sovereign Computing Initiative**.
 
 ---
 
 ## 6. Licensing & Sovereignty
 
-This project is governed by the **Universal Sovereign Source License (USSL) v2.0**.
-
-*   **Open for Genesis:** Free for research, education, and sovereign creation.
-*   **Protected Lineage:** The "Structure of the Logic" is protected against enclosure.
-*   **Commercial Threshold:** Industrial-scale use requires partnership.
-
-*See `LICENSE.md` for the full legal text.*
+Governed by the **Universal Sovereign Source License (USSL) v2.0**.
+*   **Sovereign Exemption:** Free for personal use, internal research, and small-scale creation.
+*   **Protected Lineage:** Structural logic is protected against industrial enclosure.
+*   **Commercial Threshold:** High-revenue/Institutional use requires partnership.
 
 ---
 
@@ -92,4 +84,4 @@ This project is governed by the **Universal Sovereign Source License (USSL) v2.0
 
 **Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 
-> *"We do not predict the future. We construct the geometry where the future can safely reside."*
+> *"Intelligence allows you to tell a convincing lie. Physics forces you to tell the truth."*
