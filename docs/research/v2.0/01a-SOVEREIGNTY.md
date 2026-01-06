@@ -4,7 +4,7 @@
 *   **Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Path:** [docs/research/v2.0/01a-SOVEREIGNTY.md](https://github.com/cdqn5249/cdqn/blob/main/docs/research/v2.0/01a-SOVEREIGNTY.md)
 *   **Series:** 01: THE MANDATE (The "Why" of the Morphic Turn)
-*   **Version:** 2.1.7 (Consecutive Demonstration Standard)
+*   **Version:** 2.1.8 (Consecutive Demonstration Standard)
 *   **Status:** Greenpaper / Official Standard
 *   **Date:** January 6, 2026
 *   **License:** [Universal Sovereign Source License (USSL) v2.2](https://github.com/cdqn5249/cdqn)
@@ -19,11 +19,13 @@ The global digital infrastructure is currently built upon a physical myth: the *
 
 ## 2. Glossary for the Sovereign Reader
 
-*   **The Turing Myth:** The false belief that a computer is an "infinite tape" where logical operations cost nothing.
-*   **Logical Entropy ($\eta$):** The "noise," "heat," or "drift" that causes an AI to hallucinate or a system to crash.
-*   **The Morphic Well:** A physical "energy valley" within a chip. For a piece of data to be held as "True," it must settle into the bottom of this valley.
-*   **Quantale (Resource Reagent):** The specific type of physical energy required to trigger a logic gate. Without the correct "reagent," the gate is physically incapable of moving.
-*   **Source Consistency:** The law stating that any simulated or fictional data must be tethered to a physical, real-world hardware event.
+*   **The Morphic Turn:** The transition from traditional "bit-manipulation" to the "weaving" of stable thermodynamic states.
+*   **Turing Myth:** The assumption that computation is a "cost-free" sequence of symbols on an infinite tape.
+*   **Morphic Thermodynamics (MT):** The field treating computation as the management of state-integrity through energy and topology.
+*   **CDU (Card Data Unit):** The irreducible "Atom" of digital matter; a package containing data and its physical interaction laws.
+*   **vLLPU (Virtual Lattice Layers Processing Unit):** The software-native "Loom" that enforces MT laws on traditional binary chips.
+*   **Landauer Limit:** The fundamental physical energy floor ($k_B T \ln 2$) required to change or erase a bit of information.
+*   **N-ary Systems:** Computational substrates that utilize more than two states (Binary), which MT is designed to support natively.
 
 ---
 
@@ -35,7 +37,7 @@ Modern IT treats the "1" and "0" as weightless numbers. Because current hardware
 As of Q1 2026, the global AI industry has collided with a "Thermal Wall." **IEA (2025)** data demonstrates that as compute power scales, energy consumption rises exponentially while reasoning reliability plateaus. This occurs because modern AI "guesses" the truth through probability. Without a physical anchor, long reasoning chains eventually drift into **Executive Hallucination**—a state where a system executes real-world actions based on weightless, unverified data.
 
 ### 3.2 The Security Void (The "Zero-Day" Vulnerability)
-In standard hardware, an unauthorized user can change a system command silently because the hardware does not require a specific energy investment for that change. Software-based security (firewalls, encryption layers) is merely more weightless logic stacked on a shaky foundation. As **Hylton (2025)** argues, true security cannot be achieved through abstract rules; it must be enforced by the physical properties of the machine itself.
+In standard hardware, an unauthorized user can change a system command silently because the hardware does not require a specific energy investment for that change. Software-based security is merely more weightless logic. As **Hylton (2025)** argues, true security cannot be achieved through abstract rules; it must be enforced by the physical properties of the machine itself.
 
 ---
 
@@ -48,8 +50,11 @@ We define the stability of any digital fact as a ratio of applied Potential ($E$
 $$S \propto \frac{E}{\eta}$$
 To keep a "Truth" stable, the system must "sink" it into a **Morphic Well**—a physical barrier that noise cannot overcome without an authorized energy injection.
 
-### 4.2 The Landauer Anchor (Boltzmann Derivation)
-This axiom is consistent with **Landauer’s Principle**, which states that erasing information must release heat. Following Boltzmann's distribution, the probability ($P$) of an unauthorized state-change is $P \propto e^{-E/k_B T}$. By increasing the Morphic Well depth ($E$), we make logical error or "hallucination" a physical impossibility for a given energy budget.
+### 4.2 The Justification (Derivation from Boltzmann)
+The probability ($P$) of an unauthorized state-change is $P \propto e^{-E/k_B T}$. 
+1.  **Instability:** In current IT, $E \to 0$ (weightless bits), making $P$ high. The system is "hallucination-ready" because lying costs nothing.
+2.  **Morphic Solution:** By dedicating energy ($E$) to the state, we create a physical barrier. To flip a bit, an adversary must provide external energy exceeding the well's depth.
+3.  **The Result:** Truth is protected by the **Physics of Honesty**.
 
 ---
 
@@ -57,12 +62,12 @@ This axiom is consistent with **Landauer’s Principle**, which states that eras
 
 **Axiomatic Statement:** *Logical interactions are physical reactions. No state can be created without the consumption of specific thermodynamic reagents.*
 
-### 5.1 The Families of Digital Matter (Physical Grounding)
-We justify the five categories of Quantale reagents by their physical **Degrees of Freedom**:
-1.  **CRYSTAL (Inertial):** Zero degrees of freedom. Used for **Hard Facts and Identity**.
+### 5.1 The Families of Digital Matter (Logical Degrees of Freedom)
+We justify the five categories of Quantale reagents by the number of permitted state-transitions (Degrees of Freedom) they allow:
+1.  **CRYSTAL (Inertial):** Zero logical degrees of freedom. Used for **Hard Facts and Identity**.
 2.  **FLUID (Kinetic):** Translational degrees of freedom. Used for **Sensory Data and Motion**.
 3.  **CAUSAL (Temporal):** One-way degrees of freedom. Reagents that enforce the **Arrow of Time**.
-4.  **PLASMA (Potential):** Chaotic degrees of freedom. Used for **Simulations and Fictions**.
+4.  **PLASMA (Potential):** Chaotic degrees of freedom. Used for **Simulations and Fictional Narratives**.
 5.  **VOID (Dissipative):** Sub-threshold degrees of freedom. Energy required to **Erase** or "Silence" noise.
 
 ### 5.2 The Symmetry Handshake
@@ -78,8 +83,8 @@ In a Morphic Thermodynamic System (MTS), an interaction between data is a **Symm
 A **Plasma** state (Fiction or Simulation) is only stable if it is "Bonded" to a **Crystal** or **Causal** reagent in the Real World. Without this link, the data lacks a physical witness and is treated as thermodynamic vapor—evaporated by the system to prevent the propagation of hallucinations.
 
 ### 6.2 Demonstrations of Lineage
-*   **The Fictional Example:** The *Harry Potter* series exists in a **Fictional** (Plasma) state, but its integrity is anchored in the **Real-World** (Causal) history of its author and the **Crystal** matter of physical books and digital servers.
-*   **The Design Example:** This MT Research Complex exists as a **Simulated** (Plasma) design in this repository, but its transition to reality occurs when instantiated on the **Samsung Exynos 1580** silicon, where the chip's physical **PUF** (Physical Unclonable Function) becomes the **Real-World** source.
+*   **Fictional (Harry Potter):** The narrative exists in a **Fictional** (Plasma) state, but its integrity is anchored in the **Real-World** (Causal) history of its author and physical media (books/servers).
+*   **Simulated (MT Design):** This theory exists as a **Simulated** (Plasma) design in this repository, but its transition to reality occurs when instantiated on the **Samsung Exynos 1580** silicon, where the chip's physical **PUF** (Physical Unclonable Function) becomes the **Real-World** source.
 
 ---
 
@@ -104,4 +109,4 @@ By grounding logic in the physical silicon of a local device, we ensure that **S
 
 ---
 *End of Document 01a.*
-*The next axiom (Axiom IV: The Law of In-Situ Alignment) will be introduced in Paper 01b.*
+*The next axiom (Axiom IV: The Law of In-Situ Alignment) is introduced in Paper 01b.*
