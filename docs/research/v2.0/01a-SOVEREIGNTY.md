@@ -4,8 +4,9 @@
 *   **Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Path:** [docs/research/v2.0/01a-SOVEREIGNTY.md](https://github.com/cdqn5249/cdqn/blob/main/docs/research/v2.0/01a-SOVEREIGNTY.md)
 *   **Series:** 01: THE MANDATE (The "Why" of the Morphic Turn)
-*   **Version:** 2.1.6 (Consecutive Demonstration Standard)
+*   **Version:** 2.1.7 (Consecutive Demonstration Standard)
 *   **Status:** Greenpaper / Official Standard
+*   **Date:** January 6, 2026
 *   **License:** [Universal Sovereign Source License (USSL) v2.2](https://github.com/cdqn5249/cdqn)
 *   **Copyright:** (c) 2025-2026 Christophe Duy Quang Nguyen
 
@@ -28,7 +29,7 @@ The global digital infrastructure is currently built upon a physical myth: the *
 
 ## 3. The Diagnostic: The Crisis of the Infinite Abstraction
 
-Modern IT treats the "1" and "0" as weightless numbers. Because current hardware provides no physical "friction" to stop a bit from flipping, our digital world is inherently unstable.
+Modern IT treats the "1" and "0" as weightless numbers. Because current hardware provides no physical "friction" to stop a bit from flipping, our digital world is inherently unstable and open to exploitation.
 
 ### 3.1 The Energy-Reliability Gap
 As of Q1 2026, the global AI industry has collided with a "Thermal Wall." **IEA (2025)** data demonstrates that as compute power scales, energy consumption rises exponentially while reasoning reliability plateaus. This occurs because modern AI "guesses" the truth through probability. Without a physical anchor, long reasoning chains eventually drift into **Executive Hallucination**—a state where a system executes real-world actions based on weightless, unverified data.
@@ -77,7 +78,7 @@ In a Morphic Thermodynamic System (MTS), an interaction between data is a **Symm
 A **Plasma** state (Fiction or Simulation) is only stable if it is "Bonded" to a **Crystal** or **Causal** reagent in the Real World. Without this link, the data lacks a physical witness and is treated as thermodynamic vapor—evaporated by the system to prevent the propagation of hallucinations.
 
 ### 6.2 Demonstrations of Lineage
-*   **The Fictional Example:** The *Harry Potter* series exists in a **Fictional** (Plasma) state, but its integrity is anchored in the **Real-World** (Causal) history of its author and the **Crystal** matter of physical books and servers.
+*   **The Fictional Example:** The *Harry Potter* series exists in a **Fictional** (Plasma) state, but its integrity is anchored in the **Real-World** (Causal) history of its author and the **Crystal** matter of physical books and digital servers.
 *   **The Design Example:** This MT Research Complex exists as a **Simulated** (Plasma) design in this repository, but its transition to reality occurs when instantiated on the **Samsung Exynos 1580** silicon, where the chip's physical **PUF** (Physical Unclonable Function) becomes the **Real-World** source.
 
 ---
