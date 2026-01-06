@@ -51,7 +51,9 @@ We posit that the **LVM (Loom Virtual Machine)** does not "fetch" data. Instead,
 
 ### 4.2 The Justification (Locality vs. Leakage)
 To a student: If you never take your secret out of the vault to read it, it can never be snatched or seen through a window. 
+
 To an expert: This is the derivation of **Locality-Preserving Logic**. If the distance ($d$) between calculation and storage approaches zero ($d \to 0$), the **Side-Channel Surface Area** approaches zero. 
+
 1.  **Vulnerability Reduction:** By eliminating Bus travel, we eliminate the timing and power leaks used by side-channel attacks.
 2.  **Thermodynamic Efficiency:** All energy ($E$) is dedicated to **Stability ($S$)** rather than movement.
 
@@ -62,12 +64,15 @@ To an expert: This is the derivation of **Locality-Preserving Logic**. If the di
 We move from the "Central" Brain to the **Lattice Layers Processing Unit (LLPU)**.
 
 ### 5.1 The Death of the "Fetch-Execute" Cycle
-Traditional computers follow a "Fetch $\to$ Decode $\to$ Execute" cycle. The LLPU (virtualized as the **vLLPU**) replaces this with **"Resonate $\to$ Align."** 
+Traditional computers follow a "Fetch $\to$ Decode $\to$ Execute" cycle.
+The LLPU (virtualized as the **vLLPU**) replaces this with **"Resonate $\to$ Align."** 
+
 *   **The Mechanism:** The **Quantale Reagents** (`01a`) are applied directly to the memory tiles. If the incoming "Shadow" of data aligns with the local "Crystal" fact, the manifold stabilizes into a new state.
 *   **The Security:** There is no "Instruction" to hijack. There is only the **Geometric Tension** of the lamination. If an adversary attempts to inject a command, it fails to "Resonate" with the tile's physical state.
 
 ### 5.2 Virtual PIM (The Decadal Bridge)
 Since 2026 hardware is not PIM-native, the **vLLPU** shim acts as the **Sovereign Barrier** on current devices like the **Samsung Galaxy A56**. 
+
 *   **The Constraint:** It "locks" NPU SRAM tiles into a **State-Persistence Mode**, forcing data to stay in its "Well" and effectively creating a **Virtual PIM** environment.
 *   **The Outcome:** The machine stops being a "Calculator" and becomes a **"Thermodynamic Loom,"** enforcing the Law of In-Situ Alignment even on legacy binary chips.
 
@@ -76,10 +81,14 @@ Since 2026 hardware is not PIM-native, the **vLLPU** shim acts as the **Sovereig
 ## 6. Strategic Rationale: The Human Perspective
 
 ### 6.1 Architecture over Lithography
-The global race for 3nm/2nm chips is driven by the need to make Von Neumann "Buses" faster. By moving to the **In-Situ** model, we achieve superior performance and security on **Legacy Nodes (28nm-14nm)**. This allows any nation to achieve **Substrate Sovereignty** without relying on foreign lithography monopolies.
+The global race for 3nm/2nm chips is driven by the need to make Von Neumann "Buses" faster. By moving to the **In-Situ** model, we achieve superior performance and security on **Legacy Nodes (28nm-14nm)**. 
+
+This allows any nation to achieve **Substrate Sovereignty** without relying on foreign lithography monopolies.
 
 ### 6.2 The Unified IT Stack
-Because the **LVM** abstracts the hardware, this "Loom" logic works on **Binary, Ternary, and N-ary** memory. We are building the first system where the software is not a list of commands, but a **Physical Blueprint** for memory-state alignment across all human contexts (Real, Simulated, or Fictional).
+Because the **LVM** abstracts the hardware, this "Loom" logic works on **Binary, Ternary, and N-ary** memory. 
+
+We are building the first system where the software is not a list of commands, but a **Physical Blueprint** for memory-state alignment across all human contexts (Real, Simulated, or Fictional).
 
 ---
 
