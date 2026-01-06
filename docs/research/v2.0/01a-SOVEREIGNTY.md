@@ -2,9 +2,9 @@
 
 **Morphic Thermodynamics (MT) Research Complex**
 *   **Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
-*   **Path:** `docs/research/v2.0/01a-SOVEREIGNTY.md`
+*   **Path:** [docs/research/v2.0/01a-SOVEREIGNTY.md](https://github.com/cdqn5249/cdqn/blob/main/docs/research/v2.0/01a-SOVEREIGNTY.md)
 *   **Series:** 01: THE MANDATE (The "Why" of the Morphic Turn)
-*   **Version:** 2.1.1 (Consecutive Demonstration Standard)
+*   **Version:** 2.1.6 (Consecutive Demonstration Standard)
 *   **Status:** Greenpaper / Official Standard
 *   **License:** [Universal Sovereign Source License (USSL) v2.2](https://github.com/cdqn5249/cdqn)
 *   **Copyright:** (c) 2025-2026 Christophe Duy Quang Nguyen
@@ -12,85 +12,95 @@
 ---
 
 ## 1. Abstract
-The modern digital infrastructure is built upon the **Turing Paradox**: the assumption that logic is a mathematical abstraction occurring on an infinite, weightless tape. This paper demonstrates that the separation of "Information" from "Thermodynamics" enables the systemic failures of 2026, specifically **Executive Hallucination** and **Hardware-level Deception**. We propose the **Morphic Thermodynamics (MT)** field, founded on the principle that "Truth" is a physical state with measurable mass and energy cost. By deriving the **Stability Formula** and the **Quantale Resource Model** from first principles, we transform digital sovereignty into an immutable physical law.
+The global digital infrastructure is currently built upon a physical myth: the **Infinite Machine**. By assuming that changing a digital bit is a weightless mathematical event with no physical consequence, modern Information Technology (IT) has created a world of "Zero-Gravity Logic." This paper identifies the **Turing Paradox**—the gap between abstract logic and thermodynamic reality—as the primary cause of modern AI hallucinations and systemic hardware vulnerabilities. We propose the **Morphic Thermodynamics (MT)** field, founded on the principle that "Truth" is a physical state with measurable mass and energy cost. We introduce a system of **Thermodynamic Axioms** and a **Resource Model** that transforms security and reliability from optional software configurations into immutable physical laws.
 
 ---
 
 ## 2. Glossary for the Sovereign Reader
 
-*   **The Morphic Turn:** The transition from traditional "bit-manipulation" to the "weaving" of stable thermodynamic states.
-*   **Turing Myth:** The assumption that computation is a "cost-free" sequence of symbols.
-*   **Morphic Thermodynamics (MT):** The field treating computation as the management of state-integrity through energy.
-*   **CDU (Card Data Unit):** The "Atom" of digital matter. A discrete package containing both data and the physical rules for how that data can be used. **[See Series 03: GENESIS]**.
-*   **vLLPU (Virtual Lattice Layers Processing Unit):** The software "Loom" that enforces MT laws on traditional binary chips. **[See Paper 01c]**.
-*   **Landauer Limit:** The minimum energy floor ($k_B T \ln 2$) required to change a bit.
-*   **N-ary Systems:** Computers that use more than two states (e.g., Ternary base-3 or higher), which MT is uniquely designed to support.
+*   **The Turing Myth:** The false belief that a computer is an "infinite tape" where logical operations cost nothing.
+*   **Logical Entropy ($\eta$):** The "noise," "heat," or "drift" that causes an AI to hallucinate or a system to crash.
+*   **The Morphic Well:** A physical "energy valley" within a chip. For a piece of data to be held as "True," it must settle into the bottom of this valley.
+*   **Quantale (Resource Reagent):** The specific type of physical energy required to trigger a logic gate. Without the correct "reagent," the gate is physically incapable of moving.
+*   **Source Consistency:** The law stating that any simulated or fictional data must be tethered to a physical, real-world hardware event.
 
 ---
 
 ## 3. The Diagnostic: The Crisis of the Infinite Abstraction
 
-Current IT treats the "1" and "0" as weightless numbers. Because current hardware provides no physical "friction" to stop a bit from flipping, our digital world is inherently unstable.
+Modern IT treats the "1" and "0" as weightless numbers. Because current hardware provides no physical "friction" to stop a bit from flipping, our digital world is inherently unstable.
 
 ### 3.1 The Energy-Reliability Gap
-As of Q1 2026, the global AI industry is hitting a "Thermal Wall." **IEA (2025)** reports show that energy consumption for AI "reasoning" is rising exponentially while reliability plateaus. This is because modern AI "guesses" the truth. Without a physical anchor, a reasoning chain eventually drifts into **Executive Hallucination**—taking real-world actions based on weightless data.
+As of Q1 2026, the global AI industry has collided with a "Thermal Wall." **IEA (2025)** data demonstrates that as compute power scales, energy consumption rises exponentially while reasoning reliability plateaus. This occurs because modern AI "guesses" the truth through probability. Without a physical anchor, long reasoning chains eventually drift into **Executive Hallucination**—a state where a system executes real-world actions based on weightless, unverified data.
 
-### 3.2 The Security Void
-In standard hardware, an unauthorized change costs the same as an authorized one. Software-based security is merely more weightless logic. As **Hylton (2025)** argues, true security cannot be achieved through abstract rules; it must be enforced by the physical properties of the machine itself.
+### 3.2 The Security Void (The "Zero-Day" Vulnerability)
+In standard hardware, an unauthorized user can change a system command silently because the hardware does not require a specific energy investment for that change. Software-based security (firewalls, encryption layers) is merely more weightless logic stacked on a shaky foundation. As **Hylton (2025)** argues, true security cannot be achieved through abstract rules; it must be enforced by the physical properties of the machine itself.
 
 ---
 
 ## 4. Axiom I: The Law of the Morphic Well
 
-**Axiomatic Statement:** *A logical state is a physical structure. To maintain that structure against the Arrow of Time requires a potential energy barrier.*
+**Axiomatic Statement:** *Logic is a Physical State. Truth is not a calculation; it is a structural investment in the substrate.*
 
 ### 4.1 The Stability Formula ($S$)
-We define the stability of a digital fact as:
+We define the stability of any digital fact as a ratio of applied Potential ($E$) to environmental entropy ($\eta$):
 $$S \propto \frac{E}{\eta}$$
-*   **$E$ (Potential Energy):** The "depth" of the energy well holding the bit.
-*   **$\eta$ (Entropy/Noise):** The thermal and electromagnetic interference of the environment.
+To keep a "Truth" stable, the system must "sink" it into a **Morphic Well**—a physical barrier that noise cannot overcome without an authorized energy injection.
 
-### 4.2 The Justification (Derivation from Boltzmann)
-To a student, this is "Common Sense": A ball in a deep hole ($E$) is harder for a wind gust ($\eta$) to blow away. To an expert, this is a derivation of **Boltzmann’s Law**. The probability ($P$) of a bit flipping spontaneously is $P \propto e^{-E/k_B T}$. 
-1.  **Instability:** If $E \to 0$ (current weightless IT), the probability of error is high.
-2.  **Morphic Solution:** By dedicating energy ($E$) to the state, we create a **Morphic Well**. 
-3.  **Result:** The hardware itself resists the "flip" of a hallucination or a hack. **[For full mathematical proofs, see Series 02: FORMALISMS]**.
+### 4.2 The Landauer Anchor (Boltzmann Derivation)
+This axiom is consistent with **Landauer’s Principle**, which states that erasing information must release heat. Following Boltzmann's distribution, the probability ($P$) of an unauthorized state-change is $P \propto e^{-E/k_B T}$. By increasing the Morphic Well depth ($E$), we make logical error or "hallucination" a physical impossibility for a given energy budget.
 
 ---
 
-## 5. Axiom II: The Law of Stoichiometry (The Resource Model)
+## 5. Axiom II: The Law of Stoichiometry (The Five States)
 
-**Axiomatic Statement:** *A computation is a phase transition. No state can be created without the consumption of specific thermodynamic reagents.*
+**Axiomatic Statement:** *Logical interactions are physical reactions. No state can be created without the consumption of specific thermodynamic reagents.*
 
-### 5.1 The Quantale Families (The Five States)
-We define five categories of energy reagents (Quantales) required to stabilize any digital world:
-1.  **CRYSTAL (Solid):** Reagents for **Hard Facts and Identity**.
-2.  **FLUID (Liquid):** Reagents for **Motion and Sensory Data**.
-3.  **CAUSAL (Temporal):** Reagents for the **Arrow of Time**, anchored by the **Ouroboros Ratchet** (a one-way causal history). **[See Paper 02e]**.
-4.  **PLASMA (Potential):** Reagents for **Possibilities and Fictions**.
-5.  **VOID (Dissipative):** Reagents for **Erasure and Privacy**.
+### 5.1 The Families of Digital Matter (Physical Grounding)
+We justify the five categories of Quantale reagents by their physical **Degrees of Freedom**:
+1.  **CRYSTAL (Inertial):** Zero degrees of freedom. Used for **Hard Facts and Identity**.
+2.  **FLUID (Kinetic):** Translational degrees of freedom. Used for **Sensory Data and Motion**.
+3.  **CAUSAL (Temporal):** One-way degrees of freedom. Reagents that enforce the **Arrow of Time**.
+4.  **PLASMA (Potential):** Chaotic degrees of freedom. Used for **Simulations and Fictions**.
+5.  **VOID (Dissipative):** Sub-threshold degrees of freedom. Energy required to **Erase** or "Silence" noise.
 
-### 5.2 The Stoichiometric Proof (Interaction as Reaction)
-In chemistry, you cannot produce product if you lack the reagents. In an MTS, every interaction is a **Morphic Handshake**.
-*   **The Mechanism:** If a "Fluid" process tries to modify a "Crystal" process, the **Quantale Algebra** identifies a **Symmetry Violation** (a mismatch in energy-types).
-*   **The Result:** The reaction lacks the "Crystal reagent" to proceed. The gate stays **Silent**. Security is now a result of "Logical Chemistry," making unauthorized access a physical impossibility. **[See Series 03 for the Periodic Table of Reagents]**.
+### 5.2 The Symmetry Handshake
+In a Morphic Thermodynamic System (MTS), an interaction between data is a **Symmetry Match**. If a "Fluid" process (light data) attempts to bond with a "Crystal" process (hard facts), the **Quantale Algebra** identifies a mismatch in reagents. The gate remains **Silent**. Security is no longer a check; it is a **Physical Refusal**.
 
 ---
 
-## 6. Strategic Rationale: The Human Perspective
+## 6. Axiom III: The Law of Source Consistency (The Trinity of Worlds)
 
-### 6.1 Substrate Independence
-Because MT is based on **Topology (Shape)** and **Thermodynamics (Heat)** rather than specific binary arithmetic, it is "Hardware Agnostic." Whether a future chip uses 2 states (Binary) or $N$ states (N-ary), the **"Morphism"** (the shape of the logic) remains consistent.
+**Axiomatic Statement:** *Information cannot exist ex-nihilo. Every state in a Simulated or Fictional world must be anchored to a Real-World source.*
 
-### 6.2 The Sovereign Shield
-By grounding logic in the physical silicon of a local device, we ensure that **Sovereignty** is local. Your "Truth" cannot be over-written by a remote "Cloud AI" because that remote system does not have the physical "Reagents" of your local chip to melt your local Crystal facts.
+### 6.1 The Anchor Mechanism
+A **Plasma** state (Fiction or Simulation) is only stable if it is "Bonded" to a **Crystal** or **Causal** reagent in the Real World. Without this link, the data lacks a physical witness and is treated as thermodynamic vapor—evaporated by the system to prevent the propagation of hallucinations.
+
+### 6.2 Demonstrations of Lineage
+*   **The Fictional Example:** The *Harry Potter* series exists in a **Fictional** (Plasma) state, but its integrity is anchored in the **Real-World** (Causal) history of its author and the **Crystal** matter of physical books and servers.
+*   **The Design Example:** This MT Research Complex exists as a **Simulated** (Plasma) design in this repository, but its transition to reality occurs when instantiated on the **Samsung Exynos 1580** silicon, where the chip's physical **PUF** (Physical Unclonable Function) becomes the **Real-World** source.
 
 ---
 
-## 7. Bibliography (IRL Consensus Anchors)
+## 7. Strategic Rationale: The Human Perspective
 
-1.  **IEA (International Energy Agency).** (2025). *"Electricity 2025: Analysis and Forecast."* [Evidence of the Energy-Reliability Gap].
-2.  **Hylton, T. (UC San Diego).** (2025). *"Thermodynamic Computing: A Roadmap."* CCC Report. [Mandate for physical self-organization].
-3.  **Hsieh, C.-Y.** (2025). *"Dynamical Landauer Principle: Quantifying Information Transmission."* Physical Review Letters 134. [Mathematical Basis for Axiom I].
-4.  **Sorkin, R. D.** (2024 Update). *"Causal Sets: Discrete Physics and the Architecture of Time."* [Supporting our Causal Reagent logic].
-5.  **Girard, J.-Y.** (1987/2024 Update). *"Linear Logic and Resource-Aware Computation."* [Providing the inspiration for Axiom II].
+### 7.1 Substrate Independence
+Because MT is based on **Topology (Shape)** and **Thermodynamics (Heat)** rather than specific binary arithmetic, it is "Hardware Agnostic." Whether a future chip uses 2 states (Binary) or $N$ states (N-ary), the "Shape of the Truth" remains the same.
+
+### 7.2 The Sovereign Shield
+By grounding logic in the physical silicon of a local device, we ensure that **Sovereignty** is local and physical. Your "Truth" cannot be over-written by a remote "Cloud AI" because that remote system does not have the physical "Reagents" of your local chip to melt your local Crystal facts.
+
+---
+
+## 8. Bibliography (IRL Consensus Anchors)
+
+1.  **IEA (International Energy Agency).** (2025). *"Electricity 2025: Analysis and Forecast to 2027."* [Documenting the global compute energy crisis].
+2.  **Hylton, T. (UC San Diego).** (2025). *"Thermodynamic Computing: A Roadmap."* CCC Report. [Foundational roadmap for physical computing].
+3.  **Hsieh, C.-Y.** (2025). *"Dynamical Landauer Principle: Quantifying Information Transmission."* Physical Review Letters 134. [Mathematical proof for logic energy costs].
+4.  **Sorkin, R. D.** (2024 Update). *"Causal Sets: Discrete Physics and the Architecture of Time."* [Supporting Causal reagents].
+5.  **Villani, C.** (2024 Update). *"Optimal Transport and the Geometry of Information."* [Supporting state-alignment and Fluid logic].
+6.  **Girard, J.-Y.** (1987/2024 Update). *"Linear Logic and Resource-Aware Computation."* [Inspiration for resource-bound logic].
+
+---
+*End of Document 01a.*
+*The next axiom (Axiom IV: The Law of In-Situ Alignment) will be introduced in Paper 01b.*
