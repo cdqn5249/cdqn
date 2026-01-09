@@ -37,7 +37,7 @@ A bit cannot be a single point (e.g., exactly 1.000... Volts) because a point ha
 
 $$v \in V \iff |v - \text{target}| < \epsilon$$
 
-*Conclusion: Information requires **Volume** to survive reality.*
+Conclusion: Information requires **Volume** to survive reality.
 
 ---
 
@@ -61,7 +61,7 @@ To force a bit to flip (change its value), one must perform **Work** ($W$) to cl
 
 $$W_{attack} > E$$
 
-*If the attack energy is less than the well depth ($E$), the value $v$ naturally falls back into the center. The truth is physically "trapped."*
+If the attack energy is less than the well depth ($E$), the value $v$ naturally falls back into the center. The truth is physically "trapped."
 
 ---
 
@@ -74,7 +74,7 @@ In physics, the probability ($P$) of noise ($\eta$) accidentally "jumping" a bar
 
 $$P_{error} \propto e^{-E/\eta}$$
 
-*This means that if you double the noise, the chance of a mistake doesn't just double—it explodes.*
+This means that if you double the noise, the chance of a mistake doesn't just double—it explodes.
 
 ### 4.2 The Governing Index (The Student View)
 While the physics is a complex curve, the **Loom Virtual Machine (LVM)** uses a simpler linear metric called the **Morphic Stability Index ($S$)**:
