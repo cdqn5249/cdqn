@@ -36,6 +36,7 @@ In traditional IT, a "Write" operation is like teleporting. You replace a `0` wi
 Let $d$ be the "Logical Distance" (the difference) between two states.
 The energy cost to connect or change them is:
 $$\text{Cost} = M_\sigma \times d$$
+
 *Conclusion: The heavier the truth ($M_\sigma$) and the bigger the change ($d$), the more energy you must spend.*
 
 ---
@@ -49,6 +50,7 @@ How do we measure the "Distance" ($d$) between two complex ideas or data units (
 **Derivation 2:**
 If two pieces of data ($A$ and $B$) are brought together in the same **Deck**, the system calculates the "Tear" between them:
 $$\mathcal{T} = \text{Shape}(A) - \text{Shape}(B)$$
+
 *If $\mathcal{T} = 0$, the pieces are **Resonant**. If $\mathcal{T} > 0$, they are in **Dissonance**.*
 
 ---
