@@ -34,14 +34,17 @@ A bit cannot be a point (e.g., exactly 1.0V) because a point has no room for the
 *   **The Condition:** A value $v$ is true if it stays within a distance ($\epsilon$) of our target.
 
 **Derivation 1 (The Bound):**
+
 $$v \in V \iff |v - \text{target}| < \epsilon$$
-*Conclusion: Information requires **Volume** to survive reality.*
+
+* Conclusion: Information requires **Volume** to survive reality.
 
 ---
 
 ## 4. Step 2: The Introduction of Displacement (Noise $\eta$)
 
 Everything in the universe is subject to random thermal and electromagnetic fluctuations. We call this **Noise ($\eta$)**.
+
 *   **The Observation:** If our region $V$ is flat, any noise ($\eta > 0$) will eventually displace the value $v$ until it exits the region $V$.
 *   **The Result:** A flat bit has zero long-term stability. It will eventually "drift" (hallucinate).
 
@@ -55,8 +58,10 @@ To prevent drift, we turn the region into a **Well**.
 
 **Derivation 2 (The Work Threshold):**
 To force a bit to flip (change its value), one must perform **Work** ($W$) to climb the barrier:
+
 $$W_{attack} > E$$
-*If the attack energy is less than $E$, the value $v$ naturally falls back into the center of the well.*
+
+* If the attack energy is less than $E$, the value $v$ naturally falls back into the center of the well.
 
 ---
 
@@ -66,11 +71,14 @@ We now define how we measure the "Safety" of our data.
 
 ### 4.1 The Probability of Failure (The Exponential Law)
 In physics, the probability ($P$) of noise ($\eta$) accidentally "jumping" a barrier ($E$) follows an exponential curve:
+
 $$P_{error} \propto e^{-E/\eta}$$
-*If $E$ is small compared to $\eta$, the bit flips constantly. If $E$ is large, the probability of error drops to near-zero instantly.*
+
+* If $E$ is small compared to $\eta$, the bit flips constantly. If $E$ is large, the probability of error drops to near-zero instantly.
 
 ### 4.2 The governing Index ($S$)
 While the physics is exponential, the **LVM (Loom Virtual Machine)** requires a linear metric for easy scheduling and energy-budgeting. We define the **Morphic Stability Index ($S$)** as the ratio:
+
 $$S = \frac{E}{\eta}$$
 
 **The Threshold Theorem:**
