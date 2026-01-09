@@ -3,96 +3,94 @@
 **Morphic Thermodynamics (MT) Research Complex**
 *   **Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Path:** [docs/research/v2.0/01d-LANGUAGE.md](https://github.com/cdqn5249/cdqn/blob/main/docs/research/v2.0/01d-LANGUAGE.md)
-*   **Series:** 01: THE MANDATE (The "Why" of the Morphic Turn)
-*   **Version:** 2.0.0 (Consecutive Demonstration Standard)
-*   **Status:** Greenpaper / Official Standard
-*   **Date:** January 6, 2026
-*   **License:** [Universal Sovereign Source License (USSL) v2.2](https://github.com/cdqn5249/cdqn)
+*   **Series:** 01: THE MANDATE (The "Why") | **Version:** 2.2.0
+*   **Date:** January 9, 2026 | **Status:** Greenpaper / Official Standard
+*   **License:** [Universal Sovereign Source License (USSL) v2.2]
 *   **Copyright:** (c) 2025-2026 Christophe Duy Quang Nguyen
 
 ---
 
 ## 1. Abstract
-The "Software Crisis" of 2025-2026 is defined by a global accumulation of **61 billion workdays** in technical debt, where nearly half of all existing code is deemed "fragile" and prone to catastrophic failure (**CAST, 2025**). This paper identifies the root cause: current programming languages (Python, Rust, C++) are **Imperative**, focusing on *how* to move bits rather than *what* those bits mean. We propose **`cdqnLang`**: a **Categorical Programming Language** designed as the universal interface for Morphic Thermodynamic Systems (MTS). By deriving the **Axiom of Categorical Resonance**, we demonstrate a paradigm where programming is the act of **Lamination** (stacking layers of meaning) rather than instruction, ensuring that code is physically and logically incapable of contradicting its source.
+The "Software Crisis" of 2026 is defined by a global accumulation of **60 billion workdays** in technical debt, caused by the inherent fragility of imperative programming. This paper identifies the root cause: current languages (Python, Rust) treat code as instructions for a processor rather than a description of a world. We propose **`cdqnLang`**: a **Categorical Programming Language** that synthesizes the non-linear object-navigation of **HyperCard** with the combinatorial strategy of **Trading Card Games (TCGs)**. By deriving the **Axiom of Categorical Resonance**, we demonstrate a paradigm where "Programming" is the construction of **Decks** composed of **Cards (CDUs)**. Each card carries its own types, rules, and **Quantale Costs**, ensuring that logic is physically and logically consistent by its very shape.
 
 ---
 
 ## 2. Glossary for the Sovereign Reader
 
-*   **Imperative Programming:** The traditional way of coding (Python/Rust) by giving a computer a list of "Step-by-Step" instructions to follow.
-*   **Categorical Programming:** A new method (`cdqnLang`) based on **Category Theory**, where code defines the "Relationship" between data units rather than steps.
-*   **cdqnLang:** The specialized language used to author the lamination of digital matter in the LVM.
-*   **Deck:** A collection of related **CDUs (Card Data Units)** that form a specific context (e.g., a "Physics Deck" or a "Legal Deck").
-*   **Keyword Resonance:** The mechanism where two CDUs only "Glue" together if their physical and logical capabilities match.
-*   **Technical Debt:** The "interest" paid in bugs, heat, and effort for poorly written or fragile code.
+*   **HyperCard Metaphor:** The 1987 paradigm where information is organized into "Cards" and "Stacks" rather than files.
+*   **Combinatorial Logic:** A system where behavior emerges from the interaction of discrete elements with specific properties (like an MTG deck).
+*   **Card (CDU):** The irreducible unit of `cdqnLang`. It has **Types**, **Sub-types**, **Abilities** (logic), and **Quantale Costs**.
+*   **Deck:** The "Program" or "MTS Instance"; a collection of cards stacked (laminated) to solve a problem or build a world.
+*   **Geometric Tension ($\mathcal{T}$):** The "Heat Map" provided by the compiler to show the user where two cards are incompatible.
+*   **Quantale Stoichiometry:** The requirement that a card's "Abilities" can only trigger if the user provides the correct energy reagents (`01a`).
 
 ---
 
-## 3. The Diagnostic: The Tower of Fragile Abstraction (2026)
+## 3. The Diagnostic: The Failure of Instruction-Based Coding
 
-Current software is built on a "Sinkhole" of technical debt. We are spending more energy fixing yesterday's code than building tomorrow's world.
+Modern software assumes a bit is just a bit. Because data has no "Identity" or "Rules" attached to it at the physical level, current languages create "Logic Hallucinations."
 
-### 3.1 The Failure of Memory Safety
-While languages like **Rust** have solved "Memory Safety" (preventing crashes), they have failed to solve **"Meaning Safety."** As documented in the **CAST 2025 Report**, 45% of global code is "Fragile"—meaning it functions correctly in isolation but creates "impossible states" (Logical Hallucinations) when combined. This is because current languages treat data as a "Blob" of memory rather than a **Morphic Shape**.
+### 3.1 The "Flat Data" Vulnerability
+In Python or C++, data is "Flat." A number can be a price, a coordinate, or a virus; the language doesn't know. This lack of **Contextual Armor** is why we need external "Security Layers." As established in `01b`, once a "Flat" instruction moves across the Bus, its meaning is lost to the hardware.
 
-### 3.2 The Provenance Gap
-In early 2026, the lack of **Digital Provenance** (proving where data came from) has become a multi-billion dollar risk for organizations (**Gartner, 2026**). Current languages have no internal mechanism to enforce **Source Consistency** (`01a`). A Python script cannot tell the difference between a real-world sensor input and a simulated spoof. The code is "context-blind."
+### 3.2 The Debugging Abyss
+Because imperative logic is a sequence of steps, a bug at Step 1 can hide until Step 1000. This is the root of **Technical Debt**. We are spending trillions to "Simulate" stability through testing, rather than building systems that are **Correct-by-Construction**.
 
 ---
 
 ## 4. Axiom VI: The Law of Categorical Resonance
 
-**Axiomatic Statement:** *A program is not a sequence; it is a lamination. Logic exists only where manifolds resonate.*
+**Axiomatic Statement:** *A program is not a sequence; it is a lamination. Logic exists only where digital matter resonates.*
 
-### 4.1 The Alignment Hypothesis
-We posit that **`cdqnLang`** does not "Execute." It "Aligns." 
-*   **The Demonstration:** In traditional coding, you say: `x = y + z`. In `cdqnLang`, you place the "Card" for `Y` and the "Card" for `Z` in the same **Deck**.
-*   **The Result:** The system identifies if they **Resonate**. If the "Symmetry Class" of the cards matches, the **Loom Virtual Machine (LVM)** weaves them into a stable state. If they don't, the code physically cannot compile. It is "un-gluable."
+### 4.1 The Alignment Hypothesis (The MTG Bridge)
+We propose that `cdqnLang` moves the developer from "Writing" to **"Constructing."**
+*   **The Card:** A developer authors a CDU with specific properties (e.g., Type: `Financial`, Sub-type: `Crystal`, Ability: `Non-Repudiation`, Cost: `1 Crystal Reagent`).
+*   **The Interaction:** When this card is placed in a **Deck**, the system checks its **Resonance** with the neighbors.
+*   **The Result:** The logic is "Static." It doesn't "Run"; it **Crystallizes**. If the cards in the deck satisfy each other's rules, the manifold is stable.
 
-### 4.2 The Justification (From Logic to Shape)
-To a student: Coding is no longer writing a "Recipe"; it is building with **Lego bricks** that only snap together if they are the right shape. 
-To an expert: This is the application of **Condensed Mathematics** (Scholze, 2025). We treat code as a **Sheaf** over a topological space.
-1.  **Topological Safety:** A `cdqnLang` program is a "Global Section" of a sheaf. It is a mathematical proof of consistency.
-2.  **Resource Stoichiometry:** Because the language is categorical, it enforces the **Quantale Reagents** (`01a`) at the syntax level. You cannot "cast" a Crystal spell with Fluid mana.
-
----
-
-## 5. The Structure of Truth: Decks and Keywords
-
-`cdqnLang` uses high-level metaphors grounded in **Category Theory** to make formal verification intuitive for the "Mass Smart" workforce.
-
-### 5.1 The CDUs as Atoms (Cards)
-Data is never "raw." Every piece of information in `cdqnLang` is a **CDU (Card Data Unit)**. 
-*   **Content:** The data (Fluid or Crystal).
-*   **Signature:** A set of **Keywords** (e.g., `Inelastic`, `Causal_Bound`, `Real_World_Source`).
-*   **Policy:** The local rule for how this CDU can be laminated.
-
-### 5.2 The Lamination Process (The Deck)
-Programming is the act of "Stacking" these cards into **Decks**.
-*   **Geometric Tension:** If a user tries to stack a "Fictional" card on top of a "Real-World" bank balance, the **LVM** calculates a **Geometric Tension** spike. 
-*   **The Outcome:** The system refuses the lamination. The code remains **Silent**. This makes "Logic Hallucinations" and "Zero-Day Exploits" physically impossible to author.
+### 4.2 The Justification: The Geometric Tension Map
+To a student: It is like building a **Lego Castle**. If a brick doesn't fit, it doesn't "Crash"; you simply see that it is sticking out.
+To an expert: This utilize **Sheaf Gluing Conditions** (`02b`). 
+1.  **Compiler Feedback:** If the user attempts to glue two incompatible cards (e.g., a "Fictional" rule onto a "Real-World" bank fact), the compiler generates a **Geometric Tension** report.
+2.  **Physical Veto:** The compiler refuses to "Crystallize" (build) the deck until the tension is zero. This ensures that a "Logic Hallucination" is physically impossible to deploy.
 
 ---
 
-## 6. Strategic Rationale: The Human Perspective
+## 5. The Structure of a cdqnLang Program
 
-### 6.1 Substrate & Language Independence
-Because `cdqnLang` describes **Relationships (Morphisms)** rather than binary arithmetic, it is the first language that is truly **Substrate Agnostic**. A developer authors the logic once, and the LVM weaves it onto **Binary**, **Ternary**, or **N-ary** hardware without modification. It is the language of the "Decadal Bridge."
+We move from "Code Files" to "Morphic Decks."
 
-### 6.2 Bypassing the Technical Debt Sinkhole
-By moving from "Fragile Instructions" to **"Stable Manifolds,"** `cdqnLang` eliminates the need for 90% of traditional debugging and security auditing. We are not "testing" code for errors; we are **weaving** logic that is correct by its very physical shape.
+### 5.1 Card-Based Ontology (HyperCard Inspiration)
+Following the **HyperCard** model, `cdqnLang` treats every piece of data as a sovereign object. 
+*   **Encapsulation:** A card contains its data, its **Causal Spine** (`01c`), and its **MTS Rules**. 
+*   **Portability:** Because the rules are *on* the card, the card is sovereign. You can move a "Legal Contract Card" from your Phone to a **National Anchor** (`01k`) and its rules remain physically enforced.
+
+### 5.2 Combinatorial Emergence
+Similar to a TCG, complex system behavior is the result of **Synergy**.
+*   **Abilities:** Cards have "Triggered Abilities" based on the environment. 
+*   **Example:** A "Privacy Card" in a deck might have the ability: *"If a non-resonant node attempts a Handshake, trigger VOID Damping."* 
+*   **Outcome:** The system's security is an emergent property of the cards the user chose to laminate into their Deck.
 
 ---
 
-## 7. Bibliography (IRL Verified Anchors)
+## 6. Strategic Rationale: The Mass Smart Interface
 
-1.  **CAST Software.** (Sept 24, 2025). *"Coding in the Red: The State of Global Technical Debt 2025."* [Documenting the 61-billion-workday software crisis].
-2.  **Gartner.** (Oct 20, 2025). *"Top Strategic Technology Trends for 2026: Digital Provenance and AI-Native Platforms."* [Evidence for the strategic need for provenance].
-3.  **Bytecode Alliance.** (2025-2026 Roadmap). *"WASI 0.3 (Preview 3) and the Component Model."* [The real-world move toward language-agnostic modular composition].
-4.  **Scholze, P.** (Jan 2024 - 2025 Updates). *"Lectures on Analytic Geometry and Analytic Stacks."* [The mathematical basis for Categorical Lamination].
-5.  **Titzer, B. L.** (2025). *"Wasm as the Universal Execution Format for Heterogeneous Systems."* [Supporting our "Decadal Bridge" strategy].
-6.  **Wadler, P.** (2024 Update). *"Propositions as Types, Categories as Terms."* [Supporting the "Correct-by-Construction" categorical paradigm].
+### 6.1 Bypassing the Language Barrier
+Because `cdqnLang` is based on **Visual Lamination** and **Combinatorial Logic**, it is the first language accessible to non-programmers. A lawyer constructs a "Legal Deck"; a writer constructs a "Fiction Deck." They are constructing **Physical Truths**, not "Apps."
+
+### 6.2 The Decadal Grammar
+`cdqnLang` is the definitive grammar for the **Trinity of Worlds**. It allows humanity to abstract reality without losing the thread of physics. By grounding the "Abilities" of a card in **Quantale Costs**, we ensure that "Digital Magic" stays in the **Fictional World** and "Sovereign Law" stays in the **Real World**.
+
+---
+
+## 7. Bibliography (IRL Consensus Anchors)
+
+1.  **Atkinson, B. (Apple).** (1987). *"The HyperCard User's Guide."* [Foundational inspiration for card-based non-linear data organization].
+2.  **Garfield, R.** (1993/2025 Ref). *"Magic: The Gathering – The Pocket Guide to Combinatorial Strategy."* [Foundational inspiration for rule-based object interaction].
+3.  **CAST Software.** (2025). *"Global Technical Debt Report."* [Documenting the failure of instruction-based coding].
+4.  **Wadler, P.** (2024). *"Propositions as Types, Categories as Terms."* [The mathematical bridge between TCG logic and Category Theory].
+5.  **Bodnar, C.** (2025 Update). *"Topological Deep Learning and the Geometry of Data."* [Support for the lamination-based construction of meaning].
 
 ---
 *End of Document 01d.*
-*The next paper (01e-THE MTS: The Morphic Thermodynamic System) will define the governance of this environment.*
+*The next paper (01e-THE MTS: An Alternative Paradigm for Thermodynamic Governance) will define the kernel that enforces this card-based grammar.*
