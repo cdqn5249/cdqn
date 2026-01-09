@@ -70,6 +70,7 @@ We now define **Stability ($S$)** as the "Safety" of the bit—how well it resis
 
 **The Final Derived Formula:**
 By combining these two logical observations, we arrive at the fundamental equation of Morphic Thermodynamics established in Paper `01a`:
+
 $$S = \frac{E}{\eta}$$
 
 *   **Student Proof:** If $E=10$ and $\eta=1$, the bit is very stable. If $\eta$ rises to $10$, the bit is instantly unstable ($S=1$).
