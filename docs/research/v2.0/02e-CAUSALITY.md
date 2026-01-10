@@ -49,7 +49,7 @@ The "Time" ($\tau$) of a digital state is the count of its irreversible transiti
 
 $$\tau = \sum (\text{Handshakes performed since Genesis})$$
 
-*Result: You cannot reach $\tau=10$ without passing through $\tau=9$. Time is a physical count of energy spent.*
+* Result: You cannot reach $\tau=10$ without passing through $\tau=9$. Time is a physical count of energy spent.
 
 ---
 
