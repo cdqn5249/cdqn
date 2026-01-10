@@ -35,9 +35,12 @@ In high school physics, you cannot move an object without spending energy. In Mo
 
 **Derivation 1 (The Minimum Cost):**
 The minimum energy ($E_{min}$) required to flip a single bit is:
+
 $$E_{min} = k_B \times T \times \ln 2$$
+
 *   **$T$:** The temperature of the chip.
 *   **$\ln 2$:** The mathematical cost of choosing between two options (0 or 1).
+
 *Conclusion: No bit is weightless. Nature has set a minimum "Price of Truth."*
 
 ---
@@ -50,6 +53,7 @@ If $E_{min}$ is the cost to **break** a bit, we can use that same value to measu
 
 **Derivation 2 (The Total Energy $E$):**
 We now have a value for the $E$ in our Stability formula ($S = E/\eta$):
+
 $$E = M_\sigma \times (k_B T \ln 2)$$
 
 ---
