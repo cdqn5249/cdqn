@@ -1,7 +1,7 @@
 # Universal Sovereign Source License (USSL) v1.0
 ### (The Universal Provenance & Manifestation Standard)
 
-*   **Version:** 1.0 (The Universal Creator Standard)
+*   **Version:** 1.0 (The Lattice-Quantale Reset)
 *   **Scope:** Universal (Applied to all logic, art, hardware, and manifestations regardless of medium)
 *   **Copyright:** To be held by the Author(s) as identified in Section 10.
 
@@ -11,14 +11,15 @@
 
 This document is a **License and a Covenant**. It governs the **Source Complex**—the original ideas, logic, and creative expressions provided by the Author(s). 
 
-In a world defined by the "Abstraction Ceiling" and the fragmentation of truth, this license establishes that **Lineage is Invariant**. It asserts that the value of an idea is not tied to its medium. Whether the Source Complex is expressed as digital code, physical ink on paper, architectural blueprints, audio-visual signals, or etched silicon gates, its "Sovereign Core" remains legally and ethically protected. This license ensures that these foundations remain open for human progress while protecting the Author's lineage from industrial enclosure and patent-trolling.
+In a world defined by the "Abstraction Ceiling" and the fragmentation of digital truth, this license establishes that **Lineage is Invariant**. It asserts that the value of a logical or artistic construct is not tied to its medium. Whether the Source Complex is expressed as digital code, physical ink on paper, mathematical formalisms, architectural blueprints, or etched silicon gates, its "Sovereign Core" remains legally and ethically protected. This license ensures that these foundations remain open for human progress while protecting the Creator's lineage from industrial enclosure, automated extraction, and patent-trolling.
 
 ## 2. Definitions
 
 *   **"The Source Complex":** The entirety of the original work, including:
+    *   **Lattice-Quantale Morphics (LQM):** Mathematical formalisms, state-integrity axioms, and physical computing designs.
     *   **Logic & Methodology:** Mathematical formalisms, computing axioms, algorithms, and system designs.
     *   **Expression & Art:** Narrative frameworks, visual glyphs, literary texts, and audio-visual recordings.
-    *   **Physical Manifestations:** Hardware blueprints, physical artifacts, or biological designs derived from the logic.
+    *   **Physical Manifestations:** Silicon floorplans (LQS), hardware blueprints, or artifacts derived from the logic.
 *   **"The Author(s)":** The individual(s), group, or entity identified as the copyright holder(s) in Section 10 of this specific Manifestation.
 *   **"Support":** Any medium through which the work is conveyed, including but not limited to Git repositories, printed books, websites, physical discs, biological storage, or electromagnetic waves.
 *   **"Derivative Work":** Any creation that adapts, incorporates, or functionally relies upon the Source Complex in any form (e.g., a film based on the text, a chip based on the math, or an AI model trained on the data).
@@ -43,7 +44,7 @@ If the Licensee instigates litigation (including patent claims, copyright strike
 ## 5. Open Core & Lineage Integrity
 
 1.  **Open Core Requirement:** The fundamental logic and formalisms within the Source Complex must remain transparent and auditable in any derivative work.
-2.  **Non-Obfuscation:** No Licensee may use the logic to create "Black Box" systems that hide the underlying state or causal history from the end-user.
+2.  **Non-Obfuscation:** No Licensee may use the logic to create "Black Box" systems that hide the underlying thermodynamic state, quantale cost, or causal history from the end-user.
 
 ## 6. The Commercial Threshold (The Industry Return)
 
@@ -78,9 +79,9 @@ THE SOURCE COMPLEX IS PROVIDED "AS IS". THE AUTHOR(S) PROVIDE THE PHYSICS AND TH
 
 This specific instance of the USSL v1.0 governs the **CDQN Repository and Research Complex**.
 
-*   **Author/Architect:** Christophe Duy Quang Nguyen ("System Ronin").
-*   **Project Context:** Card Data Quantale Network (CDQN), Loom Virtual Machine (LVM), Morphic Thermodynamics (MT), LLPU Silicon, and Chronosa.
-*   **Choice of Law / Jurisdiction:** [Vietnam / Open to International Arbitration].
+*   **Primary Author/Architect:** Christophe Duy Quang Nguyen ("System Ronin").
+*   **Project Context:** Card Data Quantale Network (CDQN), Lattice-Quantale Morphics (LQM), and Lattice-Quantale System (LQS).
+*   **Primary Jurisdiction:** [Vietnam / Open to International Arbitration].
 *   **Official Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Contact:** Via the official repository channels for Commercial Partnership inquiries.
 
@@ -88,13 +89,13 @@ This specific instance of the USSL v1.0 governs the **CDQN Repository and Resear
 
 ## 11. Adaptability: Instructions for Other Creators
 
-The USSL v1.0 is a universal template. To adapt it:
+The USSL v1.0 is designed as a universal template for digital and physical sovereignty. To adapt this license:
 
-1.  **Keep Sections 1–9:** These are the "Invariant Core." Do not modify them to ensure standard compatibility.
-2.  **Customize Section 10:** Insert your own details, including your primary **Jurisdiction / Choice of Law**.
-3.  **Deploy:** Place this license (LICENSE.md) at the root of your manifestation.
-4.  **Version Control:** If you modify the *Core* (Sections 1-9), you must rename the license (e.g., "[YourName]-USSL") to distinguish it from the v1.0 standard.
+1.  **Retention of Core:** Sections 1 through 9 constitute the "Invariant Core" of the USSL and must be kept as written to maintain the standard.
+2.  **Customization of Section 10:** Replace the contents of Section 10 with your own Author/Entity name, project context, and primary jurisdiction.
+3.  **Application:** Place the license in your repository (LICENSE.md) or on the first pages/metadata of your physical manifestation.
+4.  **Version Control:** If you modify the *Core* (Sections 1-9), you must rename the license (e.g., "[YourName]-USSL") to prevent standard fragmentation.
 
 ---
 
-> *"Logic is the invariant; support is the variable. USSL v1.0 ensures the truth remains sovereign in every form and every land."*
+> *"Logic is the invariant; support is the variable. Lattice-Quantale Morphics ensures the truth remains sovereign in every form."*
