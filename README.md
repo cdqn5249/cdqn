@@ -1,11 +1,11 @@
 # Card Data Quantale Network (CDQN)
 ### The International Laboratory for Lattice-Quantale Morphics (LQM)
 
-**Status:** `v1.0`
-**Field:** Lattice-Quantale Morphics (LQM)
-**System:** Lattice-Quantale System (LQS)
-**License:** Universal Sovereign Source License (USSL) v1.0
-**Location:** Vietnam (Substrate Focus: Universal / Adaptive)
+* **Status:** `v1.0`
+* **Field:** Lattice-Quantale Morphics (LQM)
+* **System:** Lattice-Quantale System (LQS)
+* **License:** Universal Sovereign Source License (USSL) v1.0
+* **Location:** Vietnam (Substrate Focus: Universal / Adaptive)
 
 ---
 
