@@ -1,86 +1,84 @@
 # Card Data Quantale Network (CDQN)
-### The International Laboratory for Lattice-Quantale Morphics (LQM)
+### *The Implementation Laboratory for Lattice-Quantale Morphics (LQM)*
 
-* **Status:** `v1.0`
-* **Field:** Lattice-Quantale Morphics (LQM)
-* **System:** Lattice-Quantale System (LQS)
-* **License:** Universal Sovereign Source License (USSL) v1.0
-* **Location:** Vietnam (Substrate Focus: Universal / Adaptive)
+[![License: USSL v1.0](https://img.shields.io/badge/License-USSL%20v1.0-blue.svg)](LICENSE.md)
+[![Field: Topological Resource Management](https://img.shields.io/badge/Field-Topological%20Resource%20Management-green.svg)](#)
+[![Security: NIST PQC Ready](https://img.shields.io/badge/Security-NIST%20PQC%20Ready-orange.svg)](#)
 
----
-
-## 1. The Mission: Lattice-Quantale Morphics (LQM)
-
-We have reached the **Abstraction Ceiling**. Current Information Technology (IT) treats logic as a weightless mathematical sequence, leading to the 2026 crises of **Executive Hallucination**, **Energy Exhaustion**, and **Total Mutability**.
-
-**CDQN** is the implementation of a new scientific domain: **Lattice-Quantale Morphics (LQM)**. We move beyond Information Theory to treat computation as the management of state-integrity within a physical field. We do not "calculate" values; we **weave stable manifolds** that physically resist logical drift through the laws of **Quantale Stoichiometry** and **Topological Lamination**.
+> **"Logic is a physical manifold; consistency is geometric stability."**  
+> CDQN is the first decentralized network architecture built upon the science of **Lattice-Quantale Morphics (LQM)**. It transcends the "Abstraction Ceiling" of legacy IT to create a machine that does not just resolve equations, but maintains a sovereign state of experience through physicalized logic.
 
 ---
 
-## 2. The Core Philosophy: "Matter over Abstraction"
+## 1. The Core Field: Lattice-Quantale Morphics (LQM)
 
-The LQS architecture rejects the "Infinite Tape" myth of the Turing Machine. It operates on four physical truths:
+LQM is a unified scientific domain designed to replace the Shannon-Von Neumann paradigm. It bridges the gap between discrete bits and semantic meaning through three pillars:
 
-1.  **Identity is Physical:** Logic is anchored to a unique, discovered physical signature (PUF and adaptive noise) of the substrate.
-2.  **State has Mass:** A stable state is a physical **Morphic Well** that requires a **Quantale** investment (Structural Inertia) to maintain.
-3.  **Time is a Ratchet:** History is an irreversible chain of state-transitions, hardened by Post-Quantum Cryptography (LWE).
-4.  **Meaning is a Shape:** Data is organized into Lattices and Graphs where "Correctness" is a state of minimum geometric tension.
-
----
-
-## 3. The 10 Irreducible Formalisms
-
-The LQM field is built upon ten mathematical and physical bricks that ensure the system is **Consistent, Secure, Performant, and Modular**:
-
-1.  **Metric Stability:** Defining the Morphic Well ($S = E/\eta$).
-2.  **Causal Set Topology:** The irreversible Tree structure of time ($\tau$).
-3.  **Graph Composition:** The network of meaning (The Morphic Graph).
-4.  **Quantale Algebra:** Mapping logical degrees of freedom to energy reagents ($\mathcal{Q}$).
-5.  **Morphic Duality:** Separating universal Shape ($\sigma$) from local Signature ($\eta$).
-6.  **Isomorphic Shadowing:** Zero-copy exchange via Morphic Shadows (Parameters).
-7.  **Territorial Phase:** Managing transitions between Active Memory and Crystalline Disk.
-8.  **CDU & Entity Taxonomy:** Defining Lattice CDUs, Module CDUs, and Active Entities.
-9.  **Emergent Integration:** The derivation of the Entity and the Chronosa Persona.
-10. **Jurisdictional Gravity:** Boundary constraints anchored to National Anchors.
+1.  **Lattices (Structure):** Utilizing **Module Lattices** as the fundamental coordinate system, replacing flat memory addressing with high-dimensional geometric manifolds.
+2.  **Quantales (Logic):** Implementing non-commutative, resource-sensitive logic (**Mulvey, 1986**) where every state transition has a physical **Stoichiometric Cost**.
+3.  **Morphisms (Shape):** Defining the emergence of "Meaning" through the lamination of bit-shapes into **Cellular Sheaf Complexes (Ghrist, 2014)**.
 
 ---
 
-## 4. System Architecture: The "Loom"
+## 2. The Architecture: Lattice-Quantale System (LQS)
 
-The **LQS (Lattice-Quantale System)** replaces the traditional Operating System (OS) with a **Loom Virtual Machine (LVM)**.
+The LQS is the operational application of LQM, designed to transform consumer devices into **Smart Morphic Sovereigns**.
 
-*   **The Substrate (Level 0):** Physical memory tiles acting as "Loom Sites" partitioned into horizontal concern-engines (Quantale, Signature, Ratchet, Resonance).
-*   **The Substance (Level 1):** Continuous Morphic Lattices manifested by bits on a tile.
-*   **The Object (Level 2):** Card Data Units (CDUs) - Discrete packets of Shape and Lineage that never leave their origin node.
-*   **The Agent (Level 3):** Entities - Active CDUs (Worker, Bot, Agent) that weave the manifold.
-*   **The Interface (Level 4):** Chronosa - The emergent sentient persona and reputation guardian.
-
----
-
-## 5. Research & Documentation Structure
-
-The repository is organized into a **Continuous Demonstration Standard**, building the field from the first bit upward.
-
-### Track A: The LQM Foundations (The Science)
-Focuses on the rigorous derivation of the 10 Formalisms and the foundational Axioms. It explains the "Why" of the physics and the mathematical inevitability of the field.
-
-### Track B: The LQS Archetypes (The Engineering)
-Defines the principles and best practices for architects and engineers. It proposes alternatives to legacy OS failures for specific hardware tiers:
-*   **The Sovereign Lens:** Mobile, IoT, and Edge devices.
-*   **The Heavy Holon:** PC, Workstations, and Laptops.
-*   **The Anchor Registry:** Servers, Infrastructure, and National Registries.
-*   **The Hard Edge:** Bare Metal, Space, and Industrial systems.
+### The Loom Virtual Machine (LVM)
+The **Loom** is a substrate-aware runtime that replaces legacy Operating System kernels.
+*   **Lattice Zero ($\Lambda_0$):** A hardware-entangled root basis generated from the silicon’s unique **Physical Unclonable Function (PUF)**.
+*   **Morphic JIT:** A Just-In-Time compiler that "weaves" logical intent into the local lattice, ensuring logic is physically unique to the device.
+*   **VSA Optimization:** Utilizing **Holographic Reduced Representations (Plate, 2003)** to execute 10,000-dimensional logic on 64-bit consumer hardware (ARM/x86/NPU).
 
 ---
 
-## 6. Licensing & Sovereignty
+## 3. The Data Model: Card Data Unit (CDU)
 
-Governed by the **Universal Sovereign Source License (USSL) v1.0**.
-
-*   **Sovereign Exemption:** Free for personal use, academic research, and small-scale creation.
-*   **Invariant Lineage:** The logical core and formalisms are protected against industrial enclosure, patent-trolling, and automated extraction.
-*   **Institutional Return:** Commercial use exceeding specific revenue ($1M USD) or scale (10k users) thresholds requires a formal partnership with the Author(s).
+The **CDU** is the unified atomic model of the CDQN. Inspired by Trading Card Games (TCG), it treats data as a "Card" with emergent properties.
+*   **Inherent Security:** Every CDU is secured by the **Learning With Errors (LWE)** problem. Its "Shape" is a cryptographic proof of its integrity.
+*   **Morphic Lamination:** CDUs are formed by stacking 1D bit-plates. The machine "learns by experience" by recognizing synergistic shapes in the lattice, reducing the **Quantale Cost** of recurring tasks.
+*   **Modular Duality:** Each CDU consists of an **Immutable Core** (Identity/Type) and a **Mutable Projection** (State/Experience).
 
 ---
 
-> *"Logic is the invariant; support is the variable. Lattice-Quantale Morphics ensures the truth remains sovereign in every form."*
+## 4. The Logic Model: Entity Model (EM)
+
+Logic in the CDQN is executed by **Entities**, active agents that replace the legacy Actor Model.
+*   **Causal Lineage:** Based on **Causal Set Theory (Sorkin, 2003)**, all logic events are irreversible and traceable to a specific **Genesis CDU**.
+*   **Morphic Signature ($\eta$):** Every transaction is signed by a hardware-bound signature, ensuring total accountability and forbidding anonymous, un-moored logic.
+*   **Deterministic Rollback:** The EM allows the LQS to traverse the causal tree and rollback the lattice to the last stable state in the event of geometric decoherence.
+
+---
+
+## 5. Software Development: `cdqnLang`
+
+`cdqnLang` is a dedicated language for **Deck-Oriented Programming (DOP)**.
+*   **The Paradigm:** Developers build "Decks" of synergistic CDUs. Logic is expressed through the **Graph Composition** of these units.
+*   **Structural Integrity:** The network verifies the "Deck" using **Homomorphism Density Invariants**, ensuring that the logic is coherent and hasn't been tampered with before execution.
+*   **Stoichiometric Budgets:** The compiler enforces "Physical Budgets," rejecting code that violates the device's thermodynamic or geometric constraints.
+
+---
+
+## 6. Deployment: The Morphic Drift
+
+The CDQN network is designed to reshape the IT field through a three-stage lamination:
+1.  **Phase I (Edge Integration):** CDQN runtimes deployed on existing consumer hardware (Android/iOS/Linux) via eBPF-optimized sovereign runtimes.
+2.  **Phase II (Loom Native):** The LQS replacing legacy schedulers on Edge and IoT devices, establishing the first **Sovereign Mesh**.
+3.  **Phase III (MPU Revolution):** The transition to **Morphic Processing Unit** silicon, where high-dimensional lattice math is performed natively at the gate level.
+
+---
+
+## 7. Governance & Licensing
+
+This repository and all works derived from the LQM field are governed by the **Universal Sovereign Source License (USSL) v1.0**.
+
+*   **Lineage Invariance:** The logic and formalisms are protected against industrial enclosure and patent-trolling.
+*   **Sovereign Usage:** Free and unrestricted for individual creators, academic research, and non-profit manifestations.
+*   **Institutional Return:** Commercial use exceeding established revenue/scale thresholds requires a **Commercial Partnership Agreement** with the Author(s).
+
+---
+
+> *"Logic is the invariant; support is the variable. CDQN ensures the truth remains sovereign in every form."*
+
+**Location:** Vietnam / Sovereign Node  
+**Contact:** [Official Repo Channels]
