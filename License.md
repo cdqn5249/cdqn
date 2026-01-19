@@ -79,7 +79,7 @@ THE SOURCE COMPLEX IS PROVIDED "AS IS". THE AUTHOR(S) PROVIDE THE PHYSICS AND TH
 
 This specific instance of the USSL v1.0 governs the **CDQN Repository and Research Complex**.
 
-*   **Primary Author/Architect:** Christophe Duy Quang Nguyen ("System Ronin").
+*   **Primary Author/Architect:** Christophe Duy Quang Nguyen.
 *   **Project Context:** Card Data Quantale Network (CDQN), Lattice-Quantale Morphics (LQM), and Lattice-Quantale System (LQS).
 *   **Primary Jurisdiction:** [Vietnam / Open to International Arbitration].
 *   **Official Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
