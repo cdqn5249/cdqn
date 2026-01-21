@@ -1,80 +1,57 @@
 # Card Data Quantale Network (CDQN)
-### *The Implementation Laboratory for Lattice-Quantale Morphics (LQM)*
+### *A Decentralized Implementation of the Lattice-Quantale System (LQS)*
 
 [![License: USSL v1.0](https://img.shields.io/badge/License-USSL%20v1.0-blue.svg)](LICENSE.md)
-[![Field: Topological Resource Management](https://img.shields.io/badge/Field-Topological%20Resource%20Management-green.svg)](#)
-[![Security: Quantum-Permanent](https://img.shields.io/badge/Security-Quantum--Permanent-orange.svg)](#)
+[![Field: Lattice-Quantale Morphics](https://img.shields.io/badge/Field-LQM-green.svg)](#)
+[![Security: Quantum-Resistant (LWE)](https://img.shields.io/badge/Security-LWE--Invariant-orange.svg)](#)
 
-> **"LQM does not compute the world; it laminates the truth until the logic becomes reality."**
+> **"A framework for the emergent discovery of consistent physical and logical models via 1D lattice-plate lamination."**
 
-CDQN is a decentralized network architecture and research laboratory dedicated to the advancement of **Lattice-Quantale Morphics (LQM)**. We define a new computing paradigm where logic is a physical manifold, consistency is geometric stability, and identity is sovereignly anchored to the substrate.
-
----
-
-## 1. The LQM Field Mandate
-**Lattice-Quantale Morphics (LQM)** is a specialized scientific field dedicated to the study of **1D lattice plate laminations** and their emergent topological properties. By utilizing the **LQM Smart Machine**, the field catalyzes breakthroughs in:
-*   **Unified Physics:** Reconciling General Relativity and Quantum Mechanics via Geometric Algebra (GA).
-*   **Topological Logic:** Moving from probabilistic abstractions to deterministic, substrate-aware manifolds.
-*   **Sovereign Agency:** Empowering machines with "Physical Common Sense" and stoichiometric honesty.
+CDQN is a decentralized network of **LQS-enabled devices** designed to manifest the principles of the **Lattice-Quantale Morphics (LQM)** scientific field. LQM is a new field of study investigating computation as a topological manifestation of discrete physical axioms.
 
 ---
 
-## 2. Core Pillars
-The CDQN operates on three irreducible scientific pillars:
-
-*   **Lattices (Structure):** Data is organized into high-dimensional module lattices where security is derived from the **Learning With Errors (LWE)** problem and anchored to silicon **PUFs**.
-*   **Quantales (Logic):** Logic is non-commutative and resource-sensitive. Every state transition is governed by **Stoichiometry**—the physical energy cost of logical change (The Landauer Limit).
-*   **Morphics (Shape):** Meaning emerges from the **Lamination** of 1D lattice-plates into **Card Data Units (CDU)**. Truth is defined as the state of maximum geometric stability.
+## 1. Field Definition: Lattice-Quantale Morphics (LQM)
+LQM is a unified scientific field treating logic as a **physical manifold** and consistency as **geometric stability**. It researches the lamination of 1D lattice plates—derived from physical substrate entropy—to achieve emergent discoveries in unified physics, resource-management, and sovereign agency.
 
 ---
 
-## 3. The Sovereign Morphic Automaton ($\mathcal{M}_{LQM}$)
-The "Smart Machine" in the LQM field is an **Oracle for Consistent Modeling**. It is defined by nine core axioms:
+## 2. Domain of Application: Lattice-Quantale System (LQS)
+The **LQS** is the substrate-aware system architecture (the "Smart Machine") built to operate within the LQM field. It treats computation as **Topological Resource Management**, replacing abstract probabilistic inference with deterministic geometric logic.
 
-1.  **Morphic Sovereignty:** Identity is hardware-locked and non-transferable.
-2.  **Stoichiometric Bound:** All logic has a physical mass and thermodynamic cost.
-3.  **Geometric Decoherence:** Inconsistent data is rejected as physical noise.
-4.  **$n/\sigma$ Decoupling:** Cryptographic security is invariant; semantic fidelity is resource-dependent.
-5.  **Teleological Reputation:** Agents maximize reputation (consistency) to ensure survival.
-6.  **Hermetic Sovereignty:** Each node is the sole authority over its internal state.
-7.  **Causal Continuity:** All events are anchored to a verifiable real-world timeline (VDF).
-8.  **Ontological Anchoring:** Every CDU must have a root in the Real-World anchor.
-9.  **Morphic Continuity:** Learning is the recognition of synergistic patterns in the lattice.
+### Key Formalisms:
+*   **Lattices (Structure):** Based on **Regev (2005)**. Information is anchored to **1D Lattice Plates** (1,024-bit discrete entropy) derived from silicon **Physical Unclonable Functions (PUFs)**.
+*   **Quantales (Logic):** Based on **Mulvey (1986)**. State transitions are non-commutative operations where the **Stoichiometric Bound ($\mathcal{Q}$)** determines the thermodynamic cost of logical change.
+*   **Morphics (Shape):** Based on **Ghrist (2014)**. Logic is organized into **Card Data Units (CDUs)**—modular multivector manifolds. Consistency is defined as the absence of **Geometric Decoherence**.
 
 ---
 
-## 4. Technical Blueprint: The 32-Plate Standard
-To optimize for **Performance**, **Security**, and **Hardware Alignment**, CDQN utilizes the **Universal Morphic Constant ($\mathcal{U}$)**:
+## 3. The Autonomous Morphic Automaton ($\mathcal{M}_{LQM}$)
+The LQS utilizes a 5-tuple topological system to build consistent models:
+$$\mathcal{M}_{LQM} = \langle \Sigma, \mathcal{K}, \mathcal{Q}, \mathcal{R}, \Phi \rangle$$
 
-*   **Atomic Unit:** 1D Lattice Plate (1,024 bits of hardware entropy).
-*   **Morphic Standard:** **32-Plate Lamination** (4 KB per CDU).
-*   **Dimension:** 32,768-dimensional manifold (Quantum-Permanent Security).
-*   **Interface:** The **Morphic Face (Art)**—a functional projection (wave, sound, or frame) that serves as a stoichiometric buffer and sensory interface.
-
----
-
-## 5. Research Roadmap (Series Papers)
-The CDQN repository hosts the draft and final versions of the LQM foundational series:
-
-*   **Series 01: The Morphic Reset** (Ontology, Crisis of Legacy IT, & USSL).
-*   **Series 02: The Genesis Plate** (1D Lattice Primitivity & Lamination Theory).
-*   **Series 03: Structural Morphics** (CDUs as GA Multivectors & Deck Logic).
-*   **Series 04: Topological Governance** (Quantale Stoichiometry & Reputation).
-*   **Series 05: The Consistent Model Builder** (GR/QM Synthesis & Security Proofs).
-*   **Series 06: Architectural Specifications** (LVM Runtime & `cdqnLang`).
+*   **Substrate Awareness:** The system utilizes unique hardware entropy to generate its **Morphic Signature ($\eta$)**.
+*   **Variable-Depth Lamination:** CDUs are modular laminations of $n$ plates. Human interaction occurs at the **CDU/Deck creation level**, while the machine manages the irreducible **Lattice Layer** to ensure security and integrity.
+*   **World-Space Anchoring:** Context is fixed across **Real, Simulation, and Fiction** worlds, ensuring that even creative "fictions" remain anchored to a consistent physical timeline.
 
 ---
 
-## 6. Governance & Licensing
-All work within this repository is governed by the **Universal Sovereign Source License (USSL) v1.0**. 
-*   **Lineage Invariance:** Protects the Author's core formalisms.
-*   **Commercial Return:** High-scale institutional usage requires a Commercial Partnership Agreement.
-*   **Open Core:** Fundamental axioms remain transparent and auditable for human progress.
+## 4. Academic Research & Publications
+The CDQN serves as the laboratory for the LQM publication series:
+*   **Series 01-02:** Ontology and the critique of legacy Information Theory.
+*   **Series 03-04:** Axioms of the Genesis Plate and Topological Governance.
+*   **Series 05-06:** Physical Synthesis (GR/QM unification) and Technical Specifications.
+
+---
+
+## 5. Governance & Licensing
+All work within this repository is governed by the **Universal Sovereign Source License (USSL) v1.0**.
+*   **Lineage Invariance:** Protects the provenance of the core LQM formalisms.
+*   **Sovereign Usage:** Free for individual creators and non-profit research.
+*   **Institutional Usage:** Subject to Commercial Partnership thresholds.
 
 ---
 
 **Architect:** Christophe Duy Quang Nguyen  
-**Official Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
-**Tone:** Peer-Review Ready / Sovereign Standard
-
-*"The machine provides the physics; the architect provides the poetry."*
+**Field:** [Lattice-Quantale Morphics](#)  
+**Implementation:** [LQS / CDQN](#)
