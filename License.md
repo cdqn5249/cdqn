@@ -1,7 +1,7 @@
 # Universal Sovereign Source License (USSL) v1.0
 ### (The Universal Provenance & Manifestation Standard)
 
-*   **Version:** 1.0 (The Lattice-Quantale Reset)
+*   **Version:** 1.0
 *   **Scope:** Universal (Applied to all logic, art, hardware, and manifestations regardless of medium)
 *   **Copyright:** To be held by the Author(s) as identified in Section 10.
 
@@ -16,10 +16,9 @@ In a world defined by the "Abstraction Ceiling" and the fragmentation of digital
 ## 2. Definitions
 
 *   **"The Source Complex":** The entirety of the original work, including:
-    *   **Lattice-Quantale Morphics (LQM):** Mathematical formalisms, state-integrity axioms, and physical computing designs.
     *   **Logic & Methodology:** Mathematical formalisms, computing axioms, algorithms, and system designs.
     *   **Expression & Art:** Narrative frameworks, visual glyphs, literary texts, and audio-visual recordings.
-    *   **Physical Manifestations:** Silicon floorplans (LQS), hardware blueprints, or artifacts derived from the logic.
+    *   **Physical Manifestations:** Silicon floorplans, hardware blueprints, or artifacts derived from the logic.
 *   **"The Author(s)":** The individual(s), group, or entity identified as the copyright holder(s) in Section 10 of this specific Manifestation.
 *   **"Support":** Any medium through which the work is conveyed, including but not limited to Git repositories, printed books, websites, physical discs, biological storage, or electromagnetic waves.
 *   **"Derivative Work":** Any creation that adapts, incorporates, or functionally relies upon the Source Complex in any form (e.g., a film based on the text, a chip based on the math, or an AI model trained on the data).
@@ -80,7 +79,7 @@ THE SOURCE COMPLEX IS PROVIDED "AS IS". THE AUTHOR(S) PROVIDE THE PHYSICS AND TH
 This specific instance of the USSL v1.0 governs the **CDQN Repository and Research Complex**.
 
 *   **Primary Author/Architect:** Christophe Duy Quang Nguyen.
-*   **Project Context:** Card Data Quantale Network (CDQN), Lattice-Quantale Morphics (LQM), and Lattice-Quantale System (LQS).
+*   **Project Context:** Card Data Quantale Network (CDQN), Quantale Sciences (QS), Quantale Sovereign System (QSS)
 *   **Primary Jurisdiction:** [Vietnam / Open to International Arbitration].
 *   **Official Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Contact:** Via the official repository channels for Commercial Partnership inquiries.
@@ -95,7 +94,3 @@ The USSL v1.0 is designed as a universal template for digital and physical sover
 2.  **Customization of Section 10:** Replace the contents of Section 10 with your own Author/Entity name, project context, and primary jurisdiction.
 3.  **Application:** Place the license in your repository (LICENSE.md) or on the first pages/metadata of your physical manifestation.
 4.  **Version Control:** If you modify the *Core* (Sections 1-9), you must rename the license (e.g., "[YourName]-USSL") to prevent standard fragmentation.
-
----
-
-> *"Logic is the invariant; support is the variable. Lattice-Quantale Morphics ensures the truth remains sovereign in every form."*
