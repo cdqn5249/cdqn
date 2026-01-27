@@ -1,57 +1,48 @@
 # Card Data Quantale Network (CDQN)
-### *A Decentralized Implementation of the Lattice-Quantale System (LQS)*
+### *Implementation Laboratory for Quantale Sovereign Systems (QSS)*
 
 [![License: USSL v1.0](https://img.shields.io/badge/License-USSL%20v1.0-blue.svg)](LICENSE.md)
-[![Field: Lattice-Quantale Morphics](https://img.shields.io/badge/Field-LQM-green.svg)](#)
-[![Security: Quantum-Resistant (LWE)](https://img.shields.io/badge/Security-LWE--Invariant-orange.svg)](#)
+[![Field: Quantale Sciences](https://img.shields.io/badge/Field-Quantale%20Sciences-green.svg)](#)
+[![Security: Quantum--Permanent](https://img.shields.io/badge/Security-Quantum--Permanent-orange.svg)](#)
 
-> **"A framework for the emergent discovery of consistent physical and logical models via 1D lattice-plate lamination."**
+> **"A scientific framework for the lamination of 2D physical axioms into modular logical manifolds for emergent discovery."**
 
-CDQN is a decentralized network of **LQS-enabled devices** designed to manifest the principles of the **Lattice-Quantale Morphics (LQM)** scientific field. LQM is a new field of study investigating computation as a topological manifestation of discrete physical axioms.
-
----
-
-## 1. Field Definition: Lattice-Quantale Morphics (LQM)
-LQM is a unified scientific field treating logic as a **physical manifold** and consistency as **geometric stability**. It researches the lamination of 1D lattice plates—derived from physical substrate entropy—to achieve emergent discoveries in unified physics, resource-management, and sovereign agency.
+CDQN is a decentralized research environment and network dedicated to **Quantale Sciences (QS)**. It serves as the manifestation environment for the **Quantale Sovereign System (QSS)**—a substrate-aware architecture where logic is a physical manifestation of high-dimensional lamination and state-consistency is governed by stoichiometric and geometric invariants.
 
 ---
 
-## 2. Domain of Application: Lattice-Quantale System (LQS)
-The **LQS** is the substrate-aware system architecture (the "Smart Machine") built to operate within the LQM field. It treats computation as **Topological Resource Management**, replacing abstract probabilistic inference with deterministic geometric logic.
-
-### Key Formalisms:
-*   **Lattices (Structure):** Based on **Regev (2005)**. Information is anchored to **1D Lattice Plates** (1,024-bit discrete entropy) derived from silicon **Physical Unclonable Functions (PUFs)**.
-*   **Quantales (Logic):** Based on **Mulvey (1986)**. State transitions are non-commutative operations where the **Stoichiometric Bound ($\mathcal{Q}$)** determines the thermodynamic cost of logical change.
-*   **Morphics (Shape):** Based on **Ghrist (2014)**. Logic is organized into **Card Data Units (CDUs)**—modular multivector manifolds. Consistency is defined as the absence of **Geometric Decoherence**.
+## 1. Field Definition: Quantale Sciences (QS)
+**Quantale Sciences (QS)** is a unified scientific field investigating the lamination of **2D lattice layers** and their emergent topological properties. Utilizing the **Sovereign Quantale Automaton ($\mathcal{A}_{QS}$)**, the field aims to catalyze breakthroughs in:
+*   **Unified Physics:** Resolving the conflict between General Relativity (GR) and Quantum Mechanics (QM) using **Geometric Algebra (GA)** multivectors and Causal Set Theory.
+*   **Emergent Modeling:** Utilizing the **Consistent Model Builder** to identify truth as a state of maximum geometric stability.
+*   **Stoichiometric Logic:** Implementing branchless, manifold-native logic bound by the thermodynamic constraints of the **Landauer Limit**.
 
 ---
 
-## 3. The Autonomous Morphic Automaton ($\mathcal{M}_{LQM}$)
-The LQS utilizes a 5-tuple topological system to build consistent models:
-$$\mathcal{M}_{LQM} = \langle \Sigma, \mathcal{K}, \mathcal{Q}, \mathcal{R}, \Phi \rangle$$
-
-*   **Substrate Awareness:** The system utilizes unique hardware entropy to generate its **Morphic Signature ($\eta$)**.
-*   **Variable-Depth Lamination:** CDUs are modular laminations of $n$ plates. Human interaction occurs at the **CDU/Deck creation level**, while the machine manages the irreducible **Lattice Layer** to ensure security and integrity.
-*   **World-Space Anchoring:** Context is fixed across **Real, Simulation, and Fiction** worlds, ensuring that even creative "fictions" remain anchored to a consistent physical timeline.
+## 2. Domain of Application: Quantale Sovereign System (QSS)
+The **QSS** is the substrate-aware architecture (the "Smart Machine") built to operate within the QS field. This domain of application of the QS need to be defined.
 
 ---
 
-## 4. Academic Research & Publications
-The CDQN serves as the laboratory for the LQM publication series:
-*   **Series 01-02:** Ontology and the critique of legacy Information Theory.
-*   **Series 03-04:** Axioms of the Genesis Plate and Topological Governance.
-*   **Series 05-06:** Physical Synthesis (GR/QM unification) and Technical Specifications.
+## 3. The Axiom of the Morphic Atom ($\alpha$)
+The foundational axiom of **Quantale Sciences** is the **128-byte 2D Lattice Layer** ($32 \times 32$ bits), defining both the physical and logical floor of the system.
+
+*   **Atomic Identity ($\Sigma$):** Every 128-byte layer is harvested from the physical entropy of the substrate's **Physical Unclonable Function (PUF)**. This ensures that identity is a $32 \times 32$ planar-native physical invariant, rendering virtualization and anonymity mathematically non-viable.
+*   **Lamination & Mass ($\mathcal{K}$):** Logic is manifested through the lamination of these 2D atoms. A standard **Card Data Unit (CDU)** consists of 32 layers, totaling **4,096 bytes (4 KB)**. This creates a **32,768-dimensional manifold**, providing quantum-permanent lattice hardness ($n$) and a perfect functional alignment with universal hardware memory pages.
+*   **Work ($\mathcal{Q}$):** Every transition has a measurable stoichiometric mass ($k_B T \ln 2$), ensuring computation follows the thermodynamic limits of the substrate.
+*   **Emergent Discovery:** The lamination process enables $O(1)$ constant-time logic for complex modeling.
 
 ---
 
-## 5. Governance & Licensing
-All work within this repository is governed by the **Universal Sovereign Source License (USSL) v1.0**.
-*   **Lineage Invariance:** Protects the provenance of the core LQM formalisms.
-*   **Sovereign Usage:** Free for individual creators and non-profit research.
-*   **Institutional Usage:** Subject to Commercial Partnership thresholds.
+## 4. Governance & Licensing
+This work is governed by the **Universal Sovereign Source License (USSL) v1.0**.
+*   **Lineage Invariance:** Protects the provenance of the core QS/QSS formalisms.
+*   **Open Core:** Fundamental axioms remain transparent and auditable for human scientific progress.
+*   **Sovereign Usage:** Free for individual creators and non-profit research. Institutional usage exceeding defined commercial thresholds requires a formal **Commercial Partnership Agreement**.
 
 ---
 
 **Architect:** Christophe Duy Quang Nguyen  
-**Field:** [Lattice-Quantale Morphics](#)  
-**Implementation:** [LQS / CDQN](#)
+**Field:** [Quantale Sciences (QS)](#)  
+**Implementation:** [Quantale Sovereign System (QSS)](#)  
+**Network:** [CDQN](#)
