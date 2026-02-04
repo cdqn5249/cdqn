@@ -11,12 +11,12 @@
 
 This document is a **License and a Covenant**. It governs the **Source Complex**—the original ideas, logic, and creative expressions provided by the Author(s). 
 
-In a world defined by the "Abstraction Ceiling" and the fragmentation of digital truth, this license establishes that **Lineage is Invariant**. It asserts that the value of a logical or artistic construct is not tied to its medium. Whether the Source Complex is expressed as digital code, physical ink on paper, mathematical formalisms, architectural blueprints, or etched silicon gates, its "Sovereign Core" remains legally and ethically protected. This license ensures that these foundations remain open for human progress while protecting the Creator's lineage from industrial enclosure, automated extraction, and patent-trolling.
+In a world defined by the fragmentation of digital truth, this license establishes that **Lineage is Invariant**. It asserts that the value of a logical or artistic construct is not tied to its medium. Whether the Source Complex is expressed as digital code, physical ink on paper, mathematical axioms or formalisms or theorems, architectural blueprints, or etched silicon gates, its "Sovereign Core" remains legally and ethically protected. This license ensures that these foundations remain open for human progress while protecting the Creator's lineage from industrial enclosure, automated extraction, and patent-trolling.
 
 ## 2. Definitions
 
 *   **"The Source Complex":** The entirety of the original work, including:
-    *   **Logic & Methodology:** Mathematical formalisms, computing axioms, algorithms, and system designs.
+    *   **Logic & Methodology:** Mathematical axioms or formalisms or theorems, computing axioms, algorithms, and system designs.
     *   **Expression & Art:** Narrative frameworks, visual glyphs, literary texts, and audio-visual recordings.
     *   **Physical Manifestations:** Silicon floorplans, hardware blueprints, or artifacts derived from the logic.
 *   **"The Author(s)":** The individual(s), group, or entity identified as the copyright holder(s) in Section 10 of this specific Manifestation.
@@ -43,7 +43,7 @@ If the Licensee instigates litigation (including patent claims, copyright strike
 ## 5. Open Core & Lineage Integrity
 
 1.  **Open Core Requirement:** The fundamental logic and formalisms within the Source Complex must remain transparent and auditable in any derivative work.
-2.  **Non-Obfuscation:** No Licensee may use the logic to create "Black Box" systems that hide the underlying thermodynamic state, quantale cost, or causal history from the end-user.
+2.  **Non-Obfuscation:** No Licensee may use the logic to create "Black Box" systems that hide the underlying state, cost, or causal history from the end-user.
 
 ## 6. The Commercial Threshold (The Industry Return)
 
@@ -79,7 +79,7 @@ THE SOURCE COMPLEX IS PROVIDED "AS IS". THE AUTHOR(S) PROVIDE THE PHYSICS AND TH
 This specific instance of the USSL v1.0 governs the **CDQN Repository and Research Complex**.
 
 *   **Primary Author/Architect:** Christophe Duy Quang Nguyen.
-*   **Project Context:** Card Data Quantale Network (CDQN), Quantale Sciences (QS), Quantale Sovereign System (QSS)
+*   **Project Context:** Card Data Quantale Network (CDQN), Quantales System (QS)
 *   **Primary Jurisdiction:** [Vietnam / Open to International Arbitration].
 *   **Official Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Contact:** Via the official repository channels for Commercial Partnership inquiries.
