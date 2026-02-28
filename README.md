@@ -1,9 +1,9 @@
 # The Quantales System (QS) Repository
 ### The Operating System of Sovereign Intelligence
 
-**Architect:** Christophe Duy Quang Nguyen
-**Location:** Da Lat, Vietnam
-**License:** Universal Sovereign Source License (USSL) v1.0
+* **Architect:** Christophe Duy Quang Nguyen
+* **Location:** Da Lat, Vietnam
+* **License:** Universal Sovereign Source License (USSL) v1.0
 
 ---
 
