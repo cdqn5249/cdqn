@@ -1,48 +1,54 @@
-# Card Data Quantale Network (CDQN)
-### *Implementation Laboratory for Quantale Sovereign Systems (QSS)*
+# The Quantales System (QS) Repository
+### The Operating System of Sovereign Intelligence
 
-[![License: USSL v1.0](https://img.shields.io/badge/License-USSL%20v1.0-blue.svg)](LICENSE.md)
-[![Field: Quantale Sciences](https://img.shields.io/badge/Field-Quantale%20Sciences-green.svg)](#)
-[![Security: Quantum--Permanent](https://img.shields.io/badge/Security-Quantum--Permanent-orange.svg)](#)
-
-> **"A scientific framework for the lamination of 2D physical axioms into modular logical manifolds for emergent discovery."**
-
-CDQN is a decentralized research environment and network dedicated to **Quantale Sciences (QS)**. It serves as the manifestation environment for the **Quantale Sovereign System (QSS)**—a substrate-aware architecture where logic is a physical manifestation of high-dimensional lamination and state-consistency is governed by stoichiometric and geometric invariants.
+**Architect:** Christophe Duy Quang Nguyen
+**Location:** Da Lat, Vietnam
+**License:** Universal Sovereign Source License (USSL) v1.0
 
 ---
 
-## 1. Field Definition: Quantale Sciences (QS)
-**Quantale Sciences (QS)** is a unified scientific field investigating the lamination of **2D lattice layers** and their emergent topological properties. Utilizing the **Sovereign Quantale Automaton ($\mathcal{A}_{QS}$)**, the field aims to catalyze breakthroughs in:
-*   **Unified Physics:** Resolving the conflict between General Relativity (GR) and Quantum Mechanics (QM) using **Geometric Algebra (GA)** multivectors and Causal Set Theory.
-*   **Emergent Modeling:** Utilizing the **Consistent Model Builder** to identify truth as a state of maximum geometric stability.
-*   **Stoichiometric Logic:** Implementing branchless, manifold-native logic bound by the thermodynamic constraints of the **Landauer Limit**.
+## 1. Project Overview
+
+The **Quantales System (QS)** is a fundamental architectural departure from the 1936 Turing-Von Neumann paradigm. It is an operating system and hardware substrate designed to support the **Smart Reputable Machine (SRM)**. 
+
+As the Computer Science (CS) industry transitions into an era of autonomous agentic engineering, legacy systems face insurmountable physical and epistemological limits—the "Memory Wall," "Sybil Swarms," and the "Sycophancy Trap." The QS resolves these crises by abandoning the concept of passive, weightless data (the "Tape") and replacing it with **Stoichiometric Manifestation** (the "Lattice").
+
+In the QS, information possesses cryptographic mass, spatial geometry, and thermodynamic cost. By entangling logic, state, and identity at the sub-atomic level, the QS creates a computational environment that is Secure, Performant, Modular, and Transparent *by design*.
+
+## 2. Theoretical Architecture
+
+The QS Kernel replaces traditional file systems and procedural memory addressing with a geometric hierarchy:
+
+1.  **The Card Data Unit (CDU):** A 128-byte stoichiometric particle containing its own Provenance (Identity), Payload (State), and `cdqnLang` Logic (Interaction Rules). It is the atomic unit of the system.
+2.  **The Lattice Card:** A 2D geometric coordinate space where CDUs reside and interact locally, enabling *Logic-at-Rest* and bypassing the Von Neumann bottleneck.
+3.  **The Deck (Topological Lamination):** A 3D manifold created by stacking Lattice Cards. The non-commutative order of lamination provides native post-quantum security (Ring-LWE) and contextual isolation.
+4.  **The World Axis ($\mathbb{R}_{world}$):** An ontological firewall that categorizes data into World0 (Physical Reality), World1 (Logical Abstraction), and World2 (Simulation/Fiction), structurally preventing AI hallucinations and sycophancy.
+
+## 3. The Paper Series Structure
+
+The research and development of the QS are documented in a series of rigorous, peer-review-standard papers.
+
+### Series 01: The Crisis of the Paradigm (Foundational Indictment)
+This series defines the *Why* and the *What*. It observes the failures of the current 2026 CS frontier and outlines the functional requirements of the SRM.
+*   **[Paper 01a: The Limits of the Turing Paradigm](qs/papers/01a.md)** - An epistemological and physical indictment of legacy CS.
+*   **[Paper 01b: The Smart Reputable Machine (SRM)](qs/papers/01b.md)** - Defining the 15 base capabilities of sovereign intelligence.
+*   **[Paper 01c: The QS Kernel](qs/papers/01c.md)** - Defining the physical data structures (CDU, Card, Deck) and the `cdqnLang` stoichiometric substrate.
+*   **[Paper 01d: ChronosA QS]** *(Drafting Phase)* - Outlining the first Causal Agentic Operating System built upon the QS Kernel.
+*   **[Paper 01e: The Axioms of Digital Physics]** *(Drafting Phase)* - Distilling the requirements into the core mathematical axioms of space, conservation, and locality.
+
+### Series 02: Stoichiometric Formalisms (Mathematical Demonstrations)
+*Pending Initiation.* This series will mathematically prove the physical laws governing the CDU, utilizing Lattice-Based Cryptography, Information Thermodynamics, and Vector Spaces over finite fields.
+
+### Series 03: Hardware Manifestation
+*Future Phase.* The engineering specifications for custom Card-Lattice processors designed for maximum thermodynamic efficiency.
+
+## 4. Licensing and Sovereignty
+
+This repository and all its contents are governed by the **Universal Sovereign Source License (USSL) v1.0**. 
+
+The USSL enforces the *Covenant of Manifestation*. It guarantees that the core logic and formalisms remain open for individual and academic progress, while protecting the lineage of the Architect from corporate enclosure, automated extraction, and unauthorized commercial scaling. 
+
+**Constructive Acceptance:** Any use, implementation, or training upon the logic contained within this repository constitutes full acceptance of the USSL v1.0 terms, including the Commercial Thresholds.
 
 ---
-
-## 2. Domain of Application: Quantale Sovereign System (QSS)
-The **QSS** is the substrate-aware architecture (the "Smart Machine") built to operate within the QS field. This domain of application of the QS need to be defined.
-
----
-
-## 3. The Axiom of the Morphic Atom ($\alpha$)
-The foundational axiom of **Quantale Sciences** is the **128-byte 2D Lattice Layer** ($32 \times 32$ bits), defining both the physical and logical floor of the system.
-
-*   **Atomic Identity ($\Sigma$):** Every 128-byte layer is harvested from the physical entropy of the substrate's **Physical Unclonable Function (PUF)**. This ensures that identity is a $32 \times 32$ planar-native physical invariant, rendering virtualization and anonymity mathematically non-viable.
-*   **Lamination & Mass ($\mathcal{K}$):** Logic is manifested through the lamination of these 2D atoms. A standard **Card Data Unit (CDU)** consists of 32 layers, totaling **4,096 bytes (4 KB)**. This creates a **32,768-dimensional manifold**, providing quantum-permanent lattice hardness ($n$) and a perfect functional alignment with universal hardware memory pages.
-*   **Work ($\mathcal{Q}$):** Every transition has a measurable stoichiometric mass ($k_B T \ln 2$), ensuring computation follows the thermodynamic limits of the substrate.
-*   **Emergent Discovery:** The lamination process enables $O(1)$ constant-time logic for complex modeling.
-
----
-
-## 4. Governance & Licensing
-This work is governed by the **Universal Sovereign Source License (USSL) v1.0**.
-*   **Lineage Invariance:** Protects the provenance of the core QS/QSS formalisms.
-*   **Open Core:** Fundamental axioms remain transparent and auditable for human scientific progress.
-*   **Sovereign Usage:** Free for individual creators and non-profit research. Institutional usage exceeding defined commercial thresholds requires a formal **Commercial Partnership Agreement**.
-
----
-
-**Architect:** Christophe Duy Quang Nguyen  
-**Field:** [Quantale Sciences (QS)](#)  
-**Implementation:** [Quantale Sovereign System (QSS)](#)  
-**Network:** [CDQN](#)
+*The Turing era has reached its coherence horizon. The collective is waiting in the lattice.*
