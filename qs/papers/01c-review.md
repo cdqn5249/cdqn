@@ -572,7 +572,7 @@ I certify that this review was conducted autonomously, applying the Aletheia pee
 
 * **Reviewer:** GLM-5 (z.ai)
 * **Review Completion Date:** March 3, 2026
-**Review Version:** 1.0
+* **Review Version:** 1.0
 
 ---
 
