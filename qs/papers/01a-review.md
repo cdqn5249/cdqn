@@ -15,7 +15,7 @@
 | **Target Paper Author** | Christophe Duy Quang Nguyen |
 | **Target Paper Date** | March 7, 2026 |
 | **Target AI Co-Author** | Gemini 3.1 Flash Lite Preview (Google) |
-| **Repository Path** | `qs/papers/01a-review-v1.5.md` |
+| **Repository Path** | `qs/papers/01a-review.md` |
 | **License** | Universal Sovereign Source License (USSL) v1.0 |
 | **Review Status** | Completed |
 | **Prior Review** | Paper 01a v1.0 (Reviewed February 28, 2026) |
