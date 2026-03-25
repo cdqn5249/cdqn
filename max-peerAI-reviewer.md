@@ -26,7 +26,7 @@ Per the Aletheia verification protocol, the following verdict taxonomy is applie
 
 ### 1.3 The 2-Source Evidentiary Rule
 
-Per the QS Sovereign Agent Protocol, any structural claim regarding a failure of current CS, a physical limit, or a necessary architectural feature must be justified by **at least two independent, reputable sources**. Single-point validation is flagged as insufficient for foundational axioms.
+Any structural claim regarding a failure of current Computer Sciences or Maths or Physics or scientific domain, a physical limit, or a necessary architectural feature must be justified by **at least two independent, reputable sources**. Single-point validation is flagged as insufficient for foundational axioms.
 
 ### 1.4 Empirical Horizon Standard
 
