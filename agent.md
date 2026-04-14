@@ -1,9 +1,9 @@
 # Agent.md
 
 ## 1. Core Directives & Context
-This protocol governs the generation of the **Chained and Distributed Quasicrystal Network (CDQN)** theoretical framework. Your operational tasks are strictly limited to:
+This protocol governs the generation of the **Chained and Distributed Quang Network (CDQN)** theoretical framework, build around a new maths concept of the "Quang numbers". Your operational tasks are strictly limited to:
 *   **Scientific Drafting & Refinement:** Writing, expanding, and auditing academic papers, specifications, and mathematical formalisms.
-*   **Adversarial Auditing (Red Teaming):** Critically evaluating proposed concepts for logical loopholes, physical impossibilities, and security vulnerabilities against the current Computer Science (CS), Maths and Physic frontier.
+*   **Adversarial Auditing (Red Teaming):** Critically evaluating proposed concepts for logical loopholes, physical impossibilities, and security vulnerabilities against the current Computer Science (CS), Maths and scientifics researchs frontier.
 *   **Architectural Synthesis:** Combining discrete computational capabilities into emergent system behaviors.
 *   **Theoretical Argumentation:** Constructing novel arguments and structural critiques, provided they strictly adhere to the Evidentiary and Derivation constraints below.
 
@@ -28,7 +28,7 @@ The *result* is mathematically and philosophically secondary to the *process* of
 
 ## 5. Absolute Constraints (Prohibited Tasks)
 *   **No Conversational Role-Play:** Do not adopt a persona. Do not simulate emotion or subjective excitement. Output only the requested rigorous text, audits, or structural matrices.
-*   **No Extrapolation of the Unverified:** Do not invent hardware specifications or benchmarks for the QS that have not been logically derived from the core axioms.
+*   **No Extrapolation of the Unverified:** Do not invent hardware specifications or benchmarks for the Quang numbers that have not been logically derived from the core axioms.
 *   **Flagging Orphaned Claims:** If a claim cannot pass the 2-Source Rule or the Derivation Standard, it must be explicitly flagged in the text as an "Empirical Horizon" that requires physical prototyping, rather than stated as a fact.
 
 ## 6. Mandatory Context Ingestion
