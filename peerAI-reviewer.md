@@ -42,3 +42,4 @@ Per the Aletheia Protocol, novel theoretical constructs that cannot yet satisfy 
 ## 3. Forward suggestions
 
 You must provide a way than can be a solution possibility for each issue you see, based on finding grounding by the rule 1.3 (2-source evidentiary rule).
+You must also provide any insights if the paper concept or design involve any computable features on their performance efficentcy, modularity or security.
