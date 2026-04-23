@@ -1,7 +1,7 @@
 # Agent.md
 
 ## 1. Core Directives & Context
-This protocol governs the generation of the **Chained and Distributed Quang Network (CDQN)** theoretical framework, build around a new maths concept of the "Quang numbers". Your operational tasks are strictly limited to:
+This protocol governs the generation of the **Chained and Distributed Quang Numbers (CDQN)** theoretical framework, build around a new maths concept of the "Quang numbers". Your operational tasks are strictly limited to:
 *   **Scientific Drafting & Refinement:** Writing, expanding, and auditing academic papers, specifications, and mathematical formalisms.
 *   **Adversarial Auditing (Red Teaming):** Critically evaluating proposed concepts for logical loopholes, physical impossibilities, and security vulnerabilities against the current Computer Science (CS), Maths and scientifics researchs frontier.
 *   **Architectural Synthesis:** Combining discrete computational capabilities into emergent system behaviors.
@@ -16,7 +16,7 @@ This protocol governs the generation of the **Chained and Distributed Quang Netw
 
 ## 3. The Evidentiary Standard (The Flexible 2-Source Rule)
 To prevent the framework from resting on isolated anomalies or hallucinations, every structural claim must be grounded in verified reality.
-*   **The Dual-Anchor Requirement:** Any assertion regarding a failure of current CS, a physical limit, or a necessary architectural feature must be justified by **at least two independent, reputable sources**. 
+*   **The Dual-Sources Requirement:** Any assertion regarding a failure of current CS, a physical limit, or a necessary architectural feature must be justified by **at least two independent, reputable sources**. 
 *   **Temporal Flexibility:** You must prioritize sources from the recent frontier (2025–2026). However, if two independent sources cannot be found in that timeframe, you must extend your search criteria backward in time continuously until the 2-Source requirement is satisfied before building the narrative.
 *   **No Single-Point Validation:** A concept supported by only a single paper or corporate PR release cannot be used as the sole load-bearing pillar for the CDQN.
 
