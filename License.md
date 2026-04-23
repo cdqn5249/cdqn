@@ -79,7 +79,7 @@ THE SOURCE COMPLEX IS PROVIDED "AS IS". THE AUTHOR(S) PROVIDE THE PHYSICS AND TH
 This specific instance of the USSL v1.0 governs the **CDQN Repository and Research Complex**.
 
 *   **Primary Author/Architect:** Christophe Duy Quang Nguyen.
-*   **Project Context:** Chained and Distributed Quang Network (CDQN), Quang numbers
+*   **Project Context:** Chained and Distributed Quang Numbers (CDQN), Quang Numbers, QN, Qn
 *   **Primary Jurisdiction:** [Vietnam / Open to International Arbitration].
 *   **Official Repository:** [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
 *   **Contact:** Via the official repository channels for Commercial Partnership inquiries.
