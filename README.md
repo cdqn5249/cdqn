@@ -40,26 +40,37 @@ graph TD
 ```
 
 ### 1.1 Inquiries into the Qn Primitives (The Sovereign Trinity)
-We explore representing the core computational unit of the system not as a single, bloated register word, but as an elegant **Sovereign Trinity [Empirical Horizon]** of exactly three orthogonal, un-bloated primitive types packed into a strict 128-bit register lane to prevent cache-line splits and register pressure [1.30, 1.35, 1.50]:
+We explore representing the core computational unit of the CDQN system not as a single, bloated register word, but as an elegant **Sovereign Trinity [Empirical Horizon]** of exactly three orthogonal primitive types packed into a strict 128-bit register lane to prevent cache-line splits and register pressure [1.30, 1.35, 1.50]:
 
 $$
 q(z) = \langle \Phi(z), \mathcal{R}(z), \mathcal{K}(z), \mathcal{C} \rangle
 $$
 
 *   **$q(\text{scalar})$ (The Quantitative Coordinate):** Carries the passive numerical data, represented as a **Remainder-Carrying Fast Binary Cauchy Sequence (RC-FBCS) [Empirical Horizon]** to execute exact real arithmetic with zero rounding drift [1.44, 1.47]:
-    *   *Quotient ($\Phi(z) \in \mathbb{Z}$):* Statically scaled integer quotient carrying the explicit sign prefix (`p`/`n`) under the **Euclidean Division Invariant [Empirical Horizon]** [1.46].
-    *   *Remainder ($\mathcal{R}(z) \in [0, 1)$):* Normalized, exact rational remainder numerator ($R(z)$) to preserve infinite precision across halts and resumes [1.44]. The scale denominator ($b$) is bound out-of-band as a static type parameter, resolving the register bloat problem.
-*   **$q(\text{expr})$ (The Symbolic Expression Tree):** Carries the syntax and variable layouts, represented recursively under the **Unified Expression-Leaf Invariant [Empirical Horizon]** [1.4, 1.35]:
-    *   *Terminal Leaf (Variable):* Stores a 64-bit unforgeable hash of the variable name pointing out-of-band to thread-local symbol tables [1.50].
-    *   *Non-Terminal Node (AST):* Stores a 64-bit hash of the Abstract Syntax Tree (AST), executing monoidal boundary compositions statically during the load phase [1.15, 1.36].
+    *   *Quotient ($\Phi(z) \in \mathbb{Z}$):* Statically scaled integer quotient carrying the explicit sign prefix under the **Euclidean Division Invariant [Empirical Horizon]** [1.46].
+    *   *Remainder ($\mathcal{R}(z) \in [0, 1)$):* Normalized, exact rational remainder numerator ($R(z)$) to preserve precision across halts and resumes [1.44]. The scale denominator ($b$) is bound out-of-band as a static type parameter, resolving the register bloat problem.
+*   **$q(\text{expr})$ (The Symbolic Expression Tree):** Carries the syntax and variable layouts, represented recursively under the **Unified Expression-Leaf Invariant [Empirical Horizon]** [1.4, 1.35].
 *   **$q(\text{morph})$ (The Algebraic Transformation):** Carries the operators, user functions, and system actions, represented as a data-oriented, un-serialized handle [1.10, 1.35]:
-    *   *Morphic Identity ($\Phi_{\text{id}} \in \mathbb{Z}$):* A 64-bit cryptographic hash of the operator/function [1.50]. The executable instructions are stored out-of-band, statically pinned inside the host’s secure, hardware-isolated **Morphic Translation Library ($\mathbf{T}_{\text{morph}}$)** [1.11, 1.15], preventing Return-Oriented Programming (ROP) and code injection [1.2].
-*   **The Constraint Set ($\mathcal{K}(z) = \{ B(z), \mathbb{S} \}$):** Enforces topological spatial boundaries ($B(z)$) and restricted semiring laws ($\mathbb{S}$) [1.10, 1.26]. Division-by-zero is mapped to Wheel Theory ($\mathbb{W}$) singularities within $\mathcal{K}$, forcing immediate register collapse to the poison state $q_\emptyset$ [1.59, 1.60].
-*   **The Capability Set ($\mathcal{C} = \{ \mathcal{E}, \mathcal{N}, \text{PBR}_{\text{id}} \}$):** Enforces temporal epochs ($\mathcal{E}$) [1.57] and authorized namespaces ($\mathcal{N}$) [1.50] under Object-Capability (OCap) rules. Lineage is tracked via a 4-bit **PBR Handle (`PBR_id`)** pointing out-of-band to the **Physical Birth Register (PBR) [Empirical Horizon]** [1.50, 1.77].
+    *   *Morphic Identity ($\Phi_{\text{id}} \in \mathbb{Z}$):* A 64-bit cryptographic hash of the operator or function [1.50]. The executable instructions are stored out-of-band, statically pinned inside the host’s secure, hardware-isolated **Morphic Translation Library ($\mathbf{T}_{\text{morph}}$)** [1.11, 1.15], preventing Return-Oriented Programming (ROP) and code injection [1.2].
+
+#### Compiler-Driven Linguistic Subtyping [Empirical Horizon]
+We reject physical, heterogeneous register-level subtypes for variables, operators, and verbs to prevent microarchitectural instruction-decoding inflation and register file routing congestion [1.50, 1.51]. Instead, we define variables, operators, and verbs strictly as **compile-time syntactic typing abstractions in QnLang [Empirical Horizon]** [1.10]. During compilation, the QnLang front-end maps these linguistic abstractions 1-to-1 onto the physical Sovereign Trinity primitives:
+*   **Variables ($q(\text{var})$):** Map strictly to the **terminal leaves** of physical $q(\text{expr})$ registers, represented as unforgeable 64-bit symbolic hashes [1.50].
+*   **Operators ($q(\text{op})$):** Map strictly to active **semiring laws** ($\mathbb{S}$) encoded within the 16-bit Constraint Set $\mathcal{K}(z)$ of the active register [1.3.10, 1.96].
+*   **Verbs ($q(\text{verb})$):** Map strictly to **morphic identities** ($\Phi_{\text{id}}$) inside physical $q(\text{morph})$ registers, pointing out-of-band to the host's hardware-isolated Morphic Translation Library ($\mathbf{T}_{\text{morph}}$) [1.11, 1.15].
+
+#### Primitive Metadata Constraints & Capabilities
+*   **The Constraint Set ($\mathcal{K}(z) = \{ B(z), \mathbb{S}, \text{ECC} \}$):** Enforces topological spatial boundaries ($B(z) = [L, R]$) and restricted semiring laws ($\mathbb{S}$) [1.3.10, 1.10, 1.26]. To fit within a strict **16-bit register budget**, $\mathcal{K}(z)$ is allocated exactly:
+    *   *5 bits* for the Left Boundary Exponent ($L$).
+    *   *5 bits* for the Right Boundary Exponent ($R$).
+    *   *3 bits* for the Active Semiring Identifier ($\mathbb{S}$).
+    *   *3 bits* for the hardware-friendly **Algebraic Parity Invariant / ECC** to protect against physical bit-flips [1.26, 1.39].
+    Division-by-zero is mapped to Wheel Theory ($\mathbb{W}$) singularities within $\mathcal{K}$, forcing immediate register collapse to the poison state $q_\emptyset$ [1.59, 1.60].
+*   **The Capability Set ($\mathcal{C} = \{ \mathcal{E}, \mathcal{N}, \text{PBR}_{\text{id}} \}$):** Enforces temporal epochs ($\mathcal{E}$) [1.57] and authorized namespaces ($\mathcal{N}$) [1.50] under Object-Capability (OCap) rules. Lineage is tracked via a 4-bit **PBR Handle (`PBR_id`)** pointing out-of-band to the **Physical Birth Register (PBR) [Empirical Horizon]** [1.50, 1.77], isolated securely within thread-local, hardware-protected Lineage Tables to prevent user-space handle forgery [1.51].
 
 ### 1.2 Inquiries into the cdqnOS and QnLang Abstractions
 *   **The Projective Functor Mapping:** To eliminate the Turing-undecidability of arbitrary memory-tiling allocations (the Wang Domino Problem [1.2.1]), compiled programs are flattened statically from a periodic $d$-dimensional hyperspace ($\mathbb{R}^d$) to the flat, 1D physical cache-line memory bus ($\mathbb{R}^1$) using a deterministic projection functor ($\pi_{\text{project}}$) [1.15, 1.35].
-*   **Format-Invariant Persistence:** Designing the Qn primitive's layout so that its storage format on disk ($Q_{\text{disk}}$) is completely identical to its execution format in registries [1.14], completely eliminating the dynamic runtime serialization and deserialization library pipeline [1.12, 1.14].
+*   **Format-Invariant Persistence:** Designing the Qn primitive's layout so that its storage format on NVMe ($Q_{\text{disk}}$) represents a packed persistent envelope containing the 128-bit active register layout alongside its appended, zero-copy lineage blocks. During load-time, the OS kernel strips this lineage block to populate the isolated Lineage Table, streaming the raw 128-bit primitive directly to registers to eliminate dynamic serialization pipelines [1.12, 1.14].
 *   **The Sensory-Morphic User Interface:** Modeling the user interface as a **Visual Category Map [Empirical Horizon]** where nodes represent pre-computed mathematical objects and edges represent morphisms [1.35, 1.36]. Primitives project their format-invariant manifolds directly onto hardware-level DAC and GPU registers, eliminating user-space decoding bottlenecks [1.14, 1.30, 1.95].
 *   **The "AI Proposes, Compiler Disposes" Paradigm:** Integrating AI-assisted code generation (LLM agents) with compiler-level SMT and Lean 4 prover synthesis to mathematically prove the absence of runtime boundary overruns and namespace violations during build-time [1.81, 1.87, 1.90].
 
@@ -75,12 +86,12 @@ cdqn/
 ├── README.md                   # This overview document (Warning: Primitives Non-Stable)
 ├── docs/
 │   ├── 01_qn_design/
-│   │   ├── 01.1.md             # Foundational primitives and inquiries (v1.1.1)
+│   │   ├── 01.1.md             # Foundational primitives and inquiries (v1.1.2)
 │   │   ├── 01.2.md             # Systems Prerequisites & Security Tiers (v1.4.0)
 │   │   ├── 01.3.md             # Compact Bit Layouts & SIMD Predicated Masking (v1.3.0)
 │   │   ├── 01.4.md             # Systems Hardening & Exception-Free Mappings (v1.2.0)
 │   │   ├── 01.5.md             # Nine Use Cases & Theoretical Stress-Testing (v1.2.0)
-│   │   └── 01.6.md             # [Final] Bridging Register Physics to Algebraic Formalisms (v1.1.0)
+│   │   └── 01.6.md             # Bridging Register Physics to Algebraic Formalisms (v1.1.1)
 │   ├── 02_math_proofs/         # [Future] Formal proofs of algebraic boundaries and permutations
 │   ├── 03_language_design/     # [Future] Abstract syntax and intermediate representations of the new coding language
 │   ├── 04_language_specs/      # [Future] Formal grammar and test specifications of the new coding language
@@ -204,4 +215,6 @@ For commercial licensing inquiries, contact the author via the official reposito
 *   **[1.93]** Benson, David J. *"Music: A Mathematical Offering."* Cambridge University Press, 2007.
 *   **[1.94]** Gamwell, Lynn. *"Mathematics and Art: A Cultural History."* Princeton University Press, 2016.
 *   **[1.95]** George Lakoff & Mark Johnson. *"Metaphors We Live By."* University of Chicago Press, 1980.
-*   **[1.2.1]** Robert Berger. *"The undecidability of the domino problem."* Memoirs of the American Mathematical Society, no. 66, pp. 1-72, 1966. (Proving the mathematical Turing-undecidability of general tiling sets).
+*   **[1.3.10]** Golan, J. S. *"Semirings and their Applications."* Kluwer Academic Publishers / Springer Science & Business Media, Dec 1999.
+*   **[1.96]** Werner Kuich & Arto Salomaa. *"Semirings, Automata, Languages."* EATCS Monographs on Theoretical Computer Science, Springer-Verlag, vol. 5, pp. 12-45, 1986.
+*   **[1.2.1]** Robert Berger. *"The undecidability of the domino problem."* Memoirs of the American Mathematical Society, no. 66, pp. 1-72, 1966.
