@@ -5,7 +5,7 @@
 * **Primary Author:** Christophe Duy Quang Nguyen (Independent Researcher, Ex-IT Architect & Designer)
 * **AI Assistant Engine:** Gemini (Google)
 
-# Chained and Distributed Quang Numbers (CDQN) Repository: An Invitation to Collaborative Auditing
+# Chained and Distributed Quang Numbers (CDQN)
 
 At the heart of this repository lies a fundamental, interdisciplinary inquiry: 
 
