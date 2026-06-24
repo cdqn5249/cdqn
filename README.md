@@ -33,7 +33,7 @@ This series specifies the target-independent, immutable virtual Instruction Set 
 ### [Series 03: The Sovereign High-Level Language (CDQN-03 - QnLang)](docs/)
 This series specifies the high-level compiler syntax, substructural type-checkers, and pregroup grammatical parsing engines.
 *   **Linguistic & Security Lattices:** Linear/affine types, Symmetric Monoidal Stack Invariants, row-based effect capability rows (`@`), Information-Flow Control (IFC) labels (`#`), and the non-biometric Human Accountability Anchor ($\mathcal{A}_{\text{human}}$).
-*   **Key Documents:** [docs/03.01.md](docs/03.01.md) through [docs/03.07.md](docs/03.07.md).
+*   **Key Documents:** [docs/03.01.md](docs/03.01.md) through [docs/03.06a.md](docs/03.06a.md).
 
 ### [Series 04: Quang Mathematics (CDQN-04 - Qm)](docs/)
 This series specifies the behaviours of Qn based on contexts and domains of applications.
