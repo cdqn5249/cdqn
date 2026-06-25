@@ -39,6 +39,10 @@ This series specifies the high-level compiler syntax, substructural type-checker
 This series specifies the behaviours of Qn based on contexts and domains of applications.
 *   **Key Documents:** Commencing with `CDQN-04.01` (to be drafted in subsequent co-design phases).
 
+### [Series 05: Quang Semantics (CDQN-05 - Qs)](docs/)
+This series specifies the semantics of Qn based on contexts and domains of applications.
+*   **Key Documents:** Commencing with `CDQN-05.01` (to be drafted in subsequent co-design phases).
+
 ### cdqnK & cdqnOS (Future Series)
 The low-level microkernel drivers, physical memory allocators, and hardware-software operating system interfaces are deferred and assigned to dedicated, separate paper series in subsequent developmental phases to preserve complete modularity and prevent premature microkernel technical debt.
 
