@@ -36,11 +36,12 @@ This series specifies the high-level compiler syntax, substructural type-checker
 *   **Key Documents:** [docs/03.01.md](docs/03.01.md) through [docs/03.06a.md](docs/03.06a.md).
 
 ### [Series 04: Quang Mathematics (CDQN-04 - Qm)](docs/)
-This series specifies the behaviours of Qn based on contexts and domains of applications.
-*   **Key Documents:** Commencing with `CDQN-04.01` (to be drafted in subsequent co-design phases).
+This series specifies the constructive, computable mathematical behaviors, axioms, and continuous thermodynamic scaling models of the Quang numbers ($Qn$).
+*   **Core Research Scope:** The optimization of bi-directional translation pathways between human-scale decimal math ($\mathbb{R}_{10}$) and register-scale binary math ($\mathbb{F}_2$), constrained strictly to the domain of Computable Quang Numbers ($Qn_{\text{comp}}$).
+*   **Key Documents:** Commencing with `docs/04.01.md` (The Foundations of Quang Mathematics - Qm), which axiomatizes the Substrate, Abstraction, and AI Context Gaps (Knowledge and Action) and formulates the Thermodynamic Value-of-Information (VoI) Inequality to prevent physical microarchitectural thermal cycling fatigue under Dynamic Voltage and Frequency Scaling (DVFS).
 
 ### [Series 05: Quang Semantics (CDQN-05 - Qs)](docs/)
-This series specifies the semantics of Qn based on contexts and domains of applications.
+This series specifies the semantics of $Qn$ based on contexts and domains of applications.
 *   **Key Documents:** Commencing with `CDQN-05.01` (to be drafted in subsequent co-design phases).
 
 ### cdqnK & cdqnOS (Future Series)
