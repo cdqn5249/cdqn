@@ -1,74 +1,304 @@
-# Chained and Distributed Quang Numbers (CDQN)
+CDQN — Chained and Distributed Quang Numbers
 
-At the heart of this repository lies a fundamental, interdisciplinary inquiry: 
+«Research Question
 
-**"Can numbers abstract anything?"** 
+Can numbers become a universal constructive abstraction for computation?»
 
-The cdqn project proposes a structural hypothesis to explore this question: that a complete, next-generation operating system stack can be modeled and executed purely via the mathematical primitives of the **Quang numbers ($Qn$)**. 
+CDQN (Chained and Distributed Quang Numbers) is an open research project exploring a new computational abstraction layer designed from the perspective of modern computing hardware rather than inherited mathematical notation or legacy software stacks.
 
-By theoretically redefining "numbers" from classical flat decimals to condensed topological sheaves over profinite spaces, we seek to investigate whether we can govern computation, memory, security, and human accountability through the category-theoretic laws of sheaves. 
+Instead of asking "How do we map human abstractions onto computers?", CDQN asks:
 
-This project is an active, open-ended research exploration. We have not "proven" a working system; we have generated a highly cohesive **Formal Design Hypothesis**. We are publishing these initial papers to the public commons to **ask for help from the global scientific, mathematical, and systems-engineering communities**. We invite you to audit our derivations, stress-test our logic, find our errors and vulnerabilities, and help us discover whether this topological model can be realized on physical, finite silicon registers.
+«"What abstraction would we design today if we started from modern processors, memory hierarchies and distributed systems?"»
 
----
-
-## 1. The Proposed Full-Stack Hypothesis
-
-The cdqn ecosystem is designed as a speculative, vertically integrated compilation pipeline:
-
-$$Qn \text{ Primitives} \to QnIR \to QnLang \to cdqnK \to cdqnOS$$
-
-The documentation of this full-stack architecture is organized sequentially across dedicated paper series located in the [docs/](docs/) directory:
-
-### [Series 01: Quang Number Primitives (CDQN-01)](docs/)
-This series formalizes the abstract mathematical definitions, valuations, metrics, and axiomatic contracts of the proposed number system.
-*   **Mathematical Bedrock:** Condensed Abelian Groups ($\mathbf{CondAb}$), profinite truncation, and $p$-adic ultrametric valuation fields.
-*   **Key Documents:** [docs/01.1.md](docs/01.1.md) through [docs/01.15.md](docs/01.15.md). Refer to [docs/01.12.md](docs/01.12.md) for the consolidated specifications contract.
-
-### [Series 02: Quang Number Intermediate Representation (CDQN-02 - QnIR)](docs/)
-This series specifies the target-independent, immutable virtual Instruction Set Architecture (vISA) and compiled dataflow mappings.
-*   **SMC Bytecode & Targets:** Free strict Symmetric Monoidal Categories (SMC), Single-Writer Wires, table-driven branchless dispatch, $p$-adic tree-structured slab allocators, and GPU-accelerated SPIR-V compute shaders.
-*   **Key Documents:** [docs/02.01.md](docs/02.01.md) through [docs/02.14.md](docs/02.14.md). Refer to [docs/02.14.md](docs/02.14.md) for the consolidated stable bytecode contract.
-
-### [Series 03: The Sovereign High-Level Language (CDQN-03 - QnLang)](docs/)
-This series specifies the high-level compiler syntax, substructural type-checkers, and pregroup grammatical parsing engines.
-*   **Linguistic & Security Lattices:** Linear/affine types, Symmetric Monoidal Stack Invariants, row-based effect capability rows (`@`), Information-Flow Control (IFC) labels (`#`), and the non-biometric Human Accountability Anchor ($\mathcal{A}_{\text{human}}$).
-*   **Key Documents:** [docs/03.01.md](docs/03.01.md) through [docs/03.06a.md](docs/03.06a.md).
-
-### [Series 04: Quang Mathematics (CDQN-04 - Qm)](docs/)
-This series specifies the constructive, computable mathematical behaviors, axioms, and continuous thermodynamic scaling models of the Quang numbers ($Qn$).
-*   **Core Research Scope:** The optimization of bi-directional translation pathways between human-scale decimal math ($\mathbb{R}_{10}$) and register-scale binary math ($\mathbb{F}_2$), constrained strictly to the domain of Computable Quang Numbers ($Qn_{\text{comp}}$).
-*   **Key Documents:** Commencing with `docs/04.01.md` (The Foundations of Quang Mathematics - Qm), which axiomatizes the Substrate, Abstraction, and AI Context Gaps (Knowledge and Action) and formulates the Thermodynamic Value-of-Information (VoI) Inequality to prevent physical microarchitectural thermal cycling fatigue under Dynamic Voltage and Frequency Scaling (DVFS).
-
-### [Series 05: Quang Semantics (CDQN-05 - Qs)](docs/)
-This series specifies the semantics of $Qn$ based on contexts and domains of applications.
-*   **Key Documents:** Commencing with `CDQN-05.01` (to be drafted in subsequent co-design phases).
-
-### cdqnK & cdqnOS (Future Series)
-The low-level microkernel drivers, physical memory allocators, and hardware-software operating system interfaces are deferred and assigned to dedicated, separate paper series in subsequent developmental phases to preserve complete modularity and prevent premature microkernel technical debt.
+The project is experimental and specification-driven. It is not intended as a replacement for existing mathematics or computer science, but as a constructive framework that may simplify future computing systems while improving accountability, portability and efficiency.
 
 ---
 
-## 2. The Collaborative Invitation: How to Contribute
+Vision
 
-This repository is designed under the **Variation-Evaluation-Selection (VES)** lifecycle. We treat every paper as a speculative "Variation" that requires adversarial auditing. We ask the community to help us evaluate these models:
+Modern computer science has accumulated decades of abstraction layers:
 
-1.  **Break Our Mathematics:** If you identify a category-theoretic inconsistency in our condensed sets ($\mathbf{CondAb}$), a homological gap in our spectral sequences ($E_r$), or an algebraic error in our $p$-adic valuations, please open an Issue or submit a Critique.
-2.  **Audit Our Security:** If you find a side-channel vulnerability in our $O(1)$ constant-time register deallocation, a collusion exploit in our Direct Anonymous Attestation (DAA), or a logical loophole in our compile-time smart contract validation, help us document and correct it.
-3.  **Refine Our Complexity:** Help us optimize our algorithmic complexity bounds for Fast GCD and cellular sheaf cohomology, or propose more efficient physical register mapping protocols.
+- programming languages
+- operating systems
+- databases
+- networking protocols
+- distributed systems
+- AI frameworks
+- cloud infrastructures
 
-Your feedback, corrections, and push-backs will be recorded in our VES Revision History tables, driving the collaborative evolution of the cdqn ecosystem.
+Each layer solves real problems, but often introduces additional complexity because they were designed independently and at different times.
+
+CDQN investigates whether a single finite constructive primitive can become the common foundation for:
+
+- computation
+- data
+- semantics
+- persistence
+- lineage
+- distributed execution
+- accountability
 
 ---
 
-## 3. Licensing and Covenant (USSL v1.0)
+Philosophy
 
-To protect the collaborative contributions of the community and prevent corporate or state enclosure of these open-core specifications, this repository is governed by the **Universal Sovereign Source License (USSL) v1.0**, authored by Christophe Duy Quang Nguyen.
+CDQN is built around several principles.
 
-### Core Invariants:
-1.  **Sovereign Exemption:** Use of the Source Complex is completely free and unrestricted for Personal Use, Academic Research, Non-Profit Education, or Small-Scale Individual Creation.
-2.  **The Iron Shield (Section 4):** If any licensee instigates patent, copyright, or trade-secret litigation against the Author(s), the Community, or any sovereign node, all rights and licenses granted to that licensee terminate immediately and retroactively. This work is the un-enclosable physical floor of its field.
-3.  **Open Core Requirement (Section 5):** The fundamental logic and formalisms within the Source Complex must remain transparent and auditable in any derivative work.
-4.  **Commercial Thresholds (Section 6):** Deployment by government entities, corporations with $>500$ employees, projects servicing $>10,000$ active users, or generating $> \$1,000,000$ USD in gross annual revenue requires entering a formal Commercial Partnership Agreement with the primary author.
+Finite Constructive Computing
 
-*All inquiries regarding commercial deployment or partnerships should be directed to the primary author, Christophe Duy Quang Nguyen, under the jurisdiction of Vietnam / Open International Arbitration.*
+Every computation is finite.
+
+Every state is finite.
+
+Every execution is finite.
+
+Rather than reasoning about infinite computational universes, CDQN focuses on constructive objects that actually exist during execution.
+
+---
+
+Accountability by Design
+
+Every computational object has explicit lineage.
+
+Instead of anonymous values moving through programs, every object can describe:
+
+- where it came from
+- how it was produced
+- under which assumptions
+- which transformations created it
+
+The objective is to make accountability a native property of computation rather than external metadata.
+
+---
+
+Computational Sovereignty
+
+Every CDQN node is sovereign.
+
+No remote system can force another node to execute work.
+
+Nodes may:
+
+- accept requests
+- reject requests
+- defer execution
+- negotiate execution
+- require compensation
+- delegate work
+
+Execution is always a voluntary local decision.
+
+Capability never implies obligation.
+
+---
+
+Constructive Cooperation
+
+Distributed computing becomes cooperation between sovereign nodes rather than remote command execution.
+
+Nodes communicate through mutually validated capabilities while preserving local autonomy.
+
+---
+
+What is a Quang Number (Qn)?
+
+A Quang Number is not simply a numeric value.
+
+A Qn is a finite constructive computational entity.
+
+Every Qn may include:
+
+- identity
+- lineage
+- constructive definition
+- semantics
+- dependencies
+- constraints
+- requirements
+- capabilities
+- metrics
+
+Everything manipulated inside the CDQN ecosystem is represented as Qn.
+
+---
+
+Current Architecture
+
+The current research architecture includes:
+
+- Qorigin — immutable node genesis
+- Qprofile — hardware calibration and evolving capabilities
+- Qn — constructive computational primitives
+- Qm — constructive mathematics
+- Qs — constructive semantics
+- Qexp — constructive expressions
+- QnIR — hardware-independent intermediate representation
+- Qdisk — persistent validated knowledge
+- QnLang — future programming language
+- CDQN Runtime — execution environment
+
+This architecture remains under active research.
+
+---
+
+Design Principles
+
+Every architectural decision is evaluated against the SEMP principles.
+
+Security
+
+Security begins with explicit identities, deterministic lineage and computational sovereignty.
+
+Nodes never execute remote work implicitly.
+
+---
+
+Efficiency
+
+The objective is not maximum theoretical performance but measurable efficiency on real hardware.
+
+Modern processors already provide decades of optimization.
+
+CDQN attempts to build abstractions that cooperate with those implementations instead of continuously hiding them behind additional software layers.
+
+---
+
+Modularity
+
+Each layer has a single responsibility.
+
+Higher abstractions are constructed from lower ones.
+
+---
+
+Portability
+
+The specification remains hardware-independent.
+
+Backends are responsible for adapting CDQN to:
+
+- CPUs
+- GPUs
+- AI accelerators
+- future architectures
+- distributed environments
+
+without modifying the constructive specification.
+
+---
+
+Research Roadmap
+
+The current roadmap follows a bottom-up methodology.
+
+Phase 0
+
+- Project vision
+- Manifesto
+- Documentation standard
+- Licensing
+- Core architecture
+
+Status: Completed (Research Draft)
+
+---
+
+Phase 1
+
+Primitive constructive layer
+
+- Q0–Q9
+- Qop (Quang Operators)
+- Qexp (Quang Expressions)
+
+These primitives will become the foundation from which Qm is derived.
+
+Status: In Progress
+
+---
+
+Phase 2
+
+Constructive Mathematics
+
+Research topics include:
+
+- constructive transformations
+- equivalence
+- representations
+- dimensions
+- zoom
+- irreducibility
+- constructive invariants
+
+---
+
+Phase 3
+
+QnLang
+
+A programming language built from constructive objects rather than traditional imperative abstractions.
+
+---
+
+Phase 4
+
+QnIR
+
+A hardware-independent intermediate representation allowing multiple execution backends.
+
+---
+
+Phase 5
+
+CDQN Runtime
+
+Execution, scheduling, persistence and distributed cooperation.
+
+---
+
+Documentation
+
+Project documentation is published using GitHub Pages.
+
+The documentation intentionally uses HTML instead of large Markdown collections.
+
+Each page documents a single concept to improve readability for both humans and AI systems.
+
+Start here:
+
+https://cdqn5249.github.io/cdqn/
+
+---
+
+Project Status
+
+CDQN is an early-stage research project.
+
+Nothing in this repository should currently be considered production-ready.
+
+The objective is to establish a logically consistent constructive framework before implementation.
+
+Scientific criticism, constructive discussions and experimental validation are encouraged.
+
+---
+
+License
+
+This repository is released under the CDQN License v0.1 (Provisional).
+
+The license is designed to encourage open research while protecting author lineage and enabling fair commercial collaboration as projects reach industrial scale.
+
+See LICENSE.md for details.
+
+---
+
+Final Note
+
+CDQN does not begin with the assumption that existing computer science is wrong.
+
+It begins with a different question:
+
+«If modern computing hardware had been invented before programming languages, databases, operating systems and distributed systems, what abstractions would we design today?»
+
+This repository is an attempt to explore that question through constructive research.
