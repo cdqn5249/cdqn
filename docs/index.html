@@ -1,106 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CDQN Documentation Index</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDQN Documentation</title>
 <style>
 body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222;max-width:1200px;margin:auto;padding:2rem}
-header{background:#12395b;color:#fff;padding:1.5rem;border-radius:10px}
-nav{background:#fff;border:1px solid #d7dde5;border-radius:10px;padding:1rem;margin:1.5rem 0}
-ul{line-height:1.9}
-a{text-decoration:none;color:#0b63c7}
-a:hover{text-decoration:underline}
-section{background:#fff;border:1px solid #d7dde5;border-radius:10px;padding:1.2rem;margin:1rem 0}
-code{background:#eef2f7;padding:.1rem .3rem;border-radius:4px}
-small{color:#666}
+header,section,nav{background:#fff;border:1px solid #d7dde5;border-radius:10px;padding:1.2rem;margin:1rem 0}
+header{background:#12395b;color:#fff}
+a{color:#0b63c7;text-decoration:none}a:hover{text-decoration:underline}
+pre{background:#f8f8f8;padding:1rem;border:1px solid #ddd}
 </style>
-</head>
-<body>
-
-<header>
-<h1>CDQN Documentation</h1>
-<p><strong>Chained and Distributed Quang Numbers</strong></p>
+</head><body>
+<header><h1>CDQN Documentation Portal</h1>
+<p>Chained and Distributed Quang Numbers</p>
 <p>Author: Christophe Duy Quang Nguyen</p>
-<p><small>License: See <code>LICENSE.md</code></small></p>
 </header>
 
 <nav>
-<h2>Documentation Map</h2>
+<h2>Project</h2>
 <ul>
-<li><a href="../README.md">README</a> — Project overview</li>
-<li><a href="manifesto.html">Manifesto</a> — Vision and philosophy</li>
+<li><a href="https://github.com/cdqn5249/cdqn">GitHub Repository</a></li>
+<li><a href="https://github.com/cdqn5249/cdqn/blob/main/README.md">README</a></li>
+<li><a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md">LICENSE</a></li>
+<li><a href="manifesto.html">Manifesto</a></li>
 <li><a href="documentation-standard.html">Documentation Standard</a></li>
 <li><a href="foundations/qn_axioms.html"><strong>Qn Foundational Axioms</strong></a></li>
 </ul>
 </nav>
 
-<section>
-<h2>Foundational Quang Families</h2>
-<ul>
-<li><a href="foundations/q0.html">Q0</a> ... <a href="foundations/q9.html">Q9</a> — Primitive Quang Numbers</li>
-<li><a href="foundations/qexp.html">Q(exp)</a> — Quang Expressions</li>
-<li><a href="foundations/qm.html">Qm</a> — Quang Mathematics</li>
-<li><a href="foundations/qs.html">Qs</a> — Quang Semantics</li>
-<li><a href="foundations/qop.html">Qop</a> — Quang Operators</li>
-<li><a href="foundations/qnir.html">QnIR</a> — Quang Intermediate Representation</li>
+<section><h2>Foundational Quang Families</h2><ul>
+<li><a href="foundations/q0.html">Q0</a> ... <a href="foundations/q9.html">Q9</a></li>
+<li><a href="foundations/qexp.html">Q(exp)</a></li>
+<li><a href="foundations/qm.html">Qm</a></li>
+<li><a href="foundations/qs.html">Qs</a></li>
+<li><a href="foundations/qop.html">Qop</a></li>
+<li><a href="foundations/qnir.html">QnIR</a></li>
 <li><a href="foundations/execution_collapse.html">Execution Collapse</a></li>
-<li><a href="foundations/qdisk.html">Qdisk</a> — Quang Persistence</li>
-<li><a href="foundations/qreuse.html">Qreuse</a> — Quang Reuse</li>
-</ul>
-</section>
+<li><a href="foundations/qdisk.html">Qdisk</a></li>
+<li><a href="foundations/qreuse.html">Qreuse</a></li>
+</ul></section>
 
-<section>
-<h2>Dependency Graph</h2>
-<pre>
-Research Question
-        │
-        ▼
-   Qn Axioms
-        │
-        ▼
-    Q0 ... Q9
-        │
-        ├──────────────┐
-        ▼              ▼
- Q(exp)  Qm  Qs  Qop
-        │
-        ▼
-      QnIR
-        │
-        ▼
+<section><h2>Dependency Graph</h2><pre>Research Question
+      │
+      ▼
+ Qn Axioms
+      │
+      ▼
+  Q0 ... Q9
+      │
+      ▼
+Q(exp) Qm Qs Qop
+      │
+      ▼
+    QnIR
+      │
 Execution Collapse
-        │
-        ▼
+      │
 Registers / ISA / SoC
-        │
-        ▼
- Qdisk ─────► Qreuse
-</pre>
-</section>
-
-<section>
-<h2>Reading Order</h2>
-<ol>
-<li>README</li>
-<li>Manifesto</li>
-<li>Qn Axioms</li>
-<li>Q0–Q9</li>
-<li>Q(exp)</li>
-<li>Qm</li>
-<li>Qs</li>
-<li>Qop</li>
-<li>QnIR</li>
-<li>Execution Collapse</li>
-<li>Qdisk</li>
-<li>Qreuse</li>
-</ol>
-</section>
-
-<footer>
-<hr>
-<p>© 2026 Christophe Duy Quang Nguyen</p>
-</footer>
-
-</body>
-</html>
+      │
+ Qdisk → Qreuse</pre></section>
+</body></html>
