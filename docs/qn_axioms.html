@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--
+==============================================================================
+File Path        : docs/foundations/qn_axioms.html
+Document ID      : DOC-QN-AXIOMS
+Document Name    : Quang Number Foundational Axioms
+Version          : 0.1.0-draft
+Status           : Draft
+Project          : CDQN - Chained and Distributed Quang Numbers
+Author           : Christophe Duy Quang Nguyen
+License          : See repository LICENSE.md
+==============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Qn Foundational Axioms</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:1100px;margin:auto;padding:2rem;line-height:1.6}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #aaa;padding:.5rem;vertical-align:top}
+code,pre{background:#f5f5f5}
+</style>
+</head>
+<body>
+<h1>Quang Number (Qn) Foundational Axioms</h1>
+
+<h2>Research Question</h2>
+<blockquote>Can numbers abstract anything?</blockquote>
+
+<h2>First Principle (FP0)</h2>
+<p>Every first-class entity manipulated inside the CDQN formalism SHALL be represented as one or more Quang Numbers (Qns).</p>
+
+<h2>Foundational Axioms</h2>
+<table>
+<tr><th>ID</th><th>Name</th><th>Normative statement</th></tr>
+<tr><td>QA0</td><td>Finite Constructive Realizability</td><td>Every Qn MUST have a finite representation, finite constructive definition and finite validation procedure.</td></tr>
+<tr><td>QA1</td><td>Identity</td><td>Every Qn MUST possess a unique immutable identity.</td></tr>
+<tr><td>QA2</td><td>Explicit Constructive Definition</td><td>Every Qn SHALL be completely described by an explicit constructive specification.</td></tr>
+<tr><td>QA3</td><td>Dependencies</td><td>Every non‑primitive Qn MUST declare the finite set of Qns required for its construction.</td></tr>
+<tr><td>QA4</td><td>Constraints</td><td>Every Qn MUST declare the constraints defining its validity domain.</td></tr>
+<tr><td>QA5</td><td>Constructive Information Preservation</td><td>Every constructive transformation SHALL preserve, transform or explicitly declare the elimination of every essential constructive information.</td></tr>
+<tr><td>QA6</td><td>Immutability</td><td>A constructed Qn MUST NOT be modified. Any modification creates a new Qn.</td></tr>
+</table>
+
+<h2>Derived Concepts</h2>
+<ul>
+<li>Q(exp): complete constructive representation.</li>
+<li>Zoom (Z): presentation scale without altering the underlying Q(exp).</li>
+<li>Precision (P): executable numerical projection.</li>
+<li>Remainder Carrying: derived from QA5 to avoid silent information loss.</li>
+<li>Qm + Qs → QnIR.</li>
+<li>Execution Collapse: deterministic projection from QnIR to machine registers.</li>
+<li>Qdisk: validated persistent constructive knowledge.</li>
+<li>Qreuse: validated reuse from Qdisk using metrics.</li>
+<li>QnLang is intentionally not Turing-complete as a consequence of QA0.</li>
+</ul>
+
+<h2>Execution Boundary</h2>
+<pre>
+Q(exp)
+   |
+ Qm + Qs
+   |
+ QnIR
+   |
+Execution Collapse
+   |
+Registers → ISA → SoC
+</pre>
+
+<h2>Scope</h2>
+<p>This specification defines only the ontology of Quang Numbers. Q0–Q9, Qm, Qs, Q(exp), QnIR, Qdisk, Qreuse and QnLang are specified in separate documents.</p>
+
+<hr>
+<p><strong>License:</strong> This specification is governed by the repository LICENSE.md.</p>
+</body>
+</html>
