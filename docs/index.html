@@ -1,62 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="qn: https://github.com/cdqn5249/cdqn/ns#">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CDQN Documentation</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>CDQN Documentation Portal</title>
+<meta name="description" content="Official documentation portal of the Chained and Distributed Quang Numbers project.">
+
+<meta name="qn:id" content="DOC-INDEX">
+<meta name="qn:type" content="DocumentationRoot">
+<meta name="qn:version" content="0.3.0-draft">
+<meta name="qn:status" content="Draft">
+<meta name="qn:author" content="Christophe Duy Quang Nguyen">
+
 <style>
-body{font-family:Segoe UI,Arial,sans-serif;background:#f4f6f8;color:#222;max-width:1200px;margin:auto;padding:2rem}
-header,section,nav{background:#fff;border:1px solid #d7dde5;border-radius:10px;padding:1.2rem;margin:1rem 0}
-header{background:#12395b;color:#fff}
-a{color:#0b63c7;text-decoration:none}a:hover{text-decoration:underline}
-pre{background:#f8f8f8;padding:1rem;border:1px solid #ddd}
+body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#f5f7fa;color:#222}
+header{background:#17375e;color:#fff;padding:2rem}
+header h1{margin:0}
+main{max-width:1200px;margin:auto;padding:2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+article{background:#fff;border:1px solid #d8dee8;border-radius:12px;padding:1rem}
+article h3{margin-top:0}
+a{color:#0b63c7;text-decoration:none}
+a:hover{text-decoration:underline}
+nav.breadcrumb{margin-bottom:1rem}
+footer{margin-top:2rem;padding:2rem;text-align:center;color:#666}
+pre{background:#f8f8f8;border:1px solid #ddd;border-radius:8px;padding:1rem;overflow:auto}
 </style>
-</head><body>
-<header><h1>CDQN Documentation Portal</h1>
+</head>
+
+<body>
+
+<header role="banner">
+<h1>CDQN Documentation Portal</h1>
 <p>Chained and Distributed Quang Numbers</p>
-<p>Author: Christophe Duy Quang Nguyen</p>
+<p>Semantic documentation graph for humans, AI agents and the future CDQN runtime.</p>
 </header>
 
-<nav>
-<h2>Project</h2>
-<ul>
-<li><a href="https://github.com/cdqn5249/cdqn">GitHub Repository</a></li>
-<li><a href="https://github.com/cdqn5249/cdqn/blob/main/README.md">README</a></li>
-<li><a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md">LICENSE</a></li>
-<li><a href="manifesto.html">Manifesto</a></li>
-<li><a href="documentation-standard.html">Documentation Standard</a></li>
-<li><a href="foundations/qn_axioms.html"><strong>Qn Foundational Axioms</strong></a></li>
-</ul>
+<main>
+
+<nav class="breadcrumb" aria-label="Repository">
+<a href="https://github.com/cdqn5249/cdqn">GitHub Repository</a> |
+<a href="https://github.com/cdqn5249/cdqn/blob/main/README.md">README</a> |
+<a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md">LICENSE</a>
 </nav>
 
-<section><h2>Foundational Quang Families</h2><ul>
-<li><a href="foundations/q0.html">Q0</a> ... <a href="foundations/q9.html">Q9</a></li>
-<li><a href="foundations/qexp.html">Q(exp)</a></li>
-<li><a href="foundations/qm.html">Qm</a></li>
-<li><a href="foundations/qs.html">Qs</a></li>
-<li><a href="foundations/qop.html">Qop</a></li>
-<li><a href="foundations/qnir.html">QnIR</a></li>
-<li><a href="foundations/execution_collapse.html">Execution Collapse</a></li>
-<li><a href="foundations/qdisk.html">Qdisk</a></li>
-<li><a href="foundations/qreuse.html">Qreuse</a></li>
-</ul></section>
+<section>
 
-<section><h2>Dependency Graph</h2><pre>Research Question
+<h2>Documentation Graph</h2>
+
+<div class="grid">
+
+<article id="manifesto">
+<h3><a href="manifesto.html" rel="dependency">Manifesto</a></h3>
+<p>Project vision and motivation.</p>
+</article>
+
+<article id="docstd">
+<h3><a href="documentation-standard.html" rel="dependency">Documentation Standard</a></h3>
+<p>Rules governing every CDQN specification.</p>
+</article>
+
+<article id="axioms">
+<h3><a href="foundations/qn_axioms.html" rel="dependency">Qn Foundational Axioms</a></h3>
+<p>Normative foundation of the CDQN formalism.</p>
+</article>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Foundational Quang Families</h2>
+
+<div class="grid">
+
+<article><h3><a href="foundations/q0.html">Q0–Q9</a></h3><p>Primitive Quang Numbers.</p></article>
+
+<article><h3><a href="foundations/qexp.html">Q(exp)</a></h3><p>Quang Expressions.</p></article>
+
+<article><h3><a href="foundations/qm.html">Qm</a></h3><p>Quang Mathematics.</p></article>
+
+<article><h3><a href="foundations/qs.html">Qs</a></h3><p>Quang Semantics.</p></article>
+
+<article><h3><a href="foundations/qop.html">Qop</a></h3><p>Quang Operators.</p></article>
+
+<article><h3><a href="foundations/qnir.html">QnIR</a></h3><p>Quang Intermediate Representation.</p></article>
+
+<article><h3><a href="foundations/execution_collapse.html">Execution Collapse</a></h3><p>Bridge toward hardware execution.</p></article>
+
+<article><h3><a href="foundations/qdisk.html">Qdisk</a></h3><p>Persistent Quang knowledge.</p></article>
+
+<article><h3><a href="foundations/qreuse.html">Qreuse</a></h3><p>Reusable validated Quang knowledge.</p></article>
+
+</div>
+
+</section>
+
+<section>
+
+<h2>Project Dependency Graph</h2>
+
+<pre>
+Repository
+    │
+ README ─ Manifesto
       │
-      ▼
- Qn Axioms
+Documentation Standard
       │
-      ▼
-  Q0 ... Q9
+Qn Axioms
       │
-      ▼
-Q(exp) Qm Qs Qop
+Q0...Q9
       │
-      ▼
+Q(exp) ─ Qm ─ Qs ─ Qop
+      │
     QnIR
       │
 Execution Collapse
       │
 Registers / ISA / SoC
       │
- Qdisk → Qreuse</pre></section>
-</body></html>
+Qdisk ─────────► Qreuse
+</pre>
+
+</section>
+
+</main>
+
+<footer>
+<p>© 2026 Christophe Duy Quang Nguyen</p>
+<p>Licensed according to the repository LICENSE.md.</p>
+</footer>
+
+</body>
+</html>
