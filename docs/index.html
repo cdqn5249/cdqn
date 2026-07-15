@@ -1,183 +1,98 @@
 <!DOCTYPE html>
+<!--
+==============================================================================
+File Path        : docs/index.html
+Document ID      : DOC-INDEX
+Document Name    : CDQN Documentation Index
+Version          : 0.2.1-draft
+Status           : Draft
+
+Project          : CDQN - Chained and Distributed Quang Numbers
+Author           : Christophe Duy Quang Nguyen
+Copyright        : © 2026 Christophe Duy Quang Nguyen
+License          : See repository LICENSE.md
+==============================================================================
+-->
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CDQN — Chained and Distributed Quang Numbers</title>
-
-<meta name="description"
-      content="Official documentation of the Chained and Distributed Quang Numbers (CDQN) project.">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CDQN Documentation Index</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;max-width:1100px;margin:auto;padding:2rem;line-height:1.65}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #bbb;padding:.55rem}
+th{background:#eee}
+code{background:#f5f5f5;padding:2px 4px}
+pre{background:#fafafa;border:1px solid #ddd;padding:1rem}
+</style>
 </head>
-
 <body>
 
-<header>
-
-<h1>Chained and Distributed Quang Numbers (CDQN)</h1>
-
-<p>
-Official documentation of the CDQN project.
-</p>
-
-<hr>
-
-<nav>
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="documentation-standard.html">Documentation Standard</a></li>
-
-</ul>
-
-</nav>
-
-<hr>
-
-</header>
-
-<main>
-
-<section>
-
-<h2>Welcome</h2>
-
-<p>
-
-Welcome to the official documentation of the
-<strong>Chained and Distributed Quang Numbers (CDQN)</strong>
-project.
-
-</p>
-
-<p>
-
-CDQN is an ongoing research and engineering project exploring a new
-computer science stack centered around Quang Numbers (Qn), Quang
-Mathematics (Qm), Quang Semantics (Qs), QnIR, QnLang, and the CDQN
-execution ecosystem.
-
-</p>
-
-</section>
-
-<section>
-
-<h2>Documentation Philosophy</h2>
-
-<p>
-
-The canonical documentation format of the CDQN project is semantic
-HTML.
-
-</p>
-
-<p>
-
-Each HTML document defines exactly one concept.
-
-</p>
-
-<p>
-
-All concepts are connected through explicit hyperlinks, forming a
-human-readable and AI-readable knowledge graph.
-
-</p>
-
-</section>
-
-<section>
-
-<h2>Current Documentation</h2>
-
-<ul>
-
-<li>
-
-<a href="cdqn/documentation-standard.html">
-
-CDQN Documentation Standard
-
-</a>
-
-</li>
-
-</ul>
-
-</section>
-
-<section>
-
-<h2>Repository</h2>
-
-<p>
-
-GitHub Repository:
-
-<a href="https://github.com/cdqn5249/cdqn">
-
-https://github.com/cdqn5249/cdqn
-
-</a>
-
-</p>
-
-<p>
-
-GitHub Pages:
-
-<a href="https://cdqn5249.github.io/cdqn/">
-
-https://cdqn5249.github.io/cdqn/
-
-</a>
-
-</p>
-
-</section>
-
-</main>
-
-<hr>
-
-<footer>
-
-<p>
-
-Version:
-0.1
-
-</p>
-
-<p>
-
-Status:
-Accepted
-
-</p>
-
-<p>
-
-Author:
-Christophe Duy Quang Nguyen
-
-</p>
-
-<p>
-
-Last Updated:
-2026-07-13
-
-</p>
-
+<h1>CDQN Documentation Index</h1>
+
+<p>Entry point for the Chained and Distributed Quang Numbers (CDQN) documentation.</p>
+
+<h2>Recommended Reading Order</h2>
+<table>
+<tr><th>#</th><th>Document</th><th>Type</th><th>Status</th></tr>
+<tr><td>1</td><td><code>README.md</code></td><td>Informative</td><td>Current</td></tr>
+<tr><td>2</td><td><code>docs/manifesto.html</code></td><td>Informative</td><td>Current</td></tr>
+<tr><td>3</td><td><code>docs/foundations/qn_axioms.html</code></td><td>Normative</td><td>Draft</td></tr>
+<tr><td>4</td><td><code>docs/documentation-standard.html</code></td><td>Normative</td><td>Current</td></tr>
+</table>
+
+<h2>Foundational Qn Families</h2>
+
+<table>
+<tr><th>Family</th><th>Specification</th><th>Status</th></tr>
+<tr><td>Primitive Quang Numbers</td><td><code>q0.html</code> → <code>q9.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Expressions</td><td><code>qexp.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Mathematics</td><td><code>qm.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Semantics</td><td><code>qs.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Operators</td><td><code>qop.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Intermediate Representation</td><td><code>qnir.html</code></td><td>Planned</td></tr>
+<tr><td>Execution Collapse</td><td><code>execution_collapse.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Disk</td><td><code>qdisk.html</code></td><td>Planned</td></tr>
+<tr><td>Quang Reuse</td><td><code>qreuse.html</code></td><td>Planned</td></tr>
+</table>
+
+<h2>Conceptual Dependency Graph</h2>
+<pre>
+Research Question
+        │
+        ▼
+   Qn Axioms
+        │
+        ▼
+    Q0 ... Q9
+        │
+        ▼
++--------------------------------------+
+| Q(exp)  Qm  Qs  Qop                  |
+| Quang Expressions                    |
+| Quang Mathematics                    |
+| Quang Semantics                      |
+| Quang Operators                      |
++--------------------------------------+
+                │
+                ▼
+              QnIR
+                │
+                ▼
+      Execution Collapse
+                │
+                ▼
+      Registers / ISA / SoC
+                │
+                ▼
+        Qdisk / Qreuse
+</pre>
+
+<footer><hr>
+<p>Copyright © 2026 Christophe Duy Quang Nguyen</p>
+<p>License: see repository <code>LICENSE.md</code>.</p>
 </footer>
 
 </body>
-
 </html>
