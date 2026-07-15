@@ -6,11 +6,15 @@ Can numbers become a universal constructive abstraction for computation?»
 
 CDQN (Chained and Distributed Quang Numbers) is an open research project exploring a new computational abstraction layer designed from the perspective of modern computing hardware rather than inherited mathematical notation or legacy software stacks.
 
-Instead of asking "How do we map human abstractions onto computers?", CDQN asks:
+Instead of asking:
+
+«"How do we map human abstractions onto computers?"»
+
+CDQN asks:
 
 «"What abstraction would we design today if we started from modern processors, memory hierarchies and distributed systems?"»
 
-The project is experimental and specification-driven. It is not intended as a replacement for existing mathematics or computer science, but as a constructive framework that may simplify future computing systems while improving accountability, portability and efficiency.
+The project is experimental, specification-driven, and research-oriented. It is not intended to replace existing mathematics or computer science. Instead, it investigates whether a finite constructive computational primitive can become a common foundation for future computing systems.
 
 ---
 
@@ -18,39 +22,37 @@ Vision
 
 Modern computer science has accumulated decades of abstraction layers:
 
-- programming languages
-- operating systems
-- databases
-- networking protocols
-- distributed systems
+- Programming languages
+- Operating systems
+- Databases
+- Networking protocols
+- Distributed systems
 - AI frameworks
-- cloud infrastructures
+- Cloud infrastructures
 
-Each layer solves real problems, but often introduces additional complexity because they were designed independently and at different times.
+Each layer solved important problems for its time, but together they have produced increasingly complex software stacks.
 
-CDQN investigates whether a single finite constructive primitive can become the common foundation for:
+CDQN explores whether a single constructive abstraction can unify:
 
-- computation
-- data
-- semantics
-- persistence
-- lineage
-- distributed execution
-- accountability
+- Computation
+- Data
+- Semantics
+- Persistence
+- Provenance
+- Distributed execution
+- Accountability
 
 ---
 
-Philosophy
-
-CDQN is built around several principles.
+Core Principles
 
 Finite Constructive Computing
 
 Every computation is finite.
 
-Every state is finite.
-
 Every execution is finite.
+
+Every state is finite.
 
 Rather than reasoning about infinite computational universes, CDQN focuses on constructive objects that actually exist during execution.
 
@@ -58,16 +60,16 @@ Rather than reasoning about infinite computational universes, CDQN focuses on co
 
 Accountability by Design
 
-Every computational object has explicit lineage.
+Every computational object carries explicit lineage.
 
-Instead of anonymous values moving through programs, every object can describe:
+Instead of anonymous values flowing through programs, every object can describe:
 
-- where it came from
-- how it was produced
-- under which assumptions
-- which transformations created it
+- Where it came from
+- How it was produced
+- Under which assumptions
+- Which transformations created it
 
-The objective is to make accountability a native property of computation rather than external metadata.
+Accountability becomes a native property of computation rather than external metadata.
 
 ---
 
@@ -75,50 +77,50 @@ Computational Sovereignty
 
 Every CDQN node is sovereign.
 
-No remote system can force another node to execute work.
+A remote node cannot force another node to execute work.
 
 Nodes may:
 
-- accept requests
-- reject requests
-- defer execution
-- negotiate execution
-- require compensation
-- delegate work
-
-Execution is always a voluntary local decision.
+- Accept requests
+- Reject requests
+- Defer execution
+- Negotiate execution
+- Delegate execution
+- Require compensation
 
 Capability never implies obligation.
+
+Execution is always a voluntary local decision.
 
 ---
 
 Constructive Cooperation
 
-Distributed computing becomes cooperation between sovereign nodes rather than remote command execution.
+Distributed computation becomes cooperation between sovereign nodes.
 
-Nodes communicate through mutually validated capabilities while preserving local autonomy.
+Communication is based on mutually validated capabilities, preserving local autonomy while enabling efficient collaboration.
 
 ---
 
-What is a Quang Number (Qn)?
+What is a Quang Number?
 
-A Quang Number is not simply a numeric value.
+A Quang Number (Qn) is not simply a numeric value.
 
 A Qn is a finite constructive computational entity.
 
-Every Qn may include:
+Each Qn may include:
 
-- identity
-- lineage
-- constructive definition
-- semantics
-- dependencies
-- constraints
-- requirements
-- capabilities
-- metrics
+- Identity
+- Lineage
+- Constructive definition
+- Semantics
+- Dependencies
+- Constraints
+- Requirements
+- Capabilities
+- Metrics
 
-Everything manipulated inside the CDQN ecosystem is represented as Qn.
+Everything manipulated inside the CDQN ecosystem is represented as a Qn.
 
 ---
 
@@ -126,72 +128,36 @@ Current Architecture
 
 The current research architecture includes:
 
-- Qorigin — immutable node genesis
-- Qprofile — hardware calibration and evolving capabilities
-- Qn — constructive computational primitives
-- Qm — constructive mathematics
-- Qs — constructive semantics
-- Qexp — constructive expressions
-- QnIR — hardware-independent intermediate representation
-- Qdisk — persistent validated knowledge
-- QnLang — future programming language
-- CDQN Runtime — execution environment
+- Qorigin — Immutable node genesis
+- Qprofile — Hardware calibration and evolving capabilities
+- Qn — Constructive computational primitives
+- Qm — Constructive mathematics
+- Qs — Constructive semantics
+- Qexp — Constructive expressions
+- QnIR — Hardware-independent intermediate representation
+- Qdisk — Persistent validated knowledge
+- QnLang — Future programming language
+- CDQN Runtime — Execution environment
 
-This architecture remains under active research.
-
----
-
-Design Principles
-
-Every architectural decision is evaluated against the SEMP principles.
-
-Security
-
-Security begins with explicit identities, deterministic lineage and computational sovereignty.
-
-Nodes never execute remote work implicitly.
+These specifications are under active research.
 
 ---
 
-Efficiency
+Design Principles (SEMP)
 
-The objective is not maximum theoretical performance but measurable efficiency on real hardware.
+Every architectural decision is evaluated against four principles.
 
-Modern processors already provide decades of optimization.
-
-CDQN attempts to build abstractions that cooperate with those implementations instead of continuously hiding them behind additional software layers.
-
----
-
-Modularity
-
-Each layer has a single responsibility.
-
-Higher abstractions are constructed from lower ones.
-
----
-
-Portability
-
-The specification remains hardware-independent.
-
-Backends are responsible for adapting CDQN to:
-
-- CPUs
-- GPUs
-- AI accelerators
-- future architectures
-- distributed environments
-
-without modifying the constructive specification.
+Principle| Goal
+Security| Explicit lineage, deterministic validation and computational sovereignty
+Efficiency| Optimize for real hardware rather than abstract computational models
+Modularity| Single responsibility for every architectural layer
+Portability| Hardware-independent specifications with multiple execution backends
 
 ---
 
 Research Roadmap
 
-The current roadmap follows a bottom-up methodology.
-
-Phase 0
+Phase 0 — Foundation
 
 - Project vision
 - Manifesto
@@ -203,9 +169,7 @@ Status: Completed (Research Draft)
 
 ---
 
-Phase 1
-
-Primitive constructive layer
+Phase 1 — Primitive Constructive Layer
 
 - Q0–Q9
 - Qop (Quang Operators)
@@ -217,41 +181,33 @@ Status: In Progress
 
 ---
 
-Phase 2
-
-Constructive Mathematics
+Phase 2 — Constructive Mathematics
 
 Research topics include:
 
-- constructive transformations
-- equivalence
-- representations
-- dimensions
-- zoom
-- irreducibility
-- constructive invariants
+- Constructive transformations
+- Equivalence
+- Representations
+- Dimensions
+- Zoom
+- Irreducibility
+- Constructive invariants
 
 ---
 
-Phase 3
-
-QnLang
+Phase 3 — QnLang
 
 A programming language built from constructive objects rather than traditional imperative abstractions.
 
 ---
 
-Phase 4
+Phase 4 — QnIR
 
-QnIR
-
-A hardware-independent intermediate representation allowing multiple execution backends.
+A hardware-independent intermediate representation supporting multiple execution backends.
 
 ---
 
-Phase 5
-
-CDQN Runtime
+Phase 5 — CDQN Runtime
 
 Execution, scheduling, persistence and distributed cooperation.
 
@@ -261,11 +217,11 @@ Documentation
 
 Project documentation is published using GitHub Pages.
 
-The documentation intentionally uses HTML instead of large Markdown collections.
+Instead of maintaining many Markdown documents, CDQN uses small interconnected HTML pages.
 
-Each page documents a single concept to improve readability for both humans and AI systems.
+Each page documents one concept only, making the documentation easier to navigate for both humans and AI agents.
 
-Start here:
+Documentation:
 
 https://cdqn5249.github.io/cdqn/
 
@@ -273,13 +229,32 @@ https://cdqn5249.github.io/cdqn/
 
 Project Status
 
+«Research Preview — Version 0.1»
+
 CDQN is an early-stage research project.
 
 Nothing in this repository should currently be considered production-ready.
 
 The objective is to establish a logically consistent constructive framework before implementation.
 
-Scientific criticism, constructive discussions and experimental validation are encouraged.
+Constructive criticism, scientific discussions and experimental validation are welcome.
+
+---
+
+Contributing
+
+Contributions are welcome, especially regarding:
+
+- Constructive mathematics
+- Programming language design
+- Compiler architecture
+- Runtime systems
+- Distributed computing
+- Computer architecture
+- Formal methods
+- Scientific validation
+
+Please keep discussions aligned with the project's long-term objectives and architectural principles.
 
 ---
 
@@ -293,12 +268,12 @@ See LICENSE.md for details.
 
 ---
 
-Final Note
+Final Thought
 
-CDQN does not begin with the assumption that existing computer science is wrong.
+CDQN does not begin by assuming existing computer science is wrong.
 
-It begins with a different question:
+Instead, it asks a different question:
 
-«If modern computing hardware had been invented before programming languages, databases, operating systems and distributed systems, what abstractions would we design today?»
+«If modern processors, memories and distributed systems had existed before programming languages, operating systems and databases, what abstractions would we design today?»
 
 This repository is an attempt to explore that question through constructive research.
