@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The SMEMP Manifesto — A Deductive Framework for Qn & CDQN</title>
+    <title>The SMEMP Manifesto — A Deductive Framework for Qn &amp; CDQN</title>
     
-    <!-- Meta Metadata -->
-    <meta name="description" content="The SMEMP Manifesto: A deductive framework for Quang Numbers (Qn) and Chained & Distributed Quang Numbers (CDQN) deriving from the core question 'Can a computing number abstract anything?'.">
+    <!-- Metadata -->
+    <meta name="description" content="The SMEMP Manifesto: A formal deductive framework for Quang Numbers (Qn) and Chained & Distributed Quang Numbers (CDQN).">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
     <meta name="timestamp" content="2026-07-22">
     <meta name="license" content="MIT License">
     <meta name="theme-color" content="#0f172a">
 
-    <!-- Embedded Clean CSS -->
+    <!-- Embedded CSS -->
     <style>
         :root {
             --bg-primary: #090d16;
@@ -21,8 +21,8 @@
             --bg-card: #1e293b;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
-            --accent-gold: #f59e0b;
-            --accent-gold-light: #fbbf24;
+            --accent-gold: #d97706;
+            --accent-gold-light: #f59e0b;
             --accent-blue: #38bdf8;
             --accent-emerald: #10b981;
             --border-color: #334155;
@@ -60,9 +60,9 @@
 
         .badge {
             display: inline-block;
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(217, 119, 6, 0.1);
             color: var(--accent-gold-light);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(217, 119, 6, 0.3);
             padding: 0.3rem 0.85rem;
             border-radius: 9999px;
             font-size: 0.85rem;
@@ -73,7 +73,7 @@
         }
 
         h1 {
-            font-size: 2.85rem;
+            font-size: 2.5rem;
             font-weight: 800;
             letter-spacing: -0.025em;
             color: #ffffff;
@@ -82,11 +82,11 @@
         }
 
         .subtitle {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--text-secondary);
             font-weight: 400;
             margin-bottom: 2rem;
-            max-width: 720px;
+            max-width: 740px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -122,25 +122,31 @@
         }
 
         h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--accent-gold);
-            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            color: var(--accent-gold-light);
+            border-bottom: 1px solid rgba(217, 119, 6, 0.25);
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         p {
             margin-bottom: 1.25rem;
             color: #cbd5e1;
-            font-size: 1.05rem;
+            font-size: 1.025rem;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            background-color: rgba(51, 65, 85, 0.5);
+            color: var(--accent-blue);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
         }
 
         .lead-quote {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-style: italic;
             color: #f1f5f9;
             background-color: var(--bg-secondary);
@@ -161,7 +167,7 @@
 
         .deduction-step h3 {
             color: var(--accent-blue);
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-family: var(--font-mono);
             margin-bottom: 0.5rem;
         }
@@ -184,7 +190,7 @@
             color: var(--accent-gold-light);
             font-weight: 700;
             font-family: var(--font-mono);
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-bottom: 0.5rem;
             display: flex;
             justify-content: space-between;
@@ -207,9 +213,19 @@
             border-radius: 0 0.5rem 0.5rem 0;
             margin: 1.75rem 0;
             font-family: var(--font-mono);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #6ee7b7;
             overflow-x: auto;
+        }
+
+        ul {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
         }
 
         .boundary-diagram {
@@ -219,7 +235,7 @@
             padding: 1.5rem;
             margin: 1.75rem 0;
             font-family: var(--font-mono);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
 
         .boundary-level {
@@ -235,8 +251,8 @@
         }
 
         .level-middle {
-            background-color: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            background-color: rgba(217, 119, 6, 0.1);
+            border: 1px solid rgba(217, 119, 6, 0.3);
             color: var(--accent-gold-light);
         }
 
@@ -257,23 +273,24 @@
         }
 
         footer a {
-            color: var(--accent-gold);
+            color: var(--accent-gold-light);
             text-decoration: none;
         }
 
         footer a:hover {
             text-decoration: underline;
         }
-    </style>
+    </footer>
+</style>
 </head>
 <body>
 
 <div class="container">
 
     <header>
-        <span class="badge">Axiomatic Manifesto</span>
+        <span class="badge">Axiomatic Framework</span>
         <h1>THE SMEMP MANIFESTO</h1>
-        <p class="subtitle">A Deductive Architectural Framework for Quang Numbers (Qn) and Chained & Distributed Quang Numbers (CDQN)</p>
+        <p class="subtitle">A Deductive Architectural Framework for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN)</p>
 
         <div class="meta-grid">
             <div class="meta-item">
@@ -297,197 +314,191 @@
 
     <main>
 
-        <!-- SECTION I: THE INQUIRING SPARK -->
+        <!-- SECTION I: THE INQUIRING THESIS -->
         <section>
-            <h2>I. The Inquiring Spark</h2>
+            <h2>I. The Inquiring Thesis</h2>
             <p>
-                This research project originates from a single, fundamental inquiry:
+                This research explores a foundational question in systems architecture:
             </p>
             
             <div class="lead-quote">
-                "Can a computing number system abstract anything?"
+                "Can a computing number system abstract arbitrary state and reasoning?"
             </div>
 
             <p>
-                If Kurt Gödel demonstrated that logical statements can be mapped to unique natural numbers, and if modern Artificial Intelligence demonstrates that multi-dimensional vectors can represent human reasoning, semantics, and intent, then mathematically the answer is affirmative: <em>A computing number can indeed abstract any system.</em>
+                Modern computing demonstrates that high-dimensional vector representations can encode complex semantics, intent, and execution paths. Consequently, from a representational standpoint, numerical structures can abstract arbitrary system states.
             </p>
             <p>
-                However, when we translate this mathematical premise into software systems, we encounter a fundamental divergence in design philosophy. Traditional computer science has historically defined abstraction as <strong>hiding complexity</strong>—encapsulating intricate operations beneath opaque boundaries. 
+                However, a critical systems engineering trade-off emerges depending on how abstraction is defined. In conventional computer science, abstraction is predominantly realized by <em>concealing complexity</em>—encapsulating operational details behind opaque interfaces. In autonomous, distributed, and agentic environments, relying solely on complexity concealment often leads to inscrutable latent states, non-deterministic execution paths, and unverified data flows.
             </p>
             <p>
-                In an era dominated by opaque AI latent spaces, autonomous multi-agent interactions, and distributed zero-trust networks, hiding complexity yields inscrutable black boxes, non-deterministic behaviors, and unverified data flows.
+                This leads to our primary deductive premise: To abstract arbitrary states without inducing operational opacity, an abstraction model must shift from <em>concealing complexity</em> toward <strong>structuring complexity</strong>.
             </p>
             <p>
-                Therefore, our initial question forces a primary deduction: If a computing number system is to abstract anything reliably, it must redefine abstraction from <em>hiding complexity</em> to <strong>structuring complexity</strong>. 
-            </p>
-            <p>
-                From this deduction emerges the concept of a <strong>Quang Number (Qn)</strong>. Derived from the Vietnamese word <em>Quang</em>—signifying luminescence, brightness, and clarity—a Quang Number is a computing number designed not to conceal state, but to illuminate it by structuring complexity into observable, verifiable mathematical relationships.
+                We designate such a structured numerical primitive as a <strong>Quang Number (Qn)</strong>—where the term <em>Quang</em> (meaning luminescent or clear) represents the property of observable, mathematically verifiable state clarity.
             </p>
         </section>
 
-        <!-- SECTION II: IDENTIFIED CS FRICTION POINTS -->
+        <!-- SECTION II: SYSTEMIC FRICTION POINTS -->
         <section>
-            <h2>II. Identified CS Friction Points</h2>
+            <h2>II. Systemic Friction Points in Current Computing Paradigms</h2>
             <p>
-                Our objective is not to criticize established computer science paradigms, which have successfully powered decades of digital transformation. Rather, we identify specific <strong>architectural friction points</strong> that naturally arise when existing paradigms are stretched into autonomous, highly distributed, agentic environments.
-            </p>
-            <p>
-                The SMEMP Manifesto is designed as a logical set of constraints specifically crafted to address these friction points:
+                Rather than postulating flaws in established computer science practices, we observe specific <strong>systemic friction points</strong> that emerge when existing assumptions are extended into high-throughput, agentic, and resource-constrained distributed contexts:
             </p>
 
             <div class="friction-grid">
                 
                 <div class="friction-card">
                     <div class="friction-title">
-                        1. The Opacity & Sandboxing Friction
-                        <span class="tag">Addressable by [S]</span>
+                        1. Implicit Trust in Unauthenticated Data Processing
+                        <span class="tag">Addressed by [S]</span>
                     </div>
                     <p>
-                        Treating data as "passive content" while relying on external runtime sandboxing creates severe vulnerabilities. As autonomous agents dynamically interpret data, configuration files, and templates, passive data becomes an active execution path (e.g., indirect prompt injections, malicious dataset payloads).
+                        Treating incoming payload structures as passive content while relying entirely on external runtime sandboxing creates severe attack vectors. When dynamic execution pipelines parse unauthenticated data, the boundary between data and instruction blurs, leading to remote code execution and prompt injection vulnerabilities.
                     </p>
                 </div>
 
                 <div class="friction-card">
                     <div class="friction-title">
-                        2. The Semantic Ambiguity Friction
-                        <span class="tag">Addressable by [M]</span>
+                        2. Non-Deterministic Latent Space Metrics
+                        <span class="tag">Addressed by [M]</span>
                     </div>
                     <p>
-                        Modern vector spaces in AI provide high expressiveness but often lack strict, deterministic bounds or human/machine-verifiable geometric metrics, introducing non-deterministic drift and unpredictable evaluation paths.
+                        High-dimensional vector representations offer high expressiveness but frequently lack deterministic metric bounds or verifiable distance invariants, leading to semantic drift and unpredictable state evaluation.
                     </p>
                 </div>
 
                 <div class="friction-card">
                     <div class="friction-title">
-                        3. The Trust-vs-Bloat Friction
-                        <span class="tag">Addressable by [E]</span>
+                        3. Scaling Laws of Distributed State Verification
+                        <span class="tag">Addressed by [E]</span>
                     </div>
                     <p>
-                        Decentralized state verification (such as traditional blockchain consensus) frequently trades performance for trust, requiring global ledger replication that causes exponential storage, energy, and latency bloat incompatible with consumer devices.
+                        Decentralized state verification mechanisms (such as global ledger replication in consensus networks) incur exponential storage, bandwidth, and energy overheads, rendering full state verification impractical on consumer-grade hardware.
                     </p>
                 </div>
 
                 <div class="friction-card">
                     <div class="friction-title">
-                        4. The Latency & Allocation Friction
-                        <span class="tag">Addressable by [Mod]</span>
+                        4. Runtime Memory Allocation Non-Determinism
+                        <span class="tag">Addressed by [Mod]</span>
                     </div>
                     <p>
-                        Dynamic object-oriented heap allocation (`malloc`/`free`) and managed garbage collection cause unpredictable micro-pauses and memory fragmentation, degrading real-time responsiveness on low-power consumer hardware.
+                        Dynamic heap allocation (<code>malloc</code>/<code>free</code>) and non-deterministic garbage collection cycles introduce unpredictable latency spikes and memory fragmentation on constrained edge devices.
                     </p>
                 </div>
 
                 <div class="friction-card">
                     <div class="friction-title">
-                        5. The Platform Lock-In Friction
-                        <span class="tag">Addressable by [P]</span>
+                        5. Host Execution Runtime Coupling
+                        <span class="tag">Addressed by [P]</span>
                     </div>
                     <p>
-                        Coupling high-level software models directly to heavy language runtimes (e.g., JVM, V8) or volatile hardware APIs limits execution fluidness across heterogeneous edge devices, NPUs, and web views.
+                        Tightly coupling application logic to specific virtual machine specifications or OS-level system interfaces restricts portability across heterogeneous hardware architectures (e.g., RISC-V microcontrollers, mobile SoCs, and Web environments).
                     </p>
                 </div>
 
             </div>
         </section>
 
-        <!-- SECTION III: THE INVARIANT COUPLE -->
+        <!-- SECTION III: THE INVARIANT CONSTRAINTS -->
         <section>
-            <h2>III. The Invariants (S × M) — Deduce the Birth Laws</h2>
+            <h2>III. The Invariant Constraints (S &times; M) — Existence Criteria</h2>
             <p>
-                To resolve the Opacity and Ambiguity friction points without sacrificing system integrity, we deduce that a Quang Number cannot exist as a raw, floating value. It must be instantiated alongside two mandatory, non-negotiable invariants:
+                To resolve payload ambiguity and execution opacity, we deduce that a Quang Number cannot exist as an unconstrained scalar or raw bit array. It must be instantiated strictly within the bounds of two coupled invariants:
             </p>
 
             <div class="formula-box">
-                Birth of Qn  ⟺  ( Security [S]  ≥  Cryptographic_Threshold )  ∧  ( Metric [M]  ∈  Finite_Metric_Space )
+                Qn_Existence &hArr; ( Security [S] &ge; Cryptographic_Threshold ) &and; ( Metric [M] &in; Finite_Metric_Space )
             </div>
 
             <div class="deduction-step">
-                <h3>[S] Security — Intrinsic Provenance & Identity</h3>
+                <h3>[S] Security — Intrinsic Provenance &amp; Authenticity</h3>
                 <p>
-                    A Qn carries its own cryptographic identity, state immutability proof, and execution boundary natively. Security is not an external sandbox wrapper added later; it is an intrinsic invariant. Unauthenticated or untrusted data cannot be "born" as a valid Qn.
+                    A Qn carries intrinsic cryptographic identity, tamper-evident boundaries, and provenance proofs within its structural representation. Security is not an external runtime wrapper; it is a structural invariant. Unauthenticated payloads cannot achieve valid Qn instantiation.
                 </p>
             </div>
 
             <div class="deduction-step">
-                <h3>[M] Metric — Measurable & Deterministic Space</h3>
+                <h3>[M] Metric — Computable &amp; Deterministic Space</h3>
                 <p>
-                    To structure complexity, state must be quantifiable. A Qn resides within a computable, deterministic metric space $(X, d)$ over discrete sets. Distance, proximity, and transformation between two states ($Q_a, Q_b$) must be calculable in finite time without ambiguity.
+                    A Qn must reside within a computable, deterministic metric space <code>(X, d)</code> defined over discrete, finite sets. State proximity, distance metrics, and state transformations between any two instances (<code>Qa</code>, <code>Qb</code>) must be deterministically evaluable in finite time.
                 </p>
             </div>
         </section>
 
-        <!-- SECTION IV: THE AGILE TRINITY & BEST OF CHOICES -->
+        <!-- SECTION IV: AGILE OPTIMIZATION VECTORS & CONTEXTUAL POLICY -->
         <section>
-            <h2>IV. The Agile Trinity (E, Mod, P) & Best of Choices (BoC)</h2>
+            <h2>IV. Agile Optimization Vectors (E, Mod, P) &amp; Best of Choices (BoC)</h2>
             <p>
-                While the Invariant Couple ($S \times M$) governs <em>existence</em>, the Agile Trinity governs <em>efficiency and consumer adaptation</em>. Unlike the invariants, the three agile criteria are independent optimization vectors tuned by the <strong>Best of Choices (BoC)</strong> dynamic engine:
+                While the Invariants (S, M) govern state validity, three independent agile optimization vectors govern runtime fitness and resource consumption on consumer hardware:
             </p>
 
             <ul>
                 <li>
-                    <strong>[E] Efficiency (Recursive Accumulator Folding):</strong> To eliminate the Trust-vs-Bloat friction, $E$ enforces constant $O(1)$ space verification. Past state chains are algebraically folded into single accumulator Qns, eliminating the need to store massive transaction histories on consumer devices.
+                    <strong>[E] Efficiency (State Compression):</strong> Reduces computational and storage complexity. By employing recursive accumulator structures, past state chains are algebraically folded into single $O(1)$ space representations, eliminating the necessity for complete transaction history storage on edge devices.
                 </li>
                 <li>
-                    <strong>[Mod] Modularity (Arena Value-Semantics):</strong> To eliminate memory fragmentation and garbage collection pauses, Qn primitives use flat value-semantics allocated within pre-managed memory arenas. Composition and decomposition are bitwise operations.
+                    <strong>[Mod] Modularity (Arena Value-Semantics):</strong> Eliminates dynamic heap fragmentation. Qn primitives utilize fixed-size value semantics allocated within pre-managed memory arenas, ensuring zero garbage collection overhead.
                 </li>
                 <li>
-                    <strong>[P] Portability (Hardware Neutrality via QnIR):</strong> To eliminate platform lock-in, $P$ decouples the high-level intent from the physical hardware. Source code in `QnLang` compiles to `QnIR` (Intermediate Representation), which emits lightweight targets for WASM/WAT, bare-metal RISC-V, ARM, or x86.
+                    <strong>[P] Portability (Target-Neutral Execution):</strong> Decouples source representation from host runtime evolution. Higher-level abstractions written in <code>QnLang</code> lower to an Intermediate Representation (<code>QnIR</code>), which can emit code for WASM/WAT, RISC-V, ARM, or x86 targets.
                 </li>
             </ul>
 
             <p>
-                <strong>The Best of Choices (BoC) Engine:</strong> In noisy, power-constrained, real-world environments, BoC acts as the dynamic policy layer that optimizes $E, Mod, P$ according to current runtime context (e.g., thermal limits, battery levels, network noise) to preserve maximum <strong>CDQN network stability</strong>.
+                <strong>The Best of Choices (BoC) Policy Engine:</strong> In heterogeneous operational environments, BoC represents a dynamic configuration policy that tunes the trade-offs between <code>E</code>, <code>Mod</code>, and <code>P</code> based on real-time hardware constraints (e.g., thermal throttling, power limits, network latency) to maximize overall <strong>CDQN network stability</strong> without compromising the mandatory (S &times; M) invariant floor.
             </p>
         </section>
 
-        <!-- SECTION V: SYSTEM CONSTRAINTS -->
+        <!-- SECTION V: FORMAL SYSTEM PROPERTIES -->
         <section>
-            <h2>V. System Constraints: Finitism & Halting</h2>
+            <h2>V. Formal System Properties: Finitism &amp; Termination</h2>
             <p>
-                From the requirement of deterministic, real-time evaluation, we derive three fundamental system laws:
+                To maintain deterministic evaluation and formal verifiability, the Qn/CDQN execution model enforces three mathematical constraints:
             </p>
 
             <div class="deduction-step">
-                <h3>1. Finitism & Bounded Model Checking</h3>
+                <h3>1. Finitism &amp; Bounded Model Checking</h3>
                 <p>
-                    All Qn and CDQN operations take place strictly over bounded, discrete, finite sets. Verification does not depend on asymptotic infinite mathematical induction, but on exhaustive, provable bounded model checking and SMT solvers over finite metric lattices.
+                    Qn state spaces are defined strictly over bounded, discrete sets. Verification relies on deterministic model checking and SMT solvers over finite lattices, avoiding non-deterministic floating-point precision drift.
                 </p>
             </div>
 
             <div class="deduction-step">
                 <h3>2. Total Functionality (Turing Incompleteness)</h3>
                 <p>
-                    To guarantee the Metric invariant ($M$), execution cannot suffer from the undecidability of the Halting Problem. All `QnIR` operations are total (Turing Incomplete) with provable upper execution bounds ($O(1)$ or $O(N)$), ensuring deterministic termination prior to execution.
+                    To guarantee deterministic evaluation and eliminate the undecidability of the Halting Problem, the <code>QnIR</code> execution model is total (Turing Incomplete). All instructions carry provable upper bounds on execution time and space prior to execution.
                 </p>
             </div>
 
             <div class="deduction-step">
-                <h3>3. Fractal Homoiconicity</h3>
+                <h3>3. Homoiconic Fractal Structure</h3>
                 <p>
-                    Because $(S \times M)$ is the universal condition for existence, every component in the stack—a primitive data byte, an operation, an AI agent state, or a network node—is fundamentally a Quang Number. There are no "unprotected raw bytes" floating outside the Qn boundary.
+                    Because the (S &times; M) invariant couple forms the universal condition for existence, all entities within the CDQN stack—data atoms, operational instructions, AI agent states, and network routing nodes—share the identical Qn structural contract.
                 </p>
             </div>
         </section>
 
         <!-- SECTION VI: ABSTRACTION BOUNDARIES -->
         <section>
-            <h2>VI. The Boundaries of Abstraction</h2>
+            <h2>VI. Boundaries of Abstraction</h2>
             <p>
-                To remain anchored in physical reality, the SMEMP Manifesto explicitly defines where abstraction begins and ends:
+                To maintain architectural grounding, the SMEMP Manifesto defines explicit floor and ceiling boundaries for abstraction:
             </p>
 
             <div class="boundary-diagram">
                 <div class="boundary-level level-ceiling">
-                    <strong>CEILING BOUNDARY (Semantic Clarity / Base10):</strong><br>
-                    Human & AI Agent Interface. Structured, observable relationships, visual rendering (HTML/Dual-channel), and human-readable semantic intent.
+                    <strong>CEILING BOUNDARY (Semantic Interface / Base10):</strong><br>
+                    Human and AI agent interface layer. Structured observable state, visual/document presentation (HTML/Dual-channel), and semantic intent.
                 </div>
                 <div class="boundary-level level-middle">
                     <strong>MIDDLE LAYER (The Qn / CDQN Universe):</strong><br>
-                    Governed by SMEMP Laws, formally verified by QnLang & QnIR, executing fractal Qn state chains.
+                    Governed by SMEMP invariant constraints, formally verified by QnLang &amp; QnIR, executing fractal Qn state chains.
                 </div>
                 <div class="boundary-level level-floor">
                     <strong>FLOOR BOUNDARY (Silicon Ground Truth / Base2):</strong><br>
-                    Bare-metal SoC registers, bitwise execution, and physical voltage states. WHERE ABSTRACTION ENDS.
+                    Hardware SoC registers, instruction execution, and physical bitwise states. WHERE ABSTRACTION ENDS.
                 </div>
             </div>
         </section>
@@ -499,7 +510,7 @@
             The SMEMP Manifesto is an open axiomatic framework published under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.
         </p>
         <p style="margin-top: 0.5rem; font-size: 0.75rem;">
-            Authored by Christophe Duy Quang Nguyen — Bao Loc, Vietnam &bull; July 2026
+            Authored by Christophe Duy Quang Nguyen &mdash; Bao Loc, Vietnam &bull; July 2026
         </p>
     </footer>
 
