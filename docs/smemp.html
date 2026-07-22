@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The SMEMP Manifesto — Foundational Laws of Qn & CDQN</title>
+    
+    <!-- Meta Metadata -->
+    <meta name="description" content="The SMEMP Manifesto: Foundational Laws for Quang Numbers (Qn) and Chained & Distributed Quang Numbers (CDQN).">
+    <meta name="author" content="Christophe Duy Quang Nguyen">
+    <meta name="location" content="Bao Loc, Vietnam">
+    <meta name="timestamp" content="2026-07-22">
+    <meta name="license" content="MIT License">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Embedded Clean CSS -->
+    <style>
+        :root {
+            --bg-primary: #090d16;
+            --bg-secondary: #111827;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-gold: #f59e0b;
+            --accent-gold-light: #fbbf24;
+            --accent-blue: #38bdf8;
+            --border-color: #334155;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            line-height: 1.7;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 860px;
+            width: 100%;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-gold-light);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            background-color: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            text-align: left;
+        }
+
+        .meta-item strong {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.2rem;
+        }
+
+        .meta-item span {
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: #cbd5e1;
+            font-size: 1.05rem;
+        }
+
+        ul {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .formula-box {
+            background-color: var(--bg-secondary);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--accent-gold-light);
+            overflow-x: auto;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .matrix-grid {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+        }
+
+        .card-header {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-mono);
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .boundary-diagram {
+            background-color: var(--bg-secondary);
+            border: 1px dashed var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        .boundary-level {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 0.375rem;
+        }
+
+        .level-ceiling {
+            background-color: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .level-middle {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-gold-light);
+        }
+
+        .level-floor {
+            background-color: rgba(148, 163, 184, 0.1);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        footer {
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <span class="badge">Axiomatic Declaration</span>
+        <h1>THE SMEMP MANIFESTO</h1>
+        <p class="subtitle">Foundational Laws for Quang Numbers (Qn) and Chained & Distributed Quang Numbers (CDQN)</p>
+
+        <div class="meta-grid">
+            <div class="meta-item">
+                <strong>Author</strong>
+                <span>Christophe Duy Quang Nguyen</span>
+            </div>
+            <div class="meta-item">
+                <strong>Origin Location</strong>
+                <span>Bao Loc, Vietnam</span>
+            </div>
+            <div class="meta-item">
+                <strong>Timestamp</strong>
+                <span>2026-07-22</span>
+            </div>
+            <div class="meta-item">
+                <strong>License</strong>
+                <span>MIT License</span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- PREAMBLE -->
+        <section>
+            <h2>Preamble: The Quest for Illumination ("Quang")</h2>
+            <p>
+                In classical Computer Science, abstraction has traditionally been defined as <em>hiding complexity</em>—encapsulating intricate logic beneath opaque black boxes. In the era of autonomous AI agents, high-dimensional neural latent spaces, and zero-trust distributed networks, this paradigm fails. Hiding complexity creates uninterpretable black boxes, technical debt, and massive attack surfaces.
+            </p>
+            <p>
+                We declare a new paradigm: <strong>Abstraction as the Structuring of Complexity</strong>. Derived from the Vietnamese word <em>Quang</em> (meaning brightness, luminescence, and clarity), a <strong>Quang Number (Qn)</strong> does not obscure state; it structures state into observable, verifiable, and deterministic mathematical relationships.
+            </p>
+            <p>
+                This Manifesto lays down the non-negotiable boundaries, invariants, and agile optimization principles that mandate the <strong>Qn</strong> and <strong>CDQN</strong> universe.
+            </p>
+        </section>
+
+        <!-- ARTICLE I -->
+        <section>
+            <h2>Article I: The Fundamental Axiom</h2>
+            <p>
+                A computing number system can abstract any state, intent, or system—provided that abstraction is defined not as obfuscation, but as <strong>mapping relationship and distance within a deterministic metric space</strong>.
+            </p>
+            <p>
+                Every valid component of the CDQN universe—whether a raw data primitive, an instruction payload, an AI agent state, or a distributed node—is fundamentally a Quang Number. The universe is <strong>homoiconic and fractal</strong>.
+            </p>
+        </section>
+
+        <!-- ARTICLE II -->
+        <section>
+            <h2>Article II: The Invariant Couple (S × M) — The Birth Laws</h2>
+            <p>
+                A Quang Number cannot come into existence without satisfying two non-negotiable, inseparable invariant conditions. If a state violates either condition, it is unauthenticated noise and cannot be instantiated.
+            </p>
+
+            <div class="formula-box">
+                Birth of Qn  ⟺  ( Security [S]  ≥  Cryptographic_Threshold )  ∧  ( Metric [M]  ∈  Finite_Metric_Space )
+            </div>
+
+            <div class="matrix-grid">
+                <div class="card">
+                    <div class="card-header">[S] Security (Invariant)</div>
+                    <p>
+                        Intrinsic identity, cryptographic provenance, and immutable state boundaries. Security is not an external sandbox or middleware; it is embedded directly inside the payload to prevent passive data exploitation and prompt injection.
+                    </p>
+                </div>
+                <div class="card">
+                    <div class="card-header">[M] Metric (Invariant)</div>
+                    <p>
+                        A well-defined, computable metric space (X, d) over discrete finite sets. Every state transition or distance calculation must be mathematically deterministic, observable, and quantifiable in finite time.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARTICLE III -->
+        <section>
+            <h2>Article III: The Agile Trinity — The Laws of Adaptation</h2>
+            <p>
+                While the Invariants (S, M) dictate <em>existence</em>, the Agile criteria dictate <em>fitness and performance</em>. Unlike the invariant couple, the three Agile criteria are mutually independent vectors optimized to make CDQN technology lightweight, fast, and attractive on consumer hardware.
+            </p>
+            <ul>
+                <li><strong>Efficiency [E]:</strong> State compression and resource optimization. History is folded using recursive accumulators, enabling constant O(1) memory space verification and eliminating ledger bloat.</li>
+                <li><strong>Modularity [Mod]:</strong> Flat value-semantics and arena memory allocation. Micro-Qn primitives combine into macro-CDQN chains with zero garbage collection pauses and zero memory fragmentation.</li>
+                <li><strong>Portability [P]:</strong> Total hardware neutrality. Execution is decoupled from platform roadmaps via QnIR (Intermediate Representation), compiling to native instructions (ARM, RISC-V) or universal runtimes (WASM).</li>
+            </ul>
+        </section>
+
+        <!-- ARTICLE IV -->
+        <section>
+            <h2>Article IV: The Principle of Best of Choices (BoC)</h2>
+            <p>
+                Real-world computing environments are naturally noisy, heterogeneous, and resource-constrained. The <strong>Best of Choices (BoC)</strong> mechanism is the dynamic policy engine that balances the Agile Trinity (E, Mod, P) based on execution context.
+            </p>
+            <p>
+                BoC dynamically adjusts optimization parameters to maximize <strong>CDQN network stability</strong> across consumer devices—adapting seamlessly whether running on a low-battery smartphone, an edge NPU, or a cloud cluster, without ever compromising the underlying (S × M) invariants.
+            </p>
+        </section>
+
+        <!-- ARTICLE V -->
+        <section>
+            <h2>Article V: System Guarantees — Finitism & Halting</h2>
+            <p>
+                To preserve deterministic clarity and efficiency across consumer devices, the Qn/CDQN universe enforces strict mathematical constraints:
+            </p>
+            <ul>
+                <li><strong>Finitism:</strong> Operations take place strictly over bounded, discrete, finite metric sets. System verification relies on bounded model checking rather than unbounded infinite mathematical induction.</li>
+                <li><strong>Total Functionality (Deterministic Halting):</strong> The Qn execution model is total and Turing Incomplete. Every Qn operation carries a provable upper execution bound, guaranteeing termination prior to execution.</li>
+                <li><strong>QnLang Compiler as Static Verifier:</strong> The QnLang compiler acts as a formal prover. It verifies S and M invariants and total functionality at compile-time before emitting QnIR.</li>
+            </ul>
+        </section>
+
+        <!-- ARTICLE VI -->
+        <section>
+            <h2>Article VI: The Boundaries of Abstraction</h2>
+            <p>
+                Abstraction must have explicit physical and logical limits. The SMEMP Manifesto grounds the universe between two absolute boundaries:
+            </p>
+
+            <div class="boundary-diagram">
+                <div class="boundary-level level-ceiling">
+                    <strong>CEILING BOUNDARY (Semantic Clarity / Base10):</strong><br>
+                    Human & AI Agent Interface. Structured, observable relationships, visual rendering (HTML/Dual-channel), and semantic intent.
+                </div>
+                <div class="boundary-level level-middle">
+                    <strong>MIDDLE LAYER (The Qn / CDQN Universe):</strong><br>
+                    Governed by SMEMP Laws, verified by QnLang & QnIR, executing fractal Qn state chains.
+                </div>
+                <div class="boundary-level level-floor">
+                    <strong>FLOOR BOUNDARY (Silicon Ground Truth / Base2):</strong><br>
+                    Bare-metal SoC registers, bitwise execution, and voltage states. WHERE ABSTRACTION ENDS.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            The SMEMP Manifesto is an open axiomatic framework published under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem;">
+            Authored by Christophe Duy Quang Nguyen — Bao Loc, Vietnam &bull; July 2026
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>
