@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The SMEMP Manifesto — A Deductive Framework for Qn &amp; CDQN</title>
+    <title>CDQN Architecture Portal — Quang Numbers &amp; CDQN Stack</title>
     
     <!-- Metadata -->
-    <meta name="description" content="The SMEMP Manifesto: A formal deductive framework for Quang Numbers (Qn) and Chained & Distributed Quang Numbers (CDQN).">
+    <meta name="description" content="Official documentation portal for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN).">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-22">
-    <meta name="license" content="MIT License">
+    <meta name="timestamp" content="2026-07-24">
+    <meta name="license" content="Scaling Source License (SSL v1.0)">
+    <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
 
     <!-- Embedded CSS -->
@@ -19,6 +20,7 @@
             --bg-primary: #090d16;
             --bg-secondary: #111827;
             --bg-card: #1e293b;
+            --bg-card-hover: #334155;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --accent-gold: #d97706;
@@ -47,14 +49,14 @@
         }
 
         .container {
-            max-width: 880px;
+            max-width: 900px;
             width: 100%;
         }
 
         header {
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 2.5rem;
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
             text-align: center;
         }
 
@@ -73,7 +75,7 @@
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.75rem;
             font-weight: 800;
             letter-spacing: -0.025em;
             color: #ffffff;
@@ -86,7 +88,7 @@
             color: var(--text-secondary);
             font-weight: 400;
             margin-bottom: 2rem;
-            max-width: 740px;
+            max-width: 760px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -112,9 +114,15 @@
             margin-bottom: 0.2rem;
         }
 
-        .meta-item span {
+        .meta-item span, .meta-item a {
             color: var(--text-primary);
             font-family: var(--font-mono);
+            text-decoration: none;
+        }
+
+        .meta-item a:hover {
+            color: var(--accent-gold-light);
+            text-decoration: underline;
         }
 
         section {
@@ -145,122 +153,76 @@
             font-size: 0.9em;
         }
 
-        .lead-quote {
-            font-size: 1.15rem;
-            font-style: italic;
-            color: #f1f5f9;
-            background-color: var(--bg-secondary);
-            border-left: 4px solid var(--accent-gold);
-            padding: 1.25rem 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
             margin: 2rem 0;
-            line-height: 1.6;
         }
 
-        .deduction-step {
+        .doc-card {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 0.75rem;
-            padding: 1.5rem;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            text-decoration: none;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-gold-light);
+            background-color: var(--bg-card);
+        }
+
+        .doc-card-tag {
+            font-size: 0.75rem;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-card-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
         }
 
-        .deduction-step h3 {
-            color: var(--accent-blue);
-            font-size: 1.1rem;
+        .doc-card-link {
+            font-size: 0.9rem;
+            font-weight: 600;
             font-family: var(--font-mono);
-            margin-bottom: 0.5rem;
+            color: var(--accent-gold-light);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
-        .friction-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
+        .overview-box {
+            background-color: var(--bg-secondary);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
             margin: 2rem 0;
         }
 
-        .friction-card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-
-        .friction-title {
+        .overview-box h3 {
             color: var(--accent-gold-light);
-            font-weight: 700;
+            font-size: 1.1rem;
             font-family: var(--font-mono);
-            font-size: 0.95rem;
             margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .friction-title .tag {
-            font-size: 0.75rem;
-            padding: 0.15rem 0.5rem;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-blue);
-            border-radius: 0.25rem;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        .formula-box {
-            background-color: var(--bg-secondary);
-            border-left: 4px solid var(--accent-emerald);
-            padding: 1.25rem 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 1.75rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            color: #6ee7b7;
-            overflow-x: auto;
-        }
-
-        ul {
-            margin-bottom: 1.25rem;
-            padding-left: 1.5rem;
-            color: #cbd5e1;
-        }
-
-        li {
-            margin-bottom: 0.75rem;
-        }
-
-        .boundary-diagram {
-            background-color: var(--bg-secondary);
-            border: 1px dashed var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin: 1.75rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
-        }
-
-        .boundary-level {
-            padding: 0.85rem 1.15rem;
-            margin-bottom: 0.75rem;
-            border-radius: 0.375rem;
-        }
-
-        .level-ceiling {
-            background-color: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: var(--accent-blue);
-        }
-
-        .level-middle {
-            background-color: rgba(217, 119, 6, 0.1);
-            border: 1px solid rgba(217, 119, 6, 0.3);
-            color: var(--accent-gold-light);
-        }
-
-        .level-floor {
-            background-color: rgba(148, 163, 184, 0.1);
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            color: var(--text-secondary);
-            margin-bottom: 0;
         }
 
         footer {
@@ -280,17 +242,16 @@
         footer a:hover {
             text-decoration: underline;
         }
-    </footer>
-</style>
+    </style>
 </head>
 <body>
 
 <div class="container">
 
     <header>
-        <span class="badge">Axiomatic Framework</span>
-        <h1>THE SMEMP MANIFESTO</h1>
-        <p class="subtitle">A Deductive Architectural Framework for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN)</p>
+        <span class="badge">Official Documentation Portal</span>
+        <h1>THE CDQN UNIVERSE</h1>
+        <p class="subtitle">A Deductive Research Architecture for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN)</p>
 
         <div class="meta-grid">
             <div class="meta-item">
@@ -298,219 +259,115 @@
                 <span>Christophe Duy Quang Nguyen</span>
             </div>
             <div class="meta-item">
-                <strong>Origin Location</strong>
+                <strong>Location</strong>
                 <span>Bao Loc, Vietnam</span>
             </div>
             <div class="meta-item">
-                <strong>Timestamp</strong>
-                <span>2026-07-22</span>
+                <strong>Repository</strong>
+                <span><a href="https://github.com/cdqn5249/cdqn" target="_blank" rel="noopener">cdqn5249/cdqn</a></span>
             </div>
             <div class="meta-item">
                 <strong>License</strong>
-                <span>MIT License</span>
+                <span><a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener">SSL v1.0</a></span>
             </div>
         </div>
     </header>
 
     <main>
 
-        <!-- SECTION I: THE INQUIRING THESIS -->
+        <!-- INTRODUCTION OVERVIEW -->
         <section>
-            <h2>I. The Inquiring Thesis</h2>
+            <h2>Architectural Overview</h2>
             <p>
-                This research explores a foundational question in systems architecture:
-            </p>
-            
-            <div class="lead-quote">
-                "Can a computing number system abstract arbitrary state and reasoning?"
-            </div>
-
-            <p>
-                Modern computing demonstrates that high-dimensional vector representations can encode complex semantics, intent, and execution paths. Consequently, from a representational standpoint, numerical structures can abstract arbitrary system states.
+                The <strong>CDQN Stack</strong> introduces a paradigm shift in computer science: redefining abstraction from classical <em>complexity concealment</em> (opaque black-box structures) to <strong>complexity structuring</strong> (*"Quang"* / Luminescent Clarity).
             </p>
             <p>
-                However, a critical systems engineering trade-off emerges depending on how abstraction is defined. In conventional computer science, abstraction is predominantly realized by <em>concealing complexity</em>—encapsulating operational details behind opaque interfaces. In autonomous, distributed, and agentic environments, relying solely on complexity concealment often leads to inscrutable latent states, non-deterministic execution paths, and unverified data flows.
-            </p>
-            <p>
-                This leads to our primary deductive premise: To abstract arbitrary states without inducing operational opacity, an abstraction model must shift from <em>concealing complexity</em> toward <strong>structuring complexity</strong>.
-            </p>
-            <p>
-                We designate such a structured numerical primitive as a <strong>Quang Number (Qn)</strong>—where the term <em>Quang</em> (meaning luminescent or clear) represents the property of observable, mathematically verifiable state clarity.
-            </p>
-        </section>
-
-        <!-- SECTION II: SYSTEMIC FRICTION POINTS -->
-        <section>
-            <h2>II. Systemic Friction Points in Current Computing Paradigms</h2>
-            <p>
-                Rather than postulating flaws in established computer science practices, we observe specific <strong>systemic friction points</strong> that emerge when existing assumptions are extended into high-throughput, agentic, and resource-constrained distributed contexts:
+                A <strong>Quang Number (Qn)</strong> is a Capability-Bounded Algebraic Type that unifies abstract algebra, zero-drift arithmetic, and persistent computer memory (<code>Q(reuse)</code>). It acts as the atomic primitive for scaling verified states across edge hardware, autonomous AI agents, and global distributed networks.
             </p>
 
-            <div class="friction-grid">
-                
-                <div class="friction-card">
-                    <div class="friction-title">
-                        1. Implicit Trust in Unauthenticated Data Processing
-                        <span class="tag">Addressed by [S]</span>
-                    </div>
-                    <p>
-                        Treating incoming payload structures as passive content while relying entirely on external runtime sandboxing creates severe attack vectors. When dynamic execution pipelines parse unauthenticated data, the boundary between data and instruction blurs, leading to remote code execution and prompt injection vulnerabilities.
-                    </p>
-                </div>
-
-                <div class="friction-card">
-                    <div class="friction-title">
-                        2. Non-Deterministic Latent Space Metrics
-                        <span class="tag">Addressed by [M]</span>
-                    </div>
-                    <p>
-                        High-dimensional vector representations offer high expressiveness but frequently lack deterministic metric bounds or verifiable distance invariants, leading to semantic drift and unpredictable state evaluation.
-                    </p>
-                </div>
-
-                <div class="friction-card">
-                    <div class="friction-title">
-                        3. Scaling Laws of Distributed State Verification
-                        <span class="tag">Addressed by [E]</span>
-                    </div>
-                    <p>
-                        Decentralized state verification mechanisms (such as global ledger replication in consensus networks) incur exponential storage, bandwidth, and energy overheads, rendering full state verification impractical on consumer-grade hardware.
-                    </p>
-                </div>
-
-                <div class="friction-card">
-                    <div class="friction-title">
-                        4. Runtime Memory Allocation Non-Determinism
-                        <span class="tag">Addressed by [Mod]</span>
-                    </div>
-                    <p>
-                        Dynamic heap allocation (<code>malloc</code>/<code>free</code>) and non-deterministic garbage collection cycles introduce unpredictable latency spikes and memory fragmentation on constrained edge devices.
-                    </p>
-                </div>
-
-                <div class="friction-card">
-                    <div class="friction-title">
-                        5. Host Execution Runtime Coupling
-                        <span class="tag">Addressed by [P]</span>
-                    </div>
-                    <p>
-                        Tightly coupling application logic to specific virtual machine specifications or OS-level system interfaces restricts portability across heterogeneous hardware architectures (e.g., RISC-V microcontrollers, mobile SoCs, and Web environments).
-                    </p>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SECTION III: THE INVARIANT CONSTRAINTS -->
-        <section>
-            <h2>III. The Invariant Constraints (S &times; M) — Existence Criteria</h2>
-            <p>
-                To resolve payload ambiguity and execution opacity, we deduce that a Quang Number cannot exist as an unconstrained scalar or raw bit array. It must be instantiated strictly within the bounds of two coupled invariants:
-            </p>
-
-            <div class="formula-box">
-                Qn_Existence &hArr; ( Security [S] &ge; Cryptographic_Threshold ) &and; ( Metric [M] &in; Finite_Metric_Space )
-            </div>
-
-            <div class="deduction-step">
-                <h3>[S] Security — Intrinsic Provenance &amp; Authenticity</h3>
-                <p>
-                    A Qn carries intrinsic cryptographic identity, tamper-evident boundaries, and provenance proofs within its structural representation. Security is not an external runtime wrapper; it is a structural invariant. Unauthenticated payloads cannot achieve valid Qn instantiation.
-                </p>
-            </div>
-
-            <div class="deduction-step">
-                <h3>[M] Metric — Computable &amp; Deterministic Space</h3>
-                <p>
-                    A Qn must reside within a computable, deterministic metric space <code>(X, d)</code> defined over discrete, finite sets. State proximity, distance metrics, and state transformations between any two instances (<code>Qa</code>, <code>Qb</code>) must be deterministically evaluable in finite time.
+            <div class="overview-box">
+                <h3>The Canonical Qn State Tuple</h3>
+                <p style="font-family: var(--font-mono); color: var(--accent-emerald); margin-bottom: 0;">
+                    Qn = ⟨ S , V , M ⟩ &nbsp;|&nbsp; Security Anchor (S), Exact Value Anchor (V), Metric Anchor (M)
                 </p>
             </div>
         </section>
 
-        <!-- SECTION IV: AGILE OPTIMIZATION VECTORS & CONTEXTUAL POLICY -->
+        <!-- CORE DOCUMENTATION CARDS -->
         <section>
-            <h2>IV. Agile Optimization Vectors (E, Mod, P) &amp; Best of Choices (BoC)</h2>
-            <p>
-                While the Invariants (S, M) govern state validity, three independent agile optimization vectors govern runtime fitness and resource consumption on consumer hardware:
-            </p>
+            <h2>Core Documentation</h2>
+            <p>Select a document below to explore the foundational laws, formal mathematical definitions, and legal licensing terms of the CDQN project:</p>
 
+            <div class="docs-grid">
+
+                <!-- CARD 1: SMEMP MANIFESTO -->
+                <a href="smemp.html" class="doc-card">
+                    <div>
+                        <div class="doc-card-tag">Axiomatic Framework</div>
+                        <div class="doc-card-title">The SMEMP Manifesto</div>
+                        <div class="doc-card-desc">
+                            The boundary laws of the Qn universe. Defines the non-negotiable Invariants (S &times; M), Agile optimization vectors (E, Mod, P), Best of Choices (BoC) policy engine, and floor/ceiling boundaries.
+                        </div>
+                    </div>
+                    <div class="doc-card-link">
+                        Read Manifesto &rarr;
+                    </div>
+                </a>
+
+                <!-- CARD 2: QN FORMAL DEFINITION -->
+                <a href="qn-def.html" class="doc-card">
+                    <div>
+                        <div class="doc-card-tag">Canonical Specification</div>
+                        <div class="doc-card-title">The Formal Qn Definition</div>
+                        <div class="doc-card-desc">
+                            The complete mathematical and systems definition. Details the Trinity Tuple ⟨S, V, M⟩, Q(reuse) residual memory engine, Two-Way Zoom window z, Qm/Qs domains, DCC profile, and Q(bypass).
+                        </div>
+                    </div>
+                    <div class="doc-card-link">
+                        Read Specification &rarr;
+                    </div>
+                </a>
+
+                <!-- CARD 3: SCALING SOURCE LICENSE -->
+                <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener" class="doc-card">
+                    <div>
+                        <div class="doc-card-tag">Source-Available Legal Terms</div>
+                        <div class="doc-card-title">Scaling Source License (SSL)</div>
+                        <div class="doc-card-desc">
+                            Version 1.0 license. 100% free for open-source, academic, and small-scale development. Requires paternity attribution, includes anti-patent protection, and mandates commercial negotiation at scale.
+                        </div>
+                    </div>
+                    <div class="doc-card-link">
+                        View License.md &rarr;
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- REPOSITORY SUMMARY -->
+        <section>
+            <h2>Repository Architecture</h2>
+            <p>
+                The CDQN project repository is organized into distinct research and execution layers:
+            </p>
             <ul>
-                <li>
-                    <strong>[E] Efficiency (State Compression):</strong> Reduces computational and storage complexity. By employing recursive accumulator structures, past state chains are algebraically folded into single O(1) space representations, eliminating the necessity for complete transaction history storage on edge devices.
-                </li>
-                <li>
-                    <strong>[Mod] Modularity (Arena Value-Semantics):</strong> Eliminates dynamic heap fragmentation. Qn primitives utilize fixed-size value semantics allocated within pre-managed memory arenas, ensuring zero garbage collection overhead.
-                </li>
-                <li>
-                    <strong>[P] Portability (Target-Neutral Execution):</strong> Decouples source representation from host runtime evolution. Higher-level abstractions written in <code>QnLang</code> lower to an Intermediate Representation (<code>QnIR</code>), which can emit code for WASM/WAT, RISC-V, ARM, or x86 targets.
-                </li>
+                <li><code>docs/index.html</code> — Documentation Portal (This page).</li>
+                <li><code>docs/smemp.html</code> — The SMEMP Manifesto (Boundary Laws).</li>
+                <li><code>docs/qn-def.html</code> — The Formal Definition of a Quang Number ($Q_n$).</li>
+                <li><code>LICENSE.md</code> — The Scaling Source License (SSL v1.0).</li>
+                <li><code>README.md</code> — Project entry point and community guidelines (Pending completion of Phase B primitives).</li>
             </ul>
-
-            <p>
-                <strong>The Best of Choices (BoC) Policy Engine:</strong> In heterogeneous operational environments, BoC represents a dynamic configuration policy that tunes the trade-offs between <code>E</code>, <code>Mod</code>, and <code>P</code> based on real-time hardware constraints (e.g., thermal throttling, power limits, network latency) to maximize overall <strong>CDQN network stability</strong> without compromising the mandatory (S &times; M) invariant floor.
-            </p>
-        </section>
-
-        <!-- SECTION V: FORMAL SYSTEM PROPERTIES -->
-        <section>
-            <h2>V. Formal System Properties: Finitism &amp; Termination</h2>
-            <p>
-                To maintain deterministic evaluation and formal verifiability, the Qn/CDQN execution model enforces three mathematical constraints:
-            </p>
-
-            <div class="deduction-step">
-                <h3>1. Finitism &amp; Bounded Model Checking</h3>
-                <p>
-                    Qn state spaces are defined strictly over bounded, discrete sets. Verification relies on deterministic model checking and SMT solvers over finite lattices, avoiding non-deterministic floating-point precision drift.
-                </p>
-            </div>
-
-            <div class="deduction-step">
-                <h3>2. Total Functionality (Turing Incompleteness)</h3>
-                <p>
-                    To guarantee deterministic evaluation and eliminate the undecidability of the Halting Problem, the <code>QnIR</code> execution model is total (Turing Incomplete). All instructions carry provable upper bounds on execution time and space prior to execution.
-                </p>
-            </div>
-
-            <div class="deduction-step">
-                <h3>3. Homoiconic Fractal Structure</h3>
-                <p>
-                    Because the (S &times; M) invariant couple forms the universal condition for existence, all entities within the CDQN stack—data atoms, operational instructions, AI agent states, and network routing nodes—share the identical Qn structural contract.
-                </p>
-            </div>
-        </section>
-
-        <!-- SECTION VI: ABSTRACTION BOUNDARIES -->
-        <section>
-            <h2>VI. Boundaries of Abstraction</h2>
-            <p>
-                To maintain architectural grounding, the SMEMP Manifesto defines explicit floor and ceiling boundaries for abstraction:
-            </p>
-
-            <div class="boundary-diagram">
-                <div class="boundary-level level-ceiling">
-                    <strong>CEILING BOUNDARY (Semantic Interface / Base10):</strong><br>
-                    Human and AI agent interface layer. Structured observable state, visual/document presentation (HTML/Dual-channel), and semantic intent.
-                </div>
-                <div class="boundary-level level-middle">
-                    <strong>MIDDLE LAYER (The Qn / CDQN Universe):</strong><br>
-                    Governed by SMEMP invariant constraints, formally verified by QnLang &amp; QnIR, executing fractal Qn state chains.
-                </div>
-                <div class="boundary-level level-floor">
-                    <strong>FLOOR BOUNDARY (Silicon Ground Truth / Base2):</strong><br>
-                    Hardware SoC registers, instruction execution, and physical bitwise states. WHERE ABSTRACTION ENDS.
-                </div>
-            </div>
         </section>
 
     </main>
 
     <footer>
         <p>
-            The SMEMP Manifesto is an open axiomatic framework published under the <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener">MIT License</a>.
+            The CDQN Project is published under the <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener">Scaling Source License (SSL v1.0)</a>.
         </p>
         <p style="margin-top: 0.5rem; font-size: 0.75rem;">
-            Authored by Christophe Duy Quang Nguyen &mdash; Bao Loc, Vietnam &bull; July 2026
+            Authored by Christophe Duy Quang Nguyen &mdash; Bao Loc, Vietnam &bull; July 2026 &bull; <a href="https://github.com/cdqn5249/cdqn" target="_blank" rel="noopener">cdqn5249/cdqn</a>
         </p>
     </footer>
 
