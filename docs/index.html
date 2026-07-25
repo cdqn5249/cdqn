@@ -9,7 +9,7 @@
     <meta name="description" content="Official documentation portal for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN).">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-24">
+    <meta name="timestamp" content="2026-07-25">
     <meta name="license" content="Scaling Source License (SSL v1.0)">
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
@@ -225,6 +225,34 @@
             margin-bottom: 0.5rem;
         }
 
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 640px) {
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .pillar-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .pillar-title {
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
         footer {
             margin-top: 4rem;
             border-top: 1px solid var(--border-color);
@@ -279,7 +307,7 @@
         <section>
             <h2>Architectural Overview</h2>
             <p>
-                The <strong>CDQN Stack</strong> introduces a paradigm shift in computer science: redefining abstraction from classical <em>complexity concealment</em> (opaque black-box structures) to <strong>complexity structuring</strong> (*"Quang"* / Luminescent Clarity).
+                The <strong>CDQN Stack</strong> introduces a paradigm shift in computer systems architecture: redefining abstraction from classical <em>complexity concealment</em> (opaque black-box structures) to <strong>complexity structuring</strong> (<em>"Quang"</em> / Luminescent Clarity).
             </p>
             <p>
                 A <strong>Quang Number (Qn)</strong> is a Capability-Bounded Algebraic Type that unifies abstract algebra, zero-drift arithmetic, and persistent computer memory (<code>Q(reuse)</code>). It acts as the atomic primitive for scaling verified states across edge hardware, autonomous AI agents, and global distributed networks.
@@ -288,8 +316,34 @@
             <div class="overview-box">
                 <h3>The Canonical Qn State Tuple</h3>
                 <p style="font-family: var(--font-mono); color: var(--accent-emerald); margin-bottom: 0;">
-                    Qn = ⟨ S , V , M ⟩ &nbsp;|&nbsp; Security Anchor (S), Exact Value Anchor (V), Metric Anchor (M)
+                    Qn = &langle; S , V(Qexpr) , M &rangle; &nbsp;|&nbsp; Security Anchor (S), Exact Value Anchor holding Quang Expression V(Qexpr), Metric Anchor (M)
                 </p>
+            </div>
+        </section>
+
+        <!-- KEY ARCHITECTURAL PILLARS -->
+        <section>
+            <h2>Foundational Architectural Pillars</h2>
+            <p>
+                The CDQN universe is built on two core technological breakdowns that bridge high-level cognitive semantics down to bare-metal hardware registers:
+            </p>
+
+            <div class="pillars-grid">
+                
+                <div class="pillar-card">
+                    <div class="pillar-title">1. Space-Time Memory Dilation</div>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">
+                        Respects the physical Memory Wall constraint. Uses Two-Way Zoom (<code>z</code>) for spatial bandwidth compression and exploits the 250-cycle DRAM fetch delay for opportunistic local <code>Q(reuse)</code> residual folding and <code>Q(bypass)</code> identity short-circuiting.
+                    </p>
+                </div>
+
+                <div class="pillar-card">
+                    <div class="pillar-title">2. Quang Expressions (Qexpr)</div>
+                    <p style="font-size: 0.95rem; margin-bottom: 0;">
+                        Unified intermediate representation bridging exact math (<code>Qm</code>) and natural language semantics (<code>Qs</code>). Encodes context as multivariate polynomials solved via variable substitution and elimination, enabling 100% lossless lowering of legacy HTML DOM data.
+                    </p>
+                </div>
+
             </div>
         </section>
 
@@ -320,7 +374,7 @@
                         <div class="doc-card-tag">Canonical Specification</div>
                         <div class="doc-card-title">The Formal Qn Definition</div>
                         <div class="doc-card-desc">
-                            The complete mathematical and systems definition. Details the Trinity Tuple ⟨S, V, M⟩, Q(reuse) residual memory engine, Two-Way Zoom window z, Qm/Qs domains, DCC profile, and Q(bypass).
+                            The complete mathematical and systems definition. Details the Trinity Tuple &langle;S, V(Qexpr), M&rangle;, Q(reuse) residual memory engine, Two-Way Zoom window z, Qm/Qs domains, DCC profile, and Q(bypass).
                         </div>
                     </div>
                     <div class="doc-card-link">
