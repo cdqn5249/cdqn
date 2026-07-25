@@ -9,7 +9,7 @@
     <meta name="description" content="The SMEMP Manifesto: A formal deductive framework for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN).">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-24">
+    <meta name="timestamp" content="2026-07-25">
     <meta name="license" content="Scaling Source License (SSL v1.0)">
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
@@ -360,13 +360,13 @@
                 Modern computing demonstrates that high-dimensional vector representations can encode complex semantics, intent, and execution paths. Consequently, from a representational standpoint, numerical structures can abstract arbitrary system states.
             </p>
             <p>
-                However, a critical systems engineering trade-off emerges depending on how abstraction is defined. In conventional computer science, abstraction is predominantly realized by <em>concealing complexity</em>—encapsulating operational details behind opaque interfaces. In autonomous, distributed, and agentic environments, relying solely on complexity concealment often leads to inscrutable latent states, non-deterministic execution paths, and unverified data flows.
+                However, a critical systems engineering trade-off emerges depending on how abstraction is defined. In conventional computer science, abstraction is predominantly realized by <em>concealing complexity</em>&mdash;encapsulating operational details behind opaque interfaces. In autonomous, distributed, and agentic environments, relying solely on complexity concealment often leads to inscrutable latent states, non-deterministic execution paths, and unverified data flows.
             </p>
             <p>
                 This leads to our primary deductive premise: To abstract arbitrary states without inducing operational opacity, an abstraction model must shift from <em>concealing complexity</em> toward <strong>structuring complexity</strong>.
             </p>
             <p>
-                We designate such a structured numerical primitive as a <strong>Quang Number (Qn)</strong>—where the term <em>Quang</em> (meaning luminescent or clear) represents the property of observable, mathematically verifiable state clarity.
+                We designate such a structured numerical primitive as a <strong>Quang Number (Qn)</strong>&mdash;where the term <em>Quang</em> (meaning luminescent or clear) represents the property of observable, mathematically verifiable state clarity.
             </p>
         </section>
 
@@ -401,11 +401,11 @@
 
                 <div class="friction-card">
                     <div class="friction-title">
-                        3. Scaling Laws of Distributed State Verification
+                        3. The Physical Memory Wall &amp; Data Movement Latency
                         <span class="tag">Addressed by [E]</span>
                     </div>
                     <p>
-                        Decentralized state verification mechanisms (such as global ledger replication in consensus networks) incur exponential storage, bandwidth, and energy overheads, rendering full state verification impractical on consumer-grade hardware.
+                        The physical latency gap between fast CPU registers and slow main DRAM (50 to 100 nanoseconds) creates a 250-cycle memory wait bubble. Conventional architectures stall during main memory fetch cycles or incur heavy energy bloat during state replication across distributed networks.
                     </p>
                 </div>
 
@@ -421,11 +421,11 @@
 
                 <div class="friction-card">
                     <div class="friction-title">
-                        5. Host Execution Runtime Coupling
+                        5. Host Execution Runtime Coupling &amp; Unstructured Data Loss
                         <span class="tag">Addressed by [P]</span>
                     </div>
                     <p>
-                        Tightly coupling application logic to specific virtual machine specifications or OS-level system interfaces restricts portability across heterogeneous hardware architectures (e.g., RISC-V microcontrollers, mobile SoCs, and Web environments).
+                        Tightly coupling application logic to specific virtual machine specifications or OS interfaces restricts portability. Furthermore, importing unstructured legacy data (such as HTML DOM trees) into rigid object models frequently causes irreversible information loss.
                     </p>
                 </div>
 
@@ -434,7 +434,7 @@
 
         <!-- SECTION III: THE INVARIANT CONSTRAINTS -->
         <section>
-            <h2>III. The Invariant Constraints (S &times; M) — Existence Criteria</h2>
+            <h2>III. The Invariant Constraints (S &times; M) &mdash; Existence Criteria</h2>
             <p>
                 To resolve payload ambiguity and execution opacity, we deduce that a Quang Number cannot exist as an unconstrained scalar or raw bit array. It must be instantiated strictly within the bounds of two coupled invariants:
             </p>
@@ -444,14 +444,14 @@
             </div>
 
             <div class="deduction-step">
-                <h3>[S] Security — Intrinsic Provenance &amp; Authenticity</h3>
+                <h3>[S] Security &mdash; Intrinsic Provenance &amp; Authenticity</h3>
                 <p>
                     A Qn carries intrinsic cryptographic identity, tamper-evident boundaries, and provenance proofs within its structural representation. Security is not an external runtime wrapper; it is a structural invariant. Unauthenticated payloads cannot achieve valid Qn instantiation.
                 </p>
             </div>
 
             <div class="deduction-step">
-                <h3>[M] Metric — Computable &amp; Deterministic Space</h3>
+                <h3>[M] Metric &mdash; Computable &amp; Deterministic Space</h3>
                 <p>
                     A Qn must reside within a computable, deterministic metric space <code>(X, d)</code> defined over discrete, finite sets. State proximity, distance metrics, and state transformations between any two instances (<code>Qa</code>, <code>Qb</code>) must be deterministically evaluable in finite time.
                 </p>
@@ -467,24 +467,24 @@
 
             <ul>
                 <li>
-                    <strong>[E] Efficiency (State Compression):</strong> Reduces computational and storage complexity. By employing recursive accumulator structures, past state chains are algebraically folded into single O(1) space representations, eliminating the necessity for complete transaction history storage on edge devices.
+                    <strong>[E] Efficiency (Space-Time Memory Dilation):</strong> Respects the physical Memory Wall. Uses Two-Way Zoom (<code>z</code>) for spatial bandwidth compression and exploits the 250-cycle DRAM fetch delay for opportunistic local <code>Q(reuse)</code> residual folding and <code>Q(bypass)</code> identity short-circuiting. Past state chains are algebraically folded into single <i>O(1)</i> space representations.
                 </li>
                 <li>
                     <strong>[Mod] Modularity (Arena Value-Semantics):</strong> Eliminates dynamic heap fragmentation. Qn primitives utilize fixed-size value semantics allocated within pre-managed memory arenas, ensuring zero garbage collection overhead.
                 </li>
                 <li>
-                    <strong>[P] Portability (Target-Neutral Execution):</strong> Decouples source representation from host runtime evolution. Higher-level abstractions written in <code>QnLang</code> lower to an Intermediate Representation (<code>QnIR</code>), which can emit code for WASM/WAT, RISC-V, ARM, or x86 targets.
+                    <strong>[P] Portability (Target-Neutral Execution via Qexpr):</strong> Decouples source representation from host runtime evolution. Higher-level abstractions expressed as Quang Expressions (<code>Qexpr</code>) lower to an Intermediate Representation (<code>QnIR</code>), which can emit code for WASM/WAT, bare-metal RISC-V, ARM, or x86 targets.
                 </li>
             </ul>
 
             <p>
-                <strong>The Best of Choices (BoC) Policy Engine:</strong> In heterogeneous operational environments, BoC represents a dynamic configuration policy that tunes the trade-offs between <code>E</code>, <code>Mod</code>, and <code>P</code> based on real-time hardware constraints (e.g., thermal throttling, power limits, network latency) to maximize overall <strong>CDQN network stability</strong> without compromising the mandatory (S &times; M) invariant floor.
+                <strong>The Best of Choices (BoC) Policy Engine:</strong> In heterogeneous operational environments, BoC represents a dynamic configuration policy that tunes the trade-offs between <code>E</code>, <code>Mod</code>, and <code>P</code> based on real-time hardware constraints (e.g., thermal limits, battery levels, network latency) to maximize overall <strong>CDQN network stability</strong> without compromising the mandatory (S &times; M) invariant floor.
             </p>
         </section>
 
         <!-- SECTION V: FORMAL SYSTEM PROPERTIES -->
         <section>
-            <h2>V. Formal System Properties: Finitism &amp; Termination</h2>
+            <h2>V. Formal System Properties: Finitism, Termination &amp; Qexpr</h2>
             <p>
                 To maintain deterministic evaluation and formal verifiability, the Qn/CDQN execution model enforces three mathematical constraints:
             </p>
@@ -504,9 +504,9 @@
             </div>
 
             <div class="deduction-step">
-                <h3>3. Homoiconic Fractal Structure</h3>
+                <h3>3. Fractal Homoiconicity &amp; Quang Expressions (Qexpr)</h3>
                 <p>
-                    Because the (S &times; M) invariant couple forms the universal condition for existence, all entities within the CDQN stack—data atoms, operational instructions, AI agent states, and network routing nodes—share the identical Qn structural contract.
+                    Because the (S &times; M) invariant couple forms the universal condition for existence, all entities within the CDQN stack&mdash;data atoms, operational instructions, AI agent states, and network routing nodes&mdash;share the identical Qn structural contract. All states are expressed as Quang Expressions (<code>Qexpr</code>), bridging math and natural language semantics losslessly.
                 </p>
             </div>
         </section>
@@ -515,21 +515,21 @@
         <section>
             <h2>VI. Boundaries of Abstraction</h2>
             <p>
-                To maintain architectural grounding, the SMEMP Manifesto explicitly defines floor and ceiling boundaries for abstraction:
+                To maintain architectural grounding, the SMEMP Manifesto defines explicit floor and ceiling boundaries for abstraction:
             </p>
 
             <div class="boundary-diagram">
                 <div class="boundary-level level-ceiling">
                     <strong>CEILING BOUNDARY (Semantic Interface / Base10):</strong><br>
-                    Human and AI agent interface layer. Structured observable state, visual/document presentation (HTML/Dual-channel), and human-readable semantic intent.
+                    Human and AI agent interface layer. Structured observable state, visual/document presentation (HTML / Dual-channel), and natural language semantic intent.
                 </div>
                 <div class="boundary-level level-middle">
                     <strong>MIDDLE LAYER (The Qn / CDQN Universe):</strong><br>
-                    Governed by SMEMP invariant constraints, formally verified by QnLang &amp; QnIR, executing fractal Qn state chains.
+                    Governed by SMEMP invariant constraints, formally verified by QnLang &amp; QnIR, executing fractal Qn state chains via Quang Expressions (Qexpr).
                 </div>
                 <div class="boundary-level level-floor">
                     <strong>FLOOR BOUNDARY (Silicon Ground Truth / Base2):</strong><br>
-                    Hardware SoC registers, instruction execution, and physical bitwise states. WHERE ABSTRACTION ENDS.
+                    Packed 64/128-bit hardware registers, bitwise execution, physical voltage states, and Space-Time Memory Dilation during DRAM data movement. WHERE ABSTRACTION ENDS.
                 </div>
             </div>
         </section>
