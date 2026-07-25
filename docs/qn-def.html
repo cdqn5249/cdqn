@@ -14,12 +14,13 @@
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
 
-    <!-- Embedded CSS -->
+    <!-- Embedded Modern CSS -->
     <style>
         :root {
             --bg-primary: #090d16;
             --bg-secondary: #111827;
             --bg-card: #1e293b;
+            --bg-card-hover: #2d3748;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --accent-gold: #d97706;
@@ -27,6 +28,7 @@
             --accent-blue: #38bdf8;
             --accent-emerald: #10b981;
             --border-color: #334155;
+            --border-accent: rgba(245, 158, 11, 0.3);
             --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
         }
@@ -48,7 +50,7 @@
         }
 
         .container {
-            max-width: 880px;
+            max-width: 920px;
             width: 100%;
         }
 
@@ -84,7 +86,7 @@
             background: rgba(16, 185, 129, 0.1);
             color: var(--accent-emerald);
             border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 0.3rem 0.85rem;
+            padding: 0.35rem 0.9rem;
             border-radius: 9999px;
             font-size: 0.85rem;
             font-family: var(--font-mono);
@@ -107,7 +109,7 @@
             color: var(--text-secondary);
             font-weight: 400;
             margin-bottom: 2rem;
-            max-width: 740px;
+            max-width: 760px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -149,7 +151,7 @@
         }
 
         h2 {
-            font-size: 1.45rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--accent-gold-light);
             border-bottom: 1px solid rgba(217, 119, 6, 0.25);
@@ -162,7 +164,7 @@
             font-weight: 600;
             color: var(--accent-blue);
             font-family: var(--font-mono);
-            margin-top: 1.5rem;
+            margin-top: 1.75rem;
             margin-bottom: 0.75rem;
         }
 
@@ -174,11 +176,12 @@
 
         code {
             font-family: var(--font-mono);
-            background-color: rgba(51, 65, 85, 0.5);
+            background-color: rgba(51, 65, 85, 0.6);
             color: var(--accent-blue);
-            padding: 0.15rem 0.4rem;
+            padding: 0.15rem 0.45rem;
             border-radius: 0.25rem;
             font-size: 0.9em;
+            border: 1px solid rgba(56, 189, 248, 0.2);
         }
 
         .formula-box {
@@ -188,23 +191,131 @@
             border-radius: 0 0.5rem 0.5rem 0;
             margin: 1.75rem 0;
             font-family: var(--font-mono);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #6ee7b7;
             overflow-x: auto;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .diagram-box {
+        /* Modern Tuple Architecture Grid */
+        .tuple-header {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--accent-gold-light);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            color: var(--accent-gold-light);
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tuple-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .tuple-card {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
             border-radius: 0.75rem;
             padding: 1.5rem;
-            margin: 1.75rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: #e2e8f0;
-            overflow-x: auto;
+            display: flex;
+            flex-direction: column;
         }
+
+        .tuple-card-header {
+            font-family: var(--font-mono);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-s { color: var(--accent-blue); }
+        .card-v { color: var(--accent-emerald); }
+        .card-m { color: var(--accent-gold-light); }
+
+        .tuple-card ul {
+            padding-left: 1.25rem;
+            font-size: 0.925rem;
+            color: #cbd5e1;
+            margin-bottom: 0;
+        }
+
+        .tuple-card li {
+            margin-bottom: 0.4rem;
+        }
+
+        /* Process & Flow Diagrams */
+        .flow-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.75rem;
+            margin: 2rem 0;
+        }
+
+        .flow-step {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        .flow-step-title {
+            color: var(--accent-gold-light);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .flow-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .flow-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .flow-branch {
+            background-color: var(--bg-card);
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+        }
+
+        .branch-hard {
+            border-top: 3px solid var(--accent-blue);
+        }
+
+        .branch-soft {
+            border-top: 3px solid var(--accent-emerald);
+        }
+
+        .branch-title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .branch-hard .branch-title { color: var(--accent-blue); }
+        .branch-soft .branch-title { color: var(--accent-emerald); }
 
         ul, ol {
             margin-bottom: 1.25rem;
@@ -216,22 +327,23 @@
             margin-bottom: 0.75rem;
         }
 
+        /* Modernized Table Styling */
         .table-wrapper {
             overflow-x: auto;
-            margin: 1.75rem 0;
+            margin: 2rem 0;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background-color: var(--bg-secondary);
-            border-radius: 0.5rem;
-            overflow: hidden;
-            font-size: 0.9rem;
+            font-size: 0.925rem;
         }
 
         th, td {
-            padding: 0.85rem 1rem;
+            padding: 1rem 1.25rem;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
         }
@@ -245,44 +357,59 @@
             letter-spacing: 0.05em;
         }
 
+        tr:last-child td {
+            border-bottom: none;
+        }
+
         td {
             color: #cbd5e1;
         }
 
+        /* Boundaries Stack */
         .boundary-diagram {
             background-color: var(--bg-secondary);
             border: 1px dashed var(--border-color);
             border-radius: 0.75rem;
             padding: 1.5rem;
-            margin: 1.75rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.875rem;
+            margin: 2rem 0;
         }
 
         .boundary-level {
-            padding: 0.85rem 1.15rem;
-            margin-bottom: 0.75rem;
-            border-radius: 0.375rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.85rem;
+            border-radius: 0.5rem;
         }
 
         .level-ceiling {
-            background-color: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: var(--accent-blue);
+            background-color: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            color: #e0f2fe;
         }
 
         .level-middle {
-            background-color: rgba(217, 119, 6, 0.1);
-            border: 1px solid rgba(217, 119, 6, 0.3);
-            color: var(--accent-gold-light);
+            background-color: rgba(217, 119, 6, 0.08);
+            border: 1px solid rgba(217, 119, 6, 0.25);
+            color: #fef3c7;
         }
 
         .level-floor {
-            background-color: rgba(148, 163, 184, 0.1);
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            color: var(--text-secondary);
+            background-color: rgba(148, 163, 184, 0.08);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: #cbd5e1;
             margin-bottom: 0;
         }
+
+        .level-title {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.35rem;
+        }
+
+        .level-ceiling .level-title { color: var(--accent-blue); }
+        .level-middle .level-title { color: var(--accent-gold-light); }
+        .level-floor .level-title { color: var(--text-secondary); }
 
         footer {
             margin-top: 4rem;
@@ -365,35 +492,52 @@
                 A Quang Number is formally instantiated as a 3-element canonical tuple:
             </p>
 
-            <div class="formula-box">
+            <div class="tuple-header">
                 Qn = &langle; S , V(Qexpr) , M &rangle;
             </div>
 
-            <div class="diagram-box">
-                       CANONICAL TRINITY TUPLE
-                   ┌─────────────────────────────────────────┐
-                   │  Qn = ⟨ S ,  V(Qexpr) ,  M ⟩            │
-                   └───────────────────┬─────────────────────┘
-                                       │
-         ┌─────────────────────────────┼─────────────────────────────┐
-         ▼                             ▼                             ▼
-  [S] Security Anchor         [V] Exact Value Anchor        [M] Metric Anchor
-  ⟨ I ,  Σ ⟩                  Contiguous exact payload      ⟨ Domain, z, D, C, DCC, P ⟩
-  - Provenance Identity (I)   - Active View (V_z)           - Two-Way Zoom Window (z)
-  - Integrity Proof (Σ)       - Residual Memory (R)         - Universal Dimension (D)
-                                                            - Chaining Topology Hook (C)
-                                                            - DCC Profile
-                                                            - Sparse Pivot Vector (P)
+            <div class="tuple-grid">
+                
+                <div class="tuple-card">
+                    <div class="tuple-card-header card-s">[S] Security Anchor</div>
+                    <ul>
+                        <li><strong>Structure:</strong> <code>&langle; I , &Sigma; &rangle;</code></li>
+                        <li><strong>Identity (I):</strong> Cryptographic provenance, public key, or namespace.</li>
+                        <li><strong>Signature (&Sigma;):</strong> Integrity proof over <code>I &Vert; V &Vert; M</code>.</li>
+                        <li><strong>Null Law (&emptyset;):</strong> Invalid &Sigma; &rArr; Qn = &emptyset;.</li>
+                    </ul>
+                </div>
+
+                <div class="tuple-card">
+                    <div class="tuple-card-header card-v">[V] Exact Value Anchor</div>
+                    <ul>
+                        <li><strong>Payload:</strong> Homoiconic <code>V(Qexpr)</code> buffer.</li>
+                        <li><strong>Un-truncated Memory:</strong> Holds complete state without precision loss.</li>
+                        <li><strong>Active View (V_z):</strong> Sliced view at current zoom level.</li>
+                        <li><strong>Residuals (R):</strong> Bi-directional <code>R_macro</code> and <code>R_micro</code>.</li>
+                    </ul>
+                </div>
+
+                <div class="tuple-card">
+                    <div class="tuple-card-header card-m">[M] Metric Anchor</div>
+                    <ul>
+                        <li><strong>Structure:</strong> <code>&langle; Domain, z, D, C, DCC, P &rangle;</code></li>
+                        <li><strong>Zoom (z):</strong> Scale ceiling and precision floor.</li>
+                        <li><strong>Dimension (D):</strong> Universal scaling parameter.</li>
+                        <li><strong>Topology (C):</strong> Chaining operator / predicate hook.</li>
+                        <li><strong>DCC Profile:</strong> Dependencies, Constraints, Capabilities.</li>
+                        <li><strong>Pivots (P):</strong> Sparse vectors for <i>O(log N)</i> search.</li>
+                    </ul>
+                </div>
+
             </div>
 
-            <h3>2.1 The Security Anchor [S]</h3>
+            <h3>2.1 The Security Anchor [S] &amp; The Null Law (&emptyset;)</h3>
             <div class="formula-box">
                 S = &langle; I , &Sigma; &rangle; &nbsp;|&nbsp; Null Law: Verify(&Sigma;) == FALSE &or; M == Undefined &rArr; Qn = &emptyset;
             </div>
             <p>
-                <strong>I (Identity):</strong> Unique origin namespace, public key, or provenance identifier.<br>
-                <strong>&Sigma; (Security Proof):</strong> Cryptographic signature or Zero-Knowledge proof verifying <code>I &Vert; V &Vert; M</code>.<br>
-                <strong>The Null Law (&emptyset;):</strong> A payload that fails cryptographic verification or lacks a valid metric anchor evaluates to the Empty Set (&emptyset;) and cannot be instantiated.
+                A payload that fails cryptographic verification or lacks a valid metric anchor evaluates to the Empty Set (&emptyset;) and cannot be instantiated within the system.
             </p>
 
             <h3>2.2 The Exact Value Anchor [V] &amp; Quang Expressions (Qexpr)</h3>
@@ -408,7 +552,7 @@
             <ul>
                 <li><strong>DomainType &in; {Maths (Qm), Semantics (Qs), Hybrid}:</strong> Governs operational interpretation.</li>
                 <li><strong>z = &langle; z_macro, z_micro &rangle;:</strong> Two-Way Zoom Window defining scale ceiling and resolution floor.</li>
-                <li><strong>D (Dimensionality):</b> Universal Dimension parameter (+D vector expansion, D &in; &Qopf;+ fractal self-similarity scaling, -D constraint/projection mask).</li>
+                <li><strong>D (Dimensionality):</strong> Universal Dimension parameter (+D vector expansion, D &in; &Qopf;+ fractal scaling, -D constraint mask).</li>
                 <li><strong>C (Chaining Hook):</strong> Topological link specifying algebraic operators (+, &times;) for Qm or semantic predicates for Qs.</li>
                 <li><strong>DCC Profile = &langle; D_dep, C_con, K_cap &rangle;:</strong> Self-describing profile of Dependencies, Constraints, and Capabilities.</li>
                 <li><strong>P (Sparse Pivots):</strong> Sparse Vantage-Point Vector enabling <i>O(1)</i> Triangle Inequality Pruning for sublinear <i>O(log N)</i> search queries.</li>
@@ -440,25 +584,31 @@
                 Qn replaces paper-and-pencil mathematical legacy with <strong>native computer memory persistence (Q(reuse))</strong>:
             </p>
 
-            <div class="diagram-box">
-                        [SoC Execution at Zoom Window z]
-                                       │
-                                       ▼
-                          Is Remainder R == 0?
-                               /       \
-                              /         \
-                          YES/           \NO
-                            v             v
-                  [HARD HALT]             [SOFT HALT]
-                  Exact result            - Return active view V_z
-                  Zero residual           - Persist residual R in Q(reuse)
-                                          - Enable O(1) depth continuation
+            <div class="flow-container">
+                <div class="flow-step">
+                    <div class="flow-step-title">SoC Execution at Zoom Window z</div>
+                    <div>Evaluates operation up to precision floor z_micro and scale ceiling z_macro.</div>
+                </div>
+
+                <div class="flow-split">
+                    <div class="flow-branch branch-hard">
+                        <div class="branch-title">HARD HALT (Remainder R == 0)</div>
+                        <p style="font-size: 0.85rem; margin-bottom: 0; color: #cbd5e1;">
+                            Operation resolves with exact precision. Returns active view V_z. Zero residual memory required.
+                        </p>
+                    </div>
+
+                    <div class="flow-branch branch-soft">
+                        <div class="branch-title">SOFT HALT (Remainder R &ne; 0)</div>
+                        <p style="font-size: 0.85rem; margin-bottom: 0; color: #cbd5e1;">
+                            Returns active view V_z. Persists exact residual R = &langle;R_macro, R_micro&rangle; in Q(reuse) SRAM cache for O(1) depth expansion.
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <ul>
-                <li><strong>Hard Halt (R = 0):</strong> Operation resolves with exact precision at current zoom depth.</li>
-                <li><strong>Soft Halt (R &ne; 0):</strong> Operation reaches precision boundary z. The SoC returns active view V_z and persists exact residual R = &langle; R_macro, R_micro &rangle; into Q(reuse) SRAM cache.</li>
-                <li><strong>Space-Time Memory Dilation:</strong> Respects the physical Memory Wall constraint. Spatial dilation (zoom window z) compresses bandwidth across the memory bus. Temporal dilation transforms the 250-cycle DRAM latency bubble into an active execution window for local Q(reuse) residual folding, cryptographic pre-checks, and Q(bypass) identity evaluations.</li>
+                <li><strong>Space-Time Memory Dilation:</strong> Respects the physical Memory Wall constraint. Spatial dilation (zoom window z) compresses bandwidth across the memory bus. Temporal dilation transforms the 250-cycle DRAM fetch delay into an active execution window for local Q(reuse) residual folding, cryptographic pre-checks, and Q(bypass) identity evaluations.</li>
             </ul>
         </section>
 
@@ -554,16 +704,16 @@
 
             <div class="boundary-diagram">
                 <div class="boundary-level level-ceiling">
-                    <strong>CEILING BOUNDARY (Semantic Interface / Base10):</strong><br>
-                    Human &amp; AI Agent presentation layer. Structured observable state, visual/document projection (HTML / Dual-channel), and natural language semantic intent.
+                    <div class="level-title">CEILING BOUNDARY (Semantic Interface / Base10)</div>
+                    <div>Human &amp; AI Agent presentation layer. Structured observable state, visual/document projection (HTML / Dual-channel), and natural language semantic intent.</div>
                 </div>
                 <div class="boundary-level level-middle">
-                    <strong>MIDDLE LAYER (The Qn / CDQN Universe):</strong><br>
-                    Governed by SMEMP Invariants (S &times; M), verified by QnLang &amp; QnIR, executing fractal Qn state chains via Quang Expressions (Qexpr).
+                    <div class="level-title">MIDDLE LAYER (The Qn / CDQN Universe)</div>
+                    <div>Governed by SMEMP Invariants (S &times; M), verified by QnLang &amp; QnIR, executing fractal Qn state chains via Quang Expressions (Qexpr).</div>
                 </div>
                 <div class="boundary-level level-floor">
-                    <strong>FLOOR BOUNDARY (Silicon Ground Truth / Base2):</strong><br>
-                    Packed 64/128-bit hardware registers, bitwise execution, physical voltage states, and Space-Time Memory Dilation during DRAM data movement. WHERE ABSTRACTION ENDS.
+                    <div class="level-title">FLOOR BOUNDARY (Silicon Ground Truth / Base2)</div>
+                    <div>Packed 64/128-bit hardware registers, bitwise execution, physical voltage states, and Space-Time Memory Dilation during DRAM data movement. WHERE ABSTRACTION ENDS.</div>
                 </div>
             </div>
         </section>
