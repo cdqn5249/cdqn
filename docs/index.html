@@ -9,7 +9,7 @@
     <meta name="description" content="Official documentation portal for Quang Numbers (Qn) and Chained &amp; Distributed Quang Numbers (CDQN).">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-25">
+    <meta name="timestamp" content="2026-07-26">
     <meta name="license" content="Scaling Source License (SSL v1.0)">
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
@@ -49,7 +49,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 920px;
             width: 100%;
         }
 
@@ -153,6 +153,43 @@
             font-size: 0.9em;
         }
 
+        .overview-box {
+            background-color: var(--bg-secondary);
+            border-left: 4px solid var(--accent-gold);
+            padding: 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 2rem 0;
+        }
+
+        .overview-box h3 {
+            color: var(--accent-gold-light);
+            font-size: 1.1rem;
+            font-family: var(--font-mono);
+            margin-bottom: 0.5rem;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+
+        .pillar-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .pillar-title {
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
         .docs-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -188,16 +225,17 @@
         }
 
         .doc-card-title {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 0.75rem;
         }
 
         .doc-card-desc {
-            font-size: 0.95rem;
+            font-size: 0.925rem;
             color: var(--text-secondary);
             margin-bottom: 1.5rem;
+            line-height: 1.6;
         }
 
         .doc-card-link {
@@ -210,47 +248,14 @@
             gap: 0.4rem;
         }
 
-        .overview-box {
-            background-color: var(--bg-secondary);
-            border-left: 4px solid var(--accent-gold);
-            padding: 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 2rem 0;
+        ul {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
         }
 
-        .overview-box h3 {
-            color: var(--accent-gold-light);
-            font-size: 1.1rem;
-            font-family: var(--font-mono);
+        li {
             margin-bottom: 0.5rem;
-        }
-
-        .pillars-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.25rem;
-            margin: 2rem 0;
-        }
-
-        @media (max-width: 640px) {
-            .pillars-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .pillar-card {
-            background-color: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-        }
-
-        .pillar-title {
-            font-weight: 700;
-            font-family: var(--font-mono);
-            color: var(--accent-blue);
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
         }
 
         footer {
@@ -325,22 +330,29 @@
         <section>
             <h2>Foundational Architectural Pillars</h2>
             <p>
-                The CDQN universe is built on two core technological breakdowns that bridge high-level cognitive semantics down to bare-metal hardware registers:
+                The CDQN universe is built on three core technological breakthroughs that bridge high-level cognitive semantics down to bare-metal hardware registers:
             </p>
 
             <div class="pillars-grid">
                 
                 <div class="pillar-card">
                     <div class="pillar-title">1. Space-Time Memory Dilation</div>
-                    <p style="font-size: 0.95rem; margin-bottom: 0;">
-                        Respects the physical Memory Wall constraint. Uses Two-Way Zoom (<code>z</code>) for spatial bandwidth compression and exploits the 250-cycle DRAM fetch delay for opportunistic local <code>Q(reuse)</code> residual folding and <code>Q(bypass)</code> identity short-circuiting.
+                    <p style="font-size: 0.925rem; margin-bottom: 0; color: #cbd5e1;">
+                        Respects physical Memory Wall constraints. Uses Two-Way Zoom (<code>z</code>) for spatial bandwidth compression and transforms the 250-cycle DRAM latency delay into an active execution window for local <code>Q(reuse)</code> residual folding and <code>Q(bypass)</code> identity short-circuiting.
                     </p>
                 </div>
 
                 <div class="pillar-card">
                     <div class="pillar-title">2. Quang Expressions (Qexpr)</div>
-                    <p style="font-size: 0.95rem; margin-bottom: 0;">
-                        Unified intermediate representation bridging exact math (<code>Qm</code>) and natural language semantics (<code>Qs</code>). Encodes context as multivariate polynomials solved via variable substitution and elimination, enabling 100% lossless lowering of legacy HTML DOM data.
+                    <p style="font-size: 0.925rem; margin-bottom: 0; color: #cbd5e1;">
+                        Unified intermediate representation bridging exact math (<code>Qm</code>) and natural language semantics (<code>Qs</code>). Encodes context as multivariate polynomials solved via substitution and elimination, enabling 100% lossless lowering of legacy HTML DOM data.
+                    </p>
+                </div>
+
+                <div class="pillar-card">
+                    <div class="pillar-title">3. Substrate-Neutral SQS ABIs</div>
+                    <p style="font-size: 0.925rem; margin-bottom: 0; color: #cbd5e1;">
+                        Self-Quang Systems (SQS) operate fractally across local registers, SRAM arenas, and remote networks. Physical bit-atoms (<code>Qn,64</code> and <code>Qn,128</code>) enforce Zero Trust at the register boundary, eliminating confused deputy attacks and replay fraud.
                     </p>
                 </div>
 
@@ -349,8 +361,8 @@
 
         <!-- CORE DOCUMENTATION CARDS -->
         <section>
-            <h2>Core Documentation</h2>
-            <p>Select a document below to explore the foundational laws, formal mathematical definitions, and legal licensing terms of the CDQN project:</p>
+            <h2>Core Documentation Suite</h2>
+            <p>Select a document below to explore the foundational laws, formal mathematical specifications, hardware ABIs, and legal terms of the CDQN project:</p>
 
             <div class="docs-grid">
 
@@ -371,7 +383,7 @@
                 <!-- CARD 2: QN FORMAL DEFINITION -->
                 <a href="qn-def.html" class="doc-card">
                     <div>
-                        <div class="doc-card-tag">Canonical Specification</div>
+                        <div class="doc-card-tag">Canonical Type Specification</div>
                         <div class="doc-card-title">The Formal Qn Definition</div>
                         <div class="doc-card-desc">
                             The complete mathematical and systems definition. Details the Trinity Tuple &langle;S, V(Qexpr), M&rangle;, Q(reuse) residual memory engine, Two-Way Zoom window z, Qm/Qs domains, DCC profile, and Q(bypass).
@@ -382,7 +394,21 @@
                     </div>
                 </a>
 
-                <!-- CARD 3: SCALING SOURCE LICENSE -->
+                <!-- CARD 3: QN PRIMITIVES ABI -->
+                <a href="qn-primitives.html" class="doc-card">
+                    <div>
+                        <div class="doc-card-tag">Hardware ABI &amp; Binary Format</div>
+                        <div class="doc-card-title">Qn Primitives ABI</div>
+                        <div class="doc-card-desc">
+                            Bit-level binary register layouts for Qn,64 and Qn,128, 2-bit execution status flags (00, 01, 10, 11), 64-byte L1 cache-line alignments, Aperiodic Einstein tile memory mapping, and substrate-neutral SQS ABIs.
+                        </div>
+                    </div>
+                    <div class="doc-card-link">
+                        Read Hardware ABI &rarr;
+                    </div>
+                </a>
+
+                <!-- CARD 4: SCALING SOURCE LICENSE -->
                 <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener" class="doc-card">
                     <div>
                         <div class="doc-card-tag">Source-Available Legal Terms</div>
@@ -403,14 +429,15 @@
         <section>
             <h2>Repository Architecture</h2>
             <p>
-                The CDQN project repository is organized into distinct research and execution layers:
+                The CDQN project repository is organized into distinct specification and execution layers:
             </p>
             <ul>
                 <li><code>docs/index.html</code> — Documentation Portal (This page).</li>
                 <li><code>docs/smemp.html</code> — The SMEMP Manifesto (Boundary Laws).</li>
                 <li><code>docs/qn-def.html</code> — The Formal Definition of a Quang Number (Qn).</li>
+                <li><code>docs/qn-primitives.html</code> — Binary Memory ABI for Qn,64 &amp; Qn,128 Register Words.</li>
                 <li><code>LICENSE.md</code> — The Scaling Source License (SSL v1.0).</li>
-                <li><code>README.md</code> — Project entry point and community guidelines (Pending completion of Phase B primitives).</li>
+                <li><code>README.md</code> — Project entry point and community guidelines (Pending completion of Phase B2 QnIR opcodes).</li>
             </ul>
         </section>
 
