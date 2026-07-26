@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Base-10 Seed, Origin &amp; Cryptographic Specification of Qn</title>
+    
+    <!-- Metadata -->
+    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, and Dual-Ring Post-Quantum Cryptography.">
+    <meta name="author" content="Christophe Duy Quang Nguyen">
+    <meta name="location" content="Bao Loc, Vietnam">
+    <meta name="timestamp" content="2026-07-26">
+    <meta name="license" content="Scaling Source License (SSL v1.0)">
+    <meta name="repository" content="https://github.com/cdqn5249/cdqn">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Embedded CSS -->
+    <style>
+        :root {
+            --bg-primary: #090d16;
+            --bg-secondary: #111827;
+            --bg-card: #1e293b;
+            --bg-card-hover: #2d3748;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-gold: #d97706;
+            --accent-gold-light: #f59e0b;
+            --accent-blue: #38bdf8;
+            --accent-emerald: #10b981;
+            --border-color: #334155;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-stack);
+            line-height: 1.75;
+            padding: 2.5rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 920px;
+            width: 100%;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+        }
+
+        .nav-bar a {
+            color: var(--accent-gold-light);
+            text-decoration: none;
+        }
+
+        .nav-bar a:hover {
+            text-decoration: underline;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2.5rem;
+            margin-bottom: 3.5rem;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-gold-light);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.35rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            line-height: 1.25;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            max-width: 780px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            background-color: var(--bg-secondary);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            text-align: left;
+        }
+
+        .meta-item strong {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.2rem;
+        }
+
+        .meta-item span, .meta-item a {
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            text-decoration: none;
+        }
+
+        .meta-item a:hover {
+            color: var(--accent-gold-light);
+            text-decoration: underline;
+        }
+
+        section {
+            margin-bottom: 3.5rem;
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--accent-gold-light);
+            border-bottom: 1px solid rgba(217, 119, 6, 0.25);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            font-family: var(--font-mono);
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            color: #cbd5e1;
+            font-size: 1.025rem;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            background-color: rgba(51, 65, 85, 0.6);
+            color: var(--accent-blue);
+            padding: 0.15rem 0.45rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .formula-box {
+            background-color: var(--bg-secondary);
+            border-left: 4px solid var(--accent-emerald);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.75rem 0;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: #6ee7b7;
+            overflow-x: auto;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin: 2rem 0;
+        }
+
+        .card-box {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .card-box-title {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-gold { color: var(--accent-gold-light); }
+        .title-blue { color: var(--accent-blue); }
+        .title-emerald { color: var(--accent-emerald); }
+
+        .flow-container {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.75rem;
+            margin: 2rem 0;
+        }
+
+        .flow-step {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        .flow-step-title {
+            color: var(--accent-gold-light);
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 1.75rem 0;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--bg-secondary);
+            font-size: 0.925rem;
+        }
+
+        th, td {
+            padding: 0.9rem 1.15rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-card);
+            color: var(--accent-gold-light);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        td { color: #cbd5e1; }
+
+        ul, ol {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 0.75rem;
+        }
+
+        footer {
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        footer a {
+            color: var(--accent-gold-light);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <nav class="nav-bar">
+        <a href="index.html">&larr; Back to Portal</a>
+        <a href="qn-primitives.html">&larr; View Hardware ABI</a>
+    </nav>
+
+    <header>
+        <span class="badge">Foundational Specification</span>
+        <h1>THE BASE-10 SEEDS, ORIGIN ANCHORS, AND CRYPTOGRAPHIC SPECIFICATION OF Qn</h1>
+        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, and Dual-Ring Post-Quantum Cryptography</p>
+
+        <div class="meta-grid">
+            <div class="meta-item">
+                <strong>Author</strong>
+                <span>Christophe Duy Quang Nguyen</span>
+            </div>
+            <div class="meta-item">
+                <strong>Location</strong>
+                <span>Bao Loc, Vietnam</span>
+            </div>
+            <div class="meta-item">
+                <strong>Repository</strong>
+                <span><a href="https://github.com/cdqn5249/cdqn" target="_blank" rel="noopener">cdqn5249/cdqn</a></span>
+            </div>
+            <div class="meta-item">
+                <strong>License</strong>
+                <span><a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener">SSL v1.0</a></span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- SECTION 1: EPISTEMOLOGICAL SCOPE -->
+        <section>
+            <h2>1. Epistemological Scope &amp; Level 1 Architecture</h2>
+            <p>
+                Level 1 forms the foundational number-theoretic bed of the CDQN stack, sitting directly above bare-metal 64-bit hardware registers (<code>qn-primitives.html</code>) and directly below advanced mathematical fields (<code>Qm</code>) and natural language semantics (<code>Qs</code>).
+            </p>
+            <p>
+                Level 1 establishes the mathematical rules for constructing base-10 numbers from atomic digit seeds, grounds local physical device entropy into memory via <code>Q(harvest)</code>, differentiates numerical scalar zero from topological genesis anchors, and introduces native Post-Quantum Cryptography (<code>Q(crypto)</code> and <code>Qnet(crypto)</code>).
+            </p>
+        </section>
+
+        <!-- SECTION 2: THE 10 BASE-10 DECIMAL SEED PRIMITIVES -->
+        <section>
+            <h2>2. The 10 Base-10 Decimal Seed Primitives (Q0 &hellip; Q9)</h2>
+            <p>
+                In the Qn universe, numbers are not raw un-typed integers. <strong>Q0, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, and Q9</strong> are the 10 Atomic Decimal Seed Numbers.
+            </p>
+            <p>
+                Each decimal seed is an atomic 64-bit Quang Number (<code>Qn,64</code>) carrying explicit digit capability flags inside its Metric Anchor (<code>K_cap &in; M</code>).
+            </p>
+
+            <div class="formula-box">
+                Positional Composition: Q10 = ( Q1 &otimes; Q_base10 ) &oplus; Q0 &nbsp;|&nbsp; Q355 = ( Q3 &otimes; Q_base100 ) &oplus; ( Q5 &otimes; Q_base10 ) &oplus; Q5
+            </div>
+
+            <p>
+                Multi-digit numbers (such as <code>Q10</code>, <code>Q42</code>, or <code>Q355</code>) are <strong>Positional Composition Chains</strong> created by composing atomic digit seeds under positional weight operators. This guarantees zero translation loss between human base-10 visual reading and bare-metal silicon register execution.
+            </p>
+        </section>
+
+        <!-- SECTION 3: Qzero vs Qorigin -->
+        <section>
+            <h2>3. Mathematical Differentiation: Qzero vs. Qorigin</h2>
+            <p>
+                To eliminate representation ambiguity, Level 1 enforces a strict distinction between arithmetic scalar zero and the topological/cryptographic origin anchor:
+            </p>
+
+            <div class="grid-cards">
+                
+                <div class="card-box">
+                    <div class="card-box-title title-gold">Arithmetic Zero (Qzero)</div>
+                    <ul>
+                        <li><strong>Value Payload:</strong> Scalar value <code>V = 0</code>.</li>
+                        <li><strong>Additive Identity:</strong> <code>x &oplus; Qzero = x</code>.</li>
+                        <li><strong>Multiplicative Annihilator:</strong> <code>x &otimes; Qzero = Qzero</code>.</li>
+                        <li><strong>Execution:</strong> Triggers <code>Q(bypass)</code> short-circuiting in <i>O(0)</i> clock cycles.</li>
+                    </ul>
+                </div>
+
+                <div class="card-box">
+                    <div class="card-box-title title-blue">Metric Origin (Qorigin)</div>
+                    <ul>
+                        <li><strong>Topological Anchor:</strong> Reference point <code>(0, 0, &hellip;, 0)</code>.</li>
+                        <li><strong>Metric Reference:</strong> Base anchor for distance function <code>d(Qorigin, Qx)</code>.</li>
+                        <li><strong>Genesis Node:</strong> Root provenance identifier (<code>I_origin</code>).</li>
+                        <li><strong>Coordinate Frame:</strong> Defines local memory arena orientation.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 4: Q(harvest) & GENESIS TILE T0 -->
+        <section>
+            <h2>4. Physical Hardware Entropy Harvesting (Q(harvest)) &amp; Genesis Patch T0</h2>
+            <p>
+                When a physical SoC onboards into the CDQN universe, <code>Q(harvest)</code> extracts physical silicon entropy (thermal noise, SRAM power-up states, clock jitter) designated as <code>e_harvest</code>.
+            </p>
+            <p>
+                This physical entropy is bound to <strong>4 Target Families</strong> to construct the local device identifier <code>Q(ID)_local</code>:
+            </p>
+
+            <div class="formula-box">
+                Q(ID)_local = &langle; Qorigin , {Q0 &hellip; Q9} , Q(ops) , Q(logics) &rangle;
+            </div>
+
+            <div class="flow-container">
+                <div class="flow-step">
+                    <div class="flow-step-title">1. Physical Noise Harvest (e_harvest)</div>
+                    <div>Silicon extracts physical SRAM power-up state and thermal jitter upon first power-on.</div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-step-title">2. Target Seed Binding</div>
+                    <div>Binds e_harvest to Qorigin, digit seeds Q0..Q9, primary operators Q(ops), and logic gates Q(logics).</div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-step-title">3. Genesis Patch T0 Allocation</div>
+                    <div>Writes Q(ID)_local into Tile Zero (T0) of the local Aperiodic Einstein Tile memory arena in SRAM/Flash.</div>
+                </div>
+
+                <div class="flow-step">
+                    <div class="flow-step-title">4. Outward Memory Inflation</div>
+                    <div>All dynamic application memory (Qexpr trees, Qm vectors, Qs graphs) inflates outward from T0.</div>
+                </div>
+            </div>
+
+            <p>
+                <strong>User vs. Device Decoupling Rule:</strong> The hardware seed <code>Q(ID)_local</code> is bound strictly to physical silicon. If a human user (<code>I_user</code>) replaces their hardware device, a new <code>Q(harvest)</code> generates <code>Q(ID)_new_device</code>, which links to <code>I_user</code> without compromising the user's master private cryptographic identity.
+            </p>
+        </section>
+
+        <!-- SECTION 5: DUAL-RING POST-QUANTUM CRYPTOGRAPHY -->
+        <section>
+            <h2>5. The Dual-Ring Post-Quantum Cryptography Engine</h2>
+            <p>
+                CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra:
+            </p>
+
+            <h3>5.1 Ring 1: Local Node Q(crypto)</h3>
+            <p>
+                Operates 100% locally on the device registers without network consensus. The local key is constructed by using real physical hardware noise <code>e_harvest</code> as the LWE error distribution:
+            </p>
+            <div class="formula-box">
+                Local Key Formula: A &middot; s_i + e_harvest,i = b_i (mod q)
+            </div>
+
+            <h3>5.2 Ring 2: CDQN Network Mesh Qnet(crypto)</h3>
+            <p>
+                High-capacity CDQN server nodes trade surplus compute power to aggregate public commitment polynomials <code>b_i</code> from surrounding leaf nodes:
+            </p>
+            <div class="formula-box">
+                B_net = &sum; b_i = A &middot; ( &sum; s_i ) + &sum; e_harvest,i (mod q)
+            </div>
+            <ul>
+                <li><strong>Zero-Knowledge Privacy:</strong> Remote peers only see composite proof <code>B_net</code>. Private key <code>s_i</code> and physical noise <code>e_harvest,i</code> remain 100% private inside local SRAM.</li>
+                <li><strong>NP-Hard Complexity:</strong> Breaking <code>Qnet(crypto)</code> requires solving a Multi-Key Ring-LWE lattice problem across <i>k</i> physically isolated hardware noise sources, scaling exponentially: <code>2^&Omega;(k)</code>.</li>
+                <li><strong>O(1) Verification:</strong> Any node verifies the composite network proof in <i>O(1)</i> constant time.</li>
+            </ul>
+
+            <h3>5.3 BoC Polymorphic Security Scaling Matrix</h3>
+            <p>
+                The Best of Choices (BoC) policy engine scales the cryptographic mode dynamically based on hardware capability:
+            </p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hardware Tier</th>
+                            <th>BoC Cryptographic Mode</th>
+                            <th>Execution Characteristics</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Tier 1: 32-Bit Microcontrollers</strong></td>
+                            <td>16-Bit Truncated HMAC / Hash-Tag Mode</td>
+                            <td>Executes in 1 clock cycle on register `r0`. Minimal energy consumption.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tier 2: Mobile SoCs / SIMD Edge</strong></td>
+                            <td>Local Physical Ring-LWE (Q(crypto))</td>
+                            <td>Executes natively on 128-bit SIMD registers using local e_harvest.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tier 3: Servers &amp; Clusters</strong></td>
+                            <td>Multi-Key Network Aggregation (Qnet(crypto))</td>
+                            <td>Trades surplus compute power to aggregate noise and protect the mesh.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 6: Qexpr TOKEN ENGINE & LOCAL COMPUTE RENDERING -->
+        <section>
+            <h2>6. The Qexpr Token Engine &amp; Death of Static File Downloads</h2>
+            <p>
+                In the CDQN universe, <strong>the concept of static file downloads (.pdf, .mp4, .exe) does not exist</strong>.
+            </p>
+            <ul>
+                <li><strong>Tokenized Transmission:</strong> Network nodes transmit lightweight 2KB <strong>Qexpr Logic Tokens</strong> instead of megabytes of raw, rendered pixels or bytes.</li>
+                <li><strong>Local Compute Rendering:</strong> Receiving nodes evaluate incoming <code>Qexpr</code> tokens locally using their private $T_0$ seeds and render visual/semantic outputs adapted to their local active Two-Way Zoom window <code>z</code>.</li>
+                <li><strong>BoC Adaptive Fallback:</strong> If a weak edge display lacks compute capability to render a complex <code>Qexpr</code> token locally, BoC requests a pre-evaluated coarse view (<code>V_z_macro</code>) from an adjacent high-capacity SQS node via sublinear <i>O(log N)</i> routing.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            The Qn Base Specification is published under the <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener">Scaling Source License (SSL v1.0)</a>.
+        </p>
+        <p style="margin-top: 0.5rem; font-size: 0.75rem;">
+            Authored by Christophe Duy Quang Nguyen &mdash; Bao Loc, Vietnam &bull; July 2026 &bull; <a href="https://github.com/cdqn5249/cdqn" target="_blank" rel="noopener">cdqn5249/cdqn</a>
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>
