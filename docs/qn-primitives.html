@@ -6,10 +6,10 @@
     <title>The Binary ABI Specification of Qn Primitives</title>
     
     <!-- Metadata -->
-    <meta name="description" content="Binary ABI Specification of Quang Number Primitives (Qn,64 and Qn,128) for bare-metal registers, memory arenas, and substrate-neutral SQS execution.">
+    <meta name="description" content="Binary ABI Specification of Quang Number Primitives (Qn,64) for bare-metal registers, memory arenas, and substrate-neutral SQS execution.">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-25">
+    <meta name="timestamp" content="2026-07-26">
     <meta name="license" content="Scaling Source License (SSL v1.0)">
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
@@ -198,7 +198,6 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Register Word Field Diagrams */
         .register-box {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -251,7 +250,6 @@
             font-family: var(--font-stack);
         }
 
-        /* Modern Tables */
         .table-wrapper {
             overflow-x: auto;
             margin: 1.75rem 0;
@@ -281,13 +279,8 @@
             letter-spacing: 0.05em;
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        td {
-            color: #cbd5e1;
-        }
+        tr:last-child td { border-bottom: none; }
+        td { color: #cbd5e1; }
 
         ul, ol {
             margin-bottom: 1.25rem;
@@ -324,13 +317,13 @@
 
     <nav class="nav-bar">
         <a href="index.html">&larr; Back to Portal</a>
-        <a href="qn-def.html">&larr; View Qn Specification</a>
+        <a href="sqs-def.html">&larr; View SQS Specification</a>
     </nav>
 
     <header>
         <span class="badge">Hardware ABI Specification</span>
         <h1>THE BINARY ABI SPECIFICATION OF Qn PRIMITIVES</h1>
-        <p class="subtitle">Specification Version 1.0 &mdash; Bit-Level Register Layouts, Memory Arena Alignments, and Substrate-Neutral SQS ABIs for Qn,64 and Qn,128</p>
+        <p class="subtitle">Specification Version 1.0 &mdash; Bit-Level Register Layouts, 32-Bit Register Pair Mapping, SIMD Vector Scaling, and Substrate-Neutral SQS ABIs for Qn,64</p>
 
         <div class="meta-grid">
             <div class="meta-item">
@@ -358,29 +351,28 @@
         <section>
             <h2>1. Physical Atomicity &amp; The Silicon Gatekeeper</h2>
             <p>
-                At the bare-metal hardware register level, software abstraction ends. The <strong>64-bit Compact Word (Qn,64)</strong> and <strong>128-bit Vector Word (Qn,128)</strong> are the physical bit-atoms of the Quang Number universe.
+                At the bare-metal hardware register level, software abstraction ends. The <strong>64-bit Word (Qn,64)</strong> is the single, universal physical bit-atom of the Quang Number universe.
             </p>
             <p>
-                Every higher-level structure (Quang Expressions, Qm vectors, Qs knowledge graphs, and CDQN network packets) is constructed strictly by composing arrays of these two primitive register words.
+                Every higher-level structure (Quang Expressions, Qm vectors, Qs knowledge graphs, and CDQN network packets) is constructed strictly by composing arrays of this single 64-bit register primitive.
             </p>
 
             <div class="formula-box">
-                The Silicon Gatekeeper Law: Lower(Data) &notin; { Qn,64 , Qn,128 } &rArr; Qn = &emptyset; (Rejected at Hardware Register Interface)
+                The Silicon Gatekeeper Law: Lower(Data) &notin; { Qn,64 } &rArr; Qn = &emptyset; (Rejected at Hardware Register Interface)
             </div>
         </section>
 
-        <!-- SECTION 2: BIT-LEVEL REGISTER LAYOUTS -->
+        <!-- SECTION 2: UNIVERSAL 64-BIT REGISTER FORMAT -->
         <section>
-            <h2>2. Bit-Level Binary Register Word Formats</h2>
+            <h2>2. Universal 64-Bit Register Format &amp; Hardware Mappings</h2>
 
-            <!-- 64-BIT COMPACT REGISTER WORD -->
-            <h3>2.1 The 64-Bit Compact Register Word (Qn,64)</h3>
+            <h3>2.1 The Single Universal Bit-Atom (Qn,64)</h3>
             <p>
-                Optimized for standard 64-bit CPU registers, microcontrollers, IoT edge chips, and low-footprint embedded devices.
+                Every device&mdash;from 32-bit microcontrollers up to 512-bit supercomputer vector engines&mdash;uses the exact same 64-bit bit-field contract:
             </p>
 
             <div class="register-box">
-                <div class="register-title">Qn,64 PACKED REGISTER WORD (64 BITS TOTAL)</div>
+                <div class="register-title">UNIVERSAL Qn,64 PACKED REGISTER WORD (64 BITS TOTAL)</div>
                 <div class="bit-grid">
                     <div class="bit-field">
                         <div class="bit-range">Bits 0 &ndash; 15 (16 Bits)</div>
@@ -395,44 +387,36 @@
                     <div class="bit-field">
                         <div class="bit-range">Bits 32 &ndash; 63 (32 Bits)</div>
                         <div class="bit-name">Value Payload [V]</div>
-                        <div class="bit-desc">16:16 Signed Numerator / Denominator ratio [N, D] or 32-bit Qexpr Arena Index.</div>
+                        <div class="bit-desc">16:16 Signed Numerator / Denominator ratio [N, D] or 32-bit Qexpr Arena Offset.</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 128-BIT VECTOR REGISTER WORD -->
-            <h3>2.2 The 128-Bit SIMD / Vector Register Word (Qn,128)</h3>
+            <h3>2.2 32-Bit Hardware Edge Alignment (r0:r1 Register Pair)</h3>
             <p>
-                Optimized for hardware SIMD registers (ARM Neon, Apple Silicon, RISC-V Vector, Nvidia Tensor Cores, WASM SIMD).
+                On 32-bit hardware architectures (ARM Cortex-M, ESP32, RISC-V RV32I), a 64-bit Qn,64 atom maps cleanly into a <strong>2-register pair (`r0:r1`)</strong>:
             </p>
+            <ul>
+                <li><strong>Control Register `r0` (Bits 0&ndash;31):</strong> Holds Security Anchor S (Bits 0-15) and Metric Anchor M (Bits 16-31). The CPU evaluates invariant checks in 1 clock cycle using register `r0`.</li>
+                <li><strong>Data Register `r1` (Bits 32&ndash;63):</strong> Holds the 32-bit Value Payload V.</li>
+            </ul>
 
-            <div class="register-box">
-                <div class="register-title">Qn,128 VECTOR REGISTER WORD (128 BITS TOTAL)</div>
-                <div class="bit-grid">
-                    <div class="bit-field">
-                        <div class="bit-range">Bits 0 &ndash; 31 (32 Bits)</div>
-                        <div class="bit-name">Security Anchor [S]</div>
-                        <div class="bit-desc">Bits 0-19: Substrate Addressing (I_src &rarr; I_dst). Bits 20-31: Cryptographic Signature Tag (&Sigma;).</div>
-                    </div>
-                    <div class="bit-field">
-                        <div class="bit-range">Bits 32 &ndash; 63 (32 Bits)</div>
-                        <div class="bit-name">Metric Anchor [M]</div>
-                        <div class="bit-desc">2-bit Status, 2-bit Domain, 8-bit z_macro, 8-bit z_micro, 8-bit Dimension D, 4-bit DCC Flags.</div>
-                    </div>
-                    <div class="bit-field">
-                        <div class="bit-range">Bits 64 &ndash; 127 (64 Bits)</div>
-                        <div class="bit-name">Value Payload [V]</div>
-                        <div class="bit-desc">High-precision 64-bit Posit lattice, 32:32 exact rational pair, or 64-bit Qexpr Arena Pointer.</div>
-                    </div>
-                </div>
-            </div>
+            <h3>2.3 Multi-Lane SIMD Vector Register Scaling</h3>
+            <p>
+                Wider vector registers do not introduce new bit formats; they function as <strong>multi-lane SIMD vector arrays of Qn,64 atoms</strong>:
+            </p>
+            <ul>
+                <li><strong>128-Bit SIMD Register (ARM Neon / Apple AMX / WASM):</strong> Holds a 2-lane vector pair <code>Qn,64[0] &Vert; Qn,64[1]</code>.</li>
+                <li><strong>256-Bit AVX Register:</strong> Holds a 4-lane vector array of Qn,64 atoms.</li>
+                <li><strong>512-Bit Vector Engine:</strong> Holds an 8-lane vector array of Qn,64 atoms.</li>
+            </ul>
         </section>
 
         <!-- SECTION 3: EXECUTION STATUS FLAGS -->
         <section>
             <h2>3. Execution Status Field &amp; Zero-Day Isolation</h2>
             <p>
-                Bits 16&ndash;17 in Qn,64 and Bits 32&ndash;33 in Qn,128 specify the <strong>2-bit Execution Status Field</strong>. This field provides native hardware feedback for Soft Halting and Zero-Day threat isolation:
+                Bits 16&ndash;17 in Qn,64 specify the <strong>2-bit Execution Status Field</strong>, providing native hardware feedback for Soft Halting and Zero-Day threat isolation:
             </p>
 
             <div class="table-wrapper">
@@ -476,12 +460,8 @@
 
             <h3>4.1 The 64-Byte L1 Cache Line Fit</h3>
             <p>
-                To maximize L1/L2 memory cache throughput and eliminate bus transfer waste:
+                To maximize L1/L2 memory cache throughput and eliminate bus transfer waste, a physical 64-byte silicon cache line fits <strong>EXACTLY 8 packed Qn,64 words</strong> (8 &times; 8 bytes = 64 bytes) with <strong>0% padding waste</strong>.
             </p>
-            <ul>
-                <li><strong>Qn,64 Mode:</strong> Exactly 8 packed words fit inside one 64-byte L1 cache line (8 &times; 8 bytes = 64 bytes, 0% padding waste).</li>
-                <li><strong>Qn,128 Mode:</strong> Exactly 4 packed words fit inside one 64-byte L1 cache line (4 &times; 16 bytes = 64 bytes, 0% padding waste).</li>
-            </ul>
 
             <h3>4.2 Register Calling Convention</h3>
             <ul>
@@ -503,7 +483,7 @@
 
             <h3>5.1 Aperiodic Einstein Tile Memory Allocation</h3>
             <p>
-                Physical hardware RAM is partitioned using Aperiodic Monotiles (Einstein tiles / Quasicrystals). Memory arenas consist of contiguous arrays of <code>Qn,64</code> or <code>Qn,128</code> words. Substitution and inflation depth indices are encoded inside zoom window <code>z</code>, eliminating periodic hash collisions and dynamic heap allocation overhead (<code>malloc</code>).
+                Physical hardware RAM is partitioned using Aperiodic Monotiles (Einstein tiles / Quasicrystals). Memory arenas consist of contiguous arrays of <code>Qn,64</code> words. Substitution and inflation depth indices are encoded inside zoom window <code>z</code>, eliminating periodic hash collisions and dynamic heap allocation overhead (<code>malloc</code>).
             </p>
 
             <h3>5.2 Substrate-Neutral SQS Transport ABI</h3>
@@ -511,7 +491,7 @@
                 To a Self-Quang System (SQS), the distinction between local hardware registers, memory buses, and remote network sockets is strictly a function of <strong>Latency (&Delta;&tau;)</strong> and <strong>Addressing Space (I_src &rarr; I_dst)</strong>.
             </p>
             <p>
-                The binary layout defined in this specification serves as the <strong>Universal SQS Payload Layout</strong>. A packed 64-bit or 128-bit Qn word can be executed directly inside a CPU register, copied to an SRAM arena, or transmitted across a network socket with <strong>zero re-serialization or translation loss</strong>.
+                The <code>Qn,64</code> binary layout defined in this specification serves as the <strong>Universal SQS Payload Layout</strong>. A packed 64-bit Qn word can be executed directly inside a CPU register, copied to an SRAM arena, or transmitted across a network socket with <strong>zero re-serialization or translation loss</strong>.
             </p>
         </section>
 
