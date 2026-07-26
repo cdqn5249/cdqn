@@ -9,7 +9,7 @@
     <meta name="description" content="Canonical formal specification of a Quang Number (Qn) within the CDQN architecture.">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-25">
+    <meta name="timestamp" content="2026-07-26">
     <meta name="license" content="Scaling Source License (SSL v1.0)">
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
@@ -199,7 +199,6 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* Modern Tuple Architecture Grid */
         .tuple-header {
             background-color: var(--bg-secondary);
             border: 1px solid var(--accent-gold-light);
@@ -254,7 +253,6 @@
             margin-bottom: 0.4rem;
         }
 
-        /* Process & Flow Diagrams */
         .flow-container {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -300,13 +298,8 @@
             font-size: 0.875rem;
         }
 
-        .branch-hard {
-            border-top: 3px solid var(--accent-blue);
-        }
-
-        .branch-soft {
-            border-top: 3px solid var(--accent-emerald);
-        }
+        .branch-hard { border-top: 3px solid var(--accent-blue); }
+        .branch-soft { border-top: 3px solid var(--accent-emerald); }
 
         .branch-title {
             font-weight: 700;
@@ -327,7 +320,6 @@
             margin-bottom: 0.75rem;
         }
 
-        /* Modernized Table Styling */
         .table-wrapper {
             overflow-x: auto;
             margin: 2rem 0;
@@ -357,15 +349,9 @@
             letter-spacing: 0.05em;
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
+        tr:last-child td { border-bottom: none; }
+        td { color: #cbd5e1; }
 
-        td {
-            color: #cbd5e1;
-        }
-
-        /* Boundaries Stack */
         .boundary-diagram {
             background-color: var(--bg-secondary);
             border: 1px dashed var(--border-color);
@@ -436,7 +422,7 @@
 
     <nav class="nav-bar">
         <a href="index.html">&larr; Back to Portal</a>
-        <a href="smemp.html">&larr; View SMEMP Manifesto</a>
+        <a href="sqs-def.html">Next: SQS Specification &rarr;</a>
     </nav>
 
     <header>
@@ -713,7 +699,7 @@
                 </div>
                 <div class="boundary-level level-floor">
                     <div class="level-title">FLOOR BOUNDARY (Silicon Ground Truth / Base2)</div>
-                    <div>Packed 64/128-bit hardware registers, bitwise execution, physical voltage states, and Space-Time Memory Dilation during DRAM data movement. WHERE ABSTRACTION ENDS.</div>
+                    <div>Packed 64-bit hardware registers (Qn,64 bit-atoms), 32-bit register pair mapping (r0:r1), SIMD multi-lane vector execution, physical voltage states, and Space-Time Memory Dilation during DRAM data movement. WHERE ABSTRACTION ENDS.</div>
                 </div>
             </div>
         </section>
