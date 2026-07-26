@@ -352,7 +352,7 @@
                 <div class="pillar-card">
                     <div class="pillar-title">3. Substrate-Neutral SQS ABIs</div>
                     <p style="font-size: 0.925rem; margin-bottom: 0; color: #cbd5e1;">
-                        Self-Quang Systems (SQS) operate fractally across local registers, SRAM arenas, and remote networks. Physical bit-atoms (<code>Qn,64</code> and <code>Qn,128</code>) enforce Zero Trust at the register boundary, eliminating confused deputy attacks and replay fraud.
+                        Self-Quang Systems (SQS) operate fractally across local registers, SRAM arenas, and remote networks. Physical bit-atoms (<code>Qn,64</code>) enforce Zero Trust at the register boundary, eliminating confused deputy attacks and replay fraud.
                     </p>
                 </div>
 
@@ -394,13 +394,27 @@
                     </div>
                 </a>
 
-                <!-- CARD 3: QN PRIMITIVES ABI -->
+                <!-- CARD 3: SQS FORMAL DEFINITION -->
+                <a href="sqs-def.html" class="doc-card">
+                    <div>
+                        <div class="doc-card-tag">Composite System Specification</div>
+                        <div class="doc-card-title">The Formal SQS Definition</div>
+                        <div class="doc-card-desc">
+                            Substrate-neutral architecture for Self-Quang Systems. Details local vs. remote substrate unification, Inheritance Trees vs. Composition Graphs, and cybernetic zero-day feedback immunization loops.
+                        </div>
+                    </div>
+                    <div class="doc-card-link">
+                        Read SQS Specification &rarr;
+                    </div>
+                </a>
+
+                <!-- CARD 4: QN PRIMITIVES ABI -->
                 <a href="qn-primitives.html" class="doc-card">
                     <div>
                         <div class="doc-card-tag">Hardware ABI &amp; Binary Format</div>
                         <div class="doc-card-title">Qn Primitives ABI</div>
                         <div class="doc-card-desc">
-                            Bit-level binary register layouts for Qn,64 and Qn,128, 2-bit execution status flags (00, 01, 10, 11), 64-byte L1 cache-line alignments, Aperiodic Einstein tile memory mapping, and substrate-neutral SQS ABIs.
+                            Bit-level binary register layout for universal 64-bit bit-atoms (Qn,64), 32-bit register pair (r0:r1) mapping, SIMD vector scaling, 2-bit status flags, and 64-byte L1 cache alignments.
                         </div>
                     </div>
                     <div class="doc-card-link">
@@ -408,7 +422,7 @@
                     </div>
                 </a>
 
-                <!-- CARD 4: SCALING SOURCE LICENSE -->
+                <!-- CARD 5: SCALING SOURCE LICENSE -->
                 <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md" target="_blank" rel="noopener" class="doc-card">
                     <div>
                         <div class="doc-card-tag">Source-Available Legal Terms</div>
@@ -435,7 +449,8 @@
                 <li><code>docs/index.html</code> — Documentation Portal (This page).</li>
                 <li><code>docs/smemp.html</code> — The SMEMP Manifesto (Boundary Laws).</li>
                 <li><code>docs/qn-def.html</code> — The Formal Definition of a Quang Number (Qn).</li>
-                <li><code>docs/qn-primitives.html</code> — Binary Memory ABI for Qn,64 &amp; Qn,128 Register Words.</li>
+                <li><code>docs/sqs-def.html</code> — The Formal Definition of a Self-Quang System (SQS).</li>
+                <li><code>docs/qn-primitives.html</code> — Binary Memory ABI for Qn,64 Register Words.</li>
                 <li><code>LICENSE.md</code> — The Scaling Source License (SSL v1.0).</li>
                 <li><code>README.md</code> — Project entry point and community guidelines (Pending completion of Phase B2 QnIR opcodes).</li>
             </ul>
