@@ -318,7 +318,7 @@
     </nav>
 
     <header>
-        <span class="badge">Foundational Specification</span>
+        <span class="badge">Level 1 Specification</span>
         <h1>THE BASE-10 SEEDS, ORIGIN ANCHORS, AND CRYPTOGRAPHIC SPECIFICATION OF Qn</h1>
         <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, and Dual-Ring Post-Quantum Cryptography</p>
 
@@ -410,25 +410,37 @@
         <section>
             <h2>4. Physical Hardware Entropy Harvesting (Q(harvest)) &amp; Genesis Patch T0</h2>
             <p>
-                When a physical SoC onboards into the CDQN universe, <code>Q(harvest)</code> extracts physical silicon entropy (thermal noise, SRAM power-up states, clock jitter) designated as <code>e_harvest</code>.
-            </p>
-            <p>
-                This physical entropy is bound to <strong>4 Target Families</strong> to construct the local device identifier <code>Q(ID)_local</code>:
+                When a physical SoC onboards into the CDQN universe, <code>Q(harvest)</code> extracts physical silicon entropy (thermal noise, SRAM power-up states, clock jitter) as a Master Hardware Entropy Vector:
             </p>
 
             <div class="formula-box">
-                Q(ID)_local = &langle; Qorigin , {Q0 &hellip; Q9} , Q(ops) , Q(logics) &rangle;
+                Master Entropy Vector: e_harvest = &langle; e_origin , e_digits , e_ops , e_logics &rangle;
+            </div>
+
+            <h3>4.1 The 4 Harvest Target Families</h3>
+            <p>
+                The components of <code>e_harvest</code> bind permanently to 4 fundamental target primitive families to form the local device identifier <code>Q(ID)_local</code>:
+            </p>
+            <ul>
+                <li><strong>1. Qorigin (Genesis Coordinate Anchor):</strong> Bound to <code>e_origin</code>. Establishes the topological origin <code>(0,0,&hellip;,0)</code> of the device's local memory arena.</li>
+                <li><strong>2. {Q0 &hellip; Q9} (Base-10 Digit Seeds):</strong> Bound to <code>e_digits</code>. Injects unique noise parameters into digit metric headers, establishing the physical chip's numerical lattice.</li>
+                <li><strong>3. Q(ops) (Primary Operators Family):</strong> Bound to <code>e_ops</code>. Binds hardware noise to the primary arithmetic operators (+, &middot;).</li>
+                <li><strong>4. Q(logics) (Unary Inverses &amp; Logic Family):</strong> Bound to <code>e_logics</code>. Binds hardware noise to unary inverses (-x, x&minus;1) and boolean capability gates.</li>
+            </ul>
+
+            <div class="formula-box">
+                Q(ID)_local = &langle; Qorigin_e_origin , {Q0 &hellip; Q9}_e_digits , Q(ops)_e_ops , Q(logics)_e_logics &rangle;
             </div>
 
             <div class="flow-container">
                 <div class="flow-step">
-                    <div class="flow-step-title">1. Physical Noise Harvest (e_harvest)</div>
-                    <div>Silicon extracts physical SRAM power-up state and thermal jitter upon first power-on.</div>
+                    <div class="flow-step-title">1. Physical Noise Extraction (e_harvest)</div>
+                    <div>Silicon extracts physical SRAM power-up state, ring oscillator jitter, and thermal noise upon first power-on.</div>
                 </div>
 
                 <div class="flow-step">
-                    <div class="flow-step-title">2. Target Seed Binding</div>
-                    <div>Binds e_harvest to Qorigin, digit seeds Q0..Q9, primary operators Q(ops), and logic gates Q(logics).</div>
+                    <div class="flow-step-title">2. Target Family Seed Binding</div>
+                    <div>Binds component entropy vectors to Qorigin, digit seeds Q0..Q9, primary operators Q(ops), and logic gates Q(logics).</div>
                 </div>
 
                 <div class="flow-step">
@@ -451,7 +463,10 @@
         <section>
             <h2>5. The Dual-Ring Post-Quantum Cryptography Engine</h2>
             <p>
-                CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra:
+                CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra.
+            </p>
+            <p>
+                Lattice-based Ring-LWE algebra is chosen as the foundational PQC engine because its polynomial ring structure <code>R_q = Z_q[X] / (X^n + 1)</code> is 100% structurally identical to <code>Qexpr</code> polynomial expressions over finite fields.
             </p>
 
             <h3>5.1 Ring 1: Local Node Q(crypto)</h3>
@@ -518,7 +533,7 @@
             </p>
             <ul>
                 <li><strong>Tokenized Transmission:</strong> Network nodes transmit lightweight 2KB <strong>Qexpr Logic Tokens</strong> instead of megabytes of raw, rendered pixels or bytes.</li>
-                <li><strong>Local Compute Rendering:</strong> Receiving nodes evaluate incoming <code>Qexpr</code> tokens locally using their private $T_0$ seeds and render visual/semantic outputs adapted to their local active Two-Way Zoom window <code>z</code>.</li>
+                <li><strong>Local Compute Rendering:</strong> Receiving nodes evaluate incoming <code>Qexpr</code> tokens locally using their private Tile Zero (T0) seeds and render visual/semantic outputs adapted to their local active Two-Way Zoom window <code>z</code>.</li>
                 <li><strong>BoC Adaptive Fallback:</strong> If a weak edge display lacks compute capability to render a complex <code>Qexpr</code> token locally, BoC requests a pre-evaluated coarse view (<code>V_z_macro</code>) from an adjacent high-capacity SQS node via sublinear <i>O(log N)</i> routing.</li>
             </ul>
         </section>
