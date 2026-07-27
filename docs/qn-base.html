@@ -6,10 +6,10 @@
     <title>The Base-10 Seed, Origin &amp; Cryptographic Specification of Qn</title>
     
     <!-- Metadata -->
-    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, and Dual-Ring Post-Quantum Cryptography.">
+    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Negative Capabilities inside DCC.">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
-    <meta name="timestamp" content="2026-07-26">
+    <meta name="timestamp" content="2026-07-27">
     <meta name="license" content="Scaling Source License (SSL v1.0)">
     <meta name="repository" content="https://github.com/cdqn5249/cdqn">
     <meta name="theme-color" content="#0f172a">
@@ -95,7 +95,7 @@
         }
 
         h1 {
-            font-size: 2.3rem;
+            font-size: 2.2rem;
             font-weight: 800;
             letter-spacing: -0.025em;
             color: #ffffff;
@@ -104,7 +104,7 @@
         }
 
         .subtitle {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--text-secondary);
             font-weight: 400;
             margin-bottom: 2rem;
@@ -190,7 +190,7 @@
             border-radius: 0 0.5rem 0.5rem 0;
             margin: 1.75rem 0;
             font-family: var(--font-mono);
-            font-size: 0.95rem;
+            font-size: 0.925rem;
             color: #6ee7b7;
             overflow-x: auto;
             border-top: 1px solid var(--border-color);
@@ -320,7 +320,7 @@
     <header>
         <span class="badge">Level 1 Specification</span>
         <h1>THE BASE-10 SEEDS, ORIGIN ANCHORS, AND CRYPTOGRAPHIC SPECIFICATION OF Qn</h1>
-        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, and Dual-Ring Post-Quantum Cryptography</p>
+        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Negative Capabilities</p>
 
         <div class="meta-grid">
             <div class="meta-item">
@@ -351,26 +351,23 @@
                 Level 1 forms the foundational number-theoretic bed of the CDQN stack, sitting directly above bare-metal 64-bit hardware registers (<code>qn-primitives.html</code>) and directly below advanced mathematical fields (<code>Qm</code>) and natural language semantics (<code>Qs</code>).
             </p>
             <p>
-                Level 1 establishes the mathematical rules for constructing base-10 numbers from atomic digit seeds, grounds local physical device entropy into memory via <code>Q(harvest)</code>, differentiates numerical scalar zero from topological genesis anchors, and introduces native Post-Quantum Cryptography (<code>Q(crypto)</code> and <code>Qnet(crypto)</code>).
+                Level 1 establishes the mathematical rules for constructing base-10 numbers from atomic digit seeds, grounds local physical device entropy into memory via <code>Q(harvest)</code>, differentiates numerical scalar zero from topological genesis anchors, defines negative capabilities inside the DCC profile, and introduces native Post-Quantum Cryptography (<code>Q(crypto)</code> and <code>Qnet(crypto)</code>).
             </p>
         </section>
 
-        <!-- SECTION 2: THE 10 BASE-10 DECIMAL SEED PRIMITIVES -->
+        <!-- SECTION 2: SEQUENTIAL GENESIS ORDERING AXIOM -->
         <section>
-            <h2>2. The 10 Base-10 Decimal Seed Primitives (Q0 &hellip; Q9)</h2>
+            <h2>2. The Sequential Genesis Ordering Axiom (&Oopf;_genesis)</h2>
             <p>
-                In the Qn universe, numbers are not raw un-typed integers. <strong>Q0, Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, and Q9</strong> are the 10 Atomic Decimal Seed Numbers.
-            </p>
-            <p>
-                Each decimal seed is an atomic 64-bit Quang Number (<code>Qn,64</code>) carrying explicit digit capability flags inside its Metric Anchor (<code>K_cap &in; M</code>).
+                Order in the Qn universe is established physically by the sequential onboarding clock pipeline during <code>Q(harvest)</code>:
             </p>
 
             <div class="formula-box">
-                Positional Composition: Q10 = ( Q1 &otimes; Q_base10 ) &oplus; Q0 &nbsp;|&nbsp; Q355 = ( Q3 &otimes; Q_base100 ) &oplus; ( Q5 &otimes; Q_base10 ) &oplus; Q5
+                &Oopf;_genesis = &langle; Qorigin &prec; Q0 &prec; Q1 &prec; Q(ops) &prec; Q(logics) &prec; {Q2 &hellip; Q9} &rangle;
             </div>
 
             <p>
-                Multi-digit numbers (such as <code>Q10</code>, <code>Q42</code>, or <code>Q355</code>) are <strong>Positional Composition Chains</strong> created by composing atomic digit seeds under positional weight operators. This guarantees zero translation loss between human base-10 visual reading and bare-metal silicon register execution.
+                The birth of <code>Q1</code> directly unlocks <code>Q(ops)</code> (primary operators {+, &middot;}) and <code>Q(logics)</code> (unary inverses {-x, x&minus;1} and boolean gates) because the pair {Q0, Q1} forms the minimal complete generating set {0, 1}. Digits <code>Q2 &hellip; Q9</code> are constructed sequentially using <code>Q(ops)</code> (e.g., <code>Q2 = Q1 &oplus; Q1</code>).
             </p>
         </section>
 
@@ -384,7 +381,7 @@
             <div class="grid-cards">
                 
                 <div class="card-box">
-                    <div class="card-box-title title-gold">Arithmetic Zero (Qzero)</div>
+                    <div class="card-box-title title-gold">Arithmetic Zero (Qzero / Q0)</div>
                     <ul>
                         <li><strong>Value Payload:</strong> Scalar value <code>V = 0</code>.</li>
                         <li><strong>Additive Identity:</strong> <code>x &oplus; Qzero = x</code>.</li>
@@ -414,7 +411,7 @@
             </p>
 
             <div class="formula-box">
-                Master Entropy Vector: e_harvest = &langle; e_origin , e_digits , e_ops , e_logics &rangle;
+                e_harvest = &langle; e_origin , e_digits , e_ops , e_logics &rangle;
             </div>
 
             <h3>4.1 The 4 Harvest Target Families</h3>
@@ -422,10 +419,10 @@
                 The components of <code>e_harvest</code> bind permanently to 4 fundamental target primitive families to form the local device identifier <code>Q(ID)_local</code>:
             </p>
             <ul>
-                <li><strong>1. Qorigin (Genesis Coordinate Anchor):</strong> Bound to <code>e_origin</code>. Establishes the topological origin <code>(0,0,&hellip;,0)</code> of the device's local memory arena.</li>
-                <li><strong>2. {Q0 &hellip; Q9} (Base-10 Digit Seeds):</strong> Bound to <code>e_digits</code>. Injects unique noise parameters into digit metric headers, establishing the physical chip's numerical lattice.</li>
-                <li><strong>3. Q(ops) (Primary Operators Family):</strong> Bound to <code>e_ops</code>. Binds hardware noise to the primary arithmetic operators (+, &middot;).</li>
-                <li><strong>4. Q(logics) (Unary Inverses &amp; Logic Family):</strong> Bound to <code>e_logics</code>. Binds hardware noise to unary inverses (-x, x&minus;1) and boolean capability gates.</li>
+                <li><strong>1. Qorigin (Genesis Anchor):</strong> Bound to <code>e_origin</code>. Absolute parent root (<code>D_dep = &emptyset;</code>). Establishes the topological origin <code>(0,0,&hellip;,0)</code> at memory address <code>0x00000000</code> in Genesis Tile T0.</li>
+                <li><strong>2. {Q0 &hellip; Q9} (Base-10 Digit Seeds):</strong> Bound to <code>e_digits</code>. Inherits <code>Qorigin</code> (<code>D_dep = {Qorigin, &hellip;}</code>). Injects unique noise parameters into digit metric headers.</li>
+                <li><strong>3. Q(ops) (Primary Operators):</strong> Bound to <code>e_ops</code>. Inherits <code>{Qorigin, Q0, Q1}</code>. Binds hardware noise to addition and multiplication execution paths.</li>
+                <li><strong>4. Q(logics) (Unary Inverses &amp; Logic):</strong> Bound to <code>e_logics</code>. Inherits <code>{Qorigin, Q0, Q1}</code>. Binds hardware noise to unary inverses (-x, x&minus;1) and boolean capability gates.</li>
             </ul>
 
             <div class="formula-box">
@@ -439,7 +436,7 @@
                 </div>
 
                 <div class="flow-step">
-                    <div class="flow-step-title">2. Target Family Seed Binding</div>
+                    <div class="flow-step-title">2. Target Seed Binding</div>
                     <div>Binds component entropy vectors to Qorigin, digit seeds Q0..Q9, primary operators Q(ops), and logic gates Q(logics).</div>
                 </div>
 
@@ -459,9 +456,107 @@
             </p>
         </section>
 
-        <!-- SECTION 5: DUAL-RING POST-QUANTUM CRYPTOGRAPHY -->
+        <!-- SECTION 5: DEEP-DIVE TARGET SEED SPECIFICATIONS -->
         <section>
-            <h2>5. The Dual-Ring Post-Quantum Cryptography Engine</h2>
+            <h2>5. Deep-Dive Specification of Core Target Seeds</h2>
+
+            <h3>5.1 Q(0) &mdash; The Arithmetic Zero Seed</h3>
+            <p>
+                Bound to <code>e_digit,0</code> and inherits <code>Qorigin</code>. Payload <code>V = 0x00000000</code>. Carries <code>ADDITIVE_IDENTITY</code> and <code>MULT_ANNIHILATOR</code> capability bits. Defines the Hard Halt condition (<code>R = 0</code>).
+            </p>
+
+            <h3>5.2 Q(1) &mdash; The Unity Gauge Metric Seed</h3>
+            <p>
+                Bound to <code>e_digit,1</code>. Carries explicit dual dependency <code>D_dep = {Qorigin, Q0}</code> (Peano <code>1 = S(0)</code>). Payload <code>V = 0x00010001</code> (ratio [1, 1]). Serves as the Unit Gauge Metric (<code>d(Q0, Q1) = 1</code>) and carries the <code>MULT_SELF_INVERSE</code> property (<code>Q1^-1 = Q1</code>), enabling <i>O(0)</i> <code>Q(bypass)</code> division short-circuiting (<code>x &divide; Q1 &rarr; x</code>).
+            </p>
+
+            <h3>5.3 Q(2) &mdash; The First Quang Prime &amp; Parity Splitter</h3>
+            <p>
+                Constructed via <code>Q1 &oplus; Q1</code>. Unlocks the first rational fraction <code>Q(1/2) = 0.5</code> (1-cycle bit-shift <code>&gt;&gt; 1</code>), <code>Q(conditional)</code> IF/ELSE branching over set {0, 1}, parity splitting (<code>x mod 2</code>), Binary Roots of Unity <code>Q(&radic;1) = {+Q1, -Q1}</code> (180&deg; mirror symmetry), first irrational generator chain <code>Q(&radic;2)</code> (2D Euclidean hypotenuse), <code>CHOICE_SEED</code>, and 1-bit Shannon entropy coin split (<code>P = 0.5</code>).
+            </p>
+
+            <h3>5.4 Q(3) &mdash; The Second Quang Prime &amp; Ternary Engine</h3>
+            <p>
+                Constructed via <code>Q2 &oplus; Q1</code>. Unlocks 3-Valued Ternary Kleene Logic (TRUE +1, FALSE -1, UNKNOWN 0) for AI agent uncertainty reasoning, 3D Spatial Volume seed (<code>D=3</code>), triangular 2-simplex closed geometry, and exact rational thirds (<code>1/3</code>). <code>1/3</code> serves as the <strong>birthplace of Q(reuse) Soft Halting</strong> (first non-terminating fraction <code>0.333&hellip;</code> with non-zero residual <code>R &ne; 0</code>).
+            </p>
+
+            <h3>5.5 Q(5) &mdash; The Golden Ratio Seed &amp; Solvability Boundary</h3>
+            <p>
+                Constructed via <code>Q3 &oplus; Q2</code>. Unlocks <code>Q(&radic;5)</code> required for the <strong>Golden Ratio (&phi; = (1 + &radic;5) / 2 &approx; 1.618)</strong> governing Aperiodic Penrose/Einstein memory inflation. Marks the <strong>Abel-Ruffini Quintic Solvability Boundary (D=5)</strong> where polynomial root resolution transitions to iterative <code>Qexpr</code> generator chains with Soft Halting. Forms the hypotenuse of the fundamental 3&ndash;4&ndash;5 Pythagorean right triangle.
+            </p>
+        </section>
+
+        <!-- SECTION 6: NEGATIVE CAPABILITIES IN DCC PROFILE -->
+        <section>
+            <h2>6. Negative Capabilities (C_con) inside the DCC Profile</h2>
+            <p>
+                Constraints (<code>C_con</code>) live <strong>directly inside the DCC Profile</strong> (<code>DCC = &langle; D_dep, C_con, K_cap &rangle; &in; M</code>) as bitwise flags declaring what a Qn atom is <strong>strictly forbidden from doing</strong> ("Negative Capabilities"):
+            </p>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Harvest Target</th>
+                            <th>Negative Capabilities (C_con in M)</th>
+                            <th>Hardware Enforcement Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Qorigin</strong></td>
+                            <td><code>NO_PARENT_DEPENDENCY</code>, <code>NO_ARITHMETIC_SCALAR_OPS</code>, <code>IMMUTABLE_ONBOARDING_LOCK</code></td>
+                            <td>Scalar math or parent assignment fires Null Law (Q = &emptyset;).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Q(0)</strong></td>
+                            <td><code>DENOMINATOR_EXCLUSION</code> (D &ne; 0), <code>MULTIPLICATIVE_NON_INVERTIBLE</code> (Q0^-1 = &emptyset;)</td>
+                            <td>x &divide; Q0 or Q0^-1 sets Status = 10 (INVARIANT_FAULT) &rarr; Q = &emptyset;.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Q(1)</strong></td>
+                            <td><code>NO_NON_UNIT_REREPRESENTATION</code>, <code>NO_RESIDUAL_GENERATION_ON_DIVISION</code></td>
+                            <td>x &divide; Q1 MUST Hard Halt (R = 0). Soft residuals forbidden.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Primes {Q2,Q3,Q5,Q7}</strong></td>
+                            <td><code>NO_NON_TRIVIAL_FACTORIZATION</code>, <code>NO_COMPOSITE_SUB_NODE</code></td>
+                            <td>Cannot be factored inside integer ring Z.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Q(ops) {+, &middot;}</strong></td>
+                            <td><code>NO_SILENT_TRUNCATION_OVERFLOW</code>, <code>NO_ASSOCIATIVITY_VIOLATION</code></td>
+                            <td>Overflow MUST force Soft Halt R &ne; 0 into Q(reuse) SRAM.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Q(logics) {-x, x^-1}</strong></td>
+                            <td><code>NO_ZERO_DIVISOR_RECIPROCAL</code>, <code>NO_NON_INVOLUTIVE_INVERSION</code></td>
+                            <td>(-(-x)) and ((x^-1)^-1) MUST equal x exactly or fire Q = &emptyset;.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 7: NUMBER-THEORETIC Q(anchors) & STRICT Q(bypass) LAW -->
+        <section>
+            <h2>7. Number-Theoretic Q(anchors) &amp; The Strict Q(bypass) Boundary Law</h2>
+            <p>
+                Single-digit seeds initialize four fundamental landmark trees in Genesis Tile T0: <code>Q(primes)</code>, <code>Q(twinPrimes)</code>, <code>Q(goldbach)</code>, and <code>Q(collatzSteps)</code>. Negative mirror anchors exist via Binary Roots of Unity <code>Q(&radic;1) = {-Q1}</code>.
+            </p>
+
+            <div class="formula-box">
+                Strict Q(bypass) Law: Short-circuiting in O(0) cycles is STRICTLY RESTRICTED to proven algebraic identities (x+0&rarr;x, x&middot;1&rarr;x, x&middot;0&rarr;0, x&divide;1&rarr;x). Unproven conjectures (Collatz, Goldbach) MUST NEVER be used as Q(bypass) shortcuts.
+            </div>
+
+            <p>
+                Collatz and Goldbach operate as <strong>explicit Q(reuse) execution trajectories</strong> evaluated step-by-step over finite sets. Collatz in negative space (&Zopf;&minus;) is directionally asymmetric, splitting into three disjoint cycles (&minus;1 cycle, &minus;5 cycle, &minus;17 cycle), proving that negative execution paths must be evaluated independently from positive space.
+            </p>
+        </section>
+
+        <!-- SECTION 8: DUAL-RING POST-QUANTUM CRYPTOGRAPHY -->
+        <section>
+            <h2>8. The Dual-Ring Post-Quantum Cryptography Engine</h2>
             <p>
                 CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra.
             </p>
@@ -469,7 +564,7 @@
                 Lattice-based Ring-LWE algebra is chosen as the foundational PQC engine because its polynomial ring structure <code>R_q = Z_q[X] / (X^n + 1)</code> is 100% structurally identical to <code>Qexpr</code> polynomial expressions over finite fields.
             </p>
 
-            <h3>5.1 Ring 1: Local Node Q(crypto)</h3>
+            <h3>8.1 Ring 1: Local Node Q(crypto)</h3>
             <p>
                 Operates 100% locally on the device registers without network consensus. The local key is constructed by using real physical hardware noise <code>e_harvest</code> as the LWE error distribution:
             </p>
@@ -477,7 +572,7 @@
                 Local Key Formula: A &middot; s_i + e_harvest,i = b_i (mod q)
             </div>
 
-            <h3>5.2 Ring 2: CDQN Network Mesh Qnet(crypto)</h3>
+            <h3>8.2 Ring 2: CDQN Network Mesh Qnet(crypto)</h3>
             <p>
                 High-capacity CDQN server nodes trade surplus compute power to aggregate public commitment polynomials <code>b_i</code> from surrounding leaf nodes:
             </p>
@@ -490,11 +585,7 @@
                 <li><strong>O(1) Verification:</strong> Any node verifies the composite network proof in <i>O(1)</i> constant time.</li>
             </ul>
 
-            <h3>5.3 BoC Polymorphic Security Scaling Matrix</h3>
-            <p>
-                The Best of Choices (BoC) policy engine scales the cryptographic mode dynamically based on hardware capability:
-            </p>
-
+            <h3>8.3 BoC Polymorphic Security Scaling Matrix</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -525,9 +616,9 @@
             </div>
         </section>
 
-        <!-- SECTION 6: Qexpr TOKEN ENGINE & LOCAL COMPUTE RENDERING -->
+        <!-- SECTION 9: Qexpr TOKEN ENGINE & LOCAL COMPUTE RENDERING -->
         <section>
-            <h2>6. The Qexpr Token Engine &amp; Death of Static File Downloads</h2>
+            <h2>9. The Qexpr Token Engine &amp; Death of Static File Downloads</h2>
             <p>
                 In the CDQN universe, <strong>the concept of static file downloads (.pdf, .mp4, .exe) does not exist</strong>.
             </p>
