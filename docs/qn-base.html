@@ -6,7 +6,7 @@
     <title>The Base-10 Seed, Origin &amp; Cryptographic Specification of Qn</title>
     
     <!-- Metadata -->
-    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Full Digit Ontologies.">
+    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography Conjecture, and Purged Finite Q(anchors).">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
     <meta name="timestamp" content="2026-07-27">
@@ -349,7 +349,7 @@
     <header>
         <span class="badge">Level 1 Specification</span>
         <h1>THE BASE-10 SEEDS, ORIGIN ANCHORS, AND CRYPTOGRAPHIC SPECIFICATION OF Qn</h1>
-        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Full Digit Ontologies</p>
+        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring PQC Hardness Conjecture, and Finite-Set Q(anchors)</p>
 
         <div class="meta-grid">
             <div class="meta-item">
@@ -380,7 +380,7 @@
                 Level 1 forms the foundational number-theoretic bed of the CDQN stack, sitting directly above bare-metal 64-bit hardware registers (<code>qn-primitives.html</code>) and directly below advanced mathematical fields (<code>Qm</code>) and natural language semantics (<code>Qs</code>).
             </p>
             <p>
-                Level 1 establishes the mathematical rules for constructing base-10 numbers from atomic digit seeds, grounds local physical device entropy into memory via <code>Q(harvest)</code>, differentiates numerical scalar zero from topological genesis anchors, defines negative capabilities inside the DCC profile, and introduces native Post-Quantum Cryptography (<code>Q(crypto)</code> and <code>Qnet(crypto)</code>).
+                Level 1 establishes the mathematical rules for constructing base-10 numbers from atomic digit seeds, grounds local physical device entropy into memory via <code>Q(harvest)</code>, differentiates numerical scalar zero from topological genesis anchors, defines negative capabilities inside the DCC profile, and introduces the Dual-Ring Post-Quantum Cryptography Conjecture (<code>Q(crypto)</code> and <code>Qnet(crypto)</code>).
             </p>
         </section>
 
@@ -701,11 +701,11 @@
             </div>
         </section>
 
-        <!-- SECTION 8: NUMBER-THEORETIC Q(anchors) & STRICT Q(bypass) LAW -->
+        <!-- SECTION 8: FINITE-RANGE Q(anchors) & STRICT Q(bypass) LAW -->
         <section>
-            <h2>8. Number-Theoretic Q(anchors) &amp; The Strict Q(bypass) Boundary Law</h2>
+            <h2>8. Finite-Range Q(anchors) &amp; The Strict Q(bypass) Boundary Law</h2>
             <p>
-                Single-digit seeds initialize four fundamental landmark trees in Genesis Tile T0: <code>Q(primes)</code>, <code>Q(twinPrimes)</code>, <code>Q(goldbach)</code>, and <code>Q(collatzSteps)</code>. Negative mirror anchors exist via Binary Roots of Unity <code>Q(&radic;1) = {-Q1}</code>.
+                Single-digit prime seeds initialize two fundamental landmark trees in Genesis Tile T0: <code>Q(primes)</code> and <code>Q(twinPrimes)</code>, defined strictly over finite bounded metric sets ([0 &hellip; 2&sup6;&sup4;&minus;1] or [0 &hellip; 2&sup1;&sup2;&sup8;&minus;1]). Negative mirror anchors exist via Binary Roots of Unity <code>Q(&radic;1) = {-Q1}</code>.
             </p>
 
             <div class="formula-box">
@@ -717,15 +717,16 @@
             </p>
         </section>
 
-        <!-- SECTION 9: DUAL-RING POST-QUANTUM CRYPTOGRAPHY -->
+        <!-- SECTION 9: DUAL-RING POST-QUANTUM CRYPTOGRAPHY HARDNESS CONJECTURE -->
         <section>
-            <h2>9. The Dual-Ring Post-Quantum Cryptography Engine</h2>
+            <h2>9. The Dual-Ring Post-Quantum Cryptography Hardness Conjecture</h2>
             <p>
-                CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra.
+                CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra over finite quotient rings <code>R_q = Z_q[X] / (X^n + 1)</code>.
             </p>
-            <p>
-                Lattice-based Ring-LWE algebra is chosen as the foundational PQC engine because its polynomial ring structure <code>R_q = Z_q[X] / (X^n + 1)</code> is 100% structurally identical to <code>Qexpr</code> polynomial expressions over finite fields.
-            </p>
+
+            <div class="formula-box">
+                The Dual-Ring Q(crypto) Post-Quantum Hardness Conjecture: We conjecture that under Q(reuse) pattern persistence&mdash;which records exact residuals, computed invariant checks, and dimensional metric patterns over finite sets z&mdash;breaking the multi-node Qnet(crypto) composite proof is computationally equivalent to worst-case multi-key Ring-LWE lattice reduction, belonging to the NP-Hard complexity class (2^&Omega;(k)). A formal lemmatic proof will be established during the Qm (Quang Maths) formal derivation phase.
+            </div>
 
             <h3>9.1 Ring 1: Local Node Q(crypto)</h3>
             <p>
