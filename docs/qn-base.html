@@ -6,7 +6,7 @@
     <title>The Base-10 Seed, Origin &amp; Cryptographic Specification of Qn</title>
     
     <!-- Metadata -->
-    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Negative Capabilities inside DCC.">
+    <meta name="description" content="Level 1 Specification of Quang Number Base-10 Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Full Digit Ontologies.">
     <meta name="author" content="Christophe Duy Quang Nguyen">
     <meta name="location" content="Bao Loc, Vietnam">
     <meta name="timestamp" content="2026-07-27">
@@ -223,6 +223,35 @@
         .title-blue { color: var(--accent-blue); }
         .title-emerald { color: var(--accent-emerald); }
 
+        .digit-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .digit-card-header {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent-gold-light);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .digit-tag {
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+            border-radius: 0.25rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            font-family: var(--font-mono);
+        }
+
         .flow-container {
             background-color: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -320,7 +349,7 @@
     <header>
         <span class="badge">Level 1 Specification</span>
         <h1>THE BASE-10 SEEDS, ORIGIN ANCHORS, AND CRYPTOGRAPHIC SPECIFICATION OF Qn</h1>
-        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Negative Capabilities</p>
+        <p class="subtitle">Specification Version 1.0 &mdash; Level 1 Architecture for Decimal Seeds (Q0..Q9), Qzero vs. Qorigin, Q(harvest) Genesis Patch T0, Dual-Ring Post-Quantum Cryptography, and Full Digit Ontologies</p>
 
         <div class="meta-grid">
             <div class="meta-item">
@@ -456,39 +485,173 @@
             </p>
         </section>
 
-        <!-- SECTION 5: DEEP-DIVE TARGET SEED SPECIFICATIONS -->
+        <!-- SECTION 5: EXHAUSTIVE ONTOLOGY & DCC SPECIFICATION OF DIGITS Q0 TO Q9 -->
         <section>
-            <h2>5. Deep-Dive Specification of Core Target Seeds</h2>
-
-            <h3>5.1 Q(0) &mdash; The Arithmetic Zero Seed</h3>
+            <h2>5. Exhaustive Ontology &amp; DCC Specification of Digits Q0 to Q9</h2>
             <p>
-                Bound to <code>e_digit,0</code> and inherits <code>Qorigin</code>. Payload <code>V = 0x00000000</code>. Carries <code>ADDITIVE_IDENTITY</code> and <code>MULT_ANNIHILATOR</code> capability bits. Defines the Hard Halt condition (<code>R = 0</code>).
+                To provide the formal vocabulary required for high-level mathematics (<code>Qm</code>) and natural language reasoning (<code>Qs</code>), each canonical digit seed carries an explicit <strong>Ontological Taxonomy and DCC Profile</strong> inside its Metric Anchor:
             </p>
 
-            <h3>5.2 Q(1) &mdash; The Unity Gauge Metric Seed</h3>
-            <p>
-                Bound to <code>e_digit,1</code>. Carries explicit dual dependency <code>D_dep = {Qorigin, Q0}</code> (Peano <code>1 = S(0)</code>). Payload <code>V = 0x00010001</code> (ratio [1, 1]). Serves as the Unit Gauge Metric (<code>d(Q0, Q1) = 1</code>) and carries the <code>MULT_SELF_INVERSE</code> property (<code>Q1^-1 = Q1</code>), enabling <i>O(0)</i> <code>Q(bypass)</code> division short-circuiting (<code>x &divide; Q1 &rarr; x</code>).
-            </p>
+            <!-- Q0 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q0 &mdash; The Arithmetic Zero Seed (Qzero)</span>
+                    <span class="digit-tag">Additive Identity &amp; Annihilator</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Arithmetic scalar zero baseline. Triggers Hard Halt (R = 0) in soft-halting mechanics and serves as the rightmost trailing placeholder in base-10 positional composition.</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin }</code></li>
+                    <li><strong>Constraints (C_con):</strong> <code>DENOMINATOR_EXCLUSION</code> (D &ne; 0), <code>MULTIPLICATIVE_NON_INVERTIBLE</code> (Q0^-1 = &emptyset;).</li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>ADDITIVE_IDENTITY</code>, <code>MULT_ANNIHILATOR</code>, <code>HARD_HALT_CONDITION</code>, <code>DECIMAL_PLACEHOLDER</code>.</li>
+                </ul>
+            </div>
 
-            <h3>5.3 Q(2) &mdash; The First Quang Prime &amp; Parity Splitter</h3>
-            <p>
-                Constructed via <code>Q1 &oplus; Q1</code>. Unlocks the first rational fraction <code>Q(1/2) = 0.5</code> (1-cycle bit-shift <code>&gt;&gt; 1</code>), <code>Q(conditional)</code> IF/ELSE branching over set {0, 1}, parity splitting (<code>x mod 2</code>), Binary Roots of Unity <code>Q(&radic;1) = {+Q1, -Q1}</code> (180&deg; mirror symmetry), first irrational generator chain <code>Q(&radic;2)</code> (2D Euclidean hypotenuse), <code>CHOICE_SEED</code>, and 1-bit Shannon entropy coin split (<code>P = 0.5</code>).
-            </p>
+            <!-- Q1 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q1 &mdash; The Unity Gauge Metric Seed (Qone)</span>
+                    <span class="digit-tag">Unity Gauge &amp; Multiplicative Identity</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Universal unit quantum (d(Q0, Q1) = 1). Birthplace of Q(ops) and Q(logics). Acts as its own multiplicative inverse (Q1^-1 = Q1).</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0 }</code> (Peano successor 1 = S(0))</li>
+                    <li><strong>Constraints (C_con):</strong> <code>UNIT_GAUGE_INVARIANT</code>, <code>NO_RESIDUAL_GENERATION_ON_DIVISION</code>.</li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>MULTIPLICATIVE_IDENTITY</code>, <code>SELF_INVERSE</code>, <code>UNIT_METRIC_BASE</code>, <code>BOOLEAN_TRUE_SEED</code>.</li>
+                </ul>
+            </div>
 
-            <h3>5.4 Q(3) &mdash; The Second Quang Prime &amp; Ternary Engine</h3>
-            <p>
-                Constructed via <code>Q2 &oplus; Q1</code>. Unlocks 3-Valued Ternary Kleene Logic (TRUE +1, FALSE -1, UNKNOWN 0) for AI agent uncertainty reasoning, 3D Spatial Volume seed (<code>D=3</code>), triangular 2-simplex closed geometry, and exact rational thirds (<code>1/3</code>). <code>1/3</code> serves as the <strong>birthplace of Q(reuse) Soft Halting</strong> (first non-terminating fraction <code>0.333&hellip;</code> with non-zero residual <code>R &ne; 0</code>).
-            </p>
+            <!-- Q2 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q2 &mdash; The First Quang Prime &amp; Parity Splitter (Qtwo)</span>
+                    <span class="digit-tag">Prime 1 &amp; Binary Branching</span>
+                </div>
+                <p><strong>Ontological Function:</strong> First prime landmark (Qprime_1). Generates even/odd parity sets (x mod 2), rational half fractions (Q(1/2) = 0.5 via 1-cycle right-shift &gt;&gt;1), control-flow IF/ELSE branching (Q(conditional)), Binary Roots of Unity Q(&radic;1) = {+Q1, -Q1}, 2D Euclidean hypotenuse Q(&radic;2), Choice Function seed, and 1-bit Shannon entropy coin split (P = 0.5).</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1 }</code> (Q2 = Q1 &oplus; Q1)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>PRIME_FACTORIZATION_LOCK_1</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>Q_PRIME_1</code>, <code>EVEN_SET_GENERATOR</code>, <code>PARITY_SPLIT</code>, <code>HALVING_SHIFT</code>, <code>CHOICE_SEED</code>, <code>PROB_1BIT_SEED</code>, <code>CONDITIONAL_BRANCH</code>.</li>
+                </ul>
+            </div>
 
-            <h3>5.5 Q(5) &mdash; The Golden Ratio Seed &amp; Solvability Boundary</h3>
-            <p>
-                Constructed via <code>Q3 &oplus; Q2</code>. Unlocks <code>Q(&radic;5)</code> required for the <strong>Golden Ratio (&phi; = (1 + &radic;5) / 2 &approx; 1.618)</strong> governing Aperiodic Penrose/Einstein memory inflation. Marks the <strong>Abel-Ruffini Quintic Solvability Boundary (D=5)</strong> where polynomial root resolution transitions to iterative <code>Qexpr</code> generator chains with Soft Halting. Forms the hypotenuse of the fundamental 3&ndash;4&ndash;5 Pythagorean right triangle.
-            </p>
+            <!-- Q3 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q3 &mdash; The Second Quang Prime &amp; Ternary Engine (Qthree)</span>
+                    <span class="digit-tag">Prime 2 &amp; 3D Spatial Volume</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Second prime landmark (Qprime_2). Unlocks 3-Valued Kleene Ternary Logic (TRUE +1, FALSE -1, UNKNOWN 0) for AI uncertainty reasoning, 3D Spatial Volume seed (D=3), triangular 2-simplex closed geometry, and exact rational thirds (1/3). 1/3 serves as the <strong>birthplace of Q(reuse) Soft Halting</strong> (first non-terminating fraction 0.333&hellip; with R &ne; 0).</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q2 }</code> (Q3 = Q2 &oplus; Q1)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>PRIME_FACTORIZATION_LOCK_2</code>, <code>ODD_PARITY_LOCK</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>Q_PRIME_2</code>, <code>TERNARY_LOGIC_ENGINE</code>, <code>SPATIAL_3D_DIMENSION_SEED</code>, <code>TRIANGULAR_SIMPLEX_BASE</code>, <code>SOFT_HALT_BIRTH</code>, <code>FACTORIAL_3</code>.</li>
+                </ul>
+            </div>
+
+            <!-- Q4 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q4 &mdash; The First Composite &amp; Hypercube Seed (Qfour)</span>
+                    <span class="digit-tag">First Composite (2&sup2;) &amp; 4D Space-Time</span>
+                </div>
+                <p><strong>Ontological Function:</strong> First composite number (2&sup2;). Unlocks 2D area quadrant (2 &times; 2), 4D Space-Time hypercube metric basis (D=4), 2-bit right-shift quarter fractions (Q(1/4) = 0.25 via &gt;&gt;2), Factorial 4! = 24, and power-of-2 byte-boundary scaling.</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q2 }</code> (Q4 = Q2 &otimes; Q2)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>COMPOSITE_FACTORIZATION_LOCK</code>, <code>IS_PRIME = 0</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>FIRST_COMPOSITE</code>, <code>SQUARE_PRIME_1</code>, <code>QUADRANT_2D_AREA</code>, <code>HYPERCUBE_4D_SEED</code>, <code>QUARTER_SHIFT</code>, <code>FACTORIAL_4</code>.</li>
+                </ul>
+            </div>
+
+            <!-- Q5 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q5 &mdash; The Golden Ratio &amp; Solvability Boundary Seed (Qfive)</span>
+                    <span class="digit-tag">Prime 3 &amp; Aperiodic Penrose Seed</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Third prime landmark (Qprime_3). Unlocks Q(&radic;5) required for the <strong>Golden Ratio (&phi; = (1 + &radic;5) / 2 &approx; 1.618)</strong> governing Aperiodic Penrose/Einstein memory inflation. Marks the <strong>Abel-Ruffini Quintic Solvability Boundary (D=5)</strong> where polynomial root resolution transitions to iterative Qexpr generator chains with Soft Halting. Forms the hypotenuse of the fundamental 3&ndash;4&ndash;5 Pythagorean right triangle.</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q2, Q3 }</code> (Q5 = Q3 &oplus; Q2)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>PRIME_FACTORIZATION_LOCK_3</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>Q_PRIME_3</code>, <code>GOLDEN_RATIO_PHI</code>, <code>APERIODIC_INFLATION_SEED</code>, <code>QUINTIC_BOUNDARY_D5</code>, <code>PYTHAGOREAN_HYPOTENUSE</code>, <code>BASE10_MIDPOINT</code>.</li>
+                </ul>
+            </div>
+
+            <!-- Q6 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q6 &mdash; The First Perfect Number Seed (Qsix)</span>
+                    <span class="digit-tag">First Perfect Number &amp; Primorial 2x3</span>
+                </div>
+                <p><strong>Ontological Function:</strong> First perfect number (1 + 2 + 3 = 6 = 1 &times; 2 &times; 3). Product of the first two primes (2 &times; 3). Factorial value of 3 (3! = 6). Unlocks 60&deg; hexagonal tessellation packing for dense 2D spatial memory arenas and superior highly composite grouping.</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q2, Q3 }</code> (Q6 = Q2 &otimes; Q3)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>COMPOSITE_FACTORIZATION_LOCK</code>, <code>IS_PRIME = 0</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>FIRST_PERFECT_NUMBER</code>, <code>PRIMORIAL_2x3</code>, <code>FACTORIAL_3_VALUE</code>, <code>HEXAGONAL_TESSELLATION_SEED</code>, <code>SUPERIOR_COMPOSITE</code>.</li>
+                </ul>
+            </div>
+
+            <!-- Q7 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q7 &mdash; The Mersenne &amp; Octonion Seed (Qseven)</span>
+                    <span class="digit-tag">Prime 4 &amp; Fano Plane Geometry</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Fourth prime landmark (Qprime_4). First Mersenne prime (2&sup3; &minus; 1 = 7). Serves as the topological anchor for the 7 imaginary units of Octonionic Non-Associative Geometry (Fano Plane in &Oopf;). Generates the 6-digit cyclic repeating fraction (1/7 = 0.142857&hellip;).</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q2, Q3, Q5 }</code> (Q7 = Q5 &oplus; Q2)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>PRIME_FACTORIZATION_LOCK_4</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>Q_PRIME_4</code>, <code>MERSENNE_PRIME_1</code>, <code>OCTONION_FANO_PLANE</code>, <code>CYCLIC_FRACTION_GEN</code>.</li>
+                </ul>
+            </div>
+
+            <!-- Q8 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q8 &mdash; The Binary Cube &amp; Byte Scale Seed (Qeight)</span>
+                    <span class="digit-tag">Binary Cube (2&sup3;) &amp; Hurwitz Limit D8</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Binary cube (2&sup3; = 2 &times; 2 &times; 2). Establishes the 8-bit byte scale boundary and 3-bit right-shift eighth fractions (Q(1/8) = 0.125 via &gt;&gt;3). Marks the <strong>Hurwitz Maximum Normed Division Algebra Dimension Boundary (D=8)</strong> for real octonionic spaces.</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q2, Q4 }</code> (Q8 = Q2 &otimes; Q4)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>COMPOSITE_FACTORIZATION_LOCK</code>, <code>IS_PRIME = 0</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>BINARY_CUBE_2x2x2</code>, <code>BYTE_SCALE_BOUNDARY</code>, <code>HURWITZ_MAX_NORMED_ALGEBRA_D8</code>, <code>EIGHTH_SHIFT</code>.</li>
+                </ul>
+            </div>
+
+            <!-- Q9 -->
+            <div class="digit-card">
+                <div class="digit-card-header">
+                    <span>Q9 &mdash; The Base-10 Ceiling &amp; Digital Root Seed (Qnine)</span>
+                    <span class="digit-tag">Base10 Max &amp; Square of Prime 3 (3&sup2;)</span>
+                </div>
+                <p><strong>Ontological Function:</strong> Base-10 single-digit ceiling atom. Square of second prime (3&sup2;). Unlocks the Cast-Out-Nines modulo digital root verification engine (x mod 9) for ultra-fast compile-time instruction checksums.</p>
+                <ul>
+                    <li><strong>Dependencies (D_dep):</strong> <code>{ Qorigin, Q0, Q1, Q3 }</code> (Q9 = Q3 &otimes; Q3)</li>
+                    <li><strong>Constraints (C_con):</strong> <code>COMPOSITE_FACTORIZATION_LOCK</code>, <code>IS_PRIME = 0</code>, <code>BASE10_SINGLE_DIGIT_CEILING</code></li>
+                    <li><strong>Capabilities (K_cap):</strong> <code>BASE10_CEILING_DIGIT</code>, <code>SQUARE_PRIME_2</code>, <code>DIGITAL_ROOT_MOD9_ENGINE</code>.</li>
+                </ul>
+            </div>
         </section>
 
-        <!-- SECTION 6: NEGATIVE CAPABILITIES IN DCC PROFILE -->
+        <!-- SECTION 6: UNLOCKING Qm AND Qs TYPES -->
         <section>
-            <h2>6. Negative Capabilities (C_con) inside the DCC Profile</h2>
+            <h2>6. Unlocking Qm &amp; Qs Types: From Discrete Seeds to Continuous Series</h2>
+            <p>
+                The explicit ontology and DCC profiles of digits Q0 through Q9 provide the foundational vocabulary that enables <code>Qm</code> (Quang Maths) and <code>Qs</code> (Quang Semantics) to construct all higher-order mathematical structures:
+            </p>
+            <ul>
+                <li><strong>Composites &amp; Prime Factorization Bases:</strong> Built by composing prime seeds ({Q2, Q3, Q5, Q7}) into Qexpr trees.</li>
+                <li><strong>Perfect Numbers &amp; Primorial Rings:</strong> Anchored by Q6 (1 + 2 + 3 = 6).</li>
+                <li><strong>Aperiodic Memory Inflation:</strong> Governed by Q5 through the Golden Ratio (&phi; = (1 + &radic;5) / 2).</li>
+                <li><strong>Dimensional Roots &amp; Powers:</strong> 2&sup2;, 2&sup3;, 3&sup2;, Q(&radic;1), Q(&radic;2), Q(&radic;5).</li>
+                <li><strong>Factorials:</strong> 3! = Q6, 4! = 24.</li>
+                <li><strong>Ordered Lists &amp; Continuous Calculus Series:</strong> Continuous functions, calculus differential quotients (&Delta;V / &Delta;&tau;), and infinite series are modeled as <strong>Ordered Lists of Qn Chains</strong> (Qexpr generator sequences) evaluated smoothly under Two-Way Zoom windows (<code>z</code>) with Q(reuse) Soft Halting!</li>
+            </ul>
+        </section>
+
+        <!-- SECTION 7: NEGATIVE CAPABILITIES IN DCC PROFILE -->
+        <section>
+            <h2>7. Negative Capabilities (C_con) inside the DCC Profile</h2>
             <p>
                 Constraints (<code>C_con</code>) live <strong>directly inside the DCC Profile</strong> (<code>DCC = &langle; D_dep, C_con, K_cap &rangle; &in; M</code>) as bitwise flags declaring what a Qn atom is <strong>strictly forbidden from doing</strong> ("Negative Capabilities"):
             </p>
@@ -509,12 +672,12 @@
                             <td>Scalar math or parent assignment fires Null Law (Q = &emptyset;).</td>
                         </tr>
                         <tr>
-                            <td><strong>Q(0)</strong></td>
+                            <td><strong>Q0</strong></td>
                             <td><code>DENOMINATOR_EXCLUSION</code> (D &ne; 0), <code>MULTIPLICATIVE_NON_INVERTIBLE</code> (Q0^-1 = &emptyset;)</td>
                             <td>x &divide; Q0 or Q0^-1 sets Status = 10 (INVARIANT_FAULT) &rarr; Q = &emptyset;.</td>
                         </tr>
                         <tr>
-                            <td><strong>Q(1)</strong></td>
+                            <td><strong>Q1</strong></td>
                             <td><code>NO_NON_UNIT_REREPRESENTATION</code>, <code>NO_RESIDUAL_GENERATION_ON_DIVISION</code></td>
                             <td>x &divide; Q1 MUST Hard Halt (R = 0). Soft residuals forbidden.</td>
                         </tr>
@@ -538,9 +701,9 @@
             </div>
         </section>
 
-        <!-- SECTION 7: NUMBER-THEORETIC Q(anchors) & STRICT Q(bypass) LAW -->
+        <!-- SECTION 8: NUMBER-THEORETIC Q(anchors) & STRICT Q(bypass) LAW -->
         <section>
-            <h2>7. Number-Theoretic Q(anchors) &amp; The Strict Q(bypass) Boundary Law</h2>
+            <h2>8. Number-Theoretic Q(anchors) &amp; The Strict Q(bypass) Boundary Law</h2>
             <p>
                 Single-digit seeds initialize four fundamental landmark trees in Genesis Tile T0: <code>Q(primes)</code>, <code>Q(twinPrimes)</code>, <code>Q(goldbach)</code>, and <code>Q(collatzSteps)</code>. Negative mirror anchors exist via Binary Roots of Unity <code>Q(&radic;1) = {-Q1}</code>.
             </p>
@@ -554,9 +717,9 @@
             </p>
         </section>
 
-        <!-- SECTION 8: DUAL-RING POST-QUANTUM CRYPTOGRAPHY -->
+        <!-- SECTION 9: DUAL-RING POST-QUANTUM CRYPTOGRAPHY -->
         <section>
-            <h2>8. The Dual-Ring Post-Quantum Cryptography Engine</h2>
+            <h2>9. The Dual-Ring Post-Quantum Cryptography Engine</h2>
             <p>
                 CDQN enforces Post-Quantum Cryptography natively through a 2-Ring architecture built on Physical Ring-LWE (Learning With Errors) polynomial algebra.
             </p>
@@ -564,7 +727,7 @@
                 Lattice-based Ring-LWE algebra is chosen as the foundational PQC engine because its polynomial ring structure <code>R_q = Z_q[X] / (X^n + 1)</code> is 100% structurally identical to <code>Qexpr</code> polynomial expressions over finite fields.
             </p>
 
-            <h3>8.1 Ring 1: Local Node Q(crypto)</h3>
+            <h3>9.1 Ring 1: Local Node Q(crypto)</h3>
             <p>
                 Operates 100% locally on the device registers without network consensus. The local key is constructed by using real physical hardware noise <code>e_harvest</code> as the LWE error distribution:
             </p>
@@ -572,7 +735,7 @@
                 Local Key Formula: A &middot; s_i + e_harvest,i = b_i (mod q)
             </div>
 
-            <h3>8.2 Ring 2: CDQN Network Mesh Qnet(crypto)</h3>
+            <h3>9.2 Ring 2: CDQN Network Mesh Qnet(crypto)</h3>
             <p>
                 High-capacity CDQN server nodes trade surplus compute power to aggregate public commitment polynomials <code>b_i</code> from surrounding leaf nodes:
             </p>
@@ -585,7 +748,7 @@
                 <li><strong>O(1) Verification:</strong> Any node verifies the composite network proof in <i>O(1)</i> constant time.</li>
             </ul>
 
-            <h3>8.3 BoC Polymorphic Security Scaling Matrix</h3>
+            <h3>9.3 BoC Polymorphic Security Scaling Matrix</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -616,9 +779,9 @@
             </div>
         </section>
 
-        <!-- SECTION 9: Qexpr TOKEN ENGINE & LOCAL COMPUTE RENDERING -->
+        <!-- SECTION 10: Qexpr TOKEN ENGINE & LOCAL COMPUTE RENDERING -->
         <section>
-            <h2>9. The Qexpr Token Engine &amp; Death of Static File Downloads</h2>
+            <h2>10. The Qexpr Token Engine &amp; Death of Static File Downloads</h2>
             <p>
                 In the CDQN universe, <strong>the concept of static file downloads (.pdf, .mp4, .exe) does not exist</strong>.
             </p>
