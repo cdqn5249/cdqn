@@ -7,7 +7,7 @@ All rights reserved.
 
 ### PREAMBLE
 
-The Scaling Source License (SSL) is designed to foster open innovation, scientific research, and unrestricted personal or small-scale development, while establishing fair reciprocity for large-scale commercial asset accumulation and robust protection against patent trolling.
+The Scaling Source License (SSL) is designed to foster open innovation, scientific research, and unrestricted personal or small-scale development, while establishing fair reciprocity for large-scale commercial asset accumulation, robust protection against patent trolling, and mandatory propagation of Open Core Invariants into derivative child licenses.
 
 ---
 
@@ -32,13 +32,19 @@ The Scaling Source License (SSL) is designed to foster open innovation, scientif
 
 ---
 
-### 3. PATERNITY & ATTRIBUTION REQUIREMENTS
+### 3. PATERNITY, ATTRIBUTION & OPEN CORE INVARIANT PROPAGATION
 
 3.1. **Child-to-Parent Linking:** All copies, distributions, or Derivative Works of the Licensed Work MUST retain the original copyright notice and include a prominent, human-readable and machine-readable Paternity Reference in the following format:
 
 > "Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL). Parent Repository: https://github.com/cdqn5249/cdqn"
 
 3.2. **Code & Runtime Lineage:** In software, APIs, compiled binary headers, or runtime specification files (`QnIR`), the Paternity Reference must be preserved in the source comments and metadata headers.
+
+3.3. **Open Core Invariant Propagation (Custom Licensing Permitted):** Downstream licensors and authors of Derivative Works are permitted to distribute their derivative works under custom license agreements of their choosing, PROVIDED THAT any such downstream license explicitly incorporates, preserves, and enforces the following non-negotiable core conditions ("Open Core Invariants"):  
+   (a) **Anti-Patent Defense:** Preservation of automatic license termination upon patent assertion against the Author or project community (Section 5); and  
+   (b) **Non-Scaling Open Access:** Guaranteeing royalty-free access for non-scaling academic, open-source, and small-scale development.  
+
+Any downstream license that attempts to omit, weaken, or bypass these Open Core Invariants shall be null and void with respect to the underlying Licensed Work.
 
 ---
 
