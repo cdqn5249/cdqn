@@ -95,3 +95,17 @@ hr { border: 0; border-top: 2px solid var(--border); margin: 2.4rem 0; }
     padding-right: 2.5rem;
   }
 }
+
+/* ─── FINAL: generous side margins (overrides everything above) ─── */
+.wrapper {
+  max-width: 800px !important;
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
