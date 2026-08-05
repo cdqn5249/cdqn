@@ -1,3 +1,4 @@
+[⬡ Back to Documentation Portal](index.html)
 # The SIMEMP Manifesto — A Deductive Framework for Qn & CDQN
 
 ## Metadata
