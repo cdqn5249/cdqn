@@ -1,32 +1,18 @@
-# ═══════════════════════════════════════════════════════════
-# CDQN Documentation Portal — GitHub Pages Configuration
-# Responsive, professional styling for all screen sizes
-# ═══════════════════════════════════════════════════════════
-
 title: "CDQN — Chained & Distributed Quang Numbers"
 description: "A Deductive Framework for Qn & CDQN — Structural Complexity, Zero-Drift Arithmetic, and Substrate-Neutral Post-Quantum Systems"
 url: "https://cdqn5249.github.io"
 baseurl: "/cdqn"
-
-# Responsive documentation theme (clean, professional, mobile-first)
-theme: jekyll-theme-cayman
-
-# Markdown processing
 markdown: kramdown
-kramdown:
-  syntax_highlighter: rouge
-  hard_wrap: false
-  auto_ids: true
 
-# GitHub Pages metadata
-github:
-  repository_url: "https://github.com/cdqn5249/cdqn"
-  license: "SSL v1.0"
+# Applies the layout to EVERY page automatically (no front matter needed)
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
 
-# Exclude non-documentation files from build
 exclude:
   - Gemfile
   - Gemfile.lock
   - node_modules
   - vendor
-  - "*.html"
