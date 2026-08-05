@@ -1,8 +1,3 @@
----
-layout: default
-title: "CDQN Documentation Portal"
----
-
 # CDQN Documentation Portal — Chained & Distributed Quang Numbers
 
 ## Metadata
