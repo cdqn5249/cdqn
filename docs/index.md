@@ -1,5 +1,7 @@
 # CDQN Documentation Portal — Chained & Distributed Quang Numbers
 
+[Next: The SIMEMP Manifesto →](simemp-manifesto.md)
+
 ## Metadata
 
 | Field | Value |
@@ -26,7 +28,7 @@
 
 ## Abstract
 
-This is the root entry point and navigation map of the CDQN (Chained & Distributed Quang Numbers) project. It presents the inquiring thesis, the abstraction stack, and the documentation suite from which every specification derives. `[M]` It is the progressive-disclosure portal: an agent or human loads this file first, then follows links only to the documents it needs. `[P]` All documents share the same Markdown blueprint and cautious derive-then-verify epistemology defined in the SIMEMP Manifesto.
+This is the root entry point and navigation map of the CDQN (Chained & Distributed Quang Numbers) project. It presents the inquiring thesis, the abstraction stack, and the documentation suite from which every specification derives. It is the progressive-disclosure portal: an agent or human loads this file first, then follows links only to the documents it needs. All documents share the same Markdown blueprint and the cautious derive-then-verify epistemology defined in the SIMEMP Manifesto.
 
 > **Governed by:** `[I]` · `[S]` · `[M]` · `[E]` · `[Mod]` · `[P]`
 
@@ -83,7 +85,7 @@ The stack is organized by **constructibility / emergence** (ascending-D groundin
  ├──────────────────────────────────────────────────────────┤
  │  Base-10 Seeds & Origin  (Q0–Q9 · Qorigin · Q(harvest))  │
  ├──────────────────────────────────────────────────────────┤
- │  FLOOR — Qn,64 silicon bit-atom  (WHERE ABSTRACTION END) │
+ │  FLOOR — Qn,64 silicon bit-atom (WHERE ABSTRACTION ENDS) │
  └──────────────────────────────────────────────────────────┘
    ▼ lower D
 ```
@@ -97,7 +99,7 @@ The stack is organized by **constructibility / emergence** (ascending-D groundin
 Three breakthroughs bridge high-level cognitive semantics down to bare-metal registers.
 
 ### III.1 Space-Time Memory Dilation — `[E]`
-Respects the physical Memory Wall. Uses Two-Way Zoom `z` for spatial bandwidth compression and transforms the 250-cycle DRAM latency into an active execution window for `Q(reuse)` residual folding and `Q(bypass)` identity short-circuiting.
+Respects the physical Memory Wall. Uses Two-Way Zoom `z` for spatial bandwidth compression and exploits the 250-cycle DRAM fetch delay as an active execution window for `Q(reuse)` residual folding and `Q(bypass)` identity short-circuiting.
 
 ### III.2 Quang Expressions (Qexpr) — `[Mod]`
 Unified intermediate representation bridging exact math (`Qm`) and natural-language semantics (`Qs`). Encodes context as multivariate polynomials solved via substitution and elimination, enabling lossless lowering of legacy data.
@@ -151,4 +153,3 @@ docs/
 - Qn,64 ABI & Status codes → [`qn-primitives.md`](qn-primitives.md)
 - SQS topologies & zero-trust → [`sqs-def.md`](sqs-def.md)
 - Canonical term definitions → [`glossary.md`](glossary.md)
-
