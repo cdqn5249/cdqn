@@ -2,6 +2,7 @@
 layout: default
 title: "The SIMEMP Manifesto"
 ---
+
 # The SIMEMP Manifesto — A Deductive Framework for Qn & CDQN
 
 ## Metadata
