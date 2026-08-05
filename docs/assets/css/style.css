@@ -73,3 +73,25 @@ hr { border: 0; border-top: 2px solid var(--border); margin: 2.4rem 0; }
   .site-header { background: none; color: #000; }
   pre { background: #fff; color: #000; border: 1px solid #ccc; }
 }
+
+/* ─── Readability Margins ─── */
+.wrapper {
+  max-width: 820px;
+  margin: 0 auto;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .wrapper {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
