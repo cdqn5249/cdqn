@@ -2,7 +2,7 @@
 
 # The Binary ABI Specification of Qn Primitives
 
-[Next: Base-10 Seeds & Cryptography →](qn-base.md)
+[Next: The Formal SQS Definition →](sqs-def.md)
 
 ## Metadata
 
