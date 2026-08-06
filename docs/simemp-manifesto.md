@@ -1,10 +1,11 @@
 [⬡ Back to Documentation Portal](index.html)
+
 # The SIMEMP Manifesto — A Deductive Framework for Qn & CDQN
 
 ## Metadata
 
 | Field | Value |
-| :-- | :-- |
+| :--- | :--- |
 | **Version** | `1.0` |
 | **Timestamp** | `2026-08-05` |
 | **Author** | Christophe Duy Quang Nguyen |
@@ -128,7 +129,7 @@ While the Triad governs existence, three agile vectors govern runtime fitness. B
 
 ### IV.1 `[E]` Efficiency — Space-Time Memory Dilation
 
-Respects the Memory Wall. Uses Two-Way Zoom `z` for spatial compression and the 250-cycle DRAM delay for opportunistic `Q(reuse)` folding and `Q(bypass)` short-circuiting.
+Respects the Memory Wall. Uses Two-Way Zoom `z` for spatial compression and exploits the 250-cycle DRAM fetch delay for opportunistic `Q(reuse)` residual folding and `Q(bypass)` identity short-circuiting.
 
 ### IV.2 `[Mod]` Modularity — Arena Value-Semantics
 
@@ -271,6 +272,7 @@ In accordance with §I.4, every derivation in this manifesto is a **theoretical 
 
 ## Cross-References
 
+- Documentation portal & navigation map → [`index.md`](index.md)
 - Qn Trinity & Metric Anchor → [`qn-def.md`](qn-def.md)
 - Digit seeds, Q(harvest), Dual-Ring PQC → [`qn-base.md`](qn-base.md)
 - Qn,64 ABI & Status codes → [`qn-primitives.md`](qn-primitives.md)
