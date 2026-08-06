@@ -2,6 +2,8 @@
 
 # The SIMEMP Manifesto — A Deductive Framework for Qn & CDQN
 
+[Next: The Formal Qn Definition →](qn-def.md)
+
 ## Metadata
 
 | Field | Value |
