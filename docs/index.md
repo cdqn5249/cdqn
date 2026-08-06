@@ -52,7 +52,7 @@ We **do not claim mathematical proofs.** We define axioms, derive consequences l
 
 A Qn is instantiated as the Trinity Tuple, governed by the Existence Triad:
 
-> **`Qn = ⟨ S , V(Qexpr) , M ⟩`** — exists if `[I] × [S] × [M]` hold.
+> **`Qn = ⟨ S , V(Qexpr) , M ⟩`** — exists iff `[I] × [S] × [M]` hold.
 
 - **`[I]` Identity** — topological existence, rooted in `Q(harvest)`.
 - **`[S]` Security** — provenance `⟨I, Σ⟩` + enforced termination.
