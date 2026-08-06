@@ -6,8 +6,8 @@
 
 | Field | Value |
 | :--- | :--- |
-| **Version** | `1.0` |
-| **Timestamp** | `2026-08-05` |
+| **Version** | `1.1` |
+| **Timestamp** | `2026-08-06` |
 | **Author** | Christophe Duy Quang Nguyen |
 | **Location** | Bao Loc, Vietnam |
 | **Repository** | [`cdqn5249/cdqn`](https://github.com/cdqn5249/cdqn) |
@@ -17,13 +17,13 @@
 ## ⬡ Document Profile
 
 - **id:** `index`
-- **version:** `1.0`
+- **version:** `1.1`
 - **type:** `portal`
 - **layer:** `ceiling`
 - **depends:** `simemp-manifesto`
 - **invariants:** `[I]` · `[S]` · `[M]`
 - **agiles:** `[E]` · `[Mod]` · `[P]`
-- **trust:** `draft`
+- **trust:** `verified`
 - **status:** `active`
 
 ## Abstract
@@ -118,11 +118,11 @@ Select a document to explore the foundational laws, formal specifications, hardw
 | Document | Scope & Contents | Status |
 | :--- | :--- | :--- |
 | [`simemp-manifesto.md`](simemp-manifesto.md) | **The SIMEMP Manifesto** — root axiom. Existence Triad `[I]×[S]×[M]`, agiles `[E]·[Mod]·[P]`, BoC, constructibility, trust & epistemic laws. | ✅ committed |
-| [`qn-def.md`](qn-def.md) | **The Formal Qn Definition** — Trinity Tuple, `Q(reuse)`, Soft/Hard Halting, `Q(bypass)`, Qm/Qs domains, distance `d`. | 🕐 planned |
-| [`qn-base.md`](qn-base.md) | **Base-10 Seeds & Cryptography** — digit seeds `Q0–Q9`, `Qorigin`, `Q(harvest)`, Dual-Ring PQC, dimensional laws. | 🕐 planned |
-| [`qn-primitives.md`](qn-primitives.md) | **Qn Primitives ABI** — bit-level `Qn,64` layout, register mapping, SIMD scaling, status flags, cache alignment. | 🕐 planned |
-| [`sqs-def.md`](sqs-def.md) | **The Formal SQS Definition** — substrate-neutral composite systems, `Q_tree`/`Q_graph`, zero-day immunization, Gateway. | 🕐 planned |
-| [`glossary.md`](glossary.md) | **Canonical Glossary** — single source of truth for all Qn/CDQN terms. | 🕐 planned |
+| [`qn-def.md`](qn-def.md) | **The Formal Qn Definition** — Trinity Tuple, `Q(reuse)`, Soft/Hard Halting, `Q(bypass)`, Qm/Qs domains, distance `d`. | ✅ committed |
+| [`qn-base.md`](qn-base.md) | **Base-10 Seeds & Cryptography** — digit seeds `Q0–Q9`, `Qorigin`, `Q(harvest)`, Dual-Ring PQC, dimensional laws. | ✅ committed |
+| [`qn-primitives.md`](qn-primitives.md) | **Qn Primitives ABI** — bit-level `Qn,64` layout, register mapping, SIMD scaling, status flags, cache alignment. | ✅ committed |
+| [`sqs-def.md`](sqs-def.md) | **The Formal SQS Definition** — substrate-neutral composite systems, `Q_tree`/`Q_graph`, zero-day immunization, Gateway. | ✅ committed |
+| [`glossary.md`](glossary.md) | **Canonical Glossary** — single source of truth for all Qn/CDQN terms. | ✅ committed |
 
 ---
 
@@ -134,13 +134,16 @@ The documentation follows a flat, progressive-disclosure layout. An agent loads 
 
 ```text
 docs/
-├── index.md                 <- this portal (root)
-├── simemp-manifesto.md      <- root axiom
-├── qn-def.md                <- Formal Qn definition
-├── qn-base.md               <- Base-10 seeds & crypto
-├── qn-primitives.md         <- Binary ABI
-├── sqs-def.md               <- Formal SQS definition
-└── glossary.md              <- Canonical term definitions
+├── _config.yml            <- Jekyll config (theme + layout defaults)
+├── _layouts/default.html  <- custom layout (links the CSS)
+├── assets/css/style.css   <- responsive documentation theme
+├── index.md               <- this portal (root)
+├── simemp-manifesto.md    <- root axiom
+├── qn-def.md              <- Formal Qn definition
+├── qn-base.md             <- Base-10 seeds & crypto
+├── qn-primitives.md       <- Binary ABI
+├── sqs-def.md             <- Formal SQS definition
+└── glossary.md            <- Canonical term definitions
 ```
 
 ---
