@@ -1,8 +1,8 @@
 ---
 title: CDQN Documentation Portal
 description: Root documentation portal for the CDQN project, including the SIMEMP constraints and future Qn/cdqn specifications.
-version: 0.1.1
-updated: 2026-06-16
+version: 0.1.0
+updated: 2026-08-08
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
