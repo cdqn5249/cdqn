@@ -1,0 +1,259 @@
+:root {
+  --bg: #ffffff;
+  --text: #1f2328;
+  --muted: #57606a;
+  --border: #d0d7de;
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+  --code-bg: #f6f8fa;
+  --table-header-bg: #f6f8fa;
+  --metadata-bg: #f6f8fa;
+  --warning-bg: #fff8c5;
+  --warning-border: #d4a72c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent-hover: #79c0ff;
+    --code-bg: #161b22;
+    --table-header-bg: #161b22;
+    --metadata-bg: #161b22;
+    --warning-bg: #2d2000;
+    --warning-border: #9e6a03;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  max-width: 980px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 2.2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin-top: 0;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h2 {
+  font-size: 1.6rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  margin: 0.9rem 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+ul,
+ol {
+  padding-left: 1.6rem;
+}
+
+li {
+  margin: 0.35rem 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.6rem 0;
+  display: block;
+  overflow-x: auto;
+}
+
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background: var(--table-header-bg);
+  font-weight: 600;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: var(--code-bg);
+  border-radius: 6px;
+  padding: 0.15rem 0.4rem;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+blockquote {
+  margin: 1.2rem 0;
+  padding: 0.8rem 1rem;
+  border-left: 4px solid var(--accent);
+  background: var(--code-bg);
+  color: var(--text);
+}
+
+blockquote p {
+  margin: 0.4rem 0;
+}
+
+.doc-metadata,
+.metadata {
+  background: var(--metadata-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.6rem 0;
+}
+
+.doc-metadata dl,
+.metadata dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.4rem 1rem;
+}
+
+.doc-metadata dt,
+.metadata dt {
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.doc-metadata dd,
+.metadata dd {
+  margin: 0;
+  word-break: break-word;
+}
+
+.glossary dt {
+  font-weight: 600;
+  margin-top: 1.1rem;
+}
+
+.glossary dd {
+  margin: 0.25rem 0 0.8rem 0;
+  color: var(--text);
+}
+
+.badge {
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.1rem 0.65rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: var(--code-bg);
+}
+
+.warning,
+.note {
+  padding: 0.9rem 1rem;
+  border-radius: 8px;
+  margin: 1.4rem 0;
+  border: 1px solid var(--warning-border);
+  background: var(--warning-bg);
+}
+
+@media (max-width: 700px) {
+  body {
+    padding: 1.2rem 1rem 3rem;
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.35rem;
+  }
+
+  .doc-metadata dl,
+  .metadata dl {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body {
+    max-width: 100%;
+    padding: 0;
+    font-size: 12pt;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  pre,
+  table,
+  blockquote {
+    page-break-inside: avoid;
+  }
+}
