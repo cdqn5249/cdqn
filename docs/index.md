@@ -1,11 +1,12 @@
 ---
 title: CDQN Documentation Portal
 description: Root documentation portal for the CDQN project, including the SIMEMP constraints and future Qn/cdqn specifications.
-version: 0.1.0
+version: 0.1.1
 updated: 2026-06-16
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
-location: docs/index.md
+license_file: LICENSE.md
+license_location: repository root
 file_repo_path: docs/index.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /
@@ -17,7 +18,7 @@ permalink: /
 
 **Project:** cdqn — Chained and Distributed Quang Numbers  
 **Author:** Christophe Duy Quang Nguyen  
-**License:** Scaling Source License (SSL) 1.0  
+**License:** [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)  
 **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
 **Status:** Thesis / constraint guide — not yet a full engineering specification
 
@@ -37,11 +38,14 @@ Future work will define axioms, derivations, and verification through successful
 
 ## Core documents
 
-| Document | Purpose | Status | HTML | Source |
-|---|---|---|---:|---|
-| SIMEMP Constraints | Thesis and constraints for the design of the Qn and cdqn stack. | Draft | [simemp.html]({{ '/simemp.html' | relative_url }}) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
-| Scaling Source License | License governing the Licensed Work, Derivative Works, Paternity References, Open Core Invariants, and Scaling Thresholds. | Stable | External | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| Repository | Public source repository for cdqn. | Active | External | [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
+| Document | Purpose | Status | GitHub Pages | Source file |
+|---|---|---|---|---|
+| [SIMEMP Constraints]({{ '/simemp.html' | relative_url }}) | Thesis and constraints for the design of the Qn and cdqn stack. | Draft | [simemp.html]({{ '/simemp.html' | relative_url }}) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
+| [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) | Scaling Source License (SSL) 1.0 governing the Licensed Work, Derivative Works, Paternity References, Open Core Invariants, and Scaling Thresholds. | Stable | Not published from `docs/` | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| [Repository](https://github.com/cdqn5249/cdqn) | Public source repository for cdqn. | Active | External | [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
+
+> **License location note:**  
+> The `LICENSE.md` file is located at the root of the `cdqn` repository, not inside the `docs/` folder. Because GitHub Pages is published from `docs/`, the license is linked through the GitHub repository rather than served as a local GitHub Pages file.
 
 ---
 
@@ -80,14 +84,18 @@ Instead, the project designs around them by requiring:
 
 This documentation portal is provided under the Scaling Source License (SSL) 1.0.
 
-Derivative Works must preserve the required copyright notice and Paternity Reference where applicable:
+Derivative Works must retain the original copyright notice and include the required Paternity Reference where applicable:
 
 > Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL). Parent Repository: https://github.com/cdqn5249/cdqn
+
+In software, APIs, compiled binary headers, or runtime specification files such as `QnIR`, the Paternity Reference must be preserved in source comments and metadata headers.
 
 The technical documentation must not weaken the SSL Open Core Invariants:
 
 1. **Anti-Patent Defense** — automatic license termination upon patent assertion against the Author or project community.
 2. **Non-Scaling Open Access** — royalty-free access for non-scaling academic, open-source, personal, research, and small-scale development.
+
+Any entity reaching a Scaling Threshold under the license must enter into a separate written Commercial License Agreement with the Author.
 
 ---
 
@@ -97,10 +105,9 @@ This folder is intended to be used as the GitHub Pages root.
 
 Recommended repository structure:
 
-```text
-docs/
-  index.md
-  simemp.md
-  assets/
-    css/
-      style.css
+- `docs/index.md`
+- `docs/simemp.md`
+- `docs/assets/css/style.css`
+- `LICENSE.md` at the repository root
+
+GitHub Pages should be configured to publish from the `docs/` folder. Jekyll should remain enabled so that Markdown files are converted to HTML pages.
