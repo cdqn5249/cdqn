@@ -21,6 +21,20 @@ depends_on:
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 
+## Navigation
+
+Use the GitHub Pages links for reading the published documentation. Use the source links for reviewing the committed Markdown files.
+
+| Document | GitHub Pages | Source file |
+|---|---:|---|
+| Documentation portal | [index.html]({{ '/' | relative_url }}) | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) |
+| SIMEMP constraints | [simemp.html]({{ '/simemp.html' | relative_url }}) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
+| This document | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) | [docs/abstractionLayers.md](https://github.com/cdqn5249/cdqn/blob/main/docs/abstractionLayers.md) |
+| Scaling Source License | Not published from `docs/` | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| Public repository | External | [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
+
+---
+
 ## Document Metadata
 
 | Field | Value |
@@ -36,6 +50,27 @@ depends_on:
 | **Depends On** | `docs/index.md`, `docs/simemp.md`, `LICENSE.md` |
 
 Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
+
+---
+
+## Table of Contents
+
+- [Purpose and Scope](#purpose-and-scope)
+- [Normative References](#normative-references)
+- [1. Foundational Position](#1-foundational-position)
+- [2. Layer Model](#2-layer-model)
+- [3. Structural Principles](#3-structural-principles)
+- [4. Set and Category Abstraction](#4-set-and-category-abstraction)
+- [5. Complexity Degree Stratification](#5-complexity-degree-stratification)
+- [6. Numeric Representation and Compilation](#6-numeric-representation-and-compilation)
+- [7. Arithmetic Foundation as Structural Example](#7-arithmetic-foundation-as-structural-example)
+- [8. Identity, Security, and cdqn Exposure](#8-identity-security-and-cdqn-exposure)
+- [9. Structure-Generativity Balance](#9-structure-generativity-balance)
+- [10. External Precedents and Recent Convergence](#10-external-precedents-and-recent-convergence)
+- [11. Future Qn Definition Files](#11-future-qn-definition-files)
+- [12. License Alignment](#12-license-alignment)
+- [13. Open Items](#13-open-items)
+- [Glossary](#glossary)
 
 ---
 
@@ -60,11 +95,13 @@ Higher Qn primitives and properties — including but not limited to `Q(2)` thro
 
 ## Normative References
 
-| Document | Role |
-|---|---|
-| [index.html]({{ '/' | relative_url }}) | Root documentation portal and project stance. |
-| [simemp.html]({{ '/simemp.html' | relative_url }}) | SIMEMP constraints: Security, Identity, Metric, Efficiency, Modularity, Portability. |
-| [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) | Scaling Source License (SSL) 1.0. Legal text governs if there is a conflict. |
+The following documents are normative for this thesis. If a technical conflict exists, `docs/simemp.md` governs the SIMEMP constraint system. If a legal conflict exists, `LICENSE.md` governs.
+
+| Document | Role | GitHub Pages | Source file |
+|---|---|---:|---|
+| `docs/index.md` | Root documentation portal and project stance. | [index.html]({{ '/' | relative_url }}) | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) |
+| `docs/simemp.md` | SIMEMP constraints: Security, Identity, Metric, Efficiency, Modularity, Portability. | [simemp.html]({{ '/simemp.html' | relative_url }}) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
+| `LICENSE.md` | Scaling Source License (SSL) 1.0. Governs licensing, Paternity References, Open Core Invariants, and Scaling Thresholds. | Not published from `docs/` | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
