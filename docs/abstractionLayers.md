@@ -17,21 +17,24 @@ depends_on:
   - LICENSE.md
 ---
 
-<link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+<link rel="stylesheet" href="assets/css/style.css">
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 
-## Navigation
+## Quick Navigation
 
-Use the GitHub Pages links for reading the published documentation. Use the source links for reviewing the committed Markdown files.
+Use the published-page links when reading the documentation on GitHub Pages. Use the source-file links when reviewing the committed Markdown files.
 
-| Document | GitHub Pages | Source file |
-|---|---:|---|
-| Documentation portal | [index.html]({{ '/' | relative_url }}) | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) |
-| SIMEMP constraints | [simemp.html]({{ '/simemp.html' | relative_url }}) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
-| This document | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) | [docs/abstractionLayers.md](https://github.com/cdqn5249/cdqn/blob/main/docs/abstractionLayers.md) |
-| Scaling Source License | Not published from `docs/` | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| Public repository | External | [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
+| Document | Published page | Source file |
+|---|---|---|
+| Documentation portal | [index.html](index.html) | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) |
+| SIMEMP constraints | [simemp.html](simemp.html) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
+| This document | [abstractionLayers.html](abstractionLayers.html) | [docs/abstractionLayers.md](https://github.com/cdqn5249/cdqn/blob/main/docs/abstractionLayers.md) |
+| Scaling Source License | Not published from docs/ | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| Public repository | [Repository](https://github.com/cdqn5249/cdqn) | [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
+
+> License location note:  
+> `LICENSE.md` is located at the root of the `cdqn` repository, not inside `docs/`. Because GitHub Pages is published from `docs/`, the license is linked through the GitHub repository rather than served as a local GitHub Pages file.
 
 ---
 
@@ -39,44 +42,23 @@ Use the GitHub Pages links for reading the published documentation. Use the sour
 
 | Field | Value |
 |---|---|
-| **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-08-09 |
-| **Author** | Christophe Duy Quang Nguyen |
-| **License** | Scaling Source License (SSL) 1.0 |
-| **Repository Path** | `docs/abstractionLayers.md` |
-| **Parent Repository** | [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
-| **Status** | Thesis / constraint guide — not a specification |
-| **Depends On** | `docs/index.md`, `docs/simemp.md`, `LICENSE.md` |
+| Document Title | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
+| Version | 1.0.0 |
+| Last Updated | 2026-08-09 |
+| Author | Christophe Duy Quang Nguyen |
+| License | Scaling Source License (SSL) 1.0 |
+| Repository Path | docs/abstractionLayers.md |
+| Parent Repository | https://github.com/cdqn5249/cdqn |
+| Status | Thesis / constraint guide — not a specification |
+| Depends On | docs/index.md, docs/simemp.md, LICENSE.md |
 
 Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 
 ---
 
-## Table of Contents
-
-- [Purpose and Scope](#purpose-and-scope)
-- [Normative References](#normative-references)
-- [1. Foundational Position](#1-foundational-position)
-- [2. Layer Model](#2-layer-model)
-- [3. Structural Principles](#3-structural-principles)
-- [4. Set and Category Abstraction](#4-set-and-category-abstraction)
-- [5. Complexity Degree Stratification](#5-complexity-degree-stratification)
-- [6. Numeric Representation and Compilation](#6-numeric-representation-and-compilation)
-- [7. Arithmetic Foundation as Structural Example](#7-arithmetic-foundation-as-structural-example)
-- [8. Identity, Security, and cdqn Exposure](#8-identity-security-and-cdqn-exposure)
-- [9. Structure-Generativity Balance](#9-structure-generativity-balance)
-- [10. External Precedents and Recent Convergence](#10-external-precedents-and-recent-convergence)
-- [11. Future Qn Definition Files](#11-future-qn-definition-files)
-- [12. License Alignment](#12-license-alignment)
-- [13. Open Items](#13-open-items)
-- [Glossary](#glossary)
-
----
-
 ## Purpose and Scope
 
-This document defines the **structural framework** of the abstraction layers for the Qn and cdqn stack.
+This document defines the structural framework of the abstraction layers for the Qn and cdqn stack.
 
 It is a thesis and constraint guide. It is not a finalized engineering specification, implementation manual, or formal proof.
 
@@ -97,11 +79,11 @@ Higher Qn primitives and properties — including but not limited to `Q(2)` thro
 
 The following documents are normative for this thesis. If a technical conflict exists, `docs/simemp.md` governs the SIMEMP constraint system. If a legal conflict exists, `LICENSE.md` governs.
 
-| Document | Role | GitHub Pages | Source file |
-|---|---|---:|---|
-| `docs/index.md` | Root documentation portal and project stance. | [index.html]({{ '/' | relative_url }}) | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) |
-| `docs/simemp.md` | SIMEMP constraints: Security, Identity, Metric, Efficiency, Modularity, Portability. | [simemp.html]({{ '/simemp.html' | relative_url }}) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
-| `LICENSE.md` | Scaling Source License (SSL) 1.0. Governs licensing, Paternity References, Open Core Invariants, and Scaling Thresholds. | Not published from `docs/` | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| Document | Role | Published page | Source file |
+|---|---|---|---|
+| docs/index.md | Root documentation portal and project stance. | [index.html](index.html) | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) |
+| docs/simemp.md | SIMEMP constraints: Security, Identity, Metric, Efficiency, Modularity, Portability. | [simemp.html](simemp.html) | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) |
+| LICENSE.md | Scaling Source License 1.0. Governs licensing, Paternity References, Open Core Invariants, and Scaling Thresholds. | Not published from docs/ | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
@@ -150,7 +132,7 @@ The gateway between Layer 0 and Layer 1 performs two structural roles.
 
 #### Node onboarding
 
-During onboarding, the node constructs its local genesis object:
+During onboarding, the node constructs its local genesis object through:
 
 - bounded entropy sampling;
 - entropy health checking;
@@ -162,13 +144,13 @@ During onboarding, the node constructs its local genesis object:
 
 Possible terminal states include:
 
-- `SUCCESS`
-- `ENTROPY_INSUFFICIENT`
-- `ENTROPY_SOURCE_FAULT`
-- `HARDWARE_FAULT`
-- `TIMEOUT`
-- `PQC_KEYGEN_FAILURE`
-- `GENESIS_RECEIPT_FAILURE`
+- SUCCESS
+- ENTROPY_INSUFFICIENT
+- ENTROPY_SOURCE_FAULT
+- HARDWARE_FAULT
+- TIMEOUT
+- PQC_KEYGEN_FAILURE
+- GENESIS_RECEIPT_FAILURE
 
 #### Fault translation
 
@@ -260,9 +242,9 @@ Implicitness is treated as a pattern that must be decomposed or recomposed into 
 
 Implicitness violates the Tier 1 Existential Invariants:
 
-- **Identity:** implicit entities have no distinct identifier;
-- **Metric:** implicit entities cannot be measured;
-- **Security:** implicit assumptions are attack surfaces.
+- Identity: implicit entities have no distinct identifier.
+- Metric: implicit entities cannot be measured.
+- Security: implicit assumptions are attack surfaces.
 
 Implicitness also introduces undecidability, non-halting behavior, and non-deterministic interpretation.
 
@@ -301,9 +283,9 @@ Every layer, object, operation, morphism, functor, and exported attestation must
 
 DCC means:
 
-- **Dependencies:** what must exist and be verified first;
-- **Constraints:** finite limits, exclusions, budgets, precision bounds, and halt conditions;
-- **Capabilities:** permitted operations, export rights, delegation rights, and transformation rights.
+- Dependencies: what must exist and be verified first.
+- Constraints: finite limits, exclusions, budgets, precision bounds, and halt conditions.
+- Capabilities: permitted operations, export rights, delegation rights, and transformation rights.
 
 No DCC profile may be implicit.
 
@@ -332,16 +314,16 @@ Every governed computation must terminate in a defined state.
 
 Defined terminal states may include:
 
-- `SUCCESS`
-- `FAILURE`
-- `NO_SOLUTION`
-- `TIMEOUT`
-- `BUDGET_EXHAUSTED`
-- `INCONCLUSIVE`
-- `QUARANTINED`
-- `PRECISION_INSUFFICIENT`
-- `EXPRESSION_TOO_COMPLEX`
-- `REJECTION_BY_GATEWAY`
+- SUCCESS
+- FAILURE
+- NO_SOLUTION
+- TIMEOUT
+- BUDGET_EXHAUSTED
+- INCONCLUSIVE
+- QUARANTINED
+- PRECISION_INSUFFICIENT
+- EXPRESSION_TOO_COMPLEX
+- REJECTION_BY_GATEWAY
 
 Silent non-termination is forbidden.
 
@@ -421,7 +403,7 @@ The complexity degree is a structural measure, not a semantic judgment.
 
 | Degree | Structural content | Examples |
 |---|---|---|
-| 0 | Primitives | `Q(0)`, `Q(1)` |
+| 0 | Primitives | Q(0), Q(1) |
 | 1 | Primitive operations | additive and multiplicative operations |
 | 2 | Compositions of degree 1 | simple Qexpr compositions |
 | 3 | Higher compositions | bounded constants, ordering relations, set partitions |
@@ -531,7 +513,7 @@ Division may be represented as a bounded constraint:
 
 Rejected division by zero must produce a defined terminal state, such as:
 
-- `DIVISION_BY_ZERO_REJECTED`
+- DIVISION_BY_ZERO_REJECTED
 
 ### 7.3 Ordering and set partition
 
@@ -549,7 +531,7 @@ Positional ordering must not be interpreted as superiority unless a separate exp
 
 If ordering is indeterminate at the declared zoom level because remainders overlap, the system must halt with a defined state, such as:
 
-- `ORDERING_INDETERMINATE_AT_ZOOM`
+- ORDERING_INDETERMINATE_AT_ZOOM
 
 ---
 
@@ -557,7 +539,7 @@ If ordering is indeterminate at the declared zoom level because remainders overl
 
 ### 8.1 Identity classes
 
-The Qn stack distinguishes at least three identity classes:
+The Qn stack distinguishes at least three identity classes.
 
 | Identity class | Represents | Must not imply |
 |---|---|---|
@@ -684,8 +666,6 @@ This supports:
 - sound approximation;
 - probabilistic generation inside governed envelopes.
 
-Recent work in probabilistic abstract interpretation and neural-network verification continues to apply this pattern to AI safety and bounded verification.
-
 ### 10.2 Domain theory and operational semantics
 
 Domain theory and operational semantics provide models for bounded evaluation, fixed points, and stepwise computation.
@@ -708,8 +688,6 @@ This supports:
 - cdqn network attestations;
 - gluing local receipts into global consistency only under explicit conditions.
 
-Recent distributed-systems and multi-agent research continues to use sheaf-theoretic structures for local-to-global consistency.
-
 ### 10.4 Algebraic effects and handlers
 
 Algebraic effects separate effect signatures from effect handlers.
@@ -720,8 +698,6 @@ This supports:
 - QnIR as a bounded handler;
 - pluggable hardware profiles;
 - governed execution without exposing unbounded operations.
-
-Recent work on governed execution, capability-bounded effects, and WebAssembly-style sandboxing aligns closely with this structural separation.
 
 ### 10.5 Linear logic and quantitative resources
 
@@ -734,8 +710,6 @@ This supports:
 - no implicit discarding;
 - metric envelopes;
 - bounded transaction accounting.
-
-Recent quantitative linear logic research supports the mapping between logical derivation and measurable resource cost.
 
 ### 10.6 Rewriting systems
 
@@ -855,7 +829,7 @@ New categories may appear as the project matures.
 
 ## 12. License Alignment
 
-This document aligns with the Scaling Source License (SSL) 1.0.
+This document aligns with the Scaling Source License 1.0.
 
 The license governs legal rights and obligations. If this document conflicts with the license, the license prevails.
 
@@ -871,8 +845,8 @@ In software, APIs, compiled binary headers, or runtime specification files such 
 
 The abstraction-layer framework must not weaken the SSL Open Core Invariants:
 
-1. **Anti-Patent Defense** — license termination upon patent assertion against the Author or project community.
-2. **Non-Scaling Open Access** — royalty-free access for non-scaling academic, open-source, personal, research, and small-scale development.
+1. Anti-Patent Defense — license termination upon patent assertion against the Author or project community.
+2. Non-Scaling Open Access — royalty-free access for non-scaling academic, open-source, personal, research, and small-scale development.
 
 ### 12.3 Scale auditing
 
@@ -979,3 +953,15 @@ Chained and Distributed Quang Numbers. The distributed composition layer of the 
 
 **SSL**  
 Scaling Source License 1.0. The license governing the project, derivative works, Open Core Invariants, Paternity References, and Scaling Thresholds.
+
+---
+
+## Bottom Navigation
+
+| Destination | Link |
+|---|---|
+| Documentation portal | [index.html](index.html) |
+| SIMEMP constraints | [simemp.html](simemp.html) |
+| This document | [abstractionLayers.html](abstractionLayers.html) |
+| License source | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| Public repository | [github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn) |
