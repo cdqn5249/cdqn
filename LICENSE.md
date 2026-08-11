@@ -52,8 +52,8 @@ In software, APIs, compiled binary headers, or runtime specification files ("QnI
 ### 3.3 Open Core Invariant Propagation (Custom Licensing Permitted)
 Downstream licensors and authors of Derivative Works are permitted to distribute their derivative works under custom license agreements of their choosing, PROVIDED THAT any such downstream license explicitly incorporates, preserves, and enforces the following non-negotiable core conditions ("Open Core Invariants"):
 
-a) **Anti-Patent Defense:** The license must include a patent retaliation clause stating that any licensee's license terminates if the licensee institutes patent litigation against the Author or the project community regarding the Licensed Work.
-b) **Non-Scaling Open Access:** The license must ensure that the core Licensed Work remains freely available for non-commercial use below the Scaling Threshold.
+* a) **Anti-Patent Defense:** The license must include a patent retaliation clause stating that any licensee's license terminates if the licensee institutes patent litigation against the Author or the project community regarding the Licensed Work.
+* b) **Non-Scaling Open Access:** The license must ensure that the core Licensed Work remains freely available for non-commercial use below the Scaling Threshold.
 
 For the avoidance of doubt, Section 3.3 applies to Derivative Works of the Licensed Work (the technical infrastructure). It does not apply to Payloads, and it does not require the creator of a Payload to propagate this License or the Open Core Invariants to the Payload or to any custom license governing the Payload.
 
