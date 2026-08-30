@@ -1,0 +1,820 @@
+# CDQN Unified Glossary — Single Source of Truth
+# Author: Christophe Duy Quang Nguyen
+# License: Scaling Source License (SSL) 1.0
+#
+# This file is the canonical registry for all specialized terms in the
+# CDQN project. Every forward link in the documentation points here.
+# Every backlink below points back to the exact document sections that
+# use the term.
+#
+# Anchor naming convention: lowercase, hyphen-separated, stable forever.
+# Jekyll/kramdown auto-generates heading anchors from section titles.
+# The anchors below match kramdown's default auto_id behavior.
+
+- term: "SIMEMP"
+  slug: "simemp"
+  category: "Constraints"
+  definition: >
+    Security, Identity, Metric, Efficiency, Modularity, Portability.
+    The constitutional constraint system governing the Qn and cdqn stack.
+    Divided into Tier 1 Existential Invariants (non-negotiable) and
+    Tier 2 Operational Agilities (trade-off-able).
+  sources:
+    - doc: "index.md"
+      section: "License and Open Core Invariants"
+      anchor: "#license-and-open-core-invariants"
+    - doc: "simemp.md"
+      section: "3. The SIMEMP Constraint Architecture"
+      anchor: "#3-the-simemp-constraint-architecture"
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "3.2. The No-Implicit Rule"
+      anchor: "#32-the-no-implicit-rule"
+    - doc: "abstractionLayers.md"
+      section: "3.4. DCC Profiles Everywhere"
+      anchor: "#34-dcc-profiles-everywhere"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "12.2. Open Core Invariants"
+      anchor: "#122-open-core-invariants"
+    - doc: "qnPrimitive.md"
+      section: "Normative References"
+      anchor: "#normative-references"
+    - doc: "qnPrimitive.md"
+      section: "1.7. DCC Profile"
+      anchor: "#17-dcc-profile"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 12 — License Lineage Where Applicable"
+      anchor: "#axiom-12--license-lineage-where-applicable"
+
+- term: "DCC Profile"
+  slug: "dcc-profile"
+  category: "Constraints"
+  definition: >
+    Dependencies, Constraints, Capabilities. A mandatory machine-readable
+    profile for every abstraction layer, object, operation, morphism,
+    functor, and exported attestation. No DCC profile may be implicit.
+  sources:
+    - doc: "simemp.md"
+      section: "4.2. The DCC Profile"
+      anchor: "#42-the-dcc-profile"
+    - doc: "simemp.md"
+      section: "5.1. Identity Constraints"
+      anchor: "#51-identity-constraints"
+    - doc: "simemp.md"
+      section: "5.2. Metric Constraints"
+      anchor: "#52-metric-constraints"
+    - doc: "abstractionLayers.md"
+      section: "2.2. Node Onboarding and Fault Translation"
+      anchor: "#22-node-onboarding-and-fault-translation"
+    - doc: "abstractionLayers.md"
+      section: "3.2. The No-Implicit Rule"
+      anchor: "#32-the-no-implicit-rule"
+    - doc: "abstractionLayers.md"
+      section: "3.4. DCC Profiles Everywhere"
+      anchor: "#34-dcc-profiles-everywhere"
+    - doc: "abstractionLayers.md"
+      section: "4.3. Functors and Gateways"
+      anchor: "#43-functors-and-gateways"
+    - doc: "qnPrimitive.md"
+      section: "1.7. DCC Profile"
+      anchor: "#17-dcc-profile"
+    - doc: "qnPrimitive.md"
+      section: "4.5. DCC Profile Reference"
+      anchor: "#45-dcc-profile-reference"
+    - doc: "qnPrimitive.md"
+      section: "7. DCC Profile Rules"
+      anchor: "#7-dcc-profile-rules"
+
+- term: "Existential Invariant"
+  slug: "existential-invariant"
+  category: "Constraints"
+  definition: >
+    A Tier 1 SIMEMP constraint that is non-negotiable. The three
+    Existential Invariants are Identity, Metric, and Security. If a
+    proposed design violates or lacks these, it is fundamentally invalid.
+    Invariants cannot be traded off for convenience or performance.
+  sources:
+    - doc: "simemp.md"
+      section: "3.1. Tier 1: Existential Invariants"
+      anchor: "#31-tier-1-existential-invariants"
+    - doc: "simemp.md"
+      section: "5.3. Security Constraints"
+      anchor: "#53-security-constraints"
+    - doc: "abstractionLayers.md"
+      section: "3.2. The No-Implicit Rule"
+      anchor: "#32-the-no-implicit-rule"
+
+- term: "Operational Agility"
+  slug: "operational-agility"
+  category: "Constraints"
+  definition: >
+    A Tier 2 SIMEMP constraint that is trade-off-able. The three
+    Operational Agilities are Efficiency, Modularity, and Portability.
+    They naturally conflict with one another and with the Invariants.
+    The Golden Rule of Trade-offs applies: always sacrifice an Agility
+    to preserve an Invariant.
+  sources:
+    - doc: "simemp.md"
+      section: "3.2. Tier 2: Operational Agilities"
+      anchor: "#32-tier-2-operational-agilities"
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+
+- term: "BOC Policy"
+  slug: "boc-policy"
+  category: "Constraints"
+  definition: >
+    Best of Choices. The engineering decision matrix used to resolve
+    design conflicts by prioritizing SIMEMP constraints. When paths
+    conflict, the BOC mandates selecting the option that most strictly
+    aligns with and preserves the SIMEMP constraints.
+  sources:
+    - doc: "simemp.md"
+      section: "7. The BOC Policy"
+      anchor: "#7-the-boc-policy"
+
+- term: "Scaling Threshold"
+  slug: "scaling-threshold"
+  category: "Constraints"
+  definition: >
+    Usage limits defined by the SSL 1.0 that trigger mandatory commercial
+    licensing negotiations. Thresholds include: >10,000 concurrent compute
+    nodes/agents, >100,000 MAU, or >10,000,000 API/Qn transactions per month.
+  sources:
+    - doc: "simemp.md"
+      section: "8. Alignment with the Scaling Source License"
+      anchor: "#8-alignment-with-the-scaling-source-license"
+    - doc: "abstractionLayers.md"
+      section: "12.3. Scale Auditing"
+      anchor: "#123-scale-auditing"
+    - doc: "LICENSE.md"
+      section: "1.5. Scale / Scaling Usage"
+      anchor: "#15-scale--scaling-usage"
+
+- term: "No-Implicit Rule"
+  slug: "no-implicit-rule"
+  category: "Constraints"
+  definition: >
+    In the Qn universe, no implicit entity, behavior, assumption, default,
+    interpretation, or convention may cross a SIMEMP Gateway. Only explicit
+    Qn objects may pass between layers. Implicitness violates Identity,
+    Metric, and Security.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "3.2. The No-Implicit Rule"
+      anchor: "#32-the-no-implicit-rule"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 1 — Explicit Envelope"
+      anchor: "#axiom-1--explicit-envelope"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 3 — Typed Payload Separation"
+      anchor: "#axiom-3--typed-payload-separation"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 9 — Numeric Precision Explicitness"
+      anchor: "#axiom-9--numeric-precision-explicitness"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 10 — No Floating-Point Semantics"
+      anchor: "#axiom-10--no-floating-point-semantics"
+
+- term: "Computational Consistency"
+  slug: "computational-consistency"
+  category: "Constraints"
+  definition: >
+    The verification methodology of the Qn universe. If the logic is
+    internally consistent, and if computations authored in QnLang and
+    compiled to QnIR execute successfully and deterministically within
+    their declared finite boundaries, the abstractions are considered valid.
+  sources:
+    - doc: "simemp.md"
+      section: "2. Method of Verification"
+      anchor: "#2-method-of-verification"
+    - doc: "abstractionLayers.md"
+      section: "1. Foundational Position"
+      anchor: "#1-foundational-position"
+    - doc: "qnPrimitive.md"
+      section: "3. Provisional Operational Axioms"
+      anchor: "#3-provisional-operational-axioms"
+
+- term: "Qn"
+  slug: "qn"
+  category: "Primitives"
+  definition: >
+    Quang Number. A governed, finite, identifiable, measurable, and
+    security-constrained entity inside the Qn universe. Not a passive
+    mathematical value; it is a governed computational entity.
+  sources:
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "1. Foundational Position"
+      anchor: "#1-foundational-position"
+    - doc: "abstractionLayers.md"
+      section: "3.1. All Governed Artifacts are Qn"
+      anchor: "#31-all-governed-artifacts-are-qn"
+    - doc: "abstractionLayers.md"
+      section: "3.5. Causal Arrow and Birth Order"
+      anchor: "#35-causal-arrow-and-birth-order"
+    - doc: "abstractionLayers.md"
+      section: "4.1. Local Qn Set"
+      anchor: "#41-local-qn-set"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "1.1. Qn Artifact"
+      anchor: "#11-qn-artifact"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 1 — Explicit Envelope"
+      anchor: "#axiom-1--explicit-envelope"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 4 — Local Genesis Dependency"
+      anchor: "#axiom-4--local-genesis-dependency"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 5 — Acyclic Causal Lineage"
+      anchor: "#axiom-5--acyclic-causal-lineage"
+
+- term: "Q(0)"
+  slug: "q0"
+  category: "Primitives"
+  definition: >
+    Local genesis object, origin, causal index zero, empty birth context.
+    The foundational numeric couple member representing local origin.
+    Q(0) is local; it is not a global universal zero. Each node may have
+    its own local Q(0) instance.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2.3. Layer 1 — Node Genesis Layer"
+      anchor: "#23-layer-1--node-genesis-layer"
+    - doc: "abstractionLayers.md"
+      section: "3.5. Causal Arrow and Birth Order"
+      anchor: "#35-causal-arrow-and-birth-order"
+    - doc: "abstractionLayers.md"
+      section: "4.1. Local Qn Set"
+      anchor: "#41-local-qn-set"
+    - doc: "abstractionLayers.md"
+      section: "7.2. Division as Constrained Operation"
+      anchor: "#72-division-as-constrained-operation"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 4 — Local Genesis Dependency"
+      anchor: "#axiom-4--local-genesis-dependency"
+    - doc: "qnPrimitive.md"
+      section: "11.2. Layer 0 to Layer 1 Gateway"
+      anchor: "#112-layer-0-to-layer-1-gateway"
+    - doc: "qnPrimitive.md"
+      section: "11.3. Layer 1"
+      anchor: "#113-layer-1"
+
+- term: "Q(1)"
+  slug: "q1"
+  category: "Primitives"
+  definition: >
+    First unit object, unity measure, reference for the abstract compute
+    unit U. Must have deterministic numeric and metric meaning. Entropy
+    may contribute to local identity but must not alter the canonical
+    value or unit meaning of Q(1). In the SSL, Q(1) is framed as a
+    cryptographically verified utility metric.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2.3. Layer 1 — Node Genesis Layer"
+      anchor: "#23-layer-1--node-genesis-layer"
+    - doc: "abstractionLayers.md"
+      section: "6.1. Floating-Point Prohibition"
+      anchor: "#61-floating-point-prohibition"
+    - doc: "abstractionLayers.md"
+      section: "7.1. First Operations"
+      anchor: "#71-first-operations"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 4 — Local Genesis Dependency"
+      anchor: "#axiom-4--local-genesis-dependency"
+    - doc: "LICENSE.md"
+      section: "1.7. Q(1) Utility Metric"
+      anchor: "#17-q1-utility-metric"
+
+- term: "cdqn"
+  slug: "cdqn"
+  category: "Primitives"
+  definition: >
+    Chained and Distributed Quang Numbers. The distributed composition
+    layer of the Qn stack. Not a single global category; it is a
+    higher-level structure composed of local categories, public
+    attestations, exported Qexpr commitments, and cross-node receipts.
+  sources:
+    - doc: "simemp.md"
+      section: "1. The Foundational Conjecture"
+      anchor: "#1-the-foundational-conjecture"
+    - doc: "simemp.md"
+      section: "8. Alignment with the Scaling Source License"
+      anchor: "#8-alignment-with-the-scaling-source-license"
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "3.3. Local-first and Controlled Exposure"
+      anchor: "#33-local-first-and-controlled-exposure"
+    - doc: "abstractionLayers.md"
+      section: "4.4. cdqn as a Category of Local Categories"
+      anchor: "#44-cdqn-as-a-category-of-local-categories"
+    - doc: "abstractionLayers.md"
+      section: "8.3. Dual-Ring PQC Boundary"
+      anchor: "#83-dual-ring-pqc-boundary"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 8 — Local-first Exposure"
+      anchor: "#axiom-8--local-first-exposure"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 12 — License Lineage"
+      anchor: "#axiom-12--license-lineage-where-applicable"
+    - doc: "qnPrimitive.md"
+      section: "Glossary"
+      anchor: "#glossary"
+
+- term: "QnLang"
+  slug: "qnlang"
+  category: "Primitives"
+  definition: >
+    The domain-specific language used to author and express Qn
+    computations. Remains paradigm-neutral at this stage. Must satisfy
+    SIMEMP constraints and the BOC policy in its final design.
+  sources:
+    - doc: "simemp.md"
+      section: "2. Method of Verification"
+      anchor: "#2-method-of-verification"
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "1. Foundational Position"
+      anchor: "#1-foundational-position"
+    - doc: "abstractionLayers.md"
+      section: "12. Future Qn Definition Files"
+      anchor: "#12-future-qn-definition-files"
+    - doc: "qnPrimitive.md"
+      section: "12. Relation to QnLang"
+      anchor: "#12-relation-to-qnlang"
+
+- term: "QnIR"
+  slug: "qnir"
+  category: "Primitives"
+  definition: >
+    Intermediate Representation used for hardware abstraction and bounded
+    execution. QnLang compiles to QnIR. The QnIR execution model is not
+    yet fully defined. May use binary hardware representations internally
+    but must not expose floating-point semantics to the Qn semantic layer.
+  sources:
+    - doc: "simemp.md"
+      section: "2. Method of Verification"
+      anchor: "#2-method-of-verification"
+    - doc: "simemp.md"
+      section: "4.1. The Memory Wall and The Semantic Gap"
+      anchor: "#41-the-memory-wall-and-the-semantic-gap"
+    - doc: "simemp.md"
+      section: "5.1. Identity Constraints"
+      anchor: "#51-identity-constraints"
+    - doc: "simemp.md"
+      section: "8. Alignment with the Scaling Source License"
+      anchor: "#8-alignment-with-the-scaling-source-license"
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "1. Foundational Position"
+      anchor: "#1-foundational-position"
+    - doc: "abstractionLayers.md"
+      section: "12.1. Paternity Reference"
+      anchor: "#121-paternity-reference"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 12 — License Lineage"
+      anchor: "#axiom-12--license-lineage-where-applicable"
+    - doc: "qnPrimitive.md"
+      section: "12. Relation to QnLang"
+      anchor: "#12-relation-to-qnlang"
+
+- term: "Qexpr"
+  slug: "qexpr"
+  category: "Primitives"
+  definition: >
+    A governed expression composed of Qn objects. Carries symbolic
+    structure, zoom z, remainder r, dimension d, DCC profile, identity,
+    and lineage. Collapses to a concrete governed value at compilation
+    time (QnLang to QnIR transition). Symbolic expression size must be
+    bounded.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "5. Complexity Degree Stratification"
+      anchor: "#5-complexity-degree-stratification"
+    - doc: "abstractionLayers.md"
+      section: "6.2. Qexpr Notation"
+      anchor: "#62-qexpr-notation"
+    - doc: "abstractionLayers.md"
+      section: "6.3. Collapse at Compilation Time"
+      anchor: "#63-collapse-at-compilation-time"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "5.2. Expression Payload Profile"
+      anchor: "#52-expression-payload-profile"
+    - doc: "qnPrimitive.md"
+      section: "12. Relation to QnLang"
+      anchor: "#12-relation-to-qnlang"
+
+- term: "Abstraction Layer"
+  slug: "abstraction-layer"
+  category: "Architecture"
+  definition: >
+    A structural boundary in the Qn stack where governed Qn objects are
+    born, transformed, or exposed under SIMEMP constraints. Layer 0 is
+    the commodity physical substrate; Layer 1 is the first governed Qn
+    layer. Higher layers are derived sequentially.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2. Layer Model"
+      anchor: "#2-layer-model"
+    - doc: "abstractionLayers.md"
+      section: "3.1. All Governed Artifacts are Qn"
+      anchor: "#31-all-governed-artifacts-are-qn"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "11. Relation to Abstraction Layers"
+      anchor: "#11-relation-to-abstraction-layers"
+
+- term: "SIMEMP Gateway"
+  slug: "simemp-gateway"
+  category: "Architecture"
+  definition: >
+    The validation boundary between abstraction layers. Only explicit,
+    bounded, governed Qn objects may pass. Performs node onboarding,
+    fault translation, and DCC profile validation. No implicit entity
+    may cross a SIMEMP Gateway.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2.2. Layer 0 to Layer 1 Gateway"
+      anchor: "#22-layer-0-to-layer-1-gateway"
+    - doc: "abstractionLayers.md"
+      section: "3.2. The No-Implicit Rule"
+      anchor: "#32-the-no-implicit-rule"
+    - doc: "abstractionLayers.md"
+      section: "3.4. DCC Profiles Everywhere"
+      anchor: "#34-dcc-profiles-everywhere"
+    - doc: "abstractionLayers.md"
+      section: "4.3. Functors and Gateways"
+      anchor: "#43-functors-and-gateways"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 7 — Receipted Boundary Events"
+      anchor: "#axiom-7--receipted-boundary-events"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 14 — Generative Candidate Boundary"
+      anchor: "#axiom-14--generative-candidate-boundary"
+    - doc: "qnPrimitive.md"
+      section: "10.2. Candidate State"
+      anchor: "#102-candidate-state"
+
+- term: "Layer 0"
+  slug: "layer-0"
+  category: "Architecture"
+  definition: >
+    The hardware-agnostic physical substrate. Includes commodity CPU, GPU,
+    memory, storage, network interfaces, and physical limits (finite
+    memory, compute, energy, thermal constraints, Memory Wall). Layer 0
+    is not yet part of the governed Qn universe; it is the acknowledged
+    Root of Finiteness.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2.1. Layer 0 — Commodity Physical Substrate"
+      anchor: "#21-layer-0--commodity-physical-substrate"
+    - doc: "abstractionLayers.md"
+      section: "2.2. Layer 0 to Layer 1 Gateway"
+      anchor: "#22-layer-0-to-layer-1-gateway"
+    - doc: "abstractionLayers.md"
+      section: "11.1. Layer 0"
+      anchor: "#111-layer-0"
+    - doc: "qnPrimitive.md"
+      section: "11.1. Layer 0"
+      anchor: "#111-layer-0"
+
+- term: "Layer 1"
+  slug: "layer-1"
+  category: "Architecture"
+  definition: >
+    The first governed Qn layer. Contains the local genesis Q(0), the
+    first unit Q(1), the abstract compute unit U, sign polarity, first
+    arithmetic operations, and the first dimensional axis d1. Layer 1
+    is where raw hardware state becomes a governed Qn artifact.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2.3. Layer 1 — Node Genesis Layer"
+      anchor: "#23-layer-1--node-genesis-layer"
+    - doc: "abstractionLayers.md"
+      section: "2.4. Higher Layers"
+      anchor: "#24-higher-layers"
+    - doc: "abstractionLayers.md"
+      section: "11.3. Layer 1"
+      anchor: "#113-layer-1"
+    - doc: "qnPrimitive.md"
+      section: "11.2. Layer 0 to Layer 1 Gateway"
+      anchor: "#112-layer-0-to-layer-1-gateway"
+    - doc: "qnPrimitive.md"
+      section: "11.3. Layer 1"
+      anchor: "#113-layer-1"
+
+- term: "Causal Arrow"
+  slug: "causal-arrow"
+  category: "Architecture"
+  definition: >
+    A persistent, monotonic ordering of computational events independent
+    of physical wall-clock time. Every Qn object is born into a local
+    Causal Arrow. The birth order is finite, bounded, and acyclic.
+    Distributed security relies on the Causal Arrow, not wall-clock time.
+  sources:
+    - doc: "simemp.md"
+      section: "5.3. Security Constraints"
+      anchor: "#53-security-constraints"
+    - doc: "simemp.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "abstractionLayers.md"
+      section: "3.5. Causal Arrow and Birth Order"
+      anchor: "#35-causal-arrow-and-birth-order"
+    - doc: "abstractionLayers.md"
+      section: "8.3. Dual-Ring PQC Boundary"
+      anchor: "#83-dual-ring-pqc-boundary"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "1.6. Lineage"
+      anchor: "#16-lineage"
+    - doc: "qnPrimitive.md"
+      section: "5.4. Receipt Payload Profile"
+      anchor: "#54-receipt-payload-profile"
+
+- term: "Complexity Degree"
+  slug: "complexity-degree"
+  category: "Architecture"
+  definition: >
+    A structural measure of Qexpr composition depth and governance level.
+    Degree 0: primitives (Q(0), Q(1)). Degree 1: primitive operations.
+    Degree 2: compositions of degree 1. Degree n: compositions of degree
+    n-1. The maximum complexity degree must be bounded and declared.
+    May be used as an exposure threshold for public cdqn attestation.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "5. Complexity Degree Stratification"
+      anchor: "#5-complexity-degree-stratification"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "5.2. Expression Payload Profile"
+      anchor: "#52-expression-payload-profile"
+    - doc: "qnPrimitive.md"
+      section: "6.4. Bounded Symbolic Expressions"
+      anchor: "#64-bounded-symbolic-expressions"
+
+- term: "Local-first"
+  slug: "local-first"
+  category: "Architecture"
+  definition: >
+    The principle that Qn instances are born locally, indexed locally,
+    and not exposed publicly by default. The first identifier component
+    of a Qn artifact is local to the node. Remote exposure requires
+    explicit authorization, bounded attestation, and compliance with
+    the exposure class.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "3.3. Local-first and Controlled Exposure"
+      anchor: "#33-local-first-and-controlled-exposure"
+    - doc: "abstractionLayers.md"
+      section: "8.2. No Anonymous Entities"
+      anchor: "#82-no-anonymous-entities-but-identity-privacy-preserved"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 4 — Local Genesis Dependency"
+      anchor: "#axiom-4--local-genesis-dependency"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 8 — Local-first Exposure"
+      anchor: "#axiom-8--local-first-exposure"
+    - doc: "qnPrimitive.md"
+      section: "6.1. Local-first Identifier Structure"
+      anchor: "#61-local-first-identifier-structure"
+
+- term: "Universal Envelope"
+  slug: "universal-envelope"
+  category: "Governance"
+  definition: >
+    The minimal governance structure required for any Qn artifact to
+    exist, transform, halt, be sealed, or be exposed. Includes identity,
+    type, lifecycle state, lineage, DCC profile, metric envelope,
+    security envelope, exposure class, and payload reference.
+  sources:
+    - doc: "qnPrimitive.md"
+      section: "1.2. Qn Primitive Envelope"
+      anchor: "#12-qn-primitive-envelope"
+    - doc: "qnPrimitive.md"
+      section: "1.3. Universal Envelope"
+      anchor: "#13-universal-envelope"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 1 — Explicit Envelope"
+      anchor: "#axiom-1--explicit-envelope"
+    - doc: "qnPrimitive.md"
+      section: "4. Universal Envelope"
+      anchor: "#4-universal-envelope"
+
+- term: "Metric Envelope"
+  slug: "metric-envelope"
+  category: "Governance"
+  definition: >
+    The finite measurement boundary of a Qn artifact. May include size
+    bounds, depth bounds, complexity degree, compute budget, storage
+    budget, transmission budget, precision bounds, uncertainty bounds,
+    collapse budget, and verification budget. No Qn artifact may be
+    unmeasurable. Must support the Memory Wall constraint.
+  sources:
+    - doc: "qnPrimitive.md"
+      section: "1.8. Metric Envelope"
+      anchor: "#18-metric-envelope"
+    - doc: "qnPrimitive.md"
+      section: "4.6. Metric Envelope Reference"
+      anchor: "#46-metric-envelope-reference"
+    - doc: "qnPrimitive.md"
+      section: "8. Metric Envelope Rules"
+      anchor: "#8-metric-envelope-rules"
+    - doc: "abstractionLayers.md"
+      section: "3.4. DCC Profiles Everywhere"
+      anchor: "#34-dcc-profiles-everywhere"
+
+- term: "Security Envelope"
+  slug: "security-envelope"
+  category: "Governance"
+  definition: >
+    The governed security boundary of a Qn artifact. Declares capability
+    limits, export rights, delegation rights, halt authority, revocation
+    path, identity class, trust assumptions, algorithm identifiers, and
+    algorithm agility metadata. Security is defined against finite
+    adversaries, not absolute adversaries. Must respect the dual-ring
+    PQC boundary.
+  sources:
+    - doc: "qnPrimitive.md"
+      section: "1.9. Security Envelope"
+      anchor: "#19-security-envelope"
+    - doc: "qnPrimitive.md"
+      section: "4.7. Security Envelope Reference"
+      anchor: "#47-security-envelope-reference"
+    - doc: "qnPrimitive.md"
+      section: "9. Security Envelope Rules"
+      anchor: "#9-security-envelope-rules"
+    - doc: "abstractionLayers.md"
+      section: "8.3. Dual-Ring PQC Boundary"
+      anchor: "#83-dual-ring-pqc-boundary"
+
+- term: "Receipt"
+  slug: "receipt"
+  category: "Governance"
+  definition: >
+    A governed record of a transition, fault, halt, rejection, gateway
+    decision, or exposure event. Receipts are mandatory for lifecycle
+    transitions, gateway crossings, sealing events, export decisions,
+    fault translations, halt events, rejections, revocations, capability
+    changes, and security-relevant state changes. Receipts are Qn
+    artifacts when they must be audited, sealed, verified, or exported.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "2.2. Fault Translation"
+      anchor: "#22-fault-translation"
+    - doc: "abstractionLayers.md"
+      section: "3.6. Totality by Budget"
+      anchor: "#36-totality-by-budget"
+    - doc: "abstractionLayers.md"
+      section: "Glossary"
+      anchor: "#glossary"
+    - doc: "qnPrimitive.md"
+      section: "1.11. Receipt"
+      anchor: "#111-receipt"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 7 — Receipted Boundary Events"
+      anchor: "#axiom-7--receipted-boundary-events"
+    - doc: "qnPrimitive.md"
+      section: "5.4. Receipt Payload Profile"
+      anchor: "#54-receipt-payload-profile"
+    - doc: "qnPrimitive.md"
+      section: "10. Lifecycle and Receipts"
+      anchor: "#10-lifecycle-and-receipts"
+
+- term: "Lifecycle State"
+  slug: "lifecycle-state"
+  category: "Governance"
+  definition: >
+    The governance status of a Qn artifact. Recognized states include:
+    candidate, constructed, sealed, verified, rejected, halted, quarantined,
+    exportable, exported, revoked. Lifecycle transitions must be explicit
+    and receipted where required. Silent non-termination is forbidden.
+  sources:
+    - doc: "qnPrimitive.md"
+      section: "1.10. Lifecycle State"
+      anchor: "#110-lifecycle-state"
+    - doc: "qnPrimitive.md"
+      section: "4.3. Lifecycle State Block"
+      anchor: "#43-lifecycle-state-block"
+    - doc: "qnPrimitive.md"
+      section: "10. Lifecycle and Receipts"
+      anchor: "#10-lifecycle-and-receipts"
+    - doc: "abstractionLayers.md"
+      section: "3.6. Totality by Budget"
+      anchor: "#36-totality-by-budget"
+
+- term: "Open Core Invariant"
+  slug: "open-core-invariant"
+  category: "Governance"
+  definition: >
+    A non-negotiable core condition that must be preserved in all
+    Derivative Works. Two invariants: (a) Anti-Patent Defense — license
+    termination upon patent assertion against the Author or project
+    community; (b) Non-Scaling Open Access — royalty-free access for
+    non-scaling academic, open-source, personal, research, and small-scale
+    development.
+  sources:
+    - doc: "index.md"
+      section: "License and Open Core Invariants"
+      anchor: "#license-and-open-core-invariants"
+    - doc: "abstractionLayers.md"
+      section: "12.2. Open Core Invariants"
+      anchor: "#122-open-core-invariants"
+    - doc: "LICENSE.md"
+      section: "3.3. Open Core Invariant Propagation"
+      anchor: "#33-open-core-invariant-propagation"
+
+- term: "Paternity Reference"
+  slug: "paternity-reference"
+  category: "Governance"
+  definition: >
+    The required attribution notice for Derivative Works:
+    "Derived from the original work by Christophe Duy Quang Nguyen
+    under the Scaling Source License (SSL). Parent Repository:
+    https://github.com/cdqn5249/cdqn". Must be preserved in source
+    comments, metadata headers, and public documentation where applicable.
+  sources:
+    - doc: "index.md"
+      section: "License and Open Core Invariants"
+      anchor: "#license-and-open-core-invariants"
+    - doc: "abstractionLayers.md"
+      section: "12.1. Paternity Reference"
+      anchor: "#121-paternity-reference"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 12 — License Lineage"
+      anchor: "#axiom-12--license-lineage-where-applicable"
+    - doc: "qnPrimitive.md"
+      section: "13.1. Paternity Reference"
+      anchor: "#131-paternity-reference"
+    - doc: "LICENSE.md"
+      section: "3.1. Paternity Reference"
+      anchor: "#31-paternity-reference"
+
+- term: "SSL"
+  slug: "ssl"
+  category: "Governance"
+  definition: >
+    Scaling Source License 1.0. The license governing the CDQN project,
+    Derivative Works, Open Core Invariants, Paternity References, and
+    Scaling Thresholds. Governs legal rights and obligations; if any
+    technical document conflicts with the license, the license prevails.
+  sources:
+    - doc: "index.md"
+      section: "License and Open Core Invariants"
+      anchor: "#license-and-open-core-invariants"
+    - doc: "simemp.md"
+      section: "8. Alignment with the Scaling Source License"
+      anchor: "#8-alignment-with-the-scaling-source-license"
+    - doc: "abstractionLayers.md"
+      section: "12. License Alignment"
+      anchor: "#12-license-alignment"
+    - doc: "qnPrimitive.md"
+      section: "13. License Alignment"
+      anchor: "#13-license-alignment"
+    - doc: "qnPrimitive.md"
+      section: "Glossary"
+      anchor: "#glossary"
