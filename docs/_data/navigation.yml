@@ -1,0 +1,46 @@
+# CDQN Documentation Navigation Registry
+# Author: Christophe Duy Quang Nguyen
+# License: Scaling Source License (SSL) 1.0
+# Updated: 2026-08-31
+
+- title: "Portal"
+  url: "/"
+  slug: "index"
+  description: "Documentation root and architectural index"
+  status: "Canonical"
+  external: false
+
+- title: "SIMEMP Constraints"
+  url: "/simemp.html"
+  slug: "simemp"
+  description: "Foundational physical and computational constraints"
+  status: "Verified"
+  external: false
+
+- title: "Abstraction Layers"
+  url: "/abstractionLayers.html"
+  slug: "abstractionLayers"
+  description: "Structural framework, gateways, and categorical model"
+  status: "Verified"
+  external: false
+
+- title: "Qn Primitive Envelope"
+  url: "/qnPrimitive.html"
+  slug: "qnPrimitive"
+  description: "Governed artifact envelope, axioms, and lifecycle"
+  status: "Verified"
+  external: false
+
+- title: "CDQN Glossary"
+  url: "/glossary.html"
+  slug: "glossary"
+  description: "Unified glossary and bidirectional source registry"
+  status: "Canonical"
+  external: false
+
+- title: "License (SSL 1.0)"
+  url: "https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md"
+  slug: "license"
+  description: "Scaling Source License terms and open core invariants"
+  status: "Canonical"
+  external: true
