@@ -8,6 +8,7 @@
   --code-bg: #f6f8fa;
   --table-header-bg: #f6f8fa;
   --metadata-bg: #f6f8fa;
+  --active-row-bg: #eef5ff;
   --warning-bg: #fff8c5;
   --warning-border: #d4a72c;
 }
@@ -23,6 +24,7 @@
     --code-bg: #161b22;
     --table-header-bg: #161b22;
     --metadata-bg: #161b22;
+    --active-row-bg: #1f293d;
     --warning-bg: #2d2000;
     --warning-border: #9e6a03;
   }
@@ -47,12 +49,7 @@ body {
   line-height: 1.65;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   margin-top: 2.2rem;
   margin-bottom: 1rem;
   font-weight: 600;
@@ -90,8 +87,7 @@ a:hover {
   text-decoration: underline;
 }
 
-ul,
-ol {
+ul, ol {
   padding-left: 1.6rem;
 }
 
@@ -113,8 +109,7 @@ table {
   overflow-x: auto;
 }
 
-th,
-td {
+th, td {
   border: 1px solid var(--border);
   padding: 0.55rem 0.75rem;
   text-align: left;
@@ -124,6 +119,10 @@ td {
 th {
   background: var(--table-header-bg);
   font-weight: 600;
+}
+
+tr.active-row {
+  background: var(--active-row-bg);
 }
 
 code {
@@ -157,49 +156,6 @@ blockquote {
   color: var(--text);
 }
 
-blockquote p {
-  margin: 0.4rem 0;
-}
-
-.doc-metadata,
-.metadata {
-  background: var(--metadata-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin: 1.6rem 0;
-}
-
-.doc-metadata dl,
-.metadata dl {
-  margin: 0;
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: 0.4rem 1rem;
-}
-
-.doc-metadata dt,
-.metadata dt {
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.doc-metadata dd,
-.metadata dd {
-  margin: 0;
-  word-break: break-word;
-}
-
-.glossary dt {
-  font-weight: 600;
-  margin-top: 1.1rem;
-}
-
-.glossary dd {
-  margin: 0.25rem 0 0.8rem 0;
-  color: var(--text);
-}
-
 .badge {
   display: inline-block;
   border: 1px solid var(--border);
@@ -210,13 +166,108 @@ blockquote p {
   background: var(--code-bg);
 }
 
-.warning,
-.note {
-  padding: 0.9rem 1rem;
-  border-radius: 8px;
-  margin: 1.4rem 0;
-  border: 1px solid var(--warning-border);
-  background: var(--warning-bg);
+/* Wikipedia-Style Glossary Tooltips */
+.glossary-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.glossary-link {
+  color: var(--accent);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+}
+
+.glossary-link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline solid;
+}
+
+.glossary-wrapper:hover::after {
+  content: attr(data-definition);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background-color: var(--code-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: normal;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.glossary-wrapper:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--border) transparent transparent transparent;
+  z-index: 1000;
+}
+
+/* Glossary Index and Concordance */
+.glossary-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.glossary-index-letter {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.glossary-index-letter.inactive {
+  color: var(--muted);
+  border-color: transparent;
+}
+
+.glossary-entry {
+  margin: 2rem 0;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.glossary-term {
+  font-size: 1.35rem;
+  margin-top: 0;
+}
+
+.term-anchor {
+  color: var(--muted);
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.term-anchor:hover {
+  color: var(--accent);
+}
+
+.backlinks-heading {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.2rem;
+}
+
+.backlinks-list {
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
 }
 
 @media (max-width: 700px) {
@@ -224,36 +275,19 @@ blockquote p {
     padding: 1.2rem 1rem 3rem;
     font-size: 15px;
   }
-
   h1 {
     font-size: 1.8rem;
   }
-
   h2 {
     font-size: 1.35rem;
   }
-
-  .doc-metadata dl,
-  .metadata dl {
-    grid-template-columns: 1fr;
+  .glossary-wrapper:hover::after {
+    width: 220px;
+    left: 0;
+    transform: none;
   }
-}
-
-@media print {
-  body {
-    max-width: 100%;
-    padding: 0;
-    font-size: 12pt;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: underline;
-  }
-
-  pre,
-  table,
-  blockquote {
-    page-break-inside: avoid;
+  .glossary-wrapper:hover::before {
+    left: 20px;
+    transform: none;
   }
 }
