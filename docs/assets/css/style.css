@@ -1,293 +1,134 @@
-:root {
-  --bg: #ffffff;
-  --text: #1f2328;
-  --muted: #57606a;
-  --border: #d0d7de;
-  --accent: #0969da;
-  --accent-hover: #0550ae;
-  --code-bg: #f6f8fa;
-  --table-header-bg: #f6f8fa;
-  --metadata-bg: #f6f8fa;
-  --active-row-bg: #eef5ff;
-  --warning-bg: #fff8c5;
-  --warning-border: #d4a72c;
+:root { --bg: #ffffff; --text: #1f2328; --muted: #57606a; --border: #d0d7de;
+--accent: #0969da; --accent-hover: #0550ae; --code-bg: #f6f8fa;
+--table-header-bg: #f6f8fa; --metadata-bg: #f6f8fa; --active-row-bg: #eef5ff;
+--warning-bg: #fff8c5; --warning-border: #d4a72c; }
+
+@media (prefers-color-scheme: dark) { :root { --bg: #0d1117; --text: #e6edf3;
+--muted: #8b949e; --border: #30363d; --accent: #58a6ff; --accent-hover: #79c0ff;
+--code-bg: #161b22; --table-header-bg: #161b22; --metadata-bg: #161b22;
+--active-row-bg: #1f293d; --warning-bg: #2d2000; --warning-border: #9e6a03; } }
+
+  - { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body { margin: 0 auto; padding: 2rem 1.25rem 4rem; max-width: 980px; background:
+var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont,
+"Segoe UI", Helvetica, Arial, sans-serif; font-size: 16px; line-height: 1.65;
+overflow-x: hidden; }
+
+h1, h2, h3, h4, h5, h6 { margin-top: 2.2rem; margin-bottom: 1rem;
+font-weight: 600; line-height: 1.25; }
+
+h1 { font-size: 2.2rem; margin-top: 0; padding-bottom: 0.4rem;
+border-bottom: 1px solid var(--border); }
+
+h2 { font-size: 1.6rem; padding-bottom: 0.3rem; border-bottom: 1px solid
+var(--border); }
+
+h3 { font-size: 1.25rem; }
+
+p { margin: 0.9rem 0; }
+
+a { color: var(--accent); text-decoration: none; }
+
+a:hover { color: var(--accent-hover); text-decoration: underline; }
+
+ul, ol { padding-left: 1.6rem; }
+
+li { margin: 0.35rem 0; }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+/* Fully Responsive Tables */ table { width: 100%; border-collapse: collapse;
+margin: 1.6rem 0; display: table; }
+
+header table, main table, footer table { display: block; width: 100%;
+max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
+border-spacing: 0; }
+
+header table table, main table table { display: table; }
+
+th, td { border: 1px solid var(--border); padding: 0.6rem 0.75rem; text-align:
+left; vertical-align: top; font-size: 0.92rem; white-space: normal; word-break:
+normal; overflow-wrap: break-word; }
+
+th { background: var(--table-header-bg); font-weight: 600; }
+
+tr.active-row { background: var(--active-row-bg); }
+
+code { font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+monospace; font-size: 0.92em; background: var(--code-bg); border-radius: 6px;
+padding: 0.15rem 0.4rem; }
+
+pre { background: var(--code-bg); border: 1px solid var(--border);
+border-radius: 8px; padding: 1rem; overflow-x: auto; line-height: 1.5;
+max-width: 100%; }
+
+pre code { background: none; padding: 0; border-radius: 0; }
+
+blockquote { margin: 1.2rem 0; padding: 0.8rem 1rem; border-left: 4px solid
+var(--accent); background: var(--code-bg); color: var(--text); }
+
+.badge { display: inline-block; border: 1px solid var(--border);
+border-radius: 999px; padding: 0.1rem 0.65rem; font-size: 0.8rem; color:
+var(--muted); background: var(--code-bg); white-space: nowrap; }
+
+/* Wikipedia-Style Glossary Tooltips */ .glossary-wrapper { position: relative;
+display: inline-block; }
+
+.glossary-link { color: var(--accent); text-decoration: underline dotted;
+text-underline-offset: 3px; cursor: help; }
+
+.glossary-link:hover { color: var(--accent-hover); text-decoration: underline
+solid; }
+
+.glossary-wrapper:hover::after { content: attr(data-definition); position:
+absolute; bottom: 125%; left: 50%; transform: translateX(-50%); width:
+max-content; max-width: min(320px, 85vw); padding: 0.75rem; border-radius: 6px;
+background-color: var(--code-bg); color: var(--text); border: 1px solid
+var(--border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); font-size: 0.85rem;
+line-height: 1.4; white-space: normal; z-index: 1000; pointer-events: none; }
+
+.glossary-wrapper:hover::before { content: ""; position: absolute; bottom: 115%;
+left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid;
+border-color: var(--border) transparent transparent transparent; z-index: 1000;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0d1117;
-    --text: #e6edf3;
-    --muted: #8b949e;
-    --border: #30363d;
-    --accent: #58a6ff;
-    --accent-hover: #79c0ff;
-    --code-bg: #161b22;
-    --table-header-bg: #161b22;
-    --metadata-bg: #161b22;
-    --active-row-bg: #1f293d;
-    --warning-bg: #2d2000;
-    --warning-border: #9e6a03;
-  }
+/* Glossary Index and Concordance */ .glossary-index { display: flex; flex-wrap:
+wrap; gap: 0.4rem; margin: 1.5rem 0; }
+
+.glossary-index-letter { display: inline-block; padding: 0.2rem 0.5rem;
+border: 1px solid var(--border); border-radius: 4px; font-weight: 600; }
+
+.glossary-index-letter.inactive { color: var(--muted); border-color:
+transparent; }
+
+.glossary-entry { margin: 2rem 0; padding-bottom: 1.5rem; border-bottom: 1px
+solid var(--border); }
+
+.glossary-term { font-size: 1.35rem; margin-top: 0; }
+
+.term-anchor { color: var(--muted); font-weight: normal; text-decoration: none;
 }
 
-* {
-  box-sizing: border-box;
+.term-anchor:hover { color: var(--accent); }
+
+.backlinks-heading { font-size: 0.9rem; font-weight: 600; color: var(--muted);
+margin-bottom: 0.2rem; }
+
+.backlinks-list { font-size: 0.9rem; margin-top: 0.2rem; }
+
+@media (max-width: 768px) { body { padding: 1rem 0.75rem 3rem; font-size: 15px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+h1 { font-size: 1.75rem; }
 
-body {
-  margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
-  max-width: 980px;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.65;
-}
+h2 { font-size: 1.35rem; }
 
-h1, h2, h3, h4, h5, h6 {
-  margin-top: 2.2rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
-  line-height: 1.25;
-}
+th, td { padding: 0.45rem 0.55rem; font-size: 0.85rem; }
 
-h1 {
-  font-size: 2.2rem;
-  margin-top: 0;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--border);
-}
+.glossary-wrapper:hover::after { left: 0; transform: none; }
 
-h2 {
-  font-size: 1.6rem;
-  padding-bottom: 0.3rem;
-  border-bottom: 1px solid var(--border);
-}
+.glossary-wrapper:hover::before { left: 15px; transform: none; } }
 
-h3 {
-  font-size: 1.25rem;
-}
-
-p {
-  margin: 0.9rem 0;
-}
-
-a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--accent-hover);
-  text-decoration: underline;
-}
-
-ul, ol {
-  padding-left: 1.6rem;
-}
-
-li {
-  margin: 0.35rem 0;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 2.5rem 0;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.6rem 0;
-  display: block;
-  overflow-x: auto;
-}
-
-th, td {
-  border: 1px solid var(--border);
-  padding: 0.55rem 0.75rem;
-  text-align: left;
-  vertical-align: top;
-}
-
-th {
-  background: var(--table-header-bg);
-  font-weight: 600;
-}
-
-tr.active-row {
-  background: var(--active-row-bg);
-}
-
-code {
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, monospace;
-  font-size: 0.92em;
-  background: var(--code-bg);
-  border-radius: 6px;
-  padding: 0.15rem 0.4rem;
-}
-
-pre {
-  background: var(--code-bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  overflow-x: auto;
-  line-height: 1.5;
-}
-
-pre code {
-  background: none;
-  padding: 0;
-  border-radius: 0;
-}
-
-blockquote {
-  margin: 1.2rem 0;
-  padding: 0.8rem 1rem;
-  border-left: 4px solid var(--accent);
-  background: var(--code-bg);
-  color: var(--text);
-}
-
-.badge {
-  display: inline-block;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.1rem 0.65rem;
-  font-size: 0.85rem;
-  color: var(--muted);
-  background: var(--code-bg);
-}
-
-/* Wikipedia-Style Glossary Tooltips */
-.glossary-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.glossary-link {
-  color: var(--accent);
-  text-decoration: underline dotted;
-  text-underline-offset: 3px;
-  cursor: help;
-}
-
-.glossary-link:hover {
-  color: var(--accent-hover);
-  text-decoration: underline solid;
-}
-
-.glossary-wrapper:hover::after {
-  content: attr(data-definition);
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 280px;
-  padding: 0.75rem;
-  border-radius: 6px;
-  background-color: var(--code-bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-size: 0.85rem;
-  line-height: 1.4;
-  white-space: normal;
-  z-index: 1000;
-  pointer-events: none;
-}
-
-.glossary-wrapper:hover::before {
-  content: "";
-  position: absolute;
-  bottom: 115%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 6px;
-  border-style: solid;
-  border-color: var(--border) transparent transparent transparent;
-  z-index: 1000;
-}
-
-/* Glossary Index and Concordance */
-.glossary-index {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.5rem 0;
-}
-
-.glossary-index-letter {
-  display: inline-block;
-  padding: 0.2rem 0.5rem;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-weight: 600;
-}
-
-.glossary-index-letter.inactive {
-  color: var(--muted);
-  border-color: transparent;
-}
-
-.glossary-entry {
-  margin: 2rem 0;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.glossary-term {
-  font-size: 1.35rem;
-  margin-top: 0;
-}
-
-.term-anchor {
-  color: var(--muted);
-  font-weight: normal;
-  text-decoration: none;
-}
-
-.term-anchor:hover {
-  color: var(--accent);
-}
-
-.backlinks-heading {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--muted);
-  margin-bottom: 0.2rem;
-}
-
-.backlinks-list {
-  font-size: 0.9rem;
-  margin-top: 0.2rem;
-}
-
-@media (max-width: 700px) {
-  body {
-    padding: 1.2rem 1rem 3rem;
-    font-size: 15px;
-  }
-  h1 {
-    font-size: 1.8rem;
-  }
-  h2 {
-    font-size: 1.35rem;
-  }
-  .glossary-wrapper:hover::after {
-    width: 220px;
-    left: 0;
-    transform: none;
-  }
-  .glossary-wrapper:hover::before {
-    left: 20px;
-    transform: none;
-  }
-}
