@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | CDQN</title>
+  <meta name="description" content="{{ page.description | default: 'Chained and Distributed Quang Numbers Documentation' }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+
+  <!-- Top Navigation Matrix -->
+  <header>
+    <h2>CDQN Documentation Matrix</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Document</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in site.data.navigation %}
+        <tr {% if page.url == item.url or page.permalink == item.url %}class="active-row"{% endif %}>
+          <td><strong>{{ item.title }}</strong></td>
+          <td>{{ item.description }}</td>
+          <td><span class="badge">{{ item.status }}</span></td>
+          <td>
+            {% if item.external %}
+              <a href="{{ item.url }}">GitHub</a>
+            {% else %}
+              <a href="{{ item.url | relative_url }}">View</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </header>
+
+  <hr>
+
+  <!-- Document Content -->
+  <main>
+    {{ content }}
+  </main>
+
+  <hr>
+
+  <!-- Bottom Navigation Bar -->
+  <footer>
+    <h3>Documentation Index</h3>
+    <ul>
+      {% for item in site.data.navigation %}
+      <li>
+        {% if item.external %}
+          <a href="{{ item.url }}">{{ item.title }}</a>
+        {% else %}
+          <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <p><small>&copy; 2026 Christophe Duy Quang Nguyen. Released under the <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md">Scaling Source License (SSL) 1.0</a>.</small></p>
+  </footer>
+
+</body>
+</html>
