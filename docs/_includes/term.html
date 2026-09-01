@@ -1,12 +1,6 @@
-{% assign entry = site.data.glossary | where: "slug", include.id | first %}
-{% if entry %}
-<span class="glossary-wrapper" data-definition="{{ entry.definition | strip | escape }}">
-  <a href="{{ '/glossary.html#' | append: entry.slug | relative_url }}" 
-     class="glossary-link" 
-     data-definition="{{ entry.definition | strip | escape }}">
-    {% if include.text %}{{ include.text }}{% else %}{{ entry.term }}{% endif %}
-  </a>
-</span>
-{% else %}
+{%- assign entry = site.data.glossary | where: "slug", include.id | first -%}
+{%- if entry -%}
+<span class="glossary-wrapper" data-definition="{{ entry.definition | strip | escape }}"><a href="{{ '/glossary.html#' | append: entry.slug | relative_url }}" class="glossary-link" data-definition="{{ entry.definition | strip | escape }}">{% if include.text %}{{ include.text }}{% else %}{{ entry.term }}{% endif %}</a></span>
+{%- else -%}
 <span class="glossary-missing">{{ include.text | default: include.id }}</span>
-{% endif %}
+{%- endif -%}
