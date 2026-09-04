@@ -50,6 +50,11 @@ body {
   overflow-x: hidden;
 }
 
+main {
+  max-width: 100%;
+  min-width: 0;
+}
+
 h1, h2, h3, h4, h5, h6 {
   margin-top: 2rem;
   margin-bottom: 0.8rem;
@@ -109,6 +114,17 @@ table {
   margin: 1.2rem 0;
   table-layout: auto;
   font-size: 0.9rem;
+}
+
+header table,
+main table,
+footer table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-spacing: 0;
 }
 
 th, td {
@@ -172,6 +188,21 @@ blockquote {
   color: var(--muted);
   background: var(--code-bg);
   white-space: nowrap;
+}
+
+/* Responsive MathJax Equations */
+mjx-container {
+  max-width: 100% !important;
+}
+
+mjx-container[display="true"] {
+  display: block !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5rem 0 !important;
+  margin: 1rem 0 !important;
 }
 
 /* Wikipedia-Style Glossary Tooltips */
