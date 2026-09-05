@@ -41,6 +41,11 @@ terms_used:
   - licensed-work
   - derivative-work
   - metric-exhaustion
+  - zoom-z
+  - remainder-r
+  - dimension-d
+  - dual-ring-pqc-boundary
+  - identity-class
 ---
 
 # Qn Primitive Envelope — Governed Qn Artifact Model
@@ -130,7 +135,7 @@ A proposed computational candidate generated via heuristic or stochastic process
 
 ### 1.13. Numeric Payload
 
-The specialized profile for numeric entities, explicitly encapsulating Zoom $z$, Remainder $r$, and Dimension $d$.
+The specialized profile for numeric entities, explicitly encapsulating {% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}, and {% include term.html id="dimension-d" text="Dimension d" %}.
 
 ### 1.14. Exposure Class
 
@@ -169,7 +174,7 @@ $$\forall \alpha \in \mathcal{Q}, \quad \mathrm{Size}(\alpha) < \infty \quad \we
 
 ### Axiom 3 — Typed Payload Separation
 
-Fields specific to numeric expressions (Zoom $z$, Remainder $r$, Dimension $d$) belong strictly to typed payload profiles and must not be made mandatory for non-numeric artifacts. External user content remains a sovereign {% include term.html id="payload" %}.
+Fields specific to numeric expressions ({% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}, {% include term.html id="dimension-d" text="Dimension d" %}) belong strictly to typed payload profiles and must not be made mandatory for non-numeric artifacts. External user content remains a sovereign {% include term.html id="payload" %}.
 
 ### Axiom 4 — Local Genesis Dependency
 
@@ -198,7 +203,7 @@ Artifact identifiers are rooted locally. Raw local Qn artifacts are never expose
 
 ### Axiom 9 — Numeric Precision Explicitness
 
-Every numeric Qn artifact must declare finite precision bounds, explicit Zoom $z$, Remainder $r$, and Dimension $d$. No implicit rounding or precision loss is permitted:
+Every numeric Qn artifact must declare finite precision bounds, explicit {% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}, and {% include term.html id="dimension-d" text="Dimension d" %}. No implicit rounding or precision loss is permitted:
 
 $$\text{NumericValue} = \langle z, \, r, \, d \rangle$$
 
@@ -260,7 +265,7 @@ A typed pointer to the associated {% include term.html id="payload" %} profile.
 ## 5. Typed Payload Profiles
 
 ### 5.1. Numeric Payload Profile
-Carries Zoom $z$, Remainder $r$, Dimension $d$, precision boundaries, uncertainty metrics, and base-independent representations.
+Carries {% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}, {% include term.html id="dimension-d" text="Dimension d" %}, precision boundaries, uncertainty metrics, and base-independent representations.
 
 ### 5.2. Expression Payload Profile
 Carries symbolic {% include term.html id="qexpr" %} trees, operator references, operand links, expression depth ceilings, structural complexity degree, and collapse budgets.
@@ -272,7 +277,7 @@ Carries pure domain-to-codomain mappings, preconditions, postconditions, budget 
 Carries terminal execution state, consumed resource budgets ({% include term.html id="metric-exhaustion" %}), causal index, parent references, and cryptographic commitment signatures.
 
 ### 5.5. Identity Payload Profile
-Carries identity class (machine, human, AI agent), pseudonyms, delegation chains, capability limits, and revocation endpoints.
+Carries {% include term.html id="identity-class" text="identity class" %} (machine, human, AI agent), pseudonyms, delegation chains, capability limits, and revocation endpoints.
 
 ### 5.6. Attestation Payload Profile
 Carries public commitments, issuer identities, capability proofs, metric summaries, and SSL lineage assertions for network-level exposure across {% include term.html id="cdqn" %}.
@@ -329,7 +334,7 @@ Every metric envelope must declare finite, measurable bounds:
 ## 9. Security Envelope Rules
 
 Every security envelope must define protection boundaries against finite adversaries:
-- Inner-ring and outer-ring scoping conforming to the dual-ring PQC boundary.
+- Inner-ring and outer-ring scoping conforming to the {% include term.html id="dual-ring-pqc-boundary" %}.
 - Swappable revocation paths and emergency halt authorities designed for zero-day patchability.
 - Post-Quantum Cryptography algorithm identifiers with explicit migration semantics.
 - Accountable pseudonymity; anonymous entities are strictly forbidden from traversing network boundaries.
@@ -426,5 +431,5 @@ The following formal specifications remain open for subsequent releases:
 1. Canonical binary serialization format for the Universal Envelope.
 2. Formal type registry for Qn artifact categories.
 3. Concrete receipt schema and cryptographic signature serialization.
-4. PQC algorithm registry and agility migration protocol.
+4. PQC algorithm agility registry and migration protocol.
 5. Automated verification rules for transitions from Sealed to Verified state.
