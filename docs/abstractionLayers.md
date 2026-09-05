@@ -34,6 +34,11 @@ terms_used:
   - paternity-reference
   - ssl
   - computational-consistency
+  - dependencies-determinism
+  - structural-indirection
+  - payload
+  - licensed-work
+  - metric-exhaustion
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -57,7 +62,7 @@ The Qn computational universe is established upon a governing operational conjec
 
 A {% include term.html id="qn" %} artifact is not an ungrounded mathematical abstraction. It is a governed, finite, identifiable, measurable, and security-constrained computational entity.
 
-The architecture rejects actual infinities, unconstrained sets, and unmetered execution. Because the architecture operates in an active search and discovery mode, layer boundaries represent **provisional structural hypotheses** designed with structural indirection to prevent premature calcification. Every abstraction must be constructed, bounded, identified, measured, and verified within explicit resource bounds via {% include term.html id="computational-consistency" %}:
+The architecture rejects actual infinities, unconstrained sets, and unmetered execution. Layer boundaries represent **provisional structural hypotheses** governed by {% include term.html id="dependencies-determinism" %} ($H(S_t \mid \mathcal{D}(S_t)) = 0$) and structured with {% include term.html id="structural-indirection" %} to prevent premature calcification. Every abstraction must be constructed, bounded, identified, measured, and verified within explicit resource bounds via {% include term.html id="computational-consistency" %}:
 
 $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \forall p \in \text{QnIR}(\mathcal{A}), \, \text{ExecutesDeterministicallyWithinBounds}(p) \right)$$
 
@@ -65,7 +70,7 @@ $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge
 
 ## 2. Layer Model
 
-{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and inter-layer transmission.
+{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and transmission across both local and distributed boundaries.
 
 ```
 +-------------------------------------------------------------------------------+
@@ -97,7 +102,7 @@ During initialization, a node instantiates its local genesis artifact through:
 2. Device execution context collection.
 3. {% include term.html id="dcc-profile" %} initialization with abstract capability interfaces.
 4. Post-Quantum Cryptography (PQC) root key generation or commitment.
-5. Construction of local genesis [`Q(0)`]({{ '/glossary.html#q0' | relative_url }}).
+5. Construction of local genesis [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0).
 6. Emission of a signed genesis {% include term.html id="receipt" %}.
 
 Terminal onboarding states: `SUCCESS`, `ENTROPY_INSUFFICIENT`, `ENTROPY_SOURCE_FAULT`, `HARDWARE_FAULT`, `TIMEOUT`, `PQC_KEYGEN_FAILURE`, `GENESIS_RECEIPT_FAILURE`.
@@ -112,8 +117,8 @@ No physical fault may cross the gateway as an unmeasured, implicit state.
 
 {% include term.html id="layer-1" text="Layer 1" %} is the primary governed layer:
 
-- [`Q(0)`]({{ '/glossary.html#q0' | relative_url }}): Local genesis artifact, causal origin zero, empty birth context.
-- [`Q(1)`]({{ '/glossary.html#q1' | relative_url }}): First unit artifact, unity measure, and reference for the abstract compute unit $U$.
+- [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0): Local genesis artifact, causal origin zero, empty birth context.
+- [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1): First unit artifact, unity measure, and baseline reference for the abstract compute unit $U$.
 - Abstract compute unit $U$: Minimal governed state transition from $Q(0)$ to $Q(1)$.
 - Sign polarity: Induced directed relation between $Q(0)$ and $Q(1)$.
 - Elementary arithmetic morphisms and the first dimensional axis $d_1$.
@@ -139,7 +144,9 @@ Higher abstraction layers are derived sequentially from Layer 1. Every layer bou
 
 ### 3.1. All Governed Artifacts are Qn
 
-Every computational entity within the system is a {% include term.html id="qn" %} artifact or reduces to one: numeric quantities, operators, expressions, logical propositions, receipts, identities, capabilities, and compiled {% include term.html id="qnir" %} runtime objects.
+Within the {% include term.html id="licensed-work" %}, every accepted artifact is a {% include term.html id="qn" %} computational entity or is reducible to one: numeric values, operators, expression trees, logical propositions, receipts, identities, capabilities, and compiled runtime objects.
+
+Raw user data, external applications, and creative works remain sovereign, uninspected {% include term.html id="payload" text="Payloads" %} separated from the technical substrate by an epistemic and legal safe-harbor air gap.
 
 ### 3.2. The No-Implicit Rule
 
@@ -154,7 +161,7 @@ Implicit type coercion, inferred operator precedence, assumed units, and unmeasu
 
 ### 3.3. Local-first and Controlled Exposure
 
-Artifacts are instantiated and indexed locally. Remote nodes in the {% include term.html id="cdqn" %} network never inspect raw local artifacts. Network exposure is restricted to:
+Artifacts are instantiated and indexed locally. Remote nodes in the network never inspect raw local artifacts. Network exposure is restricted to:
 - Bounded attestations and cryptographic commitments.
 - Exported higher-order {% include term.html id="qexpr" %} commitments.
 - Capability delegation certificates and metric summaries.
@@ -177,7 +184,7 @@ No artifact may declare a parent or dependency born later in the causal sequence
 
 ### 3.6. Totality by Budget
 
-Every governed operation must terminate within its declared metric budget as a dissipative thermodynamic step, resolving to an explicit state:
+Every governed operation must terminate within its declared metric budget as a dissipative thermodynamic step ({% include term.html id="metric-exhaustion" %}), resolving to an explicit state:
 `SUCCESS`, `FAILURE`, `NO_SOLUTION`, `TIMEOUT`, `BUDGET_EXHAUSTED`, `INCONCLUSIVE`, `QUARANTINED`, `PRECISION_INSUFFICIENT`, `EXPRESSION_TOO_COMPLEX`, `REJECTION_BY_GATEWAY`. Silent non-termination is prohibited.
 
 ---
@@ -208,13 +215,27 @@ $$\mathcal{F}: \mathbf{C}_L \to \mathbf{C}_{L+1}$$
 
 A valid layer-transition functor preserves identity, metric bounds, causal lineage, and SSL metadata. Functors introducing implicit semantic interpretations are invalid.
 
-### 4.4. cdqn as a Category of Local Categories
+### 4.4. cdqn as the Fractal Protocol of Governed Data Movement
 
-The {% include term.html id="cdqn" %} distributed network is not a monolithic category. It is a distributed network structure composed of local categories linked via exposure functors:
+{% include term.html id="cdqn" %} is the universal protocol of governed data movement, functioning across two structural scopes:
+
+```
+                    FRACTAL SCOPE OF cdqn
+ ┌─────────────────────────────────────────────────────────────────┐
+ │ REMOTE cdqn (Inter-Node)                                        │
+ │ Cross-network attestations, public PQC outer ring, consensus    │
+ ├─────────────────────────────────────────────────────────────────┤
+ │ LOCAL cdqn (Intra-Node)                                         │
+ │ Cross-layer receipts, inner-ring sealing, memory bus transport │
+ └─────────────────────────────────────────────────────────────────┘
+```
+
+1. **Local Scope (Intra-Node Chaining):** Governs data movement and morphism transitions between local abstraction layers and internal domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$) via chained receipts.
+2. **Distributed Scope (Inter-Node Attestation):** Connects autonomous local categories ($\mathbf{C}_N$) into a distributed sheaf-like structure via public attestations:
 
 $$\mathcal{E}_{\text{export}}: \mathbf{C}_N \to \mathbf{Attestations}_{\text{cdqn}}$$
 
-Local objects are exposed solely via bounded commitments and cross-node receipts.
+$\mathrm{cdqn}$ acts as a neutral, protocol-blind conduit. It warrants transit non-malleability ($\mathrm{Commitment}(P_{\text{source}}) \equiv \mathrm{Commitment}(P_{\text{dest}})$) while remaining blind to payload semantics.
 
 ---
 
@@ -334,13 +355,31 @@ The architecture aligns with established theoretical computer science frameworks
 
 ---
 
-## 11. Future Qn Definition Files
+## 11. Future Qn Definition Files and Local-First Base Domains
 
-1. **Numeric Primitives (Category A):** Detailed anatomy of $Q(0)$, $Q(1)$, $Q(2)\dots Q(9)$, prime and fractional Qn.
-2. **Operations and Morphisms (Category B):** Advanced transformations, bounded optimization, and arithmetic primitives.
-3. **Data Structures (Category C):** Governed sets, patterns, and composite data types.
-4. **Domain Abstractions (Category D):** Mathematics ($\mathrm{Qm}$), Semantics ($\mathrm{Qs}$), and Physics ($\mathrm{Qphy}$).
-5. **Runtime Specifications (Category E):** Bounded execution model, intermediate representation ({% include term.html id="qnir" %}), and authoring syntax ({% include term.html id="qnlang" %}).
+Development proceeds sequentially, separating local foundational domains from distributed networking:
+
+### Category A — Numeric Primitives
+- Detailed field anatomy of $Q(0)$ (silicon entropy harvesting, fuzzy extractors).
+- Detailed field anatomy of $Q(1)$ (calibration of compute unit $U$ along $d_1$).
+- Elementary numeric properties ($Q(2) \dots Q(9)$).
+
+### Category B — Operations and Morphisms
+- Multi-dimensional axes ($d_k$), advanced transformations, rational constraint solvers, and bounded simplification.
+
+### Category C — Data Structures
+- Directed acyclic state graphs, immutable memory containers (`Q(dataStruc)`), and pattern matching (`Q(patterns)`).
+
+### Category D — Local-First Base Domains
+Base domains project directly from Layer 1 and execute 100% locally via local $\mathrm{cdqn}$ data movement, requiring zero network consensus:
+- **$\mathrm{Qm}$ (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs.
+- **$\mathrm{Qs}$ (Quang Semantics):** Explicit knowledge graphs, semantic linguistic ontologies, and formal assertion verification.
+- **$\mathrm{Qphy}$ (Quang Physics):** Thermodynamic simulations, discrete quantum models, and physical entropy tracking.
+
+### Category E — Runtime and Distributed Networking
+- Intermediate representation ({% include term.html id="qnir" %}) instruction set and bounded virtual execution handler.
+- High-level authoring language ({% include term.html id="qnlang" %}) syntax.
+- $\mathrm{cdqn}$ distributed chaining and public attestation protocol.
 
 ---
 
@@ -358,16 +397,16 @@ All derivative distributions, compiled binaries, APIs, and runtime specification
 2. **Non-Scaling Open Access:** Royalty-free licensing is preserved for non-commercial, academic, and sub-threshold usage.
 
 ### 12.3. Scale Auditing
-The metric and identity envelopes provide native, cryptographically verifiable telemetry (active nodes, agent instances, monthly transaction volume) to monitor compliance with commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+The metric and identity envelopes provide native, cryptographically verifiable telemetry (active compute nodes, containers, agents, and monthly API transactions) to verify adherence to commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
 ## 13. Open Items
 
 The following formal specifications remain open for subsequent releases:
-1. Internal field anatomy and serialization schema for $Q(0)$ and $Q(1)$.
+1. Internal field anatomy and hardware sampling models for $Q(0)$ and $Q(1)$.
 2. Complete grammar specification for {% include term.html id="qexpr" %}.
 3. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
 4. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
 5. PQC algorithm agility registry and migration protocol.
-6. Formal specification of domain layers ($\mathrm{Qm}$, $\mathrm{Qs}$, $\mathrm{Qphy}$).
+6. Formal specification of local base domains ($\mathrm{Qm}$, $\mathrm{Qs}$, $\mathrm{Qphy}$).
