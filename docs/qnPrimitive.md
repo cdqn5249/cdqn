@@ -75,9 +75,9 @@ The following documents define the normative, physical, and legal constraints go
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and {% include term.html id="dependencies-determinism" %} | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and {% include term.html id="simemp-gateway" %} validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `LICENSE.md` | Scaling Source License 1.0 governing the {% include term.html id="licensed-work" %} and {% include term.html id="payload" text="Payloads" %} | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) and [Payloads]({{ '/glossary.html' | relative_url }}#payload) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
