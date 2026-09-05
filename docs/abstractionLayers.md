@@ -39,6 +39,12 @@ terms_used:
   - payload
   - licensed-work
   - metric-exhaustion
+  - zoom-z
+  - remainder-r
+  - dimension-d
+  - exposure-functor
+  - dual-ring-pqc-boundary
+  - identity-class
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -231,7 +237,7 @@ A valid layer-transition functor preserves identity, metric bounds, causal linea
 ```
 
 1. **Local Scope (Intra-Node Chaining):** Governs data movement and morphism transitions between local abstraction layers and internal domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$) via chained receipts.
-2. **Distributed Scope (Inter-Node Attestation):** Connects autonomous local categories ($\mathbf{C}_N$) into a distributed sheaf-like structure via public attestations:
+2. **Distributed Scope (Inter-Node Attestation):** Connects autonomous local categories ($\mathbf{C}_N$) into a distributed sheaf-like structure via the {% include term.html id="exposure-functor" text="Exposure Functor" %} ($\mathcal{E}_{\text{export}}$):
 
 $$\mathcal{E}_{\text{export}}: \mathbf{C}_N \to \mathbf{Attestations}_{\text{cdqn}}$$
 
@@ -267,9 +273,9 @@ Governed numeric expressions ({% include term.html id="qexpr" %}) maintain the e
 
 $$\text{Qexpr} = \langle \text{SymbolicStructure}, \, z, \, r, \, d, \, \text{DCC}, \, \text{Identity}, \, \text{Lineage} \rangle$$
 
-- **Zoom ($z$):** Declared scale or precision boundary.
-- **Remainder ($r$):** Exact residual quantity at the declared zoom level.
-- **Dimension ($d$):** Dimensional coordinate system.
+- **{% include term.html id="zoom-z" text="Zoom (z)" %}:** Declared scale or precision boundary.
+- **{% include term.html id="remainder-r" text="Remainder (r)" %}:** Exact residual quantity at the declared zoom level.
+- **{% include term.html id="dimension-d" text="Dimension (d)" %}:** Dimensional coordinate system.
 
 ### 6.3. Collapse at Compilation Time
 
@@ -306,6 +312,8 @@ Axis $d_1$ admits three disjoint partitions: negative Qn, origin $\{Q(0)\}$, and
 
 ### 8.1. Identity Classes
 
+The architecture distinguishes at least three explicit {% include term.html id="identity-class" text="Identity Classes" %}:
+
 | Identity Class | Substrate Entity | Prohibition |
 |---|---|---|
 | **Machine Identity** | Runtime node, execution container, hardware device | Must not imply legal personhood |
@@ -317,6 +325,8 @@ Axis $d_1$ admits three disjoint partitions: negative Qn, origin $\{Q(0)\}$, and
 The cdqn network forbids anonymous actors. All interactions are signed by accountable pseudonymous identities backed by capability proofs, cryptographic commitments, and explicit revocation paths.
 
 ### 8.3. Dual-Ring PQC Boundary
+
+The architecture enforces an explicit {% include term.html id="dual-ring-pqc-boundary" %}:
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -347,9 +357,9 @@ Stochastic engines may generate proposals, provided they are classified as *unve
 ## 10. External Precedents and Formal Convergence
 
 The architecture aligns with established theoretical computer science frameworks:
-- **Abstract Interpretation:** Sound approximation across discrete abstraction lattices (Zoom $z$, Remainder $r$).
+- **Abstract Interpretation:** Sound approximation across discrete abstraction lattices ({% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}).
 - **Domain Theory:** Bounded evaluation, fixed-point semantics, and totality by budget.
-- **Sheaf Theory:** Local category consistency and restricted global gluing via exposure functors.
+- **Sheaf Theory:** Local category consistency and restricted global gluing via {% include term.html id="exposure-functor" text="exposure functors" %}.
 - **Linear Logic:** Strict resource consumption without unmetered duplication or discarding.
 - **Neuro-Symbolic Verification:** Strict operational isolation between neural candidate generation and symbolic verification.
 
