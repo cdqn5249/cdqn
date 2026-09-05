@@ -35,6 +35,12 @@ terms_used:
   - ssl
   - computational-consistency
   - no-implicit-rule
+  - dependencies-determinism
+  - structural-indirection
+  - payload
+  - licensed-work
+  - derivative-work
+  - metric-exhaustion
 ---
 
 # Qn Primitive Envelope — Governed Qn Artifact Model
@@ -54,19 +60,19 @@ terms_used:
 
 This document formalizes the provisional structural container required for governed computational entities within the Qn universe: the {% include term.html id="universal-envelope" %}. 
 
-Because the CDQN project operates in an active search and discovery mode, this artifact model is a **working hypothesis** rather than a rigid, calcified specification. It provides the minimal structural scaffolding necessary to guide construction, transformation, and empirical testing in {% include term.html id="qnlang" %} and {% include term.html id="qnir" %}, while preserving architectural elasticity against premature optimization and zero-day vulnerabilities.
+Because the CDQN project operates in an active search and discovery mode, this artifact model is a **working hypothesis** rather than a rigid, calcified specification. It provides the minimal structural scaffolding necessary to guide construction, transformation, and empirical testing in {% include term.html id="qnlang" %} and {% include term.html id="qnir" %}, while preserving architectural elasticity against premature optimization and zero-day vulnerabilities through {% include term.html id="structural-indirection" %}.
 
 ---
 
 ## Normative References
 
-The following documents define the normative and physical constraints governing this framework. If a technical conflict arises, `simemp.md` governs; if a structural conflict arises, `abstractionLayers.md` governs; if a legal conflict arises, `LICENSE.md` governs.
+The following documents define the normative, physical, and legal constraints governing this framework. If a technical conflict arises, `simemp.md` governs; if a structural conflict arises, `abstractionLayers.md` governs; if a legal conflict arises, `LICENSE.md` governs.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and dependencies determinism | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and {% include term.html id="dependencies-determinism" %} | [simemp.html]({{ '/simemp.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and {% include term.html id="simemp-gateway" %} validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `LICENSE.md` | Scaling Source License 1.0 | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+| `LICENSE.md` | Scaling Source License 1.0 governing the {% include term.html id="licensed-work" %} and {% include term.html id="payload" text="Payloads" %} | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
@@ -78,17 +84,17 @@ A {% include term.html id="qn" %} artifact is a governed, finite, identifiable, 
 
 ### 1.2. Qn Primitive Envelope
 
-The minimal governance boundary required for any computational entity to exist, mutate, undergo sealing, or traverse a {% include term.html id="simemp-gateway" %}.
+The minimal governance boundary required for any computational entity within the {% include term.html id="licensed-work" %} to exist, mutate, undergo sealing, or traverse a {% include term.html id="simemp-gateway" %}.
 
 ### 1.3. Universal Envelope
 
-The invariant set of structural fields shared across all artifact types, parameterized via structural indirection to prevent rigid calcification:
+The invariant set of structural fields shared across all artifact types, parameterized via {% include term.html id="structural-indirection" %} to prevent rigid calcification:
 
 $$\mathcal{E} = \langle \text{Identity}, \, \text{Type}, \, \text{State}, \, \text{Lineage}, \, \text{DCC}, \, \text{Metric}, \, \text{Security}, \, \text{Exposure}, \, \text{PayloadRef} \rangle$$
 
 ### 1.4. Typed Payload Profile
 
-The domain-specific content carried by an artifact (e.g., numeric quantities, algebraic expressions, pure morphisms, state receipts, or identity assertions).
+The domain-specific content carried by an artifact (numeric quantities, algebraic expressions, pure morphisms, state receipts, identity assertions, or capability grants). Sovereign user content remains a {% include term.html id="payload" %} insulated by protocol blindness.
 
 ### 1.5. Identity
 
@@ -163,23 +169,23 @@ $$\forall \alpha \in \mathcal{Q}, \quad \mathrm{Size}(\alpha) < \infty \quad \we
 
 ### Axiom 3 — Typed Payload Separation
 
-Payload-specific fields (such as Zoom $z$, Remainder $r$, and Dimension $d$) belong strictly to typed payload profiles and must not be made mandatory for non-numeric artifacts.
+Fields specific to numeric expressions (Zoom $z$, Remainder $r$, Dimension $d$) belong strictly to typed payload profiles and must not be made mandatory for non-numeric artifacts. External user content remains a sovereign {% include term.html id="payload" %}.
 
 ### Axiom 4 — Local Genesis Dependency
 
-Every governed Qn artifact within a local universe must trace its lineage directly or transitively to the local genesis origin [`Q(0)`]({{ '/glossary.html#q0' | relative_url }}):
+Every governed Qn artifact within a local universe must trace its lineage directly or transitively to the local genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0):
 
 $$\forall \alpha \in \mathcal{Q}_N, \quad Q(0)_N \in \mathrm{Lineage}(\alpha)$$
 
 ### Axiom 5 — Acyclic Causal Lineage
 
-Lineage graphs are strictly acyclic. Every artifact must be born after its causal dependencies:
+Lineage graphs are strictly acyclic, governed by {% include term.html id="dependencies-determinism" %}. Every artifact must be born after its causal dependencies:
 
 $$\mathrm{Index}(\mathrm{Parent}(\alpha)) < \mathrm{Index}(\alpha)$$
 
 ### Axiom 6 — Totality of Governed Operations
 
-Every governed operation must terminate in a declared, finite terminal state within its declared metric budget:
+Every governed operation must terminate in a declared, finite terminal state via dissipative {% include term.html id="metric-exhaustion" %} within its declared budget:
 `SUCCESS`, `FAILURE`, `NO_SOLUTION`, `TIMEOUT`, `BUDGET_EXHAUSTED`, `INCONCLUSIVE`, `QUARANTINED`, `PRECISION_INSUFFICIENT`, `EXPRESSION_TOO_COMPLEX`, `REJECTION_BY_GATEWAY`, `DIVISION_BY_ZERO_REJECTED`, or `ORDERING_INDETERMINATE_AT_ZOOM`. Silent non-termination is prohibited.
 
 ### Axiom 7 — Receipted Boundary Events
@@ -206,7 +212,7 @@ Governance metadata may describe itself, but self-description depth must remain 
 
 ### Axiom 12 — License Lineage Where Applicable
 
-Lineage metadata and the canonical {% include term.html id="paternity-reference" %} must be preserved in distributed artifacts, exported attestations, compiled {% include term.html id="qnir" %} runtime artifacts, and public APIs pursuant to the {% include term.html id="ssl" %}.
+Lineage metadata and the canonical {% include term.html id="paternity-reference" %} must be preserved in distributed artifacts, exported attestations, compiled {% include term.html id="qnir" %} runtime artifacts, and public APIs pursuant to the {% include term.html id="ssl" %}. Encapsulating a Payload does not convert it into a {% include term.html id="derivative-work" %}.
 
 ### Axiom 13 — Versioning Creates New Artifacts
 
@@ -214,13 +220,13 @@ Versioning an artifact produces a new immutable artifact with an advanced causal
 
 ### Axiom 14 — Generative Candidate Boundary
 
-Unverified candidates proposed by stochastic or neural processes can exist locally only if explicitly tagged as unverified. Candidates cannot cross a {% include term.html id="simemp-gateway" %} without construction, evaluation, selection, and sealing.
+Unverified candidates proposed by stochastic or neural processes can exist locally only if explicitly tagged as unverified. Candidates cannot cross a {% include term.html id="simemp-gateway" %}.
 
 ---
 
 ## 4. Universal Envelope Structure
 
-The Universal Envelope $\mathcal{E}$ is structured using structural indirection, ensuring that underlying cryptographic schemes or serialization layouts can be swapped without invalidating existing causal histories.
+The Universal Envelope $\mathcal{E}$ is structured using {% include term.html id="structural-indirection" %}, ensuring that underlying cryptographic schemes or serialization layouts can be swapped without invalidating existing causal histories.
 
 ### 4.1. Identity Block
 Declares local node identifier, local causal index, artifact type identifier, version identifier, content commitment hash, and cryptographic agility metadata.
@@ -247,7 +253,7 @@ Declares authority, capability limits, trust assumptions, PQC algorithm identifi
 Declares visibility scope: local-only, sealable, exportable, attested, quarantined, or revoked.
 
 ### 4.9. Payload Reference
-A typed pointer to the associated payload profile.
+A typed pointer to the associated {% include term.html id="payload" %} profile.
 
 ---
 
@@ -263,7 +269,7 @@ Carries symbolic {% include term.html id="qexpr" %} trees, operator references, 
 Carries pure domain-to-codomain mappings, preconditions, postconditions, budget requirements, and receipt emission behavior.
 
 ### 5.4. Receipt Payload Profile
-Carries terminal execution state, consumed resource budgets, causal index, parent references, and cryptographic commitment signatures.
+Carries terminal execution state, consumed resource budgets ({% include term.html id="metric-exhaustion" %}), causal index, parent references, and cryptographic commitment signatures.
 
 ### 5.5. Identity Payload Profile
 Carries identity class (machine, human, AI agent), pseudonyms, delegation chains, capability limits, and revocation endpoints.
@@ -290,14 +296,14 @@ Raw local node identifiers are prohibited from global network exposure. Network 
 Every modification yields a distinct artifact. Predecessors remain immutable components of the historical causal chain.
 
 ### 6.4. Algorithm Agility
-Cryptographic primitives must support seamless migration via structural indirection. No single algorithm or signature suite is treated as a permanent dependency.
+Cryptographic primitives must support seamless migration via {% include term.html id="structural-indirection" %}. No single algorithm or signature suite is treated as a permanent dependency.
 
 ---
 
 ## 7. DCC Profile Rules
 
 ### 7.1. Dependencies
-Explicitly lists required parent artifacts, signing identities, capability tokens, and environmental prerequisites. Dependencies are evaluated as abstract contracts to allow modular updates.
+Explicitly lists required parent artifacts, signing identities, capability tokens, and environmental prerequisites under {% include term.html id="dependencies-determinism" %}. Dependencies are evaluated as abstract contracts to allow modular updates.
 
 ### 7.2. Constraints
 Declares hard ceilings: memory allocation, recursion depth, complexity degree ceilings, precision bounds, and forbidden parameters (e.g., denominator zero exclusion).
@@ -364,13 +370,13 @@ Invalidated via an explicit, signed revocation receipt that seals a compromised 
 Raw physical substrate states carry no primitive envelope until mediated by a gateway.
 
 ### 11.2. Layer 0 to Layer 1 Gateway
-Constructs local genesis receipts, entropy commitments, and the local [`Q(0)`]({{ '/glossary.html#q0' | relative_url }}) envelope.
+Constructs local genesis receipts, entropy commitments, and the local [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) envelope.
 
 ### 11.3. Layer 1
 Houses foundational governed primitives: $Q(0)$, $Q(1)$, abstract compute unit $U$, and axis $d_1$.
 
 ### 11.4. Higher Layers
-Inherit the invariant universal envelope while defining higher-order typed payloads.
+Inherit the invariant universal envelope while defining higher-order typed payloads and local-first domain projections.
 
 ---
 
@@ -389,13 +395,13 @@ Inherit the invariant universal envelope while defining higher-order typed paylo
 This specification enforces the legal provisions of the {% include term.html id="ssl" %}:
 
 ### 13.1. Paternity Reference
-Derivative works, APIs, compiled binary headers, and runtime specification files must embed the notice:
+{% include term.html id="derivative-work" text="Derivative Works" %}, APIs, compiled binary headers, and runtime specification files must embed the notice:
 
 > Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL). Parent Repository: https://github.com/cdqn5249/cdqn
 
 ### 13.2. Open Core Invariants
 1. **Anti-Patent Defense:** Automatic license termination upon patent assertion against the Author or community.
-2. **Non-Scaling Open Access:** Royalty-free access for non-commercial and sub-threshold usage.
+2. **Non-Scaling Open Access:** Royalty-free access for non-commercial and sub-threshold usage of the {% include term.html id="licensed-work" %}.
 
 ### 13.3. Scale Auditing
 Metric and identity envelopes supply deterministic counters (active compute nodes, containers, agents, and monthly API transactions) to verify adherence to commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
@@ -405,7 +411,7 @@ Metric and identity envelopes supply deterministic counters (active compute node
 ## 14. Exclusions
 
 The following items are outside the scope of this provisional framework and belong to dedicated exploratory documents:
-1. Detailed anatomy and serialization schemas of $Q(0)$ and $Q(1)$.
+1. Detailed anatomy and hardware sampling models of $Q(0)$ and $Q(1)$.
 2. Complete grammar for Qexpr.
 3. Concrete instruction set for QnIR.
 4. Concrete syntax for QnLang.
