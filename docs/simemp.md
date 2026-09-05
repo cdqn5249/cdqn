@@ -26,6 +26,9 @@ terms_used:
   - computational-consistency
   - receipt
   - ssl
+  - dependencies-determinism
+  - structural-indirection
+  - metric-exhaustion
 ---
 
 # SIMEMP: Thesis and Constraints for the Qn and cdqn Stack
@@ -50,7 +53,7 @@ Classical mathematics admits non-constructive entities: actual infinities, unmet
 We postulate the operational conjecture:
 > A number system can abstract any computable phenomenon within a computational environment if, and only if, that abstraction is strictly governed by finite physical realities and constrained by the {% include term.html id="simemp" %} framework.
 
-This conjecture is formally rooted in **Dependencies Determinism**. In an information-theoretic sense, the state transition of any computational entity $S_{t}$ is fully determined if, and only if, its conditional entropy given its complete set of declared causal dependencies $\mathcal{D}(S_{t})$ vanishes:
+This conjecture is formally rooted in {% include term.html id="dependencies-determinism" %}. In an information-theoretic sense, the state transition of any computational entity $S_{t}$ is fully determined if, and only if, its conditional entropy given its complete set of declared causal dependencies $\mathcal{D}(S_{t})$ vanishes:
 
 $$H(S_{t} \mid \mathcal{D}(S_{t})) = 0$$
 
@@ -134,11 +137,11 @@ To maintain internal structural order and deterministic reproducibility, the sys
 
 $$dS = dS_{\text{internal}} + dS_{\text{exchange}}, \quad \text{where } dS_{\text{exchange}} < 0$$
 
-Maintaining computational stability requires expending work (budget consumption) to verify state transitions and export entropy via bounded {% include term.html id="receipt" text="receipts" %}. Without reproducible, receipt-generating validation steps, a system cannot self-repair against entropy accumulation.
+Maintaining computational stability requires expending work—formally recognized as {% include term.html id="metric-exhaustion" %}—to verify state transitions and export entropy via bounded {% include term.html id="receipt" text="receipts" %}. Without reproducible, receipt-generating validation steps, a system cannot self-repair against entropy accumulation.
 
 ### 4.3. The DCC Profile and Structural Indirection
 
-To prevent rigid calcification and ensure defense against zero-day vulnerabilities, the system implements **Structural Indirection**:
+To prevent rigid calcification and ensure defense against zero-day vulnerabilities, the system implements {% include term.html id="structural-indirection" %}:
 
 ```
                        ┌───────────────────────────────┐
