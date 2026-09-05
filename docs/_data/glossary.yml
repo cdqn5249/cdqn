@@ -19,6 +19,9 @@
       section: "1. The Foundational Conjecture and Dependencies Determinism"
       anchor: "#1-the-foundational-conjecture-and-dependencies-determinism"
     - doc: "abstractionLayers.md"
+      section: "1. Foundational Position"
+      anchor: "#1-foundational-position"
+    - doc: "abstractionLayers.md"
       section: "3.2. The No-Implicit Rule"
       anchor: "#32-the-no-implicit-rule"
 
@@ -35,6 +38,9 @@
       section: "4.3. The DCC Profile and Structural Indirection"
       anchor: "#43-the-dcc-profile-and-structural-indirection"
     - doc: "abstractionLayers.md"
+      section: "1. Foundational Position"
+      anchor: "#1-foundational-position"
+    - doc: "abstractionLayers.md"
       section: "8.3. Dual-Ring PQC Boundary"
       anchor: "#83-dual-ring-pqc-boundary"
     - doc: "qnPrimitive.md"
@@ -43,6 +49,25 @@
     - doc: "qnPrimitive.md"
       section: "6.4. Algorithm Agility"
       anchor: "#64-algorithm-agility"
+
+- term: "Metric Exhaustion"
+  slug: "metric-exhaustion"
+  category: "Constraints"
+  definition: >
+    The verified consumption or sink of a declared compute and storage budget
+    (such as Q(1) units) required to execute a governed state transition.
+    Represents thermodynamic and causal work, not a monetary policy or financial
+    event.
+  sources:
+    - doc: "LICENSE.md"
+      section: "1.7. Q(1) Utility Metric"
+      anchor: "#17-q1-utility-metric"
+    - doc: "simemp.md"
+      section: "4.2. Open Systems, Entropy Export, and Dissipative Error Correction"
+      anchor: "#42-open-systems-entropy-export-and-dissipative-error-correction"
+    - doc: "abstractionLayers.md"
+      section: "3.6. Totality by Budget"
+      anchor: "#36-totality-by-budget"
 
 - term: "SIMEMP"
   slug: "simemp"
@@ -348,9 +373,10 @@
   slug: "cdqn"
   category: "Primitives"
   definition: >
-    Chained and Distributed Quang Numbers. The distributed network layer
-    composed of local categories linked via bounded exposure functors,
-    attestations, and cross-node receipts.
+    Chained and Distributed Quang Numbers. The universal fractal protocol of
+    governed data movement, operating both locally (intra-node causal chaining
+    between abstraction layers and base domains) and distributively (inter-node
+    public attestations across physical networks).
   sources:
     - doc: "index.md"
       section: "CDQN Documentation Portal"
@@ -362,8 +388,8 @@
       section: "3.3. Local-first and Controlled Exposure"
       anchor: "#33-local-first-and-controlled-exposure"
     - doc: "abstractionLayers.md"
-      section: "4.4. cdqn as a Category of Local Categories"
-      anchor: "#44-cdqn-as-a-category-of-local-categories"
+      section: "4.4. cdqn as the Fractal Protocol of Governed Data Movement"
+      anchor: "#44-cdqn-as-the-fractal-protocol-of-governed-data-movement"
     - doc: "abstractionLayers.md"
       section: "8.3. Dual-Ring PQC Boundary"
       anchor: "#83-dual-ring-pqc-boundary"
@@ -704,6 +730,66 @@
       section: "10. Lifecycle and Receipts"
       anchor: "#10-lifecycle-and-receipts"
 
+- term: "Payload"
+  slug: "payload"
+  category: "Governance"
+  definition: >
+    Any creative content, digital asset, real-world asset representation, data,
+    or application processed, transmitted, or settled using the Licensed Work.
+    Payloads are sovereign property of their creators, do not constitute
+    Derivative Works, and are governed under protocol blindness and safe harbor
+    neutrality.
+  sources:
+    - doc: "LICENSE.md"
+      section: "1.6. Payload"
+      anchor: "#16-payload"
+    - doc: "LICENSE.md"
+      section: "6.2. Limitation of Liability for Payloads (Safe Harbor)"
+      anchor: "#62-limitation-of-liability-for-payloads-safe-harbor"
+    - doc: "abstractionLayers.md"
+      section: "3.1. All Governed Artifacts are Qn"
+      anchor: "#31-all-governed-artifacts-are-qn"
+    - doc: "qnPrimitive.md"
+      section: "1.4. Typed Payload Profile"
+      anchor: "#14-typed-payload-profile"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 3 — Typed Payload Separation"
+      anchor: "#axiom-3--typed-payload-separation"
+
+- term: "Licensed Work"
+  slug: "licensed-work"
+  category: "Governance"
+  definition: >
+    The core technical infrastructure layer of the Qn and cdqn stack,
+    encompassing source code, intermediate representations (QnIR), specifications,
+    mathematical definitions, and documentation provided under the Scaling Source License.
+  sources:
+    - doc: "LICENSE.md"
+      section: "1.2. Licensed Work"
+      anchor: "#12-licensed-work"
+    - doc: "LICENSE.md"
+      section: "6.3. Financial and Regulatory Disclaimer"
+      anchor: "#63-financial-and-regulatory-disclaimer"
+    - doc: "abstractionLayers.md"
+      section: "3.1. All Governed Artifacts are Qn"
+      anchor: "#31-all-governed-artifacts-are-qn"
+
+- term: "Derivative Work"
+  slug: "derivative-work"
+  category: "Governance"
+  definition: >
+    Any modification, extension, translation, binding, or runtime implementation
+    derived from the Licensed Work. Encapsulating, tokenizing, or settling a
+    Payload using the Licensed Work does not cause the Payload to become a
+    Derivative Work.
+  sources:
+    - doc: "LICENSE.md"
+      section: "1.3. Derivative Work"
+      anchor: "#13-derivative-work"
+    - doc: "LICENSE.md"
+      section: "3.3. Open Core Invariant Propagation"
+      anchor: "#33-open-core-invariant-propagation-custom-licensing-permitted"
+
 - term: "Open Core Invariant"
   slug: "open-core-invariant"
   category: "Governance"
@@ -719,7 +805,7 @@
       anchor: "#122-open-core-invariants"
     - doc: "LICENSE.md"
       section: "3.3. Open Core Invariant Propagation"
-      anchor: "#33-open-core-invariant-propagation"
+      anchor: "#33-open-core-invariant-propagation-custom-licensing-permitted"
 
 - term: "Paternity Reference"
   slug: "paternity-reference"
