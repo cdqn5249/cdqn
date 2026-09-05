@@ -29,17 +29,27 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 Hover over terms across any documentation page for instant in-situ definition tooltips. Click any term to jump directly to its formal specification below.
 
 {% assign all_terms = site.data.glossary | sort: "term" %}
+{% assign categories = site.data.glossary | map: "category" | uniq | sort %}
 {% assign letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," %}
+
+<div class="category-index" style="margin-bottom: 1rem;">
+  <strong>Domains:</strong>
+  {% for category in categories %}
+    <a href="#{{ category | slugify }}" class="badge">{{ category }}</a>
+  {% endfor %}
+</div>
 
 <div class="glossary-index">
 {% for letter in letters %}
-  {% assign has_term = false %}
+  {% assign target_term = nil %}
   {% for t in all_terms %}
     {% assign first_char = t.term | slice: 0 | upcase %}
-    {% if first_char == letter %}{% assign has_term = true %}{% endif %}
+    {% if first_char == letter and target_term == nil %}
+      {% assign target_term = t %}
+    {% endif %}
   {% endfor %}
-  {% if has_term %}
-    <a href="#letter-{{ letter }}" class="glossary-index-letter">{{ letter }}</a>
+  {% if target_term %}
+    <a href="#{{ target_term.slug }}" class="glossary-index-letter" title="Jump to {{ target_term.term }}">{{ letter }}</a>
   {% else %}
     <span class="glossary-index-letter inactive">{{ letter }}</span>
   {% endif %}
@@ -50,11 +60,9 @@ Hover over terms across any documentation page for instant in-situ definition to
 
 ## Canonical Terms by Domain
 
-{% assign categories = site.data.glossary | map: "category" | uniq | sort %}
-
 {% for category in categories %}
 
-## {{ category }}
+<h2 class="glossary-category" id="{{ category | slugify }}">{{ category }}</h2>
 
 {% assign terms_in_category = site.data.glossary | where: "category", category | sort: "term" %}
 
