@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qn Primitive Envelope
-description: Governed Qn artifact model, definitions, and provisional operational axioms under SIMEMP and abstraction-layer constraints.
+description: Governed Qn artifact model, definitions, and operational axioms under SIMEMP and abstraction-layer constraints.
 version: 1.0.0
-updated: 2026-09-04
+updated: 2026-09-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -43,32 +43,28 @@ terms_used:
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
 | **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-04 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-09-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Artifact Specification |
+| **Status** | Provisional Artifact Framework / Operational Hypothesis |
 
 ---
 
 ## Purpose and Scope
 
-This document defines the minimal governed envelope shared by {% include term.html id="qn" %} artifacts. It establishes the operational architecture for artifact identity, resource encapsulation, operational axioms, and state progression under {% include term.html id="simemp" %} constraints.
+This document formalizes the provisional structural container required for governed computational entities within the Qn universe: the {% include term.html id="universal-envelope" %}. 
 
-This document formalizes:
-- The minimal structural container required for any governed computational entity: the {% include term.html id="universal-envelope" %}.
-- The typed payload profile model.
-- The 14 provisional operational axioms governing artifact existence, transformation, and boundary events.
-- Lifecycle states, lineage mechanisms, and DCC profile rules.
+Because the CDQN project operates in an active search and discovery mode, this artifact model is a **working hypothesis** rather than a rigid, calcified specification. It provides the minimal structural scaffolding necessary to guide construction, transformation, and empirical testing in {% include term.html id="qnlang" %} and {% include term.html id="qnir" %}, while preserving architectural elasticity against premature optimization and zero-day vulnerabilities.
 
 ---
 
 ## Normative References
 
-The following documents form the normative basis for this specification. In the event of a technical conflict, `simemp.md` governs constraints; if a structural conflict exists, `abstractionLayers.md` governs; if a legal conflict exists, `LICENSE.md` governs.
+The following documents define the normative and physical constraints governing this framework. If a technical conflict arises, `simemp.md` governs; if a structural conflict arises, `abstractionLayers.md` governs; if a legal conflict arises, `LICENSE.md` governs.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraint system ({% include term.html id="simemp" %}) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and dependencies determinism | [simemp.html]({{ '/simemp.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and {% include term.html id="simemp-gateway" %} validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
@@ -78,61 +74,61 @@ The following documents form the normative basis for this specification. In the 
 
 ### 1.1. Qn Artifact
 
-A {% include term.html id="qn" %} artifact is a governed, finite, identifiable, measurable, and security-constrained entity inside the Qn universe. An artifact is not a passive mathematical value; it is a governed computational entity.
+A {% include term.html id="qn" %} artifact is a governed, finite, identifiable, measurable, and security-constrained computational entity. An artifact is not a passive mathematical value; it is a discrete state node embedded in a local {% include term.html id="causal-arrow" %}.
 
 ### 1.2. Qn Primitive Envelope
 
-The {% include term.html id="universal-envelope" text="Qn primitive envelope" %} is the minimal governance structure required for any Qn artifact to exist, transform, halt, be sealed, or be exposed.
+The minimal governance boundary required for any computational entity to exist, mutate, undergo sealing, or traverse a {% include term.html id="simemp-gateway" %}.
 
 ### 1.3. Universal Envelope
 
-The invariant set of structural fields required by every Qn artifact regardless of its payload type:
+The invariant set of structural fields shared across all artifact types, parameterized via structural indirection to prevent rigid calcification:
 
 $$\mathcal{E} = \langle \text{Identity}, \, \text{Type}, \, \text{State}, \, \text{Lineage}, \, \text{DCC}, \, \text{Metric}, \, \text{Security}, \, \text{Exposure}, \, \text{PayloadRef} \rangle$$
 
 ### 1.4. Typed Payload Profile
 
-The type-specific content carried by a Qn artifact (numeric payload, expression payload, operation payload, receipt payload, identity payload, attestation payload, or capability payload).
+The domain-specific content carried by an artifact (e.g., numeric quantities, algebraic expressions, pure morphisms, state receipts, or identity assertions).
 
 ### 1.5. Identity
 
-The governed reference of a Qn artifact. Identity is {% include term.html id="local-first" %}, collision-resistant, versionable, traceable to lineage, and algorithm-agile.
+The governed witness of an artifact's existence. Identity is {% include term.html id="local-first" %}, collision-resistant, versionable, traceable along causal lineage, and cryptographic-algorithm agile.
 
 ### 1.6. Lineage
 
-The directed acyclic causal history of a Qn artifact within the local {% include term.html id="causal-arrow" %}, recording parent commitments, derivation receipts, and version ancestry.
+The directed acyclic causal history of an artifact, recording parent commitments, causal birth index, and transformation receipts.
 
 ### 1.7. DCC Profile
 
-The mandatory governance profile defining **Dependencies**, **Constraints**, and **Capabilities**. No {% include term.html id="dcc-profile" %} may be implicit.
+The explicit profile defining **Dependencies**, **Constraints**, and **Capabilities**. It serves as an abstract contract rather than a hardcoded binary binding.
 
 ### 1.8. Metric Envelope
 
-The finite measurement boundary of a Qn artifact. It enforces concrete bounds on storage footprint, recursion depth, precision, and compute budget.
+The finite measurement boundary declaring resource allocations: memory footprint, depth bounds, precision limits, and execution budgets.
 
 ### 1.9. Security Envelope
 
-The governed protection boundary declaring capability limits, delegation chains, authority, Post-Quantum Cryptography (PQC) metadata, and revocation paths.
+The governed protection boundary declaring authority limits, delegation proofs, Post-Quantum Cryptography (PQC) metadata, and swappable revocation paths.
 
 ### 1.10. Lifecycle State
 
-The discrete governance status of an artifact: candidate, constructed, sealed, verified, rejected, halted, quarantined, exportable, exported, or revoked.
+The discrete operational status of an artifact: candidate, constructed, sealed, verified, rejected, halted, quarantined, exportable, exported, or revoked.
 
 ### 1.11. Receipt
 
-A governed, immutable record of a state transition, fault translation, gateway traversal, or exposure event.
+A bounded, immutable record of a state transition, fault translation, or boundary crossing, acting as an entropy-exporting dissipative witness.
 
 ### 1.12. Unverified Candidate
 
-A proposed artifact generated via heuristic or stochastic methods that has not yet passed verification and sealing. Candidates cannot cross a {% include term.html id="simemp-gateway" %}.
+A proposed computational candidate generated via heuristic or stochastic processes that has not yet passed verification and sealing. Candidates cannot cross a {% include term.html id="simemp-gateway" %}.
 
 ### 1.13. Numeric Payload
 
-A specialized typed payload profile for numeric entities, explicitly encapsulating Zoom $z$, Remainder $r$, and Dimension $d$.
+The specialized profile for numeric entities, explicitly encapsulating Zoom $z$, Remainder $r$, and Dimension $d$.
 
 ### 1.14. Exposure Class
 
-The classification governing boundary traversal: local-only, sealable, exportable, attested, quarantined, or revoked.
+The classification governing visibility: local-only, sealable, exportable, attested, quarantined, or revoked.
 
 ---
 
@@ -140,28 +136,28 @@ The classification governing boundary traversal: local-only, sealable, exportabl
 
 This document does not mandate an object-oriented programming (OOP) paradigm. A Qn artifact is not an OOP object.
 
-A Qn artifact does not imply:
-- Classes or inheritance hierarchies.
-- Hidden mutable state or dynamic dispatch.
-- Constructors, destructors, or implicit polymorphic overrides.
+The model rejects:
+- Rigid inheritance hierarchies and dynamic dispatch tables.
+- Hidden mutable state and unmetered side effects.
+- Implicit polymorphic coercions.
 
-Transformations are explicit governed morphisms. State changes produce new immutable artifacts indexed sequentially along the local {% include term.html id="causal-arrow" %}.
+Transformations are explicit governed morphisms. State changes yield new immutable artifacts indexed sequentially along the local {% include term.html id="causal-arrow" %}.
 
 ---
 
 ## 3. Provisional Operational Axioms
 
-The Qn operational model is governed by 14 non-negotiable operational axioms validated via {% include term.html id="computational-consistency" %}.
+The Qn operational model is governed by 14 provisional operational axioms. These axioms represent **working search rules** to be challenged and validated via {% include term.html id="computational-consistency" %}.
 
 ### Axiom 1 — Explicit Envelope
 
-No Qn artifact exists unless it carries an explicit {% include term.html id="universal-envelope" %}:
+No Qn artifact exists within the governed universe unless it carries an explicit {% include term.html id="universal-envelope" %}:
 
 $$\forall \alpha \in \mathcal{Q}, \quad \exists ! \, \mathcal{E}(\alpha)$$
 
 ### Axiom 2 — Finiteness
 
-Every Qn artifact must have a finite canonical representation and bounded resource envelope. Actual infinity is not admitted as an executable or storable state:
+Every Qn artifact must have a finite canonical representation and a bounded resource envelope. Actual infinity is not admitted as an executable or storable state:
 
 $$\forall \alpha \in \mathcal{Q}, \quad \mathrm{Size}(\alpha) < \infty \quad \wedge \quad \mathrm{Budget}(\alpha) < \infty$$
 
@@ -177,7 +173,7 @@ $$\forall \alpha \in \mathcal{Q}_N, \quad Q(0)_N \in \mathrm{Lineage}(\alpha)$$
 
 ### Axiom 5 — Acyclic Causal Lineage
 
-Lineage graphs are strictly acyclic. Every Qn artifact must be born after its dependencies:
+Lineage graphs are strictly acyclic. Every artifact must be born after its causal dependencies:
 
 $$\mathrm{Index}(\mathrm{Parent}(\alpha)) < \mathrm{Index}(\alpha)$$
 
@@ -188,11 +184,11 @@ Every governed operation must terminate in a declared, finite terminal state wit
 
 ### Axiom 7 — Receipted Boundary Events
 
-Receipts are mandatory for lifecycle transitions, gateway crossings, sealing events, export decisions, fault translations, halt events, rejections, revocations, and capability transfers.
+Receipts are mandatory for lifecycle transitions, gateway crossings, sealing events, export decisions, fault translations, halt events, rejections, revocations, and capability transfers. Receipts serve as verifiable witnesses exporting operational entropy.
 
 ### Axiom 8 — Local-first Exposure
 
-Artifact identifiers are rooted locally. Raw local Qn artifacts are never exposed to remote nodes in the {% include term.html id="cdqn" %} network without explicit authorization and bounded encapsulation.
+Artifact identifiers are rooted locally. Raw local Qn artifacts are never exposed to remote nodes in the {% include term.html id="cdqn" %} network without explicit authorization and bounded attestation.
 
 ### Axiom 9 — Numeric Precision Explicitness
 
@@ -210,7 +206,7 @@ Governance metadata may describe itself, but self-description depth must remain 
 
 ### Axiom 12 — License Lineage Where Applicable
 
-Lineage metadata and the canonical {% include term.html id="paternity-reference" %} must be cryptographically preserved in distributed artifacts, exported attestations, compiled {% include term.html id="qnir" %} runtime artifacts, and public APIs pursuant to the {% include term.html id="ssl" %}.
+Lineage metadata and the canonical {% include term.html id="paternity-reference" %} must be preserved in distributed artifacts, exported attestations, compiled {% include term.html id="qnir" %} runtime artifacts, and public APIs pursuant to the {% include term.html id="ssl" %}.
 
 ### Axiom 13 — Versioning Creates New Artifacts
 
@@ -222,12 +218,12 @@ Unverified candidates proposed by stochastic or neural processes can exist local
 
 ---
 
-## 4. Universal Envelope
+## 4. Universal Envelope Structure
 
-The Universal Envelope $\mathcal{E}$ is required for every governed Qn artifact.
+The Universal Envelope $\mathcal{E}$ is structured using structural indirection, ensuring that underlying cryptographic schemes or serialization layouts can be swapped without invalidating existing causal histories.
 
 ### 4.1. Identity Block
-Declares local node identifier, local causal index, artifact type identifier, version identifier, content commitment hash, and algorithm agility metadata.
+Declares local node identifier, local causal index, artifact type identifier, version identifier, content commitment hash, and cryptographic agility metadata.
 
 ### 4.2. Type Block
 Declares the artifact category (numeric value, expression, operation, logic relation, receipt, identity, capability, DCC profile, metric envelope, security envelope, or attestation).
@@ -239,13 +235,13 @@ Declares current governance status conforming to Axiom 7.
 Declares parent artifact references, local causal index, birth order, derivation type, and transformation receipt references.
 
 ### 4.5. DCC Profile Reference
-Machine-readable reference or embedded profile declaring dependencies, hard constraints, and permitted capabilities.
+Machine-readable reference to an abstract capability contract declaring dependencies, hard constraints, and permitted capabilities.
 
 ### 4.6. Metric Envelope Reference
 Declares finite operational bounds (storage footprint, expression depth, recursion limits, and execution budgets).
 
 ### 4.7. Security Envelope Reference
-Declares authority, capability limits, trust assumptions, PQC algorithm identifiers, and revocation paths.
+Declares authority, capability limits, trust assumptions, PQC algorithm identifiers, and swappable revocation paths.
 
 ### 4.8. Exposure Class Block
 Declares visibility scope: local-only, sealable, exportable, attested, quarantined, or revoked.
@@ -283,7 +279,7 @@ Carries granular execution rights, operational constraints, delegation depths, a
 ## 6. Identity and Lineage Rules
 
 ### 6.1. Local-first Identifier Structure
-An artifact identifier is structured locally:
+An artifact identifier is rooted in its local origin:
 
 $$\mathrm{ID} = \langle \text{NodePseudonym}, \, \text{CausalIndex}, \, \text{Type}, \, \text{Version}, \, \text{Commitment} \rangle$$
 
@@ -294,14 +290,14 @@ Raw local node identifiers are prohibited from global network exposure. Network 
 Every modification yields a distinct artifact. Predecessors remain immutable components of the historical causal chain.
 
 ### 6.4. Algorithm Agility
-Cryptographic primitives must support seamless migration. No cryptographic algorithm is treated as an immutable dependency.
+Cryptographic primitives must support seamless migration via structural indirection. No single algorithm or signature suite is treated as a permanent dependency.
 
 ---
 
 ## 7. DCC Profile Rules
 
 ### 7.1. Dependencies
-Explicitly lists required parent artifacts, signing identities, capability tokens, and environmental prerequisites.
+Explicitly lists required parent artifacts, signing identities, capability tokens, and environmental prerequisites. Dependencies are evaluated as abstract contracts to allow modular updates.
 
 ### 7.2. Constraints
 Declares hard ceilings: memory allocation, recursion depth, complexity degree ceilings, precision bounds, and forbidden parameters (e.g., denominator zero exclusion).
@@ -328,8 +324,8 @@ Every metric envelope must declare finite, measurable bounds:
 
 Every security envelope must define protection boundaries against finite adversaries:
 - Inner-ring and outer-ring scoping conforming to the dual-ring PQC boundary.
-- Revocation paths and emergency halt authorities.
-- Post-Quantum Cryptography algorithm identifiers.
+- Swappable revocation paths and emergency halt authorities designed for zero-day patchability.
+- Post-Quantum Cryptography algorithm identifiers with explicit migration semantics.
 - Accountable pseudonymity; anonymous entities are strictly forbidden from traversing network boundaries.
 
 ---
@@ -358,7 +354,7 @@ Protective terminal states emitting mandatory failure receipts.
 Certified for controlled exposure across the cdqn distributed network.
 
 ### 10.8. Revoked State
-Invalidated via an explicit, signed revocation receipt.
+Invalidated via an explicit, signed revocation receipt that seals a compromised branch and migrates lineage.
 
 ---
 
@@ -408,7 +404,7 @@ Metric and identity envelopes supply deterministic counters (active compute node
 
 ## 14. Exclusions
 
-The following items are outside the scope of this specification and belong to dedicated documents:
+The following items are outside the scope of this provisional framework and belong to dedicated exploratory documents:
 1. Detailed anatomy and serialization schemas of $Q(0)$ and $Q(1)$.
 2. Complete grammar for Qexpr.
 3. Concrete instruction set for QnIR.
