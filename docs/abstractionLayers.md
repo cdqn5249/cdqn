@@ -3,7 +3,7 @@ layout: default
 title: Abstraction Layers
 description: Structural thesis defining the abstraction-layer framework for the Qn and cdqn stack under SIMEMP constraints.
 version: 1.0.0
-updated: 2026-09-03
+updated: 2026-09-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -42,10 +42,10 @@ terms_used:
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
 | **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-03 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-09-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Structural Thesis |
+| **Status** | Provisional Structural Thesis / Exploratory Layer Architecture |
 
 ---
 
@@ -57,7 +57,7 @@ The Qn computational universe is established upon a governing operational conjec
 
 A {% include term.html id="qn" %} artifact is not an ungrounded mathematical abstraction. It is a governed, finite, identifiable, measurable, and security-constrained computational entity.
 
-The architecture rejects actual infinities, unconstrained sets, and unmetered execution. Every abstraction must be constructed, bounded, identified, measured, and verified within explicit resource bounds via {% include term.html id="computational-consistency" %}:
+The architecture rejects actual infinities, unconstrained sets, and unmetered execution. Because the architecture operates in an active search and discovery mode, layer boundaries represent **provisional structural hypotheses** designed with structural indirection to prevent premature calcification. Every abstraction must be constructed, bounded, identified, measured, and verified within explicit resource bounds via {% include term.html id="computational-consistency" %}:
 
 $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \forall p \in \text{QnIR}(\mathcal{A}), \, \text{ExecutesDeterministicallyWithinBounds}(p) \right)$$
 
@@ -95,7 +95,7 @@ The {% include term.html id="simemp-gateway" %} bridging Layer 0 and Layer 1 enf
 During initialization, a node instantiates its local genesis artifact through:
 1. Bounded entropy sampling and statistical health validation.
 2. Device execution context collection.
-3. {% include term.html id="dcc-profile" %} initialization.
+3. {% include term.html id="dcc-profile" %} initialization with abstract capability interfaces.
 4. Post-Quantum Cryptography (PQC) root key generation or commitment.
 5. Construction of local genesis [`Q(0)`]({{ '/glossary.html#q0' | relative_url }}).
 6. Emission of a signed genesis {% include term.html id="receipt" %}.
@@ -128,7 +128,7 @@ No universal global zero is admitted. $Q(1)$ maintains a deterministic numeric a
 
 Higher abstraction layers are derived sequentially from Layer 1. Every layer boundary must enforce:
 - Bounded {% include term.html id="universal-envelope" text="Universal Envelopes" %}.
-- Explicit {% include term.html id="dcc-profile" text="DCC Profiles" %} on all morphisms.
+- Explicit {% include term.html id="dcc-profile" text="DCC Profiles" %} with structural indirection.
 - Strict {% include term.html id="simemp-gateway" text="Gateway" %} validation.
 - Preservation of the {% include term.html id="causal-arrow" %}.
 - Cryptographic preservation of the {% include term.html id="ssl" %} lineage.
@@ -145,7 +145,7 @@ Every computational entity within the system is a {% include term.html id="qn" %
 
 > In the Qn universe, no implicit entity, behavior, assumption, default, interpretation, or convention may cross a {% include term.html id="simemp-gateway" %}. Only explicit Qn objects may pass between layers.
 
-Implicitness violates the Tier 1 Existential Invariants:
+Implicitness violates Dependencies Determinism ($H(S_t \mid \mathcal{D}') > 0$) and the Tier 1 Existential Invariants:
 - **Identity:** Implicit entities lack cryptographic identity.
 - **Metric:** Implicit entities cannot be measured.
 - **Security:** Implicit parameters represent unverified attack vectors.
@@ -162,8 +162,8 @@ Artifacts are instantiated and indexed locally. Remote nodes in the {% include t
 
 ### 3.4. DCC Profiles Everywhere
 
-Every layer, object, morphism, and exported attestation must expose an explicit {% include term.html id="dcc-profile" %}:
-- **Dependencies:** Necessary prerequisites, parent hashes, and cryptographic anchors.
+Every layer, object, morphism, and exported attestation must expose an explicit {% include term.html id="dcc-profile" %} utilizing structural indirection:
+- **Dependencies:** Abstract capability contracts, parent hashes, and cryptographic anchors.
 - **Constraints:** Hard ceilings on memory, execution steps, recursion depth, and precision bounds.
 - **Capabilities:** Permitted operations, transformation rights, and export permissions.
 
@@ -177,7 +177,7 @@ No artifact may declare a parent or dependency born later in the causal sequence
 
 ### 3.6. Totality by Budget
 
-Every governed operation must terminate within its declared metric budget, resolving to an explicit state:
+Every governed operation must terminate within its declared metric budget as a dissipative thermodynamic step, resolving to an explicit state:
 `SUCCESS`, `FAILURE`, `NO_SOLUTION`, `TIMEOUT`, `BUDGET_EXHAUSTED`, `INCONCLUSIVE`, `QUARANTINED`, `PRECISION_INSUFFICIENT`, `EXPRESSION_TOO_COMPLEX`, `REJECTION_BY_GATEWAY`. Silent non-termination is prohibited.
 
 ---
@@ -308,7 +308,7 @@ The cdqn network forbids anonymous actors. All interactions are signed by accoun
 └────────────────────────────────────────────────────────┘
 ```
 
-The Inner Ring governs local execution and genesis. The Outer Ring governs network-facing commitments. Both rings must support Post-Quantum Cryptography (PQC) algorithm agility.
+The Inner Ring governs local execution and genesis. The Outer Ring governs network-facing commitments. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
 
 ---
 
