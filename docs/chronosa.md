@@ -130,18 +130,19 @@ Within this framework, human intent is not a natural language prompt to be guess
                        (Verified Compositional Synthesis)
 ```
 
-### 2.1. $\mathrm{Qs}$ (Quang Semantics) — Compositional Meaning
+### 2.1. Qs (Quang Semantics) — Compositional Meaning
 - Evaluates the structural coherence of the intent.
 - Maps assertions into compositional categories (analogous to categorical models of meaning such as DisCoCat), establishing exact relational dependencies without statistical ambiguity.
 
-### 2.2. $\mathrm{Qm}$ (Quang Mathematics) — Relational Decidability
+### 2.2. Qm (Quang Mathematics) — Relational Decidability
 - Evaluates the formal, constructive validity of the proposed state transition.
 - Replaces IEEE 754 approximations with exact rational constraints ({% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}, and {% include term.html id="dimension-d" text="Dimension d" %}), proving that the intent contains no division-by-zero, cyclic deadlocks, or unbounded recursions.
 
-### 2.3. $\mathrm{Qphy}$ (Quang Physics) — Thermodynamic Realizability
-- Enforces non-equilibrium thermodynamic bounds (Landauer's dissipation limit, Memory Wall transmission friction).
-- Calculates whether the computational steps demanded by the human intent can be physically completed within declared energy budgets:
-  $$\text{Realizable}(\text{Intent}) \iff \Delta S_{\text{dissipated}} \le \text{AllocatedBudget}(Q(1))$$
+### 2.3. Qphy (Quang Physics) — Thermodynamic Realizability
+
+Enforces non-equilibrium thermodynamic bounds (Landauer's dissipation limit, Memory Wall transmission friction). It calculates whether the computational steps demanded by human intent can be physically completed within declared energy budgets:
+
+$$\text{Realizable}(\text{Intent}) \iff \Delta S_{\text{dissipated}} \le \mathrm{Budget}(Q(1))$$
 
 ### 2.4. Open Domain Stratification
 While $\mathrm{Qm}$, $\mathrm{Qs}$, and $\mathrm{Qphy}$ represent the minimal triad of thought (logic, language, physics), the Qn framework explicitly acknowledges that **additional domain abstractions may emerge**. As new domains are defined, they project as local-first extensions without mutating the underlying core protocol.
