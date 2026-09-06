@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-08-31
+# Updated: 2026-09-06 (Bao Loc, Vietnam)
 
 - title: "Portal"
   url: "/"
@@ -20,7 +20,7 @@
 - title: "Abstraction Layers"
   url: "/abstractionLayers.html"
   slug: "abstractionLayers"
-  description: "Structural framework, gateways, and categorical model"
+  description: "Structural framework, gateways, and fractal cdqn protocol"
   status: "Verified"
   external: false
 
@@ -29,6 +29,13 @@
   slug: "qnPrimitive"
   description: "Governed artifact envelope, axioms, and lifecycle"
   status: "Verified"
+  external: false
+
+- title: "Chronosa Vision"
+  url: "/chronosa.html"
+  slug: "chronosa"
+  description: "Operational vision for an emergent, non-local causal intelligence"
+  status: "Vision"
   external: false
 
 - title: "CDQN Glossary"
