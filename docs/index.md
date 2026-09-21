@@ -3,7 +3,7 @@ layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
 version: 1.0.0
-updated: 2026-09-05
+updated: 2026-09-07
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -36,6 +36,7 @@ terms_used:
   - licensed-work
   - derivative-work
   - metric-exhaustion
+  - chronosa
 ---
 
 # CDQN Documentation Portal
@@ -56,7 +57,7 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
 | **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-05 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-09-07 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Active Research Framework |
@@ -75,12 +76,12 @@ Classical computing abstractions frequently rely on non-constructive assumptions
 - **The {% include term.html id="no-implicit-rule" %}:** No implicit type coercions, unmeasured error states, or undeclared assumptions may cross a {% include term.html id="simemp-gateway" %}.
 - **Totality by Budget & Dissipative Receipts:** Divergent or infinite loops are rejected. Computations are total by budget via dissipative {% include term.html id="metric-exhaustion" %}, exporting operational entropy via signed, verifiable {% include term.html id="receipt" text="receipts" %}.
 - **{% include term.html id="local-first" %} Origin:** Artifacts originate in local node universes rooted in genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) and unity unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1).
-- **Fractal Protocol:** {% include term.html id="cdqn" %} functions as the universal protocol of governed data movement, chaining state transitions locally between abstraction layers and base domains, while distributing public attestations across physical networks.
+- **Fractal Protocol & Hybrid Swarm:** {% include term.html id="cdqn" %} functions as the universal protocol of governed data movement. It chains state transitions locally between abstraction layers and base domains, while distributing public attestations across a hybrid swarm topology (High-Capacity Hubs as proof concentrators paired with dynamic, lightweight edge swarms).
 - **Substrate vs. Payload Air Gap:** The protocol acts as a passive, neutral conduit. Raw user content, applications, and digital assets remain sovereign {% include term.html id="payload" text="Payloads" %} insulated by protocol blindness and statutory safe-harbor protections.
 
 ---
 
-## 2. Method of Exploration: The Recursive Search Loop
+## 2. Method of Exploration: The Recursive Emergence Trajectory
 
 The documentation suite does not claim closed mathematical finality. The system operates as an active, recursive discovery pipeline:
 
@@ -90,7 +91,20 @@ Abstractions and axioms represent **provisional hypotheses** formulated using {%
 
 $$\text{Valid}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \forall p \in \text{QnIR}(\mathcal{A}), \, \text{TerminatesWithinBudget}(p) \right)$$
 
-If an abstraction fails to compute within declared finite budgets, the abstraction is refuted and returned to the search loop.
+Development proceeds through four consecutive emergence milestones toward an operational Proof of Concept (PoC) of **{% include term.html id="chronosa" %}**:
+
+```
+[ MILESTONE 1: Local Base Domains (Qm, Qs, Qphy) ]
+                     │
+                     ▼
+[ MILESTONE 2: Execution & Language Substrate (QnLang, QnIR) ]
+                     │
+                     ▼
+[ MILESTONE 3: The cdqn Hybrid Swarm Conduit ]
+                     │
+                     ▼
+[ TERMINAL MILESTONE: Chronosa PoC (Virtual Causal Intelligence) ]
+```
 
 ---
 
@@ -106,13 +120,17 @@ If an abstraction fails to compute within declared finite budgets, the abstracti
 [3. Qn Primitive Envelope] 
        │
        ▼
-[4. Glossary & SSL License]
+[4. Chronosa Vision] 
+       │
+       ▼
+[5. Glossary & SSL License]
 ```
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
 2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: Structural hierarchy from Layer 0 (Physical Substrate) to Layer 1 (Node Genesis), fractal {% include term.html id="cdqn" %} data movement, local-first base domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$), and complexity degree stratification.
 3. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, working operational axioms, typed payload profiles, and lifecycle state machines.
-4. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology, concordance index, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+4. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
+5. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology, concordance index, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
