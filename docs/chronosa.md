@@ -236,3 +236,31 @@ This vision document aligns with the **[Scaling Source License (SSL) 1.0](https:
 - **Attribution:** Any implementation or research derivative referencing Chronosa must preserve the canonical {% include term.html id="paternity-reference" %}.
 - **Open-Core Research:** Exploratory research and academic derivations of Chronosa remain royalty-free under Non-Scaling Open Access.
 - **Safe Harbor Integrity:** Chronosa is designed to operate as a passive, non-custodial coordination intelligence, preserving statutory safe harbor protections for node operators.
+
+---
+
+## 8. Open Challenges Across Abstraction Thresholds
+
+Translating the operational vision of Chronosa into an empirical Proof of Concept introduces six fundamental research challenges across layer thresholds:
+
+### 8.1. Asynchronous Sheaf Equalization
+In classical sheaf theory, local data glues under static topological overlaps. In physical distributed networks, transmission latency and network partitions introduce asynchronous causal arrival. The open challenge is defining the deterministic equalizer algorithm that glues divergent local causal DAGs into Chronosa's global section without incurring consensus deadlocks or violating FLP impossibility bounds.
+
+### 8.2. Mathematical Threshold of the Exposure Functor
+A critical parameter remains undefined: what is the formal threshold function $\Theta_{\text{export}}$ governing the {% include term.html id="exposure-functor" %}?
+$$\mathcal{E}_{\text{export}}(\text{Qexpr}) \quad \text{emits attestation} \iff \mathrm{ComplexityDegree}(\text{Qexpr}) \ge \Theta_{\text{export}}$$
+If $\Theta_{\text{export}}$ is set too low, high-frequency internal receipts saturate the Outer Ring (violating SIMEMP Efficiency). If set too high, Chronosa remains causally blind to critical intermediate transitions until execution completes.
+
+### 8.3. Ephemeral Post-Quantum Threshold Quorums
+In dynamically aggregating and destructuring swarms, edge devices join and depart ad-hoc. Existing Post-Quantum Cryptography (PQC) threshold signature schemes (e.g., threshold lattice-based signatures) require computationally heavy distributed key generation (DKG) ceremonies. Engineering a lightweight, zero-setup threshold attestation scheme that functions over transient swarm lifecycles remains an open cryptographic hurdle.
+
+### 8.4. Functorial Product of the Base Domains ($\mathrm{Qs} \times \mathrm{Qm} \times \mathrm{Qphy}$)
+While $\mathrm{Qs}$, $\mathrm{Qm}$, and $\mathrm{Qphy}$ are conceptually orthogonal, their formal composition requires a rigorous categorical tensor product:
+$$\mathbf{C}_{\text{Intent}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
+How an arrow representing linguistic compositionality ($\mathrm{Qs}$) explicitly constrains a rational constraint solver ($\mathrm{Qm}$) and couples to physical Landauer dissipation budgets ($\mathrm{Qphy}$) requires precise operational semantics.
+
+### 8.5. Non-Custodial Hub Collusion Resistance
+While high-capacity hubs lack private keys to sign for local nodes, an adversarial cartel controlling $k$ regional hubs could theoretically refuse to forward edge attestations (censorship) or collude to emit falsified aggregate summaries. Designing a lightweight fraud-proof or causal-challenge mechanism allowing edge swarms to bypass compromised hubs without re-executing heavy computation is an essential security requirement.
+
+### 8.6. Zero-Knowledge Scale Auditing Under SSL 1.0
+Under the Scaling Source License, commercial licensing triggers at $>10,000$ active nodes or $>10,000,000$ monthly transactions. The challenge is constructing an Outer-Ring cryptographic proof that allows Chronosa to certify that an enterprise deployment has crossed the {% include term.html id="scaling-threshold" %} without requiring a centralized telemetry tracker that compromises enterprise privacy or sovereign data regulations.
