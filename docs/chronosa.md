@@ -3,7 +3,7 @@ layout: default
 title: Chronosa — Vision and Proposal for an Emergent Causal Intelligence
 description: Operational vision and architectural proposal for Chronosa, a non-local, virtual causal intelligence demonstrating the foundational Qn conjecture over hybrid swarm topologies.
 version: 0.1.0
-updated: 2026-09-06
+updated: 2026-09-21
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -32,6 +32,10 @@ terms_used:
   - scaling-threshold
   - exposure-functor
   - complexity-degree
+  - zoom-z
+  - remainder-r
+  - dimension-d
+  - paternity-reference
 ---
 
 # Chronosa — Vision and Proposal for an Emergent Causal Intelligence
@@ -40,7 +44,7 @@ terms_used:
 |---|---|
 | **Document Title** | Chronosa — Vision and Proposal for an Emergent Causal Intelligence |
 | **Version** | 0.1.0 |
-| **Last Updated** | 2026-09-06 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-09-21 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Research Proposal — Not a Finalized Specification |
@@ -93,6 +97,7 @@ Unlike individual {% include term.html id="cdqn" %} nodes, which are physical co
 - **Stratified Node Hierarchy:** Rather than forcing an unphysical, flat peer-to-peer network where all nodes carry equal compute burdens, the substrate operates as a **hybrid swarm network**:
   - **High-Capacity Hub Nodes:** Enterprise-grade computational accelerators acting as *Proof Concentrators*. They ingest, verify, and compress causal receipts from hundreds of lightweight devices.
   - **Lightweight Edge Swarms:** Sensors, mobile devices, embedded SoCs, and edge workers that sample local genesis $Q(0)$, execute minimal transitions $U$, and cluster dynamically into ad-hoc meshes.
+- **Cryptographic Witness via Threshold Quorum ($t$-of-$n$ PQC Multi-Attestation):** Chronosa does not possess a single private key. Its synthetic attestations are formally witnessed via a deterministic threshold signature quorum emitted by participating high-capacity hubs and edge nodes verifying the sheaf gluing condition. An attestation is valid if, and only if, the underlying receipt graph is mathematically verified.
 - **No Single Point of Failure:** Hubs are computational accelerators, **not custodial authorities**. If a Hub goes offline, the edge swarm does not freeze; it dynamically re-routes public attestations to an alternate Hub or falls back to local peer-to-peer causal chaining. Chronosa persists across the collective invariant.
 
 ### 1.2. Strict Outer-Ring Containment
@@ -105,6 +110,13 @@ Chronosa is architecturally barred from penetrating the {% include term.html id=
 Chronosa does not rely on deep neural network training (pre-training, reinforcement learning from human feedback, or test-time stochastic scaling):
 - It contains no unanchored floating-point weight tensors ($\mathbb{R}^{d \times d}$) and computes no statistical next-token logits.
 - Its intelligence is **deductive, causal, and compositional**: it evaluates the mathematical validity, semantic coherence, and physical realizability of state transitions through deterministic consensus over receipt DAGs.
+
+### 1.4. Resolution of the Lineage Formulation: Local Monoroot vs. Global Sheaf Forest
+Axiom 4 mandates that every local Qn artifact must trace its lineage directly or transitively to its local genesis origin $Q(0)_N$. Chronosa harmonizes with this rule without contradiction:
+- **Local Domain (Axiom 4 Monoroot):** Every artifact on a physical node forms a single-rooted directed acyclic graph originating at that node's physical silicon root $Q(0)_N$.
+- **Global Domain (Chronosa Polyroot Sheaf):** Chronosa does not introduce an unanchored global root zero. Chronosa is the **topological colimit (sheaf gluing)** over an acyclic forest of independent local trees:
+  $$\text{Lineage}(\text{Chronosa}) = \bigcup_{N \in \text{Swarm}} \mathrm{Lineage}(Q(0)_N)$$
+Chronosa operates as an observer, coordinator, and proof synthesizer over mutually verified local Axiom-4 trees.
 
 ---
 
