@@ -1,7 +1,7 @@
 # CDQN Unified Glossary — Single Source of Truth
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-02 (Bao Loc, Vietnam)
+# Updated: 2026-10-03 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -42,6 +42,9 @@
     - doc: "qm.md"
       section: "1. Epistemic Stance and Explicit Demarcation"
       anchor: "#1-epistemic-stance-and-explicit-demarcation"
+    - doc: "q0_q1.md"
+      section: "1. Scope and Constitutional Anchoring"
+      anchor: "#1-scope-and-constitutional-anchoring"
 
 - term: "Structural Indirection"
   slug: "structural-indirection"
@@ -91,6 +94,9 @@
     - doc: "qm.md"
       section: "8. Structural Indirection: Q(anchor) in Qm"
       anchor: "#8-structural-indirection-qanchor-in-qm"
+    - doc: "q0_q1.md"
+      section: "2.4. Stage 4: Inner-Ring PQC Key Generation"
+      anchor: "#24-stage-4-inner-ring-pqc-key-generation"
 
 - term: "Metric Exhaustion"
   slug: "metric-exhaustion"
@@ -125,6 +131,9 @@
     - doc: "qm.md"
       section: "1. Epistemic Stance and Explicit Demarcation"
       anchor: "#1-epistemic-stance-and-explicit-demarcation"
+    - doc: "q0_q1.md"
+      section: "4.2. Physical Calibration of the Abstract Compute Unit U"
+      anchor: "#42-physical-calibration-of-the-abstract-compute-unit-u"
 
 - term: "SIMEMP"
   slug: "simemp"
@@ -172,6 +181,9 @@
       section: "Purpose and Epistemic Stance"
       anchor: "#purpose-and-epistemic-stance"
     - doc: "qm.md"
+      section: "Normative References"
+      anchor: "#normative-references"
+    - doc: "q0_q1.md"
       section: "Normative References"
       anchor: "#normative-references"
 
@@ -235,6 +247,9 @@
     - doc: "qm.md"
       section: "2.1. Layer-by-Layer Responsibilities"
       anchor: "#21-layer-by-layer-responsibilities"
+    - doc: "q0_q1.md"
+      section: "3. Field Anatomy of Local Genesis Object Q(0)"
+      anchor: "#3-field-anatomy-of-local-genesis-object-q0"
 
 - term: "Existential Invariant"
   slug: "existential-invariant"
@@ -355,6 +370,9 @@
     - doc: "qm.md"
       section: "5.4. Remainder Depth and Dissipative Truncation"
       anchor: "#54-remainder-depth-and-dissipative-truncation"
+    - doc: "q0_q1.md"
+      section: "1. Scope and Constitutional Anchoring"
+      anchor: "#1-scope-and-constitutional-anchoring"
 
 - term: "Computational Consistency"
   slug: "computational-consistency"
@@ -414,6 +432,9 @@
     - doc: "qm.md"
       section: "4.2. Terminal Exactness Invariant"
       anchor: "#42-terminal-exactness-invariant"
+    - doc: "q0_q1.md"
+      section: "5.2. Invariant Properties of Single Digits"
+      anchor: "#52-invariant-properties-of-single-digits"
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -661,6 +682,9 @@
     - doc: "qm.md"
       section: "5.3. Division as a Constrained Diophantine Equation"
       anchor: "#53-division-as-a-constrained-diophantine-equation"
+    - doc: "q0_q1.md"
+      section: "3. Field Anatomy of Local Genesis Object Q(0)"
+      anchor: "#3-field-anatomy-of-local-genesis-object-q0"
 
 - term: "Q(1)"
   slug: "q1"
@@ -717,6 +741,87 @@
     - doc: "qm.md"
       section: "3.3. Base-Independent Scale Lattice (Zoom z)"
       anchor: "#33-base-independent-scale-lattice-zoom-z"
+    - doc: "q0_q1.md"
+      section: "4. Field Anatomy and Calibration of First Unit Q(1)"
+      anchor: "#4-field-anatomy-and-calibration-of-first-unit-q1"
+
+- term: "Abstract Compute Unit U"
+  slug: "compute-unit-u"
+  category: "Primitives"
+  definition: >
+    The fundamental, invariant quantum of governed computational work representing
+    the minimal state transition from local genesis Q(0) to first unit Q(1) along
+    dimensional axis d1. Calibrated to physical Landauer dissipation limits
+    (W >= k_B T ln 2) to maintain platform-invariant accounting across
+    heterogeneous hardware substrates.
+  sources:
+    - doc: "LICENSE.md"
+      section: "1.7. Q(1) Utility Metric"
+      anchor: "#17-q1-utility-metric"
+    - doc: "abstractionLayers.md"
+      section: "2.3. Layer 1 — Node Genesis Layer"
+      anchor: "#23-layer-1--node-genesis-layer"
+    - doc: "q0_q1.md"
+      section: "4.2. Physical Calibration of the Abstract Compute Unit U"
+      anchor: "#42-physical-calibration-of-the-abstract-compute-unit-u"
+    - doc: "chronosa.md"
+      section: "2.3. Qphy (Quang Physics) — Thermodynamic Realizability"
+      anchor: "#23-qphy-quang-physics--thermodynamic-realizability"
+
+- term: "Qm"
+  slug: "qm"
+  category: "Primitives"
+  definition: >
+    Quang Mathematics. The local-first constructive algebraic, numeric, and
+    relational base domain of the Qn universe. Operates over discrete tuples
+    ⟨σ, q_z, z, r_z, d⟩ without floating-point mechanics, enforcing Diophantine
+    division constraints, projective remainder conservation, and positional
+    order decidability.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "11. Future Qn Definition Files and Local-First Base Domains"
+      anchor: "#11-future-qn-definition-files-and-local-first-base-domains"
+    - doc: "chronosa.md"
+      section: "2.2. Qm (Quang Mathematics) — Relational Decidability"
+      anchor: "#22-qm-quang-mathematics--relational-decidability"
+    - doc: "qm.md"
+      section: "1. Epistemic Stance and Explicit Demarcation"
+      anchor: "#1-epistemic-stance-and-explicit-demarcation"
+    - doc: "q0_q1.md"
+      section: "5.1. Inductive Derivation Rules"
+      anchor: "#51-inductive-derivation-rules"
+
+- term: "Q(reuse)"
+  slug: "q-reuse"
+  category: "Primitives"
+  definition: >
+    A Category B optimization morphism that references existing immutable content
+    commitment hashes within the local causal DAG instead of allocating new
+    physical memory bits. Mitigates the Memory Wall and eliminates redundant
+    Landauer dissipation at zero marginal Q(1) cost.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "11. Future Qn Definition Files and Local-First Base Domains"
+      anchor: "#11-future-qn-definition-files-and-local-first-base-domains"
+    - doc: "qnPrimitive.md"
+      section: "14. Exclusions"
+      anchor: "#14-exclusions"
+
+- term: "Q(bypass)"
+  slug: "q-bypass"
+  category: "Primitives"
+  definition: >
+    A Category B optimization morphism allowing a SIMEMP Gateway to short-circuit
+    execution steps when algebraic preconditions prove an invariant identity
+    transition (such as Terminal Exactness r = Q(0) or multiplication by unit Q(1)).
+    Emits an explicit zero-cost bypass receipt without consuming compute budgets.
+  sources:
+    - doc: "abstractionLayers.md"
+      section: "11. Future Qn Definition Files and Local-First Base Domains"
+      anchor: "#11-future-qn-definition-files-and-local-first-base-domains"
+    - doc: "qnPrimitive.md"
+      section: "14. Exclusions"
+      anchor: "#14-exclusions"
 
 - term: "cdqn"
   slug: "cdqn"
@@ -1036,6 +1141,9 @@
     - doc: "qm.md"
       section: "Normative References"
       anchor: "#normative-references"
+    - doc: "q0_q1.md"
+      section: "2. Layer 0 to Layer 1 Gateway: Node Onboarding Protocol"
+      anchor: "#2-layer-0-to-layer-1-gateway-node-onboarding-protocol"
 
 - term: "Layer 0"
   slug: "layer-0"
@@ -1054,6 +1162,12 @@
     - doc: "qnPrimitive.md"
       section: "11.1. Layer 0"
       anchor: "#111-layer-0"
+    - doc: "q0_q1.md"
+      section: "1. Scope and Constitutional Anchoring"
+      anchor: "#1-scope-and-constitutional-anchoring"
+    - doc: "q0_q1.md"
+      section: "2. Layer 0 to Layer 1 Gateway: Node Onboarding Protocol"
+      anchor: "#2-layer-0-to-layer-1-gateway-node-onboarding-protocol"
 
 - term: "Layer 1"
   slug: "layer-1"
@@ -1077,6 +1191,12 @@
     - doc: "qm.md"
       section: "2.1. Layer-by-Layer Responsibilities"
       anchor: "#21-layer-by-layer-responsibilities"
+    - doc: "q0_q1.md"
+      section: "1. Scope and Constitutional Anchoring"
+      anchor: "#1-scope-and-constitutional-anchoring"
+    - doc: "q0_q1.md"
+      section: "2. Layer 0 to Layer 1 Gateway: Node Onboarding Protocol"
+      anchor: "#2-layer-0-to-layer-1-gateway-node-onboarding-protocol"
 
 - term: "Causal Arrow"
   slug: "causal-arrow"
@@ -1212,6 +1332,9 @@
     - doc: "chronosa.md"
       section: "1.2. Strict Outer-Ring Containment"
       anchor: "#12-strict-outer-ring-containment"
+    - doc: "q0_q1.md"
+      section: "2.4. Stage 4: Inner-Ring PQC Key Generation"
+      anchor: "#24-stage-4-inner-ring-pqc-key-generation"
 
 - term: "Chronosa"
   slug: "chronosa"
@@ -1365,6 +1488,9 @@
     - doc: "qnPrimitive.md"
       section: "5.5. Identity Payload Profile"
       anchor: "#55-identity-payload-profile"
+    - doc: "q0_q1.md"
+      section: "3.1. Machine Identity vs. User Sovereignty Disjunction"
+      anchor: "#31-machine-identity-vs-user-sovereignty-disjunction"
 
 - term: "Receipt"
   slug: "receipt"
@@ -1413,6 +1539,9 @@
     - doc: "qnPrimitive.md"
       section: "10. Lifecycle and Receipts"
       anchor: "#10-lifecycle-and-receipts"
+    - doc: "q0_q1.md"
+      section: "6. Receipts, Lifecycle, and Hardware Maintenance"
+      anchor: "#6-receipts-lifecycle-and-hardware-maintenance"
 
 - term: "Lifecycle State"
   slug: "lifecycle-state"
@@ -1519,6 +1648,9 @@
     - doc: "qm.md"
       section: "Normative References"
       anchor: "#normative-references"
+    - doc: "q0_q1.md"
+      section: "Normative References"
+      anchor: "#normative-references"
 
 - term: "Derivative Work"
   slug: "derivative-work"
@@ -1605,6 +1737,9 @@
     - doc: "qm.md"
       section: "9. License and Invariant Lineage"
       anchor: "#9-license-and-invariant-lineage"
+    - doc: "q0_q1.md"
+      section: "7. License and Lineage Alignment"
+      anchor: "#7-license-and-lineage-alignment"
 
 - term: "SSL"
   slug: "ssl"
@@ -1646,3 +1781,6 @@
     - doc: "qm.md"
       section: "9. License and Invariant Lineage"
       anchor: "#9-license-and-invariant-lineage"
+    - doc: "q0_q1.md"
+      section: "7. License and Lineage Alignment"
+      anchor: "#7-license-and-lineage-alignment"
