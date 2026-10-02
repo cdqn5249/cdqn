@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.0.0
-updated: 2026-09-07
+version: 1.1.0
+updated: 2026-10-02
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -37,6 +37,11 @@ terms_used:
   - derivative-work
   - metric-exhaustion
   - chronosa
+  - zoom-z
+  - remainder-r
+  - dimension-d
+  - terminal-exactness
+  - q-anchor
 ---
 
 # CDQN Documentation Portal
@@ -45,7 +50,7 @@ terms_used:
 **Author:** Christophe Duy Quang Nguyen  
 **License:** [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)  
 **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
-**Status:** Provisional Architectural Portal / Exploratory Framework
+**Status:** Canonical Architectural Portal / Active Search Framework
 
 Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 
@@ -56,11 +61,11 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-07 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-02 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Active Research Framework |
+| **Status** | Active Research Framework — Milestone 1 In Progress |
 
 ---
 
@@ -94,16 +99,27 @@ $$\text{Valid}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \f
 Development proceeds through four consecutive emergence milestones toward an operational Proof of Concept (PoC) of **{% include term.html id="chronosa" %}**:
 
 ```
-[ MILESTONE 1: Local Base Domains (Qm, Qs, Qphy) ]
-                     │
-                     ▼
-[ MILESTONE 2: Execution & Language Substrate (QnLang, QnIR) ]
-                     │
-                     ▼
-[ MILESTONE 3: The cdqn Hybrid Swarm Conduit ]
-                     │
-                     ▼
-[ TERMINAL MILESTONE: Chronosa PoC (Virtual Causal Intelligence) ]
+┌─────────────────────────────────────────────────────────────────┐
+│ MILESTONE 1: Local Base Domains                                 │
+│ • Qm (Quang Mathematics) ── [VERIFIED v1.1.0]                   │
+│ • Qs (Quang Semantics)   ── [IN PROGRESS]                       │
+│ • Qphy (Quang Physics)   ── [PENDING]                           │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ MILESTONE 2: Execution & Language Substrate (QnLang, QnIR)      │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ MILESTONE 3: The cdqn Hybrid Swarm Conduit                      │
+└────────────────────────────────┬────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│ TERMINAL MILESTONE: Chronosa PoC (Virtual Causal Intelligence)  │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -120,17 +136,21 @@ Development proceeds through four consecutive emergence milestones toward an ope
 [3. Qn Primitive Envelope] 
        │
        ▼
-[4. Chronosa Vision] 
+[4. Qm Mathematics] 
        │
        ▼
-[5. Glossary & SSL License]
+[5. Chronosa Vision] 
+       │
+       ▼
+[6. Glossary & SSL License]
 ```
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
 2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: Structural hierarchy from Layer 0 (Physical Substrate) to Layer 1 (Node Genesis), fractal {% include term.html id="cdqn" %} data movement, local-first base domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$), and complexity degree stratification.
 3. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, working operational axioms, typed payload profiles, and lifecycle state machines.
-4. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
-5. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology, concordance index, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+4. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric, relational, and algebraic substrate. Formulates the discrete tuple $\langle \sigma, q_z, z, r_z, d \rangle$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability.
+5. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
+6. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology concordance, bidirectional backlinks, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
