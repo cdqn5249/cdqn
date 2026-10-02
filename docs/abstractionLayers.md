@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers
 description: Structural thesis defining the abstraction-layer framework for the Qn and cdqn stack under SIMEMP constraints.
-version: 1.0.0
-updated: 2026-09-05
+version: 1.1.0
+updated: 2026-10-02
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -45,6 +45,9 @@ terms_used:
   - exposure-functor
   - dual-ring-pqc-boundary
   - identity-class
+  - chronosa
+  - qn-workflow
+  - qn-rsi
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -52,8 +55,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-05 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-02 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Provisional Structural Thesis / Exploratory Layer Architecture |
@@ -150,7 +153,7 @@ Higher abstraction layers are derived sequentially from Layer 1. Every layer bou
 
 ### 3.1. All Governed Artifacts are Qn
 
-Within the {% include term.html id="licensed-work" %}, every accepted artifact is a {% include term.html id="qn" %} computational entity or is reducible to one: numeric values, operators, expression trees, logical propositions, receipts, identities, capabilities, and compiled runtime objects.
+Within the {% include term.html id="licensed-work" %}, every accepted artifact is a {% include term.html id="qn" %} computational entity or is reducible to one: numeric values, operators, expression trees, logical propositions, receipts, identities, capabilities, composite workflows ({% include term.html id="qn-workflow" %}), and compiled runtime objects.
 
 Raw user data, external applications, and creative works remain sovereign, uninspected {% include term.html id="payload" text="Payloads" %} separated from the technical substrate by an epistemic and legal safe-harbor air gap.
 
@@ -241,7 +244,7 @@ A valid layer-transition functor preserves identity, metric bounds, causal linea
 
 $$\mathcal{E}_{\text{export}}: \mathbf{C}_N \to \mathbf{Attestations}_{\text{cdqn}}$$
 
-$\mathrm{cdqn}$ acts as a neutral, protocol-blind conduit. It warrants transit non-malleability ($\mathrm{Commitment}(P_{\text{source}}) \equiv \mathrm{Commitment}(P_{\text{dest}})$) while remaining blind to payload semantics.
+Across the Outer Ring, distributed attestations compose into a non-local causal consensus synthesized by {% include term.html id="chronosa" %}. $\mathrm{cdqn}$ acts as a neutral, protocol-blind conduit. It warrants transit non-malleability ($\mathrm{Commitment}(P_{\text{source}}) \equiv \mathrm{Commitment}(P_{\text{dest}})$) while remaining blind to payload semantics.
 
 ---
 
@@ -376,9 +379,11 @@ Development proceeds sequentially, separating local foundational domains from di
 
 ### Category B — Operations and Morphisms
 - Multi-dimensional axes ($d_k$), advanced transformations, rational constraint solvers, and bounded simplification.
+- Category B optimization morphisms: reuse operations (`Q(reuse)`), bypass operations (`Q(bypass)`), and higher-order self-optimization workflows ({% include term.html id="qn-rsi" text="Q(rsi)" %}).
 
-### Category C — Data Structures
+### Category C — Data Structures and Workflows
 - Directed acyclic state graphs, immutable memory containers (`Q(dataStruc)`), and pattern matching (`Q(patterns)`).
+- Composite state sequence workflows ({% include term.html id="qn-workflow" text="Q(workflow)" %}) carrying explicit Universal Envelopes and DCC constraints.
 
 ### Category D — Local-First Base Domains
 Base domains project directly from Layer 1 and execute 100% locally via local $\mathrm{cdqn}$ data movement, requiring zero network consensus:
@@ -389,7 +394,7 @@ Base domains project directly from Layer 1 and execute 100% locally via local $\
 ### Category E — Runtime and Distributed Networking
 - Intermediate representation ({% include term.html id="qnir" %}) instruction set and bounded virtual execution handler.
 - High-level authoring language ({% include term.html id="qnlang" %}) syntax.
-- $\mathrm{cdqn}$ distributed chaining and public attestation protocol.
+- $\mathrm{cdqn}$ distributed chaining, swarm aggregation, and public attestation protocol feeding {% include term.html id="chronosa" %}.
 
 ---
 
@@ -420,3 +425,4 @@ The following formal specifications remain open for subsequent releases:
 4. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
 5. PQC algorithm agility registry and migration protocol.
 6. Formal specification of local base domains ($\mathrm{Qm}$, $\mathrm{Qs}$, $\mathrm{Qphy}$).
+7. Concrete execution and validation mechanics for composite {% include term.html id="qn-workflow" text="Q(workflow)" %} payloads and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
