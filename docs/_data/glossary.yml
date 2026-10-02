@@ -1,7 +1,7 @@
 # CDQN Unified Glossary — Single Source of Truth
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-09-06 (Bao Loc, Vietnam)
+# Updated: 2026-10-02 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -50,8 +50,8 @@
     contracts or fracturing causal lineage.
   sources:
     - doc: "index.md"
-      section: "2. Method of Exploration: The Recursive Search Loop"
-      anchor: "#2-method-of-exploration-the-recursive-search-loop"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
     - doc: "index.md"
       section: "3. Recommended Reading Sequence"
       anchor: "#3-recommended-reading-sequence"
@@ -345,8 +345,8 @@
     abstraction is provisionally valid.
   sources:
     - doc: "index.md"
-      section: "2. Method of Exploration: The Recursive Search Loop"
-      anchor: "#2-method-of-exploration-the-recursive-search-loop"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
     - doc: "simemp.md"
       section: "2. Method of Verification: The Recursive Search Loop"
       anchor: "#2-method-of-verification-the-recursive-search-loop"
@@ -691,8 +691,8 @@
     enforcing explicit DCC profiles and compile-time collapse.
   sources:
     - doc: "index.md"
-      section: "2. Method of Exploration: The Recursive Search Loop"
-      anchor: "#2-method-of-exploration-the-recursive-search-loop"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
     - doc: "simemp.md"
       section: "2. Method of Verification: The Recursive Search Loop"
       anchor: "#2-method-of-verification-the-recursive-search-loop"
@@ -730,8 +730,8 @@
     semantics.
   sources:
     - doc: "index.md"
-      section: "2. Method of Exploration: The Recursive Search Loop"
-      anchor: "#2-method-of-exploration-the-recursive-search-loop"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
     - doc: "simemp.md"
       section: "2. Method of Verification: The Recursive Search Loop"
       anchor: "#2-method-of-verification-the-recursive-search-loop"
@@ -810,6 +810,45 @@
     - doc: "qnPrimitive.md"
       section: "12. Relation to QnLang"
       anchor: "#12-relation-to-qnlang"
+
+- term: "Qn(workflow)"
+  slug: "qn-workflow"
+  category: "Primitives"
+  definition: >
+    A governed composite Qn artifact representing an explicit, causal directed
+    acyclic graph of state transitions and morphisms. Bounded by its own Universal
+    Envelope, DCC Profile, and finite metric budget allocation.
+  sources:
+    - doc: "qnPrimitive.md"
+      section: "4.2. Type Block"
+      anchor: "#42-type-block"
+    - doc: "qnPrimitive.md"
+      section: "5.8. Workflow Payload Profile"
+      anchor: "#58-workflow-payload-profile"
+    - doc: "qnPrimitive.md"
+      section: "11.4. Higher Layers"
+      anchor: "#114-higher-layers"
+
+- term: "Qn(rsi)"
+  slug: "qn-rsi"
+  category: "Primitives"
+  definition: >
+    A higher-order recursive self-optimization workflow. Ingests an existing Qn
+    workflow, derives an empirically more efficient successor under strict semantic
+    invariance and finite metric budget, and emits a versioned successor artifact.
+  sources:
+    - doc: "qnPrimitive.md"
+      section: "Axiom 13 — Versioning Creates New Artifacts"
+      anchor: "#axiom-13--versioning-creates-new-artifacts"
+    - doc: "qnPrimitive.md"
+      section: "5.8. Workflow Payload Profile"
+      anchor: "#58-workflow-payload-profile"
+    - doc: "qnPrimitive.md"
+      section: "14. Exclusions"
+      anchor: "#14-exclusions"
+    - doc: "qnPrimitive.md"
+      section: "15. Open Items"
+      anchor: "#15-open-items"
 
 - term: "Abstraction Layer"
   slug: "abstraction-layer"
@@ -1051,6 +1090,15 @@
     Coordinates distributed state and derives human intent across Qn base
     domains with zero statistical machine learning training.
   sources:
+    - doc: "index.md"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
+    - doc: "index.md"
+      section: "3. Recommended Reading Sequence"
+      anchor: "#3-recommended-reading-sequence"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 4 — Local Genesis Dependency"
+      anchor: "#axiom-4--local-genesis-dependency"
     - doc: "chronosa.md"
       section: "1. The Architectural Nature of Chronosa"
       anchor: "#1-the-architectural-nature-of-chronosa"
