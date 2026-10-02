@@ -360,12 +360,41 @@
       section: "Purpose and Epistemic Stance"
       anchor: "#purpose-and-epistemic-stance"
 
+- term: "Terminal Exactness"
+  slug: "terminal-exactness"
+  category: "Constraints"
+  definition: >
+    The discrete algebraic condition wherein remainder r equals genesis origin
+    Q(0) at a declared zoom level z along dimension d. Proves mathematical
+    exactness and triggers deterministic early halting, preventing redundant
+    thermodynamic metric consumption.
+  sources:
+    - doc: "simemp.md"
+      section: "3.1. Tier 1: Existential Invariants"
+      anchor: "#31-tier-1-existential-invariants"
+    - doc: "simemp.md"
+      section: "4.2. Open Systems, Entropy Export, and Dissipative Error Correction"
+      anchor: "#42-open-systems-entropy-export-and-dissipative-error-correction"
+    - doc: "abstractionLayers.md"
+      section: "6.2. Qexpr Notation"
+      anchor: "#62-qexpr-notation"
+    - doc: "abstractionLayers.md"
+      section: "7.2. Division as Constrained Operation"
+      anchor: "#72-division-as-constrained-operation"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 6 — Totality of Governed Operations"
+      anchor: "#axiom-6--totality-of-governed-operations"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 9 — Numeric Precision Explicitness"
+      anchor: "#axiom-9--numeric-precision-explicitness"
+
 - term: "Zoom z"
   slug: "zoom-z"
   category: "Primitives"
   definition: >
-    The declared precision boundary, metric resolution, or scale level of a
-    governed numeric expression. Must remain base-independent in core representations.
+    The declared precision boundary, metric resolution quantum, or discrete
+    scale level of a governed numeric expression. Parameterizes projective
+    resolution lattices while remaining base-independent in core representations.
   sources:
     - doc: "abstractionLayers.md"
       section: "6.2. Qexpr Notation"
@@ -396,9 +425,10 @@
   slug: "remainder-r"
   category: "Primitives"
   definition: >
-    The explicit residual quantity preserved at a declared zoom level or
-    division constraint. Prevents hidden precision decay and replaces IEEE 754
-    rounding approximations.
+    The conserved residual quantity preserved at a declared zoom level or
+    division constraint. Acts as the exact input state and generator for
+    subsequent zoom scale expansion along dimension d, preventing precision decay
+    and replacing IEEE 754 rounding approximations.
   sources:
     - doc: "abstractionLayers.md"
       section: "6.2. Qexpr Notation"
@@ -1108,6 +1138,31 @@
     - doc: "chronosa.md"
       section: "3. Real-World Theoretical Foundations"
       anchor: "#3-real-world-theoretical-foundations"
+
+- term: "Q(anchor)"
+  slug: "q-anchor"
+  category: "Architecture"
+  definition: >
+    A governed Qn artifact possessing high causal centrality within the lineage
+    directed acyclic graph. Protected via abstract DCC contracts and structural
+    indirection to prevent cascading dependency invalidation across downstream
+    causal cones.
+  sources:
+    - doc: "simemp.md"
+      section: "4.3. The DCC Profile and Structural Indirection"
+      anchor: "#43-the-dcc-profile-and-structural-indirection"
+    - doc: "abstractionLayers.md"
+      section: "3.5. Causal Arrow and Birth Order"
+      anchor: "#35-causal-arrow-and-birth-order"
+    - doc: "abstractionLayers.md"
+      section: "11. Future Qn Definition Files and Local-First Base Domains"
+      anchor: "#11-future-qn-definition-files-and-local-first-base-domains"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 5 — Acyclic Causal Lineage"
+      anchor: "#axiom-5--acyclic-causal-lineage"
+    - doc: "qnPrimitive.md"
+      section: "Axiom 13 — Versioning Creates New Artifacts"
+      anchor: "#axiom-13--versioning-creates-new-artifacts"
 
 - term: "Universal Envelope"
   slug: "universal-envelope"
