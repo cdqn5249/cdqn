@@ -24,6 +24,13 @@
   status: "Verified"
   external: false
 
+- title: "Category A Primitives"
+  url: "/q0_q1.html"
+  slug: "q0_q1"
+  description: "Q(0) local genesis, Q(1) unit calibration, and node onboarding"
+  status: "Verified"
+  external: false
+
 - title: "Qn Primitive Envelope"
   url: "/qnPrimitive.html"
   slug: "qnPrimitive"
