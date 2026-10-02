@@ -2,8 +2,8 @@
 layout: default
 title: Qn Primitive Envelope
 description: Governed Qn artifact model, definitions, and operational axioms under SIMEMP and abstraction-layer constraints.
-version: 1.0.0
-updated: 2026-09-05
+version: 1.1.0
+updated: 2026-10-02
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -46,6 +46,9 @@ terms_used:
   - dimension-d
   - dual-ring-pqc-boundary
   - identity-class
+  - chronosa
+  - qn-workflow
+  - qn-rsi
 ---
 
 # Qn Primitive Envelope — Governed Qn Artifact Model
@@ -53,8 +56,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-05 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-02 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Provisional Artifact Framework / Operational Hypothesis |
@@ -99,7 +102,7 @@ $$\mathcal{E} = \langle \text{Identity}, \, \text{Type}, \, \text{State}, \, \te
 
 ### 1.4. Typed Payload Profile
 
-The domain-specific content carried by an artifact (numeric quantities, algebraic expressions, pure morphisms, state receipts, identity assertions, or capability grants). Sovereign user content remains a {% include term.html id="payload" %} insulated by protocol blindness.
+The domain-specific content carried by an artifact (numeric quantities, algebraic expressions, pure morphisms, state receipts, identity assertions, capability grants, or composite workflows). Sovereign user content remains a {% include term.html id="payload" %} insulated by protocol blindness.
 
 ### 1.5. Identity
 
@@ -182,6 +185,8 @@ Every governed Qn artifact within a local universe must trace its lineage direct
 
 $$\forall \alpha \in \mathcal{Q}_N, \quad Q(0)_N \in \mathrm{Lineage}(\alpha)$$
 
+Local artifacts form single-rooted directed trees originating at physical silicon root $Q(0)_N$. Higher-order network entities operating across the Outer Ring (such as {% include term.html id="chronosa" %}) do not violate this rule; they are non-local topological colimits (sheaf gluings) over forests of mutually verified local Axiom-4 trees.
+
 ### Axiom 5 — Acyclic Causal Lineage
 
 Lineage graphs are strictly acyclic, governed by {% include term.html id="dependencies-determinism" %}. Every artifact must be born after its causal dependencies:
@@ -221,7 +226,7 @@ Lineage metadata and the canonical {% include term.html id="paternity-reference"
 
 ### Axiom 13 — Versioning Creates New Artifacts
 
-Versioning an artifact produces a new immutable artifact with an advanced causal index referencing the predecessor. Mutation in place is prohibited.
+Versioning an artifact produces a new immutable artifact with an advanced causal index referencing the predecessor. Mutation in place is prohibited. Successor workflows derived through {% include term.html id="qn-rsi" text="Qn(rsi)" %} do not overwrite existing execution paths; they are emitted as distinct causal versions.
 
 ### Axiom 14 — Generative Candidate Boundary
 
@@ -237,7 +242,7 @@ The Universal Envelope $\mathcal{E}$ is structured using {% include term.html id
 Declares local node identifier, local causal index, artifact type identifier, version identifier, content commitment hash, and cryptographic agility metadata.
 
 ### 4.2. Type Block
-Declares the artifact category (numeric value, expression, operation, logic relation, receipt, identity, capability, DCC profile, metric envelope, security envelope, or attestation).
+Declares the artifact category (numeric value, expression, operation, logic relation, receipt, identity, capability, DCC profile, metric envelope, security envelope, attestation, or workflow).
 
 ### 4.3. Lifecycle State Block
 Declares current governance status conforming to Axiom 7.
@@ -284,6 +289,9 @@ Carries public commitments, issuer identities, capability proofs, metric summari
 
 ### 5.7. Capability Payload Profile
 Carries granular execution rights, operational constraints, delegation depths, and expiration bounds.
+
+### 5.8. Workflow Payload Profile
+Carries a directed acyclic graph (DAG) of governed morphisms, input state prerequisites, execution checkpoints, intermediate collapse budgets, and terminal receipt criteria. Underpins composite state sequences and recursive self-optimization workflows ({% include term.html id="qn-rsi" text="Qn(rsi)" %}).
 
 ---
 
@@ -381,7 +389,7 @@ Constructs local genesis receipts, entropy commitments, and the local [`Q(0)`]({
 Houses foundational governed primitives: $Q(0)$, $Q(1)$, abstract compute unit $U$, and axis $d_1$.
 
 ### 11.4. Higher Layers
-Inherit the invariant universal envelope while defining higher-order typed payloads and local-first domain projections.
+Inherit the invariant universal envelope while defining higher-order typed payloads, composite workflows, and local-first domain projections.
 
 ---
 
@@ -421,7 +429,7 @@ The following items are outside the scope of this provisional framework and belo
 3. Concrete instruction set for QnIR.
 4. Concrete syntax for QnLang.
 5. Domain-specific layers ($\mathrm{Qm}$, $\mathrm{Qs}$, $\mathrm{Qphy}$).
-6. Advanced optimization primitives ($\mathrm{Q}(\text{reuse})$, $\mathrm{Q}(\text{bypass})$).
+6. Advanced optimization primitives ($\mathrm{Q}(\text{reuse})$, $\mathrm{Q}(\text{bypass})$, $\mathrm{Q}(\mathrm{rsi})$).
 
 ---
 
@@ -433,3 +441,4 @@ The following formal specifications remain open for subsequent releases:
 3. Concrete receipt schema and cryptographic signature serialization.
 4. PQC algorithm agility registry and migration protocol.
 5. Automated verification rules for transitions from Sealed to Verified state.
+6. Execution and formal verification mechanics for composite Workflow Payloads and $\mathrm{Qn}(\mathrm{rsi})$.
