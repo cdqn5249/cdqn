@@ -2,7 +2,7 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, and float-free rotations under SIMEMP constraints.
-version: 1.0.0
+version: 1.0.1
 updated: 2026-10-03
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -45,7 +45,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **Last Updated** | 2026-10-03 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -92,15 +92,17 @@ In accordance with the {% include term.html id="no-implicit-rule" %}, multi-dime
 ```
 
 ### 2.1. The Orthogonal Basis Set
+
 A spatial frame of dimension $n$ is defined by a set of $n$ mutually orthogonal dimensional axes:
 
 $$\mathcal{D}_{\mathrm{frame}} = \{ d_1, \, d_2, \, \dots, \, d_n \}$$
 
-Each axis $d_k$ is assigned an explicit basis vector $\vec{e}_k$ instantiated as a canonical $\mathrm{Qm}$ leaf artifact:
+Each coordinate axis $d_k$ is assigned an explicit basis vector instantiated as a canonical $\mathrm{Qm}$ leaf artifact:
 
 $$\vec{e}_k \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_k \rangle$$
 
 ### 2.2. Metric Signature ($\eta$)
+
 The quadratic form of the space is governed by an explicit discrete diagonal metric signature $\eta = (p, q, s)$ where $p + q + s = n$:
 
 $$\vec{e}_i \cdot \vec{e}_j = \begin{cases} 
@@ -135,21 +137,31 @@ This product decomposes the interaction into two distinct grades: a symmetric sc
  └────────────────────────────────┴────────────────────────────────┘
 ```
 
-### 3.1. The Discrete Inner Product ($\vec{u} \cdot \vec{v}$)
-Given $\vec{u} = \sum_{k=1}^n u_k \vec{e}_k$ and $\vec{v} = \sum_{k=1}^n v_k \vec{e}_k$, where each component $u_k, v_k$ is a discrete tuple evaluated at zoom $z$:
+### 3.1. The Discrete Inner Product
 
-$$\vec{u} \cdot \vec{v} = \sum_{k=1}^n \eta_{kk} \Big( u_k \times v_k \Big)$$
+Let vectors $\vec{u}$ and $\vec{v}$ be expressed along the orthogonal basis:
+
+$$\vec{u} = \sum_{k=1}^n u_k \vec{e}_k, \quad \vec{v} = \sum_{k=1}^n v_k \vec{e}_k$$
+
+where each component is a discrete tuple evaluated at zoom $z$. The inner product contracts to an exact scalar:
+
+$$\vec{u} \cdot \vec{v} = \sum_{k=1}^n \eta_{kk} (u_k \times v_k)$$
 
 The operation executes entirely via the discrete $\mathrm{Qm}$ $\mathcal{R}$-algebra (`docs/qm.md` §4), returning an exact scalar leaf with a conserved remainder $r_z$.
 
-### 3.2. The Discrete Wedge Product ($\vec{u} \wedge \vec{v}$)
+### 3.2. The Discrete Wedge Product
+
 The outer product spans an oriented planar surface area:
 
-$$\vec{u} \wedge \vec{v} = \sum_{1 \le i \lt j \le n} \Big( u_i v_j - u_j v_i \Big) (\vec{e}_i \wedge \vec{e}_j)$$
+$$\vec{u} \wedge \vec{v} = \sum_{1 \le i \lt j \le n} (u_i v_j - u_j v_i) (\vec{e}_i \wedge \vec{e}_j)$$
 
-Under the **No-Implicit Rule**:
-1. Anti-commutativity is exact: $\vec{e}_i \wedge \vec{e}_j = - (\vec{e}_j \wedge \vec{e}_i)$.
-2. Nilpotency is absolute: $\vec{e}_i \wedge \vec{e}_i = Q(0)$. Collinear vectors span zero area without precision loss.
+Under the **No-Implicit Rule**, anti-commutativity and nilpotency are exact:
+
+$$\vec{e}_i \wedge \vec{e}_j = - (\vec{e}_j \wedge \vec{e}_i)$$
+
+$$\vec{e}_i \wedge \vec{e}_i = Q(0)$$
+
+Collinear vectors span zero area without precision loss.
 
 ---
 
@@ -173,6 +185,7 @@ $$M = \sum_{k=0}^n \langle M \rangle_k = \langle M \rangle_0 + \langle M \rangle
 ```
 
 ### 4.1. Canonical Multivector State Tuple
+
 Every multivector artifact in $\mathrm{Qm}$ carries an explicit, finite representation:
 
 $$M \equiv \Big\langle \sigma_M, \, \{ \alpha_B \}_{B \in \mathcal{B}}, \, z, \, r_M, \, \mathcal{D}_{\mathrm{frame}} \Big\rangle$$
@@ -182,7 +195,8 @@ where:
 - Each blade coefficient $\alpha_B$ is a discrete scalar magnitude $q_B \in \mathbb{N}$ at zoom $z$.
 - $r_M$ is the vector of conserved residual remainders, satisfying $0 \le |r_B| \lt \delta_z(d)$ for each blade component.
 
-### 4.2. Pseudoscalar Duality ($I$)
+### 4.2. Pseudoscalar Duality
+
 The unit pseudoscalar $I = \vec{e}_1 \wedge \vec{e}_2 \wedge \dots \wedge \vec{e}_n$ provides discrete Hodge dual mapping without matrix inversion:
 
 $$M^* = M I^{-1}$$
@@ -199,7 +213,7 @@ $$R = \cos(\theta/2) - I \sin(\theta/2)$$
 
 Because $\cos(\theta)$ and $\sin(\theta)$ are transcendental irrationals for almost all rational angles, continuous engines round them to 32-bit or 64-bit IEEE 754 floats. This introduces metric drift: after $10^6$ rotations, $|R|^2 \neq 1$, forcing artificial normalization cycles.
 
-$\mathrm{Qm}$ Geometry solves this via **Cartan-Dieudonné Double Reflections** and **Rational Cayley-Klein Rotors** [1, 2].
+$\mathrm{Qm}$ Geometry solves this via **Cartan-Dieudonné Double Reflections** and **Rational Cayley-Klein Rotors**.
 
 ```
                      CARTAN-DIEUDONNÉ ROTATION MECHANISM
@@ -209,6 +223,7 @@ $\mathrm{Qm}$ Geometry solves this via **Cartan-Dieudonné Double Reflections** 
 ```
 
 ### 5.1. The Rotor Morphism
+
 A rotation of vector $\vec{v}$ in a plane is executed by two successive reflections across non-parallel unit vectors $\vec{a}$ and $\vec{b}$:
 
 $$R = \vec{b} \vec{a} = \vec{b} \cdot \vec{a} + \vec{b} \wedge \vec{a}$$
@@ -218,6 +233,7 @@ $$\vec{v}' = R \vec{v} R^{\dagger}$$
 where $R^{\dagger} = \vec{a} \vec{b}$ is the reverse rotor.
 
 ### 5.2. Rational Cayley Parameterization (Float-Free Rotors)
+
 To rotate by an exact rational angle without evaluating trigonometric series, $\mathrm{Qm}$ parameterizes rotors via rational bivectors $B \in \langle M \rangle_2$:
 
 $$R = \frac{Q(1) - B}{Q(1) + B}$$
@@ -226,7 +242,6 @@ For any planar rotation in plane $\vec{e}_1 \wedge \vec{e}_2$, the rotor coeffic
 
 $$R = \frac{(m^2 - n^2) + 2mn (\vec{e}_1 \wedge \vec{e}_2)}{m^2 + n^2}$$
 
-#### Exact Metric Invariant:
 The norm of the rotor is identically unity by construction:
 
 $$R R^{\dagger} = \frac{(m^2 - n^2)^2 + (2mn)^2}{(m^2 + n^2)^2} = \frac{(m^2 + n^2)^2}{(m^2 + n^2)^2} \equiv Q(1)$$
@@ -234,6 +249,7 @@ $$R R^{\dagger} = \frac{(m^2 - n^2)^2 + (2mn)^2}{(m^2 + n^2)^2} = \frac{(m^2 + n
 **Metric drift is identically zero.** The rotor can be applied $10^9$ consecutive times without ever departing from the unit manifold.
 
 ### 5.3. Projective Cascade for Arbitrary Target Angles
+
 When an arbitrary target angle $\theta$ is externally supplied, $\mathrm{Qm}$ does not invoke floating-point libraries. It evaluates the continued fraction expansion of $\tan(\theta/4)$, generating a sequence of rational rotors $R_z$ at zoom level $z$:
 
 $$\theta_z = \theta_{\mathrm{discrete}} + r_{\theta}$$
@@ -248,17 +264,15 @@ Distance between two spatial points $A$ and $B$ along frame $\mathcal{D}_{\mathr
 
 $$D^2 = \vec{v} \cdot \vec{v} = \sum_{k=1}^n \eta_{kk} \Big( (q_{B,k} - q_{A,k}) \cdot \delta_z \Big)^2$$
 
-In classical analysis, evaluating $D = \sqrt{D^2}$ introduces floating-point square-root routines.
-
 ### 6.1. The Diophantine Square-Root Constraint
-In $\mathrm{Qm}$, the square root is evaluated as an exact constrained Diophantine equation over the zoom lattice:
 
-$$\text{Given } D^2, \, z \implies \text{determine } q_D, \, r_D \quad \text{such that } D^2 = (q_D \cdot \delta_z)^2 + r_D$$
+In $\mathrm{Qm}$, distance evaluation resolves through an exact Diophantine square constraint:
 
-subject to:
-1. $q_D \in \mathbb{N}$.
-2. $0 \le |r_D| \lt 2 q_D \cdot \delta_z^2 + \delta_z^2$.
-3. Directionality remains strictly positive ($\sigma = \oplus$).
+$$D^2 = (q_D \cdot \delta_z)^2 + r_D$$
+
+subject to integer quotient and bounded remainder criteria:
+
+$$q_D \in \mathbb{N}, \quad 0 \le |r_D| \lt (2 q_D \cdot \delta_z^2 + \delta_z^2), \quad \sigma = \oplus$$
 
 If $r_D = Q(0)$, the distance is an exact Pythagorean integer or rational, terminating with zero residual. If $r_D \neq Q(0)$, $r_D$ is preserved as the exact argument for subsequent scale expansion ($z \to z + 1$).
 
@@ -269,18 +283,20 @@ If $r_D = Q(0)$, the distance is an exact Pythagorean integer or rational, termi
 Operating in multi-dimensional space consumes physical computational resources governed by the **Metric Invariant** (`docs/simemp.md` §3.1).
 
 ### 7.1. Complexity Scaling
-For an $n$-dimensional coordinate frame:
 - Vector addition: $\mathcal{O}(n)$ discrete operations.
 - Geometric product: $\mathcal{O}(2^n)$ blade multiplications.
 - Rotor sandwich transformation ($R v R^{\dagger}$): $\mathcal{O}(n \cdot 2^n)$ operations.
 
 ### 7.2. Dimensional Ceilings and Budget Halts
-Under **Axiom 2 (Finiteness)**, an artifact cannot declare an unbounded dimension:
-1. The declared {% include term.html id="metric-envelope" %} enforces a strict maximum dimension ceiling:
-   $$n \le \mathrm{Dim}_{\max}$$
-   (Typically $n \le 4$ for physical simulations in $\mathrm{Qphy}$; $n \le 16$ for high-dimensional semantic spaces in $\mathrm{Qs}$).
-2. If a composition of wedge products attempts to construct a grade exceeding $n$, the result collapses identically to zero ($Q(0)$) by the nilpotency of outer products, terminating in $\mathcal{O}(1)$ work.
-3. If an algebraic transformation exceeds the declared metric budget, execution halts deterministically under **Axiom 6**, emitting the receipt:
+
+Dimensional growth is bounded by the declared Metric Envelope:
+
+$$n \le \mathrm{Dim}_{\mathrm{max}}$$
+
+Typically $n \le 4$ for physical simulations in $\mathrm{Qphy}$; $n \le 16$ for high-dimensional semantic spaces in $\mathrm{Qs}$.
+
+- If a composition of wedge products attempts to construct a grade exceeding $n$, the result collapses identically to zero ($Q(0)$) by the nilpotency of outer products, terminating in $\mathcal{O}(1)$ work.
+- If an algebraic transformation exceeds the declared metric budget, execution halts deterministically under **Axiom 6**, emitting the receipt:
 
 $$\mathrm{Receipt}(\texttt{DIMENSIONAL\_BUDGET\_EXHAUSTED}) \equiv \langle \text{Status: } \texttt{BUDGET\_EXHAUSTED}, \, \text{Frame: } n, \, \text{ConsumedWork: } W \rangle$$
 
