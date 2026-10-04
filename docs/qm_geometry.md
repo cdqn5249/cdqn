@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
-description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.0
+description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean manifolds, and deferred symbolic collapse under SIMEMP constraints.
+version: 1.1.1
 updated: 2026-10-04
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -48,7 +48,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.0 |
+| **Version** | 1.1.1 |
 | **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -117,6 +117,29 @@ Q(0) & \text{if } i \neq j \quad (\text{Orthogonality})
 
 - **Euclidean $n$-Space:** $\mathcal{C}\ell_{n, 0}$ where $\eta = (+, +, \dots, +)$.
 - **Space-Time Algebra (Minkowski):** $\mathcal{C}\ell_{1, 3}$ or $\mathcal{C}\ell_{3, 1}$, providing direct spatial foundations for $\mathrm{Qphy}$.
+
+### 2.3. Non-Euclidean Topologies and Manifold Embeddings
+
+$\mathrm{Qm}$ Geometry abstracts non-Euclidean spaces without continuous Riemannian metrics or differential singularities:
+
+```
+                  NON-EUCLIDEAN CONSTRUCTIVE EMBEDDINGS
+ ┌──────────────────────────────────────┬──────────────────────────────────────┐
+ │ SPHERICAL GEOMETRY (S^n)             │ HYPERBOLIC GEOMETRY (H^n)            │
+ ├──────────────────────────────────────┼──────────────────────────────────────┤
+ │ Metric Signature:                    │ Metric Signature:                    │
+ │   Cl(n+1, 0) Euclidean Basis        │   Cl(n, 1) Minkowski Basis           │
+ │ Quadratic Constraint:                │ Quadratic Constraint (Weierstrass):  │
+ │   X · X = +Q(1)                      │   X · X = -Q(1),   X_0 > 0           │
+ │ Geodesic Motion:                     │ Geodesic Motion:                     │
+ │   Planar Bivector Rotors             │   Hyperbolic Boost Rotors            │
+ └──────────────────────────────────────┴──────────────────────────────────────┘
+```
+
+1. **Spherical Geometry ($\mathbb{S}^n$):** Modeled as the locus of vectors satisfying the Diophantine quadratic constraint $X \cdot X = +Q(1)$ in Euclidean space $\mathcal{C}\ell_{n+1, 0}$. Great-circle geodesics and spherical triangles are evaluated purely via rational bivector rotors without trigonometric projections.
+2. **Hyperbolic Geometry ($\mathbb{H}^n$):** Modeled via the Weierstrass hyperboloid within Minkowski spacetime $\mathcal{C}\ell_{n, 1}$ under constraint $X \cdot X = -Q(1)$. Non-Euclidean parallel transport and spatial expansion are governed by hyperbolic boost rotors $(\vec{e}_i \wedge \vec{e}_0)^2 = +Q(1)$.
+3. **Conformal Geometric Algebra (CGA):** By introducing two discrete null bases ($e_\infty$ for spatial infinity and $e_0$ for local origin), conformal and projective transformations reduce to linear rotor reflections ($X^2 = 0$).
+4. **Discrete Curved Manifolds:** General curved spaces are represented as simplicial complexes (discrete Regge calculus). Curvature is measured not by continuous Ricci tensors, but by **discrete deficit angles** around codimension-2 hinges, evaluated as exact closed bivector loops in $\mathrm{Qm}$.
 
 ---
 
@@ -309,12 +332,15 @@ In classical systems, every intermediate geometric operation eagerly rounds to m
 ```
 
 ### 7.1. Thermodynamic Landauer Minimization Proof
-Let a geometric sequence consist of $k$ consecutive rotor transformations.
+
+Let a geometric sequence consist of $k$ consecutive rotor transformations:
 1. **Eager Evaluation:** Dissipates $W_{\mathrm{eager}} \ge k \cdot (k_B T \ln 2)$ and compounds $k$ unmeasured remainder vectors.
 2. **Deferred Collapse:** Reversible symbolic reduction preserves information without entropy production ($W_{\mathrm{Stage\,2}} = 0$). Numerical collapse occurs once at the boundary:
-   $$W_{\mathrm{deferred}} = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{collapse}}$$
+
+$$W_{\mathrm{deferred}} = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{collapse}}$$
 
 ### 7.2. Coupling to Optimization Morphisms
+
 - **{% include term.html id="q-bypass" %}:** If Stage 2 proves that an expression reduces to an identity transformation ($R R^{\dagger} = Q(1)$) or null area ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), the sub-tree is bypassed entirely at zero metric cost.
 - **{% include term.html id="q-reuse" %}:** If a factored bivector patch or multivector rotor is shared across multiple geometric branches, `Q(reuse)` references its existing content commitment hash, preventing redundant allocation across the Memory Wall.
 
