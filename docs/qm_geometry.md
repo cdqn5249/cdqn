@@ -2,7 +2,7 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.2
+version: 1.1.3
 updated: 2026-10-04
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -48,7 +48,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.2 |
+| **Version** | 1.1.3 |
 | **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -88,12 +88,6 @@ $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
 In accordance with the {% include term.html id="no-implicit-rule" %}, multi-dimensional space cannot be assumed *a priori*. It is generated inductively from genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) and unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1).
 
-```
-                    INDUCTIVE AXIAL EMERGENCE
-  Q(0) ──► Q(1) along d1 ──► Orthogonal Transition ──► d2 ──► ... ──► dn
- (Origin)  (Genesis Unit)     Gram-Schmidt Functor    (Planar)       (n-Space)
-```
-
 ### 2.1. The Orthogonal Basis Set
 
 A spatial frame of dimension $n$ is defined by a set of $n$ mutually orthogonal dimensional axes:
@@ -122,24 +116,17 @@ Q(0) & \text{if } i \neq j \quad (\text{Orthogonality})
 
 $\mathrm{Qm}$ Geometry abstracts non-Euclidean geometries without continuous Riemannian metrics, dense floating-point tensors, or differential singularities:
 
-```
-                  NON-EUCLIDEAN CONSTRUCTIVE INCLUSIONS
- ┌──────────────────────────────────────┬──────────────────────────────────────┐
- │ SPHERICAL SUBSPACE (S^n)             │ HYPERBOLIC SUBSPACE (H^n)            │
- ├──────────────────────────────────────┼──────────────────────────────────────┤
- │ Metric Signature:                    │ Metric Signature:                    │
- │   Cl(n+1, 0) Euclidean Basis        │   Cl(n, 1) Minkowski Basis           │
- │ Quadratic Constraint:                │ Quadratic Constraint (Weierstrass):  │
- │   X · X = +Q(1)                      │   X · X = -Q(1),   X_0 > 0           │
- │ Geodesic Motion:                     │ Geodesic Motion:                     │
- │   Planar Bivector Rotors             │   Hyperbolic Boost Rotors            │
- └──────────────────────────────────────┴──────────────────────────────────────┘
-```
+| Geometry Subspace | Ambient Signature | Defining Diophantine Constraint | Geodesic Rotor Morphism |
+|---|---|---|---|
+| **Spherical** ($\mathbb{S}^n$) | $\mathcal{C}\ell_{n+1, 0}$ (Euclidean) | $X \cdot X = +Q(1)$ | Planar bivector rotors ($R \vec{v} R^{\dagger}$) |
+| **Hyperbolic** ($\mathbb{H}^n$) | $\mathcal{C}\ell_{n, 1}$ (Minkowski) | $X \cdot X = -Q(1), \quad X_0 \gt Q(0)$ | Hyperbolic boost rotors ($B \vec{v} B^{\dagger}$) |
+| **Conformal** (CGA) | $\mathcal{C}\ell_{n+1, 1}$ (Minkowski null) | $X \cdot X = Q(0)$ (Null cone) | Linear conformal rotors over $\{ e_0, e_{\mathrm{horizon}} \}$ |
+| **Curved Manifolds** | Simplicial triangulation | Bivector holonomy $\Omega = \prod R_{\mathrm{loop}}$ | Discrete Regge deficit angles without continuous tensors |
 
-1. **Spherical Subspace ($\mathbb{S}^n$):** Modeled as the locus of vectors satisfying the Diophantine quadratic constraint $X \cdot X = +Q(1)$ in Euclidean space $\mathcal{C}\ell_{n+1, 0}$. Great-circle geodesics and spherical triangles are evaluated purely via rational bivector rotors without trigonometric projections.
-2. **Hyperbolic Subspace ($\mathbb{H}^n$):** Modeled via the Weierstrass hyperboloid within Minkowski spacetime $\mathcal{C}\ell_{n, 1}$ under constraint $X \cdot X = -Q(1)$. Non-Euclidean parallel transport and spatial expansion are governed by hyperbolic boost rotors $(\vec{e}_i \wedge \vec{e}_0)^2 = +Q(1)$.
-3. **Conformal Geometric Algebra (CGA):** By introducing two discrete null basis vectors ($e_{\mathrm{horizon}}$ for the declared task boundary ceiling $Qn(\max)$ and $e_0$ for local genesis origin $Q(0)$), conformal and projective transformations reduce to linear rotor reflections without invoking actual infinities ($X^2 = 0$).
-4. **Discrete Curved Manifolds:** General curved spaces are represented as simplicial complexes (discrete Regge calculus). Curvature is measured not by continuous Ricci tensors, but by **discrete deficit angles** around codimension-2 hinges, evaluated as exact closed bivector loops in $\mathrm{Qm}$.
+1. **Spherical Subspace ($\mathbb{S}^n$):** Modeled as the locus of vectors satisfying the quadratic constraint $X \cdot X = +Q(1)$ in Euclidean space $\mathcal{C}\ell_{n+1, 0}$. Great-circle geodesics are evaluated via rational bivector rotors without trigonometric projections.
+2. **Hyperbolic Subspace ($\mathbb{H}^n$):** Modeled via the Weierstrass hyperboloid within Minkowski spacetime $\mathcal{C}\ell_{n, 1}$ under constraint $X \cdot X = -Q(1)$. Non-Euclidean parallel transport is governed by hyperbolic boost rotors $(\vec{e}_i \wedge \vec{e}_0)^2 = +Q(1)$.
+3. **Conformal Geometric Algebra (CGA):** Introducing two discrete null basis vectors ($e_{\mathrm{horizon}}$ for the task boundary ceiling $Qn(\max)$ and $e_0$ for local genesis origin $Q(0)$) reduces conformal and projective transformations to linear rotor reflections without invoking actual infinities ($X^2 = 0$).
+4. **Discrete Curved Manifolds:** General curved spaces are represented as simplicial complexes (discrete Regge calculus). Curvature is measured not by continuous Ricci tensors, but by **discrete deficit angles** around codimension-2 hinges.
 
 ---
 
@@ -149,19 +136,11 @@ In $\mathrm{Qm}$ Geometry, the multiplication of two vectors $\vec{u}$ and $\vec
 
 $$\vec{u} \vec{v} = \vec{u} \cdot \vec{v} + \vec{u} \wedge \vec{v}$$
 
-This product decomposes the interaction into two distinct grades: a symmetric scalar inner product and an anti-symmetric bivector outer product.
-
-```
-                    THE CLIFFORD GEOMETRIC PRODUCT
- ┌─────────────────────────────────────────────────────────────────┐
- │               u v  =  (u · v)   +   (u ∧ v)                     │
- ├────────────────────────────────┬────────────────────────────────┤
- │ Grade 0: Inner Product         │ Grade 2: Outer / Wedge Product │
- │ Symmetric Metric Contraction   │ Anti-Symmetric Oriented Area   │
- │   u · v = 1/2 (uv + vu)        │   u ∧ v = 1/2 (uv - vu)        │
- │   Value ∈ Qm Scalar Leaf       │   Value ∈ Qm Bivector Leaf     │
- └────────────────────────────────┴────────────────────────────────┘
-```
+| Product Component | Grade | Algebraic Symmetry | Geometric Role | Evaluation Engine |
+|---|---|---|---|---|
+| **Inner Product** ($\vec{u} \cdot \vec{v}$) | Grade 0 (Scalar) | Symmetric: $\frac{1}{2}(uv + vu)$ | Metric contraction / projection | $\mathrm{Qm}$ $\mathcal{R}$-algebra scalar leaf |
+| **Wedge Product** ($\vec{u} \wedge \vec{v}$) | Grade 2 (Bivector) | Anti-symmetric: $\frac{1}{2}(uv - vu)$ | Oriented planar area patch | Canonical bivector blade |
+| **Geometric Product** ($\vec{u} \vec{v}$) | Multivector | Graded associative sum | Total spatial interaction | Complete Clifford blade set |
 
 ### 3.1. The Discrete Inner Product
 
@@ -197,29 +176,26 @@ A general geometric artifact $M \in \mathcal{C}\ell_{p, q}$ is a graded multivec
 
 $$M = \sum_{k=0}^n \langle M \rangle_k = \langle M \rangle_0 + \langle M \rangle_1 + \langle M \rangle_2 + \dots + \langle M \rangle_n$$
 
-```
-                      GRADE STRUCTURE IN Qm GEOMETRY
- ┌───────┬──────────────┬────────────────────────┬─────────────────────────┐
- │ Grade │ Entity       │ Geometric Object       │ Basis Canonical Form    │
- ├───────┼──────────────┼────────────────────────┼─────────────────────────┤
- │   0   │ Scalar       │ Magnitude / Distance   │ 1 (Unit scalar Q(1))    │
- │   1   │ Vector       │ Directed Segment       │ e_i                     │
- │   2   │ Bivector     │ Oriented Planar Patch  │ e_i ∧ e_j               │
- │   3   │ Trivector    │ Oriented Volume Cell   │ e_i ∧ e_j ∧ e_k         │
- │   n   │ Pseudoscalar │ Maximum Volume Element │ I = e_1 ∧ e_2 ∧ ... ∧ e_n│
- └───────┴──────────────┴────────────────────────┴─────────────────────────┘
-```
+| Grade | Canonical Entity | Geometric Object | Canonical Basis Representation |
+|---|---|---|---|
+| **0** | Scalar | Metric magnitude / distance | $Q(1)$ |
+| **1** | Vector | Directed spatial segment | $\vec{e}_i$ |
+| **2** | Bivector | Oriented planar area patch | $\vec{e}_i \wedge \vec{e}_j$ |
+| **3** | Trivector | Oriented spatial volume cell | $\vec{e}_i \wedge \vec{e}_j \wedge \vec{e}_k$ |
+| **$n$** | Pseudoscalar | Maximum oriented volume element | $I = \vec{e}_1 \wedge \vec{e}_2 \wedge \dots \wedge \vec{e}_n$ |
 
 ### 4.1. Canonical Multivector State Tuple
 
 Every multivector artifact in $\mathrm{Qm}$ carries an explicit, finite representation:
 
-$$M \equiv \Big\langle \sigma_M, \, \{ \alpha_B \}_{B \in \mathcal{B}}, \, z, \, r_M, \, \mathcal{D}_{\mathrm{frame}} \Big\rangle$$
+$$M \equiv \Big\langle \sigma_M, \, \alpha_{\mathcal{B}}, \, z, \, r_M, \, \mathcal{D}_{\mathrm{frame}} \Big\rangle$$
 
-where:
-- $\mathcal{B} = \bigcup_{k=0}^n \binom{\mathcal{D}_{\mathrm{frame}}}{k}$ is the complete canonical basis blade set ($|\mathcal{B}| = 2^n$).
-- Each blade coefficient $\alpha_B$ is a discrete scalar magnitude $q_B \in \mathbb{N}$ at zoom $z$.
-- $r_M$ is the vector of conserved residual remainders, satisfying $0 \le |r_B| \lt \delta_z(d)$ for each blade component.
+| Tuple Component | Symbolic Form | Operational Invariant |
+|---|---|---|
+| **Basis Blade Set** | $\mathcal{B} = \bigcup_{k=0}^n \binom{\mathcal{D}_{\mathrm{frame}}}{k}$ | Complete canonical set of $2^n$ blade generators. |
+| **Blade Coefficients** | $\alpha_{\mathcal{B}} = \{ q_B \in \mathbb{N} \}$ | Discrete scalar magnitudes at zoom $z$ for each blade $B \in \mathcal{B}$. |
+| **Residual Vector** | $r_M = \{ r_B \}$ | Vector of conserved remainders satisfying $0 \le \|r_B\| \lt \delta_z(d)$. |
+| **Coordinate Frame** | $\mathcal{D}_{\mathrm{frame}}$ | Declared set of $n$ orthogonal axes $\{ d_1, \dots, d_n \}$. |
 
 ### 4.2. Pseudoscalar Duality
 
@@ -237,16 +213,16 @@ In conventional graphics and physics simulations, rotations are parameterized vi
 
 $$R = \cos(\theta/2) - I \sin(\theta/2)$$
 
-Because $\cos(\theta)$ and $\sin(\theta)$ are transcendental irrationals for almost all rational angles, continuous engines round them to 32-bit or 64-bit IEEE 754 floats. This introduces metric drift: after $10^6$ rotations, $|R|^2 \neq 1$, forcing artificial normalization cycles.
+Because $\cos(\theta)$ and $\sin(\theta)$ are transcendental irrationals for almost all rational angles, continuous engines round them to 32-bit or 64-bit IEEE 754 floats. This introduces metric drift: after $10^6$ rotations, $\|R\|^2 \neq 1$, forcing artificial normalization cycles.
 
 $\mathrm{Qm}$ Geometry solves this via **Cartan-Dieudonné Double Reflections** and **Rational Cayley-Klein Rotors**.
 
-```
-                     CARTAN-DIEUDONNÉ ROTATION MECHANISM
-             Vector v ──► Reflect across a ──► Reflect across b ──► v'
-                          v_mid = - a v a⁻¹     v' = - b v_mid b⁻¹
-                          Result: v' = R v R†  where R = b a
-```
+| Rotation Method | Mathematical Formulation | Precision and Drift Invariant |
+|---|---|---|
+| **Classical Floating Quaternion** | $R = \cos(\theta/2) - I \sin(\theta/2)$ | Lossy; accumulates metric drift ($\|R\|^2 \neq 1$); violates Axiom 10. |
+| **Cartan-Dieudonné Double Reflection** | $R = \vec{b} \vec{a} = \vec{b} \cdot \vec{a} + \vec{b} \wedge \vec{a}$ | Exact; composite of two discrete planar reflections. |
+| **Rational Cayley Rotor** | $R = \frac{Q(1) - B}{Q(1) + B} = \frac{(m^2 - n^2) + 2mn B}{m^2 + n^2}$ | Strict unitary norm $\|R\|^2 \equiv Q(1)$; zero trigonometric drift. |
+| **Projective Angle Cascade** | $\theta_z = \theta_{\mathrm{discrete}} + r_{\theta}$ | Projective rational convergence via continued fractions; $r_{\theta}$ conserved. |
 
 ### 5.1. The Rotor Morphism
 
@@ -280,7 +256,7 @@ When an arbitrary target angle $\theta$ is externally supplied, $\mathrm{Qm}$ do
 
 $$\theta_z = \theta_{\mathrm{discrete}} + r_{\theta}$$
 
-where $r_{\theta}$ is preserved in the remainder envelope. If $r_{\theta} = Q(0)$, the rotation is algebraically exact, emitting `RECEIPT_TERMINAL_EXACTNESS`.
+The angular remainder $r_{\theta}$ is preserved in the metric envelope. If $r_{\theta} = Q(0)$, the rotation is algebraically exact, emitting `RECEIPT_TERMINAL_EXACTNESS`.
 
 ---
 
@@ -310,26 +286,11 @@ A governing distinction between $\mathrm{Qm}$ Geometry and classical numerical e
 
 In classical systems, every intermediate geometric operation eagerly rounds to machine floats, accumulating precision drift and repeatedly dissipating Landauer heat ($W \ge k_B T \ln 2$). $\mathrm{Qm}$ Geometry executes geometric workflows through a **Three-Stage Lifecycle**:
 
-```
-                    THE THREE-STAGE GEOMETRIC WORKFLOW
- ┌────────────────────────────────────────────────────────────────────────┐
- │ STAGE 1: SYMBOLIC COMPOSITION (Layer 3 — Qexpr AST)                    │
- │ Multivector products, rotor compositions, and reflections are authored │
- │ as unevaluated expression trees. No numerical rounding is executed.    │
- ├────────────────────────────────────────────────────────────────────────┤
- │ STAGE 2: ALGEBRAIC CANONICALIZATION (Factoring & Term Rewriting)       │
- │ • Contract Clifford basis metrics: e_i · e_i = ±Q(1)                   │
- │ • Annihilate collinear wedge products: e_i ∧ e_i = Q(0)                │
- │ • Composite rotor chains: R_net = R_k ... R_2 · R_1                    │
- │ • Factor like-blades and cancel inverse reflections: R R† = Q(1)       │
- │ Zero Landauer Dissipation: W_algebraic = 0 (Isomorphic & Reversible)   │
- ├────────────────────────────────────────────────────────────────────────┤
- │ STAGE 3: TERMINAL BOUNDED COLLAPSE (Layer 1/2 — Leaf Generation)       │
- │ Executed ONLY when an explicit numerical leaf is demanded at Zoom z.   │
- │ Quantizes into discrete tuple ⟨σ, q_z, z, r_z, D⟩ and Remainder Receipt│
- │ Single Dissipative Event: W_total = 1 · W_collapse << k · W_eager      │
- └────────────────────────────────────────────────────────────────────────┘
-```
+| Execution Stage | Abstraction Layer | Operational Mechanics | Thermodynamic Work Bound |
+|---|---|---|---|
+| **Stage 1: Composition** | Layer 3 ($\text{Qexpr}$ AST) | Multivector products and rotor chains authored as symbolic trees. Zero rounding. | $W = 0$ (Information preserved) |
+| **Stage 2: Normalization** | Layer 2/3 (Rewrite Engine) | Contract basis metrics, annihilate nilpotencies ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), cancel inverse rotors ($R R^{\dagger} = Q(1)$). | $W = 0$ (Isomorphic & reversible) |
+| **Stage 3: Collapse** | Layer 1/2 ($\mathrm{Qm}$ Leaf) | Project onto zoom $z$ only upon boundary demand; compute quotient $q_z$ and remainder $r_z$. | $W = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{eager}}$ |
 
 ### 7.1. Thermodynamic Landauer Minimization Proof
 
