@@ -2,7 +2,7 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.3
+version: 1.1.4
 updated: 2026-10-04
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -48,7 +48,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.3 |
+| **Version** | 1.1.4 |
 | **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -325,9 +325,14 @@ $$n \le \mathrm{Dim}_{\mathrm{max}}$$
 Typically $n \le 4$ for physical simulations in $\mathrm{Qphy}$; $n \le 16$ for high-dimensional semantic spaces in $\mathrm{Qs}$.
 
 - If a composition of wedge products attempts to construct a grade exceeding $n$, the result collapses identically to zero ($Q(0)$) by the nilpotency of outer products, terminating in $\mathcal{O}(1)$ work.
-- If an algebraic transformation exceeds the declared metric budget, execution halts deterministically under **Axiom 6**, emitting the receipt:
+- If an algebraic transformation exceeds the declared metric budget, execution halts deterministically under **Axiom 6**, emitting an explicit budget exhaustion receipt:
 
-$$\mathrm{Receipt}(\texttt{DIMENSIONAL\_BUDGET\_EXHAUSTED}) \equiv \langle \text{Status: } \texttt{BUDGET\_EXHAUSTED}, \, \text{Frame: } n, \, \text{ConsumedWork: } W \rangle$$
+| Receipt Field | Specification |
+|---|---|
+| **Receipt Identifier** | `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` |
+| **Execution Status** | `BUDGET_EXHAUSTED` |
+| **Frame Dimension** | Bound $n$ |
+| **Consumed Metric** | Consumed work budget $W$ ($Q(1)$ units) |
 
 ---
 
