@@ -1,7 +1,7 @@
 # CDQN Unified Glossary — Single Source of Truth
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-04 (Bao Loc, Vietnam)
+# Updated: 2026-10-05 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -104,8 +104,8 @@
       section: "2.4. Stage 4: Inner-Ring PQC Key Generation"
       anchor: "#24-stage-4-inner-ring-pqc-key-generation"
     - doc: "q2_q9.md"
-      section: "4.1. Structural Indirection Protection"
-      anchor: "#41-structural-indirection-protection"
+      section: "4.1. Abstract Contract Decoupling"
+      anchor: "#41-abstract-contract-decoupling"
 
 - term: "Metric Exhaustion"
   slug: "metric-exhaustion"
@@ -466,8 +466,8 @@
       section: "2.2. Invariant Single-Digit Properties"
       anchor: "#22-invariant-single-digit-properties"
     - doc: "q2_q9.md"
-      section: "5. Constructive Parity Partitions: Q(even) and Q(odd)"
-      anchor: "#5-constructive-parity-partitions-qeven-and-qodd"
+      section: "6. Constructive Parity Partitions: Q(even) and Q(odd)"
+      anchor: "#6-constructive-parity-partitions-qeven-and-qodd"
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -728,8 +728,8 @@
       section: "1. Epistemic Scope and the Secondary DCC Role"
       anchor: "#1-epistemic-scope-and-the-secondary-dcc-role"
     - doc: "q2_q9.md"
-      section: "5.1. Classification of Genesis Origin Q(0)"
-      anchor: "#51-classification-of-genesis-origin-q0"
+      section: "6.1. Classification of Genesis Origin Q(0)"
+      anchor: "#61-classification-of-genesis-origin-q0"
 
 - term: "Q(1)"
   slug: "q1"
@@ -843,8 +843,8 @@
     demonstrating modulo-2 Terminal Exactness. Includes local genesis origin Q(0).
   sources:
     - doc: "q2_q9.md"
-      section: "5. Constructive Parity Partitions: Q(even) and Q(odd)"
-      anchor: "#5-constructive-parity-partitions-qeven-and-qodd"
+      section: "6. Constructive Parity Partitions: Q(even) and Q(odd)"
+      anchor: "#6-constructive-parity-partitions-qeven-and-qodd"
 
 - term: "Q(odd)"
   slug: "q-odd"
@@ -854,8 +854,8 @@
     Q(2) yields a remainder identically equal to first unit Q(1).
   sources:
     - doc: "q2_q9.md"
-      section: "5. Constructive Parity Partitions: Q(even) and Q(odd)"
-      anchor: "#5-constructive-parity-partitions-qeven-and-qodd"
+      section: "6. Constructive Parity Partitions: Q(even) and Q(odd)"
+      anchor: "#6-constructive-parity-partitions-qeven-and-qodd"
 
 - term: "Qm"
   slug: "qm"
@@ -882,6 +882,45 @@
     - doc: "qm_geometry.md"
       section: "1. Epistemic Stance and Dimensional Generalization"
       anchor: "#1-epistemic-stance-and-dimensional-generalization"
+
+- term: "Qlog"
+  slug: "qlog"
+  category: "Primitives"
+  definition: >
+    Quang Logics. An emergent composite domain derived from the categorical
+    tensor product of Quang Mathematics and Quang Semantics (Qm ⊗ Qs). Formalizes
+    constructive type theory, intuitionistic propositional deduction, and
+    automated proof verification without ungrounded non-constructive axioms.
+  sources:
+    - doc: "index.md"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
+    - doc: "q2_q9.md"
+      section: "4.1. Abstract Contract Decoupling"
+      anchor: "#41-abstract-contract-decoupling"
+    - doc: "chronosa.md"
+      section: "2.4. Open Domain Stratification"
+      anchor: "#24-open-domain-stratification"
+
+- term: "Qbio"
+  slug: "qbio"
+  category: "Primitives"
+  definition: >
+    Quang Biology. An emergent composite domain derived from the tensor product
+    of Quang Physics, Quang Mathematics, and Quang Semantics (Qphy ⊗ Qm ⊗ Qs).
+    Models non-equilibrium dissipative metabolic systems, cellular automata,
+    active inference, and genetic information channels operating as bounded
+    SIMEMP open systems.
+  sources:
+    - doc: "index.md"
+      section: "2. Method of Exploration: The Recursive Emergence Trajectory"
+      anchor: "#2-method-of-exploration-the-recursive-emergence-trajectory"
+    - doc: "q2_q9.md"
+      section: "4.1. Abstract Contract Decoupling"
+      anchor: "#41-abstract-contract-decoupling"
+    - doc: "chronosa.md"
+      section: "2.4. Open Domain Stratification"
+      anchor: "#24-open-domain-stratification"
 
 - term: "Q(reuse)"
   slug: "q-reuse"
@@ -1496,8 +1535,8 @@
       section: "8. Structural Indirection: Q(anchor) in Qm"
       anchor: "#8-structural-indirection-qanchor-in-qm"
     - doc: "q2_q9.md"
-      section: "4. The Primary Algebraic Anchors: Q(2), Q(3), Q(8), Q(9)"
-      anchor: "#4-the-primary-algebraic-anchors-q2-q3-q8-q9"
+      section: "4. The Complete Single-Digit Anchor Spectrum (Q(2) ... Q(9))"
+      anchor: "#4-the-complete-single-digit-anchor-spectrum-q2--q9"
 
 - term: "Universal Envelope"
   slug: "universal-envelope"
@@ -1764,6 +1803,9 @@
     - doc: "qm_geometry.md"
       section: "Normative References"
       anchor: "#normative-references"
+    - doc: "q2_q9.md"
+      section: "Normative References"
+      anchor: "#normative-references"
 
 - term: "Derivative Work"
   slug: "derivative-work"
@@ -1857,8 +1899,8 @@
       section: "9. License and Invariant Lineage"
       anchor: "#9-license-and-invariant-lineage"
     - doc: "q2_q9.md"
-      section: "8. License and Lineage Alignment"
-      anchor: "#8-license-and-lineage-alignment"
+      section: "9. License and Lineage Alignment"
+      anchor: "#9-license-and-lineage-alignment"
 
 - term: "SSL"
   slug: "ssl"
@@ -1907,5 +1949,5 @@
       section: "9. License and Invariant Lineage"
       anchor: "#9-license-and-invariant-lineage"
     - doc: "q2_q9.md"
-      section: "8. License and Lineage Alignment"
-      anchor: "#8-license-and-lineage-alignment"
+      section: "9. License and Lineage Alignment"
+      anchor: "#9-license-and-lineage-alignment"
