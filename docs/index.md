@@ -2,7 +2,7 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.4.0
+version: 1.4.1
 updated: 2026-10-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -71,11 +71,11 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.4.0 |
+| **Version** | 1.4.1 |
 | **Last Updated** | 2026-10-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Architectural Portal — Category A & Qm Core Verified |
+| **Status** | Active Research Framework — Formulated Working Hypotheses |
 
 ---
 
@@ -98,11 +98,11 @@ Classical computing abstractions frequently rely on non-constructive assumptions
 
 ## 2. Method of Exploration: The Recursive Emergence Trajectory
 
-The documentation suite does not claim closed mathematical finality. The system operates as an active, recursive discovery pipeline:
+The documentation suite does not claim closed empirical finality. The system operates as an active, recursive discovery pipeline:
 
 $$\text{Proposal} \xrightarrow{\quad} \text{Construction} \xrightarrow{\quad} \text{Evaluation} \xrightarrow{\quad} \text{Selection}$$
 
-Abstractions and axioms represent **provisional hypotheses** formulated using {% include term.html id="structural-indirection" %} to avoid premature structural calcification while retaining agility against zero-day vulnerabilities. Verification is conducted operationally via {% include term.html id="computational-consistency" %}:
+Abstractions and axioms represent **provisional working hypotheses** formulated using {% include term.html id="structural-indirection" %} to avoid premature structural calcification while retaining agility against zero-day vulnerabilities. Verification is conducted operationally via {% include term.html id="computational-consistency" %}:
 
 $$\text{Valid}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \forall p \in \text{QnIR}(\mathcal{A}), \, \text{TerminatesWithinBudget}(p) \right)$$
 
@@ -111,15 +111,16 @@ Development proceeds through consecutive emergence milestones toward an operatio
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ CATEGORY A: Foundational Hardware & Single-Digit Primitives     │
-│ • Q(0), Q(1) Genesis & Calibration ── [VERIFIED v1.0.1]         │
-│ • Q(2)...Q(9) Secondary DCC Anchors── [VERIFIED v1.0.2]         │
+│ • Q(0), Q(1) Genesis & Calibration ── [HYPOTHESIS v1.0.1]       │
+│ • Q(2)...Q(9) Secondary DCC Anchors── [HYPOTHESIS v1.0.2]       │
 ├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 1: Local Base Domains                                 │
-│ • Qm (Arithmetic Substrate)        ── [VERIFIED v1.1.0]         │
-│ • Qm Geometry (Clifford Algebra)   ── [VERIFIED v1.1.4]         │
+│ • Qm (Arithmetic Substrate)        ── [HYPOTHESIS v1.1.0]       │
+│ • Qm Geometry (Clifford Algebra)   ── [HYPOTHESIS v1.1.4]       │
 │ • Qm Calculus (Discrete Calculus)  ── [IN PROGRESS]             │
 │ • Qs (Quang Semantics)             ── [PENDING]                 │
 │ • Qphy (Quang Physics)             ── [PENDING]                 │
+│ • Emergent Domains: Qlog, Qbio     ── [EXTENSIBLE LATTICE]      │
 └────────────────────────────────┬────────────────────────────────┘
                                  │
                                  ▼
