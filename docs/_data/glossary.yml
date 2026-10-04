@@ -1,7 +1,7 @@
 # CDQN Unified Glossary — Single Source of Truth
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-03 (Bao Loc, Vietnam)
+# Updated: 2026-10-04 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -45,6 +45,9 @@
     - doc: "q0_q1.md"
       section: "1. Scope and Constitutional Anchoring"
       anchor: "#1-scope-and-constitutional-anchoring"
+    - doc: "qm_geometry.md"
+      section: "1. Epistemic Stance and Dimensional Generalization"
+      anchor: "#1-epistemic-stance-and-dimensional-generalization"
 
 - term: "Structural Indirection"
   slug: "structural-indirection"
@@ -184,6 +187,9 @@
       section: "Normative References"
       anchor: "#normative-references"
     - doc: "q0_q1.md"
+      section: "Normative References"
+      anchor: "#normative-references"
+    - doc: "qm_geometry.md"
       section: "Normative References"
       anchor: "#normative-references"
 
@@ -373,6 +379,9 @@
     - doc: "q0_q1.md"
       section: "1. Scope and Constitutional Anchoring"
       anchor: "#1-scope-and-constitutional-anchoring"
+    - doc: "qm_geometry.md"
+      section: "1. Epistemic Stance and Dimensional Generalization"
+      anchor: "#1-epistemic-stance-and-dimensional-generalization"
 
 - term: "Computational Consistency"
   slug: "computational-consistency"
@@ -435,6 +444,9 @@
     - doc: "q0_q1.md"
       section: "5.2. Invariant Properties of Single Digits"
       anchor: "#52-invariant-properties-of-single-digits"
+    - doc: "qm_geometry.md"
+      section: "5.3. Projective Cascade for Arbitrary Target Angles"
+      anchor: "#53-projective-cascade-for-arbitrary-target-angles"
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -552,6 +564,9 @@
     - doc: "qm.md"
       section: "3.5. Dimensional Orthogonality (Dimension d)"
       anchor: "#35-dimensional-orthogonality-dimension-d"
+    - doc: "qm_geometry.md"
+      section: "2.1. The Orthogonal Basis Set"
+      anchor: "#21-the-orthogonal-basis-set"
 
 - term: "Qn"
   slug: "qn"
@@ -790,6 +805,9 @@
     - doc: "q0_q1.md"
       section: "5.1. Inductive Derivation Rules"
       anchor: "#51-inductive-derivation-rules"
+    - doc: "qm_geometry.md"
+      section: "1. Epistemic Stance and Dimensional Generalization"
+      anchor: "#1-epistemic-stance-and-dimensional-generalization"
 
 - term: "Q(reuse)"
   slug: "q-reuse"
@@ -806,6 +824,9 @@
     - doc: "qnPrimitive.md"
       section: "14. Exclusions"
       anchor: "#14-exclusions"
+    - doc: "qm_geometry.md"
+      section: "7.2. Coupling to Optimization Morphisms"
+      anchor: "#72-coupling-to-optimization-morphisms"
 
 - term: "Q(bypass)"
   slug: "q-bypass"
@@ -822,6 +843,9 @@
     - doc: "qnPrimitive.md"
       section: "14. Exclusions"
       anchor: "#14-exclusions"
+    - doc: "qm_geometry.md"
+      section: "7.2. Coupling to Optimization Morphisms"
+      anchor: "#72-coupling-to-optimization-morphisms"
 
 - term: "cdqn"
   slug: "cdqn"
@@ -1032,6 +1056,9 @@
     - doc: "qm.md"
       section: "7. Interaction with Qexpr and Derivation of Higher Mathematics"
       anchor: "#7-interaction-with-qexpr-and-derivation-of-higher-mathematics"
+    - doc: "qm_geometry.md"
+      section: "7. Deferred Symbolic Normalization and Bounded Collapse Engine"
+      anchor: "#7-deferred-symbolic-normalization-and-bounded-collapse-engine"
 
 - term: "Qn(workflow)"
   slug: "qn-workflow"
@@ -1262,6 +1289,9 @@
     - doc: "qm.md"
       section: "2.2. Complexity Degree Stratification"
       anchor: "#22-complexity-degree-stratification"
+    - doc: "qm_geometry.md"
+      section: "Normative References"
+      anchor: "#normative-references"
 
 - term: "Local-first"
   slug: "local-first"
@@ -1651,6 +1681,9 @@
     - doc: "q0_q1.md"
       section: "Normative References"
       anchor: "#normative-references"
+    - doc: "qm_geometry.md"
+      section: "Normative References"
+      anchor: "#normative-references"
 
 - term: "Derivative Work"
   slug: "derivative-work"
@@ -1740,6 +1773,9 @@
     - doc: "q0_q1.md"
       section: "7. License and Lineage Alignment"
       anchor: "#7-license-and-lineage-alignment"
+    - doc: "qm_geometry.md"
+      section: "9. License and Invariant Lineage"
+      anchor: "#9-license-and-invariant-lineage"
 
 - term: "SSL"
   slug: "ssl"
@@ -1784,3 +1820,6 @@
     - doc: "q0_q1.md"
       section: "7. License and Lineage Alignment"
       anchor: "#7-license-and-lineage-alignment"
+    - doc: "qm_geometry.md"
+      section: "9. License and Invariant Lineage"
+      anchor: "#9-license-and-invariant-lineage"
