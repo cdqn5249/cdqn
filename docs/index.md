@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.3.0
-updated: 2026-10-04
+version: 1.4.0
+updated: 2026-10-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -49,6 +49,9 @@ terms_used:
   - q-reuse
   - q-bypass
   - qexpr
+  - q-even
+  - q-odd
+  - successor-morphism
 ---
 
 # CDQN Documentation Portal
@@ -68,11 +71,11 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
+| **Version** | 1.4.0 |
+| **Last Updated** | 2026-10-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Active Research Framework — Category A, Qm & Qm Geometry Verified |
+| **Status** | Canonical Architectural Portal — Category A & Qm Core Verified |
 
 ---
 
@@ -107,9 +110,9 @@ Development proceeds through consecutive emergence milestones toward an operatio
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ CATEGORY A: Foundational Hardware Primitives                    │
+│ CATEGORY A: Foundational Hardware & Single-Digit Primitives     │
 │ • Q(0), Q(1) Genesis & Calibration ── [VERIFIED v1.0.1]         │
-│ • Q(2)...Q(9) Single Digits        ── [VERIFIED v1.0.1]         │
+│ • Q(2)...Q(9) Secondary DCC Anchors── [VERIFIED v1.0.2]         │
 ├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 1: Local Base Domains                                 │
 │ • Qm (Arithmetic Substrate)        ── [VERIFIED v1.1.0]         │
@@ -149,29 +152,33 @@ Development proceeds through consecutive emergence milestones toward an operatio
 [3. Category A Primitives] 
        │
        ▼
-[4. Qn Primitive Envelope] 
+[4. Single-Digit Primitives] 
        │
        ▼
-[5. Qm Mathematics] 
+[5. Qn Primitive Envelope] 
        │
        ▼
-[6. Qm Geometry] 
+[6. Qm Mathematics] 
        │
        ▼
-[7. Chronosa Vision] 
+[7. Qm Geometry] 
        │
        ▼
-[8. Glossary & SSL License]
+[8. Chronosa Vision] 
+       │
+       ▼
+[9. Glossary & SSL License]
 ```
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
 2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: Structural hierarchy from Layer 0 (Physical Substrate) to Layer 1 (Node Genesis), fractal {% include term.html id="cdqn" %} data movement, local-first base domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$), and complexity degree stratification.
-3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0), first unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1), abstract compute unit $U$ calibrated to Landauer dissipation ($W \ge k_B T \ln 2$), hardware lifecycle and crash recovery receipts, and inductive single-digit genesis ($Q(2) \dots Q(9)$).
-4. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, working operational axioms, typed payload profiles, and lifecycle state machines.
-5. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric, relational, and algebraic substrate. Formulates the discrete tuple $\langle \sigma, q_z, z, r_z, d \rangle$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability.
-6. **[Qm Geometry]({{ '/qm_geometry.html' | relative_url }})**: Multi-axial orthogonal frames, Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$), and float-free rotations. Formulates exact rational rotors, Cartan-Dieudonné double reflections, non-Euclidean subspace inclusions, and deferred symbolic collapse under Landauer work minimization.
-7. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
-8. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology concordance, bidirectional backlinks, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0), first unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1), abstract compute unit $U$ calibrated to Landauer dissipation ($W \ge k_B T \ln 2$), hardware lifecycle, and crash recovery receipts.
+4. **[Single-Digit Primitives]({{ '/q2_q9.html' | relative_url }})**: Inductive successor cascade $\mathcal{S}(x) = x + Q(1)$, complete single-digit anchor spectrum ($Q(2) \dots Q(9)$), emergent algebraic constants ($\phi, \sqrt{2}$), constructive parity partitions (`Q(even)`, `Q(odd)`), and multiplicative domain asymmetries ($\mathcal{Q}^+$ vs. $\mathcal{Q}^-$).
+5. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, working operational axioms, typed payload profiles, and lifecycle state machines.
+6. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric, relational, and algebraic substrate. Formulates the discrete tuple $\langle \sigma, q_z, z, r_z, d \rangle$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability.
+7. **[Qm Geometry]({{ '/qm_geometry.html' | relative_url }})**: Multi-axial orthogonal frames, Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$), and float-free rotations. Formulates exact rational rotors, Cartan-Dieudonné double reflections, non-Euclidean subspace inclusions, and deferred symbolic collapse under Landauer work minimization.
+8. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
+9. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology concordance, bidirectional backlinks, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
