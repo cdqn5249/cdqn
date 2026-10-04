@@ -48,6 +48,9 @@
     - doc: "qm_geometry.md"
       section: "1. Epistemic Stance and Dimensional Generalization"
       anchor: "#1-epistemic-stance-and-dimensional-generalization"
+    - doc: "q2_q9.md"
+      section: "1. Epistemic Scope and the Secondary DCC Role"
+      anchor: "#1-epistemic-scope-and-the-secondary-dcc-role"
 
 - term: "Structural Indirection"
   slug: "structural-indirection"
@@ -100,6 +103,9 @@
     - doc: "q0_q1.md"
       section: "2.4. Stage 4: Inner-Ring PQC Key Generation"
       anchor: "#24-stage-4-inner-ring-pqc-key-generation"
+    - doc: "q2_q9.md"
+      section: "4.1. Structural Indirection Protection"
+      anchor: "#41-structural-indirection-protection"
 
 - term: "Metric Exhaustion"
   slug: "metric-exhaustion"
@@ -192,6 +198,9 @@
     - doc: "qm_geometry.md"
       section: "Normative References"
       anchor: "#normative-references"
+    - doc: "q2_q9.md"
+      section: "Normative References"
+      anchor: "#normative-references"
 
 - term: "DCC Profile"
   slug: "dcc-profile"
@@ -256,6 +265,9 @@
     - doc: "q0_q1.md"
       section: "3. Field Anatomy of Local Genesis Object Q(0)"
       anchor: "#3-field-anatomy-of-local-genesis-object-q0"
+    - doc: "q2_q9.md"
+      section: "1. Epistemic Scope and the Secondary DCC Role"
+      anchor: "#1-epistemic-scope-and-the-secondary-dcc-role"
 
 - term: "Existential Invariant"
   slug: "existential-invariant"
@@ -382,6 +394,9 @@
     - doc: "qm_geometry.md"
       section: "1. Epistemic Stance and Dimensional Generalization"
       anchor: "#1-epistemic-stance-and-dimensional-generalization"
+    - doc: "q2_q9.md"
+      section: "2. Inductive Successor Cascade Along Axis d1"
+      anchor: "#2-inductive-successor-cascade-along-axis-d1"
 
 - term: "Computational Consistency"
   slug: "computational-consistency"
@@ -447,6 +462,12 @@
     - doc: "qm_geometry.md"
       section: "5.3. Projective Cascade for Arbitrary Target Angles"
       anchor: "#53-projective-cascade-for-arbitrary-target-angles"
+    - doc: "q2_q9.md"
+      section: "2.2. Invariant Single-Digit Properties"
+      anchor: "#22-invariant-single-digit-properties"
+    - doc: "q2_q9.md"
+      section: "5. Constructive Parity Partitions: Q(even) and Q(odd)"
+      anchor: "#5-constructive-parity-partitions-qeven-and-qodd"
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -567,6 +588,9 @@
     - doc: "qm_geometry.md"
       section: "2.1. The Orthogonal Basis Set"
       anchor: "#21-the-orthogonal-basis-set"
+    - doc: "q2_q9.md"
+      section: "2. Inductive Successor Cascade Along Axis d1"
+      anchor: "#2-inductive-successor-cascade-along-axis-d1"
 
 - term: "Qn"
   slug: "qn"
@@ -700,6 +724,12 @@
     - doc: "q0_q1.md"
       section: "3. Field Anatomy of Local Genesis Object Q(0)"
       anchor: "#3-field-anatomy-of-local-genesis-object-q0"
+    - doc: "q2_q9.md"
+      section: "1. Epistemic Scope and the Secondary DCC Role"
+      anchor: "#1-epistemic-scope-and-the-secondary-dcc-role"
+    - doc: "q2_q9.md"
+      section: "5.1. Classification of Genesis Origin Q(0)"
+      anchor: "#51-classification-of-genesis-origin-q0"
 
 - term: "Q(1)"
   slug: "q1"
@@ -759,6 +789,12 @@
     - doc: "q0_q1.md"
       section: "4. Field Anatomy and Calibration of First Unit Q(1)"
       anchor: "#4-field-anatomy-and-calibration-of-first-unit-q1"
+    - doc: "q2_q9.md"
+      section: "1. Epistemic Scope and the Secondary DCC Role"
+      anchor: "#1-epistemic-scope-and-the-secondary-dcc-role"
+    - doc: "q2_q9.md"
+      section: "2. Inductive Successor Cascade Along Axis d1"
+      anchor: "#2-inductive-successor-cascade-along-axis-d1"
 
 - term: "Abstract Compute Unit U"
   slug: "compute-unit-u"
@@ -782,6 +818,44 @@
     - doc: "chronosa.md"
       section: "2.3. Qphy (Quang Physics) — Thermodynamic Realizability"
       anchor: "#23-qphy-quang-physics--thermodynamic-realizability"
+
+- term: "Successor Morphism S"
+  slug: "successor-morphism"
+  category: "Primitives"
+  definition: >
+    The discrete algebraic transition function S(x) = x + Q(1) generating
+    sequential integer artifacts inductively along dimensional axis d1 without
+    continuous or floating-point approximations.
+  sources:
+    - doc: "q0_q1.md"
+      section: "5. Inductive Single-Digit Genesis: Q(2) ... Q(9)"
+      anchor: "#5-inductive-single-digit-genesis-q2--q9"
+    - doc: "q2_q9.md"
+      section: "2. Inductive Successor Cascade Along Axis d1"
+      anchor: "#2-inductive-successor-cascade-along-axis-d1"
+
+- term: "Q(even)"
+  slug: "q-even"
+  category: "Primitives"
+  definition: >
+    The constructive parity partition of integers whose Diophantine division by
+    Q(2) yields a remainder identically equal to genesis origin Q(0),
+    demonstrating modulo-2 Terminal Exactness. Includes local genesis origin Q(0).
+  sources:
+    - doc: "q2_q9.md"
+      section: "5. Constructive Parity Partitions: Q(even) and Q(odd)"
+      anchor: "#5-constructive-parity-partitions-qeven-and-qodd"
+
+- term: "Q(odd)"
+  slug: "q-odd"
+  category: "Primitives"
+  definition: >
+    The constructive parity partition of integers whose Diophantine division by
+    Q(2) yields a remainder identically equal to first unit Q(1).
+  sources:
+    - doc: "q2_q9.md"
+      section: "5. Constructive Parity Partitions: Q(even) and Q(odd)"
+      anchor: "#5-constructive-parity-partitions-qeven-and-qodd"
 
 - term: "Qm"
   slug: "qm"
@@ -1421,6 +1495,9 @@
     - doc: "qm.md"
       section: "8. Structural Indirection: Q(anchor) in Qm"
       anchor: "#8-structural-indirection-qanchor-in-qm"
+    - doc: "q2_q9.md"
+      section: "4. The Primary Algebraic Anchors: Q(2), Q(3), Q(8), Q(9)"
+      anchor: "#4-the-primary-algebraic-anchors-q2-q3-q8-q9"
 
 - term: "Universal Envelope"
   slug: "universal-envelope"
@@ -1451,6 +1528,9 @@
     - doc: "qnPrimitive.md"
       section: "4. Universal Envelope Structure"
       anchor: "#4-universal-envelope-structure"
+    - doc: "q2_q9.md"
+      section: "3. Concrete Anatomy of Single Digits Q(2) ... Q(9)"
+      anchor: "#3-concrete-anatomy-of-single-digits-q2--q9"
 
 - term: "Metric Envelope"
   slug: "metric-envelope"
@@ -1776,6 +1856,9 @@
     - doc: "qm_geometry.md"
       section: "9. License and Invariant Lineage"
       anchor: "#9-license-and-invariant-lineage"
+    - doc: "q2_q9.md"
+      section: "8. License and Lineage Alignment"
+      anchor: "#8-license-and-lineage-alignment"
 
 - term: "SSL"
   slug: "ssl"
@@ -1823,3 +1906,6 @@
     - doc: "qm_geometry.md"
       section: "9. License and Invariant Lineage"
       anchor: "#9-license-and-invariant-lineage"
+    - doc: "q2_q9.md"
+      section: "8. License and Lineage Alignment"
+      anchor: "#8-license-and-lineage-alignment"
