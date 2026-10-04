@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
-description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean manifolds, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.1
+description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
+version: 1.1.2
 updated: 2026-10-04
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -48,7 +48,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.1 |
+| **Version** | 1.1.2 |
 | **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -76,7 +76,7 @@ The foundational operational conjecture of the Qn framework (`docs/simemp.md` §
 
 Classical geometry relies on continuous coordinate spaces ($\mathbb{R}^n$) and irrational trigonometric functions ($\sin, \cos$), introducing platform-dependent IEEE 754 rounding approximations that violate **Axiom 10**.
 
-$\mathrm{Qm}$ Geometry generalizes the 1D leaf state to $n$-dimensional space via **Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$)**. Space, direction, area, volume, and rotation are constructed as **exact, discrete, rational multivector blades** without continuous limits or transcendental float approximations.
+$\mathrm{Qm}$ Geometry generalizes the 1D leaf state to $n$-dimensional space via **Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$)**. Space, direction, area, volume, and rotation are constructed as **exact, discrete, rational multivector blades** without continuous limits, actual infinities, or transcendental float approximations.
 
 Every geometric operation in $\mathrm{Qm}$ satisfies {% include term.html id="dependencies-determinism" %}:
 
@@ -118,14 +118,14 @@ Q(0) & \text{if } i \neq j \quad (\text{Orthogonality})
 - **Euclidean $n$-Space:** $\mathcal{C}\ell_{n, 0}$ where $\eta = (+, +, \dots, +)$.
 - **Space-Time Algebra (Minkowski):** $\mathcal{C}\ell_{1, 3}$ or $\mathcal{C}\ell_{3, 1}$, providing direct spatial foundations for $\mathrm{Qphy}$.
 
-### 2.3. Non-Euclidean Topologies and Manifold Embeddings
+### 2.3. Non-Euclidean Topologies and Subspace Inclusions
 
-$\mathrm{Qm}$ Geometry abstracts non-Euclidean spaces without continuous Riemannian metrics or differential singularities:
+$\mathrm{Qm}$ Geometry abstracts non-Euclidean geometries without continuous Riemannian metrics, dense floating-point tensors, or differential singularities:
 
 ```
-                  NON-EUCLIDEAN CONSTRUCTIVE EMBEDDINGS
+                  NON-EUCLIDEAN CONSTRUCTIVE INCLUSIONS
  ┌──────────────────────────────────────┬──────────────────────────────────────┐
- │ SPHERICAL GEOMETRY (S^n)             │ HYPERBOLIC GEOMETRY (H^n)            │
+ │ SPHERICAL SUBSPACE (S^n)             │ HYPERBOLIC SUBSPACE (H^n)            │
  ├──────────────────────────────────────┼──────────────────────────────────────┤
  │ Metric Signature:                    │ Metric Signature:                    │
  │   Cl(n+1, 0) Euclidean Basis        │   Cl(n, 1) Minkowski Basis           │
@@ -136,9 +136,9 @@ $\mathrm{Qm}$ Geometry abstracts non-Euclidean spaces without continuous Riemann
  └──────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-1. **Spherical Geometry ($\mathbb{S}^n$):** Modeled as the locus of vectors satisfying the Diophantine quadratic constraint $X \cdot X = +Q(1)$ in Euclidean space $\mathcal{C}\ell_{n+1, 0}$. Great-circle geodesics and spherical triangles are evaluated purely via rational bivector rotors without trigonometric projections.
-2. **Hyperbolic Geometry ($\mathbb{H}^n$):** Modeled via the Weierstrass hyperboloid within Minkowski spacetime $\mathcal{C}\ell_{n, 1}$ under constraint $X \cdot X = -Q(1)$. Non-Euclidean parallel transport and spatial expansion are governed by hyperbolic boost rotors $(\vec{e}_i \wedge \vec{e}_0)^2 = +Q(1)$.
-3. **Conformal Geometric Algebra (CGA):** By introducing two discrete null bases ($e_\infty$ for spatial infinity and $e_0$ for local origin), conformal and projective transformations reduce to linear rotor reflections ($X^2 = 0$).
+1. **Spherical Subspace ($\mathbb{S}^n$):** Modeled as the locus of vectors satisfying the Diophantine quadratic constraint $X \cdot X = +Q(1)$ in Euclidean space $\mathcal{C}\ell_{n+1, 0}$. Great-circle geodesics and spherical triangles are evaluated purely via rational bivector rotors without trigonometric projections.
+2. **Hyperbolic Subspace ($\mathbb{H}^n$):** Modeled via the Weierstrass hyperboloid within Minkowski spacetime $\mathcal{C}\ell_{n, 1}$ under constraint $X \cdot X = -Q(1)$. Non-Euclidean parallel transport and spatial expansion are governed by hyperbolic boost rotors $(\vec{e}_i \wedge \vec{e}_0)^2 = +Q(1)$.
+3. **Conformal Geometric Algebra (CGA):** By introducing two discrete null basis vectors ($e_{\mathrm{horizon}}$ for the declared task boundary ceiling $Qn(\max)$ and $e_0$ for local genesis origin $Q(0)$), conformal and projective transformations reduce to linear rotor reflections without invoking actual infinities ($X^2 = 0$).
 4. **Discrete Curved Manifolds:** General curved spaces are represented as simplicial complexes (discrete Regge calculus). Curvature is measured not by continuous Ricci tensors, but by **discrete deficit angles** around codimension-2 hinges, evaluated as exact closed bivector loops in $\mathrm{Qm}$.
 
 ---
