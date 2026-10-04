@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
-description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, and float-free rotations under SIMEMP constraints.
-version: 1.0.1
-updated: 2026-10-03
+description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, and deferred symbolic collapse under SIMEMP constraints.
+version: 1.1.0
+updated: 2026-10-04
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -38,6 +38,9 @@ terms_used:
   - paternity-reference
   - qm
   - compute-unit-u
+  - q-reuse
+  - q-bypass
+  - qexpr
 ---
 
 # Qm Geometry — Multi-Axial Frames and Geometric Algebra
@@ -45,8 +48,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.0.1 |
-| **Last Updated** | 2026-10-03 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category B/D (Complexity Degree 2) |
@@ -278,16 +281,55 @@ If $r_D = Q(0)$, the distance is an exact Pythagorean integer or rational, termi
 
 ---
 
-## 7. SIMEMP Governance and Metric Exhaustion
+## 7. Deferred Symbolic Normalization and Bounded Collapse Engine
+
+A governing distinction between $\mathrm{Qm}$ Geometry and classical numerical engines is the **rejection of eager evaluation** (`docs/abstractionLayers.md` §6.3).
+
+In classical systems, every intermediate geometric operation eagerly rounds to machine floats, accumulating precision drift and repeatedly dissipating Landauer heat ($W \ge k_B T \ln 2$). $\mathrm{Qm}$ Geometry executes geometric workflows through a **Three-Stage Lifecycle**:
+
+```
+                    THE THREE-STAGE GEOMETRIC WORKFLOW
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ STAGE 1: SYMBOLIC COMPOSITION (Layer 3 — Qexpr AST)                    │
+ │ Multivector products, rotor compositions, and reflections are authored │
+ │ as unevaluated expression trees. No numerical rounding is executed.    │
+ ├────────────────────────────────────────────────────────────────────────┤
+ │ STAGE 2: ALGEBRAIC CANONICALIZATION (Factoring & Term Rewriting)       │
+ │ • Contract Clifford basis metrics: e_i · e_i = ±Q(1)                   │
+ │ • Annihilate collinear wedge products: e_i ∧ e_i = Q(0)                │
+ │ • Composite rotor chains: R_net = R_k ... R_2 · R_1                    │
+ │ • Factor like-blades and cancel inverse reflections: R R† = Q(1)       │
+ │ Zero Landauer Dissipation: W_algebraic = 0 (Isomorphic & Reversible)   │
+ ├────────────────────────────────────────────────────────────────────────┤
+ │ STAGE 3: TERMINAL BOUNDED COLLAPSE (Layer 1/2 — Leaf Generation)       │
+ │ Executed ONLY when an explicit numerical leaf is demanded at Zoom z.   │
+ │ Quantizes into discrete tuple ⟨σ, q_z, z, r_z, D⟩ and Remainder Receipt│
+ │ Single Dissipative Event: W_total = 1 · W_collapse << k · W_eager      │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+### 7.1. Thermodynamic Landauer Minimization Proof
+Let a geometric sequence consist of $k$ consecutive rotor transformations.
+1. **Eager Evaluation:** Dissipates $W_{\mathrm{eager}} \ge k \cdot (k_B T \ln 2)$ and compounds $k$ unmeasured remainder vectors.
+2. **Deferred Collapse:** Reversible symbolic reduction preserves information without entropy production ($W_{\mathrm{Stage\,2}} = 0$). Numerical collapse occurs once at the boundary:
+   $$W_{\mathrm{deferred}} = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{collapse}}$$
+
+### 7.2. Coupling to Optimization Morphisms
+- **{% include term.html id="q-bypass" %}:** If Stage 2 proves that an expression reduces to an identity transformation ($R R^{\dagger} = Q(1)$) or null area ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), the sub-tree is bypassed entirely at zero metric cost.
+- **{% include term.html id="q-reuse" %}:** If a factored bivector patch or multivector rotor is shared across multiple geometric branches, `Q(reuse)` references its existing content commitment hash, preventing redundant allocation across the Memory Wall.
+
+---
+
+## 8. SIMEMP Governance and Metric Exhaustion
 
 Operating in multi-dimensional space consumes physical computational resources governed by the **Metric Invariant** (`docs/simemp.md` §3.1).
 
-### 7.1. Complexity Scaling
+### 8.1. Complexity Scaling
 - Vector addition: $\mathcal{O}(n)$ discrete operations.
 - Geometric product: $\mathcal{O}(2^n)$ blade multiplications.
 - Rotor sandwich transformation ($R v R^{\dagger}$): $\mathcal{O}(n \cdot 2^n)$ operations.
 
-### 7.2. Dimensional Ceilings and Budget Halts
+### 8.2. Dimensional Ceilings and Budget Halts
 
 Dimensional growth is bounded by the declared Metric Envelope:
 
@@ -302,7 +344,7 @@ $$\mathrm{Receipt}(\texttt{DIMENSIONAL\_BUDGET\_EXHAUSTED}) \equiv \langle \text
 
 ---
 
-## 8. License and Invariant Lineage
+## 9. License and Invariant Lineage
 
 This domain specification enforces the legal and operational conditions of the {% include term.html id="ssl" %}:
 
