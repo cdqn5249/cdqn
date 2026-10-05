@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers
 description: Structural thesis defining the abstraction-layer framework for the Qn and cdqn stack under SIMEMP constraints.
-version: 1.1.0
-updated: 2026-10-02
+version: 1.2.0
+updated: 2026-10-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -19,6 +19,7 @@ terms_used:
   - layer-1
   - q0
   - q1
+  - compute-unit-u
   - qn
   - cdqn
   - causal-arrow
@@ -48,6 +49,14 @@ terms_used:
   - chronosa
   - qn-workflow
   - qn-rsi
+  - terminal-exactness
+  - q-anchor
+  - qm
+  - q-even
+  - q-odd
+  - successor-morphism
+  - qlog
+  - qbio
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -55,11 +64,27 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.1.0 |
-| **Last Updated** | 2026-10-02 (Bao Loc, Vietnam) |
+| **Version** | 1.2.0 |
+| **Last Updated** | 2026-10-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Provisional Structural Thesis / Exploratory Layer Architecture |
+| **Status** | Canonical Structural Thesis — Category A Formulated |
+
+---
+
+## Normative References
+
+The following documents establish the constitutional, physical, and domain constraints governing this layer architecture. If a technical conflict arises, `simemp.md` governs; if a structural conflict arises, this document governs; if a legal conflict arises, `LICENSE.md` governs.
+
+| Document | Role | Target |
+|---|---|---|
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/q0_q1.md` | Category A primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Category A secondary single-digit DCC anchors and parity partitions | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Lifecycle States]({{ '/glossary.html' | relative_url }}#lifecycle-state) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
@@ -106,11 +131,11 @@ Layer 0 remains outside the governed Qn universe. It constitutes the **Root of F
 The {% include term.html id="simemp-gateway" %} bridging Layer 0 and Layer 1 enforces two mandatory functions:
 
 #### Node Onboarding
-During initialization, a node instantiates its local genesis artifact through:
-1. Bounded entropy sampling and statistical health validation.
+During initialization (`docs/q0_q1.md` §2), a node instantiates its local genesis artifact through:
+1. Bounded physical entropy sampling ($\mathcal{B}_{\mathrm{raw}}$) and NIST SP 800-90B health validation.
 2. Device execution context collection.
-3. {% include term.html id="dcc-profile" %} initialization with abstract capability interfaces.
-4. Post-Quantum Cryptography (PQC) root key generation or commitment.
+3. Cryptographic conditioning into a 512-bit seed commitment ($\mathcal{S}_{\mathrm{seed}}$).
+4. Post-Quantum Cryptography (PQC) root key generation or commitment in the Inner Ring.
 5. Construction of local genesis [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0).
 6. Emission of a signed genesis {% include term.html id="receipt" %}.
 
@@ -126,11 +151,11 @@ No physical fault may cross the gateway as an unmeasured, implicit state.
 
 {% include term.html id="layer-1" text="Layer 1" %} is the primary governed layer:
 
-- [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0): Local genesis artifact, causal origin zero, empty birth context.
-- [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1): First unit artifact, unity measure, and baseline reference for the abstract compute unit $U$.
-- Abstract compute unit $U$: Minimal governed state transition from $Q(0)$ to $Q(1)$.
-- Sign polarity: Induced directed relation between $Q(0)$ and $Q(1)$.
-- Elementary arithmetic morphisms and the first dimensional axis $d_1$.
+- [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0): Local genesis artifact, causal origin zero, empty birth context (`docs/q0_q1.md` §3).
+- [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1): First unit artifact, unity measure, and baseline reference for the abstract compute unit $U$ along dimensional axis $d_1$ (`docs/q0_q1.md` §4).
+- {% include term.html id="compute-unit-u" text="Abstract compute unit U" %}: Minimal governed state transition from $Q(0)$ to $Q(1)$, calibrated to Landauer dissipation ($W \ge k_B T \ln 2$).
+- Single-digit secondary DCC sources ($Q(2) \dots Q(9)$): Inductively constructed via {% include term.html id="successor-morphism" text="Successor Morphism S" %} along axis $d_1$ (`docs/q2_q9.md`).
+- Sign polarity: Induced directed relation between $Q(0)$ and $Q(1)$ via reflection involution $\mathcal{I}_{d_1}$.
 
 $Q(0)$ is strictly local to its node:
 
@@ -187,7 +212,7 @@ Every layer, object, morphism, and exported attestation must expose an explicit 
 
 Artifact genesis is indexed along a strictly monotonic {% include term.html id="causal-arrow" %}:
 
-$$Q(0) \prec Q(1) \prec \text{First Operations} \prec d_1 \prec \text{Higher } \text{Qexpr}$$
+$$Q(0) \prec Q(1) \prec Q(2) \prec \dots \prec Q(9) \prec d_1 \prec \text{Higher } \text{Qexpr}$$
 
 No artifact may declare a parent or dependency born later in the causal sequence.
 
@@ -252,15 +277,13 @@ Across the Outer Ring, distributed attestations compose into a non-local causal 
 
 Artifacts and expressions ({% include term.html id="qexpr" %}) are stratified by structural {% include term.html id="complexity-degree" %}:
 
-| Degree | Structural Content | Examples |
-|---|---|---|
-| **0** | Primitives | $Q(0)$, $Q(1)$ |
-| **1** | Primitive Operations | Elementary addition, subtraction, multiplication |
-| **2** | Degree 1 Compositions | Elementary Qexpr expressions |
-| **3** | Higher Compositions | Bounded constants, ordering relations, set partitions |
-| **$n$** | Degree $n-1$ Compositions | Advanced domain structures, compiled runtime attestations |
-
-Public exposure across the cdqn network may enforce an explicit minimum complexity degree threshold.
+| Degree | Structural Content | Examples | Specification Mapping |
+|---|---|---|---|
+| **0** | Foundational Primitives | $Q(0)$, $Q(1)$ | `docs/q0_q1.md` |
+| **1** | Primitive Operations & Digits | Single digits $Q(2)\dots Q(9)$, elementary $\mathcal{R}$-algebra | `docs/q2_q9.md`, `docs/qm.md` |
+| **2** | Degree 1 Compositions & Frames | Multi-axial Clifford frames ($d_k$), Rotors, $\text{Qexpr}$ ASTs | `docs/qm_geometry.md` |
+| **3** | Discrete Dynamics & Calculus | Discrete Exterior Calculus, Finite Differences, Continued Fractions | `docs/qm_calculus.md` *(In Progress)* |
+| **$n$** | Advanced Domain Lattices | Categorical Semantics ($\mathrm{Qs}$), Physics ($\mathrm{Qphy}$), Logics ($\mathrm{Qlog}$), Biology ($\mathrm{Qbio}$) | Domain Specifications |
 
 ---
 
@@ -282,7 +305,7 @@ $$\text{Qexpr} = \langle \text{SymbolicStructure}, \, z, \, r, \, d, \, \text{DC
 
 ### 6.3. Collapse at Compilation Time
 
-Qexpr expressions remain symbolic during authoring and collapse deterministically to concrete values at compilation time ({% include term.html id="qnlang" %} $\to$ {% include term.html id="qnir" %}). Collapse operations must be total, finite, and accompanied by a remainder receipt.
+Qexpr expressions remain symbolic during authoring and collapse deterministically to concrete values at compilation time ({% include term.html id="qnlang" %} $\to$ {% include term.html id="qnir" %}). Collapse operations must be total, finite, and accompanied by a remainder receipt. In geometric workflows (`docs/qm_geometry.md` §7), collapse is deferred until terminal boundaries to minimize Landauer dissipation.
 
 ### 6.4. Bounded Symbolic Expressions
 
@@ -294,7 +317,7 @@ Symbolic expression trees are strictly bounded. DCC profiles declare maximum nod
 
 ### 7.1. First Operations
 
-From $Q(1)$, elementary operations are defined along axis $d_1$: additive, subtractive, multiplicative, and divisive morphisms.
+From $Q(1)$, elementary operations are defined along axis $d_1$: additive, subtractive, multiplicative, and divisive morphisms (`docs/qm.md` §4).
 
 ### 7.2. Division as Constrained Operation
 
@@ -307,7 +330,7 @@ $$\text{Given } a, b \implies \text{find } c, r \quad \text{such that } a = (b \
 
 ### 7.3. Positional Ordering
 
-Axis $d_1$ admits three disjoint partitions: negative Qn, origin $\{Q(0)\}$, and positive Qn. Ordering is positional, not hierarchical. When zoom precision prevents order determination due to remainder overlap, the operation terminates with `ORDERING_INDETERMINATE_AT_ZOOM`.
+Axis $d_1$ admits three disjoint partitions: negative Qn ($\mathcal{Q}^-$), origin $\{Q(0)\}$, and positive Qn ($\mathcal{Q}^+$). Ordering is positional, not hierarchical. When zoom precision prevents order determination due to remainder overlap, the operation terminates with `ORDERING_INDETERMINATE_AT_ZOOM`.
 
 ---
 
@@ -319,7 +342,7 @@ The architecture distinguishes at least three explicit {% include term.html id="
 
 | Identity Class | Substrate Entity | Prohibition |
 |---|---|---|
-| **Machine Identity** | Runtime node, execution container, hardware device | Must not imply legal personhood |
+| **Machine Identity** | Runtime node, execution container, hardware device ($Q(0)_N$) | Must not imply legal personhood |
 | **Human Identity** | Natural person, authorized operator | Must not execute without delegation |
 | **AI Agent Identity** | Delegated autonomous or semi-autonomous process | Must not possess undelegated authority |
 
@@ -342,7 +365,7 @@ The architecture enforces an explicit {% include term.html id="dual-ring-pqc-bou
 └────────────────────────────────────────────────────────┘
 ```
 
-The Inner Ring governs local execution and genesis. The Outer Ring governs network-facing commitments. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
+The Inner Ring governs local execution and genesis (`docs/q0_q1.md` §2.4). The Outer Ring governs network-facing commitments. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
 
 ---
 
@@ -368,18 +391,17 @@ The architecture aligns with established theoretical computer science frameworks
 
 ---
 
-## 11. Future Qn Definition Files and Local-First Base Domains
+## 11. Status of Qn Definition Files and Base Domains
 
-Development proceeds sequentially, separating local foundational domains from distributed networking:
+Development proceeds sequentially, separating foundational primitives from distributed networking:
 
-### Category A — Numeric Primitives
-- Detailed field anatomy of $Q(0)$ (silicon entropy harvesting, fuzzy extractors).
-- Detailed field anatomy of $Q(1)$ (calibration of compute unit $U$ along $d_1$).
-- Elementary numeric properties ($Q(2) \dots Q(9)$).
+### Category A — Numeric Primitives (Formulated Working Hypotheses)
+- Primary Genesis Primitives: Detailed field anatomy of $Q(0)$ and calibration of compute unit $U$ along $d_1$ in $Q(1)$ (`docs/q0_q1.md` v1.0.1).
+- Secondary DCC Anchors: Elementary integer properties, parity partitions ({% include term.html id="q-even" %}, {% include term.html id="q-odd" %}), and single-digit anchors $Q(2) \dots Q(9)$ (`docs/q2_q9.md` v1.0.3).
 
 ### Category B — Operations and Morphisms
-- Multi-dimensional axes ($d_k$), advanced transformations, rational constraint solvers, and bounded simplification.
-- Category B optimization morphisms: reuse operations (`Q(reuse)`), bypass operations (`Q(bypass)`), and higher-order self-optimization workflows ({% include term.html id="qn-rsi" text="Q(rsi)" %}).
+- Multi-dimensional axes ($d_k$), Clifford geometric algebra ($\mathcal{C}\ell_{p,q}$), and float-free rotors (`docs/qm_geometry.md` v1.1.4).
+- Category B optimization morphisms: reuse operations ({% include term.html id="q-reuse" %}), bypass operations ({% include term.html id="q-bypass" %}), and higher-order self-optimization workflows ({% include term.html id="qn-rsi" text="Q(rsi)" %}).
 
 ### Category C — Data Structures and Workflows
 - Directed acyclic state graphs, immutable memory containers (`Q(dataStruc)`), and pattern matching (`Q(patterns)`).
@@ -387,9 +409,10 @@ Development proceeds sequentially, separating local foundational domains from di
 
 ### Category D — Local-First Base Domains
 Base domains project directly from Layer 1 and execute 100% locally via local $\mathrm{cdqn}$ data movement, requiring zero network consensus:
-- **$\mathrm{Qm}$ (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs.
-- **$\mathrm{Qs}$ (Quang Semantics):** Explicit knowledge graphs, semantic linguistic ontologies, and formal assertion verification.
+- **$\mathrm{Qm}$ (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs (`docs/qm.md` v1.1.0).
+- **$\mathrm{Qs}$ (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal assertion verification.
 - **$\mathrm{Qphy}$ (Quang Physics):** Thermodynamic simulations, discrete quantum models, and physical entropy tracking.
+- **Emergent Composite Domains:** $\mathrm{Qlog}$ (Quang Logics $\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$) and $\mathrm{Qbio}$ (Quang Biology $\mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$).
 
 ### Category E — Runtime and Distributed Networking
 - Intermediate representation ({% include term.html id="qnir" %}) instruction set and bounded virtual execution handler.
@@ -419,10 +442,9 @@ The metric and identity envelopes provide native, cryptographically verifiable t
 ## 13. Open Items
 
 The following formal specifications remain open for subsequent releases:
-1. Internal field anatomy and hardware sampling models for $Q(0)$ and $Q(1)$.
-2. Complete grammar specification for {% include term.html id="qexpr" %}.
-3. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
-4. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
-5. PQC algorithm agility registry and migration protocol.
-6. Formal specification of local base domains ($\mathrm{Qm}$, $\mathrm{Qs}$, $\mathrm{Qphy}$).
-7. Concrete execution and validation mechanics for composite {% include term.html id="qn-workflow" text="Q(workflow)" %} payloads and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
+1. Complete grammar specification for {% include term.html id="qexpr" %}.
+2. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
+3. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
+4. PQC algorithm agility registry and migration protocol.
+5. Formal specification of remaining local base domains ($\mathrm{Qs}$, $\mathrm{Qphy}$) and emergent domains ($\mathrm{Qlog}$, $\mathrm{Qbio}$).
+6. Concrete execution and validation mechanics for composite {% include term.html id="qn-workflow" text="Q(workflow)" %} payloads and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
