@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers
 description: Structural thesis defining the abstraction-layer framework for the Qn and cdqn stack under SIMEMP constraints.
-version: 1.2.0
+version: 1.2.1
 updated: 2026-10-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -64,11 +64,11 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.2.0 |
+| **Version** | 1.2.1 |
 | **Last Updated** | 2026-10-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Structural Thesis — Category A Formulated |
+| **Status** | Canonical Structural Thesis — Category A Formulated (Provisional Hypotheses) |
 
 ---
 
@@ -108,9 +108,13 @@ $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge
 
 ```
 +-------------------------------------------------------------------------------+
+| Layer 2: Governed Morphism Layer (Algebraic Morphisms, Functors, Sign Involutions)
++---------------------------------------^---------------------------------------+
+                                        |  SIMEMP Gateway (Constraint Enforcement)
++---------------------------------------+---------------------------------------+
 | Layer 1: Node Genesis Layer (Q(0), Q(1), Abstract Compute Unit U, Axis d1)    |
 +---------------------------------------^---------------------------------------+
-                                        |  SIMEMP Gateway
+                                        |  SIMEMP Gateway (Hardware Onboarding)
 +---------------------------------------+---------------------------------------+
 | Layer 0: Physical Substrate (Commodity Hardware, Memory Wall, Entropy Sources)|
 +-------------------------------------------------------------------------------+
@@ -149,7 +153,7 @@ No physical fault may cross the gateway as an unmeasured, implicit state.
 
 ### 2.3. Layer 1 — Node Genesis Layer
 
-{% include term.html id="layer-1" text="Layer 1" %} is the primary governed layer:
+{% include term.html id="layer-1" text="Layer 1" %} is the primary governed ontological layer:
 
 - [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0): Local genesis artifact, causal origin zero, empty birth context (`docs/q0_q1.md` §3).
 - [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1): First unit artifact, unity measure, and baseline reference for the abstract compute unit $U$ along dimensional axis $d_1$ (`docs/q0_q1.md` §4).
@@ -163,9 +167,30 @@ $$\forall A \neq B \implies Q(0)_A \neq Q(0)_B$$
 
 No universal global zero is admitted. $Q(1)$ maintains a deterministic numeric and metric value across all nodes; local entropy may parameterize its identity witness but cannot mutate its unit value.
 
-### 2.4. Higher Layers
+### 2.4. Layer 1 to Layer 2 Gateway — Algebraic Constraint Validation
 
-Higher abstraction layers are derived sequentially from Layer 1. Every layer boundary must enforce:
+The transition from Layer 1 (Static Ontological Primitives) to Layer 2 (Action and Transformation) is mediated by a validating gateway:
+1. **Constraint Interception:** Intercepts invalid algebraic configurations (such as division by $Q(0)$), terminating execution deterministically with an immutable receipt (`RECEIPT_DIVISION_BY_ZERO_REJECTED`).
+2. **Budget Metering:** Assesses the declared metric envelope of the requested transformation before allocating compute resources.
+3. **No-Implicit Enforcement:** Prohibits implicit operator precedence, ambient sign coercions, or untyped parameter transfers.
+
+### 2.5. Layer 2 — Governed Morphism Layer (Provisional Hypothesis)
+
+Layer 2 governs **transformation and action** across the Qn universe. While Layer 1 establishes what *exists*, Layer 2 defines how governed artifacts *transform*:
+- **Elementary $\mathcal{R}$-Algebra:** Constructive addition ($+$), subtraction ($-$), multiplication ($\times$), and Diophantine division ($\div$) (`docs/qm.md` §4).
+- **Involution Morphisms:** The spatial reflection engine $\mathcal{I}_d$ parameterizing orientation polarity ($\sigma \in \{\ominus, \odot, \oplus\}$).
+- **Geometric Product Morphisms:** The Clifford product engine ($\vec{u} \vec{v} = \vec{u} \cdot \vec{v} + \vec{u} \wedge \vec{v}$) and rational Cayley rotors (`docs/qm_geometry.md` §3, §5).
+- **Secondary DCC Routing:** Directs execution requests to specialized capability contracts anchored at $Q(2)$ (parity/binary), $Q(3)$ (simplicial geometry), $Q(5)$ (aperiodicity), and $Q(8)$ (octet byte words).
+
+Layer 2 operations produce new immutable artifacts indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
+
+### 2.6. Higher Layers
+
+Higher layers are derived sequentially from Layer 2:
+- **Layer 3 (Symbolic Composition):** Governed expression trees ({% include term.html id="qexpr" %}), bounded syntax graphs, and compile-time reduction engines.
+- **Layer 4+ (Domain Lattices & Intent):** Domain specifications ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$) and emergent domains ($\mathrm{Qlog}, \mathrm{Qbio}$).
+
+Every layer boundary must enforce:
 - Bounded {% include term.html id="universal-envelope" text="Universal Envelopes" %}.
 - Explicit {% include term.html id="dcc-profile" text="DCC Profiles" %} with structural indirection.
 - Strict {% include term.html id="simemp-gateway" text="Gateway" %} validation.
@@ -265,11 +290,15 @@ A valid layer-transition functor preserves identity, metric bounds, causal linea
 ```
 
 1. **Local Scope (Intra-Node Chaining):** Governs data movement and morphism transitions between local abstraction layers and internal domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$) via chained receipts.
-2. **Distributed Scope (Inter-Node Attestation):** Connects autonomous local categories ($\mathbf{C}_N$) into a distributed sheaf-like structure via the {% include term.html id="exposure-functor" text="Exposure Functor" %} ($\mathcal{E}_{\text{export}}$):
+2. **Distributed Scope (Inter-Node Attestation):** Connects autonomous local categories ($\mathbf{C}_N$) into a distributed sheaf-like structure via the {% include term.html id="exposure-functor" text="Exposure Functor" %}:
 
-$$\mathcal{E}_{\text{export}}: \mathbf{C}_N \to \mathbf{Attestations}_{\text{cdqn}}$$
+$$\mathcal{E}_{\mathrm{export}}: \mathbf{C}_N \to \mathbf{Attestations}_{\mathrm{cdqn}}$$
 
-Across the Outer Ring, distributed attestations compose into a non-local causal consensus synthesized by {% include term.html id="chronosa" %}. $\mathrm{cdqn}$ acts as a neutral, protocol-blind conduit. It warrants transit non-malleability ($\mathrm{Commitment}(P_{\text{source}}) \equiv \mathrm{Commitment}(P_{\text{dest}})$) while remaining blind to payload semantics.
+Across the Outer Ring, distributed attestations compose into a non-local causal consensus synthesized by {% include term.html id="chronosa" %}. $\mathrm{cdqn}$ acts as a neutral, protocol-blind conduit. It warrants transit non-malleability:
+
+$$\mathrm{Commitment}(P_{\mathrm{source}}) \equiv \mathrm{Commitment}(P_{\mathrm{dest}})$$
+
+while remaining blind to payload semantics.
 
 ---
 
@@ -408,11 +437,13 @@ Development proceeds sequentially, separating foundational primitives from distr
 - Composite state sequence workflows ({% include term.html id="qn-workflow" text="Q(workflow)" %}) carrying explicit Universal Envelopes and DCC constraints.
 
 ### Category D — Local-First Base Domains
-Base domains project directly from Layer 1 and execute 100% locally via local $\mathrm{cdqn}$ data movement, requiring zero network consensus:
+Base domains project directly from Layer 1 and Layer 2, executing 100% locally via local $\mathrm{cdqn}$ data movement without network consensus:
 - **$\mathrm{Qm}$ (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs (`docs/qm.md` v1.1.0).
 - **$\mathrm{Qs}$ (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal assertion verification.
 - **$\mathrm{Qphy}$ (Quang Physics):** Thermodynamic simulations, discrete quantum models, and physical entropy tracking.
-- **Emergent Composite Domains:** $\mathrm{Qlog}$ (Quang Logics $\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$) and $\mathrm{Qbio}$ (Quang Biology $\mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$).
+- **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
+  - **{% include term.html id="qlog" %}:** Product space $\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$ governing constructive proof theory and type deductions.
+  - **{% include term.html id="qbio" %}:** Product space $\mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$ governing non-equilibrium dissipative metabolic systems and active inference.
 
 ### Category E — Runtime and Distributed Networking
 - Intermediate representation ({% include term.html id="qnir" %}) instruction set and bounded virtual execution handler.
