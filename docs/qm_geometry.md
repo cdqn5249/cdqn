@@ -2,7 +2,7 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.5
+version: 1.1.6
 updated: 2026-10-06
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -41,6 +41,13 @@ terms_used:
   - q-reuse
   - q-bypass
   - qexpr
+  - layer-0
+  - layer-1
+  - payload
+  - licensed-work
+  - existential-invariant
+  - operational-agility
+  - boc-policy
 ---
 
 # Qm Geometry — Multi-Axial Frames and Geometric Algebra
@@ -48,7 +55,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.5 |
+| **Version** | 1.1.6 |
 | **Last Updated** | 2026-10-06 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -58,13 +65,13 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, `simemp.md` governs; if a structural conflict arises, `abstractionLayers.md` governs; if a legal conflict arises, `LICENSE.md` governs.
+The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
 
 | Document | Role | Target |
 |---|---|---|
 | `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and [Complexity Degree Stratification]({{ '/glossary.html' | relative_url }}#complexity-degree) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/q0_q1.md` | Local genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) along axis d1 | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q0_q1.md` | Local genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) along axis $d_1$ | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
 | `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
 | `docs/qm.md` | Constructive numeric leaf substrate and projective remainder calculus | [qm.html]({{ '/qm.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -73,11 +80,11 @@ The following documents establish the physical, structural, and legal constraint
 
 ## 1. Epistemic Stance and Dimensional Generalization
 
-The foundational operational conjecture of the Qn framework (`docs/simemp.md` §1) asserts that a discrete number system can abstract any computable physical phenomenon under SIMEMP constraints. In `docs/qm.md`, scalar arithmetic was established along the 1D genesis axis $d_1$. However, physical reality and distributed network topographies are inherently multi-dimensional.
+The foundational operational conjecture of the Qn framework ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §1) asserts that a discrete number system can abstract any computable physical phenomenon under {% include term.html id="simemp" %} constraints. In [`docs/qm.md`]({{ '/qm.html' | relative_url }}), scalar arithmetic was established along the 1D genesis axis {% include term.html id="dimension-d" text="d_1" %}. However, physical reality and distributed network topographies are inherently multi-dimensional.
 
-Classical geometry relies on continuous coordinate spaces ($\mathbb{R}^n$) and irrational trigonometric functions ($\sin, \cos$), introducing platform-dependent IEEE 754 rounding approximations that violate **Axiom 10**.
+Classical geometry relies on continuous coordinate spaces ($\mathbb{R}^n$) and irrational trigonometric functions ($\sin, \cos$), introducing platform-dependent IEEE 754 rounding approximations that violate **Axiom 10** of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}).
 
-$\mathrm{Qm}$ Geometry generalizes the 1D leaf state to $n$-dimensional space via **Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$)**. Space, direction, area, volume, and rotation are constructed as **exact, discrete, rational multivector blades** without continuous limits, actual infinities, or transcendental float approximations.
+{% include term.html id="qm" %} Geometry generalizes the 1D leaf state to $n$-dimensional space via **Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$)**. Space, direction, area, volume, and rotation are constructed as **exact, discrete, rational multivector blades** without continuous limits, actual infinities, or transcendental float approximations.
 
 Every geometric operation in $\mathrm{Qm}$ satisfies {% include term.html id="dependencies-determinism" %}:
 
@@ -87,11 +94,11 @@ $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
 ## 2. Orthogonal Coordinate Frames and Metric Signatures
 
-In accordance with the {% include term.html id="no-implicit-rule" %}, multi-dimensional space cannot be assumed *a priori*. It is generated inductively from genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) and unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1).
+In strict accordance with the {% include term.html id="no-implicit-rule" %}, multi-dimensional space cannot be assumed *a priori*. It is generated inductively from genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) and first unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1).
 
 ### 2.1. The Orthogonal Basis Set and Inductive Dimensional Genesis
 
-Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace an unbroken causal lineage back to local genesis $Q(0)_N$. Coordinate frames cannot be introduced as detached ambient conventions.
+Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace an unbroken causal lineage back to local genesis origin $Q(0)_N$. Coordinate frames cannot be introduced as detached ambient conventions.
 
 ```
                   INDUCTIVE DIMENSIONAL GENESIS
@@ -105,11 +112,11 @@ Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace a
 ```
 
 #### Primary Genesis Axis ($d_1$)
-Formally instantiated in Layer 1 by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ along the canonical initial dimension (`docs/q0_q1.md` §4):
+Formally instantiated in {% include term.html id="layer-1" %} by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ along the canonical initial dimension ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §4):
 
 $$\vec{e}_1 \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_1 \rangle$$
 
-Here, the vector symbol $\vec{e}$ denotes a directional spatial basis blade (from the unit vector convention *Einheitsvektor*), distinct from scalar transcendental constants.
+Here, the vector symbol $\vec{e}$ denotes a directional spatial basis blade (from the unit vector convention *Einheitsvektor*), completely distinct from scalar transcendental constants.
 
 #### Inductive Dimensional Extension ($\mathcal{D}_{\mathrm{step}}$)
 For any spatial frame of dimension $k \ge 1$, the successor orthogonal axis $d_{k+1}$ is instantiated constructively by adjoining an orthogonal basis generator $\vec{e}_{k+1}$:
@@ -124,7 +131,7 @@ $$\vec{e}_{k+1} \cdot \vec{e}_{k+1} = \eta_{k+1, k+1} Q(1)$$
 
 $$\mathrm{Parent}(\vec{e}_{k+1}) = \{ \vec{e}_k, \, Q(1) \}$$
 
-By induction, a frame of dimension $n$ is defined by the complete discrete set of $n$ mutually orthogonal dimensional axes:
+By induction, a frame of dimension $n$ is defined by the complete discrete set of $n$ mutually orthogonal {% include term.html id="dimension-d" text="dimensional axes" %}:
 
 $$\mathcal{D}_{\mathrm{frame}} = \{ d_1, \, d_2, \, \dots, \, d_n \}$$
 
@@ -180,11 +187,11 @@ Let vectors $\vec{u}$ and $\vec{v}$ be expressed along the orthogonal basis:
 
 $$\vec{u} = \sum_{k=1}^n u_k \vec{e}_k, \quad \vec{v} = \sum_{k=1}^n v_k \vec{e}_k$$
 
-where each component is a discrete tuple evaluated at zoom $z$. The inner product contracts to an exact scalar:
+where each component is a discrete tuple evaluated at {% include term.html id="zoom-z" text="zoom z" %}. The inner product contracts to an exact scalar:
 
 $$\vec{u} \cdot \vec{v} = \sum_{k=1}^n \eta_{kk} (u_k \times v_k)$$
 
-The operation executes entirely via the discrete $\mathrm{Qm}$ $\mathcal{R}$-algebra (`docs/qm.md` §4), returning an exact scalar leaf with a conserved remainder $r_z$.
+The operation executes entirely via the discrete $\mathrm{Qm}$ $\mathcal{R}$-algebra ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4), returning an exact scalar leaf with a conserved {% include term.html id="remainder-r" %}.
 
 ### 3.2. The Discrete Wedge Product
 
@@ -192,7 +199,7 @@ The outer product spans an oriented planar surface area:
 
 $$\vec{u} \wedge \vec{v} = \sum_{1 \le i \lt j \le n} (u_i v_j - u_j v_i) (\vec{e}_i \wedge \vec{e}_j)$$
 
-Under the **No-Implicit Rule**, anti-commutativity and nilpotency are exact:
+Under the {% include term.html id="no-implicit-rule" %}, anti-commutativity and nilpotency are exact:
 
 $$\vec{e}_i \wedge \vec{e}_j = - (\vec{e}_j \wedge \vec{e}_i)$$
 
@@ -218,7 +225,7 @@ $$M = \sum_{k=0}^n \langle M \rangle_k = \langle M \rangle_0 + \langle M \rangle
 
 ### 4.1. Canonical Multivector State Tuple
 
-Every multivector artifact in $\mathrm{Qm}$ carries an explicit, finite representation:
+Every multivector artifact in $\mathrm{Qm}$ carries an explicit, finite representation conforming to the {% include term.html id="universal-envelope" %}:
 
 $$M \equiv \Big\langle \sigma_M, \, \alpha_{\mathcal{B}}, \, z, \, r_M, \, \mathcal{D}_{\mathrm{frame}} \Big\rangle$$
 
@@ -288,7 +295,7 @@ When an arbitrary target angle $\theta$ is externally supplied, $\mathrm{Qm}$ do
 
 $$\theta_z = \theta_{\mathrm{discrete}} + r_{\theta}$$
 
-The angular remainder $r_{\theta}$ is preserved in the metric envelope. If $r_{\theta} = Q(0)$, the rotation is algebraically exact, emitting `RECEIPT_TERMINAL_EXACTNESS`.
+The angular remainder $r_{\theta}$ is preserved in the metric envelope. If $r_{\theta} = Q(0)$, the rotation is algebraically exact, emitting a {% include term.html id="receipt" text="terminal receipt" %} confirming {% include term.html id="terminal-exactness" %}.
 
 ---
 
@@ -314,27 +321,27 @@ If $r_D = Q(0)$, the distance is an exact Pythagorean integer or rational, termi
 
 ## 7. Deferred Symbolic Normalization and Bounded Collapse Engine
 
-A governing distinction between $\mathrm{Qm}$ Geometry and classical numerical engines is the **rejection of eager evaluation** (`docs/abstractionLayers.md` §6.3).
+A governing distinction between $\mathrm{Qm}$ Geometry and classical numerical engines is the **rejection of eager evaluation** ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §6.3).
 
 In classical systems, every intermediate geometric operation eagerly rounds to machine floats, accumulating precision drift and repeatedly dissipating Landauer heat ($W \ge k_B T \ln 2$). $\mathrm{Qm}$ Geometry executes geometric workflows through a **Three-Stage Lifecycle**:
 
 | Execution Stage | Abstraction Layer | Operational Mechanics | Thermodynamic Work Bound |
 |---|---|---|---|
-| **Stage 1: Composition** | Layer 3 ($\text{Qexpr}$ AST) | Multivector products and rotor chains authored as symbolic trees. Zero rounding. | $W = 0$ (Information preserved) |
+| **Stage 1: Composition** | Layer 3 ({% include term.html id="qexpr" %} Term DAG) | Multivector products and rotor chains authored as content-addressed DAGs. Zero rounding. | $W = 0$ (Information preserved) |
 | **Stage 2: Normalization** | Layer 2/3 (Rewrite Engine) | Contract basis metrics, annihilate nilpotencies ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), cancel inverse rotors ($R R^{\dagger} = Q(1)$). | $W = 0$ (Isomorphic & reversible) |
-| **Stage 3: Collapse** | Layer 1/2 ($\mathrm{Qm}$ Leaf) | Project onto zoom $z$ only upon boundary demand; compute quotient $q_z$ and remainder $r_z$. | $W = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{eager}}$ |
+| **Stage 3: Collapse** | Layer 1/2 ($\mathrm{Qm}$ Leaf / Flat IR) | Project onto zoom $z$ only upon boundary demand; compute quotient $q_z$ and remainder $r_z$. | $W = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{eager}}$ |
 
 ### 7.1. Thermodynamic Landauer Minimization Proof
 
 Let a geometric sequence consist of $k$ consecutive rotor transformations:
 1. **Eager Evaluation:** Dissipates $W_{\mathrm{eager}} \ge k \cdot (k_B T \ln 2)$ and compounds $k$ unmeasured remainder vectors.
-2. **Deferred Collapse:** Reversible symbolic reduction preserves information without entropy production ($W_{\mathrm{Stage\,2}} = 0$). Numerical collapse occurs once at the boundary:
+2. **Deferred Collapse (BOC Selection):** Under the {% include term.html id="boc-policy" %}, symbolic structure is maintained as a **Content-Addressed Expression DAG (Term DAG)** with cryptographic hash-consing. Reversible symbolic reduction preserves information without entropy production ($W_{\mathrm{Stage\,2}} = 0$). Numerical collapse occurs once at the boundary:
 
 $$W_{\mathrm{deferred}} = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{collapse}}$$
 
 ### 7.2. Coupling to Optimization Morphisms
 
-In accordance with Category B milestones (`docs/abstractionLayers.md` §11), geometric pipelines interface with higher-order optimization morphisms via Structural Indirection:
+In accordance with Category B milestones ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §11), geometric pipelines interface with higher-order optimization morphisms via {% include term.html id="structural-indirection" %}:
 - **{% include term.html id="q-bypass" %}:** If Stage 2 proves that an expression reduces to an identity transformation ($R R^{\dagger} = Q(1)$) or null area ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), the sub-tree is bypassed entirely at zero metric cost, emitting an explicit bypass receipt.
 - **{% include term.html id="q-reuse" %}:** If a factored bivector patch or multivector rotor is shared across multiple geometric branches, `Q(reuse)` references its existing content commitment hash within the local causal DAG, eliminating redundant bit allocation across the Memory Wall.
 
@@ -342,7 +349,7 @@ In accordance with Category B milestones (`docs/abstractionLayers.md` §11), geo
 
 ## 8. SIMEMP Governance and Metric Exhaustion
 
-Operating in multi-dimensional space consumes physical computational resources governed by the **Metric Invariant** (`docs/simemp.md` §3.1).
+Operating in multi-dimensional space consumes physical computational resources governed by the **Metric Invariant** ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §3.1).
 
 ### 8.1. Complexity Scaling
 - Vector addition: $\mathcal{O}(n)$ discrete operations.
@@ -351,7 +358,7 @@ Operating in multi-dimensional space consumes physical computational resources g
 
 ### 8.2. Dimensional Ceilings and Budget Halts
 
-Dimensional growth is bounded by the declared Metric Envelope:
+Dimensional growth is bounded by the declared {% include term.html id="metric-envelope" %}:
 
 $$n \le \mathrm{Dim}_{\mathrm{max}}$$
 
@@ -365,7 +372,7 @@ Typically $n \le 4$ for physical simulations in $\mathrm{Qphy}$; $n \le 16$ for 
 | **Receipt Identifier** | `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` |
 | **Execution Status** | `BUDGET_EXHAUSTED` |
 | **Frame Dimension** | Bound $n$ |
-| **Consumed Metric** | Consumed work budget $W$ ($Q(1)$ units) |
+| **Consumed Metric** | Consumed work budget $W$ ($Q(1)$ units via {% include term.html id="metric-exhaustion" %}) |
 
 ---
 
