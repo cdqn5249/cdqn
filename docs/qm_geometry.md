@@ -95,24 +95,28 @@ Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace a
 
 ```
                   INDUCTIVE DIMENSIONAL GENESIS
- Q(0)_N ──► Q(1) ──► Axis d1 (Basis e_1)
+ Q(0)_N ──► Q(1) ──► Axis d1 (Basis Vector e_1)
                       │
                       ▼ Adjoin Orthogonal Step D_step
-                     Axis d2 (Basis e_2: e_2 · e_1 = Q(0))
+                     Axis d2 (Basis Vector e_2: e_2 · e_1 = Q(0))
                       │
                       ▼ Adjoin Orthogonal Step D_step
-                     Axis d_k (Basis e_k: e_k · e_i = Q(0), ∀i < k)
+                     Axis d_k (Basis Vector e_k: e_k · e_i = Q(0), ∀i < k)
 ```
 
-1. **Genesis Axis ($d_1$):** Formally instantiated in Layer 1 by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ (`docs/q0_q1.md` §4):
+#### Primary Genesis Axis ($d_1$)
+Formally instantiated in Layer 1 by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ along the canonical initial dimension (`docs/q0_q1.md` §4):
 
 $$\vec{e}_1 \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_1 \rangle$$
 
-2. **Inductive Dimensional Extension ($\mathcal{D}_{\mathrm{step}}$):** For any spatial frame of dimension $k \ge 1$, the successor orthogonal axis $d_{k+1}$ is instantiated constructively by adjoining an orthogonal basis generator $\vec{e}_{k+1}$:
+Here, the vector symbol $\vec{e}$ denotes a directional spatial basis blade (from the unit vector convention *Einheitsvektor*), distinct from scalar transcendental constants.
+
+#### Inductive Dimensional Extension ($\mathcal{D}_{\mathrm{step}}$)
+For any spatial frame of dimension $k \ge 1$, the successor orthogonal axis $d_{k+1}$ is instantiated constructively by adjoining an orthogonal basis generator $\vec{e}_{k+1}$:
 
 $$\vec{e}_{k+1} \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_{k+1} \rangle$$
 
-subject to the strict Diophantine orthogonality constraints:
+subject to the explicit Diophantine orthogonality constraints:
 
 $$\forall i \in \{1, \dots, k\}, \quad \vec{e}_{k+1} \cdot \vec{e}_i = Q(0)$$
 
