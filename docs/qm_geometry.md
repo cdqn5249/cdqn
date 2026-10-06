@@ -2,8 +2,8 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.4
-updated: 2026-10-04
+version: 1.1.5
+updated: 2026-10-06
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -48,8 +48,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.4 |
-| **Last Updated** | 2026-10-04 (Bao Loc, Vietnam) |
+| **Version** | 1.1.5 |
+| **Last Updated** | 2026-10-06 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category B/D (Complexity Degree 2) |
@@ -65,6 +65,7 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and [Complexity Degree Stratification]({{ '/glossary.html' | relative_url }}#complexity-degree) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
 | `docs/q0_q1.md` | Local genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) along axis d1 | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
 | `docs/qm.md` | Constructive numeric leaf substrate and projective remainder calculus | [qm.html]({{ '/qm.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
@@ -88,15 +89,42 @@ $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
 In accordance with the {% include term.html id="no-implicit-rule" %}, multi-dimensional space cannot be assumed *a priori*. It is generated inductively from genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) and unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1).
 
-### 2.1. The Orthogonal Basis Set
+### 2.1. The Orthogonal Basis Set and Inductive Dimensional Genesis
 
-A spatial frame of dimension $n$ is defined by a set of $n$ mutually orthogonal dimensional axes:
+Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace an unbroken causal lineage back to local genesis $Q(0)_N$. Coordinate frames cannot be introduced as detached ambient conventions.
+
+```
+                  INDUCTIVE DIMENSIONAL GENESIS
+ Q(0)_N ──► Q(1) ──► Axis d1 (Basis e_1)
+                      │
+                      ▼ Adjoin Orthogonal Step D_step
+                     Axis d2 (Basis e_2: e_2 · e_1 = Q(0))
+                      │
+                      ▼ Adjoin Orthogonal Step D_step
+                     Axis d_k (Basis e_k: e_k · e_i = Q(0), ∀i < k)
+```
+
+1. **Genesis Axis ($d_1$):** Formally instantiated in Layer 1 by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ (`docs/q0_q1.md` §4):
+
+$$\vec{e}_1 \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_1 \rangle$$
+
+2. **Inductive Dimensional Extension ($\mathcal{D}_{\mathrm{step}}$):** For any spatial frame of dimension $k \ge 1$, the successor orthogonal axis $d_{k+1}$ is instantiated constructively by adjoining an orthogonal basis generator $\vec{e}_{k+1}$:
+
+$$\vec{e}_{k+1} \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_{k+1} \rangle$$
+
+subject to the strict Diophantine orthogonality constraints:
+
+$$\forall i \in \{1, \dots, k\}, \quad \vec{e}_{k+1} \cdot \vec{e}_i = Q(0)$$
+
+$$\vec{e}_{k+1} \cdot \vec{e}_{k+1} = \eta_{k+1, k+1} Q(1)$$
+
+$$\mathrm{Parent}(\vec{e}_{k+1}) = \{ \vec{e}_k, \, Q(1) \}$$
+
+By induction, a frame of dimension $n$ is defined by the complete discrete set of $n$ mutually orthogonal dimensional axes:
 
 $$\mathcal{D}_{\mathrm{frame}} = \{ d_1, \, d_2, \, \dots, \, d_n \}$$
 
-Each coordinate axis $d_k$ is assigned an explicit basis vector instantiated as a canonical $\mathrm{Qm}$ leaf artifact:
-
-$$\vec{e}_k \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_k \rangle$$
+Zero implicit dimensional assumptions exist; each axis preserves a deterministic causal parentage back to $Q(0)_N$.
 
 ### 2.2. Metric Signature ($\eta$)
 
@@ -248,7 +276,7 @@ The norm of the rotor is identically unity by construction:
 
 $$R R^{\dagger} = \frac{(m^2 - n^2)^2 + (2mn)^2}{(m^2 + n^2)^2} = \frac{(m^2 + n^2)^2}{(m^2 + n^2)^2} \equiv Q(1)$$
 
-**Metric drift is identically zero.** The rotor can be applied $10^9$ consecutive times without ever departing from the unit manifold.
+**Metric drift is identically zero.** The rotor can be applied $10^9$ consecutive times without departing from the unit manifold.
 
 ### 5.3. Projective Cascade for Arbitrary Target Angles
 
@@ -302,8 +330,9 @@ $$W_{\mathrm{deferred}} = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{c
 
 ### 7.2. Coupling to Optimization Morphisms
 
-- **{% include term.html id="q-bypass" %}:** If Stage 2 proves that an expression reduces to an identity transformation ($R R^{\dagger} = Q(1)$) or null area ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), the sub-tree is bypassed entirely at zero metric cost.
-- **{% include term.html id="q-reuse" %}:** If a factored bivector patch or multivector rotor is shared across multiple geometric branches, `Q(reuse)` references its existing content commitment hash, preventing redundant allocation across the Memory Wall.
+In accordance with Category B milestones (`docs/abstractionLayers.md` §11), geometric pipelines interface with higher-order optimization morphisms via Structural Indirection:
+- **{% include term.html id="q-bypass" %}:** If Stage 2 proves that an expression reduces to an identity transformation ($R R^{\dagger} = Q(1)$) or null area ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), the sub-tree is bypassed entirely at zero metric cost, emitting an explicit bypass receipt.
+- **{% include term.html id="q-reuse" %}:** If a factored bivector patch or multivector rotor is shared across multiple geometric branches, `Q(reuse)` references its existing content commitment hash within the local causal DAG, eliminating redundant bit allocation across the Memory Wall.
 
 ---
 
