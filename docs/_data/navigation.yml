@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-05 (Bao Loc, Vietnam)
+# Updated: 2026-10-07 (Bao Loc, Vietnam)
 
 - title: "Portal"
   url: "/"
@@ -56,6 +56,13 @@
   url: "/qm_geometry.html"
   slug: "qm_geometry"
   description: "Multi-axial frames, Clifford geometric algebra, and float-free rotations"
+  status: "Hypothesis"
+  external: false
+
+- title: "Qexpr Container"
+  url: "/qexpr.html"
+  slug: "qexpr"
+  description: "Content-Addressed Expression DAG, hash-consing, and canonical node classes"
   status: "Hypothesis"
   external: false
 
