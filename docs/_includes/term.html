@@ -13,7 +13,7 @@
   {%- endfor -%}
 {%- endif -%}
 {%- if entry -%}
-<span class="glossary-wrapper" data-definition="{{ entry.definition | strip | escape }}"><a href="{{ '/glossary.html' | relative_url }}#{{ entry.slug }}" class="glossary-link" data-definition="{{ entry.definition | strip | escape }}">{% if include.text %}{{ include.text }}{% else %}{{ entry.term }}{% endif %}</a></span>
+<span id="ref-{{ entry.slug }}" class="glossary-wrapper" style="scroll-margin-top: 3rem;" data-definition="{{ entry.definition | strip | escape }}"><a href="{{ '/glossary.html' | relative_url }}#{{ entry.slug }}" class="glossary-link" data-definition="{{ entry.definition | strip | escape }}">{% if include.text %}{{ include.text }}{% else %}{{ entry.term }}{% endif %}</a></span>
 {%- else -%}
 <span class="glossary-missing">{{ include.text | default: include.id }}</span>
 {%- endif -%}
