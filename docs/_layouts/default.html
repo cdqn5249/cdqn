@@ -36,35 +36,42 @@
 </head>
 <body>
 
-  <!-- Top Navigation Matrix -->
+  <!-- Top Collapsible Navigation Matrix -->
   <header>
-    <h2>CDQN Documentation Matrix</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Document</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Target</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in site.data.navigation %}
-        <tr {% if page.url == item.url or page.permalink == item.url %}class="active-row"{% endif %}>
-          <td><strong>{{ item.title }}</strong></td>
-          <td>{{ item.description }}</td>
-          <td><span class="badge">{{ item.status }}</span></td>
-          <td>
-            {% if item.external %}
-              <a href="{{ item.url }}">GitHub</a>
-            {% else %}
-              <a href="{{ item.url | relative_url }}">View</a>
-            {% endif %}
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <details {% if page.url == "/" or page.permalink == "/" %}open{% endif %} style="margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);">
+      <summary style="cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+        <span>CDQN Documentation Matrix</span>
+        <span class="badge">{{ site.data.navigation.size }} Specifications</span>
+      </summary>
+      <div style="margin-top: 1rem;">
+        <table>
+          <thead>
+            <tr>
+              <th>Document</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in site.data.navigation %}
+            <tr {% if page.url == item.url or page.permalink == item.url %}class="active-row"{% endif %}>
+              <td><strong>{{ item.title }}</strong></td>
+              <td>{{ item.description }}</td>
+              <td><span class="badge">{{ item.status }}</span></td>
+              <td>
+                {% if item.external %}
+                  <a href="{{ item.url }}">GitHub</a>
+                {% else %}
+                  <a href="{{ item.url | relative_url }}">View</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
   </header>
 
   <hr>
