@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
-description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), hash-consing deduplication, symbolic irrationals, six canonical node classes, and hardware-aware collapse under SIMEMP constraints.
-version: 1.0.0
-updated: 2026-10-07
+description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), hash-consing deduplication, symbolic irrationals, six canonical node classes, cross-domain contexts, and hardware-aware collapse under SIMEMP constraints.
+version: 1.0.1
+updated: 2026-10-08
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -55,8 +55,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-10-07 (Bao Loc, Vietnam) |
+| **Version** | 1.0.1 |
+| **Last Updated** | 2026-10-08 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container (Complexity Degree 2) |
@@ -105,7 +105,7 @@ Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abst
  +-------------------------------------------------------------------------------+
 ```
 
-### 1.1. The Role of Layer 3
+### 1.1. The Structural Role of Layer 3
 * **Layer 1** defines **what exists** (static ontological primitives: local origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0), unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1), single digits $Q(2)\dots Q(9)$ along axis $d_1$).
 * **Layer 2** defines **atomic actions** (isolated morphisms: addition, subtraction, multiplication, Diophantine division, Clifford wedge products, spatial rotors, $Q(\mathrm{reuse})$, $Q(\mathrm{bypass})$).
 * **Layer 3 (`Qexpr`)** defines **compositional structure**: how multiple Layer 2 atomic actions are wired into directed acyclic networks *before* they are evaluated or collapsed into physical memory.
@@ -116,6 +116,19 @@ A core design tenet of the Qn architecture is the explicit recognition that **bo
 * Artificial agents and compilers are prone to algorithmic hallucinations, non-terminating expansions, and parameter misalignments.
 
 Under [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}), safety cannot rely on presumed actor infallibility. `Qexpr` serves as the **mechanical error-containment envelope**: it enforces strict syntactic cycle freedom, explicit graph depth bounds, and finite execution budgets, ensuring that an error by any actor halts deterministically at the structural boundary without inducing systemic divergence.
+
+### 1.3. Universal Semantic Membrane and Cross-Domain Contexts
+`Qexpr` is not restricted to arithmetic calculations; it is the **universal structural membrane for all computable domains**.
+
+A computational **Context** is formalised as a multi-domain Content-Addressed Expression DAG:
+
+$$\text{Context} \equiv \mathcal{G}_{\text{Qexpr}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
+
+1. **Semantic Root ($\mathrm{Qs}$):** Encapsulates intent, linguistic pregroups, and human-agent capability delegations.
+2. **Relational Root ($\mathrm{Qm}$):** Verifies that proposed state transitions are mathematically decidable, Diophantine-constrained, and exact.
+3. **Physical Root ($\mathrm{Qphy}$):** Verifies that the required computational work can physically execute within finite Landauer dissipation bounds ($W \ge k_B T \ln 2$).
+
+By representing cross-domain contexts within the unified `Qexpr` structure, heterogeneous actors achieve consensus on shared root commitment hashes $\mathcal{H}(\text{Context})$ without unmeasured semantic ambiguity.
 
 ---
 
@@ -142,8 +155,8 @@ Every symbolic node $\alpha$ within a `Qexpr` DAG is an immutable, content-addre
 
 $$\alpha = \Big\langle \mathrm{OpCode}, \, \mathcal{H}(\mathrm{Left}), \, \mathcal{H}(\mathrm{Right}), \, z, \, r, \, d, \, \mathrm{DCC}_{\mathrm{ref}} \Big\rangle$$
 
-* **$\mathrm{OpCode}$:** Discrete identifier of the operation or terminal leaf generator.
-* **$\mathcal{H}(\mathrm{Child})$:** Cryptographic content commitment hash of child dependencies. For leaf nodes, this references underlying Layer 1 primitives or input constants.
+* **$\mathrm{OpCode}$:** Discrete identifier of the operation, domain morphism, or terminal leaf generator.
+* **$\mathcal{H}(\mathrm{Child})$:** Cryptographic content commitment hash of child dependencies. For leaf nodes, this references underlying Layer 1 primitives, constants, or semantic tokens.
 * **$z, r, d$:** Target scale quantum {% include term.html id="zoom-z" text="Zoom z" %}, conserved residual {% include term.html id="remainder-r" text="Remainder r" %}, and coordinate frame {% include term.html id="dimension-d" text="Dimension d" %}.
 * **$\mathrm{DCC}_{\mathrm{ref}}$:** Abstract capability contract governing transformation ceilings and execution rights.
 
@@ -157,11 +170,11 @@ $$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, \mathcal{H}(\ma
 
 $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 
-Testing algebraic equality collapses to a single machine-word integer comparison.
+Testing algebraic or semantic equality collapses to a single machine-word integer comparison.
 
 ### 2.3. Thermodynamic Work Minimization ($W = 0$)
 In physical Layer 0 substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($\mathcal{O}(C V^2 f)$) and Landauer work ($W \ge k_B T \ln 2$).
-* By enforcing hash-consing, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) are allocated **exactly once**.
+* By enforcing hash-consing, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
 * Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($W = 0$), directly operationalizing [`Q(reuse)`]({{ '/glossary.html' | relative_url }}#q-reuse) across the Memory Wall.
 
 ### 2.4. Acyclicity by Construction (Axiom 5)
@@ -194,7 +207,7 @@ In the Qn universe, **implicit rounding is outlawed by Axiom 9 and Axiom 10**:
 1. Within Layer 3, expressions are held in unevaluated, exact symbolic form. Drift is identically zero.
 2. When projected onto physical hardware boundaries, quantities are partitioned into an integer quotient $q_z$ and an **exact conserved remainder** $r_z$ ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4):
 
-$$X = \big( q_z \cdot \delta_z(d) \big) + r_z, \quad \text{where } 0 \le |r_z| < \delta_z(d)$$
+$$X = \big( q_z \cdot \delta_z(d) \big) + r_z, \quad \text{where } 0 \le |r_z| \lt \delta_z(d)$$
 
 The remainder $r_z$ is never discarded; it is sealed within the remainder envelope as the exact causal input state for subsequent precision expansions.
 
@@ -243,36 +256,47 @@ To achieve computational completeness across all abstraction layers, `Qexpr` def
 ```
 
 ### 4.1. Node Class 1: Exact Rational Pairs (`OP_RATIO`)
-* **Role:** Represents unevaluated rational fractions $\frac{p}{q}$ ($q \neq Q(0)$) without premature projection onto decimal or binary scale lattices.
-* **Evaluation:** Multiplicative and additive morphisms execute via exact Diophantine cross-multiplication:
+Represents unevaluated rational fractions $\frac{p}{q}$ ($q \neq Q(0)$) without premature projection onto decimal or binary scale lattices.
 
-$$\frac{p_1}{q_1} \times \frac{p_2}{q_2} = \frac{p_1 \times p_2}{q_1 \times q_2}, \quad \frac{p_1}{q_1} + \frac{p_2}{q_2} = \frac{(p_1 \times q_2) + (p_2 \times q_1)}{q_1 \times q_2}$$
+Multiplicative and additive morphisms execute via exact Diophantine cross-multiplication:
+
+$$\frac{p_1}{q_1} \times \frac{p_2}{q_2} = \frac{p_1 \times p_2}{q_1 \times q_2}$$
+
+$$\frac{p_1}{q_1} + \frac{p_2}{q_2} = \frac{(p_1 \times q_2) + (p_2 \times q_1)}{q_1 \times q_2}$$
 
 ### 4.2. Node Class 2: Constrained Algebraic Roots (`OP_ROOT`)
-* **Role:** Represents algebraic radical roots as exact polynomial Diophantine equations ($P(X) = Q(0)$).
-* **Evaluation:** Algebraic roots (such as $\sqrt{2}$ via `DCC_ANCHOR_SQRT2_v1`) are held symbolically. Multiplication by identical roots ($D \times D$) resolves immediately to integer constants ($Q(2)$) via $Q(\mathrm{bypass})$ without invoking root-extraction algorithms.
+Represents algebraic radical roots as exact polynomial Diophantine equations ($P(X) = Q(0)$).
+
+Algebraic roots (such as $\sqrt{2}$ via `DCC_ANCHOR_SQRT2_v1`) are held symbolically. Multiplication by identical roots ($D \times D$) resolves immediately to integer constants ($Q(2)$) via $Q(\mathrm{bypass})$ without invoking root-extraction algorithms.
 
 ### 4.3. Node Class 3: Projective Recurrence Generators (`OP_CF`)
-* **Role:** Generates transcendental numbers ($\pi, e, \tau$) through deterministic continued fraction expansions:
+Generates transcendental numbers ($\pi, e, \tau$) through deterministic continued fraction expansions:
 
 $$X = a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2 + \cfrac{1}{\ddots}}}$$
 
-* **Evaluation:** Partial convergents $\frac{p_k}{q_k}$ are generated iteratively. The truncation error is strictly bounded by $0 \le |r_k| < \frac{1}{q_k q_{k+1}}$, and the residual is preserved in the remainder envelope.
+Partial convergents $\frac{p_k}{q_k}$ are generated iteratively. The truncation error is strictly bounded:
+
+$$0 \le |r_k| \lt \frac{1}{q_k q_{k+1}}$$
+
+and the residual is preserved in the remainder envelope.
 
 ### 4.4. Node Class 4: Bounded Monoidal Folds (`OP_FOLD`)
-* **Role:** Governs accumulation ($\sum$, $\prod$, vector concatenation) over arrays, streams, or multi-axial frames.
-* **Evaluation:** Requires an explicit step ceiling ($k \le k_{\max}$) and declared compute budget. Unbounded loops or infinite series are syntactically invalid under **Axiom 2** and **Axiom 6**.
+Governs accumulation ($\sum$, $\prod$, vector concatenation) over arrays, streams, or multi-axial frames.
+
+Requires an explicit step ceiling ($k \le k_{\max}$) and declared compute budget. Unbounded loops or infinite series are syntactically invalid under **Axiom 2** and **Axiom 6**.
 
 ### 4.5. Node Class 5: Frame Transformations and Permutations (`OP_FRAME_MAP`)
-* **Role:** Governs multi-axial Clifford geometric products, Cayley rotor conjugations ($R \vec{v} R^\dagger$), and coordinate permutations ($S_n$ group).
-* **Evaluation:** Rotors maintain unitary norm ($\|R\|^2 \equiv Q(1)$) by construction, eliminating trigonometric normalization cycles ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5).
+Governs multi-axial Clifford geometric products, Cayley rotor conjugations ($R \vec{v} R^\dagger$), and coordinate permutations ($S_n$ group).
+
+Rotors maintain unitary norm ($\|R\|^2 \equiv Q(1)$) by construction, eliminating trigonometric normalization cycles ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5).
 
 ### 4.6. Node Class 6: Canonical Equality Saturation (`OP_REWRITE`)
-* **Role:** Executes reversible term rewriting prior to numerical collapse:
-  * Identity bypass: $A + Q(0) \to A$ (emits [`Q(bypass)`]({{ '/glossary.html' | relative_url }}#q-bypass)).
-  * Rotor annihilation: $R R^\dagger \to Q(1)$.
-  * Nilpotency: $\vec{e}_i \wedge \vec{e}_i \to Q(0)$.
-* **Evaluation:** Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($W = 0$).
+Executes reversible term rewriting prior to numerical collapse:
+* Identity bypass: $A + Q(0) \to A$ (emits [`Q(bypass)`]({{ '/glossary.html' | relative_url }}#q-bypass)).
+* Rotor annihilation: $R R^\dagger \to Q(1)$.
+* Nilpotency: $\vec{e}_i \wedge \vec{e}_i \to Q(0)$.
+
+Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($W = 0$).
 
 ---
 
