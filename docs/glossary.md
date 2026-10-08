@@ -2,7 +2,7 @@
 layout: default
 title: CDQN Glossary
 description: Unified ontological concordance and dynamic bidirectional registry for the CDQN project.
-version: 1.1.0
+version: 1.1.1
 updated: 2026-10-08
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -40,7 +40,7 @@ Hover over terms across any documentation page for instant in-situ definition to
 {%- endif -%}
 {%- assign all_terms = all_terms | sort: "term" -%}
 {%- assign categories = all_terms | map: "category" | uniq | sort -%}
-{%- assign letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," -%}
+{%- assign letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,R,S,T,U,V,W,X,Y,Z" | split: "," -%}
 
 <div class="category-index" style="margin-bottom: 1rem;">
   <strong>Domains:</strong>
@@ -103,7 +103,7 @@ Hover over terms across any documentation page for instant in-situ definition to
     <ul class="backlinks-list">
       {%- for p in mentioning_pages -%}
         <li class="backlinks-doc">
-          <a href="{{ p.url | relative_url }}"><strong>{{ p.title | default: p.name }}</strong></a>
+          <a href="{{ p.url | relative_url }}#ref-{{ term.slug }}"><strong>{{ p.title | default: p.name }}</strong></a>
         </li>
       {%- endfor -%}
     </ul>
