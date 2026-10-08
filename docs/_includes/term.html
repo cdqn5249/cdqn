@@ -1,4 +1,17 @@
-{%- assign entry = site.data.glossary | where: "slug", include.id | first -%}
+{%- assign entry = nil -%}
+{%- if site.data.glossary.first.slug -%}
+  {%- comment -%} Monolithic file fallback (_data/glossary.yml) {%- endcomment -%}
+  {%- assign entry = site.data.glossary | where: "slug", include.id | first -%}
+{%- else -%}
+  {%- comment -%} Modular faceted directory (_data/glossary/*.yml) {%- endcomment -%}
+  {%- for cat in site.data.glossary -%}
+    {%- assign match = cat[1] | where: "slug", include.id | first -%}
+    {%- if match -%}
+      {%- assign entry = match -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 {%- if entry -%}
 <span class="glossary-wrapper" data-definition="{{ entry.definition | strip | escape }}"><a href="{{ '/glossary.html' | relative_url }}#{{ entry.slug }}" class="glossary-link" data-definition="{{ entry.definition | strip | escape }}">{% if include.text %}{{ include.text }}{% else %}{{ entry.term }}{% endif %}</a></span>
 {%- else -%}
