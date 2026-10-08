@@ -1,9 +1,9 @@
 ---
 layout: default
 title: CDQN Glossary
-description: Unified ontological concordance and bidirectional registry for the CDQN project.
-version: 1.0.0
-updated: 2026-09-05
+description: Unified ontological concordance and dynamic bidirectional registry for the CDQN project.
+version: 1.1.0
+updated: 2026-10-08
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -28,9 +28,19 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 
 Hover over terms across any documentation page for instant in-situ definition tooltips. Click any term to jump directly to its formal specification below.
 
-{% assign all_terms = site.data.glossary | sort: "term" %}
-{% assign categories = site.data.glossary | map: "category" | uniq | sort %}
-{% assign letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," %}
+{%- assign all_terms = "" | split: "" -%}
+{%- if site.data.glossary.first.slug -%}
+  {%- assign all_terms = site.data.glossary -%}
+{%- else -%}
+  {%- for category in site.data.glossary -%}
+    {%- for item in category[1] -%}
+      {%- assign all_terms = all_terms | push: item -%}
+    {%- endfor -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign all_terms = all_terms | sort: "term" -%}
+{%- assign categories = all_terms | map: "category" | uniq | sort -%}
+{%- assign letters = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," -%}
 
 <div class="category-index" style="margin-bottom: 1rem;">
   <strong>Domains:</strong>
@@ -64,7 +74,7 @@ Hover over terms across any documentation page for instant in-situ definition to
 
 <h2 class="glossary-category" id="{{ category | slugify }}">{{ category }}</h2>
 
-{% assign terms_in_category = site.data.glossary | where: "category", category | sort: "term" %}
+{% assign terms_in_category = all_terms | where: "category", category | sort: "term" %}
 
 {% for term in terms_in_category %}
 
@@ -81,25 +91,35 @@ Hover over terms across any documentation page for instant in-situ definition to
 
 <div class="glossary-backlinks">
   <p class="backlinks-heading"><strong>Mentioned in:</strong></p>
-  {% assign docs = term.sources | map: "doc" | uniq | sort %}
-  <ul class="backlinks-list">
-  {% for doc in docs %}
-    <li class="backlinks-doc">
-      <strong>{{ doc }}</strong>
-      <ul class="backlinks-sections">
-      {% for source in term.sources %}
-        {% if source.doc == doc %}
-        <li>
-          <a href="{% if source.doc == 'LICENSE.md' %}https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md{{ source.anchor }}{% else %}{{ '/' | append: source.doc | replace: '.md', '.html' | relative_url }}{{ source.anchor }}{% endif %}">
-            {{ source.section }}
-          </a>
+  {%- assign mentioning_pages = "" | split: "" -%}
+  {%- for p in site.pages -%}
+    {%- if p.terms_used and p.terms_used contains term.slug -%}
+      {%- assign mentioning_pages = mentioning_pages | push: p -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign mentioning_pages = mentioning_pages | sort: "title" -%}
+
+  {%- if mentioning_pages.size > 0 -%}
+    <ul class="backlinks-list">
+      {%- for p in mentioning_pages -%}
+        <li class="backlinks-doc">
+          <a href="{{ p.url | relative_url }}"><strong>{{ p.title | default: p.name }}</strong></a>
         </li>
-        {% endif %}
-      {% endfor %}
-      </ul>
-    </li>
-  {% endfor %}
-  </ul>
+      {%- endfor -%}
+    </ul>
+  {%- elsif term.sources -%}
+    {%- comment -%} Legacy fallback during transition {%- endcomment -%}
+    {%- assign legacy_docs = term.sources | map: "doc" | uniq | sort -%}
+    <ul class="backlinks-list">
+      {%- for doc in legacy_docs -%}
+        <li class="backlinks-doc">
+          <strong>{{ doc }}</strong>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    <p class="backlinks-none"><small><em>Referenced system-wide</em></small></p>
+  {%- endif -%}
 </div>
 
 </div>
