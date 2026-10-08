@@ -174,3 +174,12 @@
     A higher-order recursive self-optimization workflow. Ingests an existing Qn
     workflow, derives an empirically more efficient successor under strict semantic
     invariance and finite metric budget, and emits a versioned successor artifact.
+
+- term: "Content-Addressed Expression DAG"
+  slug: "cae-dag"
+  category: "Primitives"
+  definition: >
+    The canonical Layer 3 structural container of Qexpr, wherein every symbolic
+    node is irrevocably identified by the cryptographic commitment hash of its
+    operator, parameters, and child dependencies. Guarantees mathematical cycle
+    freedom by construction and enables O(1) structural equivalence comparisons.
