@@ -1,0 +1,96 @@
+# CDQN Unified Glossary — Governance Domain
+# License: Scaling Source License (SSL) 1.0
+# Updated: 2026-10-08 (Bao Loc, Vietnam)
+
+- term: "Universal Envelope"
+  slug: "universal-envelope"
+  category: "Governance"
+  definition: >
+    The invariant governance structure shared across all Qn artifacts,
+    composed of identity, type, state, lineage, DCC, metric, security, exposure,
+    and payload reference.
+
+- term: "Metric Envelope"
+  slug: "metric-envelope"
+  category: "Governance"
+  definition: >
+    The finite measurement boundary declaring resource limits on storage,
+    expression depth, precision, uncertainty, and compute budgets.
+
+- term: "Security Envelope"
+  slug: "security-envelope"
+  category: "Governance"
+  definition: >
+    The governed security boundary declaring authority limits, delegation
+    chains, PQC algorithm identifiers, and swappable revocation paths.
+
+- term: "Identity Class"
+  slug: "identity-class"
+  category: "Governance"
+  definition: >
+    The governed actor category parameterizing an identity block: Machine Identity
+    (runtimes/nodes), Human Identity (natural persons), or AI Agent Identity
+    (delegated processes).
+
+- term: "Receipt"
+  slug: "receipt"
+  category: "Governance"
+  definition: >
+    A governed, immutable record of an execution transition, fault, halt, or
+    boundary traversal. Acts as a dissipative witness exporting operational
+    entropy to maintain internal system order.
+
+- term: "Lifecycle State"
+  slug: "lifecycle-state"
+  category: "Governance"
+  definition: >
+    The operational status of an artifact: candidate, constructed, sealed,
+    verified, rejected, halted, quarantined, exportable, exported, revoked.
+
+- term: "Payload"
+  slug: "payload"
+  category: "Governance"
+  definition: >
+    Any creative content, digital asset, real-world asset representation, data,
+    or application processed, transmitted, or settled using the Licensed Work.
+    Payloads are sovereign property of their creators, do not constitute
+    Derivative Works, and are governed under protocol blindness and safe harbor
+    neutrality.
+
+- term: "Licensed Work"
+  slug: "licensed-work"
+  category: "Governance"
+  definition: >
+    The core technical infrastructure layer of the Qn and cdqn stack,
+    encompassing source code, intermediate representations (QnIR), specifications,
+    mathematical definitions, and documentation provided under the Scaling Source License.
+
+- term: "Derivative Work"
+  slug: "derivative-work"
+  category: "Governance"
+  definition: >
+    Any modification, extension, translation, binding, or runtime implementation
+    derived from the Licensed Work. Encapsulating, tokenizing, or settling a
+    Payload using the Licensed Work does not cause the Payload to become a
+    Derivative Work.
+
+- term: "Open Core Invariant"
+  slug: "open-core-invariant"
+  category: "Governance"
+  definition: >
+    Non-negotiable conditions preserved in all Derivative Works under the SSL
+    1.0: (a) Anti-Patent Defense, and (b) Non-Scaling Open Access.
+
+- term: "Paternity Reference"
+  slug: "paternity-reference"
+  category: "Governance"
+  definition: >
+    Mandatory attribution notice for derivative distributions and runtime
+    headers citing Christophe Duy Quang Nguyen under the Scaling Source License.
+
+- term: "SSL"
+  slug: "ssl"
+  category: "Governance"
+  definition: >
+    Scaling Source License 1.0. The commercial and open-core license governing
+    the CDQN project, derivative distributions, and scaling thresholds.
