@@ -2,7 +2,7 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), hash-consing deduplication, symbolic irrationals, six canonical node classes, cross-domain contexts, and hardware-aware collapse under SIMEMP constraints.
-version: 1.0.1
+version: 1.0.2
 updated: 2026-10-08
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -55,7 +55,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.0.1 |
+| **Version** | 1.0.2 |
 | **Last Updated** | 2026-10-08 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -82,7 +82,7 @@ The following documents establish the physical, structural, and legal constraint
 
 ## 1. Epistemic Stance and Constitutional Placement
 
-Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) v1.3.0 §2.6, §5), **`Qexpr` is situated strictly at Layer 3 (Complexity Degree 2)**.
+Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) v1.3.0 §2.6, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})**.
 
 ```
  +-------------------------------------------------------------------------------+
@@ -106,27 +106,27 @@ Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abst
 ```
 
 ### 1.1. The Structural Role of Layer 3
-* **Layer 1** defines **what exists** (static ontological primitives: local origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0), unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1), single digits $Q(2)\dots Q(9)$ along axis $d_1$).
-* **Layer 2** defines **atomic actions** (isolated morphisms: addition, subtraction, multiplication, Diophantine division, Clifford wedge products, spatial rotors, $Q(\mathrm{reuse})$, $Q(\mathrm{bypass})$).
+* **{% include term.html id="layer-1" %}** defines **what exists** (static ontological primitives: local origin {% include term.html id="q0" text="Q(0)" %}, unit {% include term.html id="q1" text="Q(1)" %}, single digits $Q(2)\dots Q(9)$ along axis {% include term.html id="dimension-d" text="d_1" %}).
+* **Layer 2** defines **atomic actions** (isolated morphisms: addition, subtraction, multiplication, Diophantine division, Clifford wedge products, spatial rotors, {% include term.html id="q-reuse" text="Q(reuse)" %}, {% include term.html id="q-bypass" text="Q(bypass)" %}).
 * **Layer 3 (`Qexpr`)** defines **compositional structure**: how multiple Layer 2 atomic actions are wired into directed acyclic networks *before* they are evaluated or collapsed into physical memory.
 
 ### 1.2. Acknowledgment of Universal Fallibility
-A core design tenet of the Qn architecture is the explicit recognition that **both human authors and artificial agents are fallible entities**. Neither is an absolute arbitrator:
+A core design tenet of the {% include term.html id="qn" %} architecture is the explicit recognition that **both human authors and artificial agents are fallible entities**. Neither is an absolute arbitrator:
 * Humans are prone to specification errors, unmeasured assumptions, and logical oversights.
 * Artificial agents and compilers are prone to algorithmic hallucinations, non-terminating expansions, and parameter misalignments.
 
-Under [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}), safety cannot rely on presumed actor infallibility. `Qexpr` serves as the **mechanical error-containment envelope**: it enforces strict syntactic cycle freedom, explicit graph depth bounds, and finite execution budgets, ensuring that an error by any actor halts deterministically at the structural boundary without inducing systemic divergence.
+Under [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}), safety cannot rely on presumed actor infallibility. `Qexpr` serves as the **mechanical error-containment envelope**: it enforces strict syntactic cycle freedom, explicit graph depth bounds, and finite execution budgets ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) Axiom 6), ensuring that an error by any actor halts deterministically at the structural boundary without inducing systemic divergence.
 
 ### 1.3. Universal Semantic Membrane and Cross-Domain Contexts
 `Qexpr` is not restricted to arithmetic calculations; it is the **universal structural membrane for all computable domains**.
 
-A computational **Context** is formalised as a multi-domain Content-Addressed Expression DAG:
+A computational **Context** is formalized as a multi-domain Content-Addressed Expression DAG:
 
 $$\text{Context} \equiv \mathcal{G}_{\text{Qexpr}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
 
 1. **Semantic Root ($\mathrm{Qs}$):** Encapsulates intent, linguistic pregroups, and human-agent capability delegations.
-2. **Relational Root ($\mathrm{Qm}$):** Verifies that proposed state transitions are mathematically decidable, Diophantine-constrained, and exact.
-3. **Physical Root ($\mathrm{Qphy}$):** Verifies that the required computational work can physically execute within finite Landauer dissipation bounds ($W \ge k_B T \ln 2$).
+2. **Relational Root ({% include term.html id="qm" %}):** Verifies that proposed state transitions are mathematically decidable, Diophantine-constrained, and exact.
+3. **Physical Root ($\mathrm{Qphy}$):** Verifies that the required computational work can physically execute within finite Landauer dissipation bounds ($W \ge k_B T \ln 2$), parameterized by the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
 
 By representing cross-domain contexts within the unified `Qexpr` structure, heterogeneous actors achieve consensus on shared root commitment hashes $\mathcal{H}(\text{Context})$ without unmeasured semantic ambiguity.
 
@@ -134,7 +134,7 @@ By representing cross-domain contexts within the unified `Qexpr` structure, hete
 
 ## 2. The Content-Addressed Expression DAG (CAE-DAG) Architecture
 
-Under the **Best of Choices (BOC) Policy** ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §7), `Qexpr` explicitly rejects naive pointer-heap trees in favor of a **Content-Addressed Expression Directed Acyclic Graph (CAE-DAG)**.
+Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §7), `Qexpr` explicitly rejects naive pointer-heap trees in favor of a **Content-Addressed Expression Directed Acyclic Graph (CAE-DAG)**.
 
 ```
     CLASSICAL POINTER-AST                         CONTENT-ADDRESSED EXPRESSION DAG (CAE-DAG)
@@ -158,10 +158,10 @@ $$\alpha = \Big\langle \mathrm{OpCode}, \, \mathcal{H}(\mathrm{Left}), \, \mathc
 * **$\mathrm{OpCode}$:** Discrete identifier of the operation, domain morphism, or terminal leaf generator.
 * **$\mathcal{H}(\mathrm{Child})$:** Cryptographic content commitment hash of child dependencies. For leaf nodes, this references underlying Layer 1 primitives, constants, or semantic tokens.
 * **$z, r, d$:** Target scale quantum {% include term.html id="zoom-z" text="Zoom z" %}, conserved residual {% include term.html id="remainder-r" text="Remainder r" %}, and coordinate frame {% include term.html id="dimension-d" text="Dimension d" %}.
-* **$\mathrm{DCC}_{\mathrm{ref}}$:** Abstract capability contract governing transformation ceilings and execution rights.
+* **$\mathrm{DCC}_{\mathrm{ref}}$:** Machine-readable {% include term.html id="dcc-profile" text="DCC Profile" %} governing transformation ceilings and execution rights.
 
 ### 2.2. Structural Hash-Consing and $\mathcal{O}(1)$ Equivalence
-Node identity is strictly mathematical:
+Node identity is strictly mathematical under {% include term.html id="dependencies-determinism" %}:
 
 $$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, \mathcal{H}(\mathrm{Left}) \,\|\, \mathcal{H}(\mathrm{Right}) \,\|\, z \,\|\, r \,\|\, d \,\|\, \mathrm{DCC}_{\mathrm{ref}}\Big)$$
 
@@ -173,12 +173,12 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 Testing algebraic or semantic equality collapses to a single machine-word integer comparison.
 
 ### 2.3. Thermodynamic Work Minimization ($W = 0$)
-In physical Layer 0 substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($\mathcal{O}(C V^2 f)$) and Landauer work ($W \ge k_B T \ln 2$).
+In physical {% include term.html id="layer-0" %} substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($\mathcal{O}(C V^2 f)$) and Landauer work ($W \ge k_B T \ln 2$).
 * By enforcing hash-consing, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
-* Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($W = 0$), directly operationalizing [`Q(reuse)`]({{ '/glossary.html' | relative_url }}#q-reuse) across the Memory Wall.
+* Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($W = 0$), directly operationalizing {% include term.html id="q-reuse" text="Q(reuse)" %} across the Memory Wall.
 
 ### 2.4. Acyclicity by Construction (Axiom 5)
-In classical graphs, circular references create non-halting loops and stack crashes. In a Content-Addressed DAG, **a circular dependency is mathematically impossible**. Because $\mathcal{H}(\alpha)$ requires the child hash $\mathcal{H}(\beta)$ as an input, $\beta$ cannot declare $\alpha$ as a dependency without breaking the pre-image resistance of cryptographic hash functions. Acyclicity is guaranteed by construction, satisfying **Axiom 5** ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }})).
+In classical graphs, circular references create non-halting loops and stack crashes. In a Content-Addressed DAG, **a circular dependency is mathematically impossible**. Because $\mathcal{H}(\alpha)$ requires the child hash $\mathcal{H}(\beta)$ as an input, $\beta$ cannot declare $\alpha$ as a dependency without breaking the pre-image resistance of cryptographic hash functions. Acyclicity along the {% include term.html id="causal-arrow" %} is guaranteed by construction, satisfying **Axiom 5** ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }})).
 
 ---
 
@@ -203,13 +203,13 @@ In classical floating-point systems (IEEE 754), rounding is an unmetered, lossy 
 ```
 
 ### 3.1. Prohibition of Rounding Drift
-In the Qn universe, **implicit rounding is outlawed by Axiom 9 and Axiom 10**:
+In the Qn universe, **implicit rounding is outlawed by {% include term.html id="no-implicit-rule" text="the No-Implicit Rule" %} and Axioms 9 and 10**:
 1. Within Layer 3, expressions are held in unevaluated, exact symbolic form. Drift is identically zero.
 2. When projected onto physical hardware boundaries, quantities are partitioned into an integer quotient $q_z$ and an **exact conserved remainder** $r_z$ ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4):
 
 $$X = \big( q_z \cdot \delta_z(d) \big) + r_z, \quad \text{where } 0 \le |r_z| \lt \delta_z(d)$$
 
-The remainder $r_z$ is never discarded; it is sealed within the remainder envelope as the exact causal input state for subsequent precision expansions.
+The remainder $r_z$ is never discarded; it is sealed within the {% include term.html id="universal-envelope" %} as the exact causal input state for subsequent precision expansions.
 
 ### 3.2. Ontological Status of Irrationals and Transcendentals
 Under **Axiom 2**, actual infinities cannot exist as storable or executable machine states. Consequently:
@@ -235,7 +235,7 @@ Under **Axiom 2**, actual infinities cannot exist as storable or executable mach
 ```
 
 1. **Algebraic Irrationals ($\sqrt{2}, \phi$):** Stored as exact polynomial constraint equations ($D^2 - Q(2) = Q(0)$). They are manipulated symbolically via radical identities with zero rounding drift.
-2. **Transcendental Constants ($\pi, \tau, e, \ln$):** Stored as deterministic continued fraction recurrence generators. Evaluating $\pi$ to zoom level $z$ computes an exact rational quotient and a conserved residual without floating-point error.
+2. **Transcendental Constants ($\pi, \tau, e, \ln$):** Stored as deterministic continued fraction recurrence generators. Evaluating $\pi$ to zoom level $z$ computes an exact rational quotient and a conserved residual without floating-point error, verifying {% include term.html id="terminal-exactness" %} where remainders collapse.
 
 ---
 
@@ -267,7 +267,7 @@ $$\frac{p_1}{q_1} + \frac{p_2}{q_2} = \frac{(p_1 \times q_2) + (p_2 \times q_1)}
 ### 4.2. Node Class 2: Constrained Algebraic Roots (`OP_ROOT`)
 Represents algebraic radical roots as exact polynomial Diophantine equations ($P(X) = Q(0)$).
 
-Algebraic roots (such as $\sqrt{2}$ via `DCC_ANCHOR_SQRT2_v1`) are held symbolically. Multiplication by identical roots ($D \times D$) resolves immediately to integer constants ($Q(2)$) via $Q(\mathrm{bypass})$ without invoking root-extraction algorithms.
+Algebraic roots (such as $\sqrt{2}$ via `DCC_ANCHOR_SQRT2_v1`) are held symbolically. Multiplication by identical roots ($D \times D$) resolves immediately to integer constants ($Q(2)$) via {% include term.html id="q-bypass" text="Q(bypass)" %} without invoking root-extraction algorithms.
 
 ### 4.3. Node Class 3: Projective Recurrence Generators (`OP_CF`)
 Generates transcendental numbers ($\pi, e, \tau$) through deterministic continued fraction expansions:
@@ -292,17 +292,17 @@ Rotors maintain unitary norm ($\|R\|^2 \equiv Q(1)$) by construction, eliminatin
 
 ### 4.6. Node Class 6: Canonical Equality Saturation (`OP_REWRITE`)
 Executes reversible term rewriting prior to numerical collapse:
-* Identity bypass: $A + Q(0) \to A$ (emits [`Q(bypass)`]({{ '/glossary.html' | relative_url }}#q-bypass)).
+* Identity bypass: $A + Q(0) \to A$ (emits {% include term.html id="q-bypass" text="Q(bypass)" %}).
 * Rotor annihilation: $R R^\dagger \to Q(1)$.
 * Nilpotency: $\vec{e}_i \wedge \vec{e}_i \to Q(0)$.
 
-Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($W = 0$).
+Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($W = 0$) using {% include term.html id="q-anchor" text="Q(anchor)" %} contracts.
 
 ---
 
 ## 5. Hardware Capability-Aware Collapse Engine (HCA-Collapse)
 
-While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3, its physical execution on physical SoCs is governed by the **Hardware Capability-Aware Collapse Engine (HCA-Collapse Engine)**.
+While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3 via {% include term.html id="structural-indirection" %}, its physical execution on physical SoCs is governed by the **Hardware Capability-Aware Collapse Engine (HCA-Collapse Engine)**.
 
 ```
                                THE COMPILATION PIPELINE
@@ -324,16 +324,16 @@ While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3, its physic
 ```
 
 ### 5.1. Target-Specific Lowering Profiles
-The compiler queries the node's local **DCC Hardware Capability Profile** (established during Layer 0 onboarding):
+The compiler queries the node's local {% include term.html id="dcc-profile" text="DCC Hardware Profile" %} (established during Layer 0 onboarding):
 1. **NPU / Systolic Arrays:** Lowers multi-axial Clifford geometric products ($\vec{u} \cdot \vec{v} = \sum \eta_{kk} u_k v_k$) directly into **integer Matrix-Multiply-Accumulate (MAC)** instructions (INT16/INT32), completing contractions in constant time.
 2. **Cryptographic Co-Processors:** Offloads hash-consing deduplication and node commitment hashing to hardware SHA-3 or BLAKE3 accelerators.
 3. **Integer RISC-V / Microcontrollers:** Replaces division by multiplication using Barrett integer reciprocal tables with exact remainder correction loops.
 
 ### 5.2. Side-Channel Immunity via Constant-Time Compute
-Variable-time operations leak secret cryptographic keys and algorithmic state via power analysis and cache timing. Lowering `Qexpr` nodes into fixed-cycle SoC instruction sequences ensures that execution duration depends strictly on declared metric budgets, providing hardware-level side-channel immunity.
+Variable-time operations leak secret cryptographic keys and algorithmic state via power analysis and cache timing. Lowering `Qexpr` nodes into fixed-cycle SoC instruction sequences ensures that execution duration depends strictly on declared metric budgets, providing hardware-level side-channel immunity under the {% include term.html id="security-envelope" %}.
 
 ### 5.3. Invariance Mandate
-SoC-specific lowering is permissible if, and only if, the transformation is an **algebraic isomorphism**. Lowering passes that introduce floating-point approximations, mantissa truncations, or non-deterministic rounding are intercepted by the gateway and rejected.
+SoC-specific lowering is permissible if, and only if, the transformation is an **algebraic isomorphism**. Lowering passes that introduce floating-point approximations, mantissa truncations, or non-deterministic rounding are intercepted by the gateway and rejected, protecting {% include term.html id="existential-invariant" text="Existential Invariants" %}.
 
 ---
 
@@ -356,8 +356,8 @@ To guarantee that fallible human directives or unaligned agentic processes canno
 ```
 
 1. **Static Graph Depth Ceilings:** If an expression tree exceeds the declared depth ceiling ($D > D_{\max}$), execution terminates immediately with receipt `RECEIPT_EXPRESSION_TOO_COMPLEX`.
-2. **Node Allocation Bounds:** If hash-consing attempts to instantiate node counts exceeding the local Metric Envelope, compilation aborts with `RECEIPT_BUDGET_EXHAUSTED`.
-3. **Totality by Budget (Axiom 6):** Every collapse operation carries an explicit compute budget in units of $Q(1)$. Non-terminating expansions are impossible; when the budget is consumed, the engine emits a dissipative receipt and halts.
+2. **Node Allocation Bounds:** If hash-consing attempts to instantiate node counts exceeding the local {% include term.html id="metric-envelope" %}, compilation aborts with `RECEIPT_BUDGET_EXHAUSTED`.
+3. **Totality by Budget (Axiom 6):** Every collapse operation carries an explicit compute budget in units of $Q(1)$ via {% include term.html id="metric-exhaustion" %}. Non-terminating expansions are impossible; when the budget is consumed, the engine emits a dissipative {% include term.html id="receipt" %} and halts.
 
 ---
 
@@ -366,13 +366,13 @@ To guarantee that fallible human directives or unaligned agentic processes canno
 This specification strictly conforms to the **[Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**:
 
 ### 7.1. Paternity Reference
-All derivative implementations, symbolic rewrite engines, compilers, and intermediate representation parsers derived from `Qexpr` must preserve the canonical attribution:
+All derivative implementations, symbolic rewrite engines, compilers, and intermediate representation parsers derived from the {% include term.html id="licensed-work" %} must preserve the canonical {% include term.html id="paternity-reference" %}:
 
 > Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL). Parent Repository: https://github.com/cdqn5249/cdqn
 
 ### 7.2. Open Core Invariants
 1. **Anti-Patent Defense:** Commercial or derivative licenses terminate automatically upon initiating patent litigation against the Author or project ecosystem.
-2. **Non-Scaling Open Access:** Royalty-free licensing is guaranteed for non-commercial, academic, and sub-threshold usage.
+2. **Non-Scaling Open Access:** Royalty-free licensing is guaranteed for non-commercial, academic, and sub-threshold usage under the {% include term.html id="ssl" %}.
 
 ### 7.3. Passive Infrastructure Safe Harbor
-The `Qexpr` symbolic container acts as passive, neutral technical infrastructure. It exercises no editorial inspection over, and makes no claim upon, sovereign user content, models, or [`Payloads`]({{ '/glossary.html' | relative_url }}#payload) processed within its expression graphs.
+The `Qexpr` symbolic container acts as passive, neutral technical infrastructure. It exercises no editorial inspection over, and makes no claim upon, sovereign user content, models, or {% include term.html id="payload" text="Payloads" %} processed within its expression graphs.
