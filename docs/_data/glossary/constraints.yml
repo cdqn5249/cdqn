@@ -104,3 +104,12 @@
     Q(0) at a declared zoom level z along dimension d. Proves mathematical
     exactness and triggers deterministic early halting, preventing redundant
     thermodynamic metric consumption.
+
+- term: "Hash-Consing"
+  slug: "hash-consing"
+  category: "Constraints"
+  definition: >
+    The structural graph-unification mechanism within CAE-DAGs mapping semantically
+    identical sub-expressions to the exact same immutable node in memory. Eliminates
+    redundant bit allocation across the Memory Wall and ensures zero marginal
+    Landauer dissipation (W = 0) for recurring sub-graphs via Q(reuse).
