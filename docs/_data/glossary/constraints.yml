@@ -1,0 +1,106 @@
+# CDQN Unified Glossary — Constraints Domain
+# License: Scaling Source License (SSL) 1.0
+# Updated: 2026-10-08 (Bao Loc, Vietnam)
+
+- term: "Dependencies Determinism"
+  slug: "dependencies-determinism"
+  category: "Constraints"
+  definition: >
+    The formal property whereby a computational state transition S_t possesses
+    zero conditional entropy given its complete declared set of causal
+    dependencies: H(S_t | D(S_t)) = 0. If dependencies are incomplete, implicit,
+    or unmeasured, residual entropy produces non-deterministic state drift.
+
+- term: "Structural Indirection"
+  slug: "structural-indirection"
+  category: "Constraints"
+  definition: >
+    The architectural decoupling of abstract capability contracts from concrete
+    cryptographic or serialization primitives. Allows the runtime to patch
+    zero-day vulnerabilities and swap algorithms without mutating abstract DCC
+    contracts or fracturing causal lineage.
+
+- term: "Metric Exhaustion"
+  slug: "metric-exhaustion"
+  category: "Constraints"
+  definition: >
+    The verified consumption or sink of a declared compute and storage budget
+    (such as Q(1) units) required to execute a governed state transition.
+    Represents thermodynamic and causal work, not a monetary policy or financial
+    event.
+
+- term: "SIMEMP"
+  slug: "simemp"
+  category: "Constraints"
+  definition: >
+    Security, Identity, Metric, Efficiency, Modularity, Portability. The
+    constitutional constraint system governing the Qn and cdqn stack. Divided
+    into Tier 1 Existential Invariants (non-negotiable) and Tier 2 Operational
+    Agilities (trade-off-able).
+
+- term: "DCC Profile"
+  slug: "dcc-profile"
+  category: "Constraints"
+  definition: >
+    Dependencies, Constraints, Capabilities. A machine-readable abstract
+    contract defining prerequisites, hard operational bounds, and permitted
+    morphisms for every layer, object, and gateway. No DCC profile may be
+    implicit.
+
+- term: "Existential Invariant"
+  slug: "existential-invariant"
+  category: "Constraints"
+  definition: >
+    A Tier 1 SIMEMP constraint that is non-negotiable. The three Existential
+    Invariants are Identity, Metric, and Security. If a proposed design
+    violates or lacks these, it is fundamentally invalid.
+
+- term: "Operational Agility"
+  slug: "operational-agility"
+  category: "Constraints"
+  definition: >
+    A Tier 2 SIMEMP constraint that is trade-off-able. The three Operational
+    Agilities are Efficiency, Modularity, and Portability. They may be
+    sacrificed to preserve Tier 1 Existential Invariants.
+
+- term: "BOC Policy"
+  slug: "boc-policy"
+  category: "Constraints"
+  definition: >
+    Best of Choices. The formal decision framework used to resolve design
+    conflicts by selecting the implementation path that maximizes SIMEMP
+    compliance and minimizes implicit state.
+
+- term: "Scaling Threshold"
+  slug: "scaling-threshold"
+  category: "Constraints"
+  definition: >
+    Usage boundaries defined by the SSL 1.0 triggering mandatory commercial
+    licensing: >10,000 active compute nodes/agents, >100,000 MAU, or
+    >10,000,000 monthly API/Qn transactions.
+
+- term: "No-Implicit Rule"
+  slug: "no-implicit-rule"
+  category: "Constraints"
+  definition: >
+    The constitutional rule that no implicit entity, default, coercion, or
+    unmeasured convention may cross a SIMEMP Gateway. Only explicit Qn objects
+    are admitted between abstraction layers.
+
+- term: "Computational Consistency"
+  slug: "computational-consistency"
+  category: "Constraints"
+  definition: >
+    The empirical verification methodology of the Qn universe. If logic is
+    internally consistent and computations authored in QnLang and compiled to
+    QnIR execute deterministically within declared finite budgets, the
+    abstraction is provisionally valid.
+
+- term: "Terminal Exactness"
+  slug: "terminal-exactness"
+  category: "Constraints"
+  definition: >
+    The discrete algebraic condition wherein remainder r equals genesis origin
+    Q(0) at a declared zoom level z along dimension d. Proves mathematical
+    exactness and triggers deterministic early halting, preventing redundant
+    thermodynamic metric consumption.
