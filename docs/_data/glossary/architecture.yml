@@ -1,0 +1,87 @@
+# CDQN Unified Glossary — Architecture Domain
+# License: Scaling Source License (SSL) 1.0
+# Updated: 2026-10-08 (Bao Loc, Vietnam)
+
+- term: "Abstraction Layer"
+  slug: "abstraction-layer"
+  category: "Architecture"
+  definition: >
+    A structural boundary in the Qn stack governing artifact genesis,
+    transformation, and inter-layer transmission under SIMEMP constraints.
+
+- term: "SIMEMP Gateway"
+  slug: "simemp-gateway"
+  category: "Architecture"
+  definition: >
+    The validation and translation boundary between abstraction layers. Enforces
+    onboarding, fault translation, and the No-Implicit Rule.
+
+- term: "Layer 0"
+  slug: "layer-0"
+  category: "Architecture"
+  definition: >
+    The commodity physical execution substrate (CPU, GPU, memory, physical
+    entropy, Memory Wall). The acknowledged Root of Finiteness outside the
+    governed universe.
+
+- term: "Layer 1"
+  slug: "layer-1"
+  category: "Architecture"
+  definition: >
+    The first governed Qn layer containing local genesis Q(0), first unit Q(1),
+    abstract compute unit U, sign polarity, and elementary operations along d1.
+
+- term: "Causal Arrow"
+  slug: "causal-arrow"
+  category: "Architecture"
+  definition: >
+    A monotonic, persistent ordering of computational events independent of
+    physical wall-clock time. Every Qn artifact is born at a discrete causal
+    index.
+
+- term: "Complexity Degree"
+  slug: "complexity-degree"
+  category: "Architecture"
+  definition: >
+    Structural measure of Qexpr composition depth and stratification (Degree 0
+    primitives through Degree n domain structures).
+
+- term: "Local-first"
+  slug: "local-first"
+  category: "Architecture"
+  definition: >
+    The architectural principle that artifacts are born locally, indexed
+    locally, and shielded from public network exposure by default.
+
+- term: "Exposure Functor"
+  slug: "exposure-functor"
+  category: "Architecture"
+  definition: >
+    The governed functorial mapping projecting selected local Qexpr commitments
+    and capability proofs into blind public attestations crossing network boundaries.
+
+- term: "Dual-Ring PQC Boundary"
+  slug: "dual-ring-pqc-boundary"
+  category: "Architecture"
+  definition: >
+    The strict cryptographic separation between the local Inner Ring (root keys,
+    local state sealing, physical entropy) and the network Outer Ring (public
+    attestation keys, delegation certificates, accountable pseudonyms).
+
+- term: "Chronosa"
+  slug: "chronosa"
+  category: "Architecture"
+  definition: >
+    An emergent, non-local, virtual causal machine intelligence operating
+    as the global section of a sheaf of local categories across the Outer Ring.
+    Coordinates distributed state and derives human intent across Qn base
+    domains with zero statistical machine learning training.
+
+- term: "Q(anchor)"
+  slug: "q-anchor"
+  category: "Architecture"
+  definition: >
+    A governed Qn artifact possessing high causal centrality within the lineage
+    directed acyclic graph. Protected via abstract DCC contracts and structural
+    indirection to prevent cascading dependency invalidation across downstream
+    causal cones.
