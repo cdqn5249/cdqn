@@ -1,0 +1,176 @@
+# CDQN Unified Glossary — Primitives Domain
+# License: Scaling Source License (SSL) 1.0
+# Updated: 2026-10-08 (Bao Loc, Vietnam)
+
+- term: "Zoom z"
+  slug: "zoom-z"
+  category: "Primitives"
+  definition: >
+    The declared precision boundary, metric resolution quantum, or discrete
+    scale level of a governed numeric expression. Parameterizes projective
+    resolution lattices while remaining base-independent in core representations.
+
+- term: "Remainder r"
+  slug: "remainder-r"
+  category: "Primitives"
+  definition: >
+    The conserved residual quantity preserved at a declared zoom level or
+    division constraint. Acts as the exact input state and generator for
+    subsequent zoom scale expansion along dimension d, preventing precision decay
+    and replacing IEEE 754 rounding approximations.
+
+- term: "Dimension d"
+  slug: "dimension-d"
+  category: "Primitives"
+  definition: >
+    A governed dimensional coordinate axis or geometric orientation parameterizing
+    a Qn entity, beginning with axis d1 derived from genesis origin Q(0) and unit Q(1).
+
+- term: "Qn"
+  slug: "qn"
+  category: "Primitives"
+  definition: >
+    Quang Number. A governed, finite, identifiable, measurable, and
+    security-constrained computational artifact within the Qn universe.
+
+- term: "Q(0)"
+  slug: "q0"
+  category: "Primitives"
+  definition: >
+    Local genesis object, causal origin zero, empty birth context. Strictly
+    local to each node; no universal global zero is admitted.
+
+- term: "Q(1)"
+  slug: "q1"
+  category: "Primitives"
+  definition: >
+    First unit artifact, unity measure, and baseline reference for the
+    abstract compute unit U along dimensional axis d1.
+
+- term: "Abstract Compute Unit U"
+  slug: "compute-unit-u"
+  category: "Primitives"
+  definition: >
+    The fundamental, invariant quantum of governed computational work representing
+    the minimal state transition from local genesis Q(0) to first unit Q(1) along
+    dimensional axis d1. Calibrated to physical Landauer dissipation limits
+    (W >= k_B T ln 2) to maintain platform-invariant accounting across
+    heterogeneous hardware substrates.
+
+- term: "Successor Morphism S"
+  slug: "successor-morphism"
+  category: "Primitives"
+  definition: >
+    The discrete algebraic transition function S(x) = x + Q(1) generating
+    sequential integer artifacts inductively along dimensional axis d1 without
+    continuous or floating-point approximations.
+
+- term: "Q(even)"
+  slug: "q-even"
+  category: "Primitives"
+  definition: >
+    The constructive parity partition of integers whose Diophantine division by
+    Q(2) yields a remainder identically equal to genesis origin Q(0),
+    demonstrating modulo-2 Terminal Exactness. Includes local genesis origin Q(0).
+
+- term: "Q(odd)"
+  slug: "q-odd"
+  category: "Primitives"
+  definition: >
+    The constructive parity partition of integers whose Diophantine division by
+    Q(2) yields a remainder identically equal to first unit Q(1).
+
+- term: "Qm"
+  slug: "qm"
+  category: "Primitives"
+  definition: >
+    Quang Mathematics. The local-first constructive algebraic, numeric, and
+    relational base domain of the Qn universe. Operates over discrete tuples
+    ⟨σ, q_z, z, r_z, d⟩ without floating-point mechanics, enforcing Diophantine
+    division constraints, projective remainder conservation, and positional
+    order decidability.
+
+- term: "Qlog"
+  slug: "qlog"
+  category: "Primitives"
+  definition: >
+    Quang Logics. An emergent composite domain derived from the categorical
+    tensor product of Quang Mathematics and Quang Semantics (Qm ⊗ Qs). Formalizes
+    constructive type theory, intuitionistic propositional deduction, and
+    automated proof verification without ungrounded non-constructive axioms.
+
+- term: "Qbio"
+  slug: "qbio"
+  category: "Primitives"
+  definition: >
+    Quang Biology. An emergent composite domain derived from the tensor product
+    of Quang Physics, Quang Mathematics, and Quang Semantics (Qphy ⊗ Qm ⊗ Qs).
+    Models non-equilibrium dissipative metabolic systems, cellular automata,
+    active inference, and genetic information channels operating as bounded
+    SIMEMP open systems.
+
+- term: "Q(reuse)"
+  slug: "q-reuse"
+  category: "Primitives"
+  definition: >
+    A Category B optimization morphism that references existing immutable content
+    commitment hashes within the local causal DAG instead of allocating new
+    physical memory bits. Mitigates the Memory Wall and eliminates redundant
+    Landauer dissipation at zero marginal Q(1) cost.
+
+- term: "Q(bypass)"
+  slug: "q-bypass"
+  category: "Primitives"
+  definition: >
+    A Category B optimization morphism allowing a SIMEMP Gateway to short-circuit
+    execution steps when algebraic preconditions prove an invariant identity
+    transition (such as Terminal Exactness r = Q(0) or multiplication by unit Q(1)).
+    Emits an explicit zero-cost bypass receipt without consuming compute budgets.
+
+- term: "cdqn"
+  slug: "cdqn"
+  category: "Primitives"
+  definition: >
+    Chained and Distributed Quang Numbers. The universal fractal protocol of
+    governed data movement, operating both locally (intra-node causal chaining
+    between abstraction layers and base domains) and distributively (inter-node
+    public attestations across physical networks).
+
+- term: "QnLang"
+  slug: "qnlang"
+  category: "Primitives"
+  definition: >
+    The high-level domain-specific language used to author Qn computations,
+    enforcing explicit DCC profiles and compile-time collapse.
+
+- term: "QnIR"
+  slug: "qnir"
+  category: "Primitives"
+  definition: >
+    Intermediate Representation used for hardware abstraction, bound
+    enforcement, and deterministic execution without exposing floating-point
+    semantics.
+
+- term: "Qexpr"
+  slug: "qexpr"
+  category: "Primitives"
+  definition: >
+    Governed expression tuple encapsulating symbolic structure, zoom, remainder,
+    dimension, DCC profile, identity, and causal lineage. Structured as a
+    Content-Addressed Expression DAG (CAE-DAG) with hash-consing.
+
+- term: "Qn(workflow)"
+  slug: "qn-workflow"
+  category: "Primitives"
+  definition: >
+    A governed composite Qn artifact representing an explicit, causal directed
+    acyclic graph of state transitions and morphisms. Bounded by its own Universal
+    Envelope, DCC Profile, and finite metric budget allocation.
+
+- term: "Qn(rsi)"
+  slug: "qn-rsi"
+  category: "Primitives"
+  definition: >
+    A higher-order recursive self-optimization workflow. Ingests an existing Qn
+    workflow, derives an empirically more efficient successor under strict semantic
+    invariance and finite metric budget, and emits a versioned successor artifact.
