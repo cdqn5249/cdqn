@@ -85,3 +85,13 @@
     directed acyclic graph. Protected via abstract DCC contracts and structural
     indirection to prevent cascading dependency invalidation across downstream
     causal cones.
+
+- term: "HCA-Collapse Engine"
+  slug: "hca-collapse"
+  category: "Architecture"
+  definition: >
+    Hardware Capability-Aware Collapse Engine. The gateway compilation pass lowering
+    Layer 3 CAE-DAG expressions into constant-time, constant-space SoC machine
+    instructions (such as integer NPU systolic MACs or DSP vectors) matching the
+    node's local DCC capability profile while strictly preserving Diophantine exactness
+    and zero floating-point semantics.
