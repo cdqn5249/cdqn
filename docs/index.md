@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.4.1
-updated: 2026-10-05
+version: 1.5.0
+updated: 2026-10-09
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -52,6 +52,7 @@ terms_used:
   - q-even
   - q-odd
   - successor-morphism
+  - simemp-gateway
 ---
 
 # CDQN Documentation Portal
@@ -71,27 +72,35 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.4.1 |
-| **Last Updated** | 2026-10-05 (Bao Loc, Vietnam) |
+| **Version** | 1.5.0 |
+| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Active Research Framework — Formulated Working Hypotheses |
+| **Status** | Canonical Architectural Portal — Category A/B & Domain Synchronization |
 
 ---
 
 ## 1. Scope, Thermodynamics, and Architectural Stance
 
-The CDQN framework investigates a foundational question in computational physics and computer science: *Can a discrete number system abstract any computable phenomenon within physical reality?*
+The CDQN framework investigates a foundational question in computational physics and computer science: *Can a discrete {% include term.html id="qn" %} number system abstract any computable phenomenon within physical reality?*
 
 Classical computing abstractions frequently rely on non-constructive assumptions: unbounded memory spaces, continuous unmetered precision, and unmodeled side-channel dissipation. The {% include term.html id="qn" %} architecture rejects actual infinities, establishing computational boundaries grounded in physical laws:
 
-- **Strict Physical Finiteness:** Computation is a non-equilibrium thermodynamic process subject to Landauer's bound ($W \ge k_B T \ln 2$). Unbounded state spaces are physically non-realizable and excluded from execution.
-- **{% include term.html id="dependencies-determinism" %}:** Every state transition $S_t$ must possess zero conditional entropy given its declared dependencies ($H(S_t \mid \mathcal{D}(S_t)) = 0$). Implicit or unmeasured states violate this bound, resulting in non-deterministic drift.
+- **Strict Physical Finiteness:** Computation is a non-equilibrium thermodynamic process subject to Landauer's bound:
+
+$$W \ge k_B T \ln 2$$
+
+Unbounded state spaces are physically non-realizable and excluded from execution.
+- **{% include term.html id="dependencies-determinism" %}:** Every state transition $S_t$ must possess zero conditional entropy given its declared dependencies:
+
+$$H(S_t \mid \mathcal{D}(S_t)) = 0$$
+
+Implicit or unmeasured states violate this bound, resulting in non-deterministic drift.
 - **{% include term.html id="simemp" %} Governance:** Execution within the {% include term.html id="licensed-work" %} is constrained by Tier 1 {% include term.html id="existential-invariant" text="Existential Invariants" %} (Identity, Metric, Security) and optimized via Tier 2 {% include term.html id="operational-agility" text="Operational Agilities" %} (Efficiency, Modularity, Portability).
-- **The {% include term.html id="no-implicit-rule" %}:** No implicit type coercions, unmeasured error states, or undeclared assumptions may cross a {% include term.html id="simemp-gateway" %}.
+- **The {% include term.html id="no-implicit-rule" %}:** No implicit type coercions, unmeasured error states, or undeclared assumptions may cross an abstraction boundary or {% include term.html id="simemp-gateway" %}.
 - **Totality by Budget & Dissipative Receipts:** Divergent or infinite loops are rejected. Computations are total by budget via dissipative {% include term.html id="metric-exhaustion" %}, exporting operational entropy via signed, verifiable {% include term.html id="receipt" text="receipts" %}.
-- **{% include term.html id="local-first" %} Origin:** Artifacts originate in local node universes rooted in genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0) and unity unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1).
-- **Fractal Protocol & Hybrid Swarm:** {% include term.html id="cdqn" %} functions as the universal protocol of governed data movement. It chains state transitions locally between abstraction layers and base domains, while distributing public attestations across a hybrid swarm topology (High-Capacity Hubs as proof concentrators paired with dynamic, lightweight edge swarms).
+- **{% include term.html id="local-first" %} Origin:** Artifacts originate in local node universes rooted in genesis origin {% include term.html id="q0" text="Q(0)" %} and unity unit {% include term.html id="q1" text="Q(1)" %}.
+- **Fractal Protocol & Hybrid Swarm:** {% include term.html id="cdqn" %} functions as the universal protocol of governed data movement. It chains state transitions locally between abstraction layers and base domains, while distributing public road receipts across a hybrid swarm topology (High-Capacity Hubs paired with dynamic edge swarms) synthesized by {% include term.html id="chronosa" %}.
 - **Substrate vs. Payload Air Gap:** The protocol acts as a passive, neutral conduit. Raw user content, applications, and digital assets remain sovereign {% include term.html id="payload" text="Payloads" %} insulated by protocol blindness and statutory safe-harbor protections.
 
 ---
@@ -102,7 +111,7 @@ The documentation suite does not claim closed empirical finality. The system ope
 
 $$\text{Proposal} \xrightarrow{\quad} \text{Construction} \xrightarrow{\quad} \text{Evaluation} \xrightarrow{\quad} \text{Selection}$$
 
-Abstractions and axioms represent **provisional working hypotheses** formulated using {% include term.html id="structural-indirection" %} to avoid premature structural calcification while retaining agility against zero-day vulnerabilities. Verification is conducted operationally via {% include term.html id="computational-consistency" %}:
+Abstractions and axioms represent working hypotheses formulated using {% include term.html id="structural-indirection" %} to avoid premature structural calcification while retaining agility against zero-day vulnerabilities. Verification is conducted operationally via {% include term.html id="computational-consistency" %}:
 
 $$\text{Valid}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \forall p \in \text{QnIR}(\mathcal{A}), \, \text{TerminatesWithinBudget}(p) \right)$$
 
@@ -111,31 +120,30 @@ Development proceeds through consecutive emergence milestones toward an operatio
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ CATEGORY A: Foundational Hardware & Single-Digit Primitives     │
-│ • Q(0), Q(1) Genesis & Calibration ── [HYPOTHESIS v1.0.1]       │
-│ • Q(2)...Q(9) Secondary DCC Anchors── [HYPOTHESIS v1.0.2]       │
+│ • Q(0), Q(1) Genesis & Calibration ── [CANONICAL v1.1.0]        │
+│ • Q(2)...Q(9) Secondary DCC Anchors── [CANONICAL v1.1.0]        │
 ├─────────────────────────────────────────────────────────────────┤
-│ MILESTONE 1: Local Base Domains                                 │
-│ • Qm (Arithmetic Substrate)        ── [HYPOTHESIS v1.1.0]       │
-│ • Qm Geometry (Clifford Algebra)   ── [HYPOTHESIS v1.1.4]       │
+│ MILESTONE 1: Local Base Domains & Spatial Geometry              │
+│ • Qm (Arithmetic Substrate)        ── [CANONICAL v1.2.0]        │
+│ • Qm Geometry (Clifford Algebra)   ── [CANONICAL v1.2.0]        │
 │ • Qm Calculus (Discrete Calculus)  ── [IN PROGRESS]             │
 │ • Qs (Quang Semantics)             ── [PENDING]                 │
 │ • Qphy (Quang Physics)             ── [PENDING]                 │
 │ • Emergent Domains: Qlog, Qbio     ── [EXTENSIBLE LATTICE]      │
-└────────────────────────────────┬────────────────────────────────┘
-                                 │
-                                 ▼
-┌─────────────────────────────────────────────────────────────────┐
-│ MILESTONE 2: Execution & Language Substrate (QnLang, QnIR)      │
-└────────────────────────────────┬────────────────────────────────┘
-                                 │
-                                 ▼
-┌─────────────────────────────────────────────────────────────────┐
+├─────────────────────────────────────────────────────────────────┤
+│ MILESTONE 2: Execution & Language Substrate                     │
+│ • Qexpr (Content-Addressed Term DAG)── [CANONICAL v1.0.2]       │
+│ • QnIR (Intermediate Representation)── [PENDING]                │
+│ • QnLang (High-Level Language)     ── [PENDING]                 │
+├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 3: The cdqn Hybrid Swarm Conduit                      │
+│ • Outer-Ring Road Receipts & Sheaf Attestation                  │
 └────────────────────────────────┬────────────────────────────────┘
                                  │
                                  ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ TERMINAL MILESTONE: Chronosa PoC (Virtual Causal Intelligence)  │
+│ • Operational Vision v0.2.0 ─────── [VISION PROPOSAL]           │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -165,21 +173,25 @@ Development proceeds through consecutive emergence milestones toward an operatio
 [7. Qm Geometry] 
        │
        ▼
-[8. Chronosa Vision] 
+[8. Qexpr CAE-DAG Container]
        │
        ▼
-[9. Glossary & SSL License]
+[9. Chronosa Vision] 
+       │
+       ▼
+[10. Glossary & SSL License]
 ```
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
-2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: Structural hierarchy from Layer 0 (Physical Substrate) to Layer 1 (Node Genesis), fractal {% include term.html id="cdqn" %} data movement, local-first base domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$), and complexity degree stratification.
-3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin [`Q(0)`]({{ '/glossary.html' | relative_url }}#q0), first unit [`Q(1)`]({{ '/glossary.html' | relative_url }}#q1), abstract compute unit $U$ calibrated to Landauer dissipation ($W \ge k_B T \ln 2$), hardware lifecycle, and crash recovery receipts.
-4. **[Single-Digit Primitives]({{ '/q2_q9.html' | relative_url }})**: Inductive successor cascade $\mathcal{S}(x) = x + Q(1)$, complete single-digit anchor spectrum ($Q(2) \dots Q(9)$), emergent algebraic constants ($\phi, \sqrt{2}$), constructive parity partitions (`Q(even)`, `Q(odd)`), and multiplicative domain asymmetries ($\mathcal{Q}^+$ vs. $\mathcal{Q}^-$).
-5. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, working operational axioms, typed payload profiles, and lifecycle state machines.
-6. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric, relational, and algebraic substrate. Formulates the discrete tuple $\langle \sigma, q_z, z, r_z, d \rangle$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability.
-7. **[Qm Geometry]({{ '/qm_geometry.html' | relative_url }})**: Multi-axial orthogonal frames, Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$), and float-free rotations. Formulates exact rational rotors, Cartan-Dieudonné double reflections, non-Euclidean subspace inclusions, and deferred symbolic collapse under Landauer work minimization.
-8. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
-9. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Canonical terminology concordance, bidirectional backlinks, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: Structural hierarchy from {% include term.html id="layer-0" text="Layer 0" %} to {% include term.html id="layer-1" text="Layer 1" %}, fractal {% include term.html id="cdqn" %} data movement, substrate vs. invariant ("car vs. road") disjunction, and complexity degree stratification.
+3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin {% include term.html id="q0" text="Q(0)" %}, first unit {% include term.html id="q1" text="Q(1)" %}, abstract compute unit {% include term.html id="compute-unit-u" text="U" %} calibrated to Landauer dissipation ($W \ge k_B T \ln 2$), hardware lifecycle, and crash recovery receipts.
+4. **[Single-Digit Primitives]({{ '/q2_q9.html' | relative_url }})**: Inductive cascade via discrete {% include term.html id="successor-morphism" text="Successor Morphism S" %}, complete single-digit {% include term.html id="q-anchor" text="Q(anchor)" %} spectrum ($Q(2) \dots Q(9)$), emergent constants ($\phi, \sqrt{2}$), constructive parity partitions ({% include term.html id="q-even" text="Q(even)" %}, {% include term.html id="q-odd" text="Q(odd)" %}), and multiplicative domain asymmetries.
+5. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, operational axioms, typed payload profiles, and Category B optimization morphisms.
+6. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric substrate based on discrete tuples $\langle \sigma, q_z, z, r_z, d \rangle$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability along coordinate axes ({% include term.html id="dimension-d" text="Dimension d" %}).
+7. **[Qm Geometry]({{ '/qm_geometry.html' | relative_url }})**: Multi-axial orthogonal frames, Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$), float-free rational Cayley rotors, optimization primitives ({% include term.html id="q-reuse" %}, {% include term.html id="q-bypass" %}), and deferred symbolic reduction.
+8. **[Qexpr Container]({{ '/qexpr.html' | relative_url }})**: Layer 3 Content-Addressed Expression DAG ({% include term.html id="qexpr" %}), cryptographic hash-consing, six canonical node classes, continued fractions for transcendentals, and hardware capability-aware collapse.
+9. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
+10. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
@@ -195,4 +207,4 @@ Every downstream implementation must preserve the two {% include term.html id="o
 1. **Anti-Patent Defense:** Automatic license termination upon initiating patent litigation against the Author or project ecosystem.
 2. **Non-Scaling Open Access:** Royalty-free access for non-commercial, academic, and sub-threshold deployments of the {% include term.html id="licensed-work" %}.
 
-Entities exceeding the {% include term.html id="scaling-threshold" %} (>10,000 active instances/agents, >100,000 MAU, or >10,000,000 monthly transactions) must execute a separate Commercial License Agreement. Processing or tokenizing a {% include term.html id="payload" %} does not by itself trigger scaling usage.
+Entities exceeding the {% include term.html id="scaling-threshold" %} (>10,000 active instances/agents, >100,000 MAU, or >10,000,000 monthly transactions) must execute a separate Commercial License Agreement. Processing, wrapping, or settling a sovereign {% include term.html id="payload" %} does not by itself trigger scaling usage.
