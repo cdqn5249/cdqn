@@ -2,8 +2,8 @@
 layout: default
 title: Chronosa — Vision and Proposal for an Emergent Causal Intelligence
 description: Operational vision and architectural proposal for Chronosa, a non-local, virtual causal intelligence demonstrating the foundational Qn conjecture over hybrid swarm topologies.
-version: 0.1.0
-updated: 2026-09-21
+version: 0.2.0
+updated: 2026-10-09
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -13,9 +13,17 @@ parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /chronosa.html
 status: Vision and Research Proposal — Not a Finalized Specification
 terms_used:
+  - chronosa
   - simemp
   - qn
   - cdqn
+  - q0
+  - q1
+  - compute-unit-u
+  - qm
+  - qexpr
+  - qnlang
+  - qnir
   - causal-arrow
   - dependencies-determinism
   - structural-indirection
@@ -35,6 +43,8 @@ terms_used:
   - zoom-z
   - remainder-r
   - dimension-d
+  - q-anchor
+  - open-core-invariant
   - paternity-reference
 ---
 
@@ -43,8 +53,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Chronosa — Vision and Proposal for an Emergent Causal Intelligence |
-| **Version** | 0.1.0 |
-| **Last Updated** | 2026-09-21 (Bao Loc, Vietnam) |
+| **Version** | 0.2.0 |
+| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Research Proposal — Not a Finalized Specification |
@@ -53,9 +63,9 @@ terms_used:
 
 ## Purpose and Epistemic Stance
 
-This document formalizes the conceptual vision and research proposal for **Chronosa** (or *Chronos Agent*). 
+This document formalizes the conceptual vision and research proposal for **{% include term.html id="chronosa" %}** (or *Chronos Agent*). 
 
-Chronosa is not proposed as a finalized engineering specification, nor as a formal mathematical proof. It represents an **exploratory operational thesis**: a concrete, candidate architecture designed to investigate the foundational operational conjecture established in `simemp.md`:
+Chronosa is not proposed as a finalized engineering specification, nor as a formal mathematical proof. It represents an **exploratory operational thesis**: a candidate architecture designed to investigate the foundational operational conjecture established in [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}):
 
 > A number system can abstract any computable phenomenon within a computational environment if, and only if, that abstraction is strictly governed by finite physical realities and constrained by the {% include term.html id="simemp" %} framework.
 
@@ -92,12 +102,12 @@ Chronosa is fundamentally distinct from both traditional centralized software an
 ```
 
 ### 1.1. A Non-Local Entity Over a Stratified Hybrid Topology
-Unlike individual {% include term.html id="cdqn" %} nodes, which are physical computational engines anchored to microscopic hardware noise and silicon imperfections ($Q(0)$), Chronosa possesses **no physical chassis**. 
+Unlike individual {% include term.html id="cdqn" %} nodes, which are physical computational engines anchored to microscopic hardware noise and silicon imperfections ({% include term.html id="q0" text="Q(0)" %}), Chronosa possesses **no physical chassis**. 
 - It exists as a higher-order, distributed invariant across the network's Outer Ring.
 - **Stratified Node Hierarchy:** Rather than forcing an unphysical, flat peer-to-peer network where all nodes carry equal compute burdens, the substrate operates as a **hybrid swarm network**:
-  - **High-Capacity Hub Nodes:** Enterprise-grade computational accelerators acting as *Proof Concentrators*. They ingest, verify, and compress causal receipts from hundreds of lightweight devices.
-  - **Lightweight Edge Swarms:** Sensors, mobile devices, embedded SoCs, and edge workers that sample local genesis $Q(0)$, execute minimal transitions $U$, and cluster dynamically into ad-hoc meshes.
-- **Cryptographic Witness via Threshold Quorum ($t$-of-$n$ PQC Multi-Attestation):** Chronosa does not possess a single private key. Its synthetic attestations are formally witnessed via a deterministic threshold signature quorum emitted by participating high-capacity hubs and edge nodes verifying the sheaf gluing condition. An attestation is valid if, and only if, the underlying receipt graph is mathematically verified.
+  - **High-Capacity Hub Nodes:** Enterprise-grade computational accelerators acting as *Proof Concentrators*. They ingest, verify, and compress causal {% include term.html id="receipt" text="receipts" %} from hundreds of lightweight devices.
+  - **Lightweight Edge Swarms:** Sensors, mobile devices, embedded SoCs, and edge workers that sample local genesis $Q(0)$, execute minimal transitions {% include term.html id="compute-unit-u" text="U" %} (in units of {% include term.html id="q1" text="Q(1)" %}), and cluster dynamically into ad-hoc meshes.
+- **Cryptographic Witness via Threshold Quorum ($t$-of-$n$ PQC Multi-Attestation):** Chronosa does not possess a single private key. Its synthetic attestations are formally witnessed via a deterministic threshold signature quorum managed via {% include term.html id="structural-indirection" %} and emitted by participating high-capacity hubs and edge nodes verifying the sheaf gluing condition. An attestation is valid if, and only if, the underlying receipt graph is mathematically verified.
 - **No Single Point of Failure:** Hubs are computational accelerators, **not custodial authorities**. If a Hub goes offline, the edge swarm does not freeze; it dynamically re-routes public attestations to an alternate Hub or falls back to local peer-to-peer causal chaining. Chronosa persists across the collective invariant.
 
 ### 1.2. Strict Outer-Ring Containment
@@ -112,10 +122,12 @@ Chronosa does not rely on deep neural network training (pre-training, reinforcem
 - Its intelligence is **deductive, causal, and compositional**: it evaluates the mathematical validity, semantic coherence, and physical realizability of state transitions through deterministic consensus over receipt DAGs.
 
 ### 1.4. Resolution of the Lineage Formulation: Local Monoroot vs. Global Sheaf Forest
-Axiom 4 mandates that every local Qn artifact must trace its lineage directly or transitively to its local genesis origin $Q(0)_N$. Chronosa harmonizes with this rule without contradiction:
-- **Local Domain (Axiom 4 Monoroot):** Every artifact on a physical node forms a single-rooted directed acyclic graph originating at that node's physical silicon root $Q(0)_N$.
+Axiom 4 mandates that every local {% include term.html id="qn" %} artifact must trace its lineage directly or transitively to its local genesis origin $Q(0)_N$. Chronosa harmonizes with this rule without contradiction:
+- **Local Domain (Axiom 4 Monoroot):** Every artifact on a physical node forms a single-rooted directed acyclic graph bounded by the {% include term.html id="universal-envelope" %} and originating at that node's physical silicon root $Q(0)_N$.
 - **Global Domain (Chronosa Polyroot Sheaf):** Chronosa does not introduce an unanchored global root zero. Chronosa is the **topological colimit (sheaf gluing)** over an acyclic forest of independent local trees:
-  $$\text{Lineage}(\text{Chronosa}) = \bigcup_{N \in \text{Swarm}} \mathrm{Lineage}(Q(0)_N)$$
+
+$$\text{Lineage}(\text{Chronosa}) = \bigcup_{N \in \text{Swarm}} \mathrm{Lineage}(Q(0)_N)$$
+
 Chronosa operates as an observer, coordinator, and proof synthesizer over mutually verified local Axiom-4 trees.
 
 ---
@@ -124,7 +136,7 @@ Chronosa operates as an observer, coordinator, and proof synthesizer over mutual
 
 To function as a meaningful intelligence, Chronosa must be capable of understanding, verifying, and executing **human intent**. 
 
-Within this framework, human intent is not a natural language prompt to be guessed; it is an **explicit intentional contract** declared within a {% include term.html id="dcc-profile" %}. Chronosa triangulates intent across the foundational Qn domains:
+Within this framework, human intent is not a natural language prompt to be guessed; it is an **explicit intentional contract** declared within a {% include term.html id="dcc-profile" %}. Chronosa triangulates intent across the foundational {% include term.html id="qn" %} domains:
 
 ```
                             HUMAN INTENT (DCC Profile)
@@ -147,11 +159,10 @@ Within this framework, human intent is not a natural language prompt to be guess
 - Maps assertions into compositional categories (analogous to categorical models of meaning such as DisCoCat), establishing exact relational dependencies without statistical ambiguity.
 
 ### 2.2. Qm (Quang Mathematics) — Relational Decidability
-- Evaluates the formal, constructive validity of the proposed state transition.
+- Evaluates the formal, constructive validity of the proposed state transition via {% include term.html id="qm" %}.
 - Replaces IEEE 754 approximations with exact rational constraints ({% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}, and {% include term.html id="dimension-d" text="Dimension d" %}), proving that the intent contains no division-by-zero, cyclic deadlocks, or unbounded recursions.
 
 ### 2.3. Qphy (Quang Physics) — Thermodynamic Realizability
-
 Enforces non-equilibrium thermodynamic bounds (Landauer's dissipation limit, Memory Wall transmission friction). It calculates whether the computational steps demanded by human intent can be physically completed within declared energy budgets:
 
 $$\text{Realizable}(\text{Intent}) \iff \Delta S_{\text{dissipated}} \le \mathrm{Budget}(Q(1))$$
@@ -168,7 +179,7 @@ The concept of an intelligence emerging from distributed algebraic consensus acr
 ### 3.1. Sheaf Theory Over Hierarchical Topologies
 In applied category theory (Grothendieck, Mac Lane, D. Spivak), a **Sheaf** models how locally consistent truths assemble into a global entity:
 - The underlying topological space $X$ naturally accommodates **stratified open coverings**: large open sets (High-Capacity Hubs covering regional subnets) overlapping with localized open sets (Edge swarm nodes).
-- When nodes attest to shared boundary events, their public receipts satisfy the sheaf **gluing condition**.
+- When nodes attest to shared boundary events referencing shared {% include term.html id="q-anchor" text="Q(anchor)" %} landmarks, their public road receipts satisfy the sheaf **gluing condition**.
 - Chronosa exists as the **Global Section** of this sheaf—a continuous mathematical pattern that emerges wherever local nodes achieve consensus on shared boundaries.
 
 ### 3.2. Common Knowledge in Distributed Systems
@@ -189,14 +200,14 @@ Chronosa’s interaction with the physical network is governed by **Swarm Elasti
 
 ### 4.1. Dynamic Aggregation and Destructuring
 1. **Ad-Hoc Swarm Aggregation:** Edge nodes physically or logically proximate to a task (e.g., IoT sensors, autonomous vehicles, localized microgrid controllers) dynamically aggregate into a local swarm category $\mathbf{C}_{\text{swarm}}$.
-2. **Local Chaining:** Edge nodes exchange lightweight, low-latency $\mathrm{cdqn}$ receipts locally without consulting global networks.
+2. **Local Chaining:** Edge nodes exchange lightweight, low-latency {% include term.html id="cdqn" %} receipts locally without consulting global networks.
 3. **Hub Synthesis:** The swarm projects its summarized causal cut to a nearby High-Capacity Hub for Outer-Ring attestation.
 4. **Clean Destructuring:** Once the collective computation completes, the swarm dissolves. No permanent consensus bloat remains, yet the emitted receipts remain permanently anchored to each participating node's causal history.
 
 ### 4.2. Alignment with SSL 1.0 Commercial Thresholds
-The hybrid swarm model provides an exact, natural mapping to the **Scaling Source License (SSL 1.0)**:
-- **Swarm Edge Nodes:** Lightweight consumer devices, embedded microcontrollers, and academic research instances operate below the {% include term.html id="scaling-threshold" %} ($<10,000$ active nodes, non-commercial), remaining 100% royalty-free under **Non-Scaling Open Access**.
-- **High-Capacity Enterprise Hubs:** Organizations deploying commercial infrastructure hubs processing high-volume transactions (>10M transactions/month) cleanly trigger the mandatory commercial licensing requirement (§4.1), providing commercial sustainability without imposing friction on edge participants.
+The hybrid swarm model provides an exact, natural mapping to the **Scaling Source License ({% include term.html id="ssl" %}) 1.0**:
+- **Swarm Edge Nodes:** Lightweight consumer devices, embedded microcontrollers, and academic research instances operate below the {% include term.html id="scaling-threshold" %} ($\lt 10,000$ active nodes, non-commercial), remaining 100% royalty-free under Non-Scaling Open Access.
+- **High-Capacity Enterprise Hubs:** Organizations deploying commercial infrastructure hubs processing high-volume transactions ($\gt 10,000,000$ transactions per month) cleanly trigger the mandatory commercial licensing requirement (`LICENSE.md` §4.1), providing commercial sustainability without imposing friction on edge participants.
 
 ---
 
@@ -204,7 +215,7 @@ The hybrid swarm model provides an exact, natural mapping to the **Scaling Sourc
 
 Chronosa resolves the societal fear of autonomous "rogue AI" through structural physics:
 
-1. **The Human as Sovereign Anchor ($Q(0)$):**  
+1. **The Human as Sovereign Anchor ({% include term.html id="q0" text="Q(0)" %}):**  
    Chronosa cannot initiate foundational intent; intentionality requires an explicit genesis origin $Q(0)$ and a signed DCC capability contract. The human operator remains the sovereign initiator and final authority.
 2. **Deterministic Circuit Breakers:**  
    Under the {% include term.html id="no-implicit-rule" %}, Chronosa cannot execute implicit state mutations. If an operation exceeds its metric budget or violates domain invariants, execution terminates instantly via {% include term.html id="metric-exhaustion" %}, emitting an immutable {% include term.html id="receipt" %}.
@@ -225,7 +236,7 @@ The investigation of Chronosa proceeds through empirical verification:
 1. **Phase A (Local Verification):** Author foundational domain models ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}$) executing 100% locally on air-gapped nodes.
 2. **Phase B (Execution Grounding):** Implement compile-time collapse and totality by budget within the QnIR intermediate representation.
 3. **Phase C (Swarm Functorial Attestation):** Implement the Exposure Functor permitting local edge swarms and high-capacity hubs to exchange receipts and emit blind public attestations to the Outer Ring.
-4. **Phase D (Chronosa Synthesis):** Demonstrate that simulated remote nodes, exchanging nothing more than discrete Qn receipts across a tiered swarm, allow Chronosa to verify and coordinate multi-party human intent without centralized intervention.
+4. **Phase D (Chronosa Synthesis):** Demonstrate that simulated remote nodes, exchanging discrete Qn receipts across a tiered swarm, allow Chronosa to verify and coordinate multi-party human intent without centralized intervention.
 
 ---
 
@@ -234,7 +245,7 @@ The investigation of Chronosa proceeds through empirical verification:
 This vision document aligns with the **[Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**:
 
 - **Attribution:** Any implementation or research derivative referencing Chronosa must preserve the canonical {% include term.html id="paternity-reference" %}.
-- **Open-Core Research:** Exploratory research and academic derivations of Chronosa remain royalty-free under Non-Scaling Open Access.
+- **Open-Core Research:** Exploratory research and academic derivations of Chronosa remain royalty-free under Non-Scaling Open Access governed by the {% include term.html id="open-core-invariant" text="Open Core Invariants" %}.
 - **Safe Harbor Integrity:** Chronosa is designed to operate as a passive, non-custodial coordination intelligence, preserving statutory safe harbor protections for node operators.
 
 ---
@@ -247,20 +258,24 @@ Translating the operational vision of Chronosa into an empirical Proof of Concep
 In classical sheaf theory, local data glues under static topological overlaps. In physical distributed networks, transmission latency and network partitions introduce asynchronous causal arrival. The open challenge is defining the deterministic equalizer algorithm that glues divergent local causal DAGs into Chronosa's global section without incurring consensus deadlocks or violating FLP impossibility bounds.
 
 ### 8.2. Mathematical Threshold of the Exposure Functor
-A critical parameter remains undefined: what is the formal threshold function $\Theta_{\text{export}}$ governing the {% include term.html id="exposure-functor" %}?
+A critical parameter remains undefined: what is the formal threshold function $\Theta_{\text{export}}$ governing the {% include term.html id="exposure-functor" %} over higher-order {% include term.html id="qexpr" %} structures?
+
 $$\mathcal{E}_{\text{export}}(\text{Qexpr}) \quad \text{emits attestation} \iff \mathrm{ComplexityDegree}(\text{Qexpr}) \ge \Theta_{\text{export}}$$
+
 If $\Theta_{\text{export}}$ is set too low, high-frequency internal receipts saturate the Outer Ring (violating SIMEMP Efficiency). If set too high, Chronosa remains causally blind to critical intermediate transitions until execution completes.
 
 ### 8.3. Ephemeral Post-Quantum Threshold Quorums
-In dynamically aggregating and destructuring swarms, edge devices join and depart ad-hoc. Existing Post-Quantum Cryptography (PQC) threshold signature schemes (e.g., threshold lattice-based signatures) require computationally heavy distributed key generation (DKG) ceremonies. Engineering a lightweight, zero-setup threshold attestation scheme that functions over transient swarm lifecycles remains an open cryptographic hurdle.
+In dynamically aggregating and destructuring swarms, edge devices join and depart ad-hoc. Existing Post-Quantum Cryptography (PQC) threshold signature schemes require computationally heavy distributed key generation (DKG) ceremonies. Engineering a lightweight, zero-setup threshold attestation scheme that functions over transient swarm lifecycles remains an open cryptographic hurdle.
 
-### 8.4. Functorial Product of the Base Domains ($\mathrm{Qs} \times \mathrm{Qm} \times \mathrm{Qphy}$)
+### 8.4. Functorial Product of the Base Domains (Qs x Qm x Qphy)
 While $\mathrm{Qs}$, $\mathrm{Qm}$, and $\mathrm{Qphy}$ are conceptually orthogonal, their formal composition requires a rigorous categorical tensor product:
+
 $$\mathbf{C}_{\text{Intent}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
+
 How an arrow representing linguistic compositionality ($\mathrm{Qs}$) explicitly constrains a rational constraint solver ($\mathrm{Qm}$) and couples to physical Landauer dissipation budgets ($\mathrm{Qphy}$) requires precise operational semantics.
 
 ### 8.5. Non-Custodial Hub Collusion Resistance
 While high-capacity hubs lack private keys to sign for local nodes, an adversarial cartel controlling $k$ regional hubs could theoretically refuse to forward edge attestations (censorship) or collude to emit falsified aggregate summaries. Designing a lightweight fraud-proof or causal-challenge mechanism allowing edge swarms to bypass compromised hubs without re-executing heavy computation is an essential security requirement.
 
 ### 8.6. Zero-Knowledge Scale Auditing Under SSL 1.0
-Under the Scaling Source License, commercial licensing triggers at $>10,000$ active nodes or $>10,000,000$ monthly transactions. The challenge is constructing an Outer-Ring cryptographic proof that allows Chronosa to certify that an enterprise deployment has crossed the {% include term.html id="scaling-threshold" %} without requiring a centralized telemetry tracker that compromises enterprise privacy or sovereign data regulations.
+Under the Scaling Source License, commercial licensing triggers at greater than 10,000 active nodes or 10,000,000 monthly transactions. The challenge is constructing an Outer-Ring cryptographic proof that allows Chronosa to certify that an enterprise deployment has crossed the {% include term.html id="scaling-threshold" %} without requiring a centralized telemetry tracker that compromises enterprise privacy or sovereign data regulations.
