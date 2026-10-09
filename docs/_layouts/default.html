@@ -7,7 +7,7 @@
   <meta name="description" content="{{ page.description | default: 'Chained and Distributed Quang Numbers Documentation' }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 
-  <!-- MathJax 3 with Kramdown & Delimiter Compatibility -->
+  <!-- MathJax 3 with Post-Typesetting Anchor Scroll Synchronization -->
   <script>
     window.MathJax = {
       tex: {
@@ -28,6 +28,36 @@
               doc.math.push(math);
             }
           }, '']
+        }
+      },
+      startup: {
+        pageReady: () => {
+          return MathJax.startup.defaultPageReady().then(() => {
+            // Re-synchronize anchor scroll after MathJax DOM reflow completes
+            if (window.location.hash) {
+              const rawHash = decodeURIComponent(window.location.hash.substring(1));
+              const slug = rawHash.replace(/^ref-/, '');
+              
+              // 1. Try exact ref- ID
+              let target = document.getElementById(rawHash) || document.getElementById('ref-' + slug);
+              
+              // 2. Try bare slug ID
+              if (!target) {
+                target = document.getElementById(slug);
+              }
+              
+              // 3. Fallback: Search for any link containing the slug
+              if (!target) {
+                target = document.querySelector('a[href*="' + slug + '"]');
+              }
+              
+              if (target) {
+                setTimeout(() => {
+                  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 50);
+              }
+            }
+          });
         }
       }
     };
