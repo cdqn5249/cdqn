@@ -7,7 +7,7 @@
   <meta name="description" content="{{ page.description | default: 'Chained and Distributed Quang Numbers Documentation' }}">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 
-  <!-- MathJax 3 with Post-Typesetting Anchor Scroll Synchronization -->
+  <!-- MathJax 3 with Scoped Post-Typesetting Anchor Scroll Synchronization -->
   <script>
     window.MathJax = {
       tex: {
@@ -33,28 +33,34 @@
       startup: {
         pageReady: () => {
           return MathJax.startup.defaultPageReady().then(() => {
-            // Re-synchronize anchor scroll after MathJax DOM reflow completes
             if (window.location.hash) {
               const rawHash = decodeURIComponent(window.location.hash.substring(1));
               const slug = rawHash.replace(/^ref-/, '');
-              
-              // 1. Try exact ref- ID
+              const main = document.querySelector('main');
+              if (!main) return;
+
+              // 1. Try exact ref- ID inside main
               let target = document.getElementById(rawHash) || document.getElementById('ref-' + slug);
-              
-              // 2. Try bare slug ID
+
+              // 2. Try bare slug ID inside main
               if (!target) {
-                target = document.getElementById(slug);
+                target = main.querySelector('#' + CSS.escape(slug));
               }
-              
-              // 3. Fallback: Search for any link containing the slug
+
+              // 3. Try link pointing specifically to glossary.html#slug inside main (NEVER header)
               if (!target) {
-                target = document.querySelector('a[href*="' + slug + '"]');
+                target = main.querySelector('a[href*="glossary.html#' + CSS.escape(slug) + '"]');
               }
-              
+
+              // 4. Try any link with exact hash ending inside main
+              if (!target) {
+                target = main.querySelector('a[href$="#' + CSS.escape(slug) + '"]');
+              }
+
               if (target) {
                 setTimeout(() => {
                   target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 50);
+                }, 80);
               }
             }
           });
