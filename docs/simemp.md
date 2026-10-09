@@ -46,7 +46,7 @@ terms_used:
 
 ## 1. The Foundational Conjecture and Dependencies Determinism
 
-The foundational premise of this architecture addresses the formal capability of discrete number systems: *Can a number system abstract any computable phenomenon?*
+The foundational premise of this architecture addresses the formal capability of discrete number systems: *Can a discrete {% include term.html id="qn" %} number system abstract any computable phenomenon?*
 
 Classical mathematics admits non-constructive entities: actual infinities, unmetered memory access, and continuous spaces lacking thermodynamic boundaries. Conversely, physical computational engines are strictly finite, bounded by thermodynamics, discrete memory hierarchies, and finite signal transmission speeds.
 
