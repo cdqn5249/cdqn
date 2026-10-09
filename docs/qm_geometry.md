@@ -2,8 +2,8 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.1.6
-updated: 2026-10-06
+version: 1.2.0
+updated: 2026-10-09
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -15,6 +15,7 @@ terms_used:
   - qn
   - q0
   - q1
+  - compute-unit-u
   - zoom-z
   - remainder-r
   - dimension-d
@@ -37,7 +38,6 @@ terms_used:
   - ssl
   - paternity-reference
   - qm
-  - compute-unit-u
   - q-reuse
   - q-bypass
   - qexpr
@@ -48,6 +48,7 @@ terms_used:
   - existential-invariant
   - operational-agility
   - boc-policy
+  - simemp-gateway
 ---
 
 # Qm Geometry — Multi-Axial Frames and Geometric Algebra
@@ -55,11 +56,11 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.1.6 |
-| **Last Updated** | 2026-10-06 (Bao Loc, Vietnam) |
+| **Version** | 1.2.0 |
+| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Domain Specification — Category B/D (Complexity Degree 2) |
+| **Status** | Canonical Domain Specification — Category B/D ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
 
 ---
 
@@ -74,13 +75,14 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/q0_q1.md` | Local genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) along axis $d_1$ | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
 | `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
 | `docs/qm.md` | Constructive numeric leaf substrate and projective remainder calculus | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
 ## 1. Epistemic Stance and Dimensional Generalization
 
-The foundational operational conjecture of the Qn framework ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §1) asserts that a discrete number system can abstract any computable physical phenomenon under {% include term.html id="simemp" %} constraints. In [`docs/qm.md`]({{ '/qm.html' | relative_url }}), scalar arithmetic was established along the 1D genesis axis {% include term.html id="dimension-d" text="d_1" %}. However, physical reality and distributed network topographies are inherently multi-dimensional.
+The foundational operational conjecture of the {% include term.html id="qn" %} framework ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §1) asserts that a discrete number system can abstract any computable physical phenomenon under {% include term.html id="simemp" %} constraints. In [`docs/qm.md`]({{ '/qm.html' | relative_url }}), scalar arithmetic was established along the 1D genesis axis {% include term.html id="dimension-d" text="d_1" %}. However, physical reality and distributed network topographies are inherently multi-dimensional.
 
 Classical geometry relies on continuous coordinate spaces ($\mathbb{R}^n$) and irrational trigonometric functions ($\sin, \cos$), introducing platform-dependent IEEE 754 rounding approximations that violate **Axiom 10** of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}).
 
@@ -90,6 +92,8 @@ Every geometric operation in $\mathrm{Qm}$ satisfies {% include term.html id="de
 
 $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
+Operational validity is verified empirically via {% include term.html id="computational-consistency" %}. No unmeasured coordinate entity may cross an abstraction boundary or {% include term.html id="simemp-gateway" %}.
+
 ---
 
 ## 2. Orthogonal Coordinate Frames and Metric Signatures
@@ -98,7 +102,7 @@ In strict accordance with the {% include term.html id="no-implicit-rule" %}, mul
 
 ### 2.1. The Orthogonal Basis Set and Inductive Dimensional Genesis
 
-Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace an unbroken causal lineage back to local genesis origin $Q(0)_N$. Coordinate frames cannot be introduced as detached ambient conventions.
+Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace an unbroken causal lineage along the {% include term.html id="causal-arrow" %} back to {% include term.html id="local-first" %} genesis origin $Q(0)_N$. Coordinate frames cannot be introduced as detached ambient conventions.
 
 ```
                   INDUCTIVE DIMENSIONAL GENESIS
@@ -112,7 +116,7 @@ Under **Axiom 4** (Local Genesis Dependency), every coordinate axis must trace a
 ```
 
 #### Primary Genesis Axis ($d_1$)
-Formally instantiated in {% include term.html id="layer-1" %} by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ along the canonical initial dimension ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §4):
+Formally instantiated in {% include term.html id="layer-1" %} by the minimal directed state transition from local origin $Q(0)_N$ to first unit $Q(1)$ along the canonical initial dimension, calibrating the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %} ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §4):
 
 $$\vec{e}_1 \equiv \langle \oplus, \, 1, \, z=0, \, r=Q(0), \, d_1 \rangle$$
 
@@ -137,7 +141,7 @@ $$\mathcal{D}_{\mathrm{frame}} = \{ d_1, \, d_2, \, \dots, \, d_n \}$$
 
 Zero implicit dimensional assumptions exist; each axis preserves a deterministic causal parentage back to $Q(0)_N$.
 
-### 2.2. Metric Signature ($\eta$)
+### 2.2. Metric Signature (η)
 
 The quadratic form of the space is governed by an explicit discrete diagonal metric signature $\eta = (p, q, s)$ where $p + q + s = n$:
 
@@ -327,15 +331,15 @@ In classical systems, every intermediate geometric operation eagerly rounds to m
 
 | Execution Stage | Abstraction Layer | Operational Mechanics | Thermodynamic Work Bound |
 |---|---|---|---|
-| **Stage 1: Composition** | Layer 3 ({% include term.html id="qexpr" %} Term DAG) | Multivector products and rotor chains authored as content-addressed DAGs. Zero rounding. | $W = 0$ (Information preserved) |
+| **Stage 1: Composition** | Layer 3 ({% include term.html id="qexpr" %} CAE-DAG) | Multivector products and rotor chains authored as content-addressed DAGs. Zero rounding. | $W = 0$ (Information preserved) |
 | **Stage 2: Normalization** | Layer 2/3 (Rewrite Engine) | Contract basis metrics, annihilate nilpotencies ($\vec{e}_i \wedge \vec{e}_i = Q(0)$), cancel inverse rotors ($R R^{\dagger} = Q(1)$). | $W = 0$ (Isomorphic & reversible) |
 | **Stage 3: Collapse** | Layer 1/2 ($\mathrm{Qm}$ Leaf / Flat IR) | Project onto zoom $z$ only upon boundary demand; compute quotient $q_z$ and remainder $r_z$. | $W = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{eager}}$ |
 
 ### 7.1. Thermodynamic Landauer Minimization Proof
 
 Let a geometric sequence consist of $k$ consecutive rotor transformations:
-1. **Eager Evaluation:** Dissipates $W_{\mathrm{eager}} \ge k \cdot (k_B T \ln 2)$ and compounds $k$ unmeasured remainder vectors.
-2. **Deferred Collapse (BOC Selection):** Under the {% include term.html id="boc-policy" %}, symbolic structure is maintained as a **Content-Addressed Expression DAG (Term DAG)** with cryptographic hash-consing. Reversible symbolic reduction preserves information without entropy production ($W_{\mathrm{Stage\,2}} = 0$). Numerical collapse occurs once at the boundary:
+1. **Eager Evaluation:** Dissipates $W_{\mathrm{eager}} \ge k \cdot (k_B T \ln 2)$ and compounds $k$ unmeasured remainder vectors across the {% include term.html id="layer-0" %} substrate.
+2. **Deferred Collapse:** Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %}, symbolic structure is maintained as a **Content-Addressed Expression DAG (Term DAG)** with cryptographic hash-consing. Reversible symbolic reduction preserves information without entropy production ($W_{\mathrm{Stage\,2}} = 0$). Numerical collapse occurs once at the boundary:
 
 $$W_{\mathrm{deferred}} = 1 \cdot W_{\mathrm{collapse}} \ll k \cdot W_{\mathrm{collapse}}$$
 
@@ -349,7 +353,7 @@ In accordance with Category B milestones ([`docs/abstractionLayers.md`]({{ '/abs
 
 ## 8. SIMEMP Governance and Metric Exhaustion
 
-Operating in multi-dimensional space consumes physical computational resources governed by the **Metric Invariant** ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §3.1).
+Operating in multi-dimensional space consumes physical computational resources governed by the {% include term.html id="existential-invariant" text="Metric Existential Invariant" %} ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §3.1), balancing algorithmic {% include term.html id="operational-agility" text="Efficiency" %} against structural Modularity.
 
 ### 8.1. Complexity Scaling
 - Vector addition: $\mathcal{O}(n)$ discrete operations.
@@ -378,7 +382,7 @@ Typically $n \le 4$ for physical simulations in $\mathrm{Qphy}$; $n \le 16$ for 
 
 ## 9. License and Invariant Lineage
 
-This domain specification enforces the legal and operational conditions of the {% include term.html id="ssl" %}:
+This domain specification enforces the legal and operational conditions of the {% include term.html id="ssl" %} governing the {% include term.html id="licensed-work" %} across the {% include term.html id="cdqn" %} network:
 
 1. **{% include term.html id="paternity-reference" %}:** All multi-dimensional solvers, Clifford algebra engines, rotor transformations, or compiled geometric kernels derived from this document must embed:
    > Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL). Parent Repository: https://github.com/cdqn5249/cdqn
