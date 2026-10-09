@@ -71,7 +71,7 @@ The following documents establish the physical, structural, and legal constraint
 
 In strict adherence to the {% include term.html id="no-implicit-rule" %} (`docs/abstractionLayers.md` §3.2), this specification explicitly defines the boundaries of $\mathrm{Qm}$ (Quang Mathematics) to prevent implicit assumptions, hidden conventions, or non-deterministic state drift.
 
-Every mathematical proposition and state transition in $\mathrm{Qm}$ is governed by {% include term.html id="dependencies-determinism" %}:
+Every mathematical proposition and state transition in the {% include term.html id="qn" %} domain of Qm is governed by {% include term.html id="dependencies-determinism" %}:
 
 $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
