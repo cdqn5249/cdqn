@@ -1,9 +1,9 @@
 ---
 layout: default
 title: SIMEMP Constraints
-description: Foundational physical, computational, and architectural constraints governing the Qn and cdqn stack.
-version: 1.0.0
-updated: 2026-09-05
+description: Foundational physical, computational, and architectural constraints governing the Qn and cdqn stack under Dependencies Determinism.
+version: 1.1.0
+updated: 2026-10-09
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -29,6 +29,11 @@ terms_used:
   - dependencies-determinism
   - structural-indirection
   - metric-exhaustion
+  - no-implicit-rule
+  - paternity-reference
+  - open-core-invariant
+  - simemp-gateway
+  - payload
 ---
 
 # SIMEMP: Thesis and Constraints for the Qn and cdqn Stack
@@ -36,11 +41,26 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | SIMEMP: Thesis and Constraints for the Qn and cdqn Stack |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-09-05 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Provisional Architectural Thesis / Search Framework |
+| **Status** | Canonical Constitutional Specification — Foundational Invariants |
+
+---
+
+## Normative References
+
+The following documents establish the structural, mathematical, and legal constraints derived from this constitutional framework.
+
+| Document | Role | Target |
+|---|---|---|
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and optimization primitives | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
@@ -51,17 +71,18 @@ The foundational premise of this architecture addresses the formal capability of
 Classical mathematics admits non-constructive entities: actual infinities, unmetered memory access, and continuous spaces lacking thermodynamic boundaries. Conversely, physical computational engines are strictly finite, bounded by thermodynamics, discrete memory hierarchies, and finite signal transmission speeds.
 
 We postulate the operational conjecture:
+
 > A number system can abstract any computable phenomenon within a computational environment if, and only if, that abstraction is strictly governed by finite physical realities and constrained by the {% include term.html id="simemp" %} framework.
 
 This conjecture is formally rooted in {% include term.html id="dependencies-determinism" %}. In an information-theoretic sense, the state transition of any computational entity $S_{t}$ is fully determined if, and only if, its conditional entropy given its complete set of declared causal dependencies $\mathcal{D}(S_{t})$ vanishes:
 
 $$H(S_{t} \mid \mathcal{D}(S_{t})) = 0$$
 
-If any dependency is implicit, hidden, or unmeasured (violating the {% include term.html id="no-implicit-rule" %}), the available dependency set is incomplete ($\mathcal{D}' \subset \mathcal{D}$), yielding non-zero conditional entropy:
+If any dependency is implicit, hidden, or unmeasured (violating the {% include term.html id="no-implicit-rule" %}), or attempts to cross an unverified abstraction boundary or {% include term.html id="simemp-gateway" %}, the available dependency set is incomplete ($\mathcal{D}' \subset \mathcal{D}$), yielding non-zero conditional entropy:
 
-$$H(S_{t} \mid \mathcal{D}') > 0$$
+$$H(S_{t} \mid \mathcal{D}') \gt 0$$
 
-This residual entropy manifests operationally as non-deterministic state drift, runtime instability, or unmodeled attack surfaces. The SIMEMP framework ensures that every state transition's causal entropy is fully accounted for by explicit, verifiable dependencies.
+This residual entropy manifests operationally as non-deterministic state drift, runtime instability, or unmodeled attack surfaces. The SIMEMP framework ensures that every state transition's causal entropy is fully accounted for by explicit, verifiable dependencies across the {% include term.html id="cdqn" %} stack.
 
 ---
 
@@ -100,7 +121,7 @@ The constraint architecture enforces a strict two-tier hierarchy across all abst
 
 ### 3.1. Tier 1: Existential Invariants
 
-{% include term.html id="existential-invariant" text="Tier 1 Invariants" %} represent non-negotiable requirements for any governed artifact to exist. If an abstraction violates any invariant, it is discarded:
+{% include term.html id="existential-invariant" text="Tier 1 Existential Invariants" %} represent non-negotiable requirements for any governed artifact to exist. If an abstraction violates any invariant, it is discarded:
 
 1. **Identity:** The abstraction must be distinctly known, collision-resistant, versionable, and causally rooted.
 2. **Metric:** The abstraction must carry an explicit, finite measurement envelope declaring memory, compute, precision, and uncertainty boundaries.
@@ -108,7 +129,7 @@ The constraint architecture enforces a strict two-tier hierarchy across all abst
 
 ### 3.2. Tier 2: Operational Agilities
 
-{% include term.html id="operational-agility" text="Tier 2 Agilities" %} represent optimization parameters. They naturally conflict with one another:
+{% include term.html id="operational-agility" text="Tier 2 Operational Agilities" %} represent optimization parameters. They naturally conflict with one another:
 
 1. **Efficiency:** Algorithmic throughput and minimal resource dissipation.
 2. **Modularity:** Strict isolation of concerns, boundary containment, and composability.
@@ -125,17 +146,19 @@ Physical computation requires formalizing hardware boundaries and thermodynamic 
 ### 4.1. The Memory Wall, Semantic Gap, and Landauer's Principle
 
 - **Landauer's Bound and Dissipation:** Any irreversible manipulation or erasure of information dissipates thermodynamic work:
-  $$W \ge k_B T \ln 2$$
+
+$$W \ge k_B T \ln 2$$
+
 - **The Memory Wall:** Transporting data across physical memory hierarchies dissipates physical energy ($\mathcal{O}(C V^2 f)$) and introduces transmission latency. The Metric invariant requires explicit accounting for memory bandwidth and locality rather than purely abstract asymptotic complexity.
 - **The Semantic Gap:** Translation between high-level intent ({% include term.html id="qnlang" %}) and physical execution ({% include term.html id="qnir" %}) represents a primary vulnerability. The system mandates bounded, verifiable intermediate representations.
 
 ### 4.2. Open Systems, Entropy Export, and Dissipative Error Correction
 
-A computational system is an **open thermodynamic system**. Left unconstrained, thermal noise, transmission faults, and physical substrate errors maximize internal entropy ($dS_{\text{internal}} > 0$).
+A computational system is an **open thermodynamic system**. Left unconstrained, thermal noise, transmission faults, and physical substrate errors maximize internal entropy ($dS_{\text{internal}} \gt 0$).
 
 To maintain internal structural order and deterministic reproducibility, the system operates as a **dissipative structure** (Prigogine formulation):
 
-$$dS = dS_{\text{internal}} + dS_{\text{exchange}}, \quad \text{where } dS_{\text{exchange}} < 0$$
+$$dS = dS_{\text{internal}} + dS_{\text{exchange}}, \quad \text{where } dS_{\text{exchange}} \lt 0$$
 
 Maintaining computational stability requires expending work—formally recognized as {% include term.html id="metric-exhaustion" %}—to verify state transitions and export entropy via bounded {% include term.html id="receipt" text="receipts" %}. Without reproducible, receipt-generating validation steps, a system cannot self-repair against entropy accumulation.
 
@@ -202,7 +225,7 @@ Stochastic and generative artificial intelligence processes are integrated via a
 [ Verified Receipt ] ◄── [ Finite Selection ] ◄── [ Metric Evaluation ]
 ```
 
-1. **Context Declaration:** Establish explicit DCC profiles, objective functions, and finite budgets.
+1. **Context Declaration:** Establish explicit {% include term.html id="dcc-profile" text="DCC profiles" %}, objective functions, and finite budgets.
 2. **Generation:** Stochastic engines propose candidate structures (classified strictly as *unverified candidates*).
 3. **Construction:** Candidates are formalized into canonical representations.
 4. **Evaluation:** Candidates are measured against constraints, error tolerances, and resource consumption.
@@ -213,7 +236,7 @@ Stochastic and generative artificial intelligence processes are integrated via a
 
 ## 7. The BOC Policy
 
-The **Best of Choices (BOC) Policy** is the formal decision framework used to resolve architectural and design conflicts:
+The {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} is the formal decision framework used to resolve architectural and design conflicts:
 
 $$\text{Selection} = \arg\max_{c \in \mathcal{C}} \left( \text{SIMEMP Compliance}(c) \right)$$
 
@@ -225,11 +248,12 @@ When implementation paths conflict, the BOC policy selects the option that minim
 
 The architectural constraints directly enforce the legal mechanics of the {% include term.html id="ssl" %}:
 
-- **Open Core Invariants:** Identity and security layers cryptographically preserve the anti-patent retaliation and non-scaling open-access clauses across derivative lineage trees.
+- **Open Core Invariants:** Identity and security layers cryptographically preserve the {% include term.html id="open-core-invariant" text="Open Core Invariants" %} (anti-patent retaliation and non-scaling open-access clauses) across derivative lineage trees.
 - **Scale Auditing:** The Metric invariant provides native, verifiable telemetry (active instances, container count, agent instances, and monthly transaction volumes) to verify whether deployment scale crosses the {% include term.html id="scaling-threshold" %}.
+- **Safe Harbor Neutrality:** The technical substrate operates as a neutral conduit, preserving sovereign user content and applications as uninspected {% include term.html id="payload" text="Payloads" %}.
 
 ---
 
 ## 9. Conclusion
 
-The SIMEMP framework is a provisional, evolutionary thesis designed to formalize physical computing limits into explicit architectural constraints. By grounding computational abstractions in non-equilibrium thermodynamics, dependencies determinism, and structural indirection, SIMEMP establishes an adaptable foundation for exploring finite, accountable, and generative computational systems. All subsequent primitive derivations and operational specifications remain subject to verification and revision under this framework.
+The SIMEMP framework is a provisional, evolutionary thesis designed to formalize physical computing limits into explicit architectural constraints. By grounding computational abstractions in non-equilibrium thermodynamics, dependencies determinism, and structural indirection, SIMEMP establishes an adaptable foundation for exploring finite, accountable, and generative computational systems across the {% include term.html id="cdqn" %} network. All subsequent primitive derivations and operational specifications remain subject to verification and revision under this framework.
