@@ -183,3 +183,26 @@
     node is irrevocably identified by the cryptographic commitment hash of its
     operator, parameters, and child dependencies. Guarantees mathematical cycle
     freedom by construction and enables O(1) structural equivalence comparisons.
+
+- term: "Discrete Exterior Calculus"
+  slug: "discrete-exterior-calculus"
+  category: "Primitives"
+  definition: >
+    The constructive formulation of calculus operating on discrete simplicial
+    meshes and cochains, replacing continuous partial differential equations with
+    exact algebraic coboundary operators without floating-point approximations.
+
+- term: "Discrete Exterior Derivative d"
+  slug: "discrete-exterior-derivative"
+  category: "Primitives"
+  definition: >
+    The discrete coboundary operator mapping k-forms to (k+1)-forms across
+    simplicial complexes. Satisfies the exact topological nilpotency invariant
+    d ∘ d = Q(0), grounding electromagnetic and fluid conservation laws.
+
+- term: "Discrete Hodge Star"
+  slug: "discrete-hodge-star"
+  category: "Primitives"
+  definition: >
+    The geometric duality operator mapping primal simplicial k-forms to dual
+    circumcentric (n-k)-forms, parameterizing exact dual volume ratio quotients.
