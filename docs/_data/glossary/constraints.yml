@@ -113,3 +113,11 @@
     identical sub-expressions to the exact same immutable node in memory. Eliminates
     redundant bit allocation across the Memory Wall and ensures zero marginal
     Landauer dissipation (W = 0) for recurring sub-graphs via Q(reuse).
+
+- term: "Anchor-Cut Invariant"
+  slug: "anchor-cut"
+  category: "Constraints"
+  definition: >
+    The sparse causal verification property whereby a terminal state S_N can be
+    proven valid in O(K) anchor receipt validations without replaying N
+    intermediate micro-steps across volatile memory.
