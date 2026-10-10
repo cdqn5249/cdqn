@@ -2,7 +2,7 @@
 layout: default
 title: Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics
 description: Canonical specification of constructive discrete calculus, Discrete Exterior Calculus (DEC) on simplicial meshes, transcendental continued fractions, and aperiodic lineage trajectories under SIMEMP constraints.
-version: 1.0.1
+version: 1.1.0
 updated: 2026-10-10
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -50,6 +50,10 @@ terms_used:
   - operational-agility
   - boc-policy
   - simemp-gateway
+  - discrete-exterior-calculus
+  - discrete-exterior-derivative
+  - discrete-hodge-star
+  - anchor-cut
 ---
 
 # Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics
@@ -57,7 +61,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics |
-| **Version** | 1.0.1 |
+| **Version** | 1.1.0 |
 | **Last Updated** | 2026-10-10 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -93,11 +97,11 @@ In the {% include term.html id="qn" %} computational universe, **continuous limi
 
 $$W \ge k_B T \ln 2$$
 
-{% include term.html id="qm" %} Calculus replaces continuous infinitesimals with **Constructive Discrete Exterior Calculus (DEC)** and **Projective Continued Fraction Cascades**, satisfying {% include term.html id="dependencies-determinism" %}:
+{% include term.html id="qm" %} Calculus replaces continuous infinitesimals with Constructive {% include term.html id="discrete-exterior-calculus" text="Discrete Exterior Calculus (DEC)" %} and **Projective Continued Fraction Cascades**, satisfying {% include term.html id="dependencies-determinism" %}:
 
 $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
-All operational derivations represent working hypotheses evaluated via {% include term.html id="computational-consistency" %}. No unmeasured limit may cross a {% include term.html id="simemp-gateway" %}.
+All operational derivations represent working hypotheses evaluated via {% include term.html id="computational-consistency" %}. No unmeasured limit may cross a {% include term.html id="simemp-gateway" %}, preserving Tier 1 {% include term.html id="existential-invariant" text="Existential Invariants" %}.
 
 ```
                           THE BOUNDED DYNAMICAL SCOPE
@@ -131,17 +135,17 @@ Classical series convergence silently truncates unmeasured trailing terms. In $\
 
 $$r_z = \big( q_{z+1} \cdot \delta_{z+1}(d) \big) + r_{z+1}$$
 
-Across arbitrary expansions, total metric information is preserved:
+Across arbitrary expansions, total metric information is preserved in the {% include term.html id="universal-envelope" %}:
 
 $$\mathcal{I}_{\mathrm{total}}(X_d) = \sum_{k=0}^{z} \big( q_k \cdot \delta_k(d) \big) + r_z$$
 
-If $r_z = Q(0)$, the system achieves {% include term.html id="terminal-exactness" %}: the calculation reaches exact algebraic closure, triggering immediate early halting with zero residual entropy ($\Delta H = 0$).
+If $r_z = Q(0)$, the system achieves {% include term.html id="terminal-exactness" %}: the calculation reaches exact algebraic closure, triggering immediate early halting with zero residual entropy ($\Delta H = 0$) and emitting an exact {% include term.html id="receipt" %}.
 
 ---
 
 ## 3. Discrete Exterior Calculus (DEC) on Simplicial Complexes
 
-To model fields, waves, fluids, and electrodynamics without floating-point PDEs, $\mathrm{Qm}$ Calculus adopts **Discrete Exterior Calculus (DEC)** on orthogonal multi-axial frames ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})).
+To model fields, waves, fluids, and electrodynamics without floating-point PDEs, $\mathrm{Qm}$ Calculus adopts {% include term.html id="discrete-exterior-calculus" text="Discrete Exterior Calculus (DEC)" %} on orthogonal multi-axial frames ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})).
 
 ```
                       DEC OPERATOR MAPPING ON SIMPLICES
@@ -158,10 +162,10 @@ To model fields, waves, fluids, and electrodynamics without floating-point PDEs,
 A physical or geometric field is not a continuous function; it is a **discrete cochain** evaluated on oriented $k$-simplices of a simplicial complex $K$:
 * **$0$-Forms (Scalars):** Potential fields, temperatures, and scalar charges evaluated on vertices.
 * **$1$-Forms (Circulations):** Electric fields ($E$) and fluid velocities ($u$) integrated along oriented edges.
-* **$2$-Forms (Fluxes):** Magnetic flux ($B$) and vorticity ($\omega$) evaluated across oriented planar faces.
+* **$2$-Forms (Fluxes):** Magnetic flux ($B$) and vorticity ($\omega$) evaluated across oriented planar faces with conserved {% include term.html id="remainder-r" text="residual r" %}.
 
 ### 3.2. The Discrete Exterior Derivative (d / DCC_ANCHOR_DEC_D_v1)
-The discrete derivative is the algebraic coboundary operator $\mathbf{d}$ mapping $k$-forms to $(k+1)$-forms:
+The discrete derivative is the algebraic coboundary operator {% include term.html id="discrete-exterior-derivative" text="Discrete Exterior Derivative d" %} mapping $k$-forms to $(k+1)$-forms:
 
 $$\langle \mathbf{d}\omega, \, \sigma_{k+1} \rangle \equiv \langle \omega, \, \partial \sigma_{k+1} \rangle = \sum_{j=0}^{k+1} (-1)^j \langle \omega, \, [v_0, \dots, \hat{v}_j, \dots, v_{k+1}] \rangle$$
 
@@ -170,10 +174,10 @@ Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Polic
 
 $$\mathbf{d} \circ \mathbf{d} \equiv Q(0)$$
 
-Because the boundary of a boundary is identically zero ($\partial \partial \equiv \emptyset$), applying the exterior derivative twice vanishes identically. This invariant is anchored via `DCC_ANCHOR_DEC_D_v1` as a primary {% include term.html id="q-anchor" text="Q(anchor)" %}.
+Because the boundary of a boundary is identically zero ($\partial \partial \equiv \emptyset$), applying the exterior derivative twice vanishes identically. This invariant is anchored via `DCC_ANCHOR_DEC_D_v1` as a primary {% include term.html id="q-anchor" text="Q(anchor)" %} governed by an explicit {% include term.html id="dcc-profile" %}.
 
 ### 3.3. The Discrete Hodge Star Dual (DCC_ANCHOR_HODGE_v1)
-The Hodge star operator $\star$ maps primal $k$-forms to dual $(n-k)$-forms across the circumcentric dual mesh:
+The {% include term.html id="discrete-hodge-star" text="Discrete Hodge Star" %} operator $\star$ maps primal $k$-forms to dual $(n-k)$-forms across the circumcentric dual mesh:
 
 $$\star \omega = \sum_{\sigma_k \in K} \frac{\lvert \star \sigma_k \rvert}{\lvert \sigma_k \rvert} \langle \omega, \, \sigma_k \rangle \, (\star \sigma_k)$$
 
@@ -199,7 +203,7 @@ Truncation error is zero by construction. Conservation laws (mass, charge, vorti
 
 ## 4. Dynamical Q(anchor) Spectrum: Transcendental Continued Fractions
 
-Transcendental numbers cannot exist as static Layer 1 digits. In $\mathrm{Qm}$ Calculus, they are anchored as **Deterministic Projective Continued Fraction Generators** inhabiting the Layer 3 {% include term.html id="qexpr" %} CAE-DAG container ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §4.3).
+Transcendental numbers cannot exist as static Layer 1 digits in {% include term.html id="layer-1" %}. In $\mathrm{Qm}$ Calculus, they are anchored as **Deterministic Projective Continued Fraction Generators** inhabiting the Layer 3 {% include term.html id="qexpr" %} CAE-DAG container ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §4.3) and functioning as foundational {% include term.html id="q-anchor" text="Q(anchor)" %} nodes.
 
 ```
                  THE DYNAMICAL Q(anchor) SPECTRUM IN Qm CALCULUS
@@ -244,11 +248,11 @@ Governs exponential damping, thermal relaxation, and solutions to discrete diffe
 $$e = [2; \, 1, \, 2, \, 1, \, 1, \, 4, \, 1, \, 1, \, 6, \, 1, \, 1, \, 8, \, \dots, \, 1, \, 1, \, 2k, \, \dots]$$
 
 ### 4.4. The Thermodynamic Logarithm (ln 2 / DCC_ANCHOR_LN2_v1)
-Directly calibrates the physical Landauer dissipation limit:
+Directly calibrates the physical {% include term.html id="layer-0" %} Landauer dissipation limit:
 
 $$\ln(2) = [0; \, 1, \, 2, \, 3, \, 1, \, 6, \, 3, \, 1, \, 1, \, 2, \, 1, \, 1, \, 4, \, \dots]$$
 
-Guarantees platform-invariant accounting when translating physical Layer 0 energy consumption into {% include term.html id="compute-unit-u" text="U" %} units.
+Guarantees platform-invariant accounting when translating physical energy consumption into {% include term.html id="compute-unit-u" text="U" %} units.
 
 ---
 
@@ -271,7 +275,7 @@ In continuous mechanics, time is treated as an unmeasured parameter ($t \in \mat
 ```
 
 ### 5.1. Formal Causal Lineage of a Dynamic State
-Every field state $S_k$ generated during dynamical evolution possesses an explicit lineage tuple:
+Every field state $S_k$ generated during dynamical evolution possesses an explicit lineage tuple in its {% include term.html id="universal-envelope" %} protected by the {% include term.html id="security-envelope" %}:
 
 $$\mathcal{L}(S_k) = \Big\langle \mathbf{P}(S_k), \, \kappa(S_k), \, \tau_{\mathrm{type}}, \, \mathcal{W}_{\mathrm{cum}}(S_k), \, \Pi_{\mathrm{receipts}}(S_k) \Big\rangle$$
 
@@ -280,14 +284,14 @@ $$\mathcal{L}(S_k) = \Big\langle \mathbf{P}(S_k), \, \kappa(S_k), \, \tau_{\math
 - **Cumulative Work ($\mathcal{W}_{\mathrm{cum}}$):** Tracks the total Landauer work expended across the simulation run in units of $Q(1)$.
 
 ### 5.2. Aperiodic Memory Trajectory
-Under `DCC_ANCHOR_Q5_APERIODICITY_v1` ([`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }})), dynamical simulations avoid circular recurrence locks. The trajectory through memory space is non-repeating:
+Under `DCC_ANCHOR_Q5_APERIODICITY_v1` ([`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }})), dynamical simulations avoid circular recurrence locks. The trajectory through {% include term.html id="local-first" %} memory space is non-repeating:
 
 $$\forall i \neq j, \quad \mathcal{H}(S_i) \neq \mathcal{H}(S_j)$$
 
 This guarantees an irreversible internal arrow of time without consulting external clocks.
 
 ### 5.3. The Anchor-Cut Verification Invariant
-To audit or verify a dynamical simulation consisting of $N$ discrete timesteps passing through $K$ intermediate $Q(\mathrm{anchor})$ checkpoints ($K \ll N$):
+To audit or verify a dynamical simulation consisting of $N$ discrete timesteps passing through $K$ intermediate $Q(\mathrm{anchor})$ checkpoints ($K \ll N$) under the {% include term.html id="anchor-cut" text="Anchor-Cut Invariant" %}:
 1. An auditor does not replay the $N$ micro-steps across volatile memory.
 2. The auditor verifies the **Anchor-Cut Chain**: the local origin {% include term.html id="q0" text="Q(0)" %}, the signed anchor receipts $\mathcal{R}_{\mathrm{anchor}}$, and the terminal state $S_N$.
 3. Verification complexity collapses from $\mathcal{O}(N)$ memory bus traversals to $\mathcal{O}(K)$ receipt validations. Micro-states between anchors are safely archived or dereferenced via {% include term.html id="q-reuse" text="Q(reuse)" %}.
@@ -296,7 +300,7 @@ To audit or verify a dynamical simulation consisting of $N$ discrete timesteps p
 
 ## 6. Coupling to Optimization Morphisms: Q(bypass) and Q(reuse)
 
-In classical scientific simulations, processors waste extensive energy re-evaluating terms that are algebraically zero. $\mathrm{Qm}$ Calculus couples DEC directly to Category B optimization morphisms:
+In classical scientific simulations, processors waste extensive energy re-evaluating terms that are algebraically zero. $\mathrm{Qm}$ Calculus couples DEC directly to Category B optimization morphisms under the {% include term.html id="boc-policy" %} to maximize {% include term.html id="operational-agility" text="Operational Agility" %}:
 
 ```
                   Q(bypass) IN DISCRETE EXTERIOR CALCULUS
