@@ -2,7 +2,7 @@
 layout: default
 title: Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics
 description: Canonical specification of constructive discrete calculus, Discrete Exterior Calculus (DEC) on simplicial meshes, transcendental continued fractions, and aperiodic lineage trajectories under SIMEMP constraints.
-version: 1.0.0
+version: 1.0.1
 updated: 2026-10-10
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -57,7 +57,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **Last Updated** | 2026-10-10 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -117,7 +117,7 @@ All operational derivations represent working hypotheses evaluated via {% includ
 
 Classical continuous limits ($\lim_{\Delta x \to 0}$) are replaced by three constructive mechanisms that operate with zero rounding drift under the {% include term.html id="no-implicit-rule" %}:
 
-### 2.1. Scale-Lattice Refinement ($z$-Refinement)
+### 2.1. Scale-Lattice Refinement (z-Refinement)
 Space and time are not continuous voids; they are partitioned by the discrete resolution quantum along {% include term.html id="dimension-d" text="dimensional axes" %} ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §3.3):
 
 $$\delta_z(d) = \frac{Q(1)_d}{\kappa(z)}$$
@@ -172,12 +172,16 @@ $$\mathbf{d} \circ \mathbf{d} \equiv Q(0)$$
 
 Because the boundary of a boundary is identically zero ($\partial \partial \equiv \emptyset$), applying the exterior derivative twice vanishes identically. This invariant is anchored via `DCC_ANCHOR_DEC_D_v1` as a primary {% include term.html id="q-anchor" text="Q(anchor)" %}.
 
-### 3.3. The Discrete Hodge Star Dual (⋆ / DCC_ANCHOR_HODGE_v1)
+### 3.3. The Discrete Hodge Star Dual (DCC_ANCHOR_HODGE_v1)
 The Hodge star operator $\star$ maps primal $k$-forms to dual $(n-k)$-forms across the circumcentric dual mesh:
 
-$$\star \omega = \sum_{\sigma_k \in K} \frac{|\star \sigma_k|}{|\sigma_k|} \langle \omega, \, \sigma_k \rangle \star \sigma_k$$
+$$\star \omega = \sum_{\sigma_k \in K} \frac{\lvert \star \sigma_k \rvert}{\lvert \sigma_k \rvert} \langle \omega, \, \sigma_k \rangle \, (\star \sigma_k)$$
 
-Ratio quotients $\frac{|\star \sigma_k|}{|\sigma_k|}$ represent exact geometric dual volume ratios held symbolically inside the {% include term.html id="qexpr" %} container via `OP_RATIO`.
+Dual volume ratio quotients:
+
+$$\frac{\lvert \star \sigma_k \rvert}{\lvert \sigma_k \rvert}$$
+
+represent exact geometric ratios held symbolically inside the {% include term.html id="qexpr" %} container via `OP_RATIO`.
 
 ### 3.4. The Discrete Laplace–Beltrami Operator (Δ / DCC_ANCHOR_LAPLACE_v1)
 The Laplacian governing diffusion, wave propagation, and electrostatic potential is constructed constructively:
