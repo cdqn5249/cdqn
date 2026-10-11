@@ -93,3 +93,10 @@
   description: "Scaling Source License terms and open core invariants"
   status: "Canonical"
   external: true
+
+- title: "Qs Semantics"
+  url: "/qs.html"
+  slug: "qs"
+  description: "Constructive relational intent, epistemic spectrum, and human-agent alignment"
+  status: "Hypothesis"
+  external: false
