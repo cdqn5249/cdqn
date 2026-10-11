@@ -137,3 +137,12 @@
     The machine-readable agreement in a DCC profile parameterizing mutual
     human-agent commitments, capability scopes, and conserved social residuals
     (r_social) to guarantee AI alignment with human sovereignty.
+
+- term: "Non-Rogue Invariant"
+  slug: "non-rogue-invariant"
+  category: "Constraints"
+  definition: >
+    The constitutional SIMEMP invariant whereby machine identities and autonomous
+    AI agents are strictly barred from root genesis sovereignty (Q(0)), requiring
+    unbroken cryptographic intent contracts bound to a human identity and finite
+    metric budgets to prevent unconstrained recursive self-modification.
