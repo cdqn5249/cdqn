@@ -90,11 +90,15 @@ This residual entropy manifests operationally as non-deterministic state drift, 
 
 ## 2. Method of Verification: The Recursive Search Loop
 
-The Qn architecture does not claim closed empirical finality. The system operates as an active, recursive research framework:
+The Qn architecture does not claim closed empirical finality. The system operates as an active, recursive research framework grounded in operational falsifiability and multi-tier constraint auditing.
+
+### 2.1. Operational Verification and Computational Consistency
+
+Because the system explores finite computational bounds ahead of physical hardware realization, all models are working hypotheses structured to prevent premature calcification. The development trajectory is governed by a cyclic search loop:
 
 $$\text{Proposal} \xrightarrow{\quad} \text{Construction} \xrightarrow{\quad} \text{Evaluation} \xrightarrow{\quad} \text{Selection}$$
 
-Because the system explores finite computational bounds ahead of physical hardware realization, all models are working hypotheses structured to prevent premature calcification. Abstractions are verified empirically through {% include term.html id="computational-consistency" %}:
+Abstractions are verified empirically through {% include term.html id="computational-consistency" %}:
 
 > If a proposed abstraction is internally consistent, and if computations authored in {% include term.html id="qnlang" %} and compiled to {% include term.html id="qnir" %} execute deterministically and terminate within declared finite resource envelopes, the abstraction is deemed provisionally valid within the Qn universe:
 
@@ -102,7 +106,7 @@ $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge
 
 Failure to compute within finite bounds, or divergence during execution, refutes the proposed abstraction and forces an iteration of the search loop.
 
-### 2.1. Epistemic Demarcation: Documentary Baselines vs. Empirical Grounding
+### 2.2. Epistemic Demarcation: Documentary Baselines vs. Empirical Grounding
 
 To prevent ambiguity across documentation indexes and automated repository ingestion, the architecture strictly distinguishes between **Documentary Maturity** and **Epistemic Modality**:
 
