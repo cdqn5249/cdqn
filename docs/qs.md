@@ -330,7 +330,7 @@ $\mathrm{Qs}$ is completely paradigm-agnostic: it does not reject generative AI 
                                       └───────► (Feeds next generation loop)
 ```
 
-1. **Agnostic Generation:** An external model (e.g., an LLM or multi-agent swarm) parses messy natural human speech and proposes a candidate semantic graph. Under **Axiom 14**, this graph is tagged as `State: CANDIDATE`.
+1. **Agnostic Generation:** An ai model (e.g., an LLM or multi-agent swarm) parses messy natural human speech and proposes a candidate semantic graph. Under **Axiom 14**, this graph is tagged as `State: CANDIDATE`.
 2. **Deterministic Measurement:** The candidate is translated into a Content-Addressed Expression DAG ([`Qexpr`]({{ '/qexpr.html' | relative_url }})) and audited against the declared Intent Contract, checking depth ceilings, metric budgets, and geometric consistency.
 3. **Selection via BOC Policy:** The candidate that maximizes compliance with SIMEMP constraints is selected under the {% include term.html id="boc-policy" %}:
 
