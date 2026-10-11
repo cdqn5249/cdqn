@@ -121,3 +121,19 @@
     The sparse causal verification property whereby a terminal state S_N can be
     proven valid in O(K) anchor receipt validations without replaying N
     intermediate micro-steps across volatile memory.
+
+- term: "Epistemic Anchorage"
+  slug: "epistemic-anchorage"
+  category: "Constraints"
+  definition: >
+    The formal attribution of truth modality to an assertion along the spectrum
+    from physical sensor observation to sovereign narrative fiction, requiring
+    causal lineage receipts to prevent unanchored AI hallucinations.
+
+- term: "Intent Contract"
+  slug: "intent-contract"
+  category: "Constraints"
+  definition: >
+    The machine-readable agreement in a DCC profile parameterizing mutual
+    human-agent commitments, capability scopes, and conserved social residuals
+    (r_social) to guarantee AI alignment with human sovereignty.
