@@ -206,3 +206,11 @@
   definition: >
     The geometric duality operator mapping primal simplicial k-forms to dual
     circumcentric (n-k)-forms, parameterizing exact dual volume ratio quotients.
+
+- term: "Qs"
+  slug: "qs"
+  category: "Primitives"
+  definition: >
+    Quang Semantics. The constructive relational, linguistic, and intent base
+    domain of the Qn universe. Formalizes words as multivector blades, grammar as
+    CAE-DAG wiring, and human-machine communication as verifiable intent contracts.
