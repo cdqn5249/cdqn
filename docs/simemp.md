@@ -2,8 +2,8 @@
 layout: default
 title: SIMEMP Constraints
 description: Foundational physical, computational, and architectural constraints governing the Qn and cdqn stack under Dependencies Determinism.
-version: 1.1.0
-updated: 2026-10-09
+version: 1.1.1
+updated: 2026-10-11
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -41,8 +41,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | SIMEMP: Thesis and Constraints for the Qn and cdqn Stack |
-| **Version** | 1.1.0 |
-| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
+| **Version** | 1.1.1 |
+| **Last Updated** | 2026-10-11 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Constitutional Specification — Foundational Invariants |
@@ -60,6 +60,8 @@ The following documents establish the structural, mathematical, and legal constr
 | `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
 | `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
 | `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent, epistemic spectrum, and human-agent alignment | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -88,15 +90,24 @@ This residual entropy manifests operationally as non-deterministic state drift, 
 
 ## 2. Method of Verification: The Recursive Search Loop
 
-The Qn architecture does not claim closed mathematical perfection. It operates as an active, recursive research framework:
+The Qn architecture does not claim closed empirical finality. The system operates as an active, recursive research framework:
 
 $$\text{Proposal} \xrightarrow{\quad} \text{Construction} \xrightarrow{\quad} \text{Evaluation} \xrightarrow{\quad} \text{Selection}$$
 
-Because the system is exploratory, the abstractions defined herein are working hypotheses designed to avoid premature calcification. Abstractions are verified empirically through {% include term.html id="computational-consistency" %}:
+Because the system explores finite computational bounds ahead of physical hardware realization, all models are working hypotheses structured to prevent premature calcification. Abstractions are verified empirically through {% include term.html id="computational-consistency" %}:
 
-> If a proposed abstraction is internally consistent, and if computations authored in {% include term.html id="qnlang" %} and compiled to {% include term.html id="qnir" %} execute deterministically and terminate within declared finite resource envelopes, the abstraction is deemed provisionally valid within the Qn universe.
+> If a proposed abstraction is internally consistent, and if computations authored in {% include term.html id="qnlang" %} and compiled to {% include term.html id="qnir" %} execute deterministically and terminate within declared finite resource envelopes, the abstraction is deemed provisionally valid within the Qn universe:
+
+$$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge \forall p \in \text{QnIR}(\mathcal{A}), \, \text{ExecutesDeterministicallyWithinBounds}(p) \right)$$
 
 Failure to compute within finite bounds, or divergence during execution, refutes the proposed abstraction and forces an iteration of the search loop.
+
+### 2.1. Epistemic Demarcation: Documentary Baselines vs. Empirical Grounding
+
+To prevent ambiguity across documentation indexes and automated repository ingestion, the architecture strictly distinguishes between **Documentary Maturity** and **Epistemic Modality**:
+
+- **Documentary Maturity (Canonical Baseline):** Specifications designated as **Canonical** represent frozen structural contracts for the current iteration of the search loop. They provide an authoritative, immutable baseline that distinguishes validated architecture from exploratory vision proposals (`docs/chronosa.md`) or uncommitted roadmap items.
+- **Epistemic Modality (Constructive Working Hypothesis):** Because the runtime has not yet been executed on physical silicon substrates (Layer 0), all canonical specifications maintain the formal epistemic status of **Constructive Working Hypotheses** pending empirical Layer 0 execution receipts.
 
 ---
 
