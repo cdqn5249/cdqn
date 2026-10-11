@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-10 (Bao Loc, Vietnam)
+# Updated: 2026-10-11 (Bao Loc, Vietnam)
 
 - title: "Portal"
   url: "/"
@@ -14,63 +14,70 @@
   url: "/simemp.html"
   slug: "simemp"
   description: "Foundational physical and computational constraints"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Abstraction Layers"
   url: "/abstractionLayers.html"
   slug: "abstractionLayers"
   description: "Structural framework, gateways, and fractal cdqn protocol"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Category A Primitives"
   url: "/q0_q1.html"
   slug: "q0_q1"
   description: "Q(0) local genesis, Q(1) unit calibration, and node onboarding"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Single-Digit Primitives"
   url: "/q2_q9.html"
   slug: "q2_q9"
   description: "Single digits Q(2)...Q(9), secondary DCC anchors, and parity"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Qn Primitive Envelope"
   url: "/qnPrimitive.html"
   slug: "qnPrimitive"
   description: "Governed artifact envelope, axioms, and lifecycle"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Qm Mathematics"
   url: "/qm.html"
   slug: "qm"
   description: "Constructive numeric, relational, and algebraic substrate"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Qm Geometry"
   url: "/qm_geometry.html"
   slug: "qm_geometry"
   description: "Multi-axial frames, Clifford geometric algebra, and float-free rotations"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Qm Calculus"
   url: "/qm_calculus.html"
   slug: "qm_calculus"
   description: "Discrete Exterior Calculus, continued fractions, and invariant dynamics"
-  status: "Hypothesis"
+  status: "Canonical"
   external: false
 
 - title: "Qexpr Container"
   url: "/qexpr.html"
   slug: "qexpr"
   description: "Content-Addressed Expression DAG, hash-consing, and canonical node classes"
-  status: "Hypothesis"
+  status: "Canonical"
+  external: false
+
+- title: "Qs Semantics"
+  url: "/qs.html"
+  slug: "qs"
+  description: "Constructive relational intent, epistemic spectrum, and human-agent alignment"
+  status: "Canonical"
   external: false
 
 - title: "Chronosa Vision"
@@ -93,10 +100,3 @@
   description: "Scaling Source License terms and open core invariants"
   status: "Canonical"
   external: true
-
-- title: "Qs Semantics"
-  url: "/qs.html"
-  slug: "qs"
-  description: "Constructive relational intent, epistemic spectrum, and human-agent alignment"
-  status: "Hypothesis"
-  external: false
