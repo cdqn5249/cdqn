@@ -2,8 +2,8 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), hash-consing deduplication, symbolic irrationals, six canonical node classes, cross-domain contexts, and hardware-aware collapse under SIMEMP constraints.
-version: 1.0.2
-updated: 2026-10-08
+version: 1.0.3
+updated: 2026-10-11
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -13,6 +13,9 @@ parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qexpr.html
 terms_used:
   - qexpr
+  - cae-dag
+  - hash-consing
+  - hca-collapse
   - qn
   - q0
   - q1
@@ -55,11 +58,11 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.0.2 |
-| **Last Updated** | 2026-10-08 (Bao Loc, Vietnam) |
+| **Version** | 1.0.3 |
+| **Last Updated** | 2026-10-11 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Specification — Layer 3 Structural Container (Complexity Degree 2) |
+| **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
 
 ---
 
@@ -76,13 +79,14 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
 | `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
 | `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
 ## 1. Epistemic Stance and Constitutional Placement
 
-Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) v1.3.0 §2.6, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})**.
+Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) v1.3.1 §2.6, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})**.
 
 ```
  +-------------------------------------------------------------------------------+
@@ -134,7 +138,7 @@ By representing cross-domain contexts within the unified `Qexpr` structure, hete
 
 ## 2. The Content-Addressed Expression DAG (CAE-DAG) Architecture
 
-Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §7), `Qexpr` explicitly rejects naive pointer-heap trees in favor of a **Content-Addressed Expression Directed Acyclic Graph (CAE-DAG)**.
+Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §7), `Qexpr` explicitly rejects naive pointer-heap trees in favor of a **{% include term.html id="cae-dag" text="Content-Addressed Expression Directed Acyclic Graph (CAE-DAG)" %}**.
 
 ```
     CLASSICAL POINTER-AST                         CONTENT-ADDRESSED EXPRESSION DAG (CAE-DAG)
@@ -161,11 +165,11 @@ $$\alpha = \Big\langle \mathrm{OpCode}, \, \mathcal{H}(\mathrm{Left}), \, \mathc
 * **$\mathrm{DCC}_{\mathrm{ref}}$:** Machine-readable {% include term.html id="dcc-profile" text="DCC Profile" %} governing transformation ceilings and execution rights.
 
 ### 2.2. Structural Hash-Consing and $\mathcal{O}(1)$ Equivalence
-Node identity is strictly mathematical under {% include term.html id="dependencies-determinism" %}:
+Node identity is strictly mathematical under {% include term.html id="dependencies-determinism" %}, operationalized via {% include term.html id="hash-consing" %}:
 
 $$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, \mathcal{H}(\mathrm{Left}) \,\|\, \mathcal{H}(\mathrm{Right}) \,\|\, z \,\|\, r \,\|\, d \,\|\, \mathrm{DCC}_{\mathrm{ref}}\Big)$$
 
-1. **Deduplication:** Any sub-expression with identical semantics and dependencies yields the identical commitment hash. The memory allocator maps it to the exact same physical node.
+1. **Deduplication:** Any sub-expression with identical semantics and dependencies yields the identical commitment hash. Through {% include term.html id="hash-consing" %}, the memory allocator maps it to the exact same physical node.
 2. **$\mathcal{O}(1)$ Structural Equality:** Verifying whether two sub-expressions $A$ and $B$ are identical requires zero recursive graph traversal:
 
 $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
@@ -174,7 +178,7 @@ Testing algebraic or semantic equality collapses to a single machine-word intege
 
 ### 2.3. Thermodynamic Work Minimization ($W = 0$)
 In physical {% include term.html id="layer-0" %} substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($\mathcal{O}(C V^2 f)$) and Landauer work ($W \ge k_B T \ln 2$).
-* By enforcing hash-consing, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
+* By enforcing {% include term.html id="hash-consing" %}, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
 * Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($W = 0$), directly operationalizing {% include term.html id="q-reuse" text="Q(reuse)" %} across the Memory Wall.
 
 ### 2.4. Acyclicity by Construction (Axiom 5)
@@ -302,7 +306,7 @@ Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost
 
 ## 5. Hardware Capability-Aware Collapse Engine (HCA-Collapse)
 
-While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3 via {% include term.html id="structural-indirection" %}, its physical execution on physical SoCs is governed by the **Hardware Capability-Aware Collapse Engine (HCA-Collapse Engine)**.
+While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3 via {% include term.html id="structural-indirection" %}, its physical execution on physical SoCs is governed by the **{% include term.html id="hca-collapse" text="Hardware Capability-Aware Collapse Engine (HCA-Collapse Engine)" %}**.
 
 ```
                                THE COMPILATION PIPELINE
@@ -326,7 +330,7 @@ While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3 via {% incl
 ### 5.1. Target-Specific Lowering Profiles
 The compiler queries the node's local {% include term.html id="dcc-profile" text="DCC Hardware Profile" %} (established during Layer 0 onboarding):
 1. **NPU / Systolic Arrays:** Lowers multi-axial Clifford geometric products ($\vec{u} \cdot \vec{v} = \sum \eta_{kk} u_k v_k$) directly into **integer Matrix-Multiply-Accumulate (MAC)** instructions (INT16/INT32), completing contractions in constant time.
-2. **Cryptographic Co-Processors:** Offloads hash-consing deduplication and node commitment hashing to hardware SHA-3 or BLAKE3 accelerators.
+2. **Cryptographic Co-Processors:** Offloads {% include term.html id="hash-consing" %} deduplication and node commitment hashing to hardware SHA-3 or BLAKE3 accelerators.
 3. **Integer RISC-V / Microcontrollers:** Replaces division by multiplication using Barrett integer reciprocal tables with exact remainder correction loops.
 
 ### 5.2. Side-Channel Immunity via Constant-Time Compute
@@ -356,7 +360,7 @@ To guarantee that fallible human directives or unaligned agentic processes canno
 ```
 
 1. **Static Graph Depth Ceilings:** If an expression tree exceeds the declared depth ceiling ($D > D_{\max}$), execution terminates immediately with receipt `RECEIPT_EXPRESSION_TOO_COMPLEX`.
-2. **Node Allocation Bounds:** If hash-consing attempts to instantiate node counts exceeding the local {% include term.html id="metric-envelope" %}, compilation aborts with `RECEIPT_BUDGET_EXHAUSTED`.
+2. **Node Allocation Bounds:** If {% include term.html id="hash-consing" %} attempts to instantiate node counts exceeding the local {% include term.html id="metric-envelope" %}, compilation aborts with `RECEIPT_BUDGET_EXHAUSTED`.
 3. **Totality by Budget (Axiom 6):** Every collapse operation carries an explicit compute budget in units of $Q(1)$ via {% include term.html id="metric-exhaustion" %}. Non-terminating expansions are impossible; when the budget is consumed, the engine emits a dissipative {% include term.html id="receipt" %} and halts.
 
 ---
