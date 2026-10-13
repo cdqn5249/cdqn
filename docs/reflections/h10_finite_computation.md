@@ -2,12 +2,21 @@
 layout: default
 title: "Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us About Finite Computation"
 description: Epistemic reflection analyzing OpenAI's claimed resolution of Hilbert's Tenth Problem over Q, the fallacy of unmetered search, and the shift from Platonic proof to verified computational patterns.
-version: 1.0.0
+version: 1.0.1
 updated: 2026-10-13
 author: Christophe Duy Quang Nguyen
 category: Reflection
 status: Reflection
+slug: h10_finite_computation
 permalink: /reflections/h10_finite_computation.html
+specs_grounded:
+  - simemp
+  - qm
+  - qexpr
+  - q0_q1
+irl_discussions:
+  linkedin: "" # Add your live URL once posted
+  x_twitter: "" # Add your live URL once posted
 ---
 
 # Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us About Finite Computation
