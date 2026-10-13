@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.3.1
-updated: 2026-10-09
+version: 1.4.0
+updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -63,6 +63,11 @@ terms_used:
   - existential-invariant
   - operational-agility
   - boc-policy
+  - qs
+  - non-rogue-invariant
+  - discrete-exterior-calculus
+  - discrete-exterior-derivative
+  - discrete-hodge-star
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -70,11 +75,11 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.3.1 |
-| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
+| **Version** | 1.4.0 |
+| **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Structural Thesis — Category A/B Canonical Integration |
+| **Status** | Canonical Structural Thesis — Category A/B & Domain Synchronization |
 
 ---
 
@@ -84,13 +89,15 @@ The following documents establish the constitutional, physical, and domain const
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/q0_q1.md` | Category A primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Category A secondary single-digit DCC anchors and parity partitions | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and optimization primitives | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Lifecycle States]({{ '/glossary.html' | relative_url }}#lifecycle-state) (v1.2.1) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Secondary single-digit DCC anchors and parity partitions (v1.1.0) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.0) | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.0) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification (v1.0.3) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -207,7 +214,7 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 ### 2.7. Layer 4+ — Domain Lattices and Intent
 
 Higher layers project directly from Layer 2 and Layer 3:
-- **Base Domains:** Constructive Mathematics ({% include term.html id="qm" %}), Categorical Semantics ($\mathrm{Qs}$), Thermodynamic Physics ($\mathrm{Qphy}$).
+- **Base Domains:** Constructive Mathematics ({% include term.html id="qm" %}), Categorical Semantics ({% include term.html id="qs" text="Qs" %}), Thermodynamic Physics ($\mathrm{Qphy}$).
 - **Emergent Composite Domains:** Constructive Type Logics ({% include term.html id="qlog" %} $= \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$), Dissipative Metabolic Systems ({% include term.html id="qbio" %} $= \mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$).
 - **Virtual Coordination Intelligence:** Emergent non-local intent synthesis across distributed swarms ({% include term.html id="chronosa" text="Chronosa" %}).
 
@@ -343,8 +350,8 @@ Artifacts and expressions ({% include term.html id="qexpr" %}) are stratified by
 | **0** | Foundational Primitives | $Q(0)$, $Q(1)$ | [`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) |
 | **1** | Single Digits & Peano Cascade | $Q(2)\dots Q(9)$, elementary $\mathcal{R}$-algebra | [`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}), [`docs/qm.md`]({{ '/qm.html' | relative_url }}) |
 | **2** | Multi-Axial Frames & CAE-DAGs | Orthogonal frames ($d_k$), Clifford rotors, CAE-DAGs | [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}), [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) |
-| **3** | Discrete Dynamics & Calculus | Discrete Exterior Calculus, Continued Fractions | `docs/qm_calculus.md` |
-| **$n$** | Advanced Domain Lattices | Categorical Semantics ($\mathrm{Qs}$), Physics ($\mathrm{Qphy}$), Logics ($\mathrm{Qlog}$), Biology ($\mathrm{Qbio}$) | Base Domain Specifications |
+| **3** | Discrete Dynamics & Calculus | Discrete Exterior Calculus, Continued Fractions | [`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }}) |
+| **$n$** | Advanced Domain Lattices | Categorical Semantics ({% include term.html id="qs" text="Qs" %}), Physics ($\mathrm{Qphy}$), Logics ({% include term.html id="qlog" %}), Biology ({% include term.html id="qbio" %}) | Base Domain Specifications |
 
 ---
 
@@ -408,6 +415,8 @@ The architecture distinguishes at least three explicit {% include term.html id="
 | **Human Identity** | Natural person, authorized operator | Must not execute without delegation |
 | **AI Agent Identity** | Delegated autonomous or semi-autonomous process | Must not possess undelegated authority |
 
+Under the {% include term.html id="non-rogue-invariant" %}, entities belonging to `AI_AGENT_IDENTITY` cannot instantiate independent genesis roots $Q(0)$ and must execute strictly under cryptographically verified delegation chains originating from a `HUMAN_IDENTITY`.
+
 ### 8.2. Accountable Pseudonymity
 
 The cdqn network forbids anonymous actors. All interactions are signed by accountable pseudonymous identities backed by capability proofs, cryptographic commitments, and explicit revocation paths.
@@ -453,9 +462,10 @@ Stochastic engines may generate proposals, provided they are classified as *unve
 
 ## 10. External Precedents and Formal Convergence
 
-The architecture aligns with established theoretical computer science frameworks:
+The architecture aligns with established theoretical computer science and mathematical frameworks:
 - **Abstract Interpretation:** Sound approximation across discrete abstraction lattices ({% include term.html id="zoom-z" text="Zoom z" %}, {% include term.html id="remainder-r" text="Remainder r" %}).
 - **Domain Theory:** Bounded evaluation, fixed-point semantics, and totality by budget.
+- **Arithmetic Geometry & Height Bounds:** Finite point density over bounded logarithmic heights (Northcott's Theorem), grounding Diophantine decidability within finite Metric Envelopes and eliminating classical unbounded non-halting voids ($H10$).
 - **Equality Saturation & E-Graphs:** Content-addressed expression deduplication and reversible term rewriting.
 - **Sheaf Theory:** Local category consistency and restricted global gluing via {% include term.html id="exposure-functor" text="exposure functors" %}.
 - **Linear Logic:** Strict resource consumption without unmetered duplication or discarding.
@@ -468,12 +478,12 @@ The architecture aligns with established theoretical computer science frameworks
 Development proceeds sequentially, separating foundational primitives from distributed networking:
 
 ### Category A — Numeric Primitives (Canonical Foundation)
-- Primary Genesis Primitives: Local origin $Q(0)$ and calibration of compute unit $U$ along $d_1$ in $Q(1)$ ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) v1.1.0).
+- Primary Genesis Primitives: Local origin $Q(0)$ and calibration of compute unit $U$ along $d_1$ in $Q(1)$ ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) v1.1.2).
 - Secondary DCC Anchors: Elementary integer properties, parity partitions ({% include term.html id="q-even" %}, {% include term.html id="q-odd" %}), single-digit anchors $Q(2) \dots Q(9)$, and emergent roots $\phi, \sqrt{2}$ ([`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}) v1.1.0).
 
 ### Category B — Operations and Morphisms (Canonical Primitive Envelope)
 - Multi-dimensional axes ($d_k$), Clifford geometric algebra ($\mathcal{C}\ell_{p,q}$), and float-free rotors ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) v1.2.0).
-- Optimization morphisms: Content-addressed memory reuse ({% include term.html id="q-reuse" %}) and identity short-circuiting ({% include term.html id="q-bypass" %}) normatively integrated into the Universal Envelope ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) v1.2.0).
+- Optimization morphisms: Content-addressed memory reuse ({% include term.html id="q-reuse" %}) and identity short-circuiting ({% include term.html id="q-bypass" %}) normatively integrated into the Universal Envelope ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) v1.2.1).
 - Higher-order self-optimization workflows ({% include term.html id="qn-rsi" text="Q(rsi)" %}).
 
 ### Category C — Data Structures and Workflows
@@ -482,15 +492,15 @@ Development proceeds sequentially, separating foundational primitives from distr
 
 ### Category D — Local-First Base Domains
 Base domains project directly from Layer 1 and Layer 2, executing 100% locally via local $\mathrm{cdqn}$ data movement without network consensus:
-- **{% include term.html id="qm" text="Qm" %} (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) v1.2.0, `docs/qm_calculus.md`).
-- **$\mathrm{Qs}$ (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal assertion verification (`docs/qs.md`).
-- **$\mathrm{Qphy}$ (Quang Physics):** Thermodynamic simulations, discrete quantum models, and physical entropy tracking (`docs/qphy.md`).
+- **{% include term.html id="qm" text="Qm" %} (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) v1.2.0, [`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }}) v1.1.0).
+- **{% include term.html id="qs" text="Qs" %} (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal intent contracts ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) v1.0.0).
+- **$\mathrm{Qphy}$ (Quang Physics):** Thermodynamic simulations, discrete quantum models, and physical entropy tracking (`docs/qphy.md`, Pending).
 - **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
   - **{% include term.html id="qlog" %}:** Product space $\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$ governing constructive proof theory and type deductions.
   - **{% include term.html id="qbio" %}:** Product space $\mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$ governing non-equilibrium dissipative metabolic systems and active inference.
 
 ### Category E — Runtime and Distributed Networking
-- Content-Addressed Expression DAG specification ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) v1.0.2).
+- Content-Addressed Expression DAG specification ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) v1.0.3).
 - Intermediate representation ({% include term.html id="qnir" %}) instruction set and bounded virtual execution handler.
 - High-level authoring language ({% include term.html id="qnlang" %}) syntax.
 - $\mathrm{cdqn}$ distributed chaining, swarm aggregation, and public attestation protocol feeding {% include term.html id="chronosa" %}.
@@ -520,5 +530,5 @@ The metric and identity envelopes provide native, cryptographically verifiable t
 The following formal specifications remain open for subsequent releases:
 1. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
 2. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
-3. Formal specification of remaining local base domains ($\mathrm{Qs}$, $\mathrm{Qphy}$) and discrete analysis (`docs/qm_calculus.md`).
+3. Formal domain specification for Quang Physics (`docs/qphy.md`: thermodynamic simulations, discrete quantum Hamiltonians, and physical entropy accounting).
 4. Concrete execution and validation mechanics for composite {% include term.html id="qn-workflow" text="Q(workflow)" %} payloads and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
