@@ -1,0 +1,69 @@
+{% comment %}
+  CDQN Automated Bidirectional Bridge Engine
+  Handles:
+  1. Reflection -> Technical Specs & External IRL Social Posts
+  2. Technical Spec -> Related Reflections Backlinks
+{% endcomment %}
+
+{% if page.category == "Reflection" %}
+  <hr style="margin-top: 3rem;">
+  <section class="reflection-bridge" style="background: var(--code-bg); padding: 1rem 1.2rem; border-radius: 8px; border: 1px solid var(--border);">
+    <h3 style="margin-top: 0;">Declarative Knowledge Topology</h3>
+
+    {% if page.specs_grounded and page.specs_grounded.size > 0 %}
+      <p><strong>Normative Technical Grounding:</strong></p>
+      <ul>
+        {% for spec_slug in page.specs_grounded %}
+          {% assign target_doc = site.pages | where: "slug", spec_slug | first %}
+          {% if target_doc %}
+            <li>
+              <a href="{{ target_doc.url | relative_url }}"><strong>{{ target_doc.title | default: target_doc.name }}</strong></a>
+              <code>({{ spec_slug }}.md)</code>
+            </li>
+          {% else %}
+            <li><code>{{ spec_slug }}</code> <small>(Registered dependency)</small></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if page.irl_discussions %}
+      <p><strong>External Context & Community Traversal:</strong></p>
+      <ul>
+        {% if page.irl_discussions.linkedin and page.irl_discussions.linkedin != "" %}
+          <li><strong>LinkedIn Thread:</strong> <a href="{{ page.irl_discussions.linkedin }}" target="_blank" rel="noopener noreferrer">View Discussion Archive</a></li>
+        {% endif %}
+        {% if page.irl_discussions.x_twitter and page.irl_discussions.x_twitter != "" %}
+          <li><strong>X (Twitter) Thread:</strong> <a href="{{ page.irl_discussions.x_twitter }}" target="_blank" rel="noopener noreferrer">View Discussion Archive</a></li>
+        {% endif %}
+      </ul>
+    {% endif %}
+  </section>
+
+{% else %}
+  {% comment %} Logic for Normative Technical Pages: Auto-discover mentioning reflections {% endcomment %}
+  {% assign current_slug = page.slug | default: page.name | remove: ".md" %}
+  {% assign related_reflections = "" | split: "" %}
+
+  {% for p in site.pages %}
+    {% if p.category == "Reflection" and p.specs_grounded contains current_slug %}
+      {% assign related_reflections = related_reflections | push: p %}
+    {% endif %}
+  {% endfor %}
+
+  {% if related_reflections.size > 0 %}
+    <hr style="margin-top: 3rem;">
+    <section class="reflection-backlinks" style="background: var(--code-bg); padding: 1rem 1.2rem; border-radius: 8px; border: 1px solid var(--border);">
+      <h3 style="margin-top: 0;">Informative Context & Epistemic Reflections</h3>
+      <p><small>The following community reflections and external case studies contextualize this technical specification:</small></p>
+      <ul>
+        {% for ref in related_reflections %}
+          <li>
+            <a href="{{ ref.url | relative_url }}"><strong>{{ ref.title }}</strong></a>
+            <span class="badge">{{ ref.updated | default: ref.date | date: "%Y-%m-%d" }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+{% endif %}
