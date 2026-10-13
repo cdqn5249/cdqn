@@ -1,7 +1,7 @@
 {% comment %}
   CDQN Automated Bidirectional Bridge Engine
   Handles:
-  1. Reflection -> Technical Specs & External IRL Social Posts
+  1. Reflection -> Technical Specs (via site.data.navigation) & External Social Posts
   2. Technical Spec -> Related Reflections Backlinks
 {% endcomment %}
 
@@ -14,14 +14,24 @@
       <p><strong>Normative Technical Grounding:</strong></p>
       <ul>
         {% for spec_slug in page.specs_grounded %}
-          {% assign target_doc = site.pages | where: "slug", spec_slug | first %}
-          {% if target_doc %}
+          {% comment %} Query site.data.navigation where slug is guaranteed to exist {% endcomment %}
+          {% assign nav_item = site.data.navigation | where: "slug", spec_slug | first %}
+          {% if nav_item %}
             <li>
-              <a href="{{ target_doc.url | relative_url }}"><strong>{{ target_doc.title | default: target_doc.name }}</strong></a>
+              <a href="{{ nav_item.url | relative_url }}"><strong>{{ nav_item.title }}</strong></a>
               <code>({{ spec_slug }}.md)</code>
             </li>
           {% else %}
-            <li><code>{{ spec_slug }}</code> <small>(Registered dependency)</small></li>
+            {% assign spec_file = spec_slug | append: ".md" %}
+            {% assign page_item = site.pages | where: "name", spec_file | first %}
+            {% if page_item %}
+              <li>
+                <a href="{{ page_item.url | relative_url }}"><strong>{{ page_item.title | default: page_item.name }}</strong></a>
+                <code>({{ spec_slug }}.md)</code>
+              </li>
+            {% else %}
+              <li><code>{{ spec_slug }}</code> <small>(Registered dependency)</small></li>
+            {% endif %}
           {% endif %}
         {% endfor %}
       </ul>
@@ -41,7 +51,7 @@
   </section>
 
 {% else %}
-  {% comment %} Logic for Normative Technical Pages: Auto-discover mentioning reflections {% endcomment %}
+  {% comment %} Logic for Technical Pages: Auto-discover mentioning reflections {% endcomment %}
   {% assign current_slug = page.slug | default: page.name | remove: ".md" %}
   {% assign related_reflections = "" | split: "" %}
 
