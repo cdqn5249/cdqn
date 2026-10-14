@@ -21,7 +21,7 @@ Every computation is modeled as a finite state transition with strictly declared
    *Details:* [Qm Mathematics](https://cdqn5249.github.io/cdqn/qm.html) · [Qm Geometry](https://cdqn5249.github.io/cdqn/qm_geometry.html) · [Qm Calculus](https://cdqn5249.github.io/cdqn/qm_calculus.html)
 
 2. **Thermodynamically Governed AI & Human Alignment**  
-   Provides structural circuit breakers against unconstrained autonomous recursive self-improvement ($Qn(\text{rsi})$). AI processes execute strictly as delegated proxies bounded by machine-readable human intent contracts and finite, non-renewable compute budgets.  
+   Provides structural circuit breakers against unconstrained autonomous recursive self-improvement ( $Qn(\text{rsi})$ ). AI processes execute strictly as delegated proxies bounded by machine-readable human intent contracts and finite, non-renewable compute budgets.  
    *Details:* [Qs Semantics & Intent](https://cdqn5249.github.io/cdqn/qs.html) · [Q(0)/Q(1) Genesis](https://cdqn5249.github.io/cdqn/q0_q1.html)
 
 3. **Verifiable Distributed Swarms & Asynchronous Consensus**  
