@@ -28,9 +28,9 @@ $$\text{Proposal} \xrightarrow{\quad} \text{Construction} \xrightarrow{\quad} \t
 Every candidate abstraction is subjected to the constitutional **SIMEMP** framework:
 
 * **Security:** Verifiable state transitions and post-quantum cryptographic (PQC) dual-ring boundaries.
-* **Identity:** Monotonic causal birth along an unbroken arrow back to local hardware entropy ($Q(0)_N$).
-* **Metric:** Strict thermodynamic accounting; state transitions are bounded by Landauer's dissipation limit ($W \ge k_B T \ln 2$) and metered in discrete work quanta ($Q(1)$).
-* **Efficiency:** Minimizing operational dissipation across the Memory Wall via graph reuse ($Q(\text{reuse})$).
+* **Identity:** Monotonic causal birth along an unbroken arrow back to local hardware entropy ( $Q(0)_N$ ).
+* **Metric:** Strict thermodynamic accounting; state transitions are bounded by Landauer's dissipation limit ( $W \ge k_B T \ln 2$ ) and metered in discrete work quanta ( $Q(1)$ ).
+* **Efficiency:** Minimizing operational dissipation across the Memory Wall via graph reuse ( $Q(\text{reuse})$ ).
 * **Modularity:** Strict isolation across abstraction layers through validating SIMEMP Gateways.
 * **Portability:** Substrate-invariant evaluation decoupling the invariant mathematical milestone from physical silicon telemetry.
 
