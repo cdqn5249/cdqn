@@ -72,10 +72,10 @@
 </head>
 <body>
 
-  <!-- Top Collapsible Navigation Matrix -->
+  <!-- Top Collapsible Navigation Matrix (Retracted by Default) -->
   <header>
-    <details {% if page.url == "/" or page.permalink == "/" %}open{% endif %} style="margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);">
-      <summary style="cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; align-items: center;">
+    <details style="margin-bottom: 1.5rem; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);">
+      <summary style="cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; align-items: center; user-select: none;">
         <span>CDQN Documentation Matrix</span>
         <span class="badge">{{ site.data.navigation.size }} Specifications</span>
       </summary>
@@ -112,7 +112,7 @@
 
   <hr>
 
-  <!-- Document Content -->
+  <!-- Document Content & Automated Knowledge Topology Bridge -->
   <main>
     {{ content }}
     {% include reflection_bridge.html %}
