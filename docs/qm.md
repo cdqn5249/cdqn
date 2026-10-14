@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.2
+version: 1.2.3
 updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -53,7 +53,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.2 |
+| **Version** | 1.2.3 |
 | **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -63,13 +63,7 @@ terms_used:
 
 ## Normative References
 
-<details markdown="1" style="margin: 1.2rem 0; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);">
-<summary style="cursor: pointer; font-weight: 600; user-select: none;">
-  <span>Normative References & Precedence Hierarchy (10 Specifications)</span>
-</summary>
-
-<div style="margin-top: 0.8rem;">
-<p><small>The following documents establish the physical, structural, and legal constraints governing $$\mathrm{Qm}$$. If a technical conflict arises, <a href="{{ '/simemp.html' | relative_url }}"><code>simemp.md</code></a> governs; if a structural conflict arises, <a href="{{ '/abstractionLayers.html' | relative_url }}"><code>abstractionLayers.md</code></a> governs; if a legal conflict arises, <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md"><code>LICENSE.md</code></a> governs.</small></p>
+The following documents establish the physical, structural, and legal constraints governing $$\mathrm{Qm}$$. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
 
 | Document | Role | Target |
 |---|---|---|
@@ -83,9 +77,6 @@ terms_used:
 | `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification (v1.0.3) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-
-</div>
-</details>
 
 ---
 
@@ -283,7 +274,7 @@ $$q_C = \left\lfloor \frac{|\mu_{\mathrm{exact}}|}{\delta_z} \right\rfloor$$
 
 $$r_C = |\mu_{\mathrm{exact}}| - (q_C \cdot \delta_z)$$
 
-$$\sigma_C = \operatorname{sgn}(\mu_{\mathrm{exact}})$$
+$$\sigma_C = \mathrm{sgn}(\mu_{\mathrm{exact}})$$
 
 ### 5.2. Multiplication
 Multiplication scales magnitude and composes orientation parity:
@@ -316,7 +307,7 @@ Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$
 
 **2. Finite State Space (Northcott's Theorem):** By Northcott's theorem, the set of rational coordinates possessing bounded height is strictly finite:
 
-$$\# \Big\{ x \in \mathbb{Q} \;\Big|\; h(x) \le H_{\max} \Big\} \lt \infty$$
+$$\left| \Big\{ x \in \mathbb{Q} \;\Big|\; h(x) \le H_{\max} \Big\} \right| \lt \infty$$
 
 Candidate solutions in $$\mathrm{Qm}$$ therefore inhabit a finite discrete lattice rather than an unmetered void.
 
@@ -342,7 +333,7 @@ Ordering on dimension $$d$$ is positional, evaluated over bounded constructive i
 
 $$I(A) = [q_A \cdot \delta_z + r_A, \, q_A \cdot \delta_z + r_A + \epsilon_z]$$
 
-$$\operatorname{Rel}(A, B) = \begin{cases} 
+$$\mathrm{Rel}(A, B) = \begin{cases} 
 A \lt B & \text{if } \sup I(A) \lt \inf I(B) \\
 A \gt B & \text{if } \inf I(A) \gt \sup I(B) \\
 A \equiv_z B & \text{if } I(A) \equiv I(B) \text{ and } r_A = r_B \\
