@@ -15,7 +15,7 @@ specs_grounded:
   - qexpr
   - q0_q1
 irl_discussions:
-  linkedin: ""
+  linkedin: "https://www.linkedin.com/feed/update/urn:li:activity:https://lnkd.in/p/gdGHXFyN/"
   x_twitter: ""
 ---
 
