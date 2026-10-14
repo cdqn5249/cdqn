@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.3
+version: 1.2.4
 updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -53,7 +53,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.3 |
+| **Version** | 1.2.4 |
 | **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -116,7 +116,7 @@ Operational validity is verified empirically via {% include term.html id="comput
 ### 1.2. Explicit Exclusions: What Qm Is Not
 - **Not an IEEE 754 Floating-Point System:** Under **Axiom 10**, approximations, mantissa round-offs, subnormal representations, and $$+0.0 / -0.0$$ distinctions are prohibited.
 - **Not a Non-Constructive Continuum:** $$\mathrm{Qm}$$ does not admit actual infinities ($$\aleph_0, \aleph_1$$), uncomputable real numbers (non-constructive Dedekind cuts), or undecidable Cauchy sequences.
-- **Not an Unbounded Diophantine Search Oracle:** While arithmetic operations are defined through Diophantine constraints, $$\mathrm{Qm}$$ explicitly rejects unmetered infinite search spaces ($$\mathbb{Z}^n, \mathbb{Q}^n$$). Classical undecidability (Hilbert's Tenth Problem, DPRM 1970) is neutralized: all evaluations are constrained to finite logarithmic height bounds ($$h(x) \le H_{\max}$$) declared within the {% include term.html id="metric-envelope" %}.
+- **Not an Unbounded Diophantine Search Oracle:** While arithmetic operations are defined through Diophantine constraints, $$\mathrm{Qm}$$ explicitly rejects unmetered infinite search spaces ($$\mathbb{Z}^n, \mathbb{Q}^n$$). Classical undecidability (Hilbert's Tenth Problem, DPRM 1970) is neutralized: all evaluations are constrained to finite logarithmic height bounds ($$h(x) \le H_{\mathrm{max}}$$) declared within the {% include term.html id="metric-envelope" %}.
 - **Not an Authoring Language:** High-level source grammar belongs to {% include term.html id="qnlang" %}.
 - **Not an Intermediate Execution Backend:** Hardware abstraction and register scheduling belong to {% include term.html id="qnir" %}.
 - **Not an Unbounded Symbolic Container:** Unevaluated expression trees belong to {% include term.html id="qexpr" %}; $$\mathrm{Qm}$$ governs their deterministic numerical collapse.
@@ -303,11 +303,11 @@ subject to the following invariant conditions:
 #### Height-Bounded Diophantine Decidability
 Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$$) inherit algorithmic undecidability (Hilbert's Tenth Problem). In $$\mathrm{Qm}$$, this undecidability void is closed structurally across three physical constraints:
 
-**1. Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity: $$h(u/v) = \max(\log |u|, \, \log |v|)$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\max}$$ and work budget $$W_{\mathrm{budget}}$$.
+**1. Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity: $$h(u/v) = \mathrm{max}(\mathrm{log}|u|, \, \mathrm{log}|v|)$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\mathrm{max}}$$ and work budget $$W_{\mathrm{budget}}$$.
 
 **2. Finite State Space (Northcott's Theorem):** By Northcott's theorem, the set of rational coordinates possessing bounded height is strictly finite:
 
-$$\left| \Big\{ x \in \mathbb{Q} \;\Big|\; h(x) \le H_{\max} \Big\} \right| \lt \infty$$
+$$\left\lvert \left\lbrace x \in \mathbb{Q} \;\middle\vert\; h(x) \le H_{\mathrm{max}} \right\rbrace \right\rvert \lt \infty$$
 
 Candidate solutions in $$\mathrm{Qm}$$ therefore inhabit a finite discrete lattice rather than an unmetered void.
 
