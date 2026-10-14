@@ -39,23 +39,10 @@
               const main = document.querySelector('main');
               if (!main) return;
 
-              // 1. Try exact ref- ID inside main
               let target = document.getElementById(rawHash) || document.getElementById('ref-' + slug);
-
-              // 2. Try bare slug ID inside main
-              if (!target) {
-                target = main.querySelector('#' + CSS.escape(slug));
-              }
-
-              // 3. Try link pointing specifically to glossary.html#slug inside main (NEVER header)
-              if (!target) {
-                target = main.querySelector('a[href*="glossary.html#' + CSS.escape(slug) + '"]');
-              }
-
-              // 4. Try any link with exact hash ending inside main
-              if (!target) {
-                target = main.querySelector('a[href$="#' + CSS.escape(slug) + '"]');
-              }
+              if (!target) target = main.querySelector('#' + CSS.escape(slug));
+              if (!target) target = main.querySelector('a[href*="glossary.html#' + CSS.escape(slug) + '"]');
+              if (!target) target = main.querySelector('a[href$="#' + CSS.escape(slug) + '"]');
 
               if (target) {
                 setTimeout(() => {
@@ -69,6 +56,38 @@
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+  <!-- Global Retractable Normative References Engine -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const h2 = document.getElementById('normative-references');
+      if (h2) {
+        const elementsToWrap = [];
+        let el = h2.nextElementSibling;
+        while (el && !['H1', 'H2', 'HR'].includes(el.tagName)) {
+          elementsToWrap.push(el);
+          el = el.nextElementSibling;
+        }
+
+        if (elementsToWrap.length > 0) {
+          const details = document.createElement('details');
+          details.style.cssText = 'margin: 1.2rem 0; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);';
+
+          const summary = document.createElement('summary');
+          summary.style.cssText = 'cursor: pointer; font-weight: 600; user-select: none;';
+          summary.textContent = 'Normative References & Precedence Hierarchy';
+          details.appendChild(summary);
+
+          const wrapper = document.createElement('div');
+          wrapper.style.marginTop = '0.8rem';
+          elementsToWrap.forEach(node => wrapper.appendChild(node));
+          details.appendChild(wrapper);
+
+          h2.parentNode.insertBefore(details, el);
+        }
+      }
+    });
+  </script>
 </head>
 <body>
 
