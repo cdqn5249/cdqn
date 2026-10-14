@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.4
+version: 1.2.5
 updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -53,7 +53,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.4 |
+| **Version** | 1.2.5 |
 | **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -177,7 +177,7 @@ Sign is not an independent arithmetic substance. It is an **oriented displacemen
 - The base transition from $$Q(0)$$ to {% include term.html id="q1" text="Q(1)" %} along axis $$d_1$$ defines canonical positive alignment ($$\oplus$$).
 - Inversion is governed by the 1D reflection functor $$\mathcal{I}_d$$, satisfying the involution property:
 
-$$\mathcal{I}_d: \Sigma \to \Sigma, \quad \mathcal{I}_d^2 = \mathrm{id}, \quad \text{where } \Sigma = \{ \ominus, \, \odot, \, \oplus \}$$
+$$\mathcal{I}_d: \Sigma \to \Sigma, \quad \mathcal{I}_d^2 = \mathrm{id}, \quad \mathrm{where} \; \Sigma = \{ \ominus, \, \odot, \, \oplus \}$$
 
 - **$$\odot$$ (Origin):** Coincident with local $$Q(0)$$ (zero metric displacement).
 - **$$\oplus$$ (Collinear):** Parallel to the basis transition $$Q(0) \to Q(1)$$.
@@ -291,32 +291,29 @@ The resulting unscaled quantity collapses to $$\langle \sigma_C, q_C, z, r_C, d 
 
 ### 5.3. Division as a Constrained Diophantine Equation
 
-Division in $$\mathrm{Qm}$$ is not an unconstrained rational projection; it is a bounded constraint relation:
+Division in $$\mathrm{Qm}$$ is defined not as an unconstrained rational projection, but as a bounded constraint equation. For any input pair $$A$$ and $$B$$, the morphism determines quotient $$C$$ and remainder $$R$$ satisfying:
 
-$$\text{Given } A, B \implies \text{determine } C, R \quad \text{such that } A = (B \times C) + R$$
+$$A = (B \times C) + R$$
 
-subject to the following invariant conditions:
-1. Denominator non-zero: $$B \neq Q(0)$$ (Enforced by DCC profile constraint).
-2. Remainder boundedness: $$0 \le |R| \lt |B|$$ (Conserved residual).
-3. Orientation composition: $$\sigma_C = \sigma_A \otimes \sigma_B$$.
+The evaluation is constrained by three invariant conditions: the divisor must be non-zero ($$B \neq Q(0)$$), the remainder is strictly bounded ($$0 \le |R| \lt |B|$$), and the orientation sign satisfies parity composition ($$\sigma_C = \sigma_A \otimes \sigma_B$$).
 
 #### Height-Bounded Diophantine Decidability
-Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$$) inherit algorithmic undecidability (Hilbert's Tenth Problem). In $$\mathrm{Qm}$$, this undecidability void is closed structurally across three physical constraints:
 
-**1. Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity: $$h(u/v) = \mathrm{max}(\mathrm{log}|u|, \, \mathrm{log}|v|)$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\mathrm{max}}$$ and work budget $$W_{\mathrm{budget}}$$.
+Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$$) inherit algorithmic undecidability under Hilbert's Tenth Problem. In $$\mathrm{Qm}$$, this undecidability void is closed structurally across three physical constraints:
 
-**2. Finite State Space (Northcott's Theorem):** By Northcott's theorem, the set of rational coordinates possessing bounded height is strictly finite:
+**Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity, bounded by $$h(u/v) = \mathrm{max}(\mathrm{log}|u|, \, \mathrm{log}|v|) \le H_{\mathrm{max}}$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\mathrm{max}}$$ and work budget $$W_{\mathrm{budget}}$$.
 
-$$\left\lvert \left\lbrace x \in \mathbb{Q} \;\middle\vert\; h(x) \le H_{\mathrm{max}} \right\rbrace \right\rvert \lt \infty$$
+**Finite State Space (Northcott's Theorem):** By Northcott's theorem, the set of rational coordinates of bounded height is strictly finite:
 
-Candidate solutions in $$\mathrm{Qm}$$ therefore inhabit a finite discrete lattice rather than an unmetered void.
+$$\mathrm{Card}\big(\{ x \in \mathbb{Q} \mid h(x) \le H_{\mathrm{max}} \}\big) \lt \infty$$
 
-**3. Deterministic Decidability:** A Diophantine evaluation is decidable by construction: it either terminates with an exact quotient-remainder pair, reaches Terminal Exactness ($$R = Q(0)$$), or halts unconditionally upon budget exhaustion via **Metric Exhaustion** (`Axiom 6`), emitting `RECEIPT_BUDGET_EXHAUSTED`.
+Therefore, candidate solutions in $$\mathrm{Qm}$$ inhabit a finite discrete lattice rather than an unmetered void.
 
-#### Terminal Rejection:
-Attempted division where the divisor satisfies $$B = Q(0)$$ is intercepted by the gateway, terminating with an immutable receipt:
-- **Terminal Rejection Receipt:** `RECEIPT_DIVISION_BY_ZERO_REJECTED`  
-  `⟨ Status: REJECTED, Code: ERR_DIV_ZERO ⟩`
+**Deterministic Decidability:** A Diophantine evaluation is decidable by construction: it either terminates with an exact quotient-remainder pair, reaches Terminal Exactness ($$R = Q(0)$$), or halts unconditionally upon budget exhaustion via **Metric Exhaustion** (`Axiom 6`), emitting `RECEIPT_BUDGET_EXHAUSTED`.
+
+#### Terminal Rejection
+
+Attempted division by origin $$Q(0)$$ violates the DCC constraint and is intercepted deterministically at the gateway, emitting the immutable receipt `RECEIPT_DIVISION_BY_ZERO_REJECTED` with status `REJECTED` and code `ERR_DIV_ZERO`.
 
 ### 5.4. Remainder Depth and Dissipative Truncation
 When recursive compositions cause the symbolic tree of $$r_C$$ to exceed the {% include term.html id="metric-envelope" text="Metric Envelope" %} ceiling $$\mathrm{Depth}_{\max}$$:
@@ -334,10 +331,10 @@ Ordering on dimension $$d$$ is positional, evaluated over bounded constructive i
 $$I(A) = [q_A \cdot \delta_z + r_A, \, q_A \cdot \delta_z + r_A + \epsilon_z]$$
 
 $$\mathrm{Rel}(A, B) = \begin{cases} 
-A \lt B & \text{if } \sup I(A) \lt \inf I(B) \\
-A \gt B & \text{if } \inf I(A) \gt \sup I(B) \\
-A \equiv_z B & \text{if } I(A) \equiv I(B) \text{ and } r_A = r_B \\
-\text{Indeterminate} & \text{if } I(A) \cap I(B) \neq \emptyset \text{ and } r_A \neq r_B
+A \lt B & \mathrm{if} \; \sup I(A) \lt \inf I(B) \\
+A \gt B & \mathrm{if} \; \inf I(A) \gt \sup I(B) \\
+A \equiv_z B & \mathrm{if} \; I(A) \equiv I(B) \;\mathrm{and}\; r_A = r_B \\
+\mathrm{Indeterminate} & \mathrm{if} \; I(A) \cap I(B) \neq \emptyset \;\mathrm{and}\; r_A \neq r_B
 \end{cases}$$
 
 When intervals overlap such that inequality cannot be constructively decided at zoom $$z$$, $$\mathrm{Qm}$$ forbids heuristic tie-breaking. It emits the deterministic receipt `ORDERING_INDETERMINATE_AT_ZOOM`. To resolve ordering, the caller must allocate additional compute budget to deepen zoom resolution ($$z \to z + \Delta z$$).
