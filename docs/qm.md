@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.5
+version: 1.2.6
 updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -53,7 +53,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.5 |
+| **Version** | 1.2.6 |
 | **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -198,7 +198,7 @@ where $$\kappa: \mathbb{N} \to \mathbb{N}$$ is a strictly monotonic resolution l
 ### 3.4. Conserved Residual ({% include term.html id="remainder-r" text="Remainder r" %})
 The residual $$r_z$$ is the exact difference between the unscaled value and its discrete quotient:
 
-$$0 \le |r_z| \lt \delta_z(d)$$
+$$0 \le \lvert r_z \rvert \lt \delta_z(d)$$
 
 The remainder is never discarded silently. It acts as the exact, causal input state for subsequent resolution expansions.
 
@@ -270,9 +270,9 @@ $$\mu_{\mathrm{exact}} = (\sigma_A q_A \cdot \delta_z + \sigma_A r_A) + (\sigma_
 
 Step 2: The result is partitioned into discrete quotient $$q_C$$, residual remainder $$r_C$$, and orientation $$\sigma_C$$:
 
-$$q_C = \left\lfloor \frac{|\mu_{\mathrm{exact}}|}{\delta_z} \right\rfloor$$
+$$q_C = \left\lfloor \frac{\lvert \mu_{\mathrm{exact}} \rvert}{\delta_z} \right\rfloor$$
 
-$$r_C = |\mu_{\mathrm{exact}}| - (q_C \cdot \delta_z)$$
+$$r_C = \lvert \mu_{\mathrm{exact}} \rvert - (q_C \cdot \delta_z)$$
 
 $$\sigma_C = \mathrm{sgn}(\mu_{\mathrm{exact}})$$
 
@@ -295,17 +295,17 @@ Division in $$\mathrm{Qm}$$ is defined not as an unconstrained rational projecti
 
 $$A = (B \times C) + R$$
 
-The evaluation is constrained by three invariant conditions: the divisor must be non-zero ($$B \neq Q(0)$$), the remainder is strictly bounded ($$0 \le |R| \lt |B|$$), and the orientation sign satisfies parity composition ($$\sigma_C = \sigma_A \otimes \sigma_B$$).
+The evaluation is constrained by three invariant conditions: the divisor must be non-zero ($$B \neq Q(0)$$), the remainder is strictly bounded ($$0 \le \lvert R \rvert \lt \lvert B \rvert$$), and the orientation sign satisfies parity composition ($$\sigma_C = \sigma_A \otimes \sigma_B$$).
 
 #### Height-Bounded Diophantine Decidability
 
 Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$$) inherit algorithmic undecidability under Hilbert's Tenth Problem. In $$\mathrm{Qm}$$, this undecidability void is closed structurally across three physical constraints:
 
-**Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity, bounded by $$h(u/v) = \mathrm{max}(\mathrm{log}|u|, \, \mathrm{log}|v|) \le H_{\mathrm{max}}$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\mathrm{max}}$$ and work budget $$W_{\mathrm{budget}}$$.
+**Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity, bounded by $$h(u/v) = \mathrm{max}(\mathrm{log}\lvert u \rvert, \, \mathrm{log}\lvert v \rvert) \le H_{\mathrm{max}}$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\mathrm{max}}$$ and work budget $$W_{\mathrm{budget}}$$.
 
 **Finite State Space (Northcott's Theorem):** By Northcott's theorem, the set of rational coordinates of bounded height is strictly finite:
 
-$$\mathrm{Card}\big(\{ x \in \mathbb{Q} \mid h(x) \le H_{\mathrm{max}} \}\big) \lt \infty$$
+$$\mathrm{Card}\big(\{ x \in \mathbb{Q} \colon h(x) \le H_{\mathrm{max}} \}\big) \lt \infty$$
 
 Therefore, candidate solutions in $$\mathrm{Qm}$$ inhabit a finite discrete lattice rather than an unmetered void.
 
@@ -372,7 +372,7 @@ All computable real-world mathematics derives systematically from this foundatio
 
 To prevent cascading structural collapse across dependent mathematical workflows, high-centrality mathematical primitives are formalized as {% include term.html id="q-anchor" text="Q(anchor)" %} entities (`docs/_data/glossary/architecture.yml`):
 
-$$\chi(\alpha) = \frac{|\mathcal{C}^+(\alpha)|}{|\mathcal{V}|} \ge \Theta_{\chi}$$
+$$\chi(\alpha) = \frac{\lvert \mathcal{C}^+(\alpha) \rvert}{\lvert \mathcal{V} \rvert} \ge \Theta_{\chi}$$
 
 ```
                          CONCRETE INSTANTIATION (Fragile)
