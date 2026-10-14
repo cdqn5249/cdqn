@@ -16,7 +16,7 @@ specs_grounded:
   - q0_q1
 irl_discussions:
   linkedin: "https://lnkd.in/p/gdGHXFyN/"
-  x_twitter: ""
+  x_twitter: "https://x.com/cdqn5249/status/2110380121702236511"
 ---
 
 # Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us About Finite Computation
