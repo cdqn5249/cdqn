@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.6.0
-updated: 2026-10-11
+version: 1.7.0
+updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -63,7 +63,7 @@ terms_used:
 **Author:** Christophe Duy Quang Nguyen  
 **License:** [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)  
 **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
-**Status:** Canonical Architectural Portal / Active Search Framework
+**Status:** Canonical Architectural Portal — Category A/B & Domain Synchronization
 
 Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 
@@ -74,8 +74,8 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.6.0 |
-| **Last Updated** | 2026-10-11 (Bao Loc, Vietnam) |
+| **Version** | 1.7.0 |
+| **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Category A/B & Domain Synchronization |
@@ -93,7 +93,7 @@ Classical computing abstractions frequently rely on non-constructive assumptions
 $$W \ge k_B T \ln 2$$
 
 Unbounded state spaces are physically non-realizable and excluded from execution.
-- **{% include term.html id="dependencies-determinism" %}:** Every state transition $S_t$ must possess zero conditional entropy given its declared dependencies:
+- **{% include term.html id="dependencies-determinism" %}:** Every state transition $$S_t$$ must possess zero conditional entropy given its declared dependencies:
 
 $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
@@ -122,7 +122,7 @@ Development proceeds through consecutive emergence milestones toward an operatio
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │ CATEGORY A: Foundational Hardware & Single-Digit Primitives     │
-│ • Q(0), Q(1) Genesis & Calibration ── [CANONICAL v1.1.0]        │
+│ • Q(0), Q(1) Genesis & Calibration ── [CANONICAL v1.1.2]        │
 │ • Q(2)...Q(9) Secondary DCC Anchors── [CANONICAL v1.1.0]        │
 ├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 1: Local Base Domains & Spatial Geometry              │
@@ -192,20 +192,29 @@ Development proceeds through consecutive emergence milestones toward an operatio
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
 2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: Structural hierarchy from {% include term.html id="layer-0" text="Layer 0" %} to {% include term.html id="layer-1" text="Layer 1" %}, fractal {% include term.html id="cdqn" %} data movement, substrate vs. invariant ("car vs. road") disjunction, and complexity degree stratification.
-3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin {% include term.html id="q0" text="Q(0)" %}, first unit {% include term.html id="q1" text="Q(1)" %}, abstract compute unit {% include term.html id="compute-unit-u" text="U" %} calibrated to Landauer dissipation ($W \ge k_B T \ln 2$), hardware lifecycle, and crash recovery receipts.
-4. **[Single-Digit Primitives]({{ '/q2_q9.html' | relative_url }})**: Inductive cascade via discrete {% include term.html id="successor-morphism" text="Successor Morphism S" %}, complete single-digit {% include term.html id="q-anchor" text="Q(anchor)" %} spectrum ($Q(2) \dots Q(9)$), emergent constants ($\phi, \sqrt{2}$), constructive parity partitions ({% include term.html id="q-even" text="Q(even)" %}, {% include term.html id="q-odd" text="Q(odd)" %}), and multiplicative domain asymmetries.
+3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin {% include term.html id="q0" text="Q(0)" %}, first unit {% include term.html id="q1" text="Q(1)" %}, abstract compute unit {% include term.html id="compute-unit-u" text="U" %} calibrated to Landauer dissipation ($$W \ge k_B T \ln 2$$), hardware lifecycle, Non-Rogue Invariant, and crash recovery receipts.
+4. **[Single-Digit Primitives]({{ '/q2_q9.html' | relative_url }})**: Inductive cascade via discrete {% include term.html id="successor-morphism" text="Successor Morphism S" %}, complete single-digit {% include term.html id="q-anchor" text="Q(anchor)" %} spectrum ($$Q(2) \dots Q(9)$$), emergent constants ($$\phi, \sqrt{2}$$), constructive parity partitions ({% include term.html id="q-even" text="Q(even)" %}, {% include term.html id="q-odd" text="Q(odd)" %}), and multiplicative domain asymmetries.
 5. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, operational axioms, typed payload profiles, and Category B optimization morphisms.
-6. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric substrate based on discrete tuples $\langle \sigma, q_z, z, r_z, d \rangle$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability along coordinate axes ({% include term.html id="dimension-d" text="Dimension d" %}).
-7. **[Qm Geometry]({{ '/qm_geometry.html' | relative_url }})**: Multi-axial orthogonal frames, Clifford Geometric Algebra ($\mathcal{C}\ell_{p,q}$), float-free rational Cayley rotors, optimization primitives ({% include term.html id="q-reuse" %}, {% include term.html id="q-bypass" %}), and deferred symbolic reduction.
+6. **[Qm Mathematics]({{ '/qm.html' | relative_url }})**: Constructive numeric substrate based on discrete tuples $$\langle \sigma, q_z, z, r_z, d \rangle$$, base-independent scale lattices ({% include term.html id="zoom-z" text="Zoom z" %}), conserved residual cascades ({% include term.html id="remainder-r" text="Remainder r" %}), {% include term.html id="terminal-exactness" %}, Diophantine division constraints, and positional relational decidability along coordinate axes ({% include term.html id="dimension-d" text="Dimension d" %}).
+7. **[Qm Geometry]({{ '/qm_geometry.html' | relative_url }})**: Multi-axial orthogonal frames, Clifford Geometric Algebra ($$\mathcal{C}\ell_{p,q}$$), float-free rational Cayley rotors, optimization primitives ({% include term.html id="q-reuse" %}, {% include term.html id="q-bypass" %}), and deferred symbolic reduction.
 8. **[Qexpr Container]({{ '/qexpr.html' | relative_url }})**: Layer 3 Content-Addressed Expression DAG ({% include term.html id="qexpr" %}), cryptographic hash-consing, six canonical node classes, continued fractions for transcendentals, and hardware capability-aware collapse.
-9. **[Qm Calculus]({{ '/qm_calculus.html' | relative_url }})**: Constructive discrete calculus, {% include term.html id="discrete-exterior-calculus" text="Discrete Exterior Calculus (DEC)" %} on simplicial complexes, nilpotent coboundary operators ($\mathbf{d} \circ \mathbf{d} \equiv Q(0)$), continued fraction generators for transcendental invariants ($\pi, e, \tau, \ln 2$), and the Anchor-Cut verification invariant in discrete time evolution.
-10. **[Qs Semantics]({{ '/qs.html' | relative_url }})**: Constructive relational intent, semantic multivector blades, epistemic modal spectrum (`MODAL_EMPIRICAL` to `MODAL_NARRATIVE`), structural intent contracts in DCC profiles, and triadic intent grounding ($\mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$).
+9. **[Qm Calculus]({{ '/qm_calculus.html' | relative_url }})**: Constructive discrete calculus, {% include term.html id="discrete-exterior-calculus" text="Discrete Exterior Calculus (DEC)" %} on simplicial complexes, nilpotent coboundary operators ($$\mathbf{d} \circ \mathbf{d} \equiv Q(0)$$), continued fraction generators for transcendental invariants ($$\pi, e, \tau, \ln 2$$), and the Anchor-Cut verification invariant in discrete time evolution.
+10. **[Qs Semantics]({{ '/qs.html' | relative_url }})**: Constructive relational intent, semantic multivector blades, epistemic modal spectrum (`MODAL_EMPIRICAL` to `MODAL_NARRATIVE`), structural intent contracts in DCC profiles, and triadic intent grounding ($$\mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$).
 11. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
 12. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
-## 4. License and Open Core Invariants
+## 4. Epistemic Reflections & Real-World Analyses
+
+To preserve lean, deterministic specifications while engaging with broader scientific and computational developments, the framework isolates non-normative essays, real-world case studies, and sociological analyses within the `docs/reflections/` layer. These publications bridge formal computational physics with empirical industry events and public discourse:
+
+* **[Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us About Finite Computation]({{ '/reflections/h10_finite_computation.html' | relative_url }})**  
+  *Published: 2026-10-13* · Analyzes OpenAI's claimed resolution of Hilbert's Tenth Problem over rational numbers ($$H10(\mathbb{Q})$$), the fallacy of unmetered search in classical mathematics, height bounds as physical memory limits, and the shift from Platonic non-constructive proof to Verified Computed Patterns under SIMEMP constraints.
+
+---
+
+## 5. License and Open Core Invariants
 
 The CDQN project is licensed under the **[Scaling Source License (SSL) 1.0]({{ '/glossary.html' | relative_url }}#ssl)**.
 
