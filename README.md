@@ -2,154 +2,70 @@
 
 **Author:** Christophe Duy Quang Nguyen  
 **License:** [Scaling Source License (SSL) 1.0](LICENSE.md)  
-**Parent Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
 **Documentation Portal:** [https://cdqn5249.github.io/cdqn/](https://cdqn5249.github.io/cdqn/)  
 
 ---
 
-## Executive Summary
+## What is CDQN?
 
-**Chained and Distributed Quang Numbers (cdqn)** is a discrete computational framework and fractal data-movement protocol designed to ground computation in non-equilibrium thermodynamics and physical finiteness.
+**CDQN** is a discrete, float-free computational framework and data-movement protocol. It replaces continuous approximations, platform-dependent rounding (IEEE 754), and unbounded execution spaces with physically grounded, thermodynamically metered computation governed by the **SIMEMP** constitutional framework (Security, Identity, Metric, Efficiency, Modularity, Portability).
 
-Classical computing abstractions frequently operate on non-constructive foundations: unbounded memory spaces, continuous unmetered precision, and unmodeled side-channel dissipation. These continuous idealizations generate systemic vulnerabilities: IEEE 754 floating-point rounding drift, Turing-undecidable search voids (Hilbert's Tenth Problem), and unconstrained neural confabulation.
-
-The Qn architecture rejects actual infinities. Every state transition is treated as an irreversible physical event governed by the **SIMEMP** framework and constrained by **Dependencies Determinism**:
-
-$$H(S_t \mid \mathcal{D}(S_t)) = 0$$
-
-An operation is admissible if, and only if, its complete causal dependencies are explicitly declared, its memory allocation is bounded by logarithmic height ceilings, and its execution terminates within a finite thermodynamic budget.
+Every computation is modeled as a finite state transition with strictly declared causal dependencies ($H(S_t \mid \mathcal{D}(S_t)) = 0$), bounded by physical Landauer energy dissipation and verified through immutable receipts.
 
 ---
 
-## Core Theoretical Pillars
+## Core Use Cases
 
-```
-                               THE Qn STACK HIERARCHY
- ┌─────────────────────────────────────────────────────────────────────────────┐
- │ LAYER 4+: Domain Lattices & Virtual Coordination                            │
- │ • Base Domains: Constructive Mathematics (Qm), Semantics (Qs), Physics (Qphy)│
- │ • Emergent Products: Qlog (Qm ⊗ Qs), Qbio (Qphy ⊗ Qm ⊗ Qs)                  │
- │ • Virtual Sheaf Coordination: Chronosa (Non-local causal intelligence)      │
- ├─────────────────────────────────────────────────────────────────────────────┤
- │ LAYER 3: Symbolic Composition (CAE-DAG / Qexpr)                             │
- │ • Content-Addressed Expression DAGs with cryptographic hash-consing.        │
- │ • Radix-neutral continued fractions for transcendentals; zero float drift.  │
- ├─────────────────────────────────────────────────────────────────────────────┤
- │ LAYER 2: Governed Morphisms & Spatial Frames                                │
- │ • Constructive R-algebra (+, -, ×, ÷) with exact remainder conservation (r).│
- │ • Clifford Geometric Algebra (Cl_p,q) and float-free rational Cayley rotors. │
- │ • Category B optimizations: Q(reuse) [W = 0] and Q(bypass).                 │
- ├─────────────────────────────────────────────────────────────────────────────┤
- │ LAYER 1: Local Node Genesis Layer                                           │
- │ • Q(0)_N: Local physical origin (Empty birth context, machine identity).    │
- │ • Q(1): First unit measure; baseline for Abstract Compute Unit U along d1.  │
- │ • Inductive Peano succession: Q(2)...Q(9) Secondary DCC Anchors.            │
- ├─────────────────────────────────────────────────────────────────────────────┤
- │ LAYER 0: Physical Substrate (Root of Finiteness)                            │
- │ • Silicon thermal noise, ring oscillators, and hardware execution context.   │
- │ • Calibrated to physical Landauer bound: W ≥ k_B T ln 2.                    │
- └─────────────────────────────────────────────────────────────────────────────┘
-```
+1. **Deterministic Scientific & Geometric Simulation**  
+   Executes exact rational arithmetic, Clifford geometric algebra ($\mathcal{C}\ell_{p,q}$), and Discrete Exterior Calculus (DEC) without floating-point drift, transcendental rounding errors, or singularities.  
+   *Details:* [Qm Mathematics](https://cdqn5249.github.io/cdqn/qm.html) · [Qm Geometry](https://cdqn5249.github.io/cdqn/qm_geometry.html) · [Qm Calculus](https://cdqn5249.github.io/cdqn/qm_calculus.html)
 
-### 1. Thermodynamic Grounding & Landauer Invariance
-Computation is not free. In accordance with Landauer's principle, any irreversible erasure or manipulation of information dissipates thermodynamic work:
+2. **Thermodynamically Governed AI & Human Alignment**  
+   Provides structural circuit breakers against unconstrained autonomous recursive self-improvement ($Qn(\text{rsi})$). AI processes execute strictly as delegated proxies bounded by machine-readable human intent contracts and finite, non-renewable compute budgets.  
+   *Details:* [Qs Semantics & Intent](https://cdqn5249.github.io/cdqn/qs.html) · [Q(0)/Q(1) Genesis](https://cdqn5249.github.io/cdqn/q0_q1.html)
 
-$$W \ge k_B T \ln 2$$
-
-In the Qn universe, the minimal transition from local genesis origin $Q(0)$ to first unit $Q(1)$ defines the **Abstract Compute Unit $U$**, calibrated to $\approx 2.87 \times 10^{-21}\text{ Joules}$ at ambient temperature ($T = 300\text{ K}$). Every execution allocates a finite metric budget in units of $Q(1)$. Divergent loops are physically non-realizable: operations are **total by budget**, terminating in exact remainder closure ($r = Q(0)$) or halting deterministically via **Metric Exhaustion** (`BUDGET_EXHAUSTED`).
-
-### 2. Height-Bounded Diophantine Decidability
-Classical Diophantine arithmetic over unmetered spaces ($\mathbb{Z}, \mathbb{Q}$) inherits algorithmic undecidability (Hilbert's Tenth Problem / DPRM). Qn eliminates this non-halting void by constraining all relational evaluations to explicit **Logarithmic Height Ceilings**:
-
-$$h\left(\frac{u}{v}\right) = \max\Big(\log \lvert u \rvert, \, \log \lvert v \rvert\Big) \le H_{\mathrm{max}}$$
-
-By Northcott's theorem, the set of rational coordinates of bounded logarithmic height is strictly finite:
-
-$$\mathrm{Card}\big(\{ x \in \mathbb{Q} \colon h(x) \le H_{\mathrm{max}} \}\big) \lt \infty$$
-
-Candidate state spaces in Qn inhabit finite discrete lattices by construction, guaranteeing algorithmic decidability within declared resource envelopes.
-
-### 3. The Non-Rogue Invariant (AI Alignment by Physics)
-The architecture prevents unconstrained recursive self-modification ($Qn(\text{rsi})$) and autonomous agent decoupling through structural subordination:
-* **Machine Identity Disjunction:** Genesis origin $Q(0)$ parameterizes an accountable silicon chassis (`MACHINE_IDENTITY`). It is constitutionally barred from claiming legal personhood or autonomous intentionality.
-* **Mandatory Intent Delegation:** Higher-level autonomous routines (`AI_AGENT_IDENTITY`) possess zero root sovereignty. An agent cannot instantiate an independent $Q(0)$ origin; it operates strictly as an authorized proxy bound by a signed, cryptographically verified **Intent Contract** originating from a sovereign `HUMAN_IDENTITY` within the $\mathrm{Qs}$ base domain.
-* **The Thermodynamic Leash:** Agents cannot self-allocate execution budgets. When allocated $Q(1)$ compute units are depleted, the system halts unconditionally.
+3. **Verifiable Distributed Swarms & Asynchronous Consensus**  
+   Enables heterogeneous edge nodes and proof concentrators to attest to state transitions across network boundaries using boundary receipts and post-quantum cryptographic (PQC) dual rings without re-executing raw internal memory graphs.  
+   *Details:* [Abstraction Layers](https://cdqn5249.github.io/cdqn/abstractionLayers.html) · [Chronosa Vision](https://cdqn5249.github.io/cdqn/chronosa.html)
 
 ---
 
-## The SIMEMP Governance Architecture
+## Project Status & Repository Layout
 
-Every computational entity within the stack is governed by the two-tier SIMEMP constitutional constraint framework:
-
-```
-                  ┌────────────────────────────────────────┐
-                  │    Tier 1: Existential Invariants      │
-                  │     (Identity, Metric, Security)       │
-                  │          [Non-Negotiable]              │
-                  └──────────────────┬─────────────────────┘
-                                     │ Governs
-                                     ▼
-                  ┌────────────────────────────────────────┐
-                  │    Tier 2: Operational Agilities       │
-                  │   (Efficiency, Modularity, Portability)│
-                  │          [Trade-off-able]              │
-                  └────────────────────────────────────────┘
-```
-
-* **The No-Implicit Rule:** No implicit type coercion, unmeasured convention, or ambient default may cross an abstraction boundary or SIMEMP Gateway.
-* **Structural Indirection:** Abstract contracts (DCC Profiles: Dependencies, Constraints, Capabilities) are decoupled from concrete cryptographic implementations, enabling post-quantum migration (PQC) and algorithm patching without fracturing causal lineage.
-* **The Universal Envelope ($\mathcal{E}$):** All governed artifacts are encapsulated within an invariant 9-block container:
-
-$$\mathcal{E} = \langle \text{Identity}, \, \text{Type}, \, \text{State}, \, \text{Lineage}, \, \text{DCC}, \, \text{Metric}, \, \text{Security}, \, \text{Exposure}, \, \text{PayloadRef} \rangle$$
-
----
-
-## Repository Directory Layout
+This repository currently hosts the **formal architectural specifications and theoretical foundations**. It contains no binary releases or compiled runtime implementations at this stage.
 
 ```
 cdqn/
-├── LICENSE.md              # Scaling Source License (SSL) 1.0
-├── README.md               # Repository Charter & Technical Overview
-└── docs/                   # Specification Suite & Jekyll Documentation Source
-    ├── _data/              # Modular Glossary & Navigation Registries
-    │   ├── glossary/       # Domain-separated ontological concordances
-    │   └── navigation.yml  # Master documentation matrix registry
-    ├── _includes/          # Liquid components (Term tooltips, Dynamic bridge)
-    ├── _layouts/           # Site presentation engine (default.html)
-    ├── assets/             # Responsive stylesheets (style.css)
-    ├── reflections/        # Epistemic essays & real-world scientific case studies
-    │   └── h10_finite_computation.md # Analysis of H10, height bounds & AI proof
-    ├── index.md            # Interactive Documentation Portal (Reading Sequence)
-    ├── simemp.md           # Constitutional Constraints & Thermodynamic Thesis
-    ├── abstractionLayers.md# Layer Topography, Gateways & Fractal cdqn Scope
-    ├── qnPrimitive.md      # Universal Envelope & 14 Operational Axioms
-    ├── q0_q1.md            # Category A: Physical Entropy, Genesis & Node Boot
-    ├── q2_q9.md            # Category A: Single Digits & Secondary DCC Anchors
-    ├── qm.md               # Category D: Constructive Arithmetic Substrate
-    ├── qm_geometry.md      # Category B/D: Clifford Algebra & Float-Free Rotors
-    ├── qm_calculus.md      # Category D: Discrete Exterior Calculus (DEC)
-    ├── qexpr.md            # Category E: Layer 3 CAE-DAG Symbolic Container
-    ├── qs.md               # Category D: Quang Semantics & Intent Contracts
-    └── chronosa.md         # Operational Vision: Emergent Causal Intelligence
+├── docs/       # Jekyll source: formal specifications, portal, and reflections
+├── LICENSE.md  # Scaling Source License (SSL) 1.0 terms
+└── README.md   # Project overview and entry points
 ```
 
 ---
 
-## Licensing: Scaling Source License (SSL) 1.0
+## Key Documentation Links
 
-The CDQN infrastructure is released under the **Scaling Source License (SSL) 1.0**.
+* **Master Portal & Reading Roadmap:** [Documentation Portal](https://cdqn5249.github.io/cdqn/)
+* **Constitutional Constraints & Physics:** [SIMEMP Constraints](https://cdqn5249.github.io/cdqn/simemp.html)
+* **Universal Artifact Model:** [Qn Primitive Envelope](https://cdqn5249.github.io/cdqn/qnPrimitive.html)
+* **Symbolic Expression Engine:** [Qexpr CAE-DAG Container](https://cdqn5249.github.io/cdqn/qexpr.html)
+* **Ontological Concordance:** [CDQN Glossary](https://cdqn5249.github.io/cdqn/glossary.html)
+* **Epistemic Case Studies:** [Reflections: H10 & Finite Computation](https://cdqn5249.github.io/cdqn/reflections/h10_finite_computation.html)
 
-### 1. Free and Open Core for Non-Commercial and Sub-Threshold Use
-The core source code, specifications, mathematical definitions, and runtime intermediate representations (`QnIR`) are freely accessible and royalty-free for academic research, personal exploration, and commercial entities operating below the **Scaling Threshold**:
-* **Financial Scale:** Annual gross revenue $\le \$1,000,000\text{ USD}$.
-* **Asset Scale:** Capital raised or enterprise valuation $\le \$5,000,000\text{ USD}$.
-* **Deployment Scale:** $\le 10,000$ active concurrent nodes, containers, or autonomous agents.
-* **Transaction Scale:** $\le 10,000,000$ API/Qn transactions per month or $\le 100,000$ Monthly Active Users (MAU).
+---
 
-### 2. Mandatory Commercial Licensing at Scale
-Entities deploying the licensed infrastructure at scale must enter into a commercial licensing agreement within 30 days of crossing any threshold criterion.
+## License Summary (SSL 1.0)
 
-### 3. Open Core Invariants
-All downstream derivative distributions and runtime implementations must strictly preserve:
-* **Anti-Patent Defense:** Automatic license termination upon initiating patent litigation against the Author or project community.
-* **Non-Scaling Open Access:** Core technology mus
+* **Open & Free for Sub-Threshold Deployments:** Free for non-commercial, academic, and commercial deployments below the scaling thresholds ($< 10,000$ active nodes, $< 100,000$ MAU, or $< \$1,000,000$ annual gross revenue).
+* **Commercial License at Scale:** Mandatory commercial agreement required within 30 days of crossing scaling thresholds.
+* **Payload Neutrality:** Neutral safe harbor; no claim or editorial control over sovereign user data or application payloads.
+* **Open Core Invariants:** Enforces anti-patent retaliation defense and non-scaling open access propagation across derivative works.
+
+Refer to the full [LICENSE.md](LICENSE.md) for legal terms.
+
+---
+
+### Attribution
+
+> Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL).  
+> Repository: [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
