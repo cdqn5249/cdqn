@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.1
+version: 1.2.2
 updated: 2026-10-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -53,7 +53,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.1 |
+| **Version** | 1.2.2 |
 | **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -63,7 +63,13 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing $$\mathrm{Qm}$$. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+<details markdown="1" style="margin: 1.2rem 0; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);">
+<summary style="cursor: pointer; font-weight: 600; user-select: none;">
+  <span>Normative References & Precedence Hierarchy (10 Specifications)</span>
+</summary>
+
+<div style="margin-top: 0.8rem;">
+<p><small>The following documents establish the physical, structural, and legal constraints governing $$\mathrm{Qm}$$. If a technical conflict arises, <a href="{{ '/simemp.html' | relative_url }}"><code>simemp.md</code></a> governs; if a structural conflict arises, <a href="{{ '/abstractionLayers.html' | relative_url }}"><code>abstractionLayers.md</code></a> governs; if a legal conflict arises, <a href="https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md"><code>LICENSE.md</code></a> governs.</small></p>
 
 | Document | Role | Target |
 |---|---|---|
@@ -77,6 +83,9 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification (v1.0.3) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+
+</div>
+</details>
 
 ---
 
@@ -108,7 +117,7 @@ Operational validity is verified empirically via {% include term.html id="comput
 
 ### 1.1. Explicit Inclusions: What Qm Is
 - **The Constructive Numeric Leaf:** The canonical, discrete representation of fully evaluated quantities along dimensional axes encapsulated within the {% include term.html id="universal-envelope" %}.
-- **The $\mathcal{R}$-Algebra:** Explicit arithmetic morphisms ($$+$$, $$-$$, $$\times$$, $$\div$$) preserving exact Diophantine invariants and emitting signed receipts.
+- **The $\mathcal{R}$-Algebra:** Explicit arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$) preserving exact Diophantine invariants and emitting signed receipts.
 - **Projective Scale Transitions:** Exact conservation of residual information ($$r_z$$) across zoom scales without numeric drift.
 - **{% include term.html id="local-first" %} Execution:** 100% intra-node computation mediated by local cdqn memory-bus data movement, requiring zero distributed consensus.
 - **Total-by-Budget Morphisms:** Discrete operations bounded by finite resource consumption via {% include term.html id="metric-exhaustion" %}.
@@ -144,7 +153,7 @@ $$\mathrm{Qm}$$ operates across the hierarchy as a vertical domain projection ac
 
 ### 2.1. Layer-by-Layer Responsibilities
 - **{% include term.html id="layer-1" %}:** Hosts genesis primitives. Origin {% include term.html id="q0" text="Q(0)" %} establishes the spatial origin; unit {% include term.html id="q1" text="Q(1)" %} establishes the baseline metric quantum; the transition $$Q(0) \to Q(1)$$ establishes the initial dimensional axis {% include term.html id="dimension-d" text="d1" %} and the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
-- **Layer 2:** Hosts elementary arithmetic morphisms ($$+$$, $$-$$, $$\times$$, $$\div$$) constrained by explicit {% include term.html id="dcc-profile" text="DCC Profiles" %}, indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
+- **Layer 2:** Hosts elementary arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$) constrained by explicit {% include term.html id="dcc-profile" text="DCC Profiles" %}, indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
 - **Layer 3:** Ingests symbolic {% include term.html id="qexpr" %} trees and collapses them into canonical $$\mathrm{Qm}$$ leaf tuples within finite metric budgets.
 
 ### 2.2. Complexity Degree Stratification
@@ -295,23 +304,23 @@ Division in $$\mathrm{Qm}$$ is not an unconstrained rational projection; it is a
 
 $$\text{Given } A, B \implies \text{determine } C, R \quad \text{such that } A = (B \times C) + R$$
 
-subject to:
-1. $$B \neq Q(0)$$ (Enforced by DCC profile constraint).
-2. $$0 \le |R| \lt |B|$$.
-3. $$\sigma_C = \sigma_A \otimes \sigma_B$$.
+subject to the following invariant conditions:
+1. Denominator non-zero: $$B \neq Q(0)$$ (Enforced by DCC profile constraint).
+2. Remainder boundedness: $$0 \le |R| \lt |B|$$ (Conserved residual).
+3. Orientation composition: $$\sigma_C = \sigma_A \otimes \sigma_B$$.
 
 #### Height-Bounded Diophantine Decidability
-Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$$) inherit algorithmic undecidability (Hilbert's Tenth Problem). In $$\mathrm{Qm}$$, this undecidability void is closed structurally by enforcing **Logarithmic Height Ceilings**:
-- In arithmetic geometry, the logarithmic height $$h(x)$$ of a rational number measures its physical bit complexity:
+Classical Diophantine equations over unmetered spaces ($$\mathbb{Z}, \mathbb{Q}$$) inherit algorithmic undecidability (Hilbert's Tenth Problem). In $$\mathrm{Qm}$$, this undecidability void is closed structurally across three physical constraints:
 
-$$h\left(\frac{u}{v}\right) = \max\Big(\log |u|, \, \log |v|\Big)$$
+**1. Logarithmic Height Boundedness:** In arithmetic geometry, the logarithmic height measures physical bit complexity: $$h(u/v) = \max(\log |u|, \, \log |v|)$$. Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\max}$$ and work budget $$W_{\mathrm{budget}}$$.
 
-- Under the {% include term.html id="metric-envelope" %}, every Diophantine evaluation operates within an explicit height ceiling $$H_{\max}$$ and work budget $$W_{\mathrm{budget}}$$.
-- By **Northcott's Theorem**, the set of rational coordinates possessing bounded height is strictly finite:
+**2. Finite State Space (Northcott's Theorem):** By Northcott's theorem, the set of rational coordinates possessing bounded height is strictly finite:
 
 $$\# \Big\{ x \in \mathbb{Q} \;\Big|\; h(x) \le H_{\max} \Big\} \lt \infty$$
 
-Consequently, candidate solutions in $$\mathrm{Qm}$$ inhabit a finite discrete lattice. A Diophantine evaluation is decidable by construction: it either terminates with an exact quotient-remainder pair, reaches Terminal Exactness ($$R = Q(0)$$), or halts unconditionally upon budget exhaustion via **Metric Exhaustion** (`Axiom 6`), emitting `RECEIPT_BUDGET_EXHAUSTED`.
+Candidate solutions in $$\mathrm{Qm}$$ therefore inhabit a finite discrete lattice rather than an unmetered void.
+
+**3. Deterministic Decidability:** A Diophantine evaluation is decidable by construction: it either terminates with an exact quotient-remainder pair, reaches Terminal Exactness ($$R = Q(0)$$), or halts unconditionally upon budget exhaustion via **Metric Exhaustion** (`Axiom 6`), emitting `RECEIPT_BUDGET_EXHAUSTED`.
 
 #### Terminal Rejection:
 Attempted division where the divisor satisfies $$B = Q(0)$$ is intercepted by the gateway, terminating with an immutable receipt:
