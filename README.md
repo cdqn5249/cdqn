@@ -1,86 +1,70 @@
 # CDQN — Chained and Distributed Quang Numbers
 
 **Author:** Christophe Duy Quang Nguyen  
+**Portal:** [https://cdqn5249.github.io/cdqn/](https://cdqn5249.github.io/cdqn/)  
 **License:** [Scaling Source License (SSL) 1.0](LICENSE.md)  
-**Documentation Portal:** [https://cdqn5249.github.io/cdqn/](https://cdqn5249/cdqn/)  
 
 ---
 
-## The Foundational Inquiry
+## What If Modern Computing Was Built on an Unphysical Fiction?
 
-> **Can a discrete number system abstract any computable phenomenon within physical reality if, and only if, that abstraction is strictly governed by finite physical realities and constrained by the SIMEMP framework?**
+For nearly a century, computer science has treated floating-point rounding errors, non-halting infinite search spaces, unmetered energy burn, and generative AI confabulations as inevitable facts of technology.
 
-Modern computing is built on non-constructive mathematical idealizations: actual infinities, continuous spaces without thermodynamic bounds, and unmetered execution time. These unphysical assumptions produce persistent systemic pathologies:
-* **Numerical Drift:** IEEE 754 floating-point approximations silently discarding trailing bits.
-* **Non-Halting Voids:** Algorithms wandering into undecidable, unmetered infinite search spaces (Hilbert's Tenth Problem).
-* **Unaligned AI Divergence:** Generative reasoning systems unrolling ungrounded statistical tokens without causal anchors or thermodynamic limits.
+**What if they are not fundamental limits of reality, but merely the symptoms of ungrounded mathematical abstractions?**
 
-The **CDQN project** is an exploratory scientific framework designed to investigate whether computation can be reconstructed from scratch without actual infinities, without floating-point mechanics, and without unmetered resource consumption.
+The **CDQN project** opens a foundational scientific inquiry into the nature of computational physics:
 
----
+> *Can a discrete number system abstract any computable phenomenon in physical reality if every operation is strictly bound by finite physical laws?*
 
-## The SIMEMP Investigation
+Instead of accepting actual infinities, unmetered execution time, and lossy approximations, this repository explores a complete reconstruction of computation from the ground up:
 
-Rather than asserting non-constructive metaphysical proofs, CDQN explores this challenge as an open, empirical hypothesis via the **Recursive Search Loop**:
+* **Zero Floating-Point Drift:** Replacing IEEE 754 approximations with exact, discrete rational lattices in [Qm](https://cdqn5249.github.io/cdqn/glossary.html#qm).
+* **Zero Hidden Assumptions:** Admitting no unmeasured state across abstraction boundaries under the [No-Implicit Rule](https://cdqn5249.github.io/cdqn/glossary.html#no-implicit-rule).
+* **Deterministic Causality:** Eliminating non-deterministic state drift via [Dependencies Determinism](https://cdqn5249.github.io/cdqn/glossary.html#dependencies-determinism).
+* **Thermodynamic Accountability:** Metering every state transition to Landauer dissipation limits via the [Abstract Compute Unit U](https://cdqn5249.github.io/cdqn/glossary.html#compute-unit-u).
+* **Structural AI Sovereignty:** Tying autonomous machine agents to human authority by physics through the [Non-Rogue Invariant](https://cdqn5249.github.io/cdqn/glossary.html#non-rogue-invariant) and [Intent Contracts](https://cdqn5249.github.io/cdqn/glossary.html#intent-contract).
+* **Unified Governance:** Packaging all artifacts inside an immutable [Universal Envelope](https://cdqn5249.github.io/cdqn/glossary.html#universal-envelope).
 
-$$\text{Proposal} \xrightarrow{\quad} \text{Construction} \xrightarrow{\quad} \text{Evaluation} \xrightarrow{\quad} \text{Selection}$$
-
-Every candidate abstraction is subjected to the constitutional **SIMEMP** framework:
-
-* **Security:** Verifiable state transitions and post-quantum cryptographic (PQC) dual-ring boundaries.
-* **Identity:** Monotonic causal birth along an unbroken arrow back to local hardware entropy ( $Q(0)_N$ ).
-* **Metric:** Strict thermodynamic accounting; state transitions are bounded by Landauer's dissipation limit ( $W \ge k_B T \ln 2$ ) and metered in discrete work quanta ( $Q(1)$ ).
-* **Efficiency:** Minimizing operational dissipation across the Memory Wall via graph reuse ( $Q(\text{reuse})$ ).
-* **Modularity:** Strict isolation across abstraction layers through validating SIMEMP Gateways.
-* **Portability:** Substrate-invariant evaluation decoupling the invariant mathematical milestone from physical silicon telemetry.
-
-An operation is valid if and only if its complete set of dependencies eliminates all residual conditional entropy:
-
-$$H(S_t \mid \mathcal{D}(S_t)) = 0$$
+Is computation an unmetered excursion into an infinite Platonic void—or an irreversible thermodynamic process operating on physical silicon?
 
 ---
 
-## Repository Scope
+## Enter the Investigation
 
-This repository houses the **formal theoretical specifications, constitutional axioms, and epistemic research papers** of the CDQN framework. It does not distribute pre-compiled binaries or application runtime packages at this stage.
+This repository hosts the formal architectural specifications, mathematical definitions, and epistemic case studies of the [Qn](https://cdqn5249.github.io/cdqn/glossary.html#qn) universe, governed by the constitutional [SIMEMP](https://cdqn5249.github.io/cdqn/glossary.html#simemp) framework.
 
 ```
 cdqn/
-├── docs/       # Specification suite, documentation portal, and reflective essays
+├── docs/       # Architectural specifications, documentation portal, and essays
 ├── LICENSE.md  # Scaling Source License (SSL) 1.0 terms
 └── README.md   # Project inquiry and entry points
 ```
 
+*There are currently no pre-compiled binary distributions or source runtimes hosted here; the project is in its formal theoretical and specification phase.*
+
 ---
 
-## Explore the Specifications
+## Dig Further
 
-Dive directly into the formal architecture via the documentation portal:
+Explore the specifications and case studies directly on the documentation portal:
 
-* **The Constitutional Thesis:** [SIMEMP Constraints](https://cdqn5249.github.io/cdqn/simemp.html)
+* **The Master Portal & Reading Roadmap:** [Documentation Portal](https://cdqn5249.github.io/cdqn/)
+* **The Constitutional Invariants:** [SIMEMP Constraints](https://cdqn5249.github.io/cdqn/simemp.html)
 * **Master Topography & Gateways:** [Abstraction Layers](https://cdqn5249.github.io/cdqn/abstractionLayers.html)
+* **The Universal Artifact Model:** [Qn Primitive Envelope](https://cdqn5249.github.io/cdqn/qnPrimitive.html)
 * **Hardware Onboarding & Genesis:** [Q(0) Origin & Q(1) Calibration](https://cdqn5249.github.io/cdqn/q0_q1.html)
-* **Float-Free Discrete Arithmetic:** [Qm Mathematics](https://cdqn5249.github.io/cdqn/qm.html)
-* **Symbolic Term DAGs:** [Qexpr CAE-DAG Container](https://cdqn5249.github.io/cdqn/qexpr.html)
-* **Human Intent & Alignment:** [Qs Semantics](https://cdqn5249.github.io/cdqn/qs.html)
-* **Epistemic Case Studies:** [Reflections: H10 & Finite Computation](https://cdqn5249.github.io/cdqn/reflections/h10_finite_computation.html)
-* **Unified Ontological Concordance:** [CDQN Glossary](https://cdqn5249.github.io/cdqn/glossary.html)
+* **Discrete Numeric Substrate:** [Qm Mathematics](https://cdqn5249.github.io/cdqn/qm.html)
+* **Content-Addressed Expression Graphs:** [Qexpr CAE-DAG](https://cdqn5249.github.io/cdqn/qexpr.html)
+* **Human Intent & Epistemic Spectrum:** [Qs Semantics](https://cdqn5249.github.io/cdqn/qs.html)
+* **Distributed Sheaf Intelligence:** [Chronosa Vision](https://cdqn5249.github.io/cdqn/chronosa.html)
+* **Real-World Case Study:** [Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us](https://cdqn5249.github.io/cdqn/reflections/h10_finite_computation.html)
+* **Complete Ontological Dictionary:** [CDQN Unified Glossary](https://cdqn5249.github.io/cdqn/glossary.html)
+
+For governance, licensing terms, and commercial scaling thresholds, consult [LICENSE.md](LICENSE.md).
 
 ---
 
-## Governance & Licensing (SSL 1.0)
-
-The CDQN technical infrastructure is licensed under the **Scaling Source License (SSL) 1.0**:
-* **Free & Open for Sub-Threshold Use:** Royalty-free for academic, non-commercial, and sub-scale commercial implementations ($< 10,000$ active nodes, $< 100,000$ MAU, or $< \$1,000,000$ annual gross revenue).
-* **Commercial License at Scale:** Mandatory commercial agreement required upon crossing defined scaling thresholds.
-* **Open Core Invariants:** Enforces automatic patent retaliation termination and preserves sub-threshold open access for downstream derivatives.
-* **Safe Harbor Neutrality:** Neutral conduit architecture; exercises no editorial claim over sovereign user payloads or application data.
-
-For full legal terms, consult [LICENSE.md](LICENSE.md).
-
----
-
-### Attribution Notice
+### Attribution
 
 > Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL).  
-> Repository: [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
+> Parent Repository: [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)
