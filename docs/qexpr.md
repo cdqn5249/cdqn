@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
-description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), hash-consing deduplication, symbolic irrationals, six canonical node classes, cross-domain contexts, and hardware-aware collapse under SIMEMP constraints.
-version: 1.0.3
-updated: 2026-10-11
+description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes, and hardware-aware collapse under SIMEMP constraints.
+version: 1.1.0
+updated: 2026-10-15
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -51,6 +51,8 @@ terms_used:
   - existential-invariant
   - operational-agility
   - boc-policy
+  - qs
+  - discrete-exterior-calculus
 ---
 
 # Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container
@@ -58,8 +60,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.0.3 |
-| **Last Updated** | 2026-10-11 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-15 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
@@ -72,21 +74,22 @@ The following documents establish the physical, structural, and legal constraint
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [Complexity Degree Stratification]({{ '/glossary.html' | relative_url }}#complexity-degree) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and optimization primitives | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
-| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Lifecycle States]({{ '/glossary.html' | relative_url }}#lifecycle-state) (v1.2.1) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.0) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.6) | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.0) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
 ## 1. Epistemic Stance and Constitutional Placement
 
-Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) v1.3.1 §2.6, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})**.
+Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §2.6, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})**.
 
 ```
  +-------------------------------------------------------------------------------+
@@ -110,7 +113,7 @@ Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abst
 ```
 
 ### 1.1. The Structural Role of Layer 3
-* **{% include term.html id="layer-1" %}** defines **what exists** (static ontological primitives: local origin {% include term.html id="q0" text="Q(0)" %}, unit {% include term.html id="q1" text="Q(1)" %}, single digits $Q(2)\dots Q(9)$ along axis {% include term.html id="dimension-d" text="d_1" %}).
+* **{% include term.html id="layer-1" %}** defines **what exists** (static ontological primitives: local origin {% include term.html id="q0" text="Q(0)" %}, unit {% include term.html id="q1" text="Q(1)" %}, single digits $$Q(2)\dots Q(9)$$ along axis {% include term.html id="dimension-d" text="d1" %}).
 * **Layer 2** defines **atomic actions** (isolated morphisms: addition, subtraction, multiplication, Diophantine division, Clifford wedge products, spatial rotors, {% include term.html id="q-reuse" text="Q(reuse)" %}, {% include term.html id="q-bypass" text="Q(bypass)" %}).
 * **Layer 3 (`Qexpr`)** defines **compositional structure**: how multiple Layer 2 atomic actions are wired into directed acyclic networks *before* they are evaluated or collapsed into physical memory.
 
@@ -128,11 +131,11 @@ A computational **Context** is formalized as a multi-domain Content-Addressed Ex
 
 $$\text{Context} \equiv \mathcal{G}_{\text{Qexpr}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
 
-1. **Semantic Root ($\mathrm{Qs}$):** Encapsulates intent, linguistic pregroups, and human-agent capability delegations.
-2. **Relational Root ({% include term.html id="qm" %}):** Verifies that proposed state transitions are mathematically decidable, Diophantine-constrained, and exact.
-3. **Physical Root ($\mathrm{Qphy}$):** Verifies that the required computational work can physically execute within finite Landauer dissipation bounds ($W \ge k_B T \ln 2$), parameterized by the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
+1. **Semantic Root ({% include term.html id="qs" text="Qs" %}):** Encapsulates intent, linguistic pregroups, and human-agent capability delegations.
+2. **Relational Root ({% include term.html id="qm" text="Qm" %}):** Verifies that proposed state transitions are mathematically decidable, Diophantine-constrained, and exact.
+3. **Physical Root ($$\mathrm{Qphy}$$):** Verifies that the required computational work can physically execute within finite Landauer dissipation bounds ($$W \ge k_B T \ln 2$$), parameterized by the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
 
-By representing cross-domain contexts within the unified `Qexpr` structure, heterogeneous actors achieve consensus on shared root commitment hashes $\mathcal{H}(\text{Context})$ without unmeasured semantic ambiguity.
+By representing cross-domain contexts within the unified `Qexpr` structure, heterogeneous actors achieve consensus on shared root commitment hashes $$\mathcal{H}(\text{Context})$$ without unmeasured semantic ambiguity.
 
 ---
 
@@ -154,35 +157,44 @@ Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Polic
    • Dissipates 2·W Landauer heat                         • Direct coupling to Q(reuse) (W = 0)
 ```
 
-### 2.1. Canonical Node Tuple Structure
-Every symbolic node $\alpha$ within a `Qexpr` DAG is an immutable, content-addressed tuple:
+### 2.1. Canonical Node Tuple and Arity-Indexed Dependencies
+Under the {% include term.html id="no-implicit-rule" %}, symbolic nodes cannot assume a rigid binary schema that forces dummy padding hashes for non-binary operators. Every symbolic node $$\alpha$$ within a `Qexpr` DAG is an immutable, content-addressed tuple with an explicit arity-indexed child commitment vector:
 
-$$\alpha = \Big\langle \mathrm{OpCode}, \, \mathcal{H}(\mathrm{Left}), \, \mathcal{H}(\mathrm{Right}), \, z, \, r, \, d, \, \mathrm{DCC}_{\mathrm{ref}} \Big\rangle$$
+$$\alpha = \Big\langle \mathrm{OpCode}, \, \mathbf{D}_{\mathrm{children}}, \, z, \, r, \, d, \, \mathrm{DCC}_{\mathrm{ref}} \Big\rangle$$
 
-* **$\mathrm{OpCode}$:** Discrete identifier of the operation, domain morphism, or terminal leaf generator.
-* **$\mathcal{H}(\mathrm{Child})$:** Cryptographic content commitment hash of child dependencies. For leaf nodes, this references underlying Layer 1 primitives, constants, or semantic tokens.
-* **$z, r, d$:** Target scale quantum {% include term.html id="zoom-z" text="Zoom z" %}, conserved residual {% include term.html id="remainder-r" text="Remainder r" %}, and coordinate frame {% include term.html id="dimension-d" text="Dimension d" %}.
-* **$\mathrm{DCC}_{\mathrm{ref}}$:** Machine-readable {% include term.html id="dcc-profile" text="DCC Profile" %} governing transformation ceilings and execution rights.
+$$\mathbf{D}_{\mathrm{children}} = \big[ \mathcal{H}_1, \, \mathcal{H}_2, \, \dots, \, \mathcal{H}_k \big], \quad k = \mathrm{Arity}(\mathrm{OpCode}) \in \mathbb{N}$$
+
+The child commitment vector $$\mathbf{D}_{\mathrm{children}}$$ strictly maps operator arity without implicit padding:
+- **Nullary ($$k = 0$$):** Leaf constants, primary primitives ($$Q(0), Q(1)$$), and continued fraction recurrence generators (`OP_CF` for $$\pi, e, \tau, \ln 2$$). $$\mathbf{D}_{\mathrm{children}} = []$$.
+- **Unary ($$k = 1$$):** Morphisms over a single operand, including radical root constraints (`OP_ROOT`), Clifford reflection involutions ($$\mathcal{I}_d$$), discrete exterior derivatives ($$\mathbf{d}$$), and Hodge stars ($$\star$$). $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1]$$.
+- **Binary ($$k = 2$$):** Elementary $$\mathcal{R}$$-algebra morphisms ($$+, -, \times, \div$$), Clifford geometric products ($$\vec{u} \vec{v}$$), and wedge products ($$\vec{u} \wedge \vec{v}$$). $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1, \, \mathcal{H}_2]$$.
+- **Variadic ($$k \ge 3$$):** Bounded monoidal folds (`OP_FOLD` for $$\sum, \prod$$), multi-axial coordinate frames, and multi-agent intent sequences. $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1, \, \dots, \, \mathcal{H}_k]$$.
+
+The remaining tuple elements preserve physical and scale invariants:
+- **$$z, r, d$$:** Target scale quantum {% include term.html id="zoom-z" text="Zoom z" %}, conserved residual {% include term.html id="remainder-r" text="Remainder r" %}, and coordinate frame {% include term.html id="dimension-d" text="Dimension d" %}.
+- **$$\mathrm{DCC}_{\mathrm{ref}}$$:** Machine-readable {% include term.html id="dcc-profile" text="DCC Profile" %} governing transformation ceilings, execution budgets, and capability delegation rights.
 
 ### 2.2. Structural Hash-Consing and $\mathcal{O}(1)$ Equivalence
 Node identity is strictly mathematical under {% include term.html id="dependencies-determinism" %}, operationalized via {% include term.html id="hash-consing" %}:
 
-$$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, \mathcal{H}(\mathrm{Left}) \,\|\, \mathcal{H}(\mathrm{Right}) \,\|\, z \,\|\, r \,\|\, d \,\|\, \mathrm{DCC}_{\mathrm{ref}}\Big)$$
+$$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, k \,\|\, \mathcal{H}_1 \,\|\, \dots \,\|\, \mathcal{H}_k \,\|\, z \,\|\, r \,\|\, d \,\|\, \mathrm{DCC}_{\mathrm{ref}}\Big)$$
 
-1. **Deduplication:** Any sub-expression with identical semantics and dependencies yields the identical commitment hash. Through {% include term.html id="hash-consing" %}, the memory allocator maps it to the exact same physical node.
-2. **$\mathcal{O}(1)$ Structural Equality:** Verifying whether two sub-expressions $A$ and $B$ are identical requires zero recursive graph traversal:
+Because the arity $$k$$ is explicitly serialized, nullary and unary operators produce canonical hashes with zero residual entropy ($$H(S_t \mid \mathcal{D}(S_t)) = 0$$).
+
+1. **Deduplication:** Any sub-expression with identical semantics, arity, and child commitments yields the identical commitment hash. Through {% include term.html id="hash-consing" %}, the runtime memory allocator maps it to the exact same physical node.
+2. **$$\mathcal{O}(1)$$ Structural Equality:** Verifying whether two sub-expressions $$A$$ and $$B$$ are identical requires zero recursive graph traversal:
 
 $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 
 Testing algebraic or semantic equality collapses to a single machine-word integer comparison.
 
-### 2.3. Thermodynamic Work Minimization ($W = 0$)
-In physical {% include term.html id="layer-0" %} substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($\mathcal{O}(C V^2 f)$) and Landauer work ($W \ge k_B T \ln 2$).
+### 2.3. Thermodynamic Work Minimization ($$W = 0$$)
+In physical {% include term.html id="layer-0" %} substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($$\mathcal{O}(C V^2 f)$$) and Landauer work ($$W \ge k_B T \ln 2$$).
 * By enforcing {% include term.html id="hash-consing" %}, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
-* Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($W = 0$), directly operationalizing {% include term.html id="q-reuse" text="Q(reuse)" %} across the Memory Wall.
+* Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($$W = 0$$), directly operationalizing {% include term.html id="q-reuse" text="Q(reuse)" %} across the Memory Wall.
 
 ### 2.4. Acyclicity by Construction (Axiom 5)
-In classical graphs, circular references create non-halting loops and stack crashes. In a Content-Addressed DAG, **a circular dependency is mathematically impossible**. Because $\mathcal{H}(\alpha)$ requires the child hash $\mathcal{H}(\beta)$ as an input, $\beta$ cannot declare $\alpha$ as a dependency without breaking the pre-image resistance of cryptographic hash functions. Acyclicity along the {% include term.html id="causal-arrow" %} is guaranteed by construction, satisfying **Axiom 5** ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }})).
+In classical graphs, circular references create non-halting loops and stack crashes. In a Content-Addressed DAG, **a circular dependency is mathematically impossible**. Because $$\mathcal{H}(\alpha)$$ requires each child hash $$\mathcal{H}_i$$ as an input, no child can declare $$\alpha$$ as a dependency without breaking the pre-image resistance of cryptographic hash functions. Acyclicity along the {% include term.html id="causal-arrow" %} is guaranteed by construction, satisfying **Axiom 5** ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }})).
 
 ---
 
@@ -207,39 +219,39 @@ In classical floating-point systems (IEEE 754), rounding is an unmetered, lossy 
 ```
 
 ### 3.1. Prohibition of Rounding Drift
-In the Qn universe, **implicit rounding is outlawed by {% include term.html id="no-implicit-rule" text="the No-Implicit Rule" %} and Axioms 9 and 10**:
+In the Qn universe, **implicit rounding is outlawed by the {% include term.html id="no-implicit-rule" %} and Axioms 9 and 10**:
 1. Within Layer 3, expressions are held in unevaluated, exact symbolic form. Drift is identically zero.
-2. When projected onto physical hardware boundaries, quantities are partitioned into an integer quotient $q_z$ and an **exact conserved remainder** $r_z$ ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4):
+2. When projected onto physical hardware boundaries, quantities are partitioned into an integer quotient $$q_z$$ and an **exact conserved remainder** $$r_z$$ ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4):
 
-$$X = \big( q_z \cdot \delta_z(d) \big) + r_z, \quad \text{where } 0 \le |r_z| \lt \delta_z(d)$$
+$$X = \big( q_z \cdot \delta_z(d) \big) + r_z, \quad \mathrm{where} \; 0 \le \lvert r_z \rvert \lt \delta_z(d)$$
 
-The remainder $r_z$ is never discarded; it is sealed within the {% include term.html id="universal-envelope" %} as the exact causal input state for subsequent precision expansions.
+The remainder $$r_z$$ is never discarded; it is sealed within the {% include term.html id="universal-envelope" %} as the exact causal input state for subsequent precision expansions.
 
 ### 3.2. Ontological Status of Irrationals and Transcendentals
 Under **Axiom 2**, actual infinities cannot exist as storable or executable machine states. Consequently:
-* An irrational number **cannot be an infinite decimal string** ($3.14159\dots$), as storing infinite digits requires infinite energy.
+* An irrational number **cannot be an infinite decimal string** ($$3.14159\dots$$), as storing infinite digits requires infinite energy.
 * **Transcendental and irrational quantities exist permanently as `Qexpr` symbolic generators.**
 
 ```
        TRANSCENDENTAL & IRRATIONAL ONTOLOGY IN THE Qn STACK
  ┌─────────────────────────────────────────────────────────────────────────────┐
  │ LAYER 3: SYMBOLIC GENERATOR (Permanent Invariant State)                     │
- │ • Minimal Metric Root √2 : Qexpr(OP_ROOT: D² - Q(2) = Q(0))                 │
- │ • Golden Ratio φ         : Qexpr(OP_ROOT: φ² - φ - Q(1) = Q(0))             │
- │ • Circular Ratio π       : Qexpr(OP_CF: [3; 7, 15, 1, 292, ...])            │
- │ • Base e                 : Qexpr(OP_CF: [2; 1, 2, 1, 1, 4, ...])            │
+ │ • Minimal Metric Root √2 : Qexpr(OP_ROOT: D² - Q(2) = Q(0), k=1)            │
+ │ • Golden Ratio φ         : Qexpr(OP_ROOT: φ² - φ - Q(1) = Q(0), k=1)        │
+ │ • Circular Ratio π       : Qexpr(OP_CF: [3; 7, 15, 1, 292, ...], k=0)       │
+ │ • Base e                 : Qexpr(OP_CF: [2; 1, 2, 1, 1, 4, ...], k=0)       │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │               │ Boundary Collapse Demand (Target Zoom z, Budget W)          │
  │               ▼                                                             │
  │ LAYER 1 / 2: DISCRETE NUMERIC LEAF (On-Demand Physical Projection)          │
  │ • Quotient   : q_z ∈ ℕ (Exact discrete integer units at scale z)            │
- │ • Remainder  : r_z (Exact residual boundary; r_z < δ_z(d))                  │
+ │ • Remainder  : r_z (Exact residual boundary; |r_z| < δ_z(d))                │
  │ • Terminal   : If r_z = Q(0), early halt via Terminal Exactness (ΔH = 0)    │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Algebraic Irrationals ($\sqrt{2}, \phi$):** Stored as exact polynomial constraint equations ($D^2 - Q(2) = Q(0)$). They are manipulated symbolically via radical identities with zero rounding drift.
-2. **Transcendental Constants ($\pi, \tau, e, \ln$):** Stored as deterministic continued fraction recurrence generators. Evaluating $\pi$ to zoom level $z$ computes an exact rational quotient and a conserved residual without floating-point error, verifying {% include term.html id="terminal-exactness" %} where remainders collapse.
+1. **Algebraic Irrationals ($$\sqrt{2}, \phi$$):** Stored as exact polynomial constraint equations ($$D^2 - Q(2) = Q(0)$$) under `OP_ROOT` ($$k = 1$$). They are manipulated symbolically via radical identities with zero rounding drift.
+2. **Transcendental Constants ($$\pi, \tau, e, \ln 2$$):** Stored as deterministic continued fraction recurrence generators under `OP_CF` ($$k = 0$$). Evaluating $$\pi$$ to zoom level $$z$$ computes an exact rational quotient and a conserved residual without floating-point error, verifying {% include term.html id="terminal-exactness" %} where remainders collapse.
 
 ---
 
@@ -250,17 +262,17 @@ To achieve computational completeness across all abstraction layers, `Qexpr` def
 ```
                        THE 6 CANONICAL Qexpr NODE CLASSES
  ┌─────────────────────────────────────────────────────────────────────────────┐
- │ 1. OP_RATIO     : Symbolic rational pairs (p / q) preserving exact ratios.  │
- │ 2. OP_ROOT      : Constrained Diophantine polynomials for algebraic roots.  │
- │ 3. OP_CF        : Projective continued fraction generators for transcendentals.│
- │ 4. OP_FOLD      : Bounded monoidal accumulation (∑, ∏) over discrete frames.│
- │ 5. OP_FRAME_MAP : Clifford geometric products, rotors, and axis permutations.│
- │ 6. OP_REWRITE   : Hash-consed equality saturation and identity bypass rules.│
+ │ 1. OP_RATIO     : Symbolic rational pairs (p / q), k = 2.                   │
+ │ 2. OP_ROOT      : Constrained Diophantine radical polynomials, k = 1.       │
+ │ 3. OP_CF        : Projective continued fraction generators, k = 0.          │
+ │ 4. OP_FOLD      : Bounded monoidal accumulation (∑, ∏) over arrays, k ≥ 3.  │
+ │ 5. OP_FRAME_MAP : Clifford geometric products and rotor conjugations, k = 2.│
+ │ 6. OP_REWRITE   : Hash-consed equality saturation and bypass rules, k = 1,2.│
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 4.1. Node Class 1: Exact Rational Pairs (`OP_RATIO`)
-Represents unevaluated rational fractions $\frac{p}{q}$ ($q \neq Q(0)$) without premature projection onto decimal or binary scale lattices.
+### 4.1. Node Class 1: Exact Rational Pairs (`OP_RATIO`, $$k = 2$$)
+Represents unevaluated rational fractions $$\frac{p}{q}$$ ($$q \neq Q(0)$$) without premature projection onto decimal or binary scale lattices.
 
 Multiplicative and additive morphisms execute via exact Diophantine cross-multiplication:
 
@@ -268,39 +280,40 @@ $$\frac{p_1}{q_1} \times \frac{p_2}{q_2} = \frac{p_1 \times p_2}{q_1 \times q_2}
 
 $$\frac{p_1}{q_1} + \frac{p_2}{q_2} = \frac{(p_1 \times q_2) + (p_2 \times q_1)}{q_1 \times q_2}$$
 
-### 4.2. Node Class 2: Constrained Algebraic Roots (`OP_ROOT`)
-Represents algebraic radical roots as exact polynomial Diophantine equations ($P(X) = Q(0)$).
+### 4.2. Node Class 2: Constrained Algebraic Roots (`OP_ROOT`, $$k = 1$$)
+Represents algebraic radical roots as exact polynomial Diophantine equations ($$P(X) = Q(0)$$).
 
-Algebraic roots (such as $\sqrt{2}$ via `DCC_ANCHOR_SQRT2_v1`) are held symbolically. Multiplication by identical roots ($D \times D$) resolves immediately to integer constants ($Q(2)$) via {% include term.html id="q-bypass" text="Q(bypass)" %} without invoking root-extraction algorithms.
+Algebraic roots (such as $$\sqrt{2}$$ via `DCC_ANCHOR_SQRT2_v1`) are held symbolically with a single operand commitment. Multiplication by identical roots ($$D \times D$$) resolves immediately to integer constants ($$Q(2)$$) via {% include term.html id="q-bypass" text="Q(bypass)" %} without invoking numerical root-extraction routines.
 
-### 4.3. Node Class 3: Projective Recurrence Generators (`OP_CF`)
-Generates transcendental numbers ($\pi, e, \tau$) through deterministic continued fraction expansions:
+### 4.3. Node Class 3: Projective Recurrence Generators (`OP_CF`, $$k = 0$$)
+Generates transcendental numbers ($$\pi, e, \tau, \ln 2$$) through deterministic continued fraction expansions:
 
 $$X = a_0 + \cfrac{1}{a_1 + \cfrac{1}{a_2 + \cfrac{1}{\ddots}}}$$
 
-Partial convergents $\frac{p_k}{q_k}$ are generated iteratively. The truncation error is strictly bounded:
+Partial convergents $$\frac{p_m}{q_m}$$ are generated iteratively as nullary generators ($$k = 0$$) containing zero child dependencies. The truncation error is strictly bounded:
 
-$$0 \le |r_k| \lt \frac{1}{q_k q_{k+1}}$$
+$$0 \le \lvert r_m \rvert \lt \frac{1}{q_m q_{m+1}}$$
 
 and the residual is preserved in the remainder envelope.
 
-### 4.4. Node Class 4: Bounded Monoidal Folds (`OP_FOLD`)
-Governs accumulation ($\sum$, $\prod$, vector concatenation) over arrays, streams, or multi-axial frames.
+### 4.4. Node Class 4: Bounded Monoidal Folds (`OP_FOLD`, $$k \ge 3$$)
+Governs accumulation ($$\sum$$, $$\prod$$, vector concatenation) over arrays, streams, or multi-axial frames.
 
-Requires an explicit step ceiling ($k \le k_{\max}$) and declared compute budget. Unbounded loops or infinite series are syntactically invalid under **Axiom 2** and **Axiom 6**.
+Requires an explicit step ceiling ($$m \le m_{\max}$$) and declared compute budget. The child vector $$\mathbf{D}_{\mathrm{children}}$$ encapsulates the full array of term commitments. Unbounded loops or infinite series are syntactically invalid under **Axiom 2** and **Axiom 6**.
 
-### 4.5. Node Class 5: Frame Transformations and Permutations (`OP_FRAME_MAP`)
-Governs multi-axial Clifford geometric products, Cayley rotor conjugations ($R \vec{v} R^\dagger$), and coordinate permutations ($S_n$ group).
+### 4.5. Node Class 5: Frame Transformations and Permutations (`OP_FRAME_MAP`, $$k = 2$$)
+Governs multi-axial Clifford geometric products, Cayley rotor conjugations ($$R \vec{v} R^\dagger$$), and coordinate permutations ($$S_n$$ group).
 
-Rotors maintain unitary norm ($\|R\|^2 \equiv Q(1)$) by construction, eliminating trigonometric normalization cycles ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5).
+Rotors maintain unitary norm ($$\lVert R \rVert^2 \equiv Q(1)$$) by construction, eliminating trigonometric normalization cycles ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5).
 
-### 4.6. Node Class 6: Canonical Equality Saturation (`OP_REWRITE`)
+### 4.6. Node Class 6: Canonical Equality Saturation (`OP_REWRITE`, $$k \in \{1, 2\}$$)
 Executes reversible term rewriting prior to numerical collapse:
-* Identity bypass: $A + Q(0) \to A$ (emits {% include term.html id="q-bypass" text="Q(bypass)" %}).
-* Rotor annihilation: $R R^\dagger \to Q(1)$.
-* Nilpotency: $\vec{e}_i \wedge \vec{e}_i \to Q(0)$.
+* Identity bypass: $$A + Q(0) \to A$$ (emits {% include term.html id="q-bypass" text="Q(bypass)" %}).
+* Rotor annihilation: $$R R^\dagger \to Q(1)$$.
+* Nilpotency: $$\vec{e}_i \wedge \vec{e}_i \to Q(0)$$.
+* Poincaré coboundary bypass: $$\mathbf{d} \circ \mathbf{d} \to Q(0)$$.
 
-Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($W = 0$) using {% include term.html id="q-anchor" text="Q(anchor)" %} contracts.
+Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($$W = 0$$) using {% include term.html id="q-anchor" text="Q(anchor)" %} contracts.
 
 ---
 
@@ -329,7 +342,7 @@ While `Qexpr` remains an abstract, substrate-agnostic DAG at Layer 3 via {% incl
 
 ### 5.1. Target-Specific Lowering Profiles
 The compiler queries the node's local {% include term.html id="dcc-profile" text="DCC Hardware Profile" %} (established during Layer 0 onboarding):
-1. **NPU / Systolic Arrays:** Lowers multi-axial Clifford geometric products ($\vec{u} \cdot \vec{v} = \sum \eta_{kk} u_k v_k$) directly into **integer Matrix-Multiply-Accumulate (MAC)** instructions (INT16/INT32), completing contractions in constant time.
+1. **NPU / Systolic Arrays:** Lowers multi-axial Clifford geometric products ($$\vec{u} \cdot \vec{v} = \sum \eta_{jj} u_j v_j$$) directly into **integer Matrix-Multiply-Accumulate (MAC)** instructions (INT16/INT32), completing contractions in constant time.
 2. **Cryptographic Co-Processors:** Offloads {% include term.html id="hash-consing" %} deduplication and node commitment hashing to hardware SHA-3 or BLAKE3 accelerators.
 3. **Integer RISC-V / Microcontrollers:** Replaces division by multiplication using Barrett integer reciprocal tables with exact remainder correction loops.
 
@@ -359,9 +372,9 @@ To guarantee that fallible human directives or unaligned agentic processes canno
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-1. **Static Graph Depth Ceilings:** If an expression tree exceeds the declared depth ceiling ($D > D_{\max}$), execution terminates immediately with receipt `RECEIPT_EXPRESSION_TOO_COMPLEX`.
+1. **Static Graph Depth Ceilings:** If an expression tree exceeds the declared depth ceiling ($$D \gt D_{\max}$$), execution terminates immediately with receipt `RECEIPT_EXPRESSION_TOO_COMPLEX`.
 2. **Node Allocation Bounds:** If {% include term.html id="hash-consing" %} attempts to instantiate node counts exceeding the local {% include term.html id="metric-envelope" %}, compilation aborts with `RECEIPT_BUDGET_EXHAUSTED`.
-3. **Totality by Budget (Axiom 6):** Every collapse operation carries an explicit compute budget in units of $Q(1)$ via {% include term.html id="metric-exhaustion" %}. Non-terminating expansions are impossible; when the budget is consumed, the engine emits a dissipative {% include term.html id="receipt" %} and halts.
+3. **Totality by Budget (Axiom 6):** Every collapse operation carries an explicit compute budget in units of $$Q(1)$$ via {% include term.html id="metric-exhaustion" %}. Non-terminating expansions are impossible; when the budget is consumed, the engine emits a dissipative {% include term.html id="receipt" %} and halts.
 
 ---
 
