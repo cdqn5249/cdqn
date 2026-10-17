@@ -2,8 +2,8 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes, and hardware-aware collapse under SIMEMP constraints.
-version: 1.1.0
-updated: 2026-10-15
+version: 1.1.1
+updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -60,8 +60,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.1.0 |
-| **Last Updated** | 2026-10-15 (Bao Loc, Vietnam) |
+| **Version** | 1.1.1 |
+| **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
@@ -76,11 +76,11 @@ The following documents establish the physical, structural, and legal constraint
 |---|---|---|
 | `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Lifecycle States]({{ '/glossary.html' | relative_url }}#lifecycle-state) (v1.2.1) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
 | `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.0) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.6) | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.0) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and parity partitions (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.9) | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
 | `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -114,7 +114,7 @@ Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abst
 
 ### 1.1. The Structural Role of Layer 3
 * **{% include term.html id="layer-1" %}** defines **what exists** (static ontological primitives: local origin {% include term.html id="q0" text="Q(0)" %}, unit {% include term.html id="q1" text="Q(1)" %}, single digits $$Q(2)\dots Q(9)$$ along axis {% include term.html id="dimension-d" text="d1" %}).
-* **Layer 2** defines **atomic actions** (isolated morphisms: addition, subtraction, multiplication, Diophantine division, Clifford wedge products, spatial rotors, {% include term.html id="q-reuse" text="Q(reuse)" %}, {% include term.html id="q-bypass" text="Q(bypass)" %}).
+* **Layer 2** defines **atomic actions** (isolated morphisms: addition, subtraction, multiplication, Diophantine division, exponents, roots, factorials, Clifford wedge products, spatial rotors, {% include term.html id="q-reuse" text="Q(reuse)" %}, {% include term.html id="q-bypass" text="Q(bypass)" %}).
 * **Layer 3 (`Qexpr`)** defines **compositional structure**: how multiple Layer 2 atomic actions are wired into directed acyclic networks *before* they are evaluated or collapsed into physical memory.
 
 ### 1.2. Acknowledgment of Universal Fallibility
@@ -166,8 +166,8 @@ $$\mathbf{D}_{\mathrm{children}} = \big[ \mathcal{H}_1, \, \mathcal{H}_2, \, \do
 
 The child commitment vector $$\mathbf{D}_{\mathrm{children}}$$ strictly maps operator arity without implicit padding:
 - **Nullary ($$k = 0$$):** Leaf constants, primary primitives ($$Q(0), Q(1)$$), and continued fraction recurrence generators (`OP_CF` for $$\pi, e, \tau, \ln 2$$). $$\mathbf{D}_{\mathrm{children}} = []$$.
-- **Unary ($$k = 1$$):** Morphisms over a single operand, including radical root constraints (`OP_ROOT`), Clifford reflection involutions ($$\mathcal{I}_d$$), discrete exterior derivatives ($$\mathbf{d}$$), and Hodge stars ($$\star$$). $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1]$$.
-- **Binary ($$k = 2$$):** Elementary $$\mathcal{R}$$-algebra morphisms ($$+, -, \times, \div$$), Clifford geometric products ($$\vec{u} \vec{v}$$), and wedge products ($$\vec{u} \wedge \vec{v}$$). $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1, \, \mathcal{H}_2]$$.
+- **Unary ($$k = 1$$):** Morphisms over a single operand, including radical root constraints (`OP_ROOT`), discrete factorials, Clifford reflection involutions ($$\mathcal{I}_d$$), discrete exterior derivatives ($$\mathbf{d}$$), and Hodge stars ($$\star$$). $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1]$$.
+- **Binary ($$k = 2$$):** Elementary $$\mathcal{R}$$-algebra morphisms ($$+, -, \times, \div$$, exponents), Clifford geometric products ($$\vec{u} \vec{v}$$), and wedge products ($$\vec{u} \wedge \vec{v}$$). $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1, \, \mathcal{H}_2]$$.
 - **Variadic ($$k \ge 3$$):** Bounded monoidal folds (`OP_FOLD` for $$\sum, \prod$$), multi-axial coordinate frames, and multi-agent intent sequences. $$\mathbf{D}_{\mathrm{children}} = [\mathcal{H}_1, \, \dots, \, \mathcal{H}_k]$$.
 
 The remaining tuple elements preserve physical and scale invariants:
@@ -188,10 +188,17 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 
 Testing algebraic or semantic equality collapses to a single machine-word integer comparison.
 
-### 2.3. Thermodynamic Work Minimization ($$W = 0$$)
+### 2.3. Thermodynamic Work Minimization and Breakeven Bounds
 In physical {% include term.html id="layer-0" %} substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($$\mathcal{O}(C V^2 f)$$) and Landauer work ($$W \ge k_B T \ln 2$$).
 * By enforcing {% include term.html id="hash-consing" %}, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
 * Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($$W = 0$$), directly operationalizing {% include term.html id="q-reuse" text="Q(reuse)" %} across the Memory Wall.
+
+#### The Breakeven Admission Bound
+Querying a cryptographic hash commitment across L3 caches or DRAM incurs measurable bus dissipation. Under the **Metric Invariant** (`simemp.md` §3.1), hash-consing lookup via $$Q(\text{reuse})$$ is admissible if and only if the computational work of re-evaluation exceeds retrieval dissipation:
+
+$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
+
+If direct computation is cheaper than memory traversal (such as single-cycle integer additions $$Q(2) + Q(3)$$ or trivial powers), the compiler bypasses hash-table probes, lowering the operation directly to integer machine instructions via the HCA-Collapse engine.
 
 ### 2.4. Acyclicity by Construction (Axiom 5)
 In classical graphs, circular references create non-halting loops and stack crashes. In a Content-Addressed DAG, **a circular dependency is mathematically impossible**. Because $$\mathcal{H}(\alpha)$$ requires each child hash $$\mathcal{H}_i$$ as an input, no child can declare $$\alpha$$ as a dependency without breaking the pre-image resistance of cryptographic hash functions. Acyclicity along the {% include term.html id="causal-arrow" %} is guaranteed by construction, satisfying **Axiom 5** ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }})).
@@ -265,9 +272,9 @@ To achieve computational completeness across all abstraction layers, `Qexpr` def
  │ 1. OP_RATIO     : Symbolic rational pairs (p / q), k = 2.                   │
  │ 2. OP_ROOT      : Constrained Diophantine radical polynomials, k = 1.       │
  │ 3. OP_CF        : Projective continued fraction generators, k = 0.          │
- │ 4. OP_FOLD      : Bounded monoidal accumulation (∑, ∏) over arrays, k ≥ 3.  │
+ │ 4. OP_FOLD      : Bounded monoidal accumulation (∑, ∏, n!) over arrays, k≥3.│
  │ 5. OP_FRAME_MAP : Clifford geometric products and rotor conjugations, k = 2.│
- │ 6. OP_REWRITE   : Hash-consed equality saturation and bypass rules, k = 1,2.│
+ │ 6. OP_REWRITE   : Equality saturation and algebraic identity bypass suite.  │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -297,7 +304,7 @@ $$0 \le \lvert r_m \rvert \lt \frac{1}{q_m q_{m+1}}$$
 and the residual is preserved in the remainder envelope.
 
 ### 4.4. Node Class 4: Bounded Monoidal Folds (`OP_FOLD`, $$k \ge 3$$)
-Governs accumulation ($$\sum$$, $$\prod$$, vector concatenation) over arrays, streams, or multi-axial frames.
+Governs accumulation ($$\sum$$, $$\prod$$, vector concatenation, and discrete factorials $$n!$$) over arrays, streams, or multi-axial frames.
 
 Requires an explicit step ceiling ($$m \le m_{\max}$$) and declared compute budget. The child vector $$\mathbf{D}_{\mathrm{children}}$$ encapsulates the full array of term commitments. Unbounded loops or infinite series are syntactically invalid under **Axiom 2** and **Axiom 6**.
 
@@ -307,13 +314,29 @@ Governs multi-axial Clifford geometric products, Cayley rotor conjugations ($$R 
 Rotors maintain unitary norm ($$\lVert R \rVert^2 \equiv Q(1)$$) by construction, eliminating trigonometric normalization cycles ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5).
 
 ### 4.6. Node Class 6: Canonical Equality Saturation (`OP_REWRITE`, $$k \in \{1, 2\}$$)
-Executes reversible term rewriting prior to numerical collapse:
-* Identity bypass: $$A + Q(0) \to A$$ (emits {% include term.html id="q-bypass" text="Q(bypass)" %}).
-* Rotor annihilation: $$R R^\dagger \to Q(1)$$.
-* Nilpotency: $$\vec{e}_i \wedge \vec{e}_i \to Q(0)$$.
-* Poincaré coboundary bypass: $$\mathbf{d} \circ \mathbf{d} \to Q(0)$$.
+Executes reversible term rewriting and identity short-circuiting prior to numerical collapse. Under the **No-Implicit Rule**, the engine evaluates the full canonical suite of $$\mathcal{O}(1)$$ algebraic identity bypasses:
 
-Rewrites sub-graphs into their canonical minimal form at zero Landauer work cost ($$W = 0$$) using {% include term.html id="q-anchor" text="Q(anchor)" %} contracts.
+```
+                    CANONICAL Q(bypass) IDENTITY RULES
+ ┌──────────────────────────────────────┬──────────────────────────────────────┐
+ │ ADDITIVE & MULTIPLICATIVE BYPASSES   │ EXPONENTIATION & RADICAL BYPASSES    │
+ ├──────────────────────────────────────┼──────────────────────────────────────┤
+ │ • A + Q(0) ──► A                     │ • A^Q(0) ──► Q(1)   (A ≠ Q(0))       │
+ │ • A × Q(1) ──► A                     │ • A^Q(1) ──► A                       │
+ │ • A × Q(0) ──► Q(0)                  │ • Q(1)^k ──► Q(1)                    │
+ │ • Q(0)! ──► Q(1)                     │ • Q(0)^k ──► Q(0)   (k > 0)          │
+ │ • Q(1)! ──► Q(1)                     │ • ^Q(1)√(A) ──► A                    │
+ │ • Q(2)! ──► Q(2)                     │ • ^n√(Q(1)) ──► Q(1)                 │
+ ├──────────────────────────────────────┴──────────────────────────────────────┤
+ │ GEOMETRIC & TOPOLOGICAL INVARIANTS                                          │
+ │ • Rotor Normalization : R R† ──► Q(1)                                       │
+ │ • Exterior Nilpotency : e_i ∧ e_i ──► Q(0)                                  │
+ │ • Bivector Inversion  : (I_2)² ──► -Q(1)   (Grade 2 collapses to Grade 0)   │
+ │ • Poincaré Coboundary : d ∘ d ──► Q(0)                                      │
+ └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+All listed transformations emit `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($$\Delta W = 0$$), short-circuiting execution before any computation or memory lookup is scheduled.
 
 ---
 
@@ -392,4 +415,4 @@ All derivative implementations, symbolic rewrite engines, compilers, and interme
 2. **Non-Scaling Open Access:** Royalty-free licensing is guaranteed for non-commercial, academic, and sub-threshold usage under the {% include term.html id="ssl" %}.
 
 ### 7.3. Passive Infrastructure Safe Harbor
-The `Qexpr` symbolic container acts as passive, neutral technical infrastructure. It exercises no editorial inspection over, and makes no claim upon, sovereign user content, models, or {% include term.html id="payload" text="Payloads" %} processed within its expression graphs.
+The `Qexpr` symbolic container acts as passive, neutral technical infrastructure. It exercises no editorial inspection over, and makes no claim upon, sovereign user content, models, or {% include term.html id="payload" text="Payloads" %}.
