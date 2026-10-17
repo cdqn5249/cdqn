@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.8
+version: 1.2.9
 updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -57,7 +57,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.7 |
+| **Version** | 1.2.9 |
 | **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -113,7 +113,7 @@ Operational validity is verified empirically via {% include term.html id="comput
 
 ### 1.1. Explicit Inclusions: What Qm Is
 - **The Constructive Numeric Leaf:** The canonical, discrete representation of fully evaluated quantities along dimensional axes encapsulated within the {% include term.html id="universal-envelope" %}.
-- **The $\mathcal{R}$-Algebra:** Explicit arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$, powers, and roots) preserving exact Diophantine invariants and emitting signed receipts.
+- **The $\mathcal{R}$-Algebra:** Explicit arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$, powers, roots, and bounded factorials) preserving exact Diophantine invariants and emitting signed receipts.
 - **Projective Scale Transitions:** Exact conservation of residual information ($$r_z$$) across zoom scales without numeric drift.
 - **{% include term.html id="local-first" %} Execution:** 100% intra-node computation mediated by local cdqn memory-bus data movement, requiring zero distributed consensus.
 - **Total-by-Budget Morphisms:** Discrete operations bounded by finite resource consumption via {% include term.html id="metric-exhaustion" %}.
@@ -149,12 +149,12 @@ $$\mathrm{Qm}$$ operates across the hierarchy as a vertical domain projection ac
 
 ### 2.1. Layer-by-Layer Responsibilities
 - **{% include term.html id="layer-1" %}:** Hosts genesis primitives. Origin {% include term.html id="q0" text="Q(0)" %} establishes the spatial origin; unit {% include term.html id="q1" text="Q(1)" %} establishes the baseline metric quantum; the transition $$Q(0) \to Q(1)$$ establishes the initial dimensional axis {% include term.html id="dimension-d" text="d1" %} and the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
-- **Layer 2:** Hosts elementary arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$, exponents, roots) constrained by explicit {% include term.html id="dcc-profile" text="DCC Profiles" %}, indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
+- **Layer 2:** Hosts elementary arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$, exponents, roots, factorials) constrained by explicit {% include term.html id="dcc-profile" text="DCC Profiles" %}, indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
 - **Layer 3:** Ingests symbolic {% include term.html id="qexpr" %} trees and collapses them into canonical $$\mathrm{Qm}$$ leaf tuples within finite metric budgets.
 
 ### 2.2. Complexity Degree Stratification
 - **Degree 0 (Foundational Primitives):** $$Q(0)$$, $$Q(1)$$.
-- **Degree 1 (Elementary Arithmetic):** Positional tuples along axis $$d_1$$, Diophantine quotient-remainder partitions, bounded powers. *(Normative scope of this specification).*
+- **Degree 1 (Elementary Arithmetic):** Positional tuples along axis $$d_1$$, Diophantine quotient-remainder partitions, bounded folds. *(Normative scope of this specification).*
 - **Degree 2 (Multi-Axial & Symbolic):** Orthogonal coordinate spaces ($$d_k$$), Clifford geometric algebras ($$\mathcal{C}\ell_{p,q}$$), and Qexpr CAE-DAG reduction ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) and [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }})).
 - **Degree 3 (Discrete Calculus & Analysis):** Discrete exterior calculus, finite-difference operators, and projective continued fractions ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})).
 
@@ -332,7 +332,7 @@ When recursive compositions cause the symbolic tree of $$r_C$$ to exceed the {% 
 Exponentiation and root extraction are formalized as constrained morphisms that operate with explicit thermodynamic bounds and dimensional parity governance:
 
 #### I. Integer Exponentiation as a Bounded Monoidal Fold
-For integer exponents $$B \in \mathbb{N}$$, exponentiation is an iterative multiplicative fold over the positive monoid $$(\mathcal{Q}^+, \times, Q(1))$$:
+For integer exponents $$B \in \mathbb{N}$$, exponentiation is an iterative multiplicative fold over the positive monoid $$(\mathcal{Q}^+, \times, Q(1))$$ under Node Class 4 (`OP_FOLD`):
 
 $$A^B = \prod_{j=1}^B A$$
 
@@ -400,11 +400,7 @@ $$(-1)! = \frac{0!}{0} = \frac{Q(1)}{Q(0)}$$
 
 $$\forall k \in \mathcal{Q}^+, \quad (-k)! = \frac{Q(1)}{Q(0) \times \prod_{j=1}^{k-1} (-j)}$$
 
-Because division by origin $$Q(0)$$ is an absolute constitutional prohibition in $$\mathrm{Qm}$$ (§5.3), and actual infinite poles are non-realizable under **Axiom 2**, the factorial of a negative integer cannot exist. Any attempt to compute $$(\ominus k)!$$ is intercepted deterministically at the SIMEMP Gateway, emitting:
-
-$$
-\texttt{RECEIPT\_DIVISION\_BY\_ZERO\_REJECTED}
-$$
+Because division by origin $$Q(0)$$ is an absolute constitutional prohibition in $$\mathrm{Qm}$$ (§5.3), and actual infinite poles are non-realizable under **Axiom 2**, the factorial of a negative integer cannot exist. Any attempt to compute $$(\ominus k)!$$ is intercepted deterministically at the SIMEMP Gateway, emitting `RECEIPT_DIVISION_BY_ZERO_REJECTED`.
 
 ---
 
