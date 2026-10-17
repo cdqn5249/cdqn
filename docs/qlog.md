@@ -2,7 +2,7 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.0.1
+version: 1.0.2
 updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -67,11 +67,11 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.0.1 |
+| **Version** | 1.0.2 |
 | **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Candidate Domain Specification — Category D (Emergent Composite Domain: $\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$) |
+| **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
 
 ---
 
@@ -243,8 +243,7 @@ Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Polic
 Under **Axiom 11** and **Axiom 14**, any emergent logical mode $M_{\mathrm{new}}$ must satisfy four gateway verification invariants before inclusion into $\mathcal{L}_{\mathrm{modes}}$:
 1. **Explicit DCC Contract:** Wrapped in an explicit profile contract (`DCC_LOGIC_MODE_<ID>_vN`).
 2. **Deterministic Reduction:** Operates over `Qexpr` CAE-DAGs with zero floating-point semantics.
-3. **Finite Landauer Dissipation Ceiling:** Bounded by an explicit work allocation:
-   $$W(M_{\mathrm{new}}) \le W_{\mathrm{budget}}$$
+3. **Finite Landauer Dissipation Ceiling:** Bounded by an explicit work allocation: $W(M_{\mathrm{new}}) \le W_{\mathrm{budget}}$ in units of $U$.
 4. **Receipt-Emitting Totality:** Terminates unconditionally in a declared terminal receipt (`SUCCESS`, `INCONCLUSIVE`, `BUDGET_EXHAUSTED`, or `REJECTED`).
 
 ---
@@ -257,7 +256,7 @@ $$Q(\text{bypass}) \prec Q(\text{reuse}) \prec \text{Direct Inferential Compute}
 
 ### 5.1. Q(bypass): Tautological and Deterministic Fault Short-Circuiting
 Before scheduling memory bus transfers or search iterations, the gateway evaluates candidate judgments in $\mathcal{O}(1)$ register time:
-- **Reflexive Identity ($A \vdash A$):** If the goal hash matches the active premise hash, search halts immediately, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($\Delta W = 0$).
+- **Reflexive Identity ($A \vdash A$):** If the goal commitment hash matches the active premise hash, search halts immediately, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($\Delta W = 0$).
 - **Topological Nilpotency:** Inferences involving discrete exterior coboundaries ($\mathbf{d} \circ \mathbf{d}$) or boundaries ($\partial \circ \partial$) collapse algebraically to $Q(0)$ without mesh traversal.
 - **Deterministic Fault Interception:** Propositions containing illegal operations (such as division by $Q(0)$) are intercepted in $\mathcal{O}(1)$ time, emitting `RECEIPT_DIVISION_BY_ZERO_REJECTED`.
 
@@ -265,8 +264,10 @@ Before scheduling memory bus transfers or search iterations, the gateway evaluat
 When intermediate `Q(patterns)` or sub-workflows are verified, they are indexed by their immutable commitment hash $\mathcal{H}(\mathcal{P})$:
 - **CAE-DAG Deduplication:** Identical sub-proofs share a single physical node in memory via {% include term.html id="hash-consing" %}.
 - **The Inferential Breakeven Equation:** Hash retrieval across the Memory Wall is admitted if and only if the computational work avoided exceeds retrieval dissipation:
-  $$\mathrm{Admit}\Big(Q(\text{reuse})\Big) \iff \Delta W_{\mathrm{search}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
-  Trivial single-step inferences execute directly on integer ALUs. Combinatorially deep derivations utilize $Q(\text{reuse})$, achieving zero marginal Landauer dissipation ($W = 0$) for recurring sub-graphs.
+
+$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{search}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
+
+Trivial single-step inferences execute directly on integer ALUs. Combinatorially deep derivations utilize $Q(\text{reuse})$, achieving zero marginal Landauer dissipation ($W = 0$) for recurring sub-graphs.
 
 ---
 
@@ -333,10 +334,11 @@ $$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle S_0, \, \math
 
 1. **Empirical Receipt Ingestion:** Observed physical telemetry is anchored via verified sensor receipts (`MODAL_EMPIRICAL`, $G = 1.0$).
 2. **Candidate Hypothesis Generation:** Stochastic modules propose ancestral trajectories ($H_1 \dots H_n$), tagged as `State: CANDIDATE` under **Axiom 14**.
-3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):**  
-   If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance:
-   $$\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} \Big( \text{SIMEMP Compliance}(H) \Big)$$
-   The selected route minimizes unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and minimizes Landauer dissipation.
+3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):** If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance:
+
+$$\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} \Big( \text{SIMEMP Compliance}(H) \Big)$$
+
+The selected route minimizes unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and minimizes Landauer dissipation.
 4. **Receipt-Sealed Invariants:** The verified trajectory is sealed as an emergent `Q(pattern)`. It attains status as an established scientific law (`MODAL_CONSTRUCTIVE` or a new $Q(\text{anchor})$) only when reproducible execution across external nodes validates the trajectory.
 
 ---
