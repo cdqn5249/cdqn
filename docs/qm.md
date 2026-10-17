@@ -402,7 +402,9 @@ $$\forall k \in \mathcal{Q}^+, \quad (-k)! = \frac{Q(1)}{Q(0) \times \prod_{j=1}
 
 Because division by origin $$Q(0)$$ is an absolute constitutional prohibition in $$\mathrm{Qm}$$ (§5.3), and actual infinite poles are non-realizable under **Axiom 2**, the factorial of a negative integer cannot exist. Any attempt to compute $$(\ominus k)!$$ is intercepted deterministically at the SIMEMP Gateway, emitting:
 
-$$\texttt{RECEIPT\_DIVISION\_BY\_ZERO\_REJECTED}$$
+$$
+\texttt{RECEIPT\_DIVISION\_BY\_ZERO\_REJECTED}
+$$
 
 ---
 
