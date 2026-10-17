@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.7
+version: 1.2.8
 updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -371,6 +371,38 @@ $$\sqrt{\ominus Q(1)} \implies \vec{e}_1 \wedge \vec{e}_2 \quad (\mathrm{where} 
 Powers and roots form a **Chiral Morphism Pair** along the causal execution arrow:
 - Forward powers collapse geometric grades ($$I_2^2 \to -Q(1)$$) and compute in feed-forward polynomial steps. Small integer powers disfavor memory lookups ($$\Delta W_{\mathrm{compute}} \le \Delta W_{\mathrm{lookup}}$$), executing directly on ALUs.
 - Inverse roots expand geometric grades ($$\sqrt{\ominus Q(1)} \to I_2$$) and require bounded Diophantine lattice searches ($$\Delta W_{\mathrm{compute}} \gg \Delta W_{\mathrm{lookup}}$$). Roots cross the thermodynamic breakeven threshold immediately, prioritizing sub-graph reuse via {% include term.html id="q-reuse" %}.
+
+### 5.6. Discrete Factorial and Combinatorial Morphisms
+
+The factorial operator is formalized in $$\mathrm{Qm}$$ as an iterative discrete monoidal fold over the positive integer monoid $$(\mathcal{Q}^+, \times, Q(1))$$ under Node Class 4 (`OP_FOLD`):
+
+$$n! = \prod_{j=1}^n j$$
+
+#### I. Boundary Identifications and $\mathcal{O}(1)$ Bypasses
+The factorial morphism exhibits three canonical identity states in the range $$Q(0) \dots Q(2)$$:
+- **Empty Product Identity ($$Q(0)!$$):** In monoid theory, an empty product evaluates to the multiplicative identity $$Q(1)$$. Handled in $$\mathcal{O}(1)$$ via {% include term.html id="q-bypass" %}, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($$\Delta W = 0$$).
+- **Unit Invariant ($$Q(1)!$$):** Evaluates identically to $$Q(1)$$. Bypassed in $$\mathcal{O}(1)$$ via $$Q(\text{bypass})$$ ($$\Delta W = 0$$).
+- **Fixed-Point Invariant ($$Q(2)!$$):** $$2$$ is the unique positive integer satisfying $$n! = n$$. Recognized as an algebraic fixed-point identity in `OP_REWRITE`, bypassing execution in $$\mathcal{O}(1)$$ ($$\Delta W = 0$$).
+
+#### II. Thermodynamic Optimization Boundary
+Under the **Metric Existential Invariant**, optimization morphisms adhere to strict thermodynamic breakeven bounds:
+- **Prohibition of $$Q(\text{reuse})$$ for $$n \le 2$$:** For $$Q(0)$$, $$Q(1)$$, and $$Q(2)$$, computational cost is zero (direct bypass). Initiating a 256-bit cryptographic hash lookup across the Memory Wall consumes dynamic bus power ($$\mathcal{O}(C V^2 f)$$) that exceeds execution cost. $$Q(\text{reuse})$$ is strictly forbidden for $$n \le 2$$.
+- **Admission of $$Q(\text{reuse})$$ for $$n \ge 3$$:** For $$k \ge 3$$, factorial computation satisfies $$Q(k)! = Q(k) \times Q(k-1)!$$. Because evaluating $$(k-1)!$$ requires cumulative multiplications, the runtime retrieves the existing hash commitment of $$(k-1)!$$ via $$Q(\text{reuse})$$, executing a single multiplication and avoiding redundant re-computation across the Memory Wall.
+
+#### III. Non-Existence of Negative Factorials
+The factorial recurrence relation is given by:
+
+$$(n - 1)! = \frac{n!}{n}$$
+
+Extending this relation to negative integers requires dividing by local genesis origin $$Q(0)$$:
+
+$$(-1)! = \frac{0!}{0} = \frac{Q(1)}{Q(0)}$$
+
+$$\forall k \in \mathcal{Q}^+, \quad (-k)! = \frac{Q(1)}{Q(0) \times \prod_{j=1}^{k-1} (-j)}$$
+
+Because division by origin $$Q(0)$$ is an absolute constitutional prohibition in $$\mathrm{Qm}$$ (§5.3), and actual infinite poles are non-realizable under **Axiom 2**, the factorial of a negative integer cannot exist. Any attempt to compute $$(\ominus k)!$$ is intercepted deterministically at the SIMEMP Gateway, emitting:
+
+$$\texttt{RECEIPT\_DIVISION\_BY\_ZERO\_REJECTED}$$
 
 ---
 
