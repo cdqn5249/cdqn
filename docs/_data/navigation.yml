@@ -80,6 +80,13 @@
   status: "Canonical"
   external: false
 
+- title: "Qlog Logics"
+  url: "/qlog.html"
+  slug: "qlog"
+  description: "Constructive type theory, pattern verification, and inferential modes"
+  status: "Canonical"
+  external: false
+  
 - title: "Chronosa Vision"
   url: "/chronosa.html"
   slug: "chronosa"
