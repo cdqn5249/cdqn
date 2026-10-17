@@ -2,7 +2,7 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.0.2
+version: 1.0.3
 updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -67,7 +67,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.0.2 |
+| **Version** | 1.0.3 |
 | **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -334,11 +334,7 @@ $$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle S_0, \, \math
 
 1. **Empirical Receipt Ingestion:** Observed physical telemetry is anchored via verified sensor receipts (`MODAL_EMPIRICAL`, $G = 1.0$).
 2. **Candidate Hypothesis Generation:** Stochastic modules propose ancestral trajectories ($H_1 \dots H_n$), tagged as `State: CANDIDATE` under **Axiom 14**.
-3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):** If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance:
-
-$$\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} \Big( \text{SIMEMP Compliance}(H) \Big)$$
-
-The selected route minimizes unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and minimizes Landauer dissipation.
+3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):** If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance: $\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} ( \text{SIMEMP Compliance}(H) )$, minimizing unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and Landauer dissipation.
 4. **Receipt-Sealed Invariants:** The verified trajectory is sealed as an emergent `Q(pattern)`. It attains status as an established scientific law (`MODAL_CONSTRUCTIVE` or a new $Q(\text{anchor})$) only when reproducible execution across external nodes validates the trajectory.
 
 ---
