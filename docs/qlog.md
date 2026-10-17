@@ -334,8 +334,9 @@ $$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle S_0, \, \math
 
 1. **Empirical Receipt Ingestion:** Observed physical telemetry is anchored via verified sensor receipts (`MODAL_EMPIRICAL`, $G = 1.0$).
 2. **Candidate Hypothesis Generation:** Stochastic modules propose ancestral trajectories ($H_1 \dots H_n$), tagged as `State: CANDIDATE` under **Axiom 14**.
-3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):** If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance: $\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} ( \text{SIMEMP Compliance}(H) )$, minimizing unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and Landauer dissipation.
-4. **Receipt-Sealed Invariants:** The verified trajectory is sealed as an emergent `Q(pattern)`. It attains status as an established scientific law (`MODAL_CONSTRUCTIVE` or a new $Q(\text{anchor})$) only when reproducible execution across external nodes validates the trajectory.
+3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):** If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance:
+$\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} ( \text{SIMEMP Compliance}(H) )$ , minimizing unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and Landauer dissipation.
+5. **Receipt-Sealed Invariants:** The verified trajectory is sealed as an emergent `Q(pattern)`. It attains status as an established scientific law (`MODAL_CONSTRUCTIVE` or a new $Q(\text{anchor})$) only when reproducible execution across external nodes validates the trajectory.
 
 ---
 
