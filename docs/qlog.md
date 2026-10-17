@@ -2,7 +2,7 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.0.0
+version: 1.0.1
 updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -67,7 +67,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -109,7 +109,7 @@ Classical mathematical logic frequently relies on unmetered search spaces ($\mat
 
 Truth is operationalized strictly as a **Verified Computed Pattern** certified by an immutable, dissipative {% include term.html id="receipt" %} satisfying {% include term.html id="dependencies-determinism" %}:
 
-$$H(S_{\mathrm{out}} \mid S_{\mathrm{in}}, \, \mathcal{M}_{\mathrm{contract}}) = 0$$
+$$H(S_{\mathrm{out}} \mid \mathcal{D}(S_{\mathrm{out}})) = 0$$
 
 <pre>
  ┌──────────────────────────────────────┬──────────────────────────────────────┐
@@ -133,7 +133,7 @@ $$H(S_{\mathrm{out}} \mid S_{\mathrm{in}}, \, \mathcal{M}_{\mathrm{contract}}) =
 ### 2.1. Quang Patterns (Q(patterns))
 A {% include term.html id="q-patterns" text="Q(pattern)" %} is an invariant, reproducible state-transition segment mapping an input state commitment to a deterministic output state milestone under an abstract capability contract:
 
-$$\mathcal{P}: \mathcal{H}(S_{\mathrm{in}}) \xrightarrow{\quad \mathcal{M}_{\mathrm{contract}} \quad} \mathcal{H}(S_{\mathrm{out}})$$
+$$\mathcal{P}: \mathcal{H}(S_0) \xrightarrow{\quad \mathcal{M}_{\mathrm{contract}} \quad} \mathcal{H}(S_1)$$
 
 Quang Patterns capture structural, algebraic, and physical causality. They are intent-neutral and evaluate identically across all nodes, whether resolving to `SUCCESS_EXACT` ({% include term.html id="terminal-exactness" %}) or an invariant terminal fault (e.g., `RECEIPT_DIVISION_BY_ZERO_REJECTED`).
 
@@ -257,7 +257,7 @@ $$Q(\text{bypass}) \prec Q(\text{reuse}) \prec \text{Direct Inferential Compute}
 
 ### 5.1. Q(bypass): Tautological and Deterministic Fault Short-Circuiting
 Before scheduling memory bus transfers or search iterations, the gateway evaluates candidate judgments in $\mathcal{O}(1)$ register time:
-- **Reflexive Identity ($A \vdash A$):** If goal hash matches an asserted premise hash ($\mathcal{H}(S_{\mathrm{target}}) == \mathcal{H}(S_{\mathrm{premise}})$), search halts immediately, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($\Delta W = 0$).
+- **Reflexive Identity ($A \vdash A$):** If the goal hash matches the active premise hash, search halts immediately, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($\Delta W = 0$).
 - **Topological Nilpotency:** Inferences involving discrete exterior coboundaries ($\mathbf{d} \circ \mathbf{d}$) or boundaries ($\partial \circ \partial$) collapse algebraically to $Q(0)$ without mesh traversal.
 - **Deterministic Fault Interception:** Propositions containing illegal operations (such as division by $Q(0)$) are intercepted in $\mathcal{O}(1)$ time, emitting `RECEIPT_DIVISION_BY_ZERO_REJECTED`.
 
@@ -327,15 +327,15 @@ In forward synthesis, a system transitions from human intent to physical executi
 3. Execution lowers deterministically to target machine operations, verifying that each milestone stays within allocated metric budgets.
 
 ### 7.2. Inverse Causal Reconstruction (Empirical Science and Abduction)
-In empirical science, observers measure a terminal physical state $S_{\mathrm{observed}}$ while the causal origin and trajectory remain unobserved:
+In empirical science, observers measure an empirical terminal physical state $S_{\mathrm{obs}}$ (anchored as `MODAL_EMPIRICAL`) while the generative causal origin and intermediate trajectory remain unobserved:
 
-$$\text{Given } S_{\mathrm{observed}} \; [\texttt{MODAL\_EMPIRICAL}] \implies \text{Find } \big\langle S_{\mathrm{origin}}, \, \mathcal{W}_{\mathrm{candidate}} \big\rangle \quad \text{such that} \quad \mathcal{W}(S_{\mathrm{origin}}) \equiv S_{\mathrm{observed}}$$
+$$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle S_0, \, \mathcal{W} \big\rangle \quad \text{such that} \quad \mathcal{W}(S_0) \equiv S_{\mathrm{obs}}$$
 
 1. **Empirical Receipt Ingestion:** Observed physical telemetry is anchored via verified sensor receipts (`MODAL_EMPIRICAL`, $G = 1.0$).
 2. **Candidate Hypothesis Generation:** Stochastic modules propose ancestral trajectories ($H_1 \dots H_n$), tagged as `State: CANDIDATE` under **Axiom 14**.
 3. **BOC Abductive Resolution (Occam's Razor Grounded in Physics):**  
    If multiple trajectories explain the observed state, the **BOC Policy** selects the hypothesis maximizing SIMEMP compliance:
-   $$\mathcal{W}_{\mathrm{optimal}} = \arg\max_{H \in \{H_1 \dots H_n\}} \Big( \text{SIMEMP Compliance}(H) \Big)$$
+   $$\mathcal{W}_{\mathrm{opt}} = \arg\max_{H \in \{H_1, \dots, H_n\}} \Big( \text{SIMEMP Compliance}(H) \Big)$$
    The selected route minimizes unmeasured conditional entropy ($H(S \mid \mathcal{D}) \to 0$) and minimizes Landauer dissipation.
 4. **Receipt-Sealed Invariants:** The verified trajectory is sealed as an emergent `Q(pattern)`. It attains status as an established scientific law (`MODAL_CONSTRUCTIVE` or a new $Q(\text{anchor})$) only when reproducible execution across external nodes validates the trajectory.
 
