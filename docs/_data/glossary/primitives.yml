@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Primitives Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-08 (Bao Loc, Vietnam)
+# Updated: 2026-10-17 (Bao Loc, Vietnam)
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -214,3 +214,19 @@
     Quang Semantics. The constructive relational, linguistic, and intent base
     domain of the Qn universe. Formalizes words as multivector blades, grammar as
     CAE-DAG wiring, and human-machine communication as verifiable intent contracts.
+
+- term: "Q(patterns)"
+  slug: "q-patterns"
+  category: "Primitives"
+  definition: >
+    An invariant, reproducible state-transition template mapping input commitments
+    to deterministic output milestones under abstract DCC contracts. Encompasses
+    both exact algebraic transformations and deterministic terminal fault signatures.
+
+- term: "Q(workflows)"
+  slug: "q-workflows"
+  category: "Primitives"
+  definition: >
+    A composite, goal-directed causal directed acyclic graph assembling multiple
+    Q(patterns) under a declared Intent Contract and finite Metric Budget.
+    Portable across any cdqn node via chained Road Receipts.
