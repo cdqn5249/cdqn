@@ -2,8 +2,8 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.6
-updated: 2026-10-14
+version: 1.2.7
+updated: 2026-10-17
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -46,6 +46,10 @@ terms_used:
   - simemp-gateway
   - qnlang
   - qnir
+  - q-reuse
+  - q-bypass
+  - q-even
+  - q-odd
 ---
 
 # Qm — Quang Mathematics: Constructive Numeric and Relational Substrate
@@ -53,8 +57,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.6 |
-| **Last Updated** | 2026-10-14 (Bao Loc, Vietnam) |
+| **Version** | 1.2.7 |
+| **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
@@ -69,12 +73,12 @@ The following documents establish the physical, structural, and legal constraint
 |---|---|---|
 | `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Lifecycle States]({{ '/glossary.html' | relative_url }}#lifecycle-state) (v1.2.1) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
 | `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.0) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.0) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and parity partitions (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
 | `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification (v1.0.3) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.0) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
@@ -101,6 +105,7 @@ Operational validity is verified empirically via {% include term.html id="comput
  │ Geometric orientation involution (σ) │ Detached ontological sign entities   │
  │ Total-by-budget morphisms (Receipts) │ Infinite non-terminating expansions  │
  │ Height-bounded Diophantine relations │ Unbounded Hilbert-10 void search     │
+ │ Bounded folds & constrained roots    │ Continuous unmetered exponents       │
  │ Positional order decidability        │ Arbitrary heuristic tie-breaking     │
  │ Concrete numeric leaf evaluation     │ Symbolic AST container (Qexpr)       │
  └──────────────────────────────────────┴──────────────────────────────────────┘
@@ -108,7 +113,7 @@ Operational validity is verified empirically via {% include term.html id="comput
 
 ### 1.1. Explicit Inclusions: What Qm Is
 - **The Constructive Numeric Leaf:** The canonical, discrete representation of fully evaluated quantities along dimensional axes encapsulated within the {% include term.html id="universal-envelope" %}.
-- **The $\mathcal{R}$-Algebra:** Explicit arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$) preserving exact Diophantine invariants and emitting signed receipts.
+- **The $\mathcal{R}$-Algebra:** Explicit arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$, powers, and roots) preserving exact Diophantine invariants and emitting signed receipts.
 - **Projective Scale Transitions:** Exact conservation of residual information ($$r_z$$) across zoom scales without numeric drift.
 - **{% include term.html id="local-first" %} Execution:** 100% intra-node computation mediated by local cdqn memory-bus data movement, requiring zero distributed consensus.
 - **Total-by-Budget Morphisms:** Discrete operations bounded by finite resource consumption via {% include term.html id="metric-exhaustion" %}.
@@ -144,12 +149,12 @@ $$\mathrm{Qm}$$ operates across the hierarchy as a vertical domain projection ac
 
 ### 2.1. Layer-by-Layer Responsibilities
 - **{% include term.html id="layer-1" %}:** Hosts genesis primitives. Origin {% include term.html id="q0" text="Q(0)" %} establishes the spatial origin; unit {% include term.html id="q1" text="Q(1)" %} establishes the baseline metric quantum; the transition $$Q(0) \to Q(1)$$ establishes the initial dimensional axis {% include term.html id="dimension-d" text="d1" %} and the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
-- **Layer 2:** Hosts elementary arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$) constrained by explicit {% include term.html id="dcc-profile" text="DCC Profiles" %}, indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
+- **Layer 2:** Hosts elementary arithmetic morphisms ($$+ $$, $$- $$, $$\times$$, $$\div$$, exponents, roots) constrained by explicit {% include term.html id="dcc-profile" text="DCC Profiles" %}, indexed sequentially along the monotonic {% include term.html id="causal-arrow" %}.
 - **Layer 3:** Ingests symbolic {% include term.html id="qexpr" %} trees and collapses them into canonical $$\mathrm{Qm}$$ leaf tuples within finite metric budgets.
 
 ### 2.2. Complexity Degree Stratification
 - **Degree 0 (Foundational Primitives):** $$Q(0)$$, $$Q(1)$$.
-- **Degree 1 (Elementary Arithmetic):** Positional tuples along axis $$d_1$$, Diophantine quotient-remainder partitions. *(Normative scope of this specification).*
+- **Degree 1 (Elementary Arithmetic):** Positional tuples along axis $$d_1$$, Diophantine quotient-remainder partitions, bounded powers. *(Normative scope of this specification).*
 - **Degree 2 (Multi-Axial & Symbolic):** Orthogonal coordinate spaces ($$d_k$$), Clifford geometric algebras ($$\mathcal{C}\ell_{p,q}$$), and Qexpr CAE-DAG reduction ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) and [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }})).
 - **Degree 3 (Discrete Calculus & Analysis):** Discrete exterior calculus, finite-difference operators, and projective continued fractions ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})).
 
@@ -243,7 +248,7 @@ If a state evaluation yields a remainder equal to the local causal origin:
 
 $$r_z = Q(0)$$
 
-the representation is algebraically exact. 
+the representation is algebraically exact.
 
 1. **Information Invariance:** For all subsequent scales $$k \gt 0$$, $$q_{z+k} \equiv 0$$ and $$r_{z+k} \equiv Q(0)$$.
 2. **Deterministic Early Halting:** Evaluating $$z+1$$ when $$r_z = Q(0)$$ yields zero entropy reduction ($$\Delta I = 0$$). Under the **Metric Invariant** ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §3.1), spending compute budget on idempotent iterations is forbidden.
@@ -321,6 +326,51 @@ When recursive compositions cause the symbolic tree of $$r_C$$ to exceed the {% 
 2. Execution halts or emits an explicit dissipative receipt:
    - **Dissipative Truncation Receipt:** `RECEIPT_REMAINDER_TRUNCATION`  
      `⟨ Status: DISSIPATIVE_SINK, LostResidual: r_C, ExportedEntropy: ΔS ⟩`
+
+### 5.5. Exponentiation and Radical Morphisms
+
+Exponentiation and root extraction are formalized as constrained morphisms that operate with explicit thermodynamic bounds and dimensional parity governance:
+
+#### I. Integer Exponentiation as a Bounded Monoidal Fold
+For integer exponents $$B \in \mathbb{N}$$, exponentiation is an iterative multiplicative fold over the positive monoid $$(\mathcal{Q}^+, \times, Q(1))$$:
+
+$$A^B = \prod_{j=1}^B A$$
+
+Evaluated at Layer 3 under `OP_FOLD`. The memory footprint expands linearly with the exponent: $$h(A^B) = B \cdot h(A) \le H_{\max}$$. If the resulting bit size exceeds the metric envelope ceiling, compilation halts with `RECEIPT_EXPRESSION_TOO_COMPLEX`.
+
+#### II. Negative Exponents as Rational Pairs
+Negative powers do not invoke floating-point arithmetic; they map to exact rational inversion pairs under `OP_RATIO`:
+
+$$A^{-B} \equiv \mathrm{OP\_RATIO}\big( Q(1), \, A^B \big) = \frac{Q(1)}{A^B}$$
+
+Projected onto scale lattices at zoom $$z$$ with exact remainder conservation ($$r_z$$). If the base is negative ($$\ominus A$$), the resulting sign is determined by the parity of exponent $$B$$ via secondary anchor $$Q(2)$$ (`DCC_ANCHOR_Q2_PARITY_v1`):
+
+$$\sigma_{\mathrm{result}} = \begin{cases} 
+\oplus & \mathrm{if} \; B \in \mathcal{Q}_{\mathrm{even}} \\ 
+\ominus & \mathrm{if} \; B \in \mathcal{Q}_{\mathrm{odd}} 
+\end{cases}$$
+
+#### III. Boundary Exponent Identities
+Under the {% include term.html id="no-implicit-rule" %}, boundary conditions are strictly evaluated:
+- **Zero Exponent Identity ($$A \neq Q(0)$$):** For any non-zero base, $$A^{Q(0)}$$ represents the empty monoidal product, collapsing to the multiplicative identity $$Q(1)$$. Evaluated in $$\mathcal{O}(1)$$ via {% include term.html id="q-bypass" %}, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($$\Delta W = 0$$).
+- **Indeterminate Origin Power ($$Q(0)^{Q(0)}$$):** An unparameterized $$0^0$$ evaluation is prohibited across gateways. Unless the calling profile carries an explicit contract (`DCC_ZERO_EXPONENT_v1`), execution halts with `RECEIPT_INDETERMINATE_ORIGIN_EXPONENT`.
+- **Negative Origin Power ($$Q(0)^{-k}$$):** Evaluating $$Q(0)^{-k} \equiv Q(1) / Q(0)^k$$ requires division by origin $$Q(0)$$, terminating immediately with `RECEIPT_DIVISION_BY_ZERO_REJECTED`.
+
+#### IV. Radical Morphisms and Dimensional Promotion
+Roots are defined constructively as polynomial Diophantine equations under `OP_ROOT`:
+
+$$\sqrt[n]{A} \implies \mathrm{Find} \; X \quad \mathrm{such} \; \mathrm{that} \quad X^n - A = Q(0)$$
+
+- **Singularity of Root Zero ($$\sqrt[Q(0)]{A}$$):** Expressed as rational exponent $$A^{\frac{Q(1)}{Q(0)}}$$, extracting the $$Q(0)$$-th root requires division by origin in the exponent denominator. The gateway halts execution with `RECEIPT_DIVISION_BY_ZERO_REJECTED`.
+- **Odd Roots of Negative Scalars ($$n \in \mathcal{Q}_{\mathrm{odd}}$$$):** Because an odd number of spatial reflections preserves negative orientation ($$\ominus^n = \ominus$$), odd roots of negative quantities are algebraically closed within 1D discrete space ($$\mathcal{Q}_1$$). For example, $$\sqrt[3]{\ominus 8} = \ominus 2$$ under Terminal Exactness.
+- **Even Roots of Negative Scalars ($$n \in \mathcal{Q}_{\mathrm{even}}$$$):** In 1D scalar space, no orientation satisfies $$\sigma \otimes \sigma = \ominus$$. An attempt to compute $$\sqrt{\ominus A}$$ in 1D is intercepted by the gateway and promoted to Dimension 2 ($$d_2$$) as an oriented planar bivector blade in Clifford Geometric Algebra ($$\mathcal{C}\ell_{p,q}$$):
+
+$$\sqrt{\ominus Q(1)} \implies \vec{e}_1 \wedge \vec{e}_2 \quad (\mathrm{where} \; (\vec{e}_1 \wedge \vec{e}_2)^2 = -Q(1))$$
+
+#### V. The Chiral Optimization Duality
+Powers and roots form a **Chiral Morphism Pair** along the causal execution arrow:
+- Forward powers collapse geometric grades ($$I_2^2 \to -Q(1)$$) and compute in feed-forward polynomial steps. Small integer powers disfavor memory lookups ($$\Delta W_{\mathrm{compute}} \le \Delta W_{\mathrm{lookup}}$$), executing directly on ALUs.
+- Inverse roots expand geometric grades ($$\sqrt{\ominus Q(1)} \to I_2$$) and require bounded Diophantine lattice searches ($$\Delta W_{\mathrm{compute}} \gg \Delta W_{\mathrm{lookup}}$$). Roots cross the thermodynamic breakeven threshold immediately, prioritizing sub-graph reuse via {% include term.html id="q-reuse" %}.
 
 ---
 
