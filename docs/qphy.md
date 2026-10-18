@@ -2,7 +2,7 @@
 layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
 description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
-version: 1.0.2
+version: 1.0.3
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -63,6 +63,9 @@ terms_used:
   - chronosa
   - q-patterns
   - q-workflows
+  - q-event
+  - historical-calibration-benchmark
+  - historical-horizon
 ---
 
 # Qphy — Quang Physics: Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting
@@ -70,7 +73,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qphy — Quang Physics: Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting |
-| **Version** | 1.0.2 |
+| **Version** | 1.0.3 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -85,7 +88,7 @@ The following documents establish the physical, structural, and legal constraint
 | Document | Role | Target |
 |---|---|---|
 | `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.5.3) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
 | `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
 | `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
 | `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
@@ -227,7 +230,7 @@ $$P_{\mathrm{bus}} = \alpha C(\ell) V^2 f + I_{\mathrm{leak}} V$$
 
 ## 5. The Canonical Physical Q(anchor) Spectrum
 
-In $\mathrm{Qphy}$, physical constants are not hardcoded static variables. They are **constructively built Qn artifacts derived from explicit Layer 0/1 calibration**, whose anchor status emerges as their topological centrality ($\chi$) expands across the causal DAG:
+In $\mathrm{Qphy}$, physical constants are not hardcoded static variables. They are **constructively built Qn artifacts derived from an explicit {% include term.html id="historical-calibration-benchmark" %}**, whose anchor status emerges as their topological centrality ($\chi$) expands across the causal DAG:
 
 <pre>
                   THE 5 PHYSICAL Q(anchor) LANDMARKS IN Qphy
@@ -310,7 +313,7 @@ Physical dynamical trajectories are integrated using discrete symplectic morphis
 Under the {% include term.html id="no-implicit-rule" %}, every tensor interaction in $\mathrm{Qphy}$ must declare its algebraic symmetry within its DCC Profile:
 - **Permutation-Invariant (`DCC_SYM_COMMUTATIVE`):** Operations where component order carries zero physical difference (e.g., thermal energy accumulation, scalar potential sums). Child hashes are sorted lexicographically, enabling $\mathcal{O}(1)$ deduplication via {% include term.html id="q-reuse" %}.
 - **Permutation-Sensitive (`DCC_SYM_NON_COMMUTATIVE`):** Operations where order dictates causality or direction (e.g., sequential time steps $S_t \otimes S_{t+\Delta t}$, non-commutative rotor sandwiches $R \vec{v} R^\dagger$). Order is strictly preserved.
-- **Graded Anti-Commutative (`DCC_SYM_ANTI_COMMUTATIVE`):** Outer products of differential forms ($\vec{u} \wedge \vec{v} = - \vec{v} \wedge \vec{u}$). Swapping elements flips the sign parity ($\sigma \to \mathcal{I}(\sigma)$).
+- **Graded Anti-Commutative (`DCC_SYM_ANTI_COMMUTATIVE`):** Outer products of differential forms ($\vec{u} \wedge \vec{v} = - \vec{u} \wedge \vec{v}$). Swapping elements flips the sign parity ($\sigma \to \mathcal{I}(\sigma)$).
 
 ### 7.2. The Four-Axis Bounded Context Range (R_ctx)
 Physical state evaluations cannot occur across unbounded continuous space. Every physical evaluation requires an explicit Context Range:
@@ -341,11 +344,11 @@ $\mathrm{Qphy}$ accommodates both directions across the causal arrow:
 ### 8.1. Forward Symplectic Time Evolution (Q(workflows))
 In forward simulation, a system predicts future physical states:
 1. Initial physical state $S_0$ is configured inside a `Qexpr` container.
-2. The system executes a sequence of symplectic `Q(patterns)`.
+2. The system executes a sequence of symplectic {% include term.html id="q-patterns" text="Q(patterns)" %} generating discrete {% include term.html id="q-event" text="Q(events)" %}.
 3. Intermediate checkpoints are verified using the {% include term.html id="anchor-cut" text="Anchor-Cut Invariant" %}, allowing external auditors to verify long simulations in $\mathcal{O}(K)$ receipt validations without replaying microscopic steps.
 
 ### 8.2. Inverse Causal Reconstruction of Physical Laws
-In empirical observational physics, observers measure an empirical terminal physical state $S_{\mathrm{obs}}$ (anchored as `MODAL_EMPIRICAL`) while the causal origin remains latent:
+In empirical observational physics across the {% include term.html id="historical-horizon" %}, observers measure an empirical terminal physical state $S_{\mathrm{obs}}$ (anchored as `MODAL_EMPIRICAL`) while the causal origin remains latent:
 
 $$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle S_0, \, \mathcal{H}_{\mathrm{sys}} \big\rangle \quad \text{such that} \quad \mathcal{H}(S_0) \equiv S_{\mathrm{obs}}$$
 
