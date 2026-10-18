@@ -3,7 +3,7 @@ layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
 description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
 version: 1.0.3
-updated: 2026-10-18
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -187,7 +187,7 @@ In classical continuous mechanics, non-linear partial differential equations per
 $\mathrm{Qphy}$ provides structural immunity against physical singularities:
 1. **Discrete Lattice Cutoff:** Physical gradients are strictly bounded by the discrete scale quantum $\delta_z(d)$ along dimensional axes (`docs/qm.md` §3.3). Spatial points cannot approach distance zero.
 2. **Dissipative Viscous Sinks:** Physical fields dissipate excess energy into microscopic thermal noise, exporting operational entropy via signed receipts.
-3. **Totality by Budget ({% include term.html id="qnPrimitive.md" text="Axiom 6" %}):** Simulation workflows carry an explicit work ceiling in units of $U$. Unbounded velocity divergence is physically impossible; execution halts cleanly upon budget exhaustion.
+3. **Totality by Budget ({% include term.html id="axiom-6" text="Axiom 6" %}):** Simulation workflows carry an explicit work ceiling in units of $U$. Unbounded velocity divergence is physically impossible; execution halts cleanly upon budget exhaustion.
 
 ### 3.3. Exact Topological Conservation (d² ≡ Q(0))
 In $\mathrm{Qphy}$, conservation laws do not rely on asymptotic floating-point limits. They are exact algebraic identities derived from the **Discrete Exterior Derivative** ({% include term.html id="discrete-exterior-derivative" text="d" %}):
