@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.5.3
+version: 1.5.4
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -47,7 +47,6 @@ terms_used:
   - dual-ring-pqc-boundary
   - identity-class
   - chronosa
-  - qn-workflow
   - qn-rsi
   - terminal-exactness
   - q-anchor
@@ -56,6 +55,7 @@ terms_used:
   - q-odd
   - successor-morphism
   - qlog
+  - qchem
   - qbio
   - qphy
   - q-reuse
@@ -71,6 +71,7 @@ terms_used:
   - discrete-hodge-star
   - q-patterns
   - q-workflows
+  - q-event
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -78,7 +79,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.5.3 |
+| **Version** | 1.5.4 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -99,10 +100,10 @@ The following documents establish the constitutional, physical, and domain const
 | `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.9) | [qm.html]({{ '/qm.html' | relative_url }}) |
 | `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
 | `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.1) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification (v1.1.1) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `docs/qlog.md` | Constructive type theory, pattern verification, and inferential modes (v1.0.4) | [qlog.html]({{ '/qlog.html' | relative_url }}) |
-| `docs/qphy.md` | Discrete field dynamics, computational thermodynamics, and physical entropy (v1.0.2) | [qphy.html]({{ '/qphy.html' | relative_url }}) |
+| `docs/qphy.md` | Discrete field dynamics, computational thermodynamics, and physical entropy (v1.0.3) | [qphy.html]({{ '/qphy.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -175,7 +176,10 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 To prevent premature architectural calcification, the architecture explicitly demarks the **Physical Execution Core** (Layers 0 to 3) from higher-order **Orthogonal Projections**:
 
 1. **The Execution Core Boundary:** The sequential, physical machine stack terminates at Layer 3. Below Layer 3, execution is hardware-grounded and metered in units of $U$.
-2. **Vertical Domain Projections:** The domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}, \mathrm{Qlog}, \mathrm{Qchem}, \mathrm{Qbio}$) are not horizontal layers sitting above Layer 3. They are **orthogonal vertical slices** that project downwards across Layers 1, 2, and 3.
+2. **Vertical Domain Projections:** The domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}, \mathrm{Qlog}, \mathrm{Qchem}, \mathrm{Qbio}$) are not horizontal layers sitting above Layer 3. They are **orthogonal vertical slices** that project downwards across Layers 1, 2, and 3:
+   - Constructive Type Logics ({% include term.html id="qlog" %}, product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$).
+   - Abiotic Molecular Chemistry ({% include term.html id="qchem" %}, product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm})$).
+   - Living Metabolic Systems ({% include term.html id="qbio" %}, biosemiotic product category $\mathbf{C}(\text{Qchem}) \otimes \mathbf{C}(\text{Qs})$).
 3. **Frontend Syntax:** Authoring languages ({% include term.html id="qnlang" %}) sit outside the execution core as compilation frontends that target Layer 3 CAE-DAGs.
 4. **Network and Swarm Intelligence:** Distributed coordination ({% include term.html id="cdqn" %}) and non-local sheaf synthesis ({% include term.html id="chronosa" %}) operate transversally over emitted Road Receipts, requiring no additional horizontal layer numbers.
 
@@ -214,7 +218,7 @@ Every layer, object, morphism, and exported attestation must expose an explicit 
 
 ### 3.5. Causal Arrow and Birth Order
 
-Artifact genesis is indexed along a strictly monotonic {% include term.html id="causal-arrow" %}:
+Every discrete {% include term.html id="q-event" text="Q(event)" %} is indexed along a strictly monotonic {% include term.html id="causal-arrow" %}:
 
 $$Q(0) \prec Q(1) \prec Q(2) \prec \dots \prec Q(9) \prec d_1 \prec d_2 \prec \text{Higher CAE-DAGs}$$
 
@@ -292,7 +296,7 @@ Artifacts and expressions ({% include term.html id="qexpr" %}) are stratified by
 | **1** | Single Digits & Peano Cascade | $Q(2)\dots Q(9)$, elementary $\mathcal{R}$-algebra | [`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}), [`docs/qm.md`]({{ '/qm.html' | relative_url }}) |
 | **2** | Multi-Axial Frames & CAE-DAGs | Orthogonal frames ($d_k$), Clifford rotors, CAE-DAGs | [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}), [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) |
 | **3** | Discrete Dynamics & Calculus | Discrete Exterior Calculus, Continued Fractions | [`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }}) |
-| **$n$** | Advanced Domain Lattices | Categorical Semantics ({% include term.html id="qs" text="Qs" %}), Physics ({% include term.html id="qphy" text="Qphy" %}), Logics ({% include term.html id="qlog" %}), Chemistry ($\mathrm{Qchem}$), Biology ({% include term.html id="qbio" %}) | Base and Emergent Specifications |
+| **$n$** | Advanced Domain Lattices | Categorical Semantics ({% include term.html id="qs" text="Qs" %}), Physics ({% include term.html id="qphy" text="Qphy" %}), Logics ({% include term.html id="qlog" %}), Chemistry ({% include term.html id="qchem" text="Qchem" %}), Biology ({% include term.html id="qbio" %}) | Base and Emergent Specifications |
 
 ---
 
@@ -424,10 +428,10 @@ Development separates foundational primitives from distributed networking:
 Base domains project directly across the execution core, executing 100% locally via local cdqn data movement without network consensus:
 - **{% include term.html id="qm" text="Qm" %} (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) v1.2.9, [`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }}) v1.1.0).
 - **{% include term.html id="qs" text="Qs" %} (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal intent contracts ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) v1.0.0).
-- **{% include term.html id="qphy" text="Qphy" %} (Quang Physics):** Computational thermodynamics, discrete exterior field mechanics, and physical entropy accounting ([`docs/qphy.md`]({{ '/qphy.html' | relative_url }}) v1.0.2).
+- **{% include term.html id="qphy" text="Qphy" %} (Quang Physics):** Computational thermodynamics, discrete exterior field mechanics, and physical entropy accounting ([`docs/qphy.md`]({{ '/qphy.html' | relative_url }}) v1.0.3).
 - **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
   - **{% include term.html id="qlog" %}:** Product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$ governing constructive type theory, inferential modes, and pattern verification ([`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) v1.0.4).
-  - **$\mathrm{Qchem}$ (Quang Chemistry):** Product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm})$ governing discrete stoichiometric balance equations, molecular bonding graphs, and Gibbs free energy dissipation (Pending).
+  - **{% include term.html id="qchem" %} (Quang Chemistry):** Product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm})$ governing discrete stoichiometric balance equations, molecular bonding graphs, and Gibbs free energy dissipation (Pending).
   - **{% include term.html id="qbio" %}:** Biosemiotic product category $\mathbf{C}(\text{Qchem}) \otimes \mathbf{C}(\text{Qs})$ governing living metabolic homeostasis, genetic information channels, and active inference (Pending).
 
 ### Category E — Runtime and Distributed Networking (Milestone 2 Launch)
