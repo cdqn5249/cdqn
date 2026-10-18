@@ -230,3 +230,12 @@
     A composite, goal-directed causal directed acyclic graph assembling multiple
     Q(patterns) under a declared Intent Contract and finite Metric Budget.
     Portable across any cdqn node via chained Road Receipts.
+
+- term: "Qphy"
+  slug: "qphy"
+  category: "Primitives"
+  definition: >
+    Quang Physics. The local-first constructive physical base domain of the
+    Qn universe. Models non-equilibrium computational thermodynamics, discrete
+    exterior cochain field dynamics, Landauer dissipation bounds, and physical
+    Q(anchor) invariants directly grounded in Layer 0 silicon substrates.
