@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Constraints Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-11 (Bao Loc, Vietnam)
+# Updated: 2026-10-18 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -146,3 +146,23 @@
     AI agents are strictly barred from root genesis sovereignty (Q(0)), requiring
     unbroken cryptographic intent contracts bound to a human identity and finite
     metric budgets to prevent unconstrained recursive self-modification.
+
+- term: "Historical Calibration Benchmark"
+  slug: "historical-calibration-benchmark"
+  category: "Constraints"
+  definition: >
+    The mandatory empirical ingestion event wherein a physical node measures
+    its local Layer 0 environmental baseline (ambient temperature, physical
+    entropy, atomic frequency standards) via signed hardware receipts.
+    Acts as the foundational physical bootstrap grounding abstract Qm/Qlog
+    invariants into real thermodynamic work (U) and universal Q(anchor) entities.
+
+- term: "Historical Horizon"
+  slug: "historical-horizon"
+  category: "Constraints"
+  definition: >
+    The epistemic boundary governing past events: Contemporary History is
+    anchored directly to multi-sensor physical receipts (MODAL_EMPIRICAL)
+    yielding global consensus, whereas Long-Horizon Deep History lacks direct
+    silicon witnesses and is evaluated strictly via Qlog inverse causal
+    reconstruction (MODAL_HYPOTHESIS) or contextually firewalled narrative (MODAL_NARRATIVE).
