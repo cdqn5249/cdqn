@@ -2,7 +2,7 @@
 layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
 description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
-version: 1.0.0
+version: 1.0.1
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -70,7 +70,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qphy — Quang Physics: Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -111,7 +111,7 @@ Classical physics often treats computation as an immaterial process operating ov
 
 $\mathrm{Qphy}$ is anchored directly to {% include term.html id="layer-0" text="Layer 0" %} (Physical Substrate: commodity silicon, parasitic wire capacitance, ring oscillator noise, and Landauer dissipation limits). A physical simulation or computation is valid if and only if its state transitions satisfy {% include term.html id="dependencies-determinism" %}:
 
-$$H(S_{\mathrm{out}} \mid \mathcal{D}(S_{\mathrm{out}})) = 0$$
+$$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 
 <pre>
  ┌──────────────────────────────────────┬──────────────────────────────────────┐
@@ -119,7 +119,7 @@ $$H(S_{\mathrm{out}} \mid \mathcal{D}(S_{\mathrm{out}})) = 0$$
  ├──────────────────────────────────────┼──────────────────────────────────────┤
  │ • Continuous spacetime manifolds R^4 │ • Discrete simplicial complexes K    │
  │   and differential field equations.  │   and multi-axial Clifford frames.   │
- │ • Permuts unphysical singularities   │ • Singularity-free by construction:  │
+ │ • Permits unphysical singularities   │ • Singularity-free by construction:  │
  │   (Infinite fluid velocity / poles). │   Spatial scale quantum δ_z(d).      │
  │ • Zero-energy computation ghost      │ • Thermodynamic Double-Leash:        │
  │   (Ignores Landauer dissipation).    │   Meters simulated and real work U.  │
@@ -207,7 +207,7 @@ Thermal noise, bus line jitter, and transmission faults maximize internal entrop
 The transition from local origin {% include term.html id="q0" text="Q(0)" %} to unit {% include term.html id="q1" text="Q(1)" %} defines the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}:
 - **The Landauer Bound:** At ambient temperature ($T = 300\text{ K}$), erasing one bit of physical information dissipates minimal thermodynamic work into the environment:
 
-$$W(U) \ge k_B T \ln 2 \approx 2.87 \times 10^{-21} \text{ Joules}$$
+$$W(U) \ge k_B T \ln 2 \approx 2.87 \times 10^{-21} \text{ J}$$
 
 - **Platform Invariance:** In software compilation, $U$ serves as the invariant accounting quantum. Physical hardware translation layers parameterize device-specific Joule-per-$U$ conversion factors without altering high-level metric envelopes.
 
@@ -282,7 +282,7 @@ $\mathrm{Qphy}$ operates as an **Axiomatic, Thermodynamically Grounded Computati
 </pre>
 
 ### 6.1. Axiomatic Invariance vs. Statistical Latent Hallucination
-Contemporary deep learning world models (e.g., JEPA, Dreamer) approximate physics through statistical correlation over continuous latent spaces. They suffer from physical hallucinations: objects morphing, phantom forces, and non-conservation of energy.  
+Contemporary deep learning world models approximate physics through statistical correlation over continuous latent spaces. They suffer from physical hallucinations: objects morphing, phantom forces, and non-conservation of energy.  
 In $\mathrm{Qphy}$, physical laws are discrete algebraic invariants. Hallucinations are prevented by construction: an unphysical state cannot compile through the gateway.
 
 ### 6.2. The Thermodynamic Double-Leash on Autonomous Agents
@@ -341,9 +341,9 @@ In forward simulation, a system predicts future physical states:
 3. Intermediate checkpoints are verified using the {% include term.html id="anchor-cut" text="Anchor-Cut Invariant" %}, allowing external auditors to verify long simulations in $\mathcal{O}(K)$ receipt validations without replaying microscopic steps.
 
 ### 8.2. Inverse Causal Reconstruction of Physical Laws
-In empirical observational physics, observers measure a terminal state $S_{\mathrm{obs}}$ (e.g., a spectral emission, cosmic radiation, or a fractured silicon line) while the causal origin remains latent:
+In empirical observational physics, observers measure an empirical terminal physical state $S_{\mathrm{obs}}$ (anchored as `MODAL_EMPIRICAL`) while the causal origin remains latent:
 
-$$\text{Given } S_{\mathrm{obs}} \; [\texttt{MODAL\_EMPIRICAL}] \implies \text{Find } \big\langle S_0, \, \mathcal{H}_{\mathrm{system}} \big\rangle \quad \text{such that} \quad \mathcal{H}(S_0) \equiv S_{\mathrm{obs}}$$
+$$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle S_0, \, \mathcal{H}_{\mathrm{sys}} \big\rangle \quad \text{such that} \quad \mathcal{H}(S_0) \equiv S_{\mathrm{obs}}$$
 
 1. **Receipt Anchoring:** The observed state is ingested via verified hardware sensor receipts (`MODAL_EMPIRICAL`, $G = 1.0$).
 2. **Candidate Hypothesis Generation:** Stochastic or neural modules propose ancestral Hamiltonians ($H_1 \dots H_n$).
