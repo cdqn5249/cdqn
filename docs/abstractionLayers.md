@@ -123,7 +123,7 @@ $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge
 
 ## 2. Layer Model and Gateway Topography
 
-{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and transmission across local hardware and distributed networks. Rather than a static, closed staircase, boundaries are modeled as **Universal Functorial Gateways** ($\mathcal{F}: \mathbf{C}_L \to \mathbf{C}_{L+1}$) that enforce the {% include term.html id="no-implicit-rule" %} and audit Landauer dissipation at every transition.
+{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and transmission across local hardware and distributed networks. Rather than a static, closed staircase, boundaries are modeled as **Universal Functorial Gateways** ( $\mathcal{F}: \mathbf{C}_L \to \mathbf{C}_{L+1}$ ) that enforce the {% include term.html id="no-implicit-rule" %} and audit Landauer dissipation at every transition.
 
 ### 2.1. Layer 0 — Commodity Physical Substrate
 
