@@ -2,7 +2,7 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.8.0
+version: 1.8.1
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -55,10 +55,12 @@ terms_used:
   - simemp-gateway
   - qs
   - qlog
+  - qchem
   - qphy
   - discrete-exterior-calculus
   - q-patterns
   - q-workflows
+  - q-event
 ---
 
 # CDQN Documentation Portal
@@ -78,7 +80,7 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.8.0 |
+| **Version** | 1.8.1 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -135,8 +137,8 @@ Development proceeds through consecutive emergence milestones toward an operatio
 │ • Qm Calculus (Discrete Calculus)  ── [CANONICAL v1.1.0]        │
 │ • Qs (Quang Semantics)             ── [CANONICAL v1.0.0]        │
 │ • Qlog (Quang Logics)              ── [CANONICAL v1.0.4]        │
-│ • Qphy (Quang Physics)             ── [CANONICAL v1.0.2]        │
-│ • Emergent Domains: Qchem, Qbio    ── [EXTENSIBLE LATTICE]      │
+│ • Qphy (Quang Physics)             ── [CANONICAL v1.0.3]        │
+│ • Emergent: Qchem, Qbio            ── [EXTENSIBLE LATTICE]      │
 ├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 2: Execution & Language Substrate [LAUNCHING]          │
 │ • Qexpr (Content-Addressed Term DAG)── [CANONICAL v1.1.1]       │
@@ -202,7 +204,7 @@ Development proceeds through consecutive emergence milestones toward an operatio
 </pre>
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
-2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: The execution core (Layers 0 to 3), universal functorial gateways, fractal {% include term.html id="cdqn" %} data movement, substrate vs. invariant ("car vs. road") disjunction, and complexity degree stratification.
+2. **[Abstraction Layers]({{ '/abstractionLayers.html' | relative_url }})**: The execution core (Layers 0 to 3), discrete {% include term.html id="q-event" text="Q(events)" %}, universal functorial gateways, fractal {% include term.html id="cdqn" %} data movement, substrate vs. invariant ("car vs. road") disjunction, and complexity degree stratification.
 3. **[Category A Primitives]({{ '/q0_q1.html' | relative_url }})**: Physical-to-governed gateway mechanics, local genesis origin {% include term.html id="q0" text="Q(0)" %}, first unit {% include term.html id="q1" text="Q(1)" %}, abstract compute unit {% include term.html id="compute-unit-u" text="U" %} calibrated to Landauer dissipation ($W \ge k_B T \ln 2$), hardware lifecycle, Non-Rogue Invariant, and crash recovery receipts.
 4. **[Single-Digit Primitives]({{ '/q2_q9.html' | relative_url }})**: Inductive cascade via discrete {% include term.html id="successor-morphism" text="Successor Morphism S" %}, complete single-digit {% include term.html id="q-anchor" text="Q(anchor)" %} spectrum ($Q(2) \dots Q(9)$), emergent constants ($\phi, \sqrt{2}$), constructive parity partitions ({% include term.html id="q-even" text="Q(even)" %}, {% include term.html id="q-odd" text="Q(odd)" %}), and multiplicative domain asymmetries.
 5. **[Qn Primitive Envelope]({{ '/qnPrimitive.html' | relative_url }})**: Structural anatomy of the {% include term.html id="universal-envelope" %}, operational axioms, typed payload profiles, and Category B optimization morphisms.
@@ -211,8 +213,8 @@ Development proceeds through consecutive emergence milestones toward an operatio
 8. **[Qexpr Container]({{ '/qexpr.html' | relative_url }})**: Layer 3 Content-Addressed Expression DAG ({% include term.html id="qexpr" %}), cryptographic hash-consing, six canonical node classes, continued fractions for transcendentals, and hardware capability-aware collapse.
 9. **[Qm Calculus]({{ '/qm_calculus.html' | relative_url }})**: Constructive discrete calculus, {% include term.html id="discrete-exterior-calculus" text="Discrete Exterior Calculus (DEC)" %} on simplicial complexes, nilpotent coboundary operators ($\mathbf{d} \circ \mathbf{d} \equiv Q(0)$), continued fraction generators for transcendental invariants ($\pi, e, \tau, \ln 2$), and the Anchor-Cut verification invariant in discrete time evolution.
 10. **[Qs Semantics]({{ '/qs.html' | relative_url }})**: Constructive relational intent, semantic multivector blades, epistemic modal spectrum (`MODAL_EMPIRICAL` to `MODAL_NARRATIVE`), structural intent contracts in DCC profiles, and triadic intent grounding ($\mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$).
-11. **[Qlog Logics]({{ '/qlog.html' | relative_url }})**: Constructive type theory, pattern verification, {% include term.html id="q-patterns" text="Q(patterns)" %}, {% include term.html id="q-workflows" text="Q(workflows)" %}, stratified inferential modes ($\mathcal{L}_{\mathrm{modes}}$), the Memory Wall latency harvester, and inverse causal reconstruction.
-12. **[Qphy Physics]({{ '/qphy.html' | relative_url }})**: Discrete exterior field dynamics, non-equilibrium computational thermodynamics, physical $Q(\text{anchor})$ spectrum, the axiomatic world model, and the thermodynamic double-leash on autonomous agents.
+11. **[{% include term.html id="qlog" text="Qlog Logics" %}]({{ '/qlog.html' | relative_url }})**: Constructive type theory, pattern verification, {% include term.html id="q-patterns" text="Q(patterns)" %}, {% include term.html id="q-workflows" text="Q(workflows)" %}, stratified inferential modes ($\mathcal{L}_{\mathrm{modes}}$), the Memory Wall latency harvester, and inverse causal reconstruction.
+12. **[{% include term.html id="qphy" text="Qphy Physics" %}]({{ '/qphy.html' | relative_url }})**: Discrete exterior field dynamics, non-equilibrium computational thermodynamics, physical $Q(\text{anchor})$ spectrum, the axiomatic world model, and the thermodynamic double-leash on autonomous agents.
 13. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
 14. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
