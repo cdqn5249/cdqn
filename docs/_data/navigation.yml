@@ -93,6 +93,13 @@
   description: "Discrete field dynamics, computational thermodynamics, and physical entropy"
   status: "Canonical"
   external: false
+
+- title: "Qchem Chemistry"
+  url: "/qchem.html"
+  slug: "qchem"
+  description: "Discrete stoichiometry, molecular graphs, and reaction energetics"
+  status: "Canonical"
+  external: false
   
 - title: "Chronosa Vision"
   url: "/chronosa.html"
