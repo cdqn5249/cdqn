@@ -2,7 +2,7 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.8.1
+version: 1.9.0
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -56,6 +56,7 @@ terms_used:
   - qs
   - qlog
   - qchem
+  - qbio
   - qphy
   - discrete-exterior-calculus
   - q-patterns
@@ -69,7 +70,7 @@ terms_used:
 **Author:** Christophe Duy Quang Nguyen  
 **License:** [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)  
 **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
-**Status:** Canonical Architectural Portal — Milestone 1 Sealed Baseline
+**Status:** Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline
 
 Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 
@@ -80,11 +81,11 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.8.1 |
+| **Version** | 1.9.0 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Architectural Portal — Milestone 1 Sealed Baseline |
+| **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
 
 ---
 
@@ -138,7 +139,8 @@ Development proceeds through consecutive emergence milestones toward an operatio
 │ • Qs (Quang Semantics)             ── [CANONICAL v1.0.0]        │
 │ • Qlog (Quang Logics)              ── [CANONICAL v1.0.4]        │
 │ • Qphy (Quang Physics)             ── [CANONICAL v1.0.3]        │
-│ • Emergent: Qchem, Qbio            ── [EXTENSIBLE LATTICE]      │
+│ • Qchem (Quang Chemistry)          ── [CANONICAL v1.0.1]        │
+│ • Qbio (Quang Biology)             ── [CANONICAL v1.0.0]        │
 ├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 2: Execution & Language Substrate [LAUNCHING]          │
 │ • Qexpr (Content-Addressed Term DAG)── [CANONICAL v1.1.1]       │
@@ -197,10 +199,16 @@ Development proceeds through consecutive emergence milestones toward an operatio
  [12. Qphy Physics]
         │
         ▼
- [13. Chronosa Vision] 
+ [13. Qchem Chemistry]
         │
         ▼
- [14. Glossary & SSL License]
+ [14. Qbio Biology]
+        │
+        ▼
+ [15. Chronosa Vision] 
+        │
+        ▼
+ [16. Glossary & SSL License]
 </pre>
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
@@ -215,8 +223,10 @@ Development proceeds through consecutive emergence milestones toward an operatio
 10. **[Qs Semantics]({{ '/qs.html' | relative_url }})**: Constructive relational intent, semantic multivector blades, epistemic modal spectrum (`MODAL_EMPIRICAL` to `MODAL_NARRATIVE`), structural intent contracts in DCC profiles, and triadic intent grounding ($\mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$).
 11. **[{% include term.html id="qlog" text="Qlog Logics" %}]({{ '/qlog.html' | relative_url }})**: Constructive type theory, pattern verification, {% include term.html id="q-patterns" text="Q(patterns)" %}, {% include term.html id="q-workflows" text="Q(workflows)" %}, stratified inferential modes ($\mathcal{L}_{\mathrm{modes}}$), the Memory Wall latency harvester, and inverse causal reconstruction.
 12. **[{% include term.html id="qphy" text="Qphy Physics" %}]({{ '/qphy.html' | relative_url }})**: Discrete exterior field dynamics, non-equilibrium computational thermodynamics, physical $Q(\text{anchor})$ spectrum, the axiomatic world model, and the thermodynamic double-leash on autonomous agents.
-13. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
-14. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+13. **[{% include term.html id="qchem" text="Qchem Chemistry" %}]({{ '/qchem.html' | relative_url }})**: Discrete Diophantine stoichiometry ($\mathbf{S} \cdot \vec{v} \equiv Q(0)$), content-addressed molecular graphs, stereochemical Clifford chirality, and reaction kinetics under Gibbs free energy dissipation.
+14. **[{% include term.html id="qbio" text="Qbio Biology" %}]({{ '/qbio.html' | relative_url }})**: Biosemiotics ($\mathbf{C}_{\mathrm{Qchem}} \otimes \mathbf{C}_{\mathrm{Qs}}$), genetic codon translation, metabolic homeostasis, Markov blankets, and active inference under variational free energy bounds.
+15. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
+16. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
