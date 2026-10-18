@@ -2,7 +2,7 @@
 layout: default
 title: Qchem — Quang Chemistry (Discrete Stoichiometry, Molecular Graphs, and Reaction Energetics)
 description: Canonical domain specification for Qchem, formalizing discrete Diophantine stoichiometry, content-addressed molecular graphs, stereochemical Clifford chirality, and reaction kinetics under SIMEMP constraints.
-version: 1.0.0
+version: 1.0.1
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -72,7 +72,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qchem — Quang Chemistry: Discrete Stoichiometry, Molecular Graphs, and Reaction Energetics |
-| **Version** | 1.0.0 |
+| **Version** | 1.0.1 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -288,9 +288,9 @@ Forward chemical synthesis compiles a path from available chemical precursors to
 3. Each step verifies $\Delta G \le Q(0)$ and stoichiometric balance, emitting a chained road receipt vector.
 
 ### 8.2. Inverse Causal Reconstruction of Molecular Graphs
-In analytical chemistry, an instrument measures an empirical spectral signature $S_{\mathrm{obs}}$ (e.g., mass-to-charge ratios $m/z$, NMR chemical shifts) while the molecular identity remains unknown:
+In analytical chemistry across the {% include term.html id="historical-horizon" %}, an instrument measures an empirical spectral signature $S_{\mathrm{obs}}$ (anchored as `MODAL_EMPIRICAL`, e.g., mass-to-charge ratios $m/z$, NMR chemical shifts) while the molecular identity remains unknown:
 
-$$\text{Given } S_{\mathrm{obs}} \; [\texttt{MODAL\_EMPIRICAL}] \implies \text{Find } \big\langle \mathcal{H}(\text{Molecule}), \, \mathcal{M}_{\mathrm{fragment}} \big\rangle \quad \text{such that} \quad \mathcal{M}(\text{Molecule}) \equiv S_{\mathrm{obs}}$$
+$$\text{Given } S_{\mathrm{obs}} \implies \text{Find } \big\langle \mathcal{H}(\text{Molecule}), \, \mathcal{M}_{\mathrm{frag}} \big\rangle \quad \text{such that} \quad \mathcal{M}(\text{Molecule}) \equiv S_{\mathrm{obs}}$$
 
 1. **Receipt Ingestion:** Mass spectrometer readings are anchored as verified sensor receipts (`MODAL_EMPIRICAL`, $G = 1.0$).
 2. **Candidate Hypothesis Generation:** Stochastic or neural engines propose candidate molecular graphs ($M_1 \dots M_n$).
