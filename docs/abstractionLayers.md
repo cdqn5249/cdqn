@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.5.2
+version: 1.5.3
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -78,7 +78,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.5.2 |
+| **Version** | 1.5.3 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -121,9 +121,11 @@ $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge
 
 ---
 
-## 2. Layer Model and Gateway Topography
+## 2. The Horizontal Execution Core and Gateway Topography
 
-{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and transmission across local hardware and distributed networks. Rather than a static, closed staircase, boundaries are modeled as **Universal Functorial Gateways** ( $\mathcal{F}: \mathbf{C}_L \to \mathbf{C}_{L+1}$ ) that enforce the {% include term.html id="no-implicit-rule" %} and audit Landauer dissipation at every transition.
+{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and physical lowering. Rather than a static, unverified staircase of infinite tiers, **the horizontal physical execution stack terminates strictly at Layer 3**, which then lowers into the virtual execution handler ({% include term.html id="qnir" %}).
+
+Inter-layer transitions are modeled as **Universal Functorial Gateways** ($\mathcal{F}: \mathbf{C}(L) \to \mathbf{C}(L+1)$) that enforce the {% include term.html id="no-implicit-rule" %} and audit Landauer dissipation at every state step.
 
 ### 2.1. Layer 0 — Commodity Physical Substrate
 
@@ -168,15 +170,14 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 
 - **Deterministic Collapse:** Expressions remain symbolic during normalization and collapse deterministically to canonical $\mathrm{Qm}$ leaf tuples or flat linear instruction streams ({% include term.html id="qnir" %}) upon crossing execution boundaries.
 
-### 2.5. Layer 4+ — Domain Lattices and Intent
+### 2.5. The Execution Boundary vs. Orthogonal Projections
 
-Higher layers project directly from Layer 2 and Layer 3 via explicit functorial mappings:
-- **Base Domains:** Constructive Mathematics ({% include term.html id="qm" %}), Categorical Semantics ({% include term.html id="qs" text="Qs" %}), and Computational Thermodynamics ({% include term.html id="qphy" text="Qphy" %}).
-- **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
-  - Constructive Type Logics ({% include term.html id="qlog" %}, product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$).
-  - Abiotic Molecular Chemistry ($\mathrm{Qchem}$, product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm})$).
-  - Living Metabolic Systems ({% include term.html id="qbio" %}, biosemiotic product category $\mathbf{C}(\text{Qchem}) \otimes \mathbf{C}(\text{Qs})$).
-- **Virtual Coordination Intelligence:** Emergent non-local intent synthesis across distributed swarms ({% include term.html id="chronosa" text="Chronosa" %}).
+To prevent premature architectural calcification, the architecture explicitly demarks the **Physical Execution Core** (Layers 0 to 3) from higher-order **Orthogonal Projections**:
+
+1. **The Execution Core Boundary:** The sequential, physical machine stack terminates at Layer 3. Below Layer 3, execution is hardware-grounded and metered in units of $U$.
+2. **Vertical Domain Projections:** The domains ($\mathrm{Qm}, \mathrm{Qs}, \mathrm{Qphy}, \mathrm{Qlog}, \mathrm{Qchem}, \mathrm{Qbio}$) are not horizontal layers sitting above Layer 3. They are **orthogonal vertical slices** that project downwards across Layers 1, 2, and 3.
+3. **Frontend Syntax:** Authoring languages ({% include term.html id="qnlang" %}) sit outside the execution core as compilation frontends that target Layer 3 CAE-DAGs.
+4. **Network and Swarm Intelligence:** Distributed coordination ({% include term.html id="cdqn" %}) and non-local sheaf synthesis ({% include term.html id="chronosa" %}) operate transversally over emitted Road Receipts, requiring no additional horizontal layer numbers.
 
 ---
 
@@ -260,7 +261,7 @@ Each node defines a locally finite category $\mathbf{C}_N$:
 
 Inter-layer transitions are modeled as functors constrained by gateway validation:
 
-$$\mathcal{F}: \mathbf{C}_L \to \mathbf{C}_{L+1}$$
+$$\mathcal{F}: \mathbf{C}(L) \longrightarrow \mathbf{C}(L+1)$$
 
 A valid layer-transition functor preserves identity, metric bounds, causal lineage, and SSL metadata. Functors introducing implicit semantic interpretations are invalid.
 
@@ -371,7 +372,7 @@ The architecture enforces an explicit {% include term.html id="dual-ring-pqc-bou
 
 Because physical nodes possess heterogeneous silicon origins ($Q(0)_A \neq Q(0)_B$) and disparate hardware capacities, global consensus cannot operate by flat transaction re-execution. 
 
-Consensus across higher abstraction layers (Layer 3 `Qexpr`, Layer 4 Domains, and {% include term.html id="chronosa" text="Chronosa" %}) is established over **Universal {% include term.html id="q-anchor" text="Q(anchor)" %} Contracts**:
+Consensus across higher abstraction layers (Layer 3 `Qexpr`, Base Domains, and {% include term.html id="chronosa" text="Chronosa" %}) is established over **Universal {% include term.html id="q-anchor" text="Q(anchor)" %} Contracts**:
 1. **Topological Invariance:** Every node instantiates the invariant Single-Digit Anchor Spectrum ($Q(2)\dots Q(9)$, $\phi$, $\sqrt{2}$) and Physical Invariant Anchors (`Q(th_2)`, `Q(c)`, `Q(ℏ)`, `Q(Z_bus)`, `Q(gauge)`). These anchors serve as universal topological landmarks.
 2. **Contract Verification:** Nodes achieve consensus by verifying that road receipts satisfy the shared anchor contract (`DCC_ANCHOR_Q2_PARITY_v1`, `DCC_ANCHOR_SECOND_LAW_v1`, etc.).
 3. **Sheaf-Theoretic Gluing:** In [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}), Chronosa verifies that road receipts emitted by heterogeneous nodes glue consistently over shared $Q(\mathrm{anchor})$ landmarks, synthesizing global causal intelligence without centralized state storage.
@@ -420,7 +421,7 @@ Development separates foundational primitives from distributed networking:
 - Composite state sequence workflows ({% include term.html id="q-workflows" text="Q(workflows)" %}) carrying explicit Universal Envelopes and DCC constraints.
 
 ### Category D — Local-First Base Domains (Milestone 1 Sealed)
-Base domains project directly from Layer 1 and Layer 2, executing 100% locally via local cdqn data movement without network consensus:
+Base domains project directly across the execution core, executing 100% locally via local cdqn data movement without network consensus:
 - **{% include term.html id="qm" text="Qm" %} (Quang Mathematics):** Constructive proof engines, discrete calculus, and exact numeric proofs ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) v1.2.9, [`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }}) v1.1.0).
 - **{% include term.html id="qs" text="Qs" %} (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal intent contracts ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) v1.0.0).
 - **{% include term.html id="qphy" text="Qphy" %} (Quang Physics):** Computational thermodynamics, discrete exterior field mechanics, and physical entropy accounting ([`docs/qphy.md`]({{ '/qphy.html' | relative_url }}) v1.0.2).
