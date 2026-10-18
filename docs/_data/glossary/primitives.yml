@@ -239,3 +239,20 @@
     Qn universe. Models non-equilibrium computational thermodynamics, discrete
     exterior cochain field dynamics, Landauer dissipation bounds, and physical
     Q(anchor) invariants directly grounded in Layer 0 silicon substrates.
+
+- term: "Q(event)"
+  slug: "q-event"
+  category: "Primitives"
+  definition: >
+    A discrete computational or physical state transition occurring at an
+    explicit spatiotemporal coordinate, carrying a discrete scale quantum,
+    a state transition payload, and a verified epistemic modality.
+
+- term: "Qchem"
+  slug: "qchem"
+  category: "Primitives"
+  definition: >
+    Quang Chemistry. An emergent composite domain derived from the categorical
+    tensor product of Quang Physics and Quang Mathematics (Qphy ⊗ Qm).
+    Models discrete stoichiometric balance equations, molecular bonding graphs,
+    reaction kinetics, and Gibbs free energy dissipation without semantic intent.
