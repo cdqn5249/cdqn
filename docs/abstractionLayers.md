@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.5.1
+version: 1.5.2
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -78,7 +78,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.5.1 |
+| **Version** | 1.5.2 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -99,7 +99,7 @@ The following documents establish the constitutional, physical, and domain const
 | `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.9) | [qm.html]({{ '/qm.html' | relative_url }}) |
 | `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
 | `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG specification (v1.1.1) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.1) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `docs/qlog.md` | Constructive type theory, pattern verification, and inferential modes (v1.0.4) | [qlog.html]({{ '/qlog.html' | relative_url }}) |
 | `docs/qphy.md` | Discrete field dynamics, computational thermodynamics, and physical entropy (v1.0.2) | [qphy.html]({{ '/qphy.html' | relative_url }}) |
@@ -121,63 +121,22 @@ $$\text{Validity}(\mathcal{A}) \iff \left( \text{Consistent}(\mathcal{A}) \wedge
 
 ---
 
-## 2. Layer Model
+## 2. Layer Model and Gateway Topography
 
-{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and transmission across local hardware and distributed networks.
-
-<pre>
-+-------------------------------------------------------------------------------+
-| Layer 3: Symbolic Composition (Content-Addressed Expression DAG / Qexpr)      |
-+---------------------------------------^---------------------------------------+
-                                        |  SIMEMP Gateway (Collapse & Budget)
-+---------------------------------------+---------------------------------------+
-| Layer 2: Governed Morphisms (R-Algebra, Q(reuse), Q(bypass), Rotors, d_k)     |
-+---------------------------------------^---------------------------------------+
-                                        |  SIMEMP Gateway (Constraint Enforcement)
-+---------------------------------------+---------------------------------------+
-| Layer 1: Node Genesis Layer (Q(0), Q(1), Abstract Compute Unit U, Axis d1)    |
-+---------------------------------------^---------------------------------------+
-                                        |  SIMEMP Gateway (Hardware Onboarding)
-+---------------------------------------+---------------------------------------+
-| Layer 0: Physical Substrate (Commodity Silicon, Memory Wall, Entropy Sources) |
-+-------------------------------------------------------------------------------+
-</pre>
+{% include term.html id="abstraction-layer" text="Abstraction layers" %} define structural boundaries governing artifact genesis, transformation, and transmission across local hardware and distributed networks. Rather than a static, closed staircase, boundaries are modeled as **Universal Functorial Gateways** ($\mathcal{F}: \mathbf{C}_L \to \mathbf{C}_{L+1}$) that enforce the {% include term.html id="no-implicit-rule" %} and audit Landauer dissipation at every transition.
 
 ### 2.1. Layer 0 — Commodity Physical Substrate
 
 {% include term.html id="layer-0" text="Layer 0" %} is the physical, hardware-agnostic execution substrate:
-
 - Commodity processors (CPU, GPU, DSP, FPGA), memory hierarchies, storage media, and network interfaces.
 - Physical boundaries: finite memory, clock latency, thermal dissipation limits, and the Memory Wall ($\mathcal{O}(C V^2 f)$).
 - Raw physical entropy sources (thermal noise, ring oscillator phase drift) and operating system telemetry.
 
-Layer 0 remains outside the governed Qn universe. It constitutes the **Root of Finiteness**. Raw substrate states, hardware counters, and noise channels become governed Qn artifacts only upon formal mediation by a gateway.
+Layer 0 remains outside the governed Qn universe. It constitutes the **Root of Finiteness**. Raw substrate states, hardware counters, and noise channels become governed Qn artifacts only upon formal mediation by an onboarding gateway.
 
-### 2.2. Layer 0 to Layer 1 Gateway — Node Onboarding and Fault Translation
+### 2.2. Layer 1 — Node Genesis Layer
 
-The {% include term.html id="simemp-gateway" %} bridging Layer 0 and Layer 1 enforces two mandatory functions:
-
-#### Node Onboarding
-During initialization ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2), a node instantiates its local genesis artifact through:
-1. Bounded physical entropy sampling ($\mathcal{B}$) and NIST SP 800-90B statistical validation ($H_{\min} \ge 0.85$).
-2. Device execution context collection (firmware digest, hardware enumeration).
-3. Cryptographic conditioning into a 512-bit seed commitment ($\mathcal{S}_{\text{seed}}$).
-4. Post-Quantum Cryptography (PQC) root keypair generation `(pk_node, sk_node)` in the Inner Ring.
-5. Construction of local genesis {% include term.html id="q0" text="Q(0)" %}.
-6. Emission of a signed genesis {% include term.html id="receipt" %}.
-
-Terminal onboarding states: `SUCCESS`, `ENTROPY_INSUFFICIENT`, `ENTROPY_SOURCE_FAULT`, `HARDWARE_FAULT`, `TIMEOUT`, `PQC_KEYGEN_FAILURE`, `GENESIS_RECEIPT_FAILURE`.
-
-#### Fault Translation
-Hardware and host execution faults are translated into bounded receipts:
-- Out-of-memory interrupts, bus timeouts, network partition states, thermal throttling events, and entropy failures.
-
-No physical fault may cross the gateway as an unmeasured, implicit state.
-
-### 2.3. Layer 1 — Node Genesis Layer
-
-{% include term.html id="layer-1" text="Layer 1" %} is the primary governed ontological layer:
-
+{% include term.html id="layer-1" text="Layer 1" %} is the primary governed ontological layer, instantiated during node onboarding across the Layer 0/1 Gateway:
 - {% include term.html id="q0" text="Q(0)" %}: Local genesis artifact, causal origin zero, empty birth context ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §3).
 - {% include term.html id="q1" text="Q(1)" %}: First unit artifact, unity measure, and baseline reference for the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %} along dimensional axis $d_1$ ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §4).
 - {% include term.html id="compute-unit-u" text="Abstract compute unit U" %}: Minimal governed state transition from $Q(0)$ to $Q(1)$, calibrated to Landauer dissipation ($W \ge k_B T \ln 2$).
@@ -190,25 +149,18 @@ $$\forall A \neq B \implies Q(0)_A \neq Q(0)_B$$
 
 No universal global zero is admitted. $Q(1)$ maintains an invariant numeric and metric value across all nodes; local entropy parameterizes its identity witness but cannot mutate its unit magnitude ($q = 1$).
 
-### 2.4. Layer 1 to Layer 2 Gateway — Algebraic Constraint Validation
+### 2.3. Layer 2 — Governed Morphism Layer
 
-The transition from Layer 1 (Static Ontological Primitives) to Layer 2 (Action and Transformation) is mediated by a validating gateway:
-1. **Constraint Interception:** Intercepts invalid algebraic configurations (such as division by $Q(0)$), terminating execution deterministically with an immutable receipt (`RECEIPT_DIVISION_BY_ZERO_REJECTED`).
-2. **Budget Metering:** Assesses the declared metric envelope of the requested transformation before allocating compute resources.
-3. **No-Implicit Enforcement:** Prohibits implicit operator precedence, ambient sign coercions, or untyped parameter transfers.
-
-### 2.5. Layer 2 — Governed Morphism Layer
-
-Layer 2 governs **transformation and action** across the Qn universe:
+Transitioning from Layer 1 to Layer 2 requires crossing an algebraic constraint gateway that intercepts invalid states (such as division by $Q(0)$) before resource allocation. Layer 2 governs **transformation and action** across the Qn universe:
 - **Elementary $\mathcal{R}$-Algebra:** Constructive addition ($+$), subtraction ($-$), multiplication ($\times$), and Diophantine division ($\div$) ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4).
 - **Optimization Morphisms:** Category B execution short-circuiting ({% include term.html id="q-bypass" text="Q(bypass)" %}) and sub-graph content reuse ({% include term.html id="q-reuse" text="Q(reuse)" %}), eliminating redundant memory allocation and Landauer dissipation ($W = 0$).
 - **Multi-Axial Frame Extension ($\mathcal{D}_{\mathrm{step}}$):** Inductive generation of orthogonal axes $d_2 \dots d_n$ from genesis axis $d_1$ ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §2.1).
 - **Involution and Geometric Products:** Reflection engine $\mathcal{I}_d$, Clifford geometric product ($\vec{u} \vec{v} = \vec{u} \cdot \vec{v} + \vec{u} \wedge \vec{v}$), and float-free rational Cayley rotors.
 - **Secondary DCC Routing:** Directs execution requests to specialized capability contracts anchored at single digits: parity ($Q(2)$), simplices ($Q(3)$), aperiodicity ($Q(5)$), and byte octets ($Q(8)$).
 
-### 2.6. Layer 3 — Symbolic Composition Layer (CAE-DAG)
+### 2.4. Layer 3 — Symbolic Composition Layer (CAE-DAG)
 
-Layer 3 governs symbolic representation and compile-time reduction:
+Transitioning from Layer 2 to Layer 3 wraps morphisms into explicit expression graphs governed by depth and node ceilings. Layer 3 governs symbolic representation and compile-time reduction:
 - Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §7), symbolic expressions are represented as **Content-Addressed Expression DAGs (CAE-DAGs / Term DAGs)** with cryptographic hash-consing ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }})). Naive pointer-heap trees are rejected. Every expression carries an explicit {% include term.html id="universal-envelope" %}, {% include term.html id="metric-envelope" %}, and {% include term.html id="lifecycle-state" %}.
 - **Equivalence Saturation:** Structural equality collapses to $\mathcal{O}(1)$ integer hash comparisons:
 
@@ -216,11 +168,14 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 
 - **Deterministic Collapse:** Expressions remain symbolic during normalization and collapse deterministically to canonical $\mathrm{Qm}$ leaf tuples or flat linear instruction streams ({% include term.html id="qnir" %}) upon crossing execution boundaries.
 
-### 2.7. Layer 4+ — Domain Lattices and Intent
+### 2.5. Layer 4+ — Domain Lattices and Intent
 
-Higher layers project directly from Layer 2 and Layer 3:
+Higher layers project directly from Layer 2 and Layer 3 via explicit functorial mappings:
 - **Base Domains:** Constructive Mathematics ({% include term.html id="qm" %}), Categorical Semantics ({% include term.html id="qs" text="Qs" %}), and Computational Thermodynamics ({% include term.html id="qphy" text="Qphy" %}).
-- **Emergent Composite Domains:** Constructive Type Logics ({% include term.html id="qlog" %}, product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$) and Dissipative Metabolic Systems ({% include term.html id="qbio" %}).
+- **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
+  - Constructive Type Logics ({% include term.html id="qlog" %}, product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$).
+  - Abiotic Molecular Chemistry ($\mathrm{Qchem}$, product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm})$).
+  - Living Metabolic Systems ({% include term.html id="qbio" %}, biosemiotic product category $\mathbf{C}(\text{Qchem}) \otimes \mathbf{C}(\text{Qs})$).
 - **Virtual Coordination Intelligence:** Emergent non-local intent synthesis across distributed swarms ({% include term.html id="chronosa" text="Chronosa" %}).
 
 ---
@@ -273,21 +228,13 @@ Every governed operation must terminate within its declared metric budget as a d
 
 To reconcile physical hardware heterogeneity with platform-invariant verification, the architecture enforces an explicit disjunction between execution telemetry and algebraic invariants:
 
-<pre>
-          THE "CAR PROFILE" (Substrate) vs. THE "ROAD" (Invariant Contract)
- ┌──────────────────────────────────────┬──────────────────────────────────────┐
- │ THE SUBSTRATE ENVELOPE (The "Car")   │ THE GOVERNED TRANSITION (The "Road") │
- ├──────────────────────────────────────┼──────────────────────────────────────┤
- │ Declared in Metric/Security Envelope │ Declared in Abstract DCC Contract    │
- │ • Node hardware architecture & clock │ • Input State Commitment             │
- │ • Local physical thermal dissipation │ • Output State Milestone             │
- │ • Microscopic silicon root Q(0)_N    │ • Invariant Diophantine condition    │
- │ • Local hardware trust ring / enclave│ • Substrate-invariant work ΔW in Q(1)│
- └──────────────────────────────────────┴──────────────────────────────────────┘
-</pre>
-
-1. **The Substrate Envelope (The "Car"):** Node A (an enterprise GPU cluster) and Node B (an embedded microcontroller) possess fundamentally different physical capabilities. These execution differences are parameterized locally within their Metric and Security Envelopes.
-2. **The Governed Invariant (The "Road"):** The state-transition contract $\mathcal{M}_{\mathrm{contract}}$ specifies an invariant mathematical milestone. Whether traversed in one microsecond by Node A or five seconds by Node B, the algebraic displacement is invariant and quantified identically in units of $Q(1)$.
+| Context | The Substrate Envelope (The "Car") | The Governed Invariant (The "Road") |
+|---|---|---|
+| **Location** | Declared in Metric/Security Envelope | Declared in Abstract DCC Contract |
+| **Parameters** | Node hardware architecture and clock frequency | Invariant input state commitment |
+| **Thermodynamics** | Local physical thermal dissipation ($T_{\mathrm{local}}$) | Invariant target state milestone |
+| **Identity** | Microscopic silicon root $Q(0)_N$ | Invariant Diophantine condition |
+| **Security** | Local hardware trust ring and enclave | Substrate-invariant work $\Delta W$ in $Q(1)$ |
 
 ---
 
@@ -320,18 +267,6 @@ A valid layer-transition functor preserves identity, metric bounds, causal linea
 ### 4.4. cdqn as the Fractal Protocol of Governed Data Movement
 
 {% include term.html id="cdqn" %} operates across two structural scopes:
-
-<pre>
-                    FRACTAL SCOPE OF cdqn
- ┌─────────────────────────────────────────────────────────────────┐
- │ REMOTE cdqn (Outer Ring: Inter-Node Attestation)                │
- │ "Road Receipts", public PQC pseudonyms, Q(anchor) consensus     │
- ├─────────────────────────────────────────────────────────────────┤
- │ LOCAL cdqn (Inner Ring: Intra-Node Movement)                    │
- │ CAE-DAG memory transport, inner-ring sealing, private monoroot  │
- └─────────────────────────────────────────────────────────────────┘
-</pre>
-
 1. **Local Scope (Intra-Node Chaining):** Governs data movement and morphism transitions between local abstraction layers via Content-Addressed Expression DAGs (CAE-DAGs) and chained {% include term.html id="receipt" text="receipts" %}.
 2. **Distributed Scope (Inter-Node Attestation):** Connects autonomous local categories ($\mathbf{C}_N$) into a distributed sheaf-like structure synthesized by {% include term.html id="chronosa" %} via the {% include term.html id="exposure-functor" text="Exposure Functor" %}:
 
@@ -356,7 +291,7 @@ Artifacts and expressions ({% include term.html id="qexpr" %}) are stratified by
 | **1** | Single Digits & Peano Cascade | $Q(2)\dots Q(9)$, elementary $\mathcal{R}$-algebra | [`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}), [`docs/qm.md`]({{ '/qm.html' | relative_url }}) |
 | **2** | Multi-Axial Frames & CAE-DAGs | Orthogonal frames ($d_k$), Clifford rotors, CAE-DAGs | [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}), [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) |
 | **3** | Discrete Dynamics & Calculus | Discrete Exterior Calculus, Continued Fractions | [`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }}) |
-| **$n$** | Advanced Domain Lattices | Categorical Semantics ({% include term.html id="qs" text="Qs" %}), Physics ({% include term.html id="qphy" text="Qphy" %}), Logics ({% include term.html id="qlog" %}), Biology ({% include term.html id="qbio" %}) | Base Domain Specifications |
+| **$n$** | Advanced Domain Lattices | Categorical Semantics ({% include term.html id="qs" text="Qs" %}), Physics ({% include term.html id="qphy" text="Qphy" %}), Logics ({% include term.html id="qlog" %}), Chemistry ($\mathrm{Qchem}$), Biology ({% include term.html id="qbio" %}) | Base and Emergent Specifications |
 
 ---
 
@@ -429,19 +364,8 @@ The cdqn network forbids anonymous actors. All interactions are signed by accoun
 ### 8.3. Dual-Ring PQC Boundary
 
 The architecture enforces an explicit {% include term.html id="dual-ring-pqc-boundary" %}:
-
-<pre>
-┌────────────────────────────────────────────────────────┐
-│ Outer Ring: cdqn Network Exposure                      │
-│ (Pseudonyms, Attestation Keys, Delegation Proofs)      │
-│   ┌────────────────────────────────────────────────┐   │
-│   │ Inner Ring: Local Node Substrate               │   │
-│   │ (Root Keys, Q(0), Local Lineage, Sealing Keys) │   │
-│   └────────────────────────────────────────────────┘   │
-└────────────────────────────────────────────────────────┘
-</pre>
-
-The Inner Ring governs local execution and genesis ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.4). The Outer Ring governs network-facing commitments under the local {% include term.html id="security-envelope" %}. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
+- The **Inner Ring** governs local execution and genesis ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.4), protecting root keys, local lineage, and state sealing.
+- The **Outer Ring** governs network-facing commitments under the local {% include term.html id="security-envelope" %}, managing pseudonyms, attestation keys, and delegation proofs. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
 
 ### 8.4. Q(anchor) as the Outer-Ring Consensus Reference Frame
 
@@ -502,7 +426,8 @@ Base domains project directly from Layer 1 and Layer 2, executing 100% locally v
 - **{% include term.html id="qphy" text="Qphy" %} (Quang Physics):** Computational thermodynamics, discrete exterior field mechanics, and physical entropy accounting ([`docs/qphy.md`]({{ '/qphy.html' | relative_url }}) v1.0.2).
 - **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
   - **{% include term.html id="qlog" %}:** Product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$ governing constructive type theory, inferential modes, and pattern verification ([`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) v1.0.4).
-  - **{% include term.html id="qbio" %}:** Product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$ governing non-equilibrium dissipative metabolic systems and active inference (Pending).
+  - **$\mathrm{Qchem}$ (Quang Chemistry):** Product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm})$ governing discrete stoichiometric balance equations, molecular bonding graphs, and Gibbs free energy dissipation (Pending).
+  - **{% include term.html id="qbio" %}:** Biosemiotic product category $\mathbf{C}(\text{Qchem}) \otimes \mathbf{C}(\text{Qs})$ governing living metabolic homeostasis, genetic information channels, and active inference (Pending).
 
 ### Category E — Runtime and Distributed Networking (Milestone 2 Launch)
 - Content-Addressed Expression DAG specification ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) v1.1.1).
@@ -536,4 +461,5 @@ The following formal specifications remain open for subsequent releases:
 1. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
 2. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
 3. Concrete execution and validation mechanics for composite {% include term.html id="q-workflows" text="Q(workflows)" %} and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
-4. Formal specification for Quang Biology (`docs/qbio.md`: dissipative metabolic open systems and active inference).
+4. Formal specification for Quang Chemistry (`docs/qchem.md`: molecular graphs, reaction stoichiometry, and chemical thermodynamic networks).
+5. Formal specification for Quang Biology (`docs/qbio.md`: biosemiotic metabolic systems and active inference).
