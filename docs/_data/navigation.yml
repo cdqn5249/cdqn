@@ -86,6 +86,13 @@
   description: "Constructive type theory, pattern verification, and inferential modes"
   status: "Canonical"
   external: false
+
+- title: "Qphy Physics"
+  url: "/qphy.html"
+  slug: "qphy"
+  description: "Discrete field dynamics, computational thermodynamics, and physical entropy"
+  status: "Canonical"
+  external: false
   
 - title: "Chronosa Vision"
   url: "/chronosa.html"
