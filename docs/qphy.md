@@ -2,7 +2,7 @@
 layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
 description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
-version: 1.0.1
+version: 1.0.2
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -70,7 +70,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qphy — Quang Physics: Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting |
-| **Version** | 1.0.1 |
+| **Version** | 1.0.2 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -135,14 +135,18 @@ $$H(S_t \mid \mathcal{D}(S_t)) = 0$$
 ### 2.1. The Base Triad Architecture (Qs ⊗ Qm ⊗ Qphy)
 Conforming to `docs/qs.md` (§7), physical reality is not generated from pure mathematical logic. The computational universe is grounded upon three mutually orthogonal Base Domains:
 
-$$\mathbf{C}_{\mathrm{Universe}} \equiv \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
+$$\mathbf{C}_{\text{total}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
 
 - **$\mathrm{Qm}$ (Mathematics):** Supplies discrete scalar arithmetic, orthogonal Clifford frames ($\mathcal{C}\ell_{p,q}$), and discrete calculus coboundaries ($\mathbf{d}$).
 - **$\mathrm{Qs}$ (Semantics):** Supplies observer framing, semantic blades, and human {% include term.html id="intent-contract" text="Intent Contracts" %}.
 - **$\mathrm{Qphy}$ (Physics):** Supplies physical non-equilibrium thermodynamics, energy dissipation bounds, and physical conservation laws.
 
 ### 2.2. The Grounding Coupling with Qlog
-$\mathrm{Qphy}$ cannot be generated algebraically by squaring mathematical logic ($\mathbf{C}_{\mathrm{Qphy}} \neq (\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}})^2$). However, $\mathrm{Qphy}$ requires {% include term.html id="qlog" %} to type-check and assemble its physical trajectories:
+The physical domain cannot be synthesized by squaring mathematical logic:
+
+$$\mathbf{C}_{\text{Qphy}} \neq (\mathbf{C}_{\text{Qm}} \otimes \mathbf{C}_{\text{Qs}})^2$$
+
+However, $\mathrm{Qphy}$ requires {% include term.html id="qlog" %} to type-check and assemble its physical trajectories:
 
 <pre>
                          THE BASE DOMAIN COUPLING
@@ -199,9 +203,9 @@ By the Poincaré lemma on discrete simplicial meshes, the boundary of a boundary
 ### 4.1. The Open System Entropy Balance (Prigogine Formulation)
 A physical computing system is an **open thermodynamic engine**. In accordance with non-equilibrium thermodynamics, internal computational stability requires expending work to export operational entropy (`docs/simemp.md` §4.2):
 
-$$dS = dS_{\mathrm{internal}} + dS_{\mathrm{exchange}}, \quad \text{where } dS_{\mathrm{exchange}} \lt 0$$
+$$dS = dS_{\text{int}} + dS_{\text{ext}}, \quad \text{where } dS_{\text{ext}} \lt 0$$
 
-Thermal noise, bus line jitter, and transmission faults maximize internal entropy ($dS_{\mathrm{internal}} \gt 0$). The system restores internal order by exporting entropy through immutable, signed {% include term.html id="receipt" text="Road Receipts" %} ($\mathcal{R}_{\mathrm{road}}$).
+Thermal noise, bus line jitter, and transmission faults maximize internal entropy ($dS_{\text{int}} \gt 0$). The system restores internal order by exporting entropy through immutable, signed {% include term.html id="receipt" text="Road Receipts" %} ($\mathcal{R}_{\mathrm{road}}$).
 
 ### 4.2. Physical Calibration of the Abstract Compute Unit U
 The transition from local origin {% include term.html id="q0" text="Q(0)" %} to unit {% include term.html id="q1" text="Q(1)" %} defines the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}:
@@ -223,39 +227,39 @@ $$P_{\mathrm{bus}} = \alpha C(\ell) V^2 f + I_{\mathrm{leak}} V$$
 
 ## 5. The Canonical Physical Q(anchor) Spectrum
 
-$\mathrm{Qphy}$ establishes five foundational physical landmarks as universal {% include term.html id="q-anchor" text="Q(anchor)" %} entities, each governed by an abstract DCC contract:
+In $\mathrm{Qphy}$, physical constants are not hardcoded static variables. They are **constructively built Qn artifacts derived from explicit Layer 0/1 calibration**, whose anchor status emerges as their topological centrality ($\chi$) expands across the causal DAG:
 
 <pre>
                   THE 5 PHYSICAL Q(anchor) LANDMARKS IN Qphy
  ┌──────────┬─────────────────────────────┬────────────────────────────────────┐
- │ ARTIFACT │ ANCHOR CONTRACT DESIGNATION │ DEFINING PHYSICAL LAW & BOUND      │
+ │ ARTIFACT │ ANCHOR CONTRACT DESIGNATION │ CONSTRUCTIVE DERIVATION SOURCE     │
  ├──────────┼─────────────────────────────┼────────────────────────────────────┤
- │ Q(th_2)  │ DCC_ANCHOR_SECOND_LAW_v1    │ Non-Equilibrium Thermodynamics:    │
- │          │ (Entropy & Landauer Bound)  │ W ≥ k_B T ln 2 per erased bit.     │
+ │ Q(th_2)  │ DCC_ANCHOR_SECOND_LAW_v1    │ Calibrated via hardware sensor temp│
+ │          │ (Entropy & Landauer Bound)  │ T, Q(1), and DCC_ANCHOR_LN2.       │
  ├──────────┼─────────────────────────────┼────────────────────────────────────┤
- │ Q(c)     │ DCC_ANCHOR_CAUSAL_HORIZON_v1│ Relativistic Locality & Causality: │
- │          │ (Finite Speed of Light c)   │ Latency τ ≥ Δx / c (No spooky sync)│
+ │ Q(c)     │ DCC_ANCHOR_CAUSAL_HORIZON_v1│ Calibrated via interconnect dielectric│
+ │          │ (Finite Speed of Light c)   │ velocity in Minkowski frame Cl(1,3)│
  ├──────────┼─────────────────────────────┼────────────────────────────────────┤
- │ Q(ℏ)     │ DCC_ANCHOR_ACTION_PLANCK_v1 │ Quantum Action & Information Bound:│
- │          │ (Bekenstein-Margolus Limit) │ Max state rate ν_max ≤ 2E / (π ℏ). │
+ │ Q(ℏ)     │ DCC_ANCHOR_ACTION_PLANCK_v1 │ Calibrated via Northcott height    │
+ │          │ (Bekenstein-Margolus Limit) │ ceilings and discrete state quantum│
  ├──────────┼─────────────────────────────┼────────────────────────────────────┤
- │ Q(Z_bus) │ DCC_ANCHOR_MEMORY_WALL_v1   │ Capacitive Transport Friction:     │
- │          │ (Ohmic Line Dissipation)    │ P_bus = α C V² f (Data move cost). │
+ │ Q(Z_bus) │ DCC_ANCHOR_MEMORY_WALL_v1   │ Calibrated via bus line capacitance│
+ │          │ (Ohmic Line Dissipation)    │ impedance and static leakage leak. │
  ├──────────┼─────────────────────────────┼────────────────────────────────────┤
- │ Q(gauge) │ DCC_ANCHOR_DEC_D_v1         │ Exact Topological Conservation:    │
- │          │ (Poincaré Coboundary d²≡0)  │ Exact charge & flux conservation.  │
+ │ Q(gauge) │ DCC_ANCHOR_DEC_D_v1         │ Verified via discrete coboundary   │
+ │          │ (Poincaré Coboundary d²≡0)  │ topological nilpotency on mesh K.  │
  └──────────┴─────────────────────────────┴────────────────────────────────────┘
 </pre>
 
 ### 5.1. Universal Physical Anchors and Capability Contracts
-- **`Q(th_2)` (The Second Law Anchor):** Mandates that any non-reversible state collapse dissipates non-zero thermodynamic heat. Zero-energy bit-erasure is prohibited.
-- **`Q(c)` (The Relativistic Causal Horizon Anchor):** Enforces finite signal propagation within Minkowski frames ($\mathcal{C}\ell_{1,3}$). Zero-latency global synchronization is rejected.
-- **`Q(ℏ)` (The Quantum Action Anchor):** Enforces Northcott height ceilings ($H_{\max}$) and the Margolus–Levitin bound. Infinite continuous information density in finite volume is barred.
-- **`Q(Z_bus)` (The Memory Wall Transport Anchor):** Meters bus line capacitance and static leakage dissipation ($P_{\mathrm{leak}} = I_{\mathrm{leak}} V$).
-- **`Q(gauge)` (The Topological Conservation Anchor):** Enforces exact coboundary nilpotency ($\mathbf{d}^2 \equiv Q(0)$).
+- **`Q(th_2)` (The Second Law Anchor):** Built from sampled thermal receipts and $\ln 2$ continued fraction generators. Enforces non-zero heat dissipation for bit-erasure.
+- **`Q(c)` (The Relativistic Causal Horizon Anchor):** Built from local dielectric propagation delays. Enforces finite signal speed ($\tau \ge \Delta x / v_{\mathrm{signal}}$).
+- **`Q(ℏ)` (The Quantum Action Anchor):** Built from height ceilings ($H_{\max}$) and quantum action limits. Forbids unmetered infinite information density in finite registers.
+- **`Q(Z_bus)` (The Memory Wall Transport Anchor):** Built from parasitic wire capacitance measurements ($P = \alpha C V^2 f + I_{\mathrm{leak}} V$).
+- **`Q(gauge)` (The Topological Conservation Anchor):** Built from simplicial mesh topology. Enforces exact coboundary nilpotency ($\mathbf{d}^2 \equiv Q(0)$).
 
 ### 5.2. The Physical Inconsistency Collapse Cascade and Circuit Breakers
-If an execution profile or autonomous workflow claims a trajectory that violates a physical anchor:
+If an execution profile or autonomous workflow claims a trajectory that violates an emergent physical anchor:
 1. **Immediate Inconsistency Cascade:** The physical anchor destabilizes, threatening to corrupt downstream causal cones $\mathcal{C}^+(\alpha)$.
 2. **Gateway Circuit Breaker:** The {% include term.html id="simemp-gateway" %} intercepts the invalid transition, halting execution and emitting `RECEIPT_PHYSICAL_VIOLATION`.
 3. **Protection of Silicon and Lineage:** Halting at the gateway prevents physical thermal runaway on hardware chips and protects downstream causal lineage from ungrounded physics.
