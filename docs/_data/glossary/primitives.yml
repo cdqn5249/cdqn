@@ -255,3 +255,13 @@
     tensor product of Quang Physics and Quang Mathematics (Qphy ⊗ Qm).
     Models discrete stoichiometric balance equations, molecular bonding graphs,
     reaction kinetics, and Gibbs free energy dissipation without semantic intent.
+
+- term: "Axiom 6"
+  slug: "axiom-6"
+  category: "Primitives"
+  definition: >
+    Totality of Governed Operations. Every governed operation carries an
+    explicit work ceiling in Abstract Compute Units U: execution either
+    reaches Terminal Exactness (R = Q(0)) or halts cleanly upon budget
+    exhaustion, emitting a signed receipt. Unbounded, non-terminating state
+    transitions are physically impossible in the Qn universe.
