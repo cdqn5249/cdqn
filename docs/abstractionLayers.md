@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.5.0
+version: 1.5.1
 updated: 2026-10-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -78,7 +78,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.5.0 |
+| **Version** | 1.5.1 |
 | **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -159,10 +159,10 @@ The {% include term.html id="simemp-gateway" %} bridging Layer 0 and Layer 1 enf
 
 #### Node Onboarding
 During initialization ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2), a node instantiates its local genesis artifact through:
-1. Bounded physical entropy sampling ($\mathcal{B}_{\mathrm{raw}}$) and NIST SP 800-90B statistical validation ($H_{\min} \ge 0.85$).
+1. Bounded physical entropy sampling ($\mathcal{B}$) and NIST SP 800-90B statistical validation ($H_{\min} \ge 0.85$).
 2. Device execution context collection (firmware digest, hardware enumeration).
-3. Cryptographic conditioning into a 512-bit seed commitment ($\mathcal{S}_{\mathrm{seed}}$).
-4. Post-Quantum Cryptography (PQC) root key generation ($\mathrm{pk}_N, \mathrm{sk}_N$) in the Inner Ring.
+3. Cryptographic conditioning into a 512-bit seed commitment ($\mathcal{S}_{\text{seed}}$).
+4. Post-Quantum Cryptography (PQC) root keypair generation `(pk_node, sk_node)` in the Inner Ring.
 5. Construction of local genesis {% include term.html id="q0" text="Q(0)" %}.
 6. Emission of a signed genesis {% include term.html id="receipt" %}.
 
@@ -220,7 +220,7 @@ $$A \equiv B \iff \mathcal{H}(A) == \mathcal{H}(B)$$
 
 Higher layers project directly from Layer 2 and Layer 3:
 - **Base Domains:** Constructive Mathematics ({% include term.html id="qm" %}), Categorical Semantics ({% include term.html id="qs" text="Qs" %}), and Computational Thermodynamics ({% include term.html id="qphy" text="Qphy" %}).
-- **Emergent Composite Domains:** Constructive Type Logics ({% include term.html id="qlog" %} $= \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$), Dissipative Metabolic Systems ({% include term.html id="qbio" %} $= \mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$).
+- **Emergent Composite Domains:** Constructive Type Logics ({% include term.html id="qlog" %}, product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$) and Dissipative Metabolic Systems ({% include term.html id="qbio" %}).
 - **Virtual Coordination Intelligence:** Emergent non-local intent synthesis across distributed swarms ({% include term.html id="chronosa" text="Chronosa" %}).
 
 ---
@@ -340,9 +340,9 @@ $$\mathcal{E}_{\mathrm{export}}: \mathbf{C}_N \to \mathbf{Attestations}_{\mathrm
 #### The "Road Receipt" Transmission Conduit
 Nodes never broadcast internal CAE-DAGs across physical networks. Raw local graphs are non-replicable because their causal lineages terminate at node-specific silicon origins ($Q(0)_A \neq Q(0)_B$). Instead, nodes emit **Boundary State-Transition Receipts** ("road receipts"):
 
-$$\mathcal{R}_{\mathrm{road}} = \Big\langle \mathcal{H}(\mathrm{State}_{\mathrm{in}}), \, \mathcal{M}_{\mathrm{contract}}, \, \mathcal{H}(\mathrm{State}_{\mathrm{out}}), \, \Delta W, \, \pi_{\mathrm{proof}}, \, \sigma_{\mathrm{pseudonym}} \Big\rangle$$
+$$\mathcal{R}_{\text{road}} = \Big\langle \mathcal{H}(S_{\text{in}}), \, \mathcal{M}, \, \mathcal{H}(S_{\text{out}}), \, \Delta W, \, \pi, \, \sigma \Big\rangle$$
 
-A receiving node ingests $\mathcal{H}(\mathcal{R}_{\mathrm{road}})$ as an external witness, anchoring the milestone into its *own* local monoroot tree without adopting the sender's origin $Q(0)_A$, preserving **Axiom 4** and achieving $\mathcal{O}(1)$ bandwidth efficiency.
+A receiving node ingests $\mathcal{H}(\mathcal{R}_{\text{road}})$ as an external witness, anchoring the milestone into its *own* local monoroot tree without adopting the sender's origin $Q(0)_A$, preserving **Axiom 4** and achieving $\mathcal{O}(1)$ bandwidth efficiency.
 
 ---
 
@@ -448,7 +448,7 @@ The Inner Ring governs local execution and genesis ([`docs/q0_q1.md`]({{ '/q0_q1
 Because physical nodes possess heterogeneous silicon origins ($Q(0)_A \neq Q(0)_B$) and disparate hardware capacities, global consensus cannot operate by flat transaction re-execution. 
 
 Consensus across higher abstraction layers (Layer 3 `Qexpr`, Layer 4 Domains, and {% include term.html id="chronosa" text="Chronosa" %}) is established over **Universal {% include term.html id="q-anchor" text="Q(anchor)" %} Contracts**:
-1. **Topological Invariance:** Every node instantiates the invariant Single-Digit Anchor Spectrum ($Q(2)\dots Q(9)$, $\phi$, $\sqrt{2}$) and Physical Invariant Anchors ($Q(\mathrm{th}_2), Q(c), Q(\hbar), Q(Z_{\mathrm{bus}}), Q(\mathrm{gauge})$). These anchors serve as universal topological landmarks.
+1. **Topological Invariance:** Every node instantiates the invariant Single-Digit Anchor Spectrum ($Q(2)\dots Q(9)$, $\phi$, $\sqrt{2}$) and Physical Invariant Anchors (`Q(th_2)`, `Q(c)`, `Q(ℏ)`, `Q(Z_bus)`, `Q(gauge)`). These anchors serve as universal topological landmarks.
 2. **Contract Verification:** Nodes achieve consensus by verifying that road receipts satisfy the shared anchor contract (`DCC_ANCHOR_Q2_PARITY_v1`, `DCC_ANCHOR_SECOND_LAW_v1`, etc.).
 3. **Sheaf-Theoretic Gluing:** In [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}), Chronosa verifies that road receipts emitted by heterogeneous nodes glue consistently over shared $Q(\mathrm{anchor})$ landmarks, synthesizing global causal intelligence without centralized state storage.
 
@@ -501,8 +501,8 @@ Base domains project directly from Layer 1 and Layer 2, executing 100% locally v
 - **{% include term.html id="qs" text="Qs" %} (Quang Semantics):** Explicit knowledge graphs, categorical linguistic ontologies (DisCoCat), and formal intent contracts ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) v1.0.0).
 - **{% include term.html id="qphy" text="Qphy" %} (Quang Physics):** Computational thermodynamics, discrete exterior field mechanics, and physical entropy accounting ([`docs/qphy.md`]({{ '/qphy.html' | relative_url }}) v1.0.2).
 - **Emergent Composite Domains:** Extended domain lattice formed via categorical tensor products:
-  - **{% include term.html id="qlog" %}:** Product space $\mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$ governing constructive type theory, inferential modes, and pattern verification ([`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) v1.0.4).
-  - **{% include term.html id="qbio" %}:** Product space $\mathbf{C}_{\mathrm{Qphy}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qs}}$ governing non-equilibrium dissipative metabolic systems and active inference (Pending).
+  - **{% include term.html id="qlog" %}:** Product category $\mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$ governing constructive type theory, inferential modes, and pattern verification ([`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) v1.0.4).
+  - **{% include term.html id="qbio" %}:** Product category $\mathbf{C}(\text{Qphy}) \otimes \mathbf{C}(\text{Qm}) \otimes \mathbf{C}(\text{Qs})$ governing non-equilibrium dissipative metabolic systems and active inference (Pending).
 
 ### Category E — Runtime and Distributed Networking (Milestone 2 Launch)
 - Content-Addressed Expression DAG specification ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) v1.1.1).
