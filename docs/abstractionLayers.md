@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.7.0
+version: 1.7.1
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -39,11 +39,18 @@ terms_used:
   - payload
   - q-anchor
   - q-bypass
+  - q-c
+  - q-datastruc
   - q-even
   - q-event
+  - q-gauge
+  - q-hbar
   - q-odd
+  - q-patterns
   - q-reuse
+  - q-th-2
   - q-workflows
+  - q-z-bus
   - q0
   - q1
   - qbio
@@ -75,7 +82,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.7.0 |
+| **Version** | 1.7.1 |
 | **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -377,7 +384,7 @@ The architecture enforces an explicit {% include term.html id="dual-ring-pqc-bou
 Because physical nodes possess heterogeneous silicon origins ($Q(0)_A \neq Q(0)_B$) and disparate hardware capacities, global consensus cannot operate by flat transaction re-execution. 
 
 Consensus across the execution-core ceiling and its orthogonal projections (Layer 3 `Qexpr`, the base-domain projections, and {% include term.html id="chronosa" text="Chronosa" %}) is established over **Universal {% include term.html id="q-anchor" text="Q(anchor)" %} Contracts**:
-1. **Topological Invariance:** Every node instantiates the invariant Single-Digit Anchor Spectrum ($Q(2)\dots Q(9)$, $\phi$, $\sqrt{2}$) and Physical Invariant Anchors (`Q(th_2)`, `Q(c)`, `Q(ℏ)`, `Q(Z_bus)`, `Q(gauge)`). These anchors serve as universal topological landmarks.
+1. **Topological Invariance:** Every node instantiates the invariant Single-Digit Anchor Spectrum ($Q(2)\dots Q(9)$, $\phi$, $\sqrt{2}$) and Physical Invariant Anchors ({% include term.html id="q-th-2" text="Q(th_2)" %}, {% include term.html id="q-c" text="Q(c)" %}, {% include term.html id="q-hbar" text="Q(ℏ)" %}, {% include term.html id="q-z-bus" text="Q(Z_bus)" %}, {% include term.html id="q-gauge" text="Q(gauge)" %}). These anchors serve as universal topological landmarks.
 2. **Contract Verification:** Nodes achieve consensus by verifying that road receipts satisfy the shared anchor contract (`DCC_ANCHOR_Q2_PARITY_v1`, `DCC_ANCHOR_SECOND_LAW_v1`, etc.).
 3. **Sheaf-Theoretic Gluing:** In [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}), Chronosa verifies that road receipts emitted by heterogeneous nodes glue consistently over shared $Q(\mathrm{anchor})$ landmarks, synthesizing global causal intelligence without centralized state storage.
 
@@ -422,7 +429,7 @@ Development separates foundational primitives from distributed networking:
 
 ### Category C — Data Structures and Workflows
 - Content-Addressed Expression DAGs (CAE-DAGs): hash-consed symbolic expression containers with explicit {% include term.html id="universal-envelope" text="Universal Envelopes" %} and bounded DCC profiles ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }})).
-- Directed acyclic state graphs, immutable memory containers (`Q(dataStruc)`), and pattern matching (`Q(patterns)`).
+- Directed acyclic state graphs, immutable memory containers ({% include term.html id="q-datastruc" text="Q(dataStruc)" %}), and pattern matching ({% include term.html id="q-patterns" text="Q(patterns)" %}).
 - Composite state sequence workflows ({% include term.html id="q-workflows" text="Q(workflows)" %}) carrying explicit Universal Envelopes and DCC constraints.
 
 ### Category D — Local-First Base Domains (Milestone 1 Sealed)
