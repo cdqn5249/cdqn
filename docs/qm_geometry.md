@@ -2,8 +2,8 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.2.1
-updated: 2026-10-16
+version: 1.2.2
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,45 +12,37 @@ file_repo_path: docs/qm_geometry.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qm_geometry.html
 terms_used:
-  - qn
-  - q0
-  - q1
-  - compute-unit-u
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - terminal-exactness
-  - q-anchor
-  - simemp
-  - dependencies-determinism
-  - structural-indirection
-  - metric-exhaustion
-  - no-implicit-rule
-  - computational-consistency
-  - dcc-profile
-  - receipt
-  - universal-envelope
-  - metric-envelope
-  - cdqn
+  - boc-policy
   - causal-arrow
+  - cdqn
   - complexity-degree
-  - local-first
-  - ssl
-  - paternity-reference
-  - qm
-  - q-reuse
-  - q-bypass
-  - qexpr
+  - computational-consistency
+  - compute-unit-u
+  - dependencies-determinism
+  - dimension-d
+  - existential-invariant
   - layer-0
   - layer-1
-  - payload
   - licensed-work
-  - existential-invariant
+  - local-first
+  - metric-envelope
+  - metric-exhaustion
+  - no-implicit-rule
   - operational-agility
-  - boc-policy
-  - simemp-gateway
+  - paternity-reference
+  - payload
+  - qexpr
+  - qm
+  - qn
   - qs
-  - discrete-exterior-calculus
+  - receipt
+  - remainder-r
+  - simemp
+  - simemp-gateway
+  - ssl
+  - terminal-exactness
+  - universal-envelope
+  - zoom-z
 ---
 
 # Qm Geometry — Multi-Axial Frames and Geometric Algebra
@@ -58,8 +50,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.2.1 |
-| **Last Updated** | 2026-10-16 (Bao Loc, Vietnam) |
+| **Version** | 1.2.2 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category B/D ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
