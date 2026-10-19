@@ -2,8 +2,8 @@
 layout: default
 title: Qn Primitive Envelope — Governed Qn Artifact Model
 description: Governed Qn artifact model, operational axioms, candidate typed payload profiles, and Category B optimization primitives under SIMEMP consistency constraints.
-version: 1.2.2
-updated: 2026-10-15
+version: 1.2.3
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,55 +12,53 @@ file_repo_path: docs/qnPrimitive.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qnPrimitive.html
 terms_used:
-  - qn
-  - universal-envelope
-  - dcc-profile
-  - metric-envelope
-  - security-envelope
-  - receipt
-  - lifecycle-state
+  - boc-policy
   - causal-arrow
-  - complexity-degree
-  - local-first
-  - simemp
-  - simemp-gateway
-  - q0
-  - q1
-  - compute-unit-u
   - cdqn
-  - qnlang
-  - qnir
-  - qexpr
-  - open-core-invariant
-  - paternity-reference
-  - ssl
+  - chronosa
+  - complexity-degree
   - computational-consistency
-  - no-implicit-rule
+  - compute-unit-u
+  - dcc-profile
   - dependencies-determinism
-  - structural-indirection
-  - payload
-  - licensed-work
   - derivative-work
-  - metric-exhaustion
-  - zoom-z
-  - remainder-r
   - dimension-d
   - dual-ring-pqc-boundary
+  - existential-invariant
   - identity-class
-  - chronosa
-  - qn-workflow
-  - qn-rsi
-  - q-reuse
-  - q-bypass
-  - terminal-exactness
   - layer-0
   - layer-1
-  - existential-invariant
-  - operational-agility
-  - boc-policy
-  - qs
+  - licensed-work
+  - lifecycle-state
+  - local-first
+  - metric-envelope
+  - metric-exhaustion
+  - no-implicit-rule
   - non-rogue-invariant
-  - intent-contract
+  - open-core-invariant
+  - operational-agility
+  - paternity-reference
+  - payload
+  - q-bypass
+  - q-reuse
+  - q0
+  - q1
+  - qexpr
+  - qn
+  - qn-rsi
+  - qn-workflow
+  - qnir
+  - qnlang
+  - qs
+  - receipt
+  - remainder-r
+  - security-envelope
+  - simemp
+  - simemp-gateway
+  - ssl
+  - structural-indirection
+  - universal-envelope
+  - zoom-z
 ---
 
 # Qn Primitive Envelope — Governed Qn Artifact Model
@@ -68,8 +66,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
-| **Version** | 1.2.2 |
-| **Last Updated** | 2026-10-15 (Bao Loc, Vietnam) |
+| **Version** | 1.2.3 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Primitive Specification — Category A/B Envelope Foundation |
