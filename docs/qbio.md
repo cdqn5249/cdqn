@@ -42,8 +42,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qbio — Quang Biology: Biosemiotics, Metabolic Homeostasis, and Active Inference |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
+| **Version** | 1.0.1 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
