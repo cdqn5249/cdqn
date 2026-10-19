@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.6.0
-updated: 2026-10-18
+version: 1.6.1
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -13,65 +13,61 @@ parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /abstractionLayers.html
 terms_used:
   - abstraction-layer
-  - simemp
-  - simemp-gateway
+  - boc-policy
+  - causal-arrow
+  - cdqn
+  - chronosa
+  - complexity-degree
+  - computational-consistency
+  - compute-unit-u
+  - dcc-profile
+  - dependencies-determinism
+  - dimension-d
+  - dual-ring-pqc-boundary
+  - existential-invariant
+  - exposure-functor
+  - identity-class
   - layer-0
   - layer-1
+  - licensed-work
+  - lifecycle-state
+  - metric-envelope
+  - metric-exhaustion
+  - no-implicit-rule
+  - non-rogue-invariant
+  - operational-agility
+  - payload
+  - q-anchor
+  - q-bypass
+  - q-even
+  - q-event
+  - q-odd
+  - q-reuse
+  - q-workflows
   - q0
   - q1
-  - compute-unit-u
-  - qn
-  - cdqn
-  - causal-arrow
-  - complexity-degree
-  - no-implicit-rule
-  - dcc-profile
-  - universal-envelope
-  - metric-envelope
-  - security-envelope
-  - receipt
-  - lifecycle-state
-  - open-core-invariant
-  - paternity-reference
-  - ssl
-  - computational-consistency
-  - dependencies-determinism
-  - structural-indirection
-  - payload
-  - licensed-work
-  - metric-exhaustion
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - exposure-functor
-  - dual-ring-pqc-boundary
-  - identity-class
-  - chronosa
-  - qn-rsi
-  - terminal-exactness
-  - q-anchor
-  - qm
-  - q-even
-  - q-odd
-  - successor-morphism
-  - qlog
-  - qchem
   - qbio
-  - qphy
-  - q-reuse
-  - q-bypass
+  - qchem
   - qexpr
-  - existential-invariant
-  - operational-agility
-  - boc-policy
+  - qlog
+  - qm
+  - qn
+  - qn-rsi
+  - qnir
+  - qnlang
+  - qphy
   - qs
-  - non-rogue-invariant
-  - discrete-exterior-calculus
-  - discrete-exterior-derivative
-  - discrete-hodge-star
-  - q-patterns
-  - q-workflows
-  - q-event
+  - receipt
+  - remainder-r
+  - security-envelope
+  - simemp
+  - simemp-gateway
+  - ssl
+  - structural-indirection
+  - successor-morphism
+  - terminal-exactness
+  - universal-envelope
+  - zoom-z
 ---
 
 # Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
@@ -79,8 +75,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.6.0 |
-| **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
+| **Version** | 1.6.1 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Structural Thesis — Milestone 1 Fully Sealed Baseline |
