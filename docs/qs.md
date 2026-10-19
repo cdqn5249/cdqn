@@ -2,7 +2,7 @@
 layout: default
 title: Qs — Quang Semantics (Constructive Relational Intent and Epistemic Grounding)
 description: Canonical specification of the constructive semantic base domain, multi-axial Clifford language frames, epistemic modal spectrum, human-agent intent contracts, and AI alignment under SIMEMP constraints.
-version: 1.0.1
+version: 1.1.0
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -48,7 +48,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding |
-| **Version** | 1.0.1 |
+| **Version** | 1.1.0 |
 | **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -58,7 +58,7 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing $\mathrm{Qs}$. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+The following documents establish the physical, structural, and legal constraints governing $\mathrm{Qs}$. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs. References are deliberately version-unpinned: each target document's front matter carries its own authoritative version, so this specification never duplicates drift-prone patch state.
 
 | Document | Role | Target |
 |---|---|---|
@@ -115,16 +115,16 @@ Operational validity is verified empirically via {% include term.html id="comput
 
 ## 2. Vertical Abstraction Layer Projection of Qs
 
-Mirroring the mathematical domain ([`docs/qm.md`]({{ '/qm.html' | relative_url }})), {% include term.html id="qs" %} does not reside in a single, isolated tier. It projects vertically across the entire stack ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §2.7):
+Mirroring the mathematical domain ([`docs/qm.md`]({{ '/qm.html' | relative_url }})), {% include term.html id="qs" %} does not reside in a single, isolated tier. It is an orthogonal vertical projection crossing the execution core ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §2.5):
 
 ```
-                  VERTICAL PROJECTION OF Qs ACROSS THE LAYERS
+                  VERTICAL PROJECTION OF Qs ACROSS THE EXECUTION CORE (L1–L3)
  ┌─────────────────────────────────────────────────────────────────────────────┐
- │ LAYER 4+: Intent & Social Systems (Complexity Degree 3+)                    │
+ │ CD 3+ COMPOSITION DEPTH — beyond the execution ceiling, not a layer         │
  │ Multi-party contracts, modal epistemology (Fact vs. Fiction),               │
  │ human-agent sociology, Chronosa Outer-Ring intent synthesis.                │
  ├─────────────────────────────────────────────────────────────────────────────┤
- │ LAYER 3: Symbolic Semantic Graphs (Complexity Degree 2 / Qexpr CAE-DAG)     │
+ │ LAYER 3 — EXECUTION CEILING: Symbolic Semantic Graphs (CD 2 / Qexpr CAE-DAG)│
  │ Content-Addressed Semantic DAGs: sentences, dialogues, and contexts         │
  │ structured without floating-point drift; agnostic to generating models.     │
  ├─────────────────────────────────────────────────────────────────────────────┤
@@ -136,6 +136,8 @@ Mirroring the mathematical domain ([`docs/qm.md`]({{ '/qm.html' | relative_url }
  │ Foundational distinction between Empty Context Q(0) and Unit Intent Q(1).   │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
+
+* **CD vs. Layer Note:** Complexity Degree (CD) indexes structural composition depth, not layer numbers. The LAYER 1–3 bands name the execution-core strata crossed by the Qs projection; their CD 0/1/2 labels measure composition depth accumulated at each stratum, and CD 3+ marks depth accumulated above the ceiling without implying a Layer 4.
 
 ### 2.1. Layer 1 — Contextual Genesis (Complexity Degree 0)
 At {% include term.html id="layer-1" %}, $\mathrm{Qs}$ establishes the primitive origin of meaning:
@@ -152,8 +154,8 @@ At Layer 3, $\mathrm{Qs}$ structures compound propositions, dialogues, and multi
 * Identical semantic sub-trees and legal clauses share immutable cryptographic hashes via {% include term.html id="cae-dag" %} hash-consing.
 * Incurs zero redundant bit allocation across the Memory Wall via {% include term.html id="q-reuse" text="Q(reuse)" %}.
 
-### 2.4. Layer 4+ — Epistemic Modality and Social Systems (Complexity Degree 3+)
-At Layer 4+, $\mathrm{Qs}$ formalizes higher-order sociology:
+### 2.4. CD 3+ Composition Depth — Epistemic Modality and Social Systems
+Above the Layer 3 execution ceiling, $\mathrm{Qs}$ accumulates Complexity Degree 3+ composition depth — emergent social capability, not additional execution layers:
 * The formal separation between physical facts and sovereign fiction via {% include term.html id="epistemic-anchorage" %}.
 * Multi-party consensus synthesized by {% include term.html id="chronosa" %} over public road receipts.
 
@@ -339,7 +341,7 @@ $$\mathbf{C}_{\text{Intent}} = \mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mat
      Qs (Semantics)              Qm (Mathematics)           Qphy (Physics)
  ┌──────────────────────┐   ┌──────────────────────┐   ┌──────────────────────┐
  │ Human Intent Contract│   │ Formal Decidability  │   │ Thermodynamic Work   │
- │ • Is User Q(0)_H     │   │ • Is rotor trajectory│   │ • Does battery have  │
+ │ • Is User Q(0)_H     │   │ Is rotor trajectory  │   │ Does battery have    │
  │   authorized to fly? │   │   algebraically exact│   │   sufficient Q(1)    │
  │ • DCC capability     │   │   without division by│   │   metric budget?     │
  │   token verified.    │   │   zero?              │   │ • Landauer heat safe.│
