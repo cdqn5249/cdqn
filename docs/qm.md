@@ -55,7 +55,7 @@ terms_used:
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
 | **Version** | 1.2.10 |
-| **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
