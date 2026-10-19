@@ -6,32 +6,44 @@
 
 ---
 
-## What If Modern Computing Was Built on an Unphysical Fiction?
-
-For nearly a century, computer science has treated floating-point rounding errors, non-halting infinite search spaces, unmetered energy burn, and generative AI confabulations as inevitable facts of technology.
-
-**What if they are not fundamental limits of reality, but merely the symptoms of ungrounded mathematical abstractions?**
-
-The **CDQN project** opens a foundational scientific inquiry into the nature of computational physics:
+## The Inquiry
 
 > *Can a discrete number system abstract any computable phenomenon in physical reality if every operation is strictly bound by finite physical laws?*
 
-Instead of accepting actual infinities, unmetered execution time, and lossy approximations, this repository explores a complete reconstruction of computation from the ground up:
+CDQN reconstructs computation from the ground up on that question: exact discrete rationals instead of IEEE 754 drift, no unmeasured state across abstraction boundaries, every state transition metered to thermodynamic limits, and all artifacts sealed inside a governed envelope. The full architectural thesis lives on the documentation portal — this repository hosts its sources.
 
-* **Zero Floating-Point Drift:** Replacing IEEE 754 approximations with exact, discrete rational lattices in [Qm](https://cdqn5249.github.io/cdqn/glossary.html#qm).
-* **Zero Hidden Assumptions:** Admitting no unmeasured state across abstraction boundaries under the [No-Implicit Rule](https://cdqn5249.github.io/cdqn/glossary.html#no-implicit-rule).
-* **Deterministic Causality:** Eliminating non-deterministic state drift via [Dependencies Determinism](https://cdqn5249.github.io/cdqn/glossary.html#dependencies-determinism).
-* **Thermodynamic Accountability:** Metering every state transition to Landauer dissipation limits via the [Abstract Compute Unit U](https://cdqn5249.github.io/cdqn/glossary.html#compute-unit-u).
-* **Structural AI Sovereignty:** Tying autonomous machine agents to human authority by physics through the [Non-Rogue Invariant](https://cdqn5249.github.io/cdqn/glossary.html#non-rogue-invariant) and [Intent Contracts](https://cdqn5249.github.io/cdqn/glossary.html#intent-contract).
-* **Unified Governance:** Packaging all artifacts inside an immutable [Universal Envelope](https://cdqn5249.github.io/cdqn/glossary.html#universal-envelope).
-
-Is computation an unmetered excursion into an infinite Platonic void—or an irreversible thermodynamic process operating on physical silicon?
+*Status: formal theoretical and specification phase. No pre-compiled binaries or runtimes are hosted here.*
 
 ---
 
-## Enter the Investigation
+## Documentation Map
 
-This repository hosts the formal architectural specifications, mathematical definitions, and epistemic case studies of the [Qn](https://cdqn5249.github.io/cdqn/glossary.html#qn) universe, governed by the constitutional [SIMEMP](https://cdqn5249.github.io/cdqn/glossary.html#simemp) framework.
+Each specification exists as a source `.md` (this repository) and a rendered `.html` (the portal). Details, definitions, and reading order live there.
+
+| Document | Specification (.md) | Portal (.html) |
+|---|---|---|
+| Documentation Portal & Roadmap | [docs/index.md](https://github.com/cdqn5249/cdqn/blob/main/docs/index.md) | [Portal](https://cdqn5249.github.io/cdqn/) |
+| SIMEMP Constraints | [docs/simemp.md](https://github.com/cdqn5249/cdqn/blob/main/docs/simemp.md) | [simemp.html](https://cdqn5249.github.io/cdqn/simemp.html) |
+| Abstraction Layers | [docs/abstractionLayers.md](https://github.com/cdqn5249/cdqn/blob/main/docs/abstractionLayers.md) | [abstractionLayers.html](https://cdqn5249.github.io/cdqn/abstractionLayers.html) |
+| Qn Primitive Envelope | [docs/qnPrimitive.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qnPrimitive.md) | [qnPrimitive.html](https://cdqn5249.github.io/cdqn/qnPrimitive.html) |
+| Q(0) Origin & Q(1) Calibration | [docs/q0_q1.md](https://github.com/cdqn5249/cdqn/blob/main/docs/q0_q1.md) | [q0_q1.html](https://cdqn5249.github.io/cdqn/q0_q1.html) |
+| Single-Digit Integers Q(2)…Q(9) | [docs/q2_q9.md](https://github.com/cdqn5249/cdqn/blob/main/docs/q2_q9.md) | [q2_q9.html](https://cdqn5249.github.io/cdqn/q2_q9.html) |
+| Qm — Quang Mathematics | [docs/qm.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qm.md) | [qm.html](https://cdqn5249.github.io/cdqn/qm.html) |
+| Qm Geometry | [docs/qm_geometry.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qm_geometry.md) | [qm_geometry.html](https://cdqn5249.github.io/cdqn/qm_geometry.html) |
+| Qm Calculus | [docs/qm_calculus.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qm_calculus.md) | [qm_calculus.html](https://cdqn5249.github.io/cdqn/qm_calculus.html) |
+| Qexpr — CAE-DAG | [docs/qexpr.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qexpr.md) | [qexpr.html](https://cdqn5249.github.io/cdqn/qexpr.html) |
+| Qs — Quang Semantics | [docs/qs.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qs.md) | [qs.html](https://cdqn5249.github.io/cdqn/qs.html) |
+| Qlog — Quang Logics | [docs/qlog.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qlog.md) | [qlog.html](https://cdqn5249.github.io/cdqn/qlog.html) |
+| Qphy — Quang Physics | [docs/qphy.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qphy.md) | [qphy.html](https://cdqn5249.github.io/cdqn/qphy.html) |
+| Qchem — Quang Chemistry | [docs/qchem.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qchem.md) | [qchem.html](https://cdqn5249.github.io/cdqn/qchem.html) |
+| Qbio — Quang Biology | [docs/qbio.md](https://github.com/cdqn5249/cdqn/blob/main/docs/qbio.md) | [qbio.html](https://cdqn5249.github.io/cdqn/qbio.html) |
+| Chronosa Vision | [docs/chronosa.md](https://github.com/cdqn5249/cdqn/blob/main/docs/chronosa.md) | [chronosa.html](https://cdqn5249.github.io/cdqn/chronosa.html) |
+| Reflection — H10 & Finite Computation | [docs/reflections/h10_finite_computation.md](https://github.com/cdqn5249/cdqn/blob/main/docs/reflections/h10_finite_computation.md) | [h10_finite_computation.html](https://cdqn5249.github.io/cdqn/reflections/h10_finite_computation.html) |
+| Unified Glossary | [docs/glossary.md](https://github.com/cdqn5249/cdqn/blob/main/docs/glossary.md) | [glossary.html](https://cdqn5249.github.io/cdqn/glossary.html) |
+
+---
+
+## Repository Structure
 
 ```
 cdqn/
@@ -39,28 +51,6 @@ cdqn/
 ├── LICENSE.md  # Scaling Source License (SSL) 1.0 terms
 └── README.md   # Project inquiry and entry points
 ```
-
-*There are currently no pre-compiled binary distributions or source runtimes hosted here; the project is in its formal theoretical and specification phase.*
-
----
-
-## Dig Further
-
-Explore the specifications and case studies directly on the documentation portal:
-
-* **The Master Portal & Reading Roadmap:** [Documentation Portal](https://cdqn5249.github.io/cdqn/)
-* **The Constitutional Invariants:** [SIMEMP Constraints](https://cdqn5249.github.io/cdqn/simemp.html)
-* **Master Topography & Gateways:** [Abstraction Layers](https://cdqn5249.github.io/cdqn/abstractionLayers.html)
-* **The Universal Artifact Model:** [Qn Primitive Envelope](https://cdqn5249.github.io/cdqn/qnPrimitive.html)
-* **Hardware Onboarding & Genesis:** [Q(0) Origin & Q(1) Calibration](https://cdqn5249.github.io/cdqn/q0_q1.html)
-* **Discrete Numeric Substrate:** [Qm Mathematics](https://cdqn5249.github.io/cdqn/qm.html)
-* **Content-Addressed Expression Graphs:** [Qexpr CAE-DAG](https://cdqn5249.github.io/cdqn/qexpr.html)
-* **Human Intent & Epistemic Spectrum:** [Qs Semantics](https://cdqn5249.github.io/cdqn/qs.html)
-* **Distributed Sheaf Intelligence:** [Chronosa Vision](https://cdqn5249.github.io/cdqn/chronosa.html)
-* **Real-World Case Study:** [Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us](https://cdqn5249.github.io/cdqn/reflections/h10_finite_computation.html)
-* **Complete Ontological Dictionary:** [CDQN Unified Glossary](https://cdqn5249.github.io/cdqn/glossary.html)
-
-For governance, licensing terms, and commercial scaling thresholds, consult [LICENSE.md](LICENSE.md).
 
 ---
 
