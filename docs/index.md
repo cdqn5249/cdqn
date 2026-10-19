@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.9.1
-updated: 2026-10-19
+version: 1.10.0
+updated: 2026-10-20
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -75,8 +75,8 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.9.1 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.10.0 |
+| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
@@ -123,23 +123,23 @@ Development proceeds through consecutive emergence milestones toward an operatio
 <pre>
 ┌─────────────────────────────────────────────────────────────────┐
 │ CATEGORY A: Foundational Hardware & Single-Digit Primitives     │
-│ • Q(0), Q(1) Genesis & Calibration ── [CANONICAL v1.1.2]        │
-│ • Q(2)...Q(9) Secondary DCC Anchors── [CANONICAL v1.1.1]        │
+│ • Q(0), Q(1) Genesis & Calibration ── [CANONICAL · CD 0]        │
+│ • Q(2)...Q(9) Secondary DCC Anchors ── [CANONICAL · CD 1]       │
 ├─────────────────────────────────────────────────────────────────┤
-│ MILESTONE 1: Local Base Domains & Logics [SEALED BASELINE]       │
-│ • Qm (Arithmetic Substrate)        ── [CANONICAL v1.2.9]        │
-│ • Qm Geometry (Clifford Algebra)   ── [CANONICAL v1.2.1]        │
-│ • Qm Calculus (Discrete Calculus)  ── [CANONICAL v1.1.0]        │
-│ • Qs (Quang Semantics)             ── [CANONICAL v1.0.0]        │
-│ • Qlog (Quang Logics)              ── [CANONICAL v1.0.4]        │
-│ • Qphy (Quang Physics)             ── [CANONICAL v1.0.3]        │
-│ • Qchem (Quang Chemistry)          ── [CANONICAL v1.0.1]        │
-│ • Qbio (Quang Biology)             ── [CANONICAL v1.0.0]        │
+│ MILESTONE 1: Local Base Domains & Logics [SEALED BASELINE]      │
+│ • Qm (Arithmetic Substrate) ── [CANONICAL · CD 1]               │
+│ • Qm Geometry (Clifford Algebra) ── [CANONICAL · CD 2]          │
+│ • Qm Calculus (Discrete Calculus) ── [CANONICAL · CD 3]         │
+│ • Qs (Quang Semantics) ── [CANONICAL · CD n]                    │
+│ • Qlog (Quang Logics) ── [CANONICAL · CD n]                     │
+│ • Qphy (Quang Physics) ── [CANONICAL · CD n]                    │
+│ • Qchem (Quang Chemistry) ── [CANONICAL · CD n]                 │
+│ • Qbio (Quang Biology) ── [CANONICAL · CD n]                    │
 ├─────────────────────────────────────────────────────────────────┤
-│ MILESTONE 2: Execution & Language Substrate [LAUNCHING]          │
-│ • Qexpr (Content-Addressed Term DAG)── [CANONICAL v1.1.1]       │
-│ • QnIR (Intermediate Representation)── [PENDING]                │
-│ • QnLang (High-Level Language)     ── [PENDING]                 │
+│ MILESTONE 2: Execution & Language Substrate [LAUNCHING]         │
+│ • Qexpr (Content-Addressed Term DAG) ── [CANONICAL · CD 2]      │
+│ • QnIR (Intermediate Representation) ── [PENDING]               │
+│ • QnLang (High-Level Language) ── [PENDING]                     │
 ├─────────────────────────────────────────────────────────────────┤
 │ MILESTONE 3: The cdqn Hybrid Swarm Conduit                      │
 │ • Outer-Ring Road Receipts & Sheaf Attestation                  │
@@ -148,9 +148,11 @@ Development proceeds through consecutive emergence milestones toward an operatio
                                  ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │ TERMINAL MILESTONE: Chronosa PoC (Virtual Causal Intelligence)  │
-│ • Operational Vision v0.2.0 ─────── [VISION PROPOSAL]           │
+│ • Operational Vision ─────── [VISION PROPOSAL]                  │
 └─────────────────────────────────────────────────────────────────┘
 </pre>
+
+**CD vs. Layer Note:** The `CD k` labels in the status rows above mirror the Complexity Degree stratification defined in [`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) (§5): they index structural composition depth, not layer numbers. The five domain specifications (Qs, Qlog, Qphy, Qchem, Qbio) are orthogonal vertical projections across the execution core (Layers 1 to 3) whose artifacts carry open-ended CD $n$ labels (rendered as plain `CD n` inside the ASCII diagram); they are not additional layers above the Layer 3 execution ceiling.
 
 ---
 
