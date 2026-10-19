@@ -2,8 +2,8 @@
 layout: default
 title: Qchem — Quang Chemistry (Discrete Stoichiometry, Molecular Graphs, and Reaction Energetics)
 description: Canonical domain specification for Qchem, formalizing discrete Diophantine stoichiometry, content-addressed molecular graphs, stereochemical Clifford chirality, and reaction kinetics under SIMEMP constraints.
-version: 1.0.1
-updated: 2026-10-18
+version: 1.0.2
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,59 +12,27 @@ file_repo_path: docs/qchem.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qchem.html
 terms_used:
-  - qchem
-  - qphy
-  - qm
-  - qs
-  - qlog
-  - qn
-  - q0
-  - q1
-  - compute-unit-u
-  - dependencies-determinism
-  - no-implicit-rule
-  - structural-indirection
-  - simemp
-  - universal-envelope
-  - metric-envelope
-  - security-envelope
-  - receipt
-  - causal-arrow
-  - complexity-degree
-  - local-first
-  - terminal-exactness
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - q-anchor
-  - q-reuse
-  - q-bypass
-  - qexpr
-  - cae-dag
-  - hash-consing
-  - epistemic-anchorage
-  - intent-contract
-  - non-rogue-invariant
-  - qn-rsi
+terms_used:
   - boc-policy
-  - existential-invariant
-  - operational-agility
-  - ssl
-  - paternity-reference
-  - payload
-  - licensed-work
-  - simemp-gateway
-  - discrete-exterior-calculus
-  - anchor-cut
-  - layer-0
-  - layer-1
-  - identity-class
-  - chronosa
-  - q-patterns
-  - q-workflows
-  - q-event
+  - cae-dag
+  - complexity-degree
+  - dependencies-determinism
   - historical-calibration-benchmark
   - historical-horizon
+  - metric-envelope
+  - open-core-invariant
+  - payload
+  - q-anchor
+  - q-bypass
+  - q-patterns
+  - q-reuse
+  - q-workflows
+  - qbio
+  - qexpr
+  - simemp-gateway
+  - ssl
+  - structural-indirection
+  - terminal-exactness
 ---
 
 # Qchem — Quang Chemistry: Discrete Stoichiometry, Molecular Graphs, and Reaction Energetics
