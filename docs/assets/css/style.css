@@ -352,9 +352,11 @@ mjx-container[display="true"] {
     transform: none;
   }
 
-  .glossary-missing {
+}
+
+/* Guard: unresolvable glossary term references render visibly broken */
+.glossary-missing {
   color: #b30000;
   border-bottom: 2px dotted #b30000;
   cursor: help;
-  }
 }
