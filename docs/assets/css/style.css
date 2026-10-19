@@ -351,4 +351,10 @@ mjx-container[display="true"] {
     left: 12px;
     transform: none;
   }
+
+  .glossary-missing {
+  color: #b30000;
+  border-bottom: 2px dotted #b30000;
+  cursor: help;
+  }
 }
