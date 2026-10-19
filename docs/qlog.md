@@ -2,7 +2,7 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.0.5
+version: 1.1.0
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -47,7 +47,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.0.5 |
+| **Version** | 1.1.0 |
 | **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -57,20 +57,20 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs. References are deliberately version-unpinned: each target document's front matter carries its own authoritative version, so this specification never duplicates drift-prone patch state.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
-| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.9) | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.1) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
-| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -134,7 +134,7 @@ A {% include term.html id="q-workflows" text="Q(workflow)" %} is a goal-directed
 
 ## 3. Vertical Projection Across Complexity Degrees
 
-Like {% include term.html id="qm" %} and {% include term.html id="qs" %}, $\mathrm{Qlog}$ is not pinned to a single horizontal layer. It operates as a vertical domain projection across all {% include term.html id="complexity-degree" text="Complexity Degrees" %}:
+Like {% include term.html id="qm" %} and {% include term.html id="qs" %}, $\mathrm{Qlog}$ is not pinned to a single horizontal layer. It operates as an orthogonal vertical projection crossing the execution core ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §2.5) across all {% include term.html id="complexity-degree" text="Complexity Degrees" %}:
 
 <pre>
                      VERTICAL DEGREE PROJECTION OF Qlog
@@ -155,9 +155,11 @@ Like {% include term.html id="qm" %} and {% include term.html id="qs" %}, $\math
  ├────────┼─────────────────────────┼──────────────────────────────────────────┤
  │ Deg n  │ Epistemic Modality &    │ MODAL_* validation, inverse scientific   │
  │        │ Sheaf Synthesis         │ causal reconstruction, Chronosa Outer-   │
- │        │                         │ Ring consensus, self-evolution via Qn(rsi│
+ │        │                         │ Ring consensus, evolution via Qn(rsi)    │
  └────────┴─────────────────────────┴──────────────────────────────────────────┘
 </pre>
+
+* **CD vs. Layer Note:** Complexity Degree (CD) indexes structural composition depth, not layer numbers. The Layer references in §3.1–§3.3 name the execution-core strata (Layers 1–3) crossed by the Qlog vertical projection; their Degree labels measure composition depth accumulated at each stratum, and Degrees 3 and $n$ mark depth accumulated beyond the Layer 3 execution ceiling without implying a Layer 4.
 
 ### 3.1. Degree 0 — Genesis Ontological Baseline
 At {% include term.html id="layer-1" %}, logic formalizes the foundation of existence:
@@ -181,7 +183,7 @@ Interfaces directly with discrete calculus (`docs/qm_calculus.md`):
 - Governs trajectory routing across the universal {% include term.html id="q-anchor" %} landmark network.
 
 ### 3.5. Degree n — Epistemic Modality, Inverse Reconstruction, and RSI
-At Layer 4+, $\mathrm{Qlog}$ unifies multi-agent interaction and empirical science:
+Above the Layer 3 execution ceiling, $\mathrm{Qlog}$ accumulates Complexity Degree $n$ composition depth — emergent epistemic capability, not additional execution layers — unifying multi-agent interaction and empirical science:
 - **{% include term.html id="epistemic-anchorage" %}:** Segregates physical sensor data (`MODAL_EMPIRICAL`) from context-bound worldbuilding (`MODAL_NARRATIVE`).
 - **Inverse Causal Reconstruction:** Formalizes empirical scientific discovery by inverting observed macroscopic states to identify minimal causal ancestor DAGs.
 - **Recursive Evolution via {% include term.html id="qn-rsi" %}:** Compiles and optimizes the logical engine itself, emitting versioned successor artifacts under **Axiom 13**.
