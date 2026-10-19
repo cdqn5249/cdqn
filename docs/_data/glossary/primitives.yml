@@ -158,21 +158,14 @@
     dimension, DCC profile, identity, and causal lineage. Structured as a
     Content-Addressed Expression DAG (CAE-DAG) with hash-consing.
 
-- term: "Qn(workflow)"
-  slug: "qn-workflow"
-  category: "Primitives"
-  definition: >
-    A governed composite Qn artifact representing an explicit, causal directed
-    acyclic graph of state transitions and morphisms. Bounded by its own Universal
-    Envelope, DCC Profile, and finite metric budget allocation.
-
-- term: "Qn(rsi)"
+- term: "Q(rsi)"
   slug: "qn-rsi"
   category: "Primitives"
   definition: >
-    A higher-order recursive self-optimization workflow. Ingests an existing Qn
-    workflow, derives an empirically more efficient successor under strict semantic
-    invariance and finite metric budget, and emits a versioned successor artifact.
+    A higher-order recursive self-optimization workflow. Ingests an existing
+    Q(workflows) artifact, derives an empirically more efficient successor under
+    strict semantic invariance and finite metric budget, and emits a versioned
+    successor artifact.
 
 - term: "Content-Addressed Expression DAG"
   slug: "cae-dag"
@@ -265,3 +258,53 @@
     reaches Terminal Exactness (R = Q(0)) or halts cleanly upon budget
     exhaustion, emitting a signed receipt. Unbounded, non-terminating state
     transitions are physically impossible in the Qn universe.
+
+- term: "Q(dataStruc)"
+  slug: "q-datastruc"
+  category: "Primitives"
+  definition: >
+    Governed immutable memory container artifact class providing bounded,
+    content-addressed storage within the local causal DAG. Allocation, reading,
+    and writing are explicit governed morphisms subject to DCC constraints and
+    Memory Wall envelopes; no implicit heap state is admitted.
+
+- term: "Q(th_2)"
+  slug: "q-th-2"
+  category: "Primitives"
+  definition: >
+    Physical invariant anchor encoding the Second Law. Calibrated from sampled
+    thermal receipts via ln 2 dissipation quanta, it mandates that endergonic
+    processes execute only under a declared Gibbs free-energy budget
+    (DCC_ANCHOR_SECOND_LAW_v1).
+
+- term: "Q(c)"
+  slug: "q-c"
+  category: "Primitives"
+  definition: >
+    Physical invariant anchor of the relativistic causal horizon. Calibrated
+    from local dielectric propagation delays, it bounds causally ordered state
+    propagation across the substrate (DCC_ANCHOR_CAUSAL_HORIZON_v1).
+
+- term: "Q(ℏ)"
+  slug: "q-hbar"
+  category: "Primitives"
+  definition: >
+    Physical invariant anchor of quantum action. Built from height ceilings
+    and quantum action limits, it forbids unmetered infinite information
+    density in finite registers (DCC_ANCHOR_ACTION_PLANCK_v1).
+
+- term: "Q(Z_bus)"
+  slug: "q-z-bus"
+  category: "Primitives"
+  definition: >
+    Physical invariant anchor of the Memory Wall. Built from parasitic wire
+    capacitance and bus line physics, it calibrates transport latency and
+    bandwidth ceilings of the substrate (DCC_ANCHOR_MEMORY_WALL_v1).
+
+- term: "Q(gauge)"
+  slug: "q-gauge"
+  category: "Primitives"
+  definition: >
+    Physical invariant anchor of topological conservation. Built from
+    simplicial mesh topology and discrete coboundary verification, it grounds
+    conserved field quantities without metric drift (DCC_ANCHOR_DEC_D_v1).
