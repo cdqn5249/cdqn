@@ -2,8 +2,8 @@
 layout: default
 title: Qs — Quang Semantics (Constructive Relational Intent and Epistemic Grounding)
 description: Canonical specification of the constructive semantic base domain, multi-axial Clifford language frames, epistemic modal spectrum, human-agent intent contracts, and AI alignment under SIMEMP constraints.
-version: 1.0.0
-updated: 2026-10-11
+version: 1.0.1
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,51 +12,35 @@ file_repo_path: docs/qs.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qs.html
 terms_used:
-  - qs
-  - qn
-  - q0
-  - q1
-  - compute-unit-u
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - terminal-exactness
-  - q-anchor
-  - simemp
-  - dependencies-determinism
-  - structural-indirection
-  - metric-exhaustion
-  - no-implicit-rule
-  - computational-consistency
-  - dcc-profile
-  - receipt
-  - universal-envelope
-  - metric-envelope
-  - security-envelope
-  - cdqn
-  - causal-arrow
-  - complexity-degree
-  - local-first
-  - ssl
-  - paternity-reference
-  - q-reuse
-  - q-bypass
-  - qexpr
+  - boc-policy
   - cae-dag
+  - causal-arrow
+  - cdqn
+  - chronosa
+  - computational-consistency
+  - compute-unit-u
+  - dcc-profile
+  - dependencies-determinism
+  - epistemic-anchorage
+  - identity-class
+  - intent-contract
   - layer-0
   - layer-1
-  - payload
   - licensed-work
-  - existential-invariant
-  - operational-agility
-  - boc-policy
-  - simemp-gateway
-  - identity-class
-  - chronosa
-  - qn-rsi
+  - metric-exhaustion
+  - no-implicit-rule
+  - open-core-invariant
+  - paternity-reference
+  - q-reuse
+  - q0
+  - q1
   - qm
-  - epistemic-anchorage
-  - intent-contract
+  - qn
+  - qn-rsi
+  - qs
+  - simemp-gateway
+  - ssl
+  - zoom-z
 ---
 
 # Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding
@@ -64,8 +48,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding |
-| **Version** | 1.0.0 |
-| **Last Updated** | 2026-10-11 (Bao Loc, Vietnam) |
+| **Version** | 1.0.1 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
