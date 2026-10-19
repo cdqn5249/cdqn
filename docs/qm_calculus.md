@@ -2,8 +2,8 @@
 layout: default
 title: Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics
 description: Canonical specification of constructive discrete calculus, Discrete Exterior Calculus (DEC) on simplicial meshes, transcendental continued fractions, and aperiodic lineage trajectories under SIMEMP constraints.
-version: 1.1.0
-updated: 2026-10-10
+version: 1.1.1
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,48 +12,47 @@ file_repo_path: docs/qm_calculus.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qm_calculus.html
 terms_used:
-  - qm
-  - qn
-  - q0
-  - q1
-  - compute-unit-u
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - terminal-exactness
-  - q-anchor
-  - simemp
-  - dependencies-determinism
-  - structural-indirection
-  - metric-exhaustion
-  - no-implicit-rule
-  - computational-consistency
-  - dcc-profile
-  - receipt
-  - universal-envelope
-  - metric-envelope
-  - security-envelope
-  - cdqn
-  - causal-arrow
-  - complexity-degree
-  - local-first
-  - ssl
-  - paternity-reference
-  - q-reuse
-  - q-bypass
-  - qexpr
-  - layer-0
-  - layer-1
-  - payload
-  - licensed-work
-  - existential-invariant
-  - operational-agility
+  - anchor-cut
   - boc-policy
-  - simemp-gateway
+  - causal-arrow
+  - cdqn
+  - complexity-degree
+  - computational-consistency
+  - compute-unit-u
+  - dcc-profile
+  - dependencies-determinism
+  - dimension-d
   - discrete-exterior-calculus
   - discrete-exterior-derivative
   - discrete-hodge-star
-  - anchor-cut
+  - existential-invariant
+  - layer-0
+  - layer-1
+  - licensed-work
+  - local-first
+  - metric-envelope
+  - metric-exhaustion
+  - no-implicit-rule
+  - open-core-invariant
+  - operational-agility
+  - paternity-reference
+  - payload
+  - q-anchor
+  - q-bypass
+  - q-reuse
+  - q0
+  - q1
+  - qexpr
+  - qm
+  - qn
+  - receipt
+  - remainder-r
+  - security-envelope
+  - simemp-gateway
+  - ssl
+  - terminal-exactness
+  - universal-envelope
+  - zoom-z
 ---
 
 # Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics
@@ -61,8 +60,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Calculus — Discrete Exterior Calculus, Continued Fractions, and Invariant Dynamics |
-| **Version** | 1.1.0 |
-| **Last Updated** | 2026-10-10 (Bao Loc, Vietnam) |
+| **Version** | 1.1.1 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
