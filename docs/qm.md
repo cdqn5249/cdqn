@@ -2,7 +2,7 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.9
+version: 1.2.10
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -12,44 +12,41 @@ file_repo_path: docs/qm.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qm.html
 terms_used:
-  - qm
-  - qn
-  - q0
-  - q1
+  - abstraction-layer
+  - axiom-6
+  - causal-arrow
+  - computational-consistency
   - compute-unit-u
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - terminal-exactness
-  - q-anchor
-  - simemp
+  - dcc-profile
   - dependencies-determinism
-  - structural-indirection
+  - dimension-d
+  - layer-1
+  - licensed-work
+  - local-first
+  - metric-envelope
   - metric-exhaustion
   - no-implicit-rule
-  - computational-consistency
-  - dcc-profile
-  - receipt
-  - universal-envelope
-  - metric-envelope
-  - cdqn
-  - causal-arrow
-  - complexity-degree
-  - local-first
-  - ssl
   - paternity-reference
-  - qexpr
-  - abstraction-layer
-  - layer-1
   - payload
-  - licensed-work
-  - simemp-gateway
-  - qnlang
-  - qnir
-  - q-reuse
+  - q-anchor
   - q-bypass
-  - q-even
-  - q-odd
+  - q-reuse
+  - q0
+  - q1
+  - qexpr
+  - qm
+  - qn
+  - qnir
+  - qnlang
+  - receipt
+  - remainder-r
+  - simemp
+  - simemp-gateway
+  - ssl
+  - structural-indirection
+  - terminal-exactness
+  - universal-envelope
+  - zoom-z
 ---
 
 # Qm — Quang Mathematics: Constructive Numeric and Relational Substrate
@@ -57,7 +54,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.9 |
+| **Version** | 1.2.10 |
 | **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
