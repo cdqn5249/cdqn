@@ -2,8 +2,8 @@
 layout: default
 title: Chronosa — Vision and Proposal for an Emergent Causal Intelligence
 description: Operational vision and architectural proposal for Chronosa, a non-local, virtual causal intelligence demonstrating the foundational Qn conjecture over hybrid swarm topologies.
-version: 0.2.0
-updated: 2026-10-09
+version: 0.2.1
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -13,39 +13,38 @@ parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /chronosa.html
 status: Vision and Research Proposal — Not a Finalized Specification
 terms_used:
-  - chronosa
-  - simemp
-  - qn
-  - cdqn
-  - q0
-  - q1
-  - compute-unit-u
-  - qm
-  - qexpr
-  - qnlang
-  - qnir
   - causal-arrow
-  - dependencies-determinism
-  - structural-indirection
-  - dcc-profile
-  - receipt
-  - universal-envelope
-  - dual-ring-pqc-boundary
+  - cdqn
+  - chronosa
   - computational-consistency
-  - metric-exhaustion
-  - payload
-  - licensed-work
-  - ssl
-  - no-implicit-rule
-  - scaling-threshold
-  - exposure-functor
-  - complexity-degree
-  - zoom-z
-  - remainder-r
+  - compute-unit-u
+  - dcc-profile
+  - dependencies-determinism
   - dimension-d
-  - q-anchor
+  - dual-ring-pqc-boundary
+  - exposure-functor
+  - licensed-work
+  - metric-exhaustion
+  - no-implicit-rule
   - open-core-invariant
   - paternity-reference
+  - payload
+  - q-anchor
+  - q0
+  - q1
+  - qexpr
+  - qm
+  - qn
+  - qnir
+  - qnlang
+  - receipt
+  - remainder-r
+  - scaling-threshold
+  - simemp
+  - ssl
+  - structural-indirection
+  - universal-envelope
+  - zoom-z
 ---
 
 # Chronosa — Vision and Proposal for an Emergent Causal Intelligence
@@ -53,8 +52,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Chronosa — Vision and Proposal for an Emergent Causal Intelligence |
-| **Version** | 0.2.0 |
-| **Last Updated** | 2026-10-09 (Bao Loc, Vietnam) |
+| **Version** | 0.2.1 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Research Proposal — Not a Finalized Specification |
