@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.9.0
-updated: 2026-10-18
+version: 1.9.1
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,56 +12,50 @@ file_repo_path: docs/index.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /
 terms_used:
+  - boc-policy
   - cdqn
-  - simemp
-  - qn
-  - qnlang
-  - qnir
+  - chronosa
   - computational-consistency
+  - compute-unit-u
+  - dependencies-determinism
+  - derivative-work
+  - dimension-d
+  - discrete-exterior-calculus
   - existential-invariant
-  - operational-agility
-  - no-implicit-rule
-  - receipt
+  - licensed-work
   - local-first
+  - metric-exhaustion
+  - no-implicit-rule
+  - open-core-invariant
+  - operational-agility
+  - paternity-reference
+  - payload
+  - q-anchor
+  - q-bypass
+  - q-even
+  - q-event
+  - q-odd
+  - q-patterns
+  - q-reuse
+  - q-workflows
   - q0
   - q1
-  - compute-unit-u
-  - qm
-  - layer-0
-  - layer-1
-  - boc-policy
-  - scaling-threshold
-  - open-core-invariant
-  - paternity-reference
-  - ssl
-  - dependencies-determinism
-  - structural-indirection
-  - payload
-  - licensed-work
-  - derivative-work
-  - metric-exhaustion
-  - chronosa
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - terminal-exactness
-  - q-anchor
-  - q-reuse
-  - q-bypass
-  - qexpr
-  - q-even
-  - q-odd
-  - successor-morphism
-  - simemp-gateway
-  - qs
-  - qlog
-  - qchem
   - qbio
+  - qchem
+  - qexpr
+  - qlog
+  - qn
   - qphy
-  - discrete-exterior-calculus
-  - q-patterns
-  - q-workflows
-  - q-event
+  - receipt
+  - remainder-r
+  - scaling-threshold
+  - simemp
+  - simemp-gateway
+  - structural-indirection
+  - successor-morphism
+  - terminal-exactness
+  - universal-envelope
+  - zoom-z
 ---
 
 # CDQN Documentation Portal
@@ -81,8 +75,8 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.9.0 |
-| **Last Updated** | 2026-10-18 (Bao Loc, Vietnam) |
+| **Version** | 1.9.1 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
