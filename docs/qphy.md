@@ -2,7 +2,7 @@
 layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
 description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
-version: 1.0.4
+version: 1.0.5
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -26,10 +26,15 @@ terms_used:
   - no-implicit-rule
   - open-core-invariant
   - payload
+  - q-c
   - q-event
+  - q-gauge
+  - q-hbar
   - q-patterns
   - q-reuse
+  - q-th-2
   - q-workflows
+  - q-z-bus
   - q0
   - q1
   - qlog
@@ -46,7 +51,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qphy — Quang Physics: Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting |
-| **Version** | 1.0.4 |
+| **Version** | 1.0.5 |
 | **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -56,21 +61,21 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs. References are deliberately version-unpinned: each target document's front matter carries its own authoritative version, so this specification never duplicates drift-prone patch state.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.5.3) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
-| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.9) | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.1) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
-| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
-| `docs/qlog.md` | Constructive type theory, pattern verification, and inferential modes (v1.0.4) | [qlog.html]({{ '/qlog.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
+| `docs/qlog.md` | Constructive type theory, pattern verification, and inferential modes | [qlog.html]({{ '/qlog.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -228,11 +233,11 @@ In $\mathrm{Qphy}$, physical constants are not hardcoded static variables. They 
 </pre>
 
 ### 5.1. Universal Physical Anchors and Capability Contracts
-- **`Q(th_2)` (The Second Law Anchor):** Built from sampled thermal receipts and $\ln 2$ continued fraction generators. Enforces non-zero heat dissipation for bit-erasure.
-- **`Q(c)` (The Relativistic Causal Horizon Anchor):** Built from local dielectric propagation delays. Enforces finite signal speed ($\tau \ge \Delta x / v_{\mathrm{signal}}$).
-- **`Q(ℏ)` (The Quantum Action Anchor):** Built from height ceilings ($H_{\max}$) and quantum action limits. Forbids unmetered infinite information density in finite registers.
-- **`Q(Z_bus)` (The Memory Wall Transport Anchor):** Built from parasitic wire capacitance measurements ($P = \alpha C V^2 f + I_{\mathrm{leak}} V$).
-- **`Q(gauge)` (The Topological Conservation Anchor):** Built from simplicial mesh topology. Enforces exact coboundary nilpotency ($\mathbf{d}^2 \equiv Q(0)$).
+- **{% include term.html id="q-th-2" text="Q(th_2)" %} (The Second Law Anchor):** Built from sampled thermal receipts and $\ln 2$ continued fraction generators. Enforces non-zero heat dissipation for bit-erasure.
+- **{% include term.html id="q-c" text="Q(c)" %} (The Relativistic Causal Horizon Anchor):** Built from local dielectric propagation delays. Enforces finite signal speed ($\tau \ge \Delta x / v_{\mathrm{signal}}$).
+- **{% include term.html id="q-hbar" text="Q(ℏ)" %} (The Quantum Action Anchor):** Built from height ceilings ($H_{\max}$) and quantum action limits. Forbids unmetered infinite information density in finite registers.
+- **{% include term.html id="q-z-bus" text="Q(Z_bus)" %} (The Memory Wall Transport Anchor):** Built from parasitic wire capacitance measurements ($P = \alpha C V^2 f + I_{\mathrm{leak}} V$).
+- **{% include term.html id="q-gauge" text="Q(gauge)" %} (The Topological Conservation Anchor):** Built from simplicial mesh topology. Enforces exact coboundary nilpotency ($\mathbf{d}^2 \equiv Q(0)$).
 
 ### 5.2. The Physical Inconsistency Collapse Cascade and Circuit Breakers
 If an execution profile or autonomous workflow claims a trajectory that violates an emergent physical anchor:
