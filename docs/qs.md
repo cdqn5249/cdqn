@@ -2,7 +2,7 @@
 layout: default
 title: Qs — Quang Semantics (Constructive Relational Intent and Epistemic Grounding)
 description: Canonical specification of the constructive semantic base domain, multi-axial Clifford language frames, epistemic modal spectrum, human-agent intent contracts, and AI alignment under SIMEMP constraints.
-version: 1.1.0
+version: 1.1.1
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -48,7 +48,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding |
-| **Version** | 1.1.0 |
+| **Version** | 1.1.1 |
 | **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -233,9 +233,9 @@ If an artificial agent asserts: *"The motor temperature is 450°C"*, the gateway
 * If the lineage contains an unbroken causal chain terminating in a verified {% include term.html id="layer-0" %} hardware sensor receipt, it is admitted as `MODAL_EMPIRICAL`.
 * If the assertion traces only to an internal neural probability distribution without sensor receipts, the gateway intercepts it:
 
-$$\text{Gateway Action: } \mathrm{Reject}\Big(\mathcal{H}(\mathrm{Statement})\Big) \implies \text{Emits } \texttt{RECEIPT\_UNANCHORED\_ASSERTION\_REJECTED}$$
+$$\text{Gateway Action: } \mathrm{Reject}\Big(\mathcal{H}(\mathrm{Statement})\Big) \implies \text{Emits Receipt}$$
 
-The claim is physically barred from entering the execution pipeline.
+The gateway emits the rejection receipt `RECEIPT_UNANCHORED_ASSERTION_REJECTED`; the claim is physically barred from entering the execution pipeline.
 
 ### 4.2. Contextual Isolation for Creative Fiction
 $\mathrm{Qs}$ does not prohibit human imagination, creative writing, or artistic worldbuilding:
