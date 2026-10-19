@@ -2,7 +2,7 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes, and hardware-aware collapse under SIMEMP constraints.
-version: 1.1.2
+version: 1.2.0
 updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -54,7 +54,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.1.2 |
+| **Version** | 1.2.0 |
 | **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -64,34 +64,33 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing this specification. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+The following documents establish the constitutional, structural, and operational constraints governing this specification. If a constitutional conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs. References are deliberately version-unpinned: each target document's front matter carries its own authoritative version, so this specification never duplicates drift-prone patch state.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
-| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and parity partitions (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.9) | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamic metering, and the [Best of Choices Policy]({{ '/glossary.html' | relative_url }}#boc-policy) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Execution core boundary, orthogonal projections, and Complexity Degree mapping | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms (Axioms 2, 5, 6, 9, 10), and optimization morphisms | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and conserved remainder partitioning | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Clifford geometric algebra, multi-axial frames, and rotor conjugations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qs.md` | Semantic root contracts and agent capability delegations | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
 
 ## 1. Epistemic Stance and Constitutional Placement
 
-Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §2.6, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})**.
+Within the master abstraction hierarchy ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §2.5, §5), **{% include term.html id="qexpr" text="Qexpr" %} is situated strictly at Layer 3 ({% include term.html id="complexity-degree" text="Complexity Degree 2" %})** — the terminal layer of the physical execution core. Domains are orthogonal vertical projections across Layers 1–3, not horizontal layers above the stack.
 
 ```
  +-------------------------------------------------------------------------------+
- | Layer 4+: Domain Lattices (Qm Mathematics, Qs Semantics, Qphy Physics)        |
+ | ORTHOGONAL DOMAIN PROJECTIONS: Qm (Mathematics), Qs (Semantics),              |
+ | Qphy (Physics), Qlog, Qchem, Qbio — vertical slices, NOT horizontal layers    |
  +---------------------------------------^---------------------------------------+
-                                         │ Domain Projections
+                                         │ Vertical projections across Layers 1–3
  +---------------------------------------+---------------------------------------+
- | LAYER 3: SYMBOLIC COMPOSITION LAYER (Qexpr / CAE-DAG)                         |
+ | LAYER 3 — EXECUTION CEILING: SYMBOLIC COMPOSITION LAYER (Qexpr / CAE-DAG)     |
  | • Structural Container: Content-Addressed Expression DAG                      |
  | • Role: Wires Layer 2 atomic morphisms into bounded, evaluatable graphs       |
  | • Mechanics: Hash-consing, algebraic rewrite, compile-time collapse budget    |
