@@ -3,7 +3,7 @@ layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
 version: 1.2.9
-updated: 2026-10-17
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -314,7 +314,7 @@ $$\mathrm{Card}\big(\{ x \in \mathbb{Q} \colon h(x) \le H_{\mathrm{max}} \}\big)
 
 Therefore, candidate solutions in $$\mathrm{Qm}$$ inhabit a finite discrete lattice rather than an unmetered void.
 
-**Deterministic Decidability:** A Diophantine evaluation is decidable by construction: it either terminates with an exact quotient-remainder pair, reaches Terminal Exactness ($$R = Q(0)$$), or halts unconditionally upon budget exhaustion via **Metric Exhaustion** (`Axiom 6`), emitting `RECEIPT_BUDGET_EXHAUSTED`.
+**Deterministic Decidability:** A Diophantine evaluation is decidable by construction: it either terminates with an exact quotient-remainder pair, reaches Terminal Exactness ($$R = Q(0)$$), or halts unconditionally upon budget exhaustion via {% include term.html id="metric-exhaustion" text="Metric Exhaustion" %} ({% include term.html id="axiom-6" text="Axiom 6" %}), emitting `RECEIPT_BUDGET_EXHAUSTED`.
 
 #### Terminal Rejection
 
