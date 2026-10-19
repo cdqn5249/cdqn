@@ -2,8 +2,8 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.0.4
-updated: 2026-10-17
+version: 1.0.5
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,54 +12,34 @@ file_repo_path: docs/qlog.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qlog.html
 terms_used:
-  - qlog
-  - qm
-  - qs
-  - qn
+  - boc-policy
+  - cae-dag
+  - complexity-degree
+  - dependencies-determinism
+  - epistemic-anchorage
+  - hash-consing
+  - intent-contract
+  - layer-1
+  - metric-envelope
+  - open-core-invariant
+  - payload
+  - q-anchor
+  - q-bypass
+  - q-patterns
+  - q-reuse
+  - q-workflows
   - q0
   - q1
-  - compute-unit-u
-  - dependencies-determinism
-  - no-implicit-rule
-  - structural-indirection
-  - simemp
-  - universal-envelope
-  - metric-envelope
-  - security-envelope
-  - receipt
-  - causal-arrow
-  - complexity-degree
-  - local-first
-  - terminal-exactness
-  - zoom-z
-  - remainder-r
-  - dimension-d
-  - q-anchor
-  - q-reuse
-  - q-bypass
   - qexpr
-  - cae-dag
-  - hash-consing
-  - epistemic-anchorage
-  - intent-contract
-  - non-rogue-invariant
+  - qlog
+  - qm
+  - qn
   - qn-rsi
-  - boc-policy
-  - existential-invariant
-  - operational-agility
+  - qs
+  - receipt
   - ssl
-  - paternity-reference
-  - payload
-  - licensed-work
-  - simemp-gateway
-  - discrete-exterior-calculus
-  - anchor-cut
-  - layer-0
-  - layer-1
-  - identity-class
-  - chronosa
-  - q-patterns
-  - q-workflows
+  - structural-indirection
+  - terminal-exactness
 ---
 
 # Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction
@@ -67,8 +47,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.0.4 |
-| **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
+| **Version** | 1.0.5 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
