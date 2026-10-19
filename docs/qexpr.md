@@ -2,8 +2,8 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes, and hardware-aware collapse under SIMEMP constraints.
-version: 1.1.1
-updated: 2026-10-17
+version: 1.1.2
+updated: 2026-10-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,47 +12,41 @@ file_repo_path: docs/qexpr.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qexpr.html
 terms_used:
-  - qexpr
+  - boc-policy
   - cae-dag
-  - hash-consing
-  - hca-collapse
-  - qn
-  - q0
-  - q1
-  - compute-unit-u
-  - simemp
-  - dependencies-determinism
-  - no-implicit-rule
-  - structural-indirection
-  - metric-exhaustion
-  - computational-consistency
-  - dcc-profile
-  - universal-envelope
-  - metric-envelope
-  - security-envelope
-  - receipt
   - causal-arrow
   - complexity-degree
-  - local-first
-  - zoom-z
-  - remainder-r
+  - compute-unit-u
+  - dcc-profile
+  - dependencies-determinism
   - dimension-d
-  - terminal-exactness
-  - q-anchor
-  - q-reuse
-  - q-bypass
-  - qm
+  - existential-invariant
+  - hash-consing
+  - hca-collapse
   - layer-0
   - layer-1
-  - payload
   - licensed-work
+  - metric-envelope
+  - metric-exhaustion
+  - no-implicit-rule
   - paternity-reference
-  - ssl
-  - existential-invariant
-  - operational-agility
-  - boc-policy
+  - payload
+  - q-bypass
+  - q-reuse
+  - q0
+  - q1
+  - qexpr
+  - qm
+  - qn
   - qs
-  - discrete-exterior-calculus
+  - receipt
+  - remainder-r
+  - security-envelope
+  - ssl
+  - structural-indirection
+  - terminal-exactness
+  - universal-envelope
+  - zoom-z
 ---
 
 # Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container
@@ -60,8 +54,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.1.1 |
-| **Last Updated** | 2026-10-17 (Bao Loc, Vietnam) |
+| **Version** | 1.1.2 |
+| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
