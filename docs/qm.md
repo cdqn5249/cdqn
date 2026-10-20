@@ -2,8 +2,8 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.2.10
-updated: 2026-10-19
+version: 1.2.11
+updated: 2026-10-20
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -54,8 +54,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.2.10 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.2.11 |
+| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
@@ -64,19 +64,19 @@ terms_used:
 
 ## Normative References
 
-The following documents establish the physical, structural, and legal constraints governing $$\mathrm{Qm}$$. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+The following documents establish the physical, structural, and legal constraints governing $$\mathrm{Qm}$$. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs. References are deliberately version-unpinned: each target document's front matter carries its own authoritative version, so this specification never duplicates drift-prone patch state.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) (v1.2.2) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
-| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and parity partitions (v1.1.1) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.1) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.0) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
-| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and [Optimization Morphisms]({{ '/glossary.html' | relative_url }}#q-reuse) | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and parity partitions | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -127,18 +127,18 @@ Operational validity is verified empirically via {% include term.html id="comput
 
 ## 2. Abstraction Layer Mapping and Complexity Stratification
 
-$$\mathrm{Qm}$$ operates across the hierarchy as a vertical domain projection across {% include term.html id="abstraction-layer" text="abstraction layers" %} ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §11), rather than a static horizontal tier.
+$$\mathrm{Qm}$$ operates across the hierarchy as an orthogonal vertical projection across {% include term.html id="abstraction-layer" text="abstraction layers" %} ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §11), rather than a static horizontal tier.
 
 ```
  ┌─────────────────────────────────────────────────────────────────────────────┐
- │ Layer 3: Symbolic Composition (Qexpr Trees, Bounded Expressions)           │
+ │ Layer 3: Symbolic Composition (Qexpr Trees, Bounded Expressions)            │
  │          Qm Degree 2: Multi-axial geometry (d_k), Polynomial Forms          │
  ├─────────────────────────────────────────────────────────────────────────────┤
- │ Layer 2: Governed Morphisms & Algebraic Interfaces                         │
+ │ Layer 2: Governed Morphisms & Algebraic Interfaces                          │
  │          Qm Degree 1: Monoids, Involutions (I), Diophantine Constraints     │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │ Layer 1: Node Genesis Layer                                                 │
- │          Qm Degree 0: Origin Q(0), Unit Q(1), Basis Alignment d1           │
+ │          Qm Degree 0: Origin Q(0), Unit Q(1), Basis Alignment d1            │
  ├═════════════════════════════════════════════════════════════════════════════┤
  │ Layer 0: Physical Substrate (Entropy Harvesting, Landauer Work W ≥ kT ln 2) │
  └─────────────────────────────────────────────────────────────────────────────┘
@@ -166,11 +166,11 @@ $$\text{Qn Numeric Entity} \equiv \langle \sigma, \, q_z, \, z, \, r_z, \, d \ra
 ```
                    CANONICAL Qm NUMERIC STRUCTURE
  ┌─────────────────────────────────────────────────────────────────┐
- │  σ    : Relational Orientation (⊖, ⊙, ⊕)                       │
- │  q_z  : Discrete Metric Magnitude Quotient (q_z ∈ ℕ)           │
- │  z    : Scale / Lattice Zoom Level (z ∈ ℕ)                     │
+ │  σ    : Relational Orientation (⊖, ⊙, ⊕)                        │
+ │  q_z  : Discrete Metric Magnitude Quotient (q_z ∈ ℕ)            │
+ │  z    : Scale / Lattice Zoom Level (z ∈ ℕ)                      │
  │  r_z  : Conserved Residual Generator (0 ≤ |r_z| < δ_z(d))       │
- │  d    : Dimensional Coordinate Axis Parameter (d_k)            │
+ │  d    : Dimensional Coordinate Axis Parameter (d_k)             │
  └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -336,9 +336,9 @@ $$A^B = \prod_{j=1}^B A$$
 Evaluated at Layer 3 under `OP_FOLD`. The memory footprint expands linearly with the exponent: $$h(A^B) = B \cdot h(A) \le H_{\max}$$. If the resulting bit size exceeds the metric envelope ceiling, compilation halts with `RECEIPT_EXPRESSION_TOO_COMPLEX`.
 
 #### II. Negative Exponents as Rational Pairs
-Negative powers do not invoke floating-point arithmetic; they map to exact rational inversion pairs under `OP_RATIO`:
+Negative powers do not invoke floating-point arithmetic; they map to exact rational inversion pairs under the Node Class 1 ordered call `OP_RATIO(Q(1), A^B)`:
 
-$$A^{-B} \equiv \mathrm{OP\_RATIO}\big( Q(1), \, A^B \big) = \frac{Q(1)}{A^B}$$
+$$A^{-B} \equiv \frac{Q(1)}{A^B}$$
 
 Projected onto scale lattices at zoom $$z$$ with exact remainder conservation ($$r_z$$). If the base is negative ($$\ominus A$$), the resulting sign is determined by the parity of exponent $$B$$ via secondary anchor $$Q(2)$$ (`DCC_ANCHOR_Q2_PARITY_v1`):
 
