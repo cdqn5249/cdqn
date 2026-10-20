@@ -2,8 +2,8 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.1.0
-updated: 2026-10-19
+version: 1.1.1
+updated: 2026-10-20
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -47,8 +47,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.1.0 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.1.1 |
+| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
@@ -155,7 +155,7 @@ Like {% include term.html id="qm" %} and {% include term.html id="qs" %}, $\math
  ├────────┼─────────────────────────┼──────────────────────────────────────────┤
  │ Deg n  │ Epistemic Modality &    │ MODAL_* validation, inverse scientific   │
  │        │ Sheaf Synthesis         │ causal reconstruction, Chronosa Outer-   │
- │        │                         │ Ring consensus, evolution via Qn(rsi)    │
+ │        │                         │ Ring consensus, evolution via Q(rsi)     │
  └────────┴─────────────────────────┴──────────────────────────────────────────┘
 </pre>
 
@@ -207,7 +207,7 @@ Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Polic
  │    • Anchored Markov Routing : Stochastic pathfinding over Q(anchor) cuts.  │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │ 3. EMERGENT RSI MODES : L_emergent (Complexity Degree n)                    │
- │    • Adjoined dynamically via Qn(rsi) under explicit DCC Profile Contracts. │
+ │    • Adjoined dynamically via Q(rsi) under explicit DCC Profile Contracts.  │
  │    • Examples: Sheaf co-equalization, paraconsistent dissipative sinks.     │
  └─────────────────────────────────────────────────────────────────────────────┘
 </pre>
@@ -264,7 +264,7 @@ In physical hardware architectures, retrieving data across the Memory Wall stall
                                           ▼
  ┌─────────────────────────────────────────────────────────────────────────────┐
  │ Qlog HARVESTER EXECUTION (Local Register Cache Workload)                    │
- │ 1. Background Equality Saturation : Apply OP_REWRITE rules via Qn(rsi).     │
+ │ 1. Background Equality Saturation : Apply OP_REWRITE rules via Q(rsi).      │
  │ 2. Speculative Pre-Validation     : Audit pending Candidate Q(patterns).    │
  │ 3. Anchor Transition Pre-Routing  : Update Markov transition matrices.      │
  └────────────────────────────────────────┬────────────────────────────────────┘
@@ -275,7 +275,7 @@ In physical hardware architectures, retrieving data across the Memory Wall stall
 
 ### 6.1. Harvester Workload Scheduling During Stall Windows
 During memory-stall windows ($\Delta t_{\mathrm{stall}}$), $\mathrm{Qlog}$ schedules local, register-pinned workloads requiring zero external bus traffic:
-1. **Background Equality Saturation (`Qn(rsi)`):** Rewrites cached `Qexpr` DAGs using equivalence rules to find smaller structural footprints, minimizing future execution budgets.
+1. **Background Equality Saturation (`Q(rsi)`):** Rewrites cached `Qexpr` DAGs using equivalence rules to find smaller structural footprints, minimizing future execution budgets.
 2. **Speculative Candidate Auditing:** Evaluates unverified `State: CANDIDATE` transitions against algebraic invariants. Failed candidates are pruned prior to bus resumption.
 3. **Anchor Route Pre-computation:** Re-calculates transition weights between local $Q(\text{anchor})$ landmarks based on recent receipt metrics.
 
@@ -293,12 +293,12 @@ $\mathrm{Qlog}$ accommodates both directional flows across the causal arrow:
 <pre>
                THE DUAL CAUSAL DIRECTIONS IN Qlog
  ┌─────────────────────────────────────────────────────────────────────────────┐
- │ FORWARD SYNTHESIS : Teleological Direction (Intent ──► Target State)       │
- │ • Domain : Software engineering, compilation, robotic actuation.           │
+ │ FORWARD SYNTHESIS : Teleological Direction (Intent ──► Target State)        │
+ │ • Domain : Software engineering, compilation, robotic actuation.            │
  │ • Pipeline: Qs Intent Contract ──► Q(workflows) ──► Executed Target State.  │
  ├─────────────────────────────────────────────────────────────────────────────┤
- │ INVERSE RECONSTRUCTION : Empirical Science Direction (Observed State ──► ) │
- │ • Domain : Cosmology, pathology, materials forensics, fundamental physics. │
+ │ INVERSE RECONSTRUCTION : Empirical Science Direction (Observed State ──► )  │
+ │ • Domain : Cosmology, pathology, materials forensics, fundamental physics.  │
  │ • Pipeline: Observed State S_obs ──► Qlog Abduction ──► Latent Causal Origin│
  └─────────────────────────────────────────────────────────────────────────────┘
 </pre>
