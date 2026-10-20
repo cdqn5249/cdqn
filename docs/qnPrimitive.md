@@ -2,8 +2,8 @@
 layout: default
 title: Qn Primitive Envelope — Governed Qn Artifact Model
 description: Governed Qn artifact model, operational axioms, candidate typed payload profiles, and Category B optimization primitives under SIMEMP consistency constraints.
-version: 1.2.3
-updated: 2026-10-19
+version: 1.2.4
+updated: 2026-10-20
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -41,12 +41,12 @@ terms_used:
   - payload
   - q-bypass
   - q-reuse
+  - q-workflows
   - q0
   - q1
   - qexpr
   - qn
   - qn-rsi
-  - qn-workflow
   - qnir
   - qnlang
   - qs
@@ -66,8 +66,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
-| **Version** | 1.2.3 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.2.4 |
+| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Primitive Specification — Category A/B Envelope Foundation |
@@ -86,19 +86,19 @@ All formulations represent **provisional consistency abstractions** within the R
 
 ## Normative References
 
-The following documents define the physical, structural, and legal constraints governing this framework. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs.
+The following documents define the physical, structural, and legal constraints governing this framework. If a technical conflict arises, [`simemp.md`]({{ '/simemp.html' | relative_url }}) governs; if a structural conflict arises, [`abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) governs; if a legal conflict arises, [`LICENSE.md`](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) governs. References are deliberately version-unpinned: each target document's front matter carries its own authoritative version, so this specification never duplicates drift-prone patch state.
 
 | Document | Role | Target |
 |---|---|---|
-| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) (v1.1.1) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
-| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation (v1.4.1) | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
-| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) (v1.1.2) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
-| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum (v1.1.0) | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
-| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints (v1.2.6) | [qm.html]({{ '/qm.html' | relative_url }}) |
-| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations (v1.2.0) | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
-| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics (v1.1.0) | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
-| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container (v1.1.0) | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
-| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) (v1.0.0) | [qs.html]({{ '/qs.html' | relative_url }}) |
+| `docs/simemp.md` | Constitutional constraints, thermodynamics, and [Dependencies Determinism]({{ '/glossary.html' | relative_url }}#dependencies-determinism) | [simemp.html]({{ '/simemp.html' | relative_url }}) |
+| `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
+| `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
+| `docs/q2_q9.md` | Single-digit secondary DCC anchors and single-digit spectrum | [q2_q9.html]({{ '/q2_q9.html' | relative_url }}) |
+| `docs/qm.md` | Constructive numeric leaf substrate and Diophantine division constraints | [qm.html]({{ '/qm.html' | relative_url }}) |
+| `docs/qm_geometry.md` | Multi-axial frames, Clifford geometric algebra, and float-free rotations | [qm_geometry.html]({{ '/qm_geometry.html' | relative_url }}) |
+| `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
+| `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
+| `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
@@ -224,7 +224,7 @@ Governance metadata may describe its own schema, but self-description depth must
 Lineage metadata and the canonical {% include term.html id="paternity-reference" %} must be preserved in distributed artifacts, exported attestations, compiled {% include term.html id="qnir" %} binaries, and public APIs pursuant to the {% include term.html id="ssl" %}. Encapsulating a Payload does not convert it into a {% include term.html id="derivative-work" %}.
 
 ### Axiom 13 — Versioning Creates New Artifacts
-Versioning an artifact produces a new immutable artifact with an advanced causal index referencing the predecessor. Mutation in place is prohibited. Successor workflows derived through {% include term.html id="qn-rsi" text="Qn(rsi)" %} do not overwrite existing execution paths; they are emitted as distinct causal versions.
+Versioning an artifact produces a new immutable artifact with an advanced causal index referencing the predecessor. Mutation in place is prohibited. Successor workflows derived through {% include term.html id="qn-rsi" %} do not overwrite existing execution paths; they are emitted as distinct causal versions.
 
 ### Axiom 14 — Generative Candidate Boundary
 Unverified candidates proposed by stochastic, generative, or neural processes can exist locally only if explicitly tagged as unverified candidates. Candidates cannot cross a {% include term.html id="simemp-gateway" %} or achieve sealed execution without deterministic validation.
@@ -317,7 +317,7 @@ Carries public commitments, issuer pseudonyms, capability proofs, metric summari
 Carries granular execution rights, operational constraints, delegation depths, and expiration bounds.
 
 ### 5.8. Workflow Payload Profile
-Carries a directed acyclic graph of governed morphisms, input state prerequisites, execution checkpoints, intermediate collapse budgets, and terminal receipt criteria. Underpins composite state workflows ({% include term.html id="qn-workflow" text="Qn(workflow)" %}) and recursive self-optimization loops ({% include term.html id="qn-rsi" text="Qn(rsi)" %}).
+Carries a directed acyclic graph of governed morphisms, input state prerequisites, execution checkpoints, intermediate collapse budgets, and terminal receipt criteria. Underpins composite state workflows ({% include term.html id="q-workflows" %}) and recursive self-optimization loops ({% include term.html id="qn-rsi" %}).
 
 ### 5.9. Optimization Payload Profile (Category B Primitives)
 Governs explicit sub-graph reuse and gateway short-circuiting under physical thermodynamic constraints:
@@ -495,4 +495,4 @@ The following formal specifications remain open for subsequent releases:
 1. Canonical binary serialization format (e.g., deterministic CBOR or custom packed Qn-binary) for the Universal Envelope.
 2. Formal schema definition for Post-Quantum Cryptography algorithm agility migration certificates.
 3. Automated verification checker specification for state transitions from Sealed to Verified.
-4. Execution mechanics and termination bounds for higher-order recursive self-optimization workflows ({% include term.html id="qn-rsi" text="Qn(rsi)" %}).
+4. Execution mechanics and termination bounds for higher-order recursive self-optimization workflows ({% include term.html id="qn-rsi" %}).
