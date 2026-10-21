@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-11 (Bao Loc, Vietnam)
+# Updated: 2026-10-21 (Bao Loc, Vietnam)
 
 - title: "Portal"
   url: "/"
@@ -112,6 +112,13 @@
   url: "/chronosa.html"
   slug: "chronosa"
   description: "Operational vision for an emergent, non-local causal intelligence"
+  status: "Vision"
+  external: false
+
+- title: "Qs History Proposal"
+  url: "/qs_history.html"
+  slug: "qs_history"
+  description: "Vision and research proposal for historical anchoring and the Qs History Library"
   status: "Vision"
   external: false
 
