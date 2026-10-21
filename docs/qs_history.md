@@ -2,7 +2,7 @@
 layout: default
 title: Qs History — Vision and Proposal for Historical Anchoring in the Qn Universe
 description: Operational vision and research proposal for Anchor Grounding Classes, the Source-Receipt Invariant, Calendar Projection Contracts, the Qs History Library, and the Anti-Poisoning Ingestion Firewall. All artifacts herein are propositions pending deterministic measurement and BOC selection.
-version: 0.1.0
+version: 0.1.1
 updated: 2026-10-21
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -59,7 +59,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs History — Vision and Proposal for Historical Anchoring in the Qn Universe |
-| **Version** | 0.1.0 |
+| **Version** | 0.1.1 |
 | **Last Updated** | 2026-10-21 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -194,7 +194,7 @@ The library can be alimented only by petition through gates. Publicly reported i
 2. Its arrival into financial registers is barred by the contextual containment of creative and ungrounded content ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) §4.2).
 3. Citation laundering itself is assessed as **causally impossible** under the proposed counting rule: sources are counted as **lineage-disjoint root subtrees** in the polyroot forest ([`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}) §1.4), never by citation count or pseudonym count. Laundering adds descendants to a poisoned root; it cannot manufacture independent origins. An entire laundering cascade descending from one fabricated artifact counts as **one** source.
 
-It is proposed that library ingestion pass five gates, each a governed operation emitting its own {% include term.html id="receipt" %>:
+It is proposed that library ingestion pass five gates, each a governed operation emitting its own {% include term.html id="receipt" %}:
 
 | Gate | Canon root | Threat addressed |
 |---|---|---|
