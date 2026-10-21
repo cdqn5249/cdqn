@@ -2,8 +2,8 @@
 layout: default
 title: Qs — Quang Semantics (Constructive Relational Intent and Epistemic Grounding)
 description: Canonical specification of the constructive semantic base domain, multi-axial Clifford language frames, epistemic modal spectrum, human-agent intent contracts, and AI alignment under SIMEMP constraints.
-version: 1.1.1
-updated: 2026-10-19
+version: 1.2.0
+updated: 2026-10-21
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -48,8 +48,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding |
-| **Version** | 1.1.1 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.2.0 |
+| **Last Updated** | 2026-10-21 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
@@ -242,6 +242,46 @@ $\mathrm{Qs}$ does not prohibit human imagination, creative writing, or artistic
 * A creative work (such as a fantasy novel or game narrative) is typed as `MODAL_NARRATIVE` anchored to the author's sovereign identity $Q(0)_{\mathrm{author}}$ and publisher receipt.
 * The internal consistency of the fictional universe is preserved within its closed `Qexpr` sub-DAG.
 * The gateway guarantees **contextual containment**: a fictional sub-DAG is barred from ever triggering real-world physical actuators, financial registers, or legal delegations.
+
+### 4.3. The Source-Receipt Invariant (Proposed, CANDIDATE)
+
+**Status.** This subsection records a proposed extension of the §4 firewall from statements to governed artifacts, sourced from [`docs/qs_history.md`]({{ '/qs_history.html' | relative_url }}) §3. It carries `State: CANDIDATE` under **Axiom 14**: it remains subject to deterministic measurement and {% include term.html id="boc-policy" text="BOC" %} selection through the pipeline of §6, and it amends nothing in §4.1 or §4.2, which continue to apply exactly as written.
+
+It is proposed that every governed artifact of the {% include term.html id="qn" %} universe crossing a {% include term.html id="simemp-gateway" %} declare an explicit pair:
+
+**(content modality, source class)**
+
+where the content modality is drawn from the {% include term.html id="epistemic-anchorage" %} spectrum of §4, and the source class is a declared expression of where the artifact's asserted content ultimately anchors. Under the {% include term.html id="no-implicit-rule" %}, the declaration makes explicit — at the level of composite artifacts and worlds — what the gateway already enforces implicitly at the level of single statements.
+
+```
+        ARTIFACT-LEVEL SOURCE DECLARATION (PROPOSED, STATE: CANDIDATE)
+ ┌─────────────────────────────────────────────────────────────────────────────┐
+ │ Governed Artifact  :=  ( ContentModality , SourceClass )                    │
+ ├─────────────────────────────────────────────────────────────────────────────┤
+ │ ContentModality : one modality of the §4 spectrum, assigned per             │
+ │                   atomic claim decomposition of the artifact                │
+ │ SourceClass     : declared expression of where the asserted content         │
+ │                   ultimately anchors (candidate vocabulary I / P / S,       │
+ │                   docs/qs_history.md §2)                                    │
+ │ SourceReceipts  : unbroken chain terminating in physically receipted        │
+ │                   reality events; no dangling source references             │
+ └─────────────────────────────────────────────────────────────────────────────┘
+```
+
+The invariant requires that the source receipt chain terminate in physically receipted reality events, with the terminating receipt type fixed by the declared modality:
+
+* **Empirical content** terminates in verified {% include term.html id="layer-0" %} sensor or artifact receipts, exactly as mandated by §4.1.
+* **Constructive content** terminates in algebraic closure receipts whose remainder $r = Q(0)$ (Terminal Exactness).
+* **Contextually sealed creative content** terminates in the author-identity ($Q(0)_{\mathrm{author}}$) and publisher-receipt anchoring already mandated by §4.2.
+
+The extension therefore applies the §4.1 statement-level rejection rule to composite artifacts and worlds: no unsourceable fiction, no unsourced anchor, no history-less constant. An artifact whose source receipt chain cannot be completed is rejected at the gateway exactly as an unanchored statement is, emitting the same class of rejection receipt.
+
+Two cautions are recorded, and they are binding on any future implementation of the invariant:
+
+1. **Payload sovereignty is untouched.** The invariant governs artifacts that cross the gateway as governed objects of the {% include term.html id="licensed-work" %}. Sovereign human [`Payloads`]({{ '/glossary.html' | relative_url }}#payload) remain uninspected behind the safe-harbor air gap ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §3.1). Where a creative work is declared as a governed `MODAL_NARRATIVE` artifact, its anchoring to author identity and publisher receipt is **declared by its author**, not extracted by inspection.
+2. **Simulation modality is two-faced.** A simulation's execution is `MODAL_CONSTRUCTIVE` (deterministic algebraic closure), while its claims *about reality* are `MODAL_HYPOTHESIS` until physically falsified. The pair declaration makes this two-faced split explicit rather than leaving it implicit, in accordance with the {% include term.html id="no-implicit-rule" %}.
+
+The proposed Anchor Grounding Classes of [`docs/qs_history.md`]({{ '/qs_history.html' | relative_url }}) §2 (Classes I / P / S) supply the candidate vocabulary for the source-class field. Glossary registration of the newly named concepts — and the final sealing of this invariant itself — remain deferred to the integration queue of that document (§8), preserving its discipline against dead glossary entries for unmeasured concepts.
 
 ---
 
