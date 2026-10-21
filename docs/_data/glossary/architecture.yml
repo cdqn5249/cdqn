@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Architecture Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-08 (Bao Loc, Vietnam)
+# Updated: 2026-10-21 (Bao Loc, Vietnam)
 
 - term: "Abstraction Layer"
   slug: "abstraction-layer"
@@ -37,7 +37,10 @@
   definition: >
     A monotonic, persistent ordering of computational events independent of
     physical wall-clock time. Every Qn artifact is born at a discrete causal
-    index.
+    index. Proposed extension (CANDIDATE, docs/qs_history.md §4): human
+    calendars are not parallel time systems but projections — deterministic
+    mappings between calendar coordinates and intervals of the local causal
+    index, declared through versioned Calendar Projection Contracts.
 
 - term: "Complexity Degree"
   slug: "complexity-degree"
@@ -84,7 +87,14 @@
     A governed Qn artifact possessing high causal centrality within the lineage
     directed acyclic graph. Protected via abstract DCC contracts and structural
     indirection to prevent cascading dependency invalidation across downstream
-    causal cones.
+    causal cones. Proposed refinement (CANDIDATE, docs/qs_history.md §1–2): the
+    notion carries two distinct predicates — the structural predicate (out-cone
+    centrality, computable locally from the lineage DAG) and the epistemic
+    predicate (grounding), the latter proposed as three Anchor Grounding
+    Classes: I (invariant, deterministic re-derivation, self-witnessed),
+    P (physical, independent calibration converging within declared tolerance
+    envelopes), and S (social, quorum-witnessed shared events) — pending
+    deterministic measurement and BOC selection.
 
 - term: "HCA-Collapse Engine"
   slug: "hca-collapse"
