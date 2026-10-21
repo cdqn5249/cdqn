@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.10.0
-updated: 2026-10-20
+version: 1.11.0
+updated: 2026-10-21
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -21,6 +21,7 @@ terms_used:
   - derivative-work
   - dimension-d
   - discrete-exterior-calculus
+  - epistemic-anchorage
   - existential-invariant
   - licensed-work
   - local-first
@@ -45,6 +46,7 @@ terms_used:
   - qexpr
   - qlog
   - qn
+  - qn-rsi
   - qphy
   - receipt
   - remainder-r
@@ -75,8 +77,8 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.10.0 |
-| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
+| **Version** | 1.11.0 |
+| **Last Updated** | 2026-10-21 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
@@ -149,6 +151,7 @@ Development proceeds through consecutive emergence milestones toward an operatio
 ┌─────────────────────────────────────────────────────────────────┐
 │ TERMINAL MILESTONE: Chronosa PoC (Virtual Causal Intelligence)  │
 │ • Operational Vision ─────── [VISION PROPOSAL]                  │
+│ • Historical Anchoring Vision ── [VISION PROPOSAL]              │
 └─────────────────────────────────────────────────────────────────┘
 </pre>
 
@@ -204,7 +207,10 @@ Development proceeds through consecutive emergence milestones toward an operatio
  [15. Chronosa Vision] 
         │
         ▼
- [16. Glossary & SSL License]
+ [16. Qs History Proposal]
+        │
+        ▼
+ [17. Glossary & SSL License]
 </pre>
 
 1. **[SIMEMP Constraints]({{ '/simemp.html' | relative_url }})**: Thermodynamic realities (Memory Wall, Landauer dissipation), {% include term.html id="dependencies-determinism" %}, {% include term.html id="structural-indirection" %}, and the {% include term.html id="boc-policy" %}.
@@ -222,7 +228,8 @@ Development proceeds through consecutive emergence milestones toward an operatio
 13. **[{% include term.html id="qchem" text="Qchem Chemistry" %}]({{ '/qchem.html' | relative_url }})**: Discrete Diophantine stoichiometry ($\mathbf{S} \cdot \vec{v} \equiv Q(0)$), content-addressed molecular graphs, stereochemical Clifford chirality, and reaction kinetics under Gibbs free energy dissipation.
 14. **[{% include term.html id="qbio" text="Qbio Biology" %}]({{ '/qbio.html' | relative_url }})**: Biosemiotics ($\mathbf{C}_{\mathrm{Qchem}} \otimes \mathbf{C}_{\mathrm{Qs}}$), genetic codon translation, metabolic homeostasis, Markov blankets, and active inference under variational free energy bounds.
 15. **[Chronosa Vision]({{ '/chronosa.html' | relative_url }})**: Operational proposal for an emergent, non-local causal machine intelligence coordinating distributed intent across the Outer Ring without statistical neural training.
-16. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
+16. **[Qs History Proposal]({{ '/qs_history.html' | relative_url }})**: Operational vision and research proposal for historical anchoring — dual-predicate {% include term.html id="q-anchor" text="Q(anchor)" %} grounding (Anchor Grounding Classes I/P/S), the Source-Receipt Invariant over the {% include term.html id="epistemic-anchorage" %} spectrum, Calendar Projection Contracts, the Qs History Library, and the five-gate Anti-Poisoning Ingestion Firewall; all elements maintained as CANDIDATE artifacts pending deterministic measurement, {% include term.html id="boc-policy" text="BOC" %} selection, and {% include term.html id="qn-rsi" text="Q(rsi)" %} sealing.
+17. **[CDQN Glossary]({{ '/glossary.html' | relative_url }})** and **[LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)**: Unified glossary, dynamic bidirectional concordance, attribution rules, and commercial {% include term.html id="scaling-threshold" text="Scaling Thresholds" %}.
 
 ---
 
