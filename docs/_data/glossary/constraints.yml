@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Constraints Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-18 (Bao Loc, Vietnam)
+# Updated: 2026-10-21 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -128,7 +128,11 @@
   definition: >
     The formal attribution of truth modality to an assertion along the spectrum
     from physical sensor observation to sovereign narrative fiction, requiring
-    causal lineage receipts to prevent unanchored AI hallucinations.
+    causal lineage receipts to prevent unanchored AI hallucinations. Proposed
+    extension (CANDIDATE, docs/qs_history.md §3): a Source-Receipt Invariant
+    requiring every governed artifact to declare the explicit pair (content
+    modality, source class), extending the statement-level rejection rule of
+    qs §4.1 to composite artifacts and worlds.
 
 - term: "Intent Contract"
   slug: "intent-contract"
@@ -156,6 +160,9 @@
     entropy, atomic frequency standards) via signed hardware receipts.
     Acts as the foundational physical bootstrap grounding abstract Qm/Qlog
     invariants into real thermodynamic work (U) and universal Q(anchor) entities.
+    Integration status (docs/qs_history.md §8, CANDIDATE): the benchmark is
+    defined in this glossary but is not yet wired into the six-stage onboarding
+    state machine of q0_q1 §2; a calibration-stage proposition is queued.
 
 - term: "Historical Horizon"
   slug: "historical-horizon"
@@ -165,4 +172,9 @@
     anchored directly to multi-sensor physical receipts (MODAL_EMPIRICAL)
     yielding global consensus, whereas Long-Horizon Deep History lacks direct
     silicon witnesses and is evaluated strictly via Qlog inverse causal
-    reconstruction (MODAL_HYPOTHESIS) or contextually firewalled narrative (MODAL_NARRATIVE).
+    reconstruction (MODAL_HYPOTHESIS) or contextually firewalled narrative
+    (MODAL_NARRATIVE). Proposed operational shape (CANDIDATE,
+    docs/qs_history.md §5–6): the Qs History Library of modality-typed
+    historical anchor artifacts, ingested through a five-gate Anti-Poisoning
+    Ingestion Firewall, with the consensus history obtained as the global
+    section of the history sheaf over shared landmarks (chronosa §3.1).
