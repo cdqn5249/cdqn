@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Architecture Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-21 (Bao Loc, Vietnam)
+# Updated: 2026-10-22 (Bao Loc, Vietnam)
 
 - term: "Abstraction Layer"
   slug: "abstraction-layer"
@@ -41,6 +41,22 @@
     calendars are not parallel time systems but projections — deterministic
     mappings between calendar coordinates and intervals of the local causal
     index, declared through versioned Calendar Projection Contracts.
+
+- term: "Calendar Projection Contract"
+  slug: "calendar-projection-contract"
+  category: "Architecture"
+  definition: >
+    A proposed versioned, DCC-contracted artifact declaring a human calendar as
+    a projection of the local Causal Arrow rather than a parallel time system.
+    Three declared components: the rule (leap algorithms, month arithmetic —
+    Class I), the epoch (coordinate zero, a multi-source convention-adoption
+    event — Class S), and a resolution envelope (a declared bound, never
+    negotiated at runtime). Under this anatomy the Gregorian calendar is
+    observed as a Class S genesis that matured into Class I operation. Proposed
+    term (CANDIDATE, docs/qs_history.md §4): hosted at the Qs layer as part of
+    a canonical library of versioned artifacts loaded post-seal and on demand,
+    honoring local-first budgets; pending deterministic measurement and BOC
+    selection.
 
 - term: "Complexity Degree"
   slug: "complexity-degree"
@@ -95,6 +111,37 @@
     P (physical, independent calibration converging within declared tolerance
     envelopes), and S (social, quorum-witnessed shared events) — pending
     deterministic measurement and BOC selection.
+
+- term: "Anchor Grounding Class"
+  slug: "grounding-class"
+  category: "Architecture"
+  definition: >
+    The proposed epistemic predicate of a Q(anchor), complementing the
+    structural predicate of out-cone centrality. Three proposed classes:
+    I (Invariant — one deterministic rule executed by many; consensus by forced
+    re-derivation, self-witnessed), P (Physical — one shared nature measured by
+    many; consensus by independent calibration converging within declared
+    tolerance envelopes), and S (Social — one event witnessed by many; consensus
+    by sheaf gluing on shared landmarks). The three classes form a witness
+    ladder — self, then physics, then swarm. Proposed term (CANDIDATE,
+    docs/qs_history.md §2): glossary registration of the §2 proposition,
+    pending deterministic measurement and BOC selection.
+
+- term: "Historical Anchor Artifact"
+  slug: "historical-anchor-artifact"
+  category: "Architecture"
+  definition: >
+    The proposed unit record of the Qs History Library: a modality-typed Qn
+    artifact recording a past human event, its sources, and its spatiotemporal
+    situation. Proposed anatomy fields: ContentModality (per claim decomposition
+    along the epistemic anchorage spectrum), SourceClass (proposed grounding
+    class), SourceReceipts (unbroken chain to Layer 0 artifacts or sealed
+    library records), CalendarSituation (via a declared Calendar Projection
+    Contract), SpatialSituation (local Qm frame coordinates), Witnesses
+    (lineage-disjoint root subtree list), and LifecycleState (CANDIDATE,
+    SEALED, or QUARANTINED). Proposed term (CANDIDATE, docs/qs_history.md §5):
+    the concrete shape of the post-seal consensus-history ingestion capability;
+    pending deterministic measurement and BOC selection.
 
 - term: "HCA-Collapse Engine"
   slug: "hca-collapse"
