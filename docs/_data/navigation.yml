@@ -122,6 +122,13 @@
   status: "Vision"
   external: false
 
+- title: "Qs History Library"
+  url: "/history_library.html"
+  slug: "history_library"
+  description: "Post-seal history ingestion: historical anchor artifacts, calendar projection contracts, and the five-gate ingestion firewall"
+  status: "Vision"
+  external: false
+
 - title: "CDQN Glossary"
   url: "/glossary.html"
   slug: "glossary"
