@@ -2,7 +2,7 @@
 layout: default
 title: Qs History Library — Vision and Operational Proposal for Post-Seal History Ingestion
 description: Operational proposal for the Qs History Library — historical anchor artifacts, Calendar Projection Contracts, and the five-gate Anti-Poisoning Ingestion Firewall — as the concrete shape of post-seal consensus-history ingestion. All artifacts herein are propositions pending deterministic measurement and BOC selection.
-version: 0.1.0
+version: 0.1.1
 updated: 2026-10-22
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -57,7 +57,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs History Library — Vision and Operational Proposal for Post-Seal History Ingestion |
-| **Version** | 0.1.0 |
+| **Version** | 0.1.1 |
 | **Last Updated** | 2026-10-22 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -193,7 +193,7 @@ All items below remain in CANDIDATE status. Sealing of any item occurs exclusive
 2. **Quorum thresholds.** The anchor-grade floor k ≥ 2 and the per-grade ladder above it are declared-value proposals; their concrete values belong to the DCC contracts of the first implemented anchor grades and remain open until then.
 3. **Cross-root collusion.** The open challenge of [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}) §8.5 applies unchanged; economic and physical mitigations are recorded in Section 5, but no closed-form defense is claimed.
 4. **Library indexing.** Retrieval over the library — content-addressed lookup keyed by artifact commitments and lineage tags, in the manner of cached {% include term.html id="q-datastruc" text="Q(dataStruc)" %} derivations — is proposed as the natural index discipline but is not yet codified.
-5. **Onboarding calibration.** The mandatory {% include term.html id="historical-calibration-benchmark" %} is defined in the glossary but is not yet wired into the six-stage onboarding state machine of [`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2; the calibration-stage proposition remains queued as integration item 3 and is untouched by this document.
+5. **Onboarding calibration.** The mandatory {% include term.html id="historical-calibration-benchmark" %} is defined in the glossary and is now wired as a non-mutating CANDIDATE proposition at [`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.7, closing item 1 of the [`docs/qs_history.md`]({{ '/qs_history.html' | relative_url }}) §8 queue — the third and final step of that document's proposed integration order; the wiring remains subject to deterministic measurement and BOC selection and is otherwise untouched by this document.
 
 ---
 
