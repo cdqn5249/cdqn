@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Constraints Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-21 (Bao Loc, Vietnam)
+# Updated: 2026-10-22 (Bao Loc, Vietnam)
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -178,3 +178,58 @@
     historical anchor artifacts, ingested through a five-gate Anti-Poisoning
     Ingestion Firewall, with the consensus history obtained as the global
     section of the history sheaf over shared landmarks (chronosa §3.1).
+
+- term: "Source-Receipt Invariant"
+  slug: "source-receipt-invariant"
+  category: "Constraints"
+  definition: >
+    The proposed artifact-level extension of the statement-level rejection
+    rule: every governed Qn artifact declares the explicit pair (content
+    modality, source class), where the content modality is drawn from the
+    epistemic anchorage spectrum and the source receipt chain must terminate
+    in physically receipted reality events — Layer 0 sensor or artifact
+    receipts for empirical content, algebraic closure receipts for
+    constructive content, and author-identity plus publisher receipts for
+    contextually sealed creative content. Two binding cautions: sovereign
+    Payloads remain uninspected behind the safe-harbor air gap (the
+    declaration is authored, never extracted by inspection), and a
+    simulation's execution stays constructive while its claims about reality
+    remain hypothesis until physically falsified. Proposed term (CANDIDATE,
+    docs/qs_history.md §3): elaborated as docs/qs.md §4.3, extending the
+    rejection rule of qs §4.1 to composite artifacts and worlds; pending
+    deterministic measurement and BOC selection.
+
+- term: "Source Class"
+  slug: "source-class"
+  category: "Constraints"
+  definition: >
+    The second element of the proposed (content modality, source class)
+    declaration pair: a declared expression of where a governed artifact's
+    asserted content ultimately anchors, drawn from the same proposed I/P/S
+    vocabulary as the anchor grounding classes — I (Invariant: deterministic
+    re-derivation from the artifact's own declared rule), P (Physical:
+    independent Layer 0 calibrations converging within declared tolerance
+    envelopes), and S (Social: quorum-witnessed historical events glued on
+    shared landmarks). Proposed term (CANDIDATE, docs/qs_history.md §3):
+    applies the witness ladder — self, then physics, then swarm — to
+    composite artifacts and worlds rather than to anchors alone; pending
+    deterministic measurement and BOC selection.
+
+- term: "Ingestion Gate"
+  slug: "ingestion-gate"
+  category: "Constraints"
+  definition: >
+    A proposed governed checkpoint of the five-gate Anti-Poisoning Ingestion
+    Firewall through which the Qs History Library can be alimented only by
+    petition, each gate emitting its own receipt. The five proposed gates:
+    Lineage (unbroken receipt chain to Layer 0 artifacts or sealed library
+    records), Modality Ceiling (each atomic claim typed at the highest
+    modality its receipts support), Independence Quorum (anchor-grade
+    records require multiple sources with lineage-disjoint root subtrees in
+    the polyroot forest), Sheaf Gluing (records disagreeing with receipted
+    overlapping records enter a QUARANTINED lifecycle state under a
+    challenge receipt), and Append-Only Immutability (sealed artifacts never
+    mutate; corrections arrive as counter-receipts and migration receipts —
+    history is never rewritten, only re-witnessed). Proposed term (CANDIDATE,
+    docs/qs_history.md §6): the firewall composes existing canon mechanisms
+    under one pipeline; pending deterministic measurement and BOC selection.
