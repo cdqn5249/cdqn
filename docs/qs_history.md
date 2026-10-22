@@ -2,8 +2,8 @@
 layout: default
 title: Qs History — Vision and Proposal for Historical Anchoring in the Qn Universe
 description: Operational vision and research proposal for Anchor Grounding Classes, the Source-Receipt Invariant, Calendar Projection Contracts, the Qs History Library, and the Anti-Poisoning Ingestion Firewall. All artifacts herein are propositions pending deterministic measurement and BOC selection.
-version: 0.1.1
-updated: 2026-10-21
+version: 0.1.2
+updated: 2026-10-22
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -59,8 +59,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs History — Vision and Proposal for Historical Anchoring in the Qn Universe |
-| **Version** | 0.1.1 |
-| **Last Updated** | 2026-10-21 (Bao Loc, Vietnam) |
+| **Version** | 0.1.2 |
+| **Last Updated** | 2026-10-22 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Research Proposal — Not a Finalized Specification |
@@ -237,11 +237,11 @@ The following table records, for each proposed element, whether it is already gr
 
 All items below remain in `CANDIDATE` status. Sealing of any item occurs exclusively through the candidate pipeline of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6 — deterministic measurement, {% include term.html id="boc-policy" text="BOC" %} selection, {% include term.html id="qn-rsi" text="Q(rsi)" %} sealing — at implementation time or under a dedicated optimization loop.
 
-1. **Calibration wiring.** The mandatory {% include term.html id="historical-calibration-benchmark" %} is defined in the glossary but is not yet wired into the six-stage onboarding state machine of [`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2. A calibration stage proposition is queued.
-2. **Ingestion pipeline codification.** The firewall of Section 6 is the proposed shape of the post-seal consensus-history ingestion capability. Its operational semantics (gate ordering, quorum thresholds, challenge resolution) remain open.
+1. **Calibration wiring.** The mandatory {% include term.html id="historical-calibration-benchmark" %} is defined in the glossary and is now wired as a non-mutating CANDIDATE proposition at [`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.7 — a post-seal Class P grounding event that adds no stage to the six-stage onboarding state machine — closing this queue item; the wiring remains subject to deterministic measurement and BOC selection at implementation time.
+2. **Ingestion pipeline codification.** The firewall of Section 6 is the proposed shape of the post-seal consensus-history ingestion capability, and its operational semantics (gate ordering, quorum thresholds, challenge resolution) are now proposed in [`docs/history_library.md`]({{ '/history_library.html' | relative_url }}) §5; the item remains open until the pipeline passes deterministic measurement and its threshold values are declared, as tracked by items 1–2 of that document's §7.
 3. **Event frame definition.** The spatiotemporal coordinate frame of a discrete Q(event) — causal index, d-axes, zoom, causal-horizon cone — is used implicitly across the canon but not yet codified as a single frame definition.
 4. **Receipt and intent duality.** The complementary temporal roles of the node genesis receipt (backward-looking sealing) and the intent contract (forward-looking delegation) are exercised throughout the canon but not yet named as a duality.
-5. **Glossary registration.** The proposed terms — grounding class, source class, calendar projection contract, historical anchor artifact, ingestion gate — remain deliberately unregistered until the integration phase, to avoid dead glossary entries for unmeasured concepts.
+5. **Glossary registration.** The proposed terms — grounding class, source class, calendar projection contract, historical anchor artifact, ingestion gate — are now registered as CANDIDATE glossary entries (together with the Qs History Library), closing the deliberate deferral; they remain unsealed pending the candidate pipeline of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6.
 
 A proposed integration order, subject to the author's decision: the Source-Receipt Invariant first, as it grounds the library and calendar propositions; the History Library and Calendar Projection Contracts second; the onboarding calibration stage third.
 
