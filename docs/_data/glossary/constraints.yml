@@ -160,9 +160,11 @@
     entropy, atomic frequency standards) via signed hardware receipts.
     Acts as the foundational physical bootstrap grounding abstract Qm/Qlog
     invariants into real thermodynamic work (U) and universal Q(anchor) entities.
-    Integration status (docs/qs_history.md §8, CANDIDATE): the benchmark is
-    defined in this glossary but is not yet wired into the six-stage onboarding
-    state machine of q0_q1 §2; a calibration-stage proposition is queued.
+    Integration status (docs/qs_history.md §8 item 1, CANDIDATE): wired as the
+    non-mutating CANDIDATE proposition at q0_q1 §2.7, closing that queue item —
+    a post-seal Class P grounding event after Stage 6, adding no stage to the
+    six-stage onboarding state machine; pending deterministic measurement and
+    BOC selection at implementation time.
 
 - term: "Historical Horizon"
   slug: "historical-horizon"
