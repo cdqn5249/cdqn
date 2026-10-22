@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-21 (Bao Loc, Vietnam)
+# Updated: 2026-10-22 (Bao Loc, Vietnam)
 
 - title: "Portal"
   url: "/"
@@ -76,7 +76,7 @@
 - title: "Qs Semantics"
   url: "/qs.html"
   slug: "qs"
-  description: "Constructive relational intent, epistemic spectrum, and human-agent alignment"
+  description: "Constructive relational intent, epistemic spectrum, source receipts, and human-agent alignment"
   status: "Canonical"
   external: false
 
