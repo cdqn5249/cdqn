@@ -143,6 +143,24 @@
     the concrete shape of the post-seal consensus-history ingestion capability;
     pending deterministic measurement and BOC selection.
 
+- term: "Qs History Library"
+  slug: "qs-history-library"
+  category: "Architecture"
+  definition: >
+    The proposed canonical, versioned collection of modality-typed Historical
+    Anchor Artifacts — the concrete shape of the post-seal consensus-history
+    ingestion capability. Access is proposed in four tiers: the canonical
+    library (consulted, never trusted — every ingestion passes the five-gate
+    Anti-Poisoning Ingestion Firewall), local nodes holding anchor contracts
+    and bounded working sets within declared metric-envelope budgets, AI
+    agents citing loaded artifacts instead of generating from latent weights,
+    and Chronosa seeing only the public glued layer — the consensus history
+    as the global section of the history sheaf. The library complements a
+    CDQN runtime the way a reference discipline complements a language
+    faculty: the machine does not remember the past — it cites it through
+    receipted lineage. Proposed term (CANDIDATE, docs/history_library.md
+    §2): pending deterministic measurement and BOC selection.
+
 - term: "HCA-Collapse Engine"
   slug: "hca-collapse"
   category: "Architecture"
