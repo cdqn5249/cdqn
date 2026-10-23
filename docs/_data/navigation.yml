@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-22 (Bao Loc, Vietnam)
+# Updated: 2026-10-23 (Bao Loc, Vietnam)
 
 - title: "Portal"
   url: "/"
@@ -129,6 +129,13 @@
   status: "Vision"
   external: false
 
+- title: "Qn Structures Proposal"
+  url: "/qstructures.html"
+  slug: "qstructures"
+  description: "Vision and evaluation framework for Category C data structures and workflows"
+  status: "Vision"
+  external: false
+  
 - title: "CDQN Glossary"
   url: "/glossary.html"
   slug: "glossary"
