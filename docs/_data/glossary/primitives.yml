@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Primitives Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-19 (Bao Loc, Vietnam)
+# Updated: 2026-10-23 (Bao Loc, Vietnam)
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -308,3 +308,59 @@
     Physical invariant anchor of topological conservation. Built from
     simplicial mesh topology and discrete coboundary verification, it grounds
     conserved field quantities without metric drift (DCC_ANCHOR_DEC_D_v1).
+
+- term: "Q(array)"
+  slug: "q-array"
+  category: "Primitives"
+  definition: >
+    The proposed sequenced container contract surface: a bounded, indexed
+    container whose footprint is a declared length, whose permitted access is
+    indexed, whose locality class is contiguous, and whose traversal order is
+    fixed by causal index with constant declared work per indexed access.
+    Grounded in the OP_FOLD child vector under an explicit step ceiling, it
+    admits no in-place mutation: growth emits a new versioned artifact. A
+    contract surface under the five-row structural contract schema, never a
+    runtime shape; pending deterministic measurement, BOC selection, and
+    Q(rsi) sealing.
+
+- term: "Q(matrix)"
+  slug: "q-matrix"
+  category: "Primitives"
+  definition: >
+    The proposed geometric container contract surface: a bounded,
+    two-dimensional integer container whose contractions complete in constant
+    declared time through the integer Matrix-Multiply-Accumulate lowering,
+    preserving exactness by construction without floating-point drift, and
+    admitting the Q(bypass) morphism to short-circuit identity preconditions
+    in register time. Grounded in the OP_FRAME_MAP node class. A contract
+    surface under the five-row structural contract schema, never a runtime
+    shape; pending deterministic measurement, BOC selection, and Q(rsi)
+    sealing.
+
+- term: "Q(table)"
+  slug: "q-table"
+  category: "Primitives"
+  definition: >
+    The proposed keyed container contract surface: a bounded, content-addressed
+    lookup structure grounded in hash-consing itself, the Content-Addressed
+    Expression DAG already constituting a keyed index over committed
+    expressions. Capacity is declared; growth is re-versioning rather than
+    resizing; the work row declares the breakeven inequality under which keyed
+    lookup is preferred over its recorded alternatives, in the manner of the
+    committed Q(reuse) analysis. A contract surface under the five-row
+    structural contract schema, never a runtime shape; pending deterministic
+    measurement, BOC selection, and Q(rsi) sealing.
+
+- term: "Q(stream)"
+  slug: "q-stream"
+  category: "Primitives"
+  definition: >
+    The proposed bounded stream contract surface for sequenced data: declared
+    capacity with sequenced, append-ordered access fixed by causal index.
+    Bounded streams are already exercised, through declared sample volumes in
+    entropy measurement and append-only receipt chains, while no container
+    type is committed; an implicitly resizable queue would violate the
+    footprint and determinism rows and is not admitted. Nominated as an open
+    contract shape under the five-row structural contract schema, never a
+    runtime shape; pending implementation feedback, deterministic measurement,
+    BOC selection, and Q(rsi) sealing.
