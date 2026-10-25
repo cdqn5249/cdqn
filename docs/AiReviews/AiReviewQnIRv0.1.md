@@ -1,9 +1,7 @@
----
 Christophe Duy Quang Nguyen note :
 * The QnIR v0.1 was committed to the docs/AiReviews/ folder on October 26th, 2026.
 * The QnIR v0.1 was submitted for review by Google's AI, Deep Review, on October 26th, 2026.
 * This transcript is the result of this review. The reviewer's points seem limited to the content of the QnIR v0.1 PDF; if any data loss exists between the live docs on GitHub Pages and the PDF content, this means that the reviewer's results will also be based on inaccurate data.
----
 
 # HIGH LEVEL SUMMARY
 ---
