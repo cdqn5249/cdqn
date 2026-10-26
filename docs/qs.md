@@ -226,7 +226,11 @@ $$\mathrm{Dim}_{\max} \le 16$$
 
 , [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5.2, since the blade count scales as $\mathcal{O}(2^n)$ ) is **not a vocabulary limit**.
 
-The basis dimensions of $\mathcal{D}_{\mathrm{semantic}}$ are fixed **normative and thematic axes** ( $d_{\mathrm{intent}}$, $d_{\mathrm{consent}}$, $d_{\mathrm{obligation}}$, $d_{\mathrm{temporal}}$, $d_{\mathrm{agent}}$, … ), not per-word slots: allocating a distinct basis blade to every open-vocabulary noun would exhaust the ceiling after the first handful of terms, collapsing the frame algebra.
+The basis dimensions of 
+
+$$\mathcal{D}_{\mathrm{semantic}}$$
+
+are fixed **normative and thematic axes** ( $d_{\mathrm{intent}}$, $d_{\mathrm{consent}}$, $d_{\mathrm{obligation}}$, $d_{\mathrm{temporal}}$, $d_{\mathrm{agent}}$, … ), not per-word slots: allocating a distinct basis blade to every open-vocabulary noun would exhaust the ceiling after the first handful of terms, collapsing the frame algebra.
 
 Open-vocabulary lexical identifiers ("battery", "drone", "contract", …) instead reside as **content-addressed commitments inside the blade coefficients**: a noun blade's coefficient tuples (§3.1) carry the $\mathcal{H}$-commitments of the entity's Layer-2 and numeric-leaf definitions, and two occurrences of the same term share one commitment via CAE-DAG hash-consing (§2.3). Adding a new word to the discourse therefore allocates coefficient data inside existing axes and never a new basis vector. Under the {% include term.html id="no-implicit-rule" %}, any application that genuinely requires an additional normative axis must declare it explicitly in its frame specification and accept the $\mathcal{O}(2^n)$ blade-count consequence, rather than silently overloading an existing axis.
 
