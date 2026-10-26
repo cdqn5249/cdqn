@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qn Primitive Envelope — Governed Qn Artifact Model
-description: Governed Qn artifact model, operational axioms, candidate typed payload profiles, and Category B optimization primitives under SIMEMP consistency constraints.
-version: 1.2.4
-updated: 2026-10-20
+description: Governed Qn artifact model, operational axioms, candidate typed payload profiles, and Category B optimization primitives under SIMEMP consistency constraints; includes the canonical circuit-breaker receipt registry and the OP_BYPASS/OP_SATURATE split alignment.
+version: 1.3.0
+updated: 2026-10-26
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -66,8 +66,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
-| **Version** | 1.2.4 |
-| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
+| **Version** | 1.3.0 |
+| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Primitive Specification — Category A/B Envelope Foundation |
@@ -100,6 +100,22 @@ The following documents define the physical, structural, and legal constraints g
 | `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+
+---
+
+## Review Integration Record (v1.3.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md) — transcript of the external adversarial review (Google Deep Review, October 2026) of the condensed Qn universe specification and QnIR v0.1 candidate draft. This update integrates the operational-axiom findings of that review, and the cross-file dependencies deferred by `docs/qexpr.md` v1.3.0, into the canon. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place. New constructions and semantic refinements introduced below are tagged **[v1.3.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| Macro-DAG "equality saturation" sentence aligned to the `qexpr.md` v1.3.0 Node Class 6 split: `OP_BYPASS` canonical contraction governs identity short-circuiting; general saturation is legal only as `OP_SATURATE` (Q(rsi)-gated, versioned-artifact output) | §5.9 | QO-5 / Segment 2 Point 3; `qexpr.md` v1.3.0 cross-file dependency | CANDIDATE |
+| §1.16 `Q(bypass)` bound to the Layer-3 `OP_BYPASS` canonical contraction (16-rule terminating suite); `OP_REWRITE` noted as deprecated alias | §1.16 | QO-5 / `qexpr.md` v1.3.0 cross-file dependency | CANDIDATE |
+| **Canonical Circuit-Breaker Receipt Registry** — names the previously unnamed third-breaker receipt `RECEIPT_METRIC_EXHAUSTED`; registers `RECEIPT_SATURATION_CONVERGED` and reason codes `D_MAX_REACHED` / `N_MAX_REACHED` / `U_BUDGET_EXHAUSTED` / `K_MAX_REACHED`; no new Axiom-6 terminal states required | §5.9 (new) | QO-5 / data-loss audit (unnamed third circuit-breaker receipt) | CANDIDATE |
+| Breakeven-inequality provenance: $$\Delta W_{\mathrm{compute}}$$, $$\Delta W_{\mathrm{lookup}}$$, $$\epsilon_{\mathrm{overhead}}$$ defined as DCC-declared deterministic quantities; undeclared quantities force the safe Direct-Compute fallback | §1.15, §5.9 | Data-loss audit (unspecified $$\Delta W_{\mathrm{compute}}$$ provenance) | CANDIDATE |
+| Universal Envelope Structure figure box-normalized to uniform 67-column interior (pre-existing raggedness: border 65, rows 65–67); row text preserved byte-for-byte | §4 | — | editorial |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline, to be integrated in subsequent versioned updates): `docs/qexpr.md` one-line touch-up at its next versioned opportunity (breaker-3 receipt name `RECEIPT_METRIC_EXHAUSTED` inherited from the §5.9 registry); `docs/qlog.md` §6.1 background-saturation wording resolves to `OP_SATURATE`; `docs/abstractionLayers.md` (road-receipt and π/zk findings — next queue item); `docs/simemp.md` (Eq-1 / $$U$$ / BOC compliance-measure formalization); glossary entries for the new receipt names.
 
 ---
 
@@ -152,8 +168,12 @@ The classification governing artifact visibility: local-only, sealable, exportab
 ### 1.15. Q(reuse) Optimization Morphism
 A Category B primitive referencing existing immutable content commitment hashes within the local causal DAG. Under physical constraints, $$Q(\text{reuse})$$ is admissible if and only if the predicted computational work of direct re-evaluation exceeds the lookup and retrieval dissipation across the Memory Wall ($$\Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$).
 
+**Breakeven provenance [v1.3.0 — CANDIDATE]:** the terms of the breakeven inequality are measured, not assumed. $$\Delta W_{\mathrm{compute}}$$ is the DCC-declared deterministic upper-bound estimate of direct re-evaluation work, expressed in Abstract Compute Units $$U$$ and calibrated at the Layer-0 anchor, produced by the cost model declared in the morphism's {% include term.html id="dcc-profile" %} — never by runtime sampling. $$\Delta W_{\mathrm{lookup}}$$ is the DCC-declared retrieval dissipation across the local memory hierarchy, and $$\epsilon_{\mathrm{overhead}}$$ is a DCC-declared fixed constant of the local gateway. All three **MUST** be declared (No-Implicit Rule); an undeclared quantity forces the safe fallback to Direct Compute (§5.9 precedence), never a guessed admission.
+
 ### 1.16. Q(bypass) Optimization Morphism
 A Category B primitive allowing a {% include term.html id="simemp-gateway" %} to short-circuit execution upon verifying an algebraic identity precondition in $$\mathcal{O}(1)$$ register time, emitting a zero-cost bypass receipt without memory traversal or compute budget consumption.
+
+**[v1.3.0 — CANDIDATE, Review Integration QO-5]** The Layer-3 node-class semantics of this morphism is the `OP_BYPASS` canonical contraction of Node Class 6 ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §4.6.1, v1.3.0): the fixed sixteen-rule terminating identity suite whose normal form, together with `DCC_SYM_COMMUTATIVE` child sorting, governs canonical node hashing. The former umbrella name `OP_REWRITE` is a **deprecated alias** retained only for resolvability of prior artifacts and is retired at the QnIR v0.2 candidate.
 
 ---
 
@@ -237,25 +257,25 @@ The Universal Envelope $$\mathcal{E}$$ is structured using {% include term.html 
 
 ```
                     UNIVERSAL ENVELOPE STRUCTURE
- ┌─────────────────────────────────────────────────────────────────┐
+ ┌───────────────────────────────────────────────────────────────────┐
  │ 1. IDENTITY BLOCK      : NodeID, CausalIndex, Type, Version, Hash │
- ├─────────────────────────────────────────────────────────────────┤
- │ 2. TYPE BLOCK          : Primitive, Morphism, Workflow, Receipt │
- ├─────────────────────────────────────────────────────────────────┤
- │ 3. STATE BLOCK         : Candidate, Sealed, Verified, Quarantined│
- ├─────────────────────────────────────────────────────────────────┤
- │ 4. LINEAGE BLOCK       : ParentCommitmentHashes, BirthOrder      │
- ├─────────────────────────────────────────────────────────────────┤
- │ 5. DCC PROFILE REF     : Dependencies, Constraints, Capabilities │
- ├─────────────────────────────────────────────────────────────────┤
- │ 6. METRIC ENVELOPE     : MemoryCeiling, DepthLimit, ComputeBudget│
- ├─────────────────────────────────────────────────────────────────┤
- │ 7. SECURITY ENVELOPE   : SecurityRing, PQCAlgoID, RevocationPath │
- ├─────────────────────────────────────────────────────────────────┤
- │ 8. EXPOSURE BLOCK      : LocalOnly, Exportable, Attested         │
- ├─────────────────────────────────────────────────────────────────┤
- │ 9. PAYLOAD REFERENCE   : Typed pointer to Payload Profile        │
- └─────────────────────────────────────────────────────────────────┘
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 2. TYPE BLOCK          : Primitive, Morphism, Workflow, Receipt   │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 3. STATE BLOCK         : Candidate, Sealed, Verified, Quarantined │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 4. LINEAGE BLOCK       : ParentCommitmentHashes, BirthOrder       │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 5. DCC PROFILE REF     : Dependencies, Constraints, Capabilities  │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 6. METRIC ENVELOPE     : MemoryCeiling, DepthLimit, ComputeBudget │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 7. SECURITY ENVELOPE   : SecurityRing, PQCAlgoID, RevocationPath  │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 8. EXPOSURE BLOCK      : LocalOnly, Exportable, Attested          │
+ ├───────────────────────────────────────────────────────────────────┤
+ │ 9. PAYLOAD REFERENCE   : Typed pointer to Payload Profile         │
+ └───────────────────────────────────────────────────────────────────┘
 ```
 
 ### 4.1. Identity Block
@@ -337,7 +357,19 @@ Within any single morphism evaluation step, the gateway enforces strict causal p
 
 $$Q(\text{bypass}) \prec Q(\text{reuse}) \prec \text{Direct Compute}$$
 
-At the macro-DAG scale (Layer 3), equality saturation executes iteratively, where sub-graph unifications via $$Q(\text{reuse})$$ may reveal newly adjacent terms that trigger downstream $$Q(\text{bypass})$$ cancellations.
+**[v1.3.0 — CANDIDATE, Review Integration QO-5]** At the macro-DAG scale (Layer 3), rewrite executes under the Node Class 6 split ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §4.6, v1.3.0): the canonical contraction suite `OP_BYPASS` applies the fixed $$\mathcal{O}(1)$$ identity rules and governs canonical node hashing, while general equality saturation is legal **only** as `OP_SATURATE` inside an explicit $$Q(\text{rsi})$$ workflow whose DCC profile pins a deterministic rule-application schedule, iteration/node/depth ceilings, and a deterministic hash-tie-broken cost extractor — emitting a **new versioned artifact (Axiom 13)** rather than mutating canonical identity. Within a saturation pass, sub-graph unifications via $$Q(\text{reuse})$$ may reveal newly adjacent terms that trigger downstream `OP_BYPASS` cancellations; the causal precedence of this section is unchanged.
+
+#### Canonical Circuit-Breaker Receipt Registry **[v1.3.0 — CANDIDATE]**
+**[Review Integration QO-5 / data-loss audit]** The Layer-3 structural circuit breakers ([`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §6) emit the following canonically named receipts, registered here as the operational-axiom authority (Axioms 6 and 7). No new Axiom-6 terminal states are required:
+
+| Circuit breaker | Bound | Receipt | Terminal state (Axiom 6) | Reason code |
+|---|---|---|---|---|
+| 1. Static graph depth ceiling | Depth(DAG) ≤ D_max | `RECEIPT_EXPRESSION_TOO_COMPLEX` | `EXPRESSION_TOO_COMPLEX` | `D_MAX_REACHED` |
+| 2. Node count budget allocation | Count(Nodes) ≤ N_max | `RECEIPT_BUDGET_EXHAUSTED` | `BUDGET_EXHAUSTED` | `N_MAX_REACHED` |
+| 3. Metric collapse budget ceiling | Burn(U) ≤ Budget_Q1 | `RECEIPT_METRIC_EXHAUSTED` | `BUDGET_EXHAUSTED` | `U_BUDGET_EXHAUSTED` |
+| 4. Saturation iteration ceiling | Epochs(OP_SATURATE) ≤ K_max | `RECEIPT_BUDGET_EXHAUSTED` | `BUDGET_EXHAUSTED` | `K_MAX_REACHED` |
+
+Two non-breaker canonical receipts complete the registry: `RECEIPT_SATURATION_CONVERGED` (terminal state `SUCCESS`) is emitted when an `OP_SATURATE` workflow halts on convergence before any ceiling, and `RECEIPT_BYPASS_IDENTITY` (zero metric cost, $$\Delta W = 0$$) is emitted by every `OP_BYPASS` contraction. Breaker 3's receipt name is declared here for the first time; [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §6 inherits it at its next versioned touch-up.
 
 ---
 
