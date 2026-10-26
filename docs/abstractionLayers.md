@@ -308,15 +308,68 @@ A receiving node ingests $\mathcal{H}(\mathcal{R}_{\text{road}})$ as an external
 
 #### Soundness of the π Field: Execution Proofs and the Bisection Audit Right [v1.8.0 — CANDIDATE]
 
-**Status.** Proposed extension of the road-receipt conduit above, sourced from [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md) (QO-13). It carries `State: CANDIDATE` under **Axiom 14**. The receipt tuple $\mathcal{R}_{\text{road}} = \langle \mathcal{H}(S_{\text{in}}), \mathcal{M}, \mathcal{H}(S_{\text{out}}), \Delta W, \pi, \sigma \rangle$ is unchanged; this subsection fixes what the proof field $\pi$ must contain for a road receipt to be admissible across the Outer Ring.
+**Status.** 
 
-The review established a structural finding: **contract-verification-plus-receipt-trust is not sound on its own** against Byzantine or corrupted nodes. Because receiving nodes verify $\mathcal{R}_{\text{road}}$ against shared `Q(anchor)` contracts without re-executing the sender's transaction (§3.3, §8.4), a $\pi$ that is merely a metadata attestation signed by $\sigma$ would let a compromised node holding valid Inner/Outer-Ring PQC keys sign an arbitrary transition $\mathcal{H}(S_{\text{in}}) \to \mathcal{H}(S_{\text{out}})$ with a fabricated work ledger $\Delta W$ — a violation of {% include term.html id="dependencies-determinism" %} across network boundaries that no downstream contract check can detect. Admissible road receipts therefore carry **verifiable computational integrity** in $\pi$, via exactly one of two realizations:
+Proposed extension of the road-receipt conduit above, sourced from [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md) (QO-13). It carries `State: CANDIDATE` under **Axiom 14**. 
+The receipt tuple 
 
-**Realization A — Succinct Zero-Knowledge Execution Proof.** The QnIR execution handler is a small, fixed-width deterministic machine over integer arithmetic, with bounded loops and no floating point (§6.3, §13). Its execution trace therefore arithmetizes directly into an Algebraic Intermediate Representation (AIR) inside a transparent **zk-STARK proof** (precedents: RISC Zero, Cairo receipts). The proof attests that a valid local witness trace, rooted at $Q(0)_A$, transformed $\mathcal{H}(S_{\text{in}})$ into $\mathcal{H}(S_{\text{out}})$ under contract $\mathcal{M}$ within work $\Delta W$. Any receiver verifies in $\mathcal{O}(\mathrm{polylog}\,N)$ time with **zero trust in the sender** and **zero disclosure of the private local graph** — preserving **Axiom 8**.
+$$\mathcal{R}_{\text{road}} = \langle \mathcal{H}(S_{\text{in}}), \mathcal{M}, \mathcal{H}(S_{\text{out}}), \Delta W, \pi, \sigma \rangle$$
 
-**Realization B — Optimistic Interactive Anchor-Cut Bisection.** For deployments where full STARK generation exceeds the thermodynamic breakeven ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15), $\pi$ commits the **Merkle root of the $K$ intermediate `OP_ANCHORCUT` witnesses** of the execution ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})). Receivers hold a protocol-enforced **Interactive Bisection Challenge Right**: upon ingesting $\mathcal{H}(\mathcal{R}_{\text{road}})$, a receiver may challenge any segment $[\kappa_i, \kappa_{i+1}]$ in $\mathcal{O}(\log K)$ rounds, descending to a single origin-quotiented QnIR instruction step replayed deterministically at $\mathcal{O}(1)$ local cost. Failure to respond, or a hash mismatch, quarantines the receipt: terminal status `QUARANTINED` (§3.6) with receipt `RECEIPT_ANCHOR_REVOKED` — the receipt name is deliberately inherited from the anchor-fracture containment of [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}); no new terminal status is introduced.
+is unchanged; this subsection fixes what the proof field $\pi$ must contain for a road receipt to be admissible across the Outer Ring.
 
-**Origin-Quotiented Canonical Projection for Export.** Strictly local origins imply that identical deterministic computations on nodes $A$ and $B$ yield disjoint commitments, $\mathcal{H}(S_{\text{out}})_A \neq \mathcal{H}(S_{\text{out}})_B$: a receiving node can neither verify a state transition nor deduplicate shared sub-expressions across peers by direct hash comparison. The {% include term.html id="exposure-functor" text="Exposure Functor" %} therefore computes public commitments only **after quotienting out the local root**, $Q(0)_A \mapsto \widehat{Q(0)}$: during pure `Qm` evaluation the origin is treated as a formal canonical symbol, and the node-specific hardware seed remains bound solely in the envelope's lineage block. The public commitments $\mathcal{H}_{\mathrm{pub}}(S_{\text{in}})$ and $\mathcal{H}_{\mathrm{pub}}(S_{\text{out}})$ carried by $\mathcal{R}_{\text{road}}$ are computed over the quotiented projection, so any two nodes executing the same {% include term.html id="q-patterns" text="Q(pattern)" %} over identical relative inputs produce **identical portable commitments** — making Anchor Grounding Class I transitions verifiable by forced re-derivation on any peer.
+The review established a structural finding: **contract-verification-plus-receipt-trust is not sound on its own** against Byzantine or corrupted nodes. Because receiving nodes verify 
+
+$$\mathcal{R}_{\text{road}}$$
+
+against shared `Q(anchor)` contracts without re-executing the sender's transaction (§3.3, §8.4), a $\pi$ that is merely a metadata attestation signed by $\sigma$ would let a compromised node holding valid Inner/Outer-Ring PQC keys sign an arbitrary transition 
+
+$$\mathcal{H}(S_{\text{in}}) \to \mathcal{H}(S_{\text{out}})$$ 
+
+with a fabricated work ledger $\Delta W$ — a violation of {% include term.html id="dependencies-determinism" %} across network boundaries that no downstream contract check can detect. Admissible road receipts therefore carry **verifiable computational integrity** in $\pi$, via exactly one of two realizations:
+
+**Realization A — Succinct Zero-Knowledge Execution Proof.** 
+
+The QnIR execution handler is a small, fixed-width deterministic machine over integer arithmetic, with bounded loops and no floating point (§6.3, §13). Its execution trace therefore arithmetizes directly into an Algebraic Intermediate Representation (AIR) inside a transparent **zk-STARK proof** (precedents: RISC Zero, Cairo receipts). The proof attests that a valid local witness trace, rooted at $Q(0)_A$, transformed 
+
+$$\mathcal{H}(S_{\text{in}})$$
+
+into 
+
+$$\mathcal{H}(S_{\text{out}})$$
+
+under contract $\mathcal{M}$ within work $\Delta W$. Any receiver verifies in $\mathcal{O}(\mathrm{polylog}\,N)$ time with **zero trust in the sender** and **zero disclosure of the private local graph** — preserving **Axiom 8**.
+
+**Realization B — Optimistic Interactive Anchor-Cut Bisection.** 
+
+For deployments where full STARK generation exceeds the thermodynamic breakeven ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15), $\pi$ commits the **Merkle root of the $K$ intermediate `OP_ANCHORCUT` witnesses** of the execution ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})). Receivers hold a protocol-enforced **Interactive Bisection Challenge Right**: upon ingesting 
+
+$$\mathcal{H}(\mathcal{R}_{\text{road}})$$
+
+, a receiver may challenge any segment 
+
+$$[\kappa_i, \kappa_{i+1}]$$ 
+
+in 
+
+$$\mathcal{O}(\log K)$$
+
+rounds, descending to a single origin-quotiented QnIR instruction step replayed deterministically at $\mathcal{O}(1)$ local cost. Failure to respond, or a hash mismatch, quarantines the receipt: terminal status `QUARANTINED` (§3.6) with receipt `RECEIPT_ANCHOR_REVOKED` — the receipt name is deliberately inherited from the anchor-fracture containment of [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}); no new terminal status is introduced.
+
+**Origin-Quotiented Canonical Projection for Export.** 
+
+Strictly local origins imply that identical deterministic computations on nodes $A$ and $B$ yield disjoint commitments, 
+
+$$\mathcal{H}(S_{\text{out}})_A \neq \mathcal{H}(S_{\text{out}})_B$$
+
+: a receiving node can neither verify a state transition nor deduplicate shared sub-expressions across peers by direct hash comparison. The {% include term.html id="exposure-functor" text="Exposure Functor" %} therefore computes public commitments only **after quotienting out the local root**, $Q(0)_A \mapsto \widehat{Q(0)}$: during pure `Qm` evaluation the origin is treated as a formal canonical symbol, and the node-specific hardware seed remains bound solely in the envelope's lineage block. The public commitments 
+
+$$\mathcal{H}_{\mathrm{pub}}(S_{\text{in}})$$
+
+and 
+
+$$\mathcal{H}_{\mathrm{pub}}(S_{\text{out}})$$
+
+carried by $\mathcal{R}_{\text{road}}$ are computed over the quotiented projection, so any two nodes executing the same {% include term.html id="q-patterns" text="Q(pattern)" %} over identical relative inputs produce **identical portable commitments** — making Anchor Grounding Class I transitions verifiable by forced re-derivation on any peer.
 
 ---
 
