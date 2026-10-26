@@ -461,7 +461,11 @@ The architecture enforces an explicit {% include term.html id="dual-ring-pqc-bou
 - The **Inner Ring** governs local execution and genesis ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.4), protecting root keys, local lineage, and state sealing.
 - The **Outer Ring** governs network-facing commitments under the local {% include term.html id="security-envelope" %}, managing pseudonyms, attestation keys, and delegation proofs. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
 
-**Inner-Ring co-signature operations [v1.8.0 — CANDIDATE].** The Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6.1 executes as an **Inner-Ring signing operation**: the deterministic read-back pair ($\text{DCC\_INTENT\_CONTRACT\_v1}$, $\mathcal{T}$) is presented to the human principal and signed entirely inside the Inner Ring, and only the resulting co-signature commitment crosses the Outer Ring as a public attestation. The co-signature operation is metered under **Axiom 6** and emits a receipt like any governed operation; it never exposes private lineage, root keys, or payload content to the Outer Ring.
+**Inner-Ring co-signature operations [v1.8.0 — CANDIDATE].** The Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6.1 executes as an **Inner-Ring signing operation**: the deterministic read-back pair (
+
+$$\text{DCC\_INTENT\_CONTRACT\_v1}$$ , $$\mathcal{T}$$
+
+) is presented to the human principal and signed entirely inside the Inner Ring, and only the resulting co-signature commitment crosses the Outer Ring as a public attestation. The co-signature operation is metered under **Axiom 6** and emits a receipt like any governed operation; it never exposes private lineage, root keys, or payload content to the Outer Ring.
 
 ### 8.4. Q(anchor) as the Outer-Ring Consensus Reference Frame
 
