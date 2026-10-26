@@ -323,9 +323,27 @@ The proposed Anchor Grounding Classes of [`docs/qs_history.md`]({{ '/qs_history.
 
 ### 4.4. The Parser-Boundary Modality Ceiling [v1.3.0 — CANDIDATE]
 
-The §4 firewall inspects statements and artifacts that are already formalized. The remaining trust gap lies **upstream of formalization**: translating a natural-language utterance into a structured CAE-DAG and a `DCC_INTENT_CONTRACT_v1` relies on a statistical or neural **candidate parser** (§6, step 1) crossing the **Axiom 14** boundary. No statistical parser guarantees $H(\text{Intent}_{\mathrm{human}} \mid \text{Utterance}) = 0$ — {% include term.html id="dependencies-determinism" %} governs the formalized state, not the pre-formalization act of interpretation. If the parser hallucinates or inverts the human's actual intent while attaching a valid human origin signature $Q(0)_{\mathrm{author}}$ and well-formed `MODAL_EMPIRICAL` or `MODAL_CONSTRUCTIVE` tags, then every downstream check — the SIMEMP gateways, the Triadic Grounding of §7 ($\mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$), and the QnIR anti-drift invariant $H(\text{Intent} \mid \text{Execution}) = 0$ — will validate the *wrong* intent with perfect rigor, because the error occurred prior to formalization.
+The §4 firewall inspects statements and artifacts that are already formalized. The remaining trust gap lies **upstream of formalization**: translating a natural-language utterance into a structured CAE-DAG and a `DCC_INTENT_CONTRACT_v1` relies on a statistical or neural **candidate parser** (§6, step 1) crossing the **Axiom 14** boundary. 
 
-**Parser-boundary modality ceiling (rule).** Any candidate DAG produced by a natural-language parser enters the generative pipeline of §6 typed **no higher than `MODAL_HYPOTHESIS`**. Direct admission at `MODAL_EMPIRICAL` or `MODAL_CONSTRUCTIVE` is barred — including when the parser itself attaches those tags — until the candidate passes the Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake of §6.1.
+No statistical parser guarantees 
+
+$$H(\text{Intent}_{\mathrm{human}} \mid \text{Utterance}) = 0$$
+
+— {% include term.html id="dependencies-determinism" %} governs the formalized state, not the pre-formalization act of interpretation. 
+If the parser hallucinates or inverts the human's actual intent while attaching a valid human origin signature 
+$Q(0)_{\mathrm{author}}$ and well-formed `MODAL_EMPIRICAL` or `MODAL_CONSTRUCTIVE` tags, then every downstream check — the SIMEMP gateways, the Triadic Grounding of §7 (
+
+$$\mathbf{C}_{\mathrm{Qs}} \otimes \mathbf{C}_{\mathrm{Qm}} \otimes \mathbf{C}_{\mathrm{Qphy}}$$
+
+), and the QnIR anti-drift invariant 
+
+$$H(\text{Intent} \mid \text{Execution}) = 0$$
+
+— will validate the *wrong* intent with perfect rigor, because the error occurred prior to formalization.
+
+**Parser-boundary modality ceiling (rule).** 
+
+Any candidate DAG produced by a natural-language parser enters the generative pipeline of §6 typed **no higher than `MODAL_HYPOTHESIS`**. Direct admission at `MODAL_EMPIRICAL` or `MODAL_CONSTRUCTIVE` is barred — including when the parser itself attaches those tags — until the candidate passes the Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake of §6.1.
 
 * A parsed intent is, epistemically, a **hypothesis about what the principal meant**; `MODAL_HYPOTHESIS` is its correct home in the §4 spectrum — a working conjecture whose only competent falsifier is the principal's own confirmation. Parser confidence scores are not {% include term.html id="epistemic-anchorage" %}: under the {% include term.html id="no-implicit-rule" %} they confer no grounding value and must not be mapped onto $G$.
 * The upgrade path is exactly one: §6.1, where the sole authority over the intent's meaning — the human principal — supplies the anchorage that the parser cannot.
