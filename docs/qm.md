@@ -277,13 +277,24 @@ $$h_{\mathrm{cons}}(q_z) = \lceil \log_B(q_z + 1) \rceil \le H_{\mathrm{max}}$$
 
 so lineage depth and creation work are $$\mathcal{O}(\log_B q_z)$$ — logarithmic, not linear. Under HCA-Collapse the Cons-chain lowers isomorphically to native machine words (`UINT64` / multi-precision limbs) with zero radix-conversion overhead for dyadic and octal schedules. Exceeding $$H_{\mathrm{max}}$$ during construction halts with `RECEIPT_EXPRESSION_TOO_COMPLEX`.
 
-**Category A anchor basis (scope correction).** The single-digit prime anchors $$\{Q(2), Q(3), Q(5), Q(7)\}$$ form the **Category A single-digit prime anchor basis**: they characterize the factorization structure of single-digit artifacts ([`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}) §7). They do **not** generate the multiplicative monoid of all constructed naturals — no free monoid over $$\{2, 3, 5, 7\}$$ contains $$11, 13$$, or any integer with a prime factor $$\ge 11$$, and the generated set is not closed under addition ($$Q(9) + Q(2) = 11$$). Multi-digit magnitudes exist by the §3.6 construction, not by prime generation. (The parallel claim in `docs/q2_q9.md` §7.1 is queued for the same scope correction in its next versioned update.)
+**Category A anchor basis (scope correction).** 
+The single-digit prime anchors $$\{Q(2), Q(3), Q(5), Q(7)\}$$ form the 
 
-**Decimal interface projection.** Radix-10 formatting via $$Q(9)$$ and $$Q(10) \equiv \mathrm{Cons}_{Q(2)}(Q(5), \, Q(0))$$ remains strictly an interface projection governed by `DCC_ANCHOR_Q9_RADIX_v1` — never the internal representation (base neutrality, §3.3, is preserved).
+**Category A single-digit prime anchor basis**: 
+They characterize the factorization structure of single-digit artifacts ([`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}) §7). They do **not** generate the multiplicative monoid of all constructed naturals — no free monoid over $$\{2, 3, 5, 7\}$$ contains $$11, 13$$, or any integer with a prime factor $$\ge 11$$, and the generated set is not closed under addition ($$Q(9) + Q(2) = 11$$). Multi-digit magnitudes exist by the §3.6 construction, not by prime generation. (The parallel claim in `docs/q2_q9.md` §7.1 is queued for the same scope correction in its next versioned update.)
 
-**Example.** $$11 = \mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(Q(1), \, Q(0)\big), \, Q(1)\big), \, Q(1)\big)$$ — binary $$1011_2$$, chain depth 3 above the $$Q(1)$$ seed; its commitment hash is distinct from $$\mathcal{H}(Q(9))$$ and $$\mathcal{H}(Q(2))$$, and identical on every node applying the same schedule.
+**Decimal interface projection.** 
+Radix-10 formatting via $$Q(9)$$ and $$Q(10) \equiv \mathrm{Cons}_{Q(2)}(Q(5), \, Q(0))$$ remains strictly an interface projection governed by `DCC_ANCHOR_Q9_RADIX_v1` — never the internal representation (base neutrality, §3.3, is preserved).
 
-**BOC record.** (a) Import $$\mathbb{N}/\mathbb{Q}$$ wholesale — rejected: violates Axioms 1/2/4 and the No-Implicit Rule. (b) Unary successor extension — rejected: $$\mathcal{O}(q_z)$$ work violates Tier-2 Efficiency. (c) **Radix-anchor morphism, $$B \in \{Q(2), Q(8)\}$$ — selected**: logarithmic cost, Axiom-4 lineage, native word lowering, canonical uniqueness. Tier-1 admission filter: Identity (unique canonical hash) ✓; Metric (finite height $$\le H_{\mathrm{max}}$$) ✓; Security (anchor-constrained, receipted construction) ✓. Tier-2 vector: Efficiency (logarithmic) ✓; Modularity (reuses §5 morphisms unchanged) ✓; Portability (dyadic/octal anchors lower to any word-addressed substrate) ✓.
+**Example.** 
+$$11 = \mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(Q(1), \, Q(0)\big), \, Q(1)\big), \, Q(1)\big)$$ — binary $$1011_2$$, chain depth 3 above the $$Q(1)$$ seed; its commitment hash is distinct from $$\mathcal{H}(Q(9))$$ and $$\mathcal{H}(Q(2))$$, and identical on every node applying the same schedule.
+
+**BOC record.** 
+(a) Import $$\mathbb{N}/\mathbb{Q}$$ wholesale — rejected: violates Axioms 1/2/4 and the No-Implicit Rule. 
+(b) Unary successor extension — rejected: $$\mathcal{O}(q_z)$$ work violates Tier-2 Efficiency. 
+(c) **Radix-anchor morphism, $$B \in \{Q(2), Q(8)\}$$ — selected**: 
+logarithmic cost, Axiom-4 lineage, native word lowering, canonical uniqueness. 
+Tier-1 admission filter: Identity (unique canonical hash) ✓; Metric (finite height $$\le H_{\mathrm{max}}$$) ✓; Security (anchor-constrained, receipted construction) ✓. Tier-2 vector: Efficiency (logarithmic) ✓; Modularity (reuses §5 morphisms unchanged) ✓; Portability (dyadic/octal anchors lower to any word-addressed substrate) ✓.
 
 ---
 
