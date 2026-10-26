@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.7.1
-updated: 2026-10-19
+version: 1.8.0
+updated: 2026-10-26
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -82,11 +82,28 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.7.1 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.8.0 |
+| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Structural Thesis — Milestone 1 Fully Sealed Baseline |
+
+---
+
+## Review Integration Record (v1.8.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md) — transcript of the external adversarial review (Google Deep Review, October 2026) of the condensed Qn universe specification and QnIR v0.1 candidate draft. This is the first review-driven update of this thesis; it integrates the road-receipt trust-model findings of that review (reviewer open question `QO-13`, Segment 3 Point 1, and the boundary-trust verdict finding on Objection 7): soundness of the proof field $$\pi$$, the origin-quotiented canonical projection for export, and the interactive bisection audit right. It also absorbs the cross-file dependency flagged by `docs/qs.md` v1.3.0 (Inner-Ring co-signature mechanics for the §6.1 handshake). Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place. New constructions introduced below are tagged **[v1.8.0 — CANDIDATE]** pending BOC sealing.
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Origin-Quotiented Canonical Projection for Export**: the Exposure Functor quotients out the local root ($Q(0)_A \mapsto \widehat{Q(0)}$) prior to computing public commitments $\mathcal{H}_{\mathrm{pub}}(S_{\mathrm{in}})$ / $\mathcal{H}_{\mathrm{pub}}(S_{\mathrm{out}})$, so identical deterministic computations on distinct nodes yield identical portable commitments, verifiable by forced re-derivation on any peer | §4.4 | QO-13 / Segment 3 Point 1 (disjoint commitment hashes) | CANDIDATE |
+| **π-field soundness**: two admissible realizations of verifiable computational integrity — (A) transparent zk-STARK execution proof over the AIR-arithmetized QnIR trace ($\mathcal{O}(\mathrm{polylog}\,N)$ verification, zero trust in the sender, Axiom 8 preserved); (B) optimistic interactive Anchor-Cut bisection ($\mathcal{O}(\log K)$ challenge rounds down to one origin-quotiented instruction step, $\mathcal{O}(1)$ replay). A bare σ-signed attestation without either is not sound against Byzantine nodes | §4.4 (new) | QO-13 / Segment 3 Point 1; verdict Objection 7 | CANDIDATE |
+| **Bisection-failure disposition**: terminal status `QUARANTINED` + receipt `RECEIPT_ANCHOR_REVOKED` (name inherited from the anchor-fracture containment of `docs/qlog.md`); `REVOKED` is deliberately **not** introduced as a new Axiom-6 terminal status — the sealed 12-status list of §3.6 is untouched | §4.4, §3.6 | QO-13 / Segment 3 Point 1 | CANDIDATE |
+| **Inner-Ring co-signature operations**: the `qs.md` §6.1 handshake executes as an Inner-Ring signing operation; only the co-signature commitment crosses the Outer Ring | §8.3 | `docs/qs.md` v1.3.0 cross-file dependency | CANDIDATE |
+| **Soundness caveat on Q(anchor) consensus**: contract verification plus receipt trust is not, on its own, execution verification; admissible road receipts carry $$\pi$$ per §4.4 | §8.4 | QO-13 / Segment 3 Point 1 | CANDIDATE |
+| Open Items: AIR arithmetization of the QnIR transition function and concrete π-field realizations deferred to the QnIR v0.2 candidate | §13 | QO-13 / Segment 4 Point 5 (control-flow vs. data-flow verification) | CANDIDATE |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline, to be integrated in subsequent versioned updates): QnIR v0.2 — AIR arithmetization, the π-field encoding, and the control-flow/data-flow verification finding (Segment 4, Point 5) land in the candidate VM specification; `docs/qm_calculus.md` — the $K$ intermediate `OP_ANCHORCUT` witnesses are already canonical there, and this update only binds them into the bisection protocol (a cross-reference touch-up may ride along that file's next versioned update); `docs/chronosa.md` — sheaf gluing over road receipts inherits the §8.4 soundness caveat at its next versioned update; glossary entries for *Origin-Quotiented Canonical Projection* and *Interactive Bisection Challenge Right* (deferred under the standing no-dead-entries discipline of [`docs/qs_history.md`]({{ '/qs_history.html' | relative_url }}) §8).
 
 ---
 
@@ -289,6 +306,18 @@ $$\mathcal{R}_{\text{road}} = \Big\langle \mathcal{H}(S_{\text{in}}), \, \mathca
 
 A receiving node ingests $\mathcal{H}(\mathcal{R}_{\text{road}})$ as an external witness, anchoring the milestone into its *own* local monoroot tree without adopting the sender's origin $Q(0)_A$, preserving **Axiom 4** and achieving $\mathcal{O}(1)$ bandwidth efficiency.
 
+#### Soundness of the π Field: Execution Proofs and the Bisection Audit Right [v1.8.0 — CANDIDATE]
+
+**Status.** Proposed extension of the road-receipt conduit above, sourced from [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md) (QO-13). It carries `State: CANDIDATE` under **Axiom 14**. The receipt tuple $\mathcal{R}_{\text{road}} = \langle \mathcal{H}(S_{\text{in}}), \mathcal{M}, \mathcal{H}(S_{\text{out}}), \Delta W, \pi, \sigma \rangle$ is unchanged; this subsection fixes what the proof field $\pi$ must contain for a road receipt to be admissible across the Outer Ring.
+
+The review established a structural finding: **contract-verification-plus-receipt-trust is not sound on its own** against Byzantine or corrupted nodes. Because receiving nodes verify $\mathcal{R}_{\text{road}}$ against shared `Q(anchor)` contracts without re-executing the sender's transaction (§3.3, §8.4), a $\pi$ that is merely a metadata attestation signed by $\sigma$ would let a compromised node holding valid Inner/Outer-Ring PQC keys sign an arbitrary transition $\mathcal{H}(S_{\text{in}}) \to \mathcal{H}(S_{\text{out}})$ with a fabricated work ledger $\Delta W$ — a violation of {% include term.html id="dependencies-determinism" %} across network boundaries that no downstream contract check can detect. Admissible road receipts therefore carry **verifiable computational integrity** in $\pi$, via exactly one of two realizations:
+
+**Realization A — Succinct Zero-Knowledge Execution Proof.** The QnIR execution handler is a small, fixed-width deterministic machine over integer arithmetic, with bounded loops and no floating point (§6.3, §13). Its execution trace therefore arithmetizes directly into an Algebraic Intermediate Representation (AIR) inside a transparent **zk-STARK proof** (precedents: RISC Zero, Cairo receipts). The proof attests that a valid local witness trace, rooted at $Q(0)_A$, transformed $\mathcal{H}(S_{\text{in}})$ into $\mathcal{H}(S_{\text{out}})$ under contract $\mathcal{M}$ within work $\Delta W$. Any receiver verifies in $\mathcal{O}(\mathrm{polylog}\,N)$ time with **zero trust in the sender** and **zero disclosure of the private local graph** — preserving **Axiom 8**.
+
+**Realization B — Optimistic Interactive Anchor-Cut Bisection.** For deployments where full STARK generation exceeds the thermodynamic breakeven ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15), $\pi$ commits the **Merkle root of the $K$ intermediate `OP_ANCHORCUT` witnesses** of the execution ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})). Receivers hold a protocol-enforced **Interactive Bisection Challenge Right**: upon ingesting $\mathcal{H}(\mathcal{R}_{\text{road}})$, a receiver may challenge any segment $[\kappa_i, \kappa_{i+1}]$ in $\mathcal{O}(\log K)$ rounds, descending to a single origin-quotiented QnIR instruction step replayed deterministically at $\mathcal{O}(1)$ local cost. Failure to respond, or a hash mismatch, quarantines the receipt: terminal status `QUARANTINED` (§3.6) with receipt `RECEIPT_ANCHOR_REVOKED` — the receipt name is deliberately inherited from the anchor-fracture containment of [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}); no new terminal status is introduced.
+
+**Origin-Quotiented Canonical Projection for Export.** Strictly local origins imply that identical deterministic computations on nodes $A$ and $B$ yield disjoint commitments, $\mathcal{H}(S_{\text{out}})_A \neq \mathcal{H}(S_{\text{out}})_B$: a receiving node can neither verify a state transition nor deduplicate shared sub-expressions across peers by direct hash comparison. The {% include term.html id="exposure-functor" text="Exposure Functor" %} therefore computes public commitments only **after quotienting out the local root**, $Q(0)_A \mapsto \widehat{Q(0)}$: during pure `Qm` evaluation the origin is treated as a formal canonical symbol, and the node-specific hardware seed remains bound solely in the envelope's lineage block. The public commitments $\mathcal{H}_{\mathrm{pub}}(S_{\text{in}})$ and $\mathcal{H}_{\mathrm{pub}}(S_{\text{out}})$ carried by $\mathcal{R}_{\text{road}}$ are computed over the quotiented projection, so any two nodes executing the same {% include term.html id="q-patterns" text="Q(pattern)" %} over identical relative inputs produce **identical portable commitments** — making Anchor Grounding Class I transitions verifiable by forced re-derivation on any peer.
+
 ---
 
 ## 5. Complexity Degree Stratification
@@ -379,6 +408,8 @@ The architecture enforces an explicit {% include term.html id="dual-ring-pqc-bou
 - The **Inner Ring** governs local execution and genesis ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.4), protecting root keys, local lineage, and state sealing.
 - The **Outer Ring** governs network-facing commitments under the local {% include term.html id="security-envelope" %}, managing pseudonyms, attestation keys, and delegation proofs. Both rings implement structural indirection to support non-disruptive migration across Post-Quantum Cryptography (PQC) standards.
 
+**Inner-Ring co-signature operations [v1.8.0 — CANDIDATE].** The Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6.1 executes as an **Inner-Ring signing operation**: the deterministic read-back pair ($\text{DCC\_INTENT\_CONTRACT\_v1}$, $\mathcal{T}$) is presented to the human principal and signed entirely inside the Inner Ring, and only the resulting co-signature commitment crosses the Outer Ring as a public attestation. The co-signature operation is metered under **Axiom 6** and emits a receipt like any governed operation; it never exposes private lineage, root keys, or payload content to the Outer Ring.
+
 ### 8.4. Q(anchor) as the Outer-Ring Consensus Reference Frame
 
 Because physical nodes possess heterogeneous silicon origins ($Q(0)_A \neq Q(0)_B$) and disparate hardware capacities, global consensus cannot operate by flat transaction re-execution. 
@@ -387,6 +418,8 @@ Consensus across the execution-core ceiling and its orthogonal projections (Laye
 1. **Topological Invariance:** Every node instantiates the invariant Single-Digit Anchor Spectrum ($Q(2)\dots Q(9)$, $\phi$, $\sqrt{2}$) and Physical Invariant Anchors ({% include term.html id="q-th-2" text="Q(th_2)" %}, {% include term.html id="q-c" text="Q(c)" %}, {% include term.html id="q-hbar" text="Q(ℏ)" %}, {% include term.html id="q-z-bus" text="Q(Z_bus)" %}, {% include term.html id="q-gauge" text="Q(gauge)" %}). These anchors serve as universal topological landmarks.
 2. **Contract Verification:** Nodes achieve consensus by verifying that road receipts satisfy the shared anchor contract (`DCC_ANCHOR_Q2_PARITY_v1`, `DCC_ANCHOR_SECOND_LAW_v1`, etc.).
 3. **Sheaf-Theoretic Gluing:** In [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}), Chronosa verifies that road receipts emitted by heterogeneous nodes glue consistently over shared $Q(\mathrm{anchor})$ landmarks, synthesizing global causal intelligence without centralized state storage.
+
+**Soundness caveat [v1.8.0 — CANDIDATE].** Points 1–3 verify that road receipts *satisfy* the shared anchor contracts; they do not by themselves verify that the recorded transitions *executed*. Per §4.4, admissible road receipts carry verifiable computational integrity in the proof field $\pi$ — a zk-STARK execution proof or an Anchor-Cut bisection commitment. A road receipt whose $\pi$ field is a bare $\sigma$-signed metadata attestation is **not admissible** for Outer-Ring consensus, however well its contract fields verify.
 
 ---
 
@@ -473,3 +506,4 @@ The following formal specifications remain open for subsequent releases:
 1. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
 2. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
 3. Concrete execution and validation mechanics for composite {% include term.html id="q-workflows" text="Q(workflows)" %} and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
+4. Arithmetization of the QnIR transition function into AIR and the concrete π-field realizations of §4.4 (proof-system parameters, challenge-response wire format), deferred to the QnIR v0.2 candidate.
