@@ -380,13 +380,19 @@ Autonomous agents cannot self-replicate or consume unmetered resources. Under **
 
 ### 5.3. Logical Typing of the Social Residual (Proposed, CANDIDATE) [v1.3.0 — CANDIDATE]
 
-**Status.** This subsection records a candidate logical anchoring for the conserved social residual $r_{\mathrm{social}}$ of §2.2 and §3.3. It carries `State: CANDIDATE` under **Axiom 14**: it remains subject to deterministic measurement and {% include term.html id="boc-policy" text="BOC" %} selection through the pipeline of §6, and it amends nothing in §5.1 or §5.2, which continue to apply exactly as written.
+**Status.**
+
+This subsection records a candidate logical anchoring for the conserved social residual $r_{\mathrm{social}}$ of §2.2 and §3.3. It carries `State: CANDIDATE` under **Axiom 14**: it remains subject to deterministic measurement and {% include term.html id="boc-policy" text="BOC" %} selection through the pipeline of §6, and it amends nothing in §5.1 or §5.2, which continue to apply exactly as written.
 
 Sections §5.2 and §3.3 conserve $r_{\mathrm{social}}$ but leave its logical type unspecified: representing $\text{Action} = (\text{Delegation} \times \text{Actor}) + r_{\mathrm{social}}$ as a Diophantine conservation constraint does not by itself say how multi-clause legal or safety obligations, deadline expirations, or secondary reparations are encoded into the residual once a primary obligation is only partially violated. The reviewer proposal recorded here anchors the semantics of `DCC_INTENT_CONTRACT_v1` in **resource-bounded dyadic deontic logic with contrary-to-duty (CTD) obligations**, composed with **dynamic epistemic logic (DEL)** for multi-agent state updates.
 
 Under this candidate reading:
 
-* Primary obligations $\mathcal{O}_{\mathrm{actor}}(\alpha \mid W_{\mathrm{allowed}})$, permissions $P(\alpha)$, and prohibitions $F(\alpha)$ carry explicit work budgets drawn from the contract's Metric Budget field.
+* Primary obligations
+
+  $$\mathcal{O}_{\mathrm{actor}}(\alpha \mid W_{\mathrm{allowed}})$$
+
+  , permissions $P(\alpha)$, and prohibitions $F(\alpha)$ carry explicit work budgets drawn from the contract's Metric Budget field.
 * When a primary obligation goes unfulfilled, a **reparational secondary obligation** $\mathcal{O}(\beta \mid \neg\alpha)$ takes effect by construction — the contrary-to-duty structure.
 * This gives $r_{\mathrm{social}} \neq Q(0)$ a rigorous logical type: a **persistent CTD obligation sub-DAG** that remains in the lineage until discharged by a matching receipt. Multi-clause obligations, deadline expirations, and secondary reparations then encode as additional CTD structure on the residual instead of silently vanishing at partial violation, which is exactly the anti-abandonment property §3.3 mandates.
 
