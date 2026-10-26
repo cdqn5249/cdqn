@@ -291,7 +291,9 @@ Radix-10 formatting via $$Q(9)$$ and $$Q(10) \equiv \mathrm{Cons}_{Q(2)}(Q(5), \
 
 **Example.** 
 
-$$11 = \mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(Q(1), \, Q(0)\big), \, Q(1)\big), \, Q(1)\big)$$ — binary $$1011_2$$, chain depth 3 above the $$Q(1)$$ seed; its commitment hash is distinct from $$\mathcal{H}(Q(9))$$ and $$\mathcal{H}(Q(2))$$, and identical on every node applying the same schedule.
+$$11 = \mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(\mathrm{Cons}_{Q(2)}\big(Q(1), \, Q(0)\big), \, Q(1)\big), \, Q(1)\big)$$
+
+— binary $$1011_2$$, chain depth 3 above the $$Q(1)$$ seed; its commitment hash is distinct from $$\mathcal{H}(Q(9))$$ and $$\mathcal{H}(Q(2))$$, and identical on every node applying the same schedule.
 
 **BOC record.** 
 
