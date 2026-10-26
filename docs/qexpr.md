@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
-description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes, and hardware-aware collapse under SIMEMP constraints.
-version: 1.2.1
-updated: 2026-10-19
+description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes (Class 6 split into canonical contraction OP_BYPASS and bounded saturation OP_SATURATE), and hardware-aware collapse under SIMEMP constraints.
+version: 1.3.0
+updated: 2026-10-26
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -54,8 +54,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.2.1 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.3.0 |
+| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
@@ -78,6 +78,24 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/qm_calculus.md` | Discrete Exterior Calculus, continued fractions, and invariant dynamics | [qm_calculus.html]({{ '/qm_calculus.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+
+---
+
+## Review Integration Record (v1.3.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md) — transcript of the external adversarial review (Google Deep Review, October 2026) of the condensed Qn universe specification and QnIR v0.1 candidate draft. This update integrates the Layer-3 rewrite-semantics findings of that review into the canon. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place. New constructions and semantic refinements introduced below are tagged **[v1.3.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| `OP_REWRITE` split into `OP_BYPASS` (canonical contraction, hash-governing) and `OP_SATURATE` (bounded, `Q(rsi)`-gated equality saturation); `OP_REWRITE` retained as deprecated alias until QnIR v0.2 | §4.6 | QO-5 / Segment 2 Point 3 (definitive theoretical constraint) | CANDIDATE |
+| Saturation artifact discipline: output is a new versioned artifact (Axiom 13), never a canonical node identity; provenance (schedule, ceilings, extractor generation) recorded | §4.6.2 | QO-5 / Segment 2 Point 3 | CANDIDATE |
+| Canonical child sorting for `DCC_SYM_COMMUTATIVE` opcodes + hashing-generation tag on the DCC profile | §2.2 | QO-5 / Segment 2 Point 3 | CANDIDATE |
+| Bypass suite count fixed at **16 rules** (first-root rule restored); QnIR v0.1 PDF condensation reconciled | §4.6.1 | `qm.md` v1.3.0 cross-file flag / data-loss audit | editorial |
+| Confluence of the bypass suite tagged CANDIDATE; machine-checked confluence certificate set as QnIR v0.2 sealing prerequisite | §4.6.1 | QO-5 (termination/confluence demand) | CANDIDATE |
+| Fourth circuit breaker: saturation iteration ceiling $$K_{\max}$$; reason codes `K_MAX_REACHED` / `N_MAX_REACHED` / `D_MAX_REACHED`; receipt `RECEIPT_SATURATION_CONVERGED` | §6 | QO-5 / Segment 2 Point 3 | CANDIDATE |
+| §6 breaker-box row 3 box-alignment correction (pre-existing 1-char drift) | §6 | — | editorial |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline, to be integrated in subsequent versioned updates): `docs/qnPrimitive.md` (Q(bypass) execution precedence sentence and macro-DAG "equality saturation" wording aligned to the split; third circuit-breaker receipt naming); `docs/qlog.md` §6.1 ("Background Equality Saturation" resolves to `OP_SATURATE`); `docs/qm.md` v1.3.0 one-line touch-up (fixed-point identity attribution `OP_REWRITE` → `OP_BYPASS` in the Fixed-Point Invariant entry); glossary term additions for the new §2.2/§4.6 constructs; and the QnIR v0.2 candidate must carry distinct opcodes for `OP_BYPASS` and `OP_SATURATE` (Reviewer Segment 4 Point 1, Requirement R11 opcode-coverage finding, resolved in the QnIR v0.2 cycle, not in this file).
 
 ---
 
@@ -176,6 +194,12 @@ $$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, k \,\|\, \mathc
 
 Because the arity $$k$$ is explicitly serialized, nullary and unary operators produce canonical hashes with zero residual entropy ($$H(S_t \mid \mathcal{D}(S_t)) = 0$$).
 
+**Canonical child ordering [v1.3.0 — CANDIDATE, Review Integration QO-5]:** When a node's `OpCode` is declared commutative under its {% include term.html id="dcc-profile" text="DCC Profile" %} (flag `DCC_SYM_COMMUTATIVE`), the child commitment vector is replaced by its lexicographically sorted image $$\sigma_{\mathrm{sym}}$$ prior to hashing:
+
+$$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, k \,\|\, \sigma_{\mathrm{sym}}(\mathcal{H}_1, \dots, \mathcal{H}_k) \,\|\, z \,\|\, r \,\|\, d \,\|\, \mathrm{DCC}_{\mathrm{ref}}\Big)$$
+
+so that $$A \circ B$$ and $$B \circ A$$ commit identically whenever the DCC declares $$\circ$$ commutative: one commitment exists per semantic value, and algebraic equality of commutative permutations collapses to the same $$\mathcal{O}(1)$$ machine-word comparison. Non-commutative opcodes hash in declaration order, unchanged. Because this changes commitment values, a DCC profile enabling sorting **MUST** declare a hashing-generation tag; commitments across distinct hashing generations compare only through signed migration receipts under {% include term.html id="structural-indirection" %} and the versioned-artifact discipline of **Axiom 13** — never by raw hash equality.
+
 1. **Deduplication:** Any sub-expression with identical semantics, arity, and child commitments yields the identical commitment hash. Through {% include term.html id="hash-consing" %}, the runtime memory allocator maps it to the exact same physical node.
 2. **$$\mathcal{O}(1)$$ Structural Equality:** Verifying whether two sub-expressions $$A$$ and $$B$$ are identical requires zero recursive graph traversal:
 
@@ -269,7 +293,8 @@ To achieve computational completeness across all abstraction layers, `Qexpr` def
  │ 3. OP_CF        : Projective continued fraction generators, k = 0.          │
  │ 4. OP_FOLD      : Bounded monoidal accumulation (∑, ∏, n!) over arrays, k≥3.│
  │ 5. OP_FRAME_MAP : Clifford geometric products and rotor conjugations, k = 2.│
- │ 6. OP_REWRITE   : Equality saturation and algebraic identity bypass suite.  │
+ │ 6. OP_BYPASS    : Canonical identity contraction suite (confluent, O(1)).   │
+ │    OP_SATURATE  : Bounded equality saturation (Q(rsi)-gated, versioned).    │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -308,8 +333,12 @@ Governs multi-axial Clifford geometric products, Cayley rotor conjugations ($$R 
 
 Rotors maintain unitary norm ($$\lVert R \rVert^2 \equiv Q(1)$$) by construction, eliminating trigonometric normalization cycles ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §5).
 
-### 4.6. Node Class 6: Canonical Equality Saturation (`OP_REWRITE`, $$k \in \{1, 2\}$$)
-Executes reversible term rewriting and identity short-circuiting prior to numerical collapse. Under the **No-Implicit Rule**, the engine evaluates the full canonical suite of $$\mathcal{O}(1)$$ algebraic identity bypasses:
+### 4.6. Node Class 6: Canonical Rewrite Operations (`OP_BYPASS` and `OP_SATURATE`, $$k \in \{1, 2\}$$) **[v1.3.0 — CANDIDATE]**
+
+**[Review Integration QO-5]** Version 1.2.1 grouped two fundamentally different rewriting mechanisms under the single `OP_REWRITE` label: (a) a fixed, terminating, $$\mathcal{O}(1)$$ algebraic identity suite, and (b) general equality saturation. These carry opposite canonical semantics, and their conflation is not benign. Once bidirectional structural axioms (commutativity, associativity, distributivity) are admitted to a saturation e-graph, the e-graph can grow exponentially or without bound, and optimal DAG extraction from a saturated e-graph is NP-hard; two nodes saturating under different budgets or rule schedules can therefore extract different trees and commit different hashes — silently breaking $$\mathcal{O}(1)$$ hash-consing equivalence and $$H(S_t \mid \mathcal{D}(S_t)) = 0$$ (Tate et al. 2009; Willsey et al. 2021, `egg`). Node Class 6 is accordingly split into **two distinct operations**. The former umbrella name `OP_REWRITE` is retained as a **deprecated alias** (so that QnIR v0.1 and [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) references remain resolvable) and is retired at the QnIR v0.2 candidate.
+
+#### 4.6.1. `OP_BYPASS` — Canonical Contraction
+Executes reversible identity short-circuiting prior to numerical collapse. Under the **No-Implicit Rule**, the engine evaluates the full canonical suite of $$\mathcal{O}(1)$$ algebraic identity bypasses:
 
 ```
                     CANONICAL Q(bypass) IDENTITY RULES
@@ -332,6 +361,29 @@ Executes reversible term rewriting and identity short-circuiting prior to numeri
 ```
 
 All listed transformations emit `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($$\Delta W = 0$$), short-circuiting execution before any computation or memory lookup is scheduled.
+
+**Rule-count reconciliation:** the canonical count is **16 rules**, including the first-root rule $$^{Q(1)}\sqrt{A} \to A$$. The condensed QnIR v0.1 review draft (PDF §4.3) printed 15 rules — the first-root row was lost in condensation; that PDF is a draft artifact and this specification is the authority.
+
+Mandatory properties of the `OP_BYPASS` suite:
+
+1. **Terminating:** every rule strictly reduces expression size or height, so the contraction always reaches a normal form in linear rule applications.
+2. **Confluent [v1.3.0 — CANDIDATE, sealing item]:** the suite's critical pairs (e.g., $$Q(1)^{Q(1)}$$ under both $$A^{Q(1)} \to A$$ and $$Q(1)^k \to Q(1)$$) are locally joinable, and a unique normal form is asserted. A machine-checked confluence certificate (Newman's lemma over the critical-pair set) is a **QnIR v0.2 sealing prerequisite** under QO-5; until sealed, this property is a CANDIDATE proposition, not a theorem.
+3. **Hash-governing:** the bypass normal form, together with the `DCC_SYM_COMMUTATIVE` child sorting of §2.2, is the input to canonical node hashing $$\mathcal{H}(\alpha)$$. One commitment exists per semantic value; `OP_BYPASS` never emits a new artifact — it discloses an identity that already held.
+4. **Cost:** zero metric cost ($$\Delta W = 0$$), as receipted above.
+
+The Layer-2 operational morphism and its execution precedence ($$Q(\text{bypass}) \prec Q(\text{reuse}) \prec \text{Direct Compute}$$) remain defined in [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) (Q(bypass) Optimization Morphism); this section governs the Layer-3 node-class semantics.
+
+#### 4.6.2. `OP_SATURATE` — Bounded Equality Saturation
+General equality saturation is a **workflow-scoped optimization operation**, never a canonical identity operation. It is legal **only** inside an explicit {% include term.html id="q-reuse" text="Q(reuse)" %}-class optimization workflow (`Q(rsi)`) whose {% include term.html id="dcc-profile" %} pins **all** of the following, without defaults (No-Implicit Rule):
+
+1. **Deterministic rule-application schedule** over the declared rule set (e.g., fixed-epoch breadth-first Datalog scheduling); data-dependent or adaptive scheduling is invalid.
+2. **Iteration ceiling** $$K_{\max}$$ (§6, circuit breaker 4).
+3. **E-node ceiling** $$N_{\max}$$ and graph depth ceiling $$D_{\max}$$ (§6, circuit breakers 1–2).
+4. **Deterministic polynomial-time greedy tree-cost extractor with hash tie-breaking.** Optimal extraction from a saturated e-graph is NP-hard, so "optimal extraction" is out of scope by construction; extraction is required to be greedy, polynomial-time, and totally tie-broken by commitment hash.
+
+**Termination and receipts:** saturation halting before any ceiling emits `RECEIPT_SATURATION_CONVERGED` **[v1.3.0 — CANDIDATE]**; ceiling exhaustion emits the existing dissipative receipts `RECEIPT_BUDGET_EXHAUSTED` or `RECEIPT_EXPRESSION_TOO_COMPLEX` with reason codes `K_MAX_REACHED`, `N_MAX_REACHED`, or `D_MAX_REACHED`. Totality in the Axiom-6 sense is preserved: every saturation halts with a receipt.
+
+**Artifact discipline:** the extractor's output is emitted as a **new versioned artifact (Axiom 13)** that records its input commitments, pinned schedule, ceilings, and extractor generation. `OP_SATURATE` never mutates canonical node identity and never participates in $$\mathcal{H}(\alpha)$$. Two saturation runs under different budgets or schedules MAY legitimately produce different versioned artifacts; this is measured, provenance-recorded divergence between artifacts — not state drift — provided each artifact carries its full saturation provenance.
 
 ---
 
@@ -386,13 +438,17 @@ To guarantee that fallible human directives or unaligned agentic processes canno
  │    Count(Nodes) ≤ Node_max (Prevents memory exhaustion across Memory Wall)  │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │ 3. METRIC COLLAPSE BUDGET CEILING                                           │
- │    Burn(U) ≤ Budget_Q1 (Guarantees deterministic halting via Axiom 6)        │
+ │    Burn(U) ≤ Budget_Q1 (Guarantees deterministic halting via Axiom 6)       │
+ ├─────────────────────────────────────────────────────────────────────────────┤
+ │ 4. SATURATION ITERATION CEILING                                             │
+ │    Epochs(OP_SATURATE) ≤ K_max (Bounds e-graph growth; deterministic halt)  │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 1. **Static Graph Depth Ceilings:** If an expression tree exceeds the declared depth ceiling ($$D \gt D_{\max}$$), execution terminates immediately with receipt `RECEIPT_EXPRESSION_TOO_COMPLEX`.
 2. **Node Allocation Bounds:** If {% include term.html id="hash-consing" %} attempts to instantiate node counts exceeding the local {% include term.html id="metric-envelope" %}, compilation aborts with `RECEIPT_BUDGET_EXHAUSTED`.
 3. **Totality by Budget (Axiom 6):** Every collapse operation carries an explicit compute budget in units of $$Q(1)$$ via {% include term.html id="metric-exhaustion" %}. Non-terminating expansions are impossible; when the budget is consumed, the engine emits a dissipative {% include term.html id="receipt" %} and halts.
+4. **Saturation Iteration Ceilings [v1.3.0 — CANDIDATE]:** `OP_SATURATE` workflows (§4.6.2) carry an explicit iteration ceiling $$K_{\max}$$ alongside the node and depth ceilings. Hitting any ceiling halts deterministically with the corresponding reason code (`K_MAX_REACHED`, `N_MAX_REACHED`, `D_MAX_REACHED`), and the partially saturated state is discarded — only a receipted, extracted versioned artifact (Axiom 13) survives.
 
 ---
 
