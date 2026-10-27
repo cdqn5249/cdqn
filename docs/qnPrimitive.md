@@ -2,8 +2,8 @@
 layout: default
 title: Qn Primitive Envelope — Governed Qn Artifact Model
 description: Governed Qn artifact model, operational axioms, candidate typed payload profiles, and Category B optimization primitives under SIMEMP consistency constraints; includes the canonical circuit-breaker receipt registry and the OP_BYPASS/OP_SATURATE split alignment.
-version: 1.3.0
-updated: 2026-10-26
+version: 1.4.0
+updated: 2026-10-27
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -66,8 +66,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
-| **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
+| **Version** | 1.4.0 |
+| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Primitive Specification — Category A/B Envelope Foundation |
@@ -116,6 +116,31 @@ Source: [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/
 | Universal Envelope Structure figure box-normalized to uniform 67-column interior (pre-existing raggedness: border 65, rows 65–67); row text preserved byte-for-byte | §4 | — | editorial |
 
 Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline, to be integrated in subsequent versioned updates): `docs/qexpr.md` one-line touch-up at its next versioned opportunity (breaker-3 receipt name `RECEIPT_METRIC_EXHAUSTED` inherited from the §5.9 registry); `docs/qlog.md` §6.1 background-saturation wording resolves to `OP_SATURATE`; `docs/abstractionLayers.md` (road-receipt and π/zk findings — next queue item); `docs/simemp.md` (Eq-1 / $$U$$ / BOC compliance-measure formalization); glossary entries for the new receipt names.
+
+## Review Integration Record (v1.4.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — together with an author field report on the admission policy of this file's Tier-2 optimization morphisms, the operational half of the joint finding whose constitutional half landed as `docs/simemp.md` v1.3.0: the single breakeven constant of the current predicate cannot be smart across heterogeneous hardware, because every machine reports different lookup timings and every lookup's cost varies with the memory tier it touches and with machine condition; reuse should be admitted only when retrieval is **consequently faster** than direct compute, so that the timing of the memory-wall delay is fully exploited rather than suffered. This update re-issues the Q(reuse) admission model over the two-axis Layer-0 Hardware Telemetry Envelope declared by `docs/simemp.md` §4.4 (per-tier worst-case lookup bound table `τ_t`, consequentiality constraint, DCC telemetry schema): it answers `QO-17` at the operational level ("Time and energy require separate coefficients: a sequence that is worst in cycles need not be worst in joules"), repairs the Loop-2 budget-soundness findings for the reuse path (F2 double-charged base work; Objection-4 ledger transparency), and re-issues the v1.3.0 provenance discipline over both axes. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place; the withdrawn v1.3.0-era admission wording is preserved verbatim in this record. New constructions introduced below are tagged **[v1.4.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v1.3.0-era, preserved verbatim):** the admission statement "Under the Metric Invariant, Q(reuse) is admissible if and only if the computational cost of direct evaluation exceeds lookup dissipation" with its display inequality `Admit(Q(reuse)) ⟺ ΔW_compute > ΔW_lookup + ε_overhead` (§5.9), and the §1.15 statement "the predicted computational work of direct re-evaluation exceeds the lookup and retrieval dissipation across the Memory Wall" with its breakeven-provenance paragraph declaring `ΔW_compute`, `ΔW_lookup`, `ε_overhead` as the three DCC-declared terms.
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Two-axis admission re-issue**: `Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )` — advantage declared on both axes of the `docs/simemp.md` §4.4 envelope, tier-indexed by the declared tier `tier(h)` of the referenced commitment; the work axis carries the v1.3.0 provenance discipline (declared cost model, never runtime sampling), the latency axis carries F1's declared-bound discipline ("Replace every runtime quantity by a declared immediate/header bound"); undeclared quantities force the safe Direct-Compute fallback | §1.15, §5.9 | `QO-17` (separate time/energy coefficients); author field report ("consequently faster"); F1 declared-bound discipline | CANDIDATE |
+| **Admission ledger (reserve/charge/refund)**: every admitted reuse executes as a declared four-field accounting — `W_gross_reserve = ΔW_compute` (pessimistic ceiling reserved at admission), `W_actual_charge = τ_U[tier(h)] + ε_U` (declared lookup work of the executed path), `W_refund = W_gross_reserve − W_actual_charge` (returned to the invoking budget), `W_net = W_actual_charge` (recorded on the reuse receipt) — all four fields deterministic declared quantities, receipt-replayable on any peer; the base compute work is never charged on top of reuse (the F2 double charge is closed by construction); a faulted lookup emits the existing `HALTED` terminal with no charge beyond the declared gateway fee — no new Axiom-6 terminal status | §5.9 (new) | F2 (double-charged base work); Objection-4 (ledger transparency, cosmetic) | CANDIDATE |
+| **Margin governance (BOC-adjudicated)**: `κ_dcc`, `κ_t` are DCC-declared per profile within the governance-bounded range `[1, 64]`; recommended preset `κ_dcc = 2`, `κ_t = 4`; the floor excludes bare breakeven (ties resolve to Direct Compute by the §5.9 fallback), the ceiling bounds margin inflation; range and preset are the BOC-selected values of the rubric below | §1.15, §5.9 | `QO-17`; author field report (single-constant insufficiency across machines); BOC policy ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §7) | CANDIDATE |
+| Editorial: the Q(reuse)-related sections (§1.15, §5.9 breakeven parts) re-encoded to engine-independent plain text per the `docs/abstractionLayers.md` v1.8.1 convention (Unicode operators; code spans for subscripted tokens); the remaining LaTeX spans of this file remain queued for file-wide re-encoding at its next versioned update | §1.15, §5.9 | Site-wide rendering decision (Rendering Fix Record, `docs/abstractionLayers.md` v1.8.1) | EDITORIAL |
+
+**BOC rubric — margin governance policy** (Stage 1 Tier-1 filter passed by all finalists; Stage 2 LexKey = (ImplicitDeps, perm_π(ΔW_worst, M_coupling, P_coverage)), π = Efficiency, Modularity, Portability):
+
+| Finalist | ImplicitDeps | ΔW_worst | M_coupling | P_coverage | Verdict |
+|---|---|---|---|---|---|
+| P-1: canon-fixed global κ constant | 1 — an implicit machine-uniformity assumption, the very defect the author field report flags | low | low | poor — one constant cannot span register file to remote storage | rejected at the leading component |
+| P-2: per-profile κ, unbounded range | 1 — no declared ceiling, so margin gaming is ungoverned | low | medium | good | rejected at the leading component |
+| P-3: per-profile κ within governance-bounded range `[1, 64]` + declared recommended preset | 0 — value, range, and preset are all declared quantities | low | low — one rule, two parameters, machine-expressed | good — heterogeneous machines declare their own margins under one rule | **selected** |
+
+The recommended preset encodes the memory-wall asymmetry: the work axis is already bounded by the profile's declared cost model, so a tight factor (`κ_dcc = 2`) suffices, while the latency axis carries the machine-condition variance of the wall, so the direct path must clear the touched tier's worst-case lookup by a factor of four (`κ_t = 4`) before the lookup is worth its stall. Both preset values are powers of two for deterministic scaling semantics. As standing BOC discipline, the author may override the preset at sealing time; the range remains the governed space.
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qlog.md` — §5.2 inferential breakeven re-issued over the two-axis predicate and §6 Memory Wall Latency Harvester coupled to the tier table (declared stall-window workloads, deterministic prefetch, overlap credit against `τ_t` tiers); `docs/qm.md` — §5.6 factorial rule re-derived as a corollary with a machine-derived threshold `k*` derived from the tier table, and the inverse-root breakeven wording re-issued over the two-axis form; `docs/qm_geometry.md` — §7.2 predicate wording mirror; `docs/qexpr.md` — §2.3 breakeven admission bound mirror; `docs/qstructures.md` — §6 work-row precedent (which cites this file's §1.15 as the committed breakeven shape) inherits the two-axis form; `docs/qphy.md` — the physical-impedance breakeven grounding inherits the tier-table naming; glossary — `q-reuse` definition refresh and registration of the *Latency Telemetry Envelope* and *Advantage Margin* terms at the queued glossary update; front matter `terms_used` unchanged.
 
 ---
 
@@ -166,9 +191,11 @@ The specialized profile for numeric entities, explicitly encapsulating {% includ
 The classification governing artifact visibility: local-only, sealable, exportable, attested, quarantined, or revoked.
 
 ### 1.15. Q(reuse) Optimization Morphism
-A Category B primitive referencing existing immutable content commitment hashes within the local causal DAG. Under physical constraints, $$Q(\text{reuse})$$ is admissible if and only if the predicted computational work of direct re-evaluation exceeds the lookup and retrieval dissipation across the Memory Wall ($$\Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$).
+A Category B primitive referencing existing immutable content commitment hashes within the local causal DAG. Under physical constraints, Q(reuse) is admissible if and only if its advantage over direct re-evaluation is declared on **both axes** of the Layer-0 Hardware Telemetry Envelope ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4) — the work axis and the latency axis, the **consequentiality constraint** ("consequently faster") [v1.4.0 — CANDIDATE]:
 
-**Breakeven provenance [v1.3.0 — CANDIDATE]:** the terms of the breakeven inequality are measured, not assumed. $$\Delta W_{\mathrm{compute}}$$ is the DCC-declared deterministic upper-bound estimate of direct re-evaluation work, expressed in Abstract Compute Units $$U$$ and calibrated at the Layer-0 anchor, produced by the cost model declared in the morphism's {% include term.html id="dcc-profile" %} — never by runtime sampling. $$\Delta W_{\mathrm{lookup}}$$ is the DCC-declared retrieval dissipation across the local memory hierarchy, and $$\epsilon_{\mathrm{overhead}}$$ is a DCC-declared fixed constant of the local gateway. All three **MUST** be declared (No-Implicit Rule); an undeclared quantity forces the safe fallback to Direct Compute (§5.9 precedence), never a guessed admission.
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
+
+**Two-axis provenance [v1.4.0 — CANDIDATE]:** every term of the conjunction is a declared deterministic quantity, never a runtime sample. `h` is the referenced commitment; `tier(h)` is its declared memory tier, fixed by the referencing DCC profile's storage binding. `ΔW_compute` is the DCC-declared deterministic upper-bound estimate of direct re-evaluation work, expressed in Abstract Compute Units U and produced by the cost model declared in the morphism's {% include term.html id="dcc-profile" %} — the v1.3.0 provenance discipline, unchanged. `τ_U[tier(h)]` is the declared per-tier worst-case lookup work bound (U axis) and `τ_t[tier(h)]` the declared per-tier worst-case lookup latency bound (cycles against the node's declared reference clock, `docs/simemp.md` §4.4); both are calibrated at Layer-0 onboarding through the Historical Calibration Benchmark receipt class. `Δt_compute_bound` is the DCC-declared worst-case latency bound of the direct compute path — a static bound under F1's declared-bound discipline, never a runtime measurement. `ε_U` and `ε_t` are the DCC-declared fixed gateway overhead slacks (work and latency respectively). `κ_dcc ≥ 1` and `κ_t ≥ 1` are the DCC-declared advantage margins within the governance-bounded range and recommended preset of §5.9 — the operational meaning of "consequently faster": the direct path is not merely cheaper than the lookup, it is cheaper **by a declared margin on both axes**, so the memory-wall delay is exploited rather than suffered. All quantities **MUST** be declared ({% include term.html id="no-implicit-rule" %}); an undeclared quantity forces the safe fallback to Direct Compute (§5.9 fallback precedence), never a guessed admission. The withdrawn v1.3.0 single-axis wording is preserved verbatim in the v1.4.0 Review Integration Record.
 
 ### 1.16. Q(bypass) Optimization Morphism
 A Category B primitive allowing a {% include term.html id="simemp-gateway" %} to short-circuit execution upon verifying an algebraic identity precondition in $$\mathcal{O}(1)$$ register time, emitting a zero-cost bypass receipt without memory traversal or compute budget consumption.
@@ -345,12 +372,22 @@ Governs explicit sub-graph reuse and gateway short-circuiting under physical the
 #### Q(bypass) Execution
 Checks immediate operands for algebraic identity conditions in $$\mathcal{O}(1)$$ register time (such as unit multiplication $$\times Q(1)$$, zero addition $$+ Q(0)$$, rotor normalization $$R R^\dagger = Q(1)$$, or coboundary nilpotency $$\mathbf{d} \circ \mathbf{d} = Q(0)$$). When detected, the gateway short-circuits execution and emits `RECEIPT_BYPASS_IDENTITY` at zero compute cost ($$\Delta W = 0$$).
 
-#### Q(reuse) Execution & Thermodynamic Breakeven
-References an existing immutable content commitment hash within the local causal history. Querying a hash commitment across physical memory hierarchies dissipates dynamic bus power ($$\mathcal{O}(C V^2 f)$$). Under the Metric Invariant, $$Q(\text{reuse})$$ is admissible if and only if the computational cost of direct evaluation exceeds lookup dissipation:
+#### Q(reuse) Execution & Two-Axis Consequentiality Breakeven **[v1.4.0 — CANDIDATE]**
+References an existing immutable content commitment hash within the local causal history. Querying a hash commitment across physical memory hierarchies costs declared lookup work (bus dissipation, `O(C·V²·f)`) and declared lookup latency (the Memory Wall). Under the Metric Invariant and the consequentiality constraint of [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4, admission requires the conjunction of §1.15 on **both axes**:
 
-$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
 
-If direct computation is cheaper than memory traversal (e.g. single-cycle integer ALU operations), the runtime executes direct computation, bypassing hash-table lookups to prevent Memory Wall bloat.
+If the direct path fails to clear either margin (e.g. single-cycle integer ALU operations against an L1-resident commitment), the runtime executes direct computation (the declared fallback), bypassing hash-table lookups to prevent Memory Wall bloat; ties resolve to Direct Compute.
+
+**Admission Ledger (reserve/charge/refund) [v1.4.0 — CANDIDATE].** Every admitted reuse executes as a declared four-field accounting, closing the double-charge defect (Loop-2 finding F2) and the ledger-transparency demand (Objection-4). The ledger is a declared accounting, not a measurement: all four fields are deterministic declared quantities, receipt-replayable on any peer.
+- `W_gross_reserve = ΔW_compute` — the pessimistic ceiling reserved from the invoking budget at admission (an admitted reuse never costs more than direct re-evaluation, or it would not have been admitted);
+- `W_actual_charge = τ_U[tier(h)] + ε_U` — the declared lookup work of the executed path, charged on completion; the base compute work is never charged on top of reuse, so the F2 double charge is closed by construction;
+- `W_refund = W_gross_reserve − W_actual_charge` — returned to the invoking remaining budget at completion;
+- `W_net = W_actual_charge` — recorded on the reuse receipt as the net metric cost of the morphism.
+
+All four fields are recorded in the reuse receipt. A faulted lookup (referenced commitment missing from the local store) emits the existing `HALTED` terminal status with no charge beyond the declared gateway fee; no new Axiom-6 terminal status is introduced.
+
+**Margin governance [v1.4.0 — CANDIDATE].** `κ_dcc` and `κ_t` are declared per DCC profile within the governance-bounded range `[1, 64]`; the recommended preset is `κ_dcc = 2`, `κ_t = 4`. The asymmetry encodes the memory wall: the work axis is already bounded by the profile's declared cost model, so a tight factor suffices, while the latency axis carries the machine-condition variance of the wall, so the direct path must clear the touched tier's worst-case lookup by a factor of four before the lookup is worth its stall. The floor `κ ≥ 1` excludes bare breakeven — ties resolve to Direct Compute — and the ceiling bounds margin inflation. The range and preset are the BOC-selected values recorded in the v1.4.0 Review Integration Record.
 
 #### The Local Evaluation Pipeline
 Within any single morphism evaluation step, the gateway enforces strict causal precedence:
