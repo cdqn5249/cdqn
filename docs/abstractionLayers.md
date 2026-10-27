@@ -2,7 +2,7 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.9.0
+version: 1.9.1
 updated: 2026-10-27
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -82,7 +82,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.9.0 |
+| **Version** | 1.9.1 |
 | **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -127,6 +127,14 @@ Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/
 | **Open Items re-deferred**: item 1 (formal QnIR instruction set and operational semantics) reaffirmed as the v0.3 priority — minimal executable core, formal transition relation, differential tests; item 4 (AIR arithmetization and concrete π-field realizations) re-deferred from "the QnIR v0.2 candidate" (not promoted) to the v0.3 repair sequence | §13 | §1 verdict; repair steps 1–2 and 6; promotion criterion | CANDIDATE |
 
 Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): the remaining Loop-2 findings (F1–F8, `QO-17`–`QO-32`) bind the QnIR v0.3 candidate program, not sealed-path canon text, and are tracked through the repair sequence in §5 of the review transcript; the Tier-2 `Q(reuse)` breakeven refinements (two-axis admission over work and latency, tiered declared lookup bounds — `QO-17` alignment) land in `docs/simemp.md` §4.4 and `docs/qnPrimitive.md` §1.15/§5.9 at their next versioned updates; `docs/qm.md`, `docs/qlog.md`, `docs/qm_geometry.md`, and the glossary registers inherit the resulting predicate wording at their own next versioned updates. No glossary term set changes in this update (no new terms introduced; `terms_used` unchanged).
+
+## Rendering Fix Record (v1.9.1)
+
+**Source.** Author field report on the live GitHub Pages HTML of v1.9.0 (October 27th, 2026): in §2.3, the Clifford geometric product formula renders hollow missing-glyph boxes stacked on top of its letters. Diagnosis: the formula marked its vectors with the combining right arrow above (U+20D7, applied to `u` and `v`), a code point from the Combining Diacritical Marks for Symbols block (U+20D0–U+20FF). That block is absent from the site's declared font stacks (the system UI faces and the monospace faces alike) and from their platform fallbacks, and mark-over-base positioning is precisely what glyph fallback cannot repair, so each arrow surfaces as a tofu box positioned over the base letter. The defect predates this file's v1.8.1 re-encoding: the vector arrows were carried over unreviewed, and U+20D7 is not part of the operator inventory that record declares (≠, ≤, ≡, ≺, ⟺, ⟹, →, ⟶, ↦, ∈, ∧, ⊗, ×, ÷, Δ, π, σ, φ, √2, κ, α, β, …, Q̂(0)).
+
+**Decision.** The §2.3 identity is retyped without combining symbol marks: `u v = u · v + u ∧ v`. The operator symbols (·, ∧) already carry the scalar-product / outer-product distinction the arrows merely decorated; vector-hood of `u` and `v` remains established by the surrounding prose ("Clifford geometric product", "Reflection engine `I_d`", "float-free rational Cayley rotors") and normatively by [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}). This applies the file's own v1.8.1 selection rule — every glyph must render identically on GitHub Pages HTML, on github.com source views, and in raw markdown — to a formula class that the v1.8.1 pass did not re-examine. A site-level remedy (shipping a mathematical-coverage webfont via `@font-face`, e.g. Noto Sans Math) was considered and rejected: it adds a network asset dependency and a render-blocking failure mode to every page of the site in order to preserve decoration that the operator symbols already express.
+
+**Scope and invariants.** A combining-mark audit of this file confirms: the v1.8.1-era marks (U+0300–U+036F, e.g. the circumflex in `Q̂(0)`) are retained — they render on the target platforms and remain part of the declared convention — while the six U+20D7 occurrences (all in the §2.3 formula) are the only members of the U+20D0–U+20FF block in this file and are eliminated by this update. No semantic content is mutated: the product identity, its operator set, and the section's itemization are preserved token-for-token under the new encoding; all [v1.9.0 — CANDIDATE] tags, the Review Integration Record above, and the sealed 12-terminal-status list of §3.6 are untouched. A repository-wide scan finds no sibling specification file carrying U+20D0–U+20FF, so no cross-file dependency is flagged under the one-file-at-a-time discipline.
 
 ---
 
@@ -203,7 +211,7 @@ Transitioning from Layer 1 to Layer 2 requires crossing an algebraic constraint 
 - **Elementary R-Algebra:** Constructive addition (+), subtraction (-), multiplication (×), and Diophantine division (÷) ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4).
 - **Optimization Morphisms:** Category B execution short-circuiting ({% include term.html id="q-bypass" text="Q(bypass)" %}) and sub-graph content reuse ({% include term.html id="q-reuse" text="Q(reuse)" %}), eliminating redundant memory allocation and Landauer dissipation (W = 0).
 - **Multi-Axial Frame Extension (`D_step`):** Inductive generation of orthogonal axes `d_2 … d_n` from genesis axis `d_1` ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §2.1).
-- **Involution and Geometric Products:** Reflection engine `I_d`, Clifford geometric product (`u⃗ v⃗ = u⃗ · v⃗ + u⃗ ∧ v⃗`), and float-free rational Cayley rotors.
+- **Involution and Geometric Products:** Reflection engine `I_d`, Clifford geometric product (`u v = u · v + u ∧ v`), and float-free rational Cayley rotors.
 - **Secondary DCC Routing:** Directs execution requests to specialized capability contracts anchored at single digits: parity (Q(2)), simplices (Q(3)), aperiodicity (Q(5)), and byte octets (Q(8)).
 
 ### 2.4. Layer 3 — Symbolic Composition Layer (CAE-DAG)
