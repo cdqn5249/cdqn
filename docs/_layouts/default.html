@@ -88,6 +88,69 @@
       }
     });
   </script>
+
+  <!-- Global Retractable Version Records Engine -->
+  <!-- Collapses every "… Record (vX.Y.Z)" section (Review Integration Records, -->
+  <!-- Rendering Fix Records, and any future record type matching the heading   -->
+  <!-- pattern) into a retracted drawer. Presentation-only: the full record     -->
+  <!-- remains in the markdown source and in the drawer on demand (Axiom 13     -->
+  <!-- provenance preserved; no canon mutation). Deep links targeting an anchor -->
+  <!-- inside a record auto-open its drawer. -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const recordPattern = /\bRecord \(v\d+(\.\d+)*\)\s*$/;
+      const recordDetails = [];
+
+      document.querySelectorAll('main h2').forEach((h2) => {
+        if (!recordPattern.test(h2.textContent.trim())) return;
+
+        const elementsToWrap = [];
+        let el = h2.nextElementSibling;
+        while (el && !['H1', 'H2', 'HR'].includes(el.tagName)) {
+          elementsToWrap.push(el);
+          el = el.nextElementSibling;
+        }
+
+        if (elementsToWrap.length > 0) {
+          const details = document.createElement('details');
+          details.style.cssText = 'margin: 0.8rem 0 1.2rem 0; border: 1px solid var(--border); border-radius: 6px; padding: 0.6rem 0.9rem; background: var(--code-bg);';
+
+          const summary = document.createElement('summary');
+          summary.style.cssText = 'cursor: pointer; font-weight: 600; user-select: none;';
+          summary.textContent = 'Show version record details';
+
+          const wrapper = document.createElement('div');
+          wrapper.style.marginTop = '0.8rem';
+          elementsToWrap.forEach(node => wrapper.appendChild(node));
+
+          details.appendChild(summary);
+          details.appendChild(wrapper);
+          h2.insertAdjacentElement('afterend', details);
+          recordDetails.push(details);
+        }
+      });
+
+      // Deep-link support: reveal the collapsed drawer containing the hash target.
+      if (window.location.hash) {
+        let target = null;
+        try {
+          target = document.getElementById(decodeURIComponent(window.location.hash.substring(1)));
+        } catch (e) {
+          target = null;
+        }
+        if (target) {
+          if (target.tagName === 'H2' && recordPattern.test(target.textContent.trim())) {
+            const drawer = target.nextElementSibling;
+            if (drawer && drawer.tagName === 'DETAILS') drawer.open = true;
+          } else {
+            recordDetails.forEach((drawer) => {
+              if (drawer.contains(target)) drawer.open = true;
+            });
+          }
+        }
+      }
+    });
+  </script>
 </head>
 <body>
 
