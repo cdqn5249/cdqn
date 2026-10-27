@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
-version: 1.8.1
-updated: 2026-10-26
+version: 1.9.0
+updated: 2026-10-27
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -82,8 +82,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.8.1 |
-| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
+| **Version** | 1.9.0 |
+| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Structural Thesis — Milestone 1 Fully Sealed Baseline |
@@ -113,6 +113,20 @@ Cross-file dependencies flagged (deferred under the one-file-at-a-time disciplin
 
 **Scope and invariants.** No semantic content is mutated: every formula, tuple, operator, receipt name, terminal status, and reviewer attribution of v1.8.0 is preserved token-for-token under the new encoding; the sealed 12-terminal-status list of §3.6 is untouched; all [v1.8.0 — CANDIDATE] tags retain their provenance under **Axiom 13** and **Axiom 14**. Under the one-file-at-a-time discipline, the re-encoding is applied to this file only; sibling specification files sharing the LaTeX encoding remain queued for the same treatment at their next versioned updates. A site-layout MathJax include would be the alternative global remedy, but plain-text encoding keeps every page renderer-independent and is therefore taken as the BOC.
 
+
+---
+
+## Review Integration Record (v1.9.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2. The review's overall verdict is "major revision; do not promote QnIR v0.2 to the canon"; its promotion criterion states that `R11'`, `R12'`, `R19`, and the `O(polylog)` verification statement must remain conditional until the v0.3 repair sequence completes. This update applies the only Loop-2 finding that reaches sealed-path canon text: the Objection 9 fatal grade against the claim that the QnIR execution trace "arithmetizes directly" into an AIR. Under **Axiom 13**, this file is a new versioned artifact; the amended statements are re-issued in place under the **[v1.9.0 — CANDIDATE]** tag, and the withdrawn v1.8.0 wording is preserved verbatim in this record: "Its execution trace therefore arithmetizes directly into an Algebraic Intermediate Representation (AIR) inside a transparent zk-STARK proof (precedents: RISC Zero, Cairo receipts). ... Any receiver verifies in O(polylog N) time with zero trust in the sender and zero disclosure of the private local graph — preserving Axiom 8."
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Realization A downgraded to conditional status**: the "arithmetizes directly" claim is withdrawn as an established statement and re-issued as a hypothesis to be demonstrated (class-specific sub-AIRs with explicit lookup/permutation arguments per `QO-16`; Class D prover-cost dominance not numerically decidable from the draft; `O(polylog N)` verification conditional; Realization A/B selection requires measured break-even parameters per repair-sequence step 6) | §4.4 | Objection 9 (fatal); `QO-16`; promotion criterion | CANDIDATE |
+| **§8.4 soundness caveat scoped**: the π-field *requirement* (admissible road receipts carry verifiable computational integrity) is unchanged; the caveat now records that until Realization A is demonstrated, admissible discharge of π falls to Realization B, and A/B selection is measurement-gated | §8.4 | Objection 9; `QO-16`; repair step 6 | CANDIDATE |
+| **Open Items re-deferred**: item 1 (formal QnIR instruction set and operational semantics) reaffirmed as the v0.3 priority — minimal executable core, formal transition relation, differential tests; item 4 (AIR arithmetization and concrete π-field realizations) re-deferred from "the QnIR v0.2 candidate" (not promoted) to the v0.3 repair sequence | §13 | §1 verdict; repair steps 1–2 and 6; promotion criterion | CANDIDATE |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): the remaining Loop-2 findings (F1–F8, `QO-17`–`QO-32`) bind the QnIR v0.3 candidate program, not sealed-path canon text, and are tracked through the repair sequence in §5 of the review transcript; the Tier-2 `Q(reuse)` breakeven refinements (two-axis admission over work and latency, tiered declared lookup bounds — `QO-17` alignment) land in `docs/simemp.md` §4.4 and `docs/qnPrimitive.md` §1.15/§5.9 at their next versioned updates; `docs/qm.md`, `docs/qlog.md`, `docs/qm_geometry.md`, and the glossary registers inherit the resulting predicate wording at their own next versioned updates. No glossary term set changes in this update (no new terms introduced; `terms_used` unchanged).
 
 ---
 
@@ -321,7 +335,7 @@ A receiving node ingests `H(R_road)` as an external witness, anchoring the miles
 
 The review established a structural finding: **contract-verification-plus-receipt-trust is not sound on its own** against Byzantine or corrupted nodes. Because receiving nodes verify `R_road` against shared `Q(anchor)` contracts without re-executing the sender's transaction (§3.3, §8.4), a π that is merely a metadata attestation signed by σ would let a compromised node holding valid Inner/Outer-Ring PQC keys sign an arbitrary transition `H(S_in) → H(S_out)` with a fabricated work ledger ΔW — a violation of {% include term.html id="dependencies-determinism" %} across network boundaries that no downstream contract check can detect. Admissible road receipts therefore carry **verifiable computational integrity** in π, via exactly one of two realizations:
 
-**Realization A — Succinct Zero-Knowledge Execution Proof.** The QnIR execution handler is a small, fixed-width deterministic machine over integer arithmetic, with bounded loops and no floating point (§6.3, §13). Its execution trace therefore arithmetizes directly into an Algebraic Intermediate Representation (AIR) inside a transparent **zk-STARK proof** (precedents: RISC Zero, Cairo receipts). The proof attests that a valid local witness trace, rooted at `Q(0)_A`, transformed `H(S_in)` into `H(S_out)` under contract M within work ΔW. Any receiver verifies in O(polylog N) time with **zero trust in the sender** and **zero disclosure of the private local graph** — preserving **Axiom 8**.
+**Realization A — Succinct Zero-Knowledge Execution Proof [v1.9.0 — CANDIDATE, conditional status].** The QnIR execution handler is designed as a small, fixed-width deterministic machine over integer arithmetic, with bounded loops and no floating point (§6.3, §13). [v1.9.0 — CANDIDATE, per the Loop-2 adversarial review ([`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md)) — Objection 9 grade, `QO-16` verdict, and the v0.3 promotion criterion]: no AIR for the QnIR transition relation exists yet, and the previously stated claim that the trace "arithmetizes directly" into one (v1.8.0 wording, preserved in the v1.9.0 integration record) is **withdrawn as an established statement**. The claim survives only as a hypothesis to be demonstrated: a class-specific sub-AIR construction with explicit lookup/permutation arguments (`QO-16`), published prover-cost measurements (Class D may dominate the trace), and adversarial worst-case calibration (`QO-17`) must exist before a transparent **zk-STARK proof** over that AIR (precedents: RISC Zero, Cairo receipts) may be asserted to attest that a valid local witness trace, rooted at `Q(0)_A`, transformed `H(S_in)` into `H(S_out)` under contract M within work ΔW, verifiable in `O(polylog N)` time with **zero trust in the sender** and **zero disclosure of the private local graph** — preserving **Axiom 8**. Until that demonstration, Realization A is a **profile-gated extension candidate**, the `O(polylog N)` verification statement remains conditional, and selection between Realization A and Realization B requires measured break-even parameters (trace length, field, blowup factor, query count, hash implementation, hardware) rather than asymptotic assertion.
 
 **Realization B — Optimistic Interactive Anchor-Cut Bisection.** For deployments where full STARK generation exceeds the thermodynamic breakeven ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15), π commits the **Merkle root of the K intermediate `OP_ANCHORCUT` witnesses** of the execution ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})). Receivers hold a protocol-enforced **Interactive Bisection Challenge Right**: upon ingesting `H(R_road)`, a receiver may challenge any segment `[κ_i, κ_{i+1}]` in O(log K) rounds, descending to a single origin-quotiented QnIR instruction step replayed deterministically at O(1) local cost. Failure to respond, or a hash mismatch, quarantines the receipt: terminal status `QUARANTINED` (§3.6) with receipt `RECEIPT_ANCHOR_REVOKED` — the receipt name is deliberately inherited from the anchor-fracture containment of [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}); no new terminal status is introduced.
 
@@ -428,7 +442,7 @@ Consensus across the execution-core ceiling and its orthogonal projections (Laye
 2. **Contract Verification:** Nodes achieve consensus by verifying that road receipts satisfy the shared anchor contract (`DCC_ANCHOR_Q2_PARITY_v1`, `DCC_ANCHOR_SECOND_LAW_v1`, etc.).
 3. **Sheaf-Theoretic Gluing:** In [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}), Chronosa verifies that road receipts emitted by heterogeneous nodes glue consistently over shared Q(anchor) landmarks, synthesizing global causal intelligence without centralized state storage.
 
-**Soundness caveat [v1.8.0 — CANDIDATE].** Points 1–3 verify that road receipts *satisfy* the shared anchor contracts; they do not by themselves verify that the recorded transitions *executed*. Per §4.4, admissible road receipts carry verifiable computational integrity in the proof field π — a zk-STARK execution proof or an Anchor-Cut bisection commitment. A road receipt whose π field is a bare σ-signed metadata attestation is **not admissible** for Outer-Ring consensus, however well its contract fields verify.
+**Soundness caveat [v1.8.0 — CANDIDATE].** Points 1–3 verify that road receipts *satisfy* the shared anchor contracts; they do not by themselves verify that the recorded transitions *executed*. Per §4.4, admissible road receipts carry verifiable computational integrity in the proof field π — a zk-STARK execution proof or an Anchor-Cut bisection commitment. A road receipt whose π field is a bare σ-signed metadata attestation is **not admissible** for Outer-Ring consensus, however well its contract fields verify. [v1.9.0 — CANDIDATE, per the Loop-2 review] The π-field *requirement* is unchanged, but its two discharge routes are not symmetric in maturity: Realization A remains conditional until a class-specific AIR with measured prover cost is demonstrated (§4.4), so until then the admissible discharge of π falls to Realization B, and A/B selection is measurement-gated per the v0.3 repair sequence.
 
 ---
 
@@ -512,7 +526,7 @@ The metric and identity envelopes provide native, cryptographically verifiable t
 ## 13. Open Items
 
 The following formal specifications remain open for subsequent releases:
-1. Formal instruction set and operational semantics for {% include term.html id="qnir" %}.
+1. Formal instruction set and operational semantics for {% include term.html id="qnir" %} — reaffirmed as the v0.3 priority by the Loop-2 adversarial review ([`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md)): a minimal executable core (constants, tuples, exact arithmetic, comparison, bounded structured control, status, commit, witness, halt) with a formal transition relation and differential tests precedes any extension opcode. [v1.9.0 — CANDIDATE]
 2. Syntax and type-checking rules for {% include term.html id="qnlang" %}.
 3. Concrete execution and validation mechanics for composite {% include term.html id="q-workflows" text="Q(workflows)" %} and {% include term.html id="qn-rsi" text="Q(rsi)" %} self-optimization loops.
-4. Arithmetization of the QnIR transition function into AIR and the concrete π-field realizations of §4.4 (proof-system parameters, challenge-response wire format), deferred to the QnIR v0.2 candidate.
+4. Arithmetization of the QnIR transition function into AIR and the concrete π-field realizations of §4.4 (proof-system parameters, challenge-response wire format) — re-deferred by the Loop-2 adversarial review: QnIR v0.2 was **not** promoted to the canon, so this item now follows the v0.3 repair sequence (class-specific sub-AIRs with explicit lookup/permutation arguments; measured Realization A/B break-even) instead of the v0.2 candidate. [v1.9.0 — CANDIDATE]
