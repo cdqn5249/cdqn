@@ -2,8 +2,8 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes (Class 6 split into canonical contraction OP_BYPASS and bounded saturation OP_SATURATE), and hardware-aware collapse under SIMEMP constraints.
-version: 1.3.0
-updated: 2026-10-26
+version: 1.4.0
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -54,8 +54,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
+| **Version** | 1.4.0 |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
@@ -96,6 +96,26 @@ Source: [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/
 | §6 breaker-box row 3 box-alignment correction (pre-existing 1-char drift) | §6 | — | editorial |
 
 Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline, to be integrated in subsequent versioned updates): `docs/qnPrimitive.md` (Q(bypass) execution precedence sentence and macro-DAG "equality saturation" wording aligned to the split; third circuit-breaker receipt naming); `docs/qlog.md` §6.1 ("Background Equality Saturation" resolves to `OP_SATURATE`); `docs/qm.md` v1.3.0 one-line touch-up (fixed-point identity attribution `OP_REWRITE` → `OP_BYPASS` in the Fixed-Point Invariant entry); glossary term additions for the new §2.2/§4.6 constructs; and the QnIR v0.2 candidate must carry distinct opcodes for `OP_BYPASS` and `OP_SATURATE` (Reviewer Segment 4 Point 1, Requirement R11 opcode-coverage finding, resolved in the QnIR v0.2 cycle, not in this file).
+
+---
+
+## Review Integration Record (v1.4.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — as integrated upstream by the two committed anchors this file mirrors: the constitutional two-axis Layer-0 Hardware Telemetry Envelope of `docs/simemp.md` v1.3.0 and the operational two-axis admission predicate of `docs/qnPrimitive.md` v1.4.0 (§1.15 term provenance, §5.9 margin governance and Admission Ledger). The `docs/qm_geometry.md` v1.3.0 record flags this file's mirror obligation — the §2.3 breakeven admission bound mirror and the same zero-cost scoping for the "zero Landauer dissipation (W = 0)" normalization sentence — discharged here. Qexpr makes no new policy adjudication of its own: the margin range `[1, 64]` and the recommended preset (`κ_dcc = 2`, `κ_t = 4`) are inherited unchanged from `docs/qnPrimitive.md` §5.9. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place; the withdrawn v1.3.0-era wordings are preserved verbatim in this record. New constructions introduced below are tagged **[v1.4.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v1.3.0-era, preserved verbatim):**
+1. the §2.3 item title "The Breakeven Admission Bound" with its admission sentence "Querying a cryptographic hash commitment across L3 caches or DRAM incurs measurable bus dissipation. Under the **Metric Invariant** (`simemp.md` §3.1), hash-consing lookup via $$Q(\text{reuse})$$ is admissible if and only if the computational work of re-evaluation exceeds retrieval dissipation:" and its display inequality `$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$`;
+2. the §2.3 normalization bullet "Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($$W = 0$$), directly operationalizing Q(reuse) across the Memory Wall." (the bullet's live `term.html` include is rendered as plain "Q(reuse)" here to keep the record inert);
+3. the §2 comparison-diagram cell "• Direct coupling to Q(reuse) (W = 0)";
+4. the §2.3 direct-path fallback sentence `If direct computation is cheaper than memory traversal (such as single-cycle integer additions $$Q(2) + Q(3)$$ or trivial powers), the compiler bypasses hash-table probes, lowering the operation directly to integer machine instructions via the HCA-Collapse engine.` (re-anchored below to the two-axis verdict, its examples and HCA-Collapse anchor preserved).
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Two-axis predicate mirror**: the §2.3 admission bound is re-issued as the Two-Axis Consequentiality Breakeven — advantage declared on **both axes** of the `docs/simemp.md` §4.4 envelope ("consequently faster") over the canonical tokens of `docs/qnPrimitive.md` §1.15/§5.9 (`ΔW_compute`, `Δt_compute_bound`, tier-indexed `τ_U[tier(h)]`/`τ_t[tier(h)]`, gateway slacks `ε_U`/`ε_t`, margin range `[1, 64]` with preset `κ_dcc = 2`/`κ_t = 4` inherited unchanged), with compact term provenance anchoring the declared cost model to this file's own §2.1 `DCC_ref` storage binding and the declared per-opcode bounds of `docs/qm.md` / `docs/qm_geometry.md` §8.1; undeclared quantities force the Direct-Compute fallback, ties resolve to Direct Compute, and admitted reuse executes under the Admission Ledger of `docs/qnPrimitive.md` §5.9; the work-axis-only "if and only if" admission sentence, its display inequality, and its fallback trigger are withdrawn (the bare form carries no latency-axis verdict — the QO-17 defect) | §2.3 | `QO-17` (via `docs/qnPrimitive.md` v1.4.0); consequentiality constraint (`docs/simemp.md` §4.4); F1 declared-bound discipline | CANDIDATE |
+| **Zero-cost scoping**: the §2.3 normalization bullet's W = 0 claim is confined to the reversible-symbolic domain (no bit erased in abstract state evolution — outside the admission path, the canon-consistency class of the `docs/qm_geometry.md` v1.3.0 EDITORIAL row) and decoupled from Q(reuse): tier traversal always dissipates, and Q(reuse) harvests the Memory Wall only under the two-axis predicate, executing under the Admission Ledger (`W_net = W_actual_charge` — charged declared work, never free); the §2 diagram cell is re-scoped to `(symbolic W = 0)` with column alignment preserved | §2.3, §2 | F1 declared-bound discipline; Admission Ledger (`docs/qnPrimitive.md` §5.9); `docs/qm_geometry.md` v1.3.0 EDITORIAL precedent | CANDIDATE |
+| Editorial: the touched admission statement is re-encoded to engine-independent plain text per the `docs/abstractionLayers.md` v1.8.1 convention (code-span predicate, Unicode operators); the remaining LaTeX spans of this file remain queued for file-wide re-encoding at its next versioned update | §2.3 | Rendering Fix Record (`docs/abstractionLayers.md` v1.8.1); `docs/qm_geometry.md` v1.3.0 EDITORIAL precedent | EDITORIAL |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qstructures.md` §6 work-row precedent and `docs/qphy.md` physical-impedance grounding inherit the two-axis form at their next versioned updates; the unbudgeted `docs/_data/navigation.yml` review-program entry remains optional; the substantive next horizon is the QnIR v0.3 minimal executable core per the Loop-2 repair sequence. No new `term.html` includes are used in this update — the q-reuse include of §2.3 pre-dates this wave — under the standing no-dead-entries discipline of `docs/qs_history.md` §8; front matter `terms_used` unchanged.
 
 ---
 
@@ -167,7 +187,7 @@ Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Polic
        [x]     [y]     [x]     [y]                        └──────[x]     [y]───────┘
    • 2x Memory bit allocations                             • Exact 1x Memory bit allocation
    • RAM pointer drift across reboots                     • Platform-invariant cryptographic identity
-   • Dissipates 2·W Landauer heat                         • Direct coupling to Q(reuse) (W = 0)
+   • Dissipates 2·W Landauer heat                         • Direct coupling to Q(reuse) (symbolic W = 0)
 ```
 
 ### 2.1. Canonical Node Tuple and Arity-Indexed Dependencies
@@ -210,14 +230,16 @@ Testing algebraic or semantic equality collapses to a single machine-word intege
 ### 2.3. Thermodynamic Work Minimization and Breakeven Bounds
 In physical {% include term.html id="layer-0" %} substrates, allocating and deallocating memory across physical buses dissipates electrical capacitance ($$\mathcal{O}(C V^2 f)$$) and Landauer work ($$W \ge k_B T \ln 2$$).
 * By enforcing {% include term.html id="hash-consing" %}, repeated sub-terms in multi-dimensional Clifford geometric products ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})) or multi-agent dialogue graphs are allocated **exactly once**.
-* Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($$W = 0$$), directly operationalizing {% include term.html id="q-reuse" text="Q(reuse)" %} across the Memory Wall.
+* Reversible symbolic normalization within the CAE-DAG incurs **zero Landauer dissipation** ($$W = 0$$) **within the reversible-symbolic domain only** [v1.4.0 — CANDIDATE] — no bit is erased in the abstract machine's state evolution, a claim that lives outside the admission path. It does not by itself operationalize {% include term.html id="q-reuse" text="Q(reuse)" %}: retrieving an existing commitment across L3 caches or DRAM always dissipates per the two-axis envelope of [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4, and Q(reuse) harvests the Memory Wall only under the declared two-axis admission of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15, executing under the Admission Ledger of §5.9 (`W_net = W_actual_charge` — charged declared work, never a free operation). The Memory Wall is harvested, never suffered, and never for free.
 
-#### The Breakeven Admission Bound
-Querying a cryptographic hash commitment across L3 caches or DRAM incurs measurable bus dissipation. Under the **Metric Invariant** (`simemp.md` §3.1), hash-consing lookup via $$Q(\text{reuse})$$ is admissible if and only if the computational work of re-evaluation exceeds retrieval dissipation:
+#### The Two-Axis Consequentiality Breakeven **[v1.4.0 — CANDIDATE]**
+Querying a cryptographic hash commitment across L3 caches or DRAM incurs declared lookup work (bus dissipation, $$\mathcal{O}(C V^2 f)$$) and declared lookup latency (the Memory Wall). Under the **Metric Invariant** (`simemp.md` §3.1) and the consequentiality constraint of [`docs/simemp.md`]({ '/simemp.html' | relative_url }) §4.4, hash-consing lookup via $$Q(\text{reuse})$$ is admissible if and only if its advantage over direct re-evaluation is declared on **both axes** of the Layer-0 Hardware Telemetry Envelope — the work axis and the latency axis, the **consequentiality constraint** ("consequently faster") — per the canonical admission predicate of [`docs/qnPrimitive.md`]({ '/qnPrimitive.html' | relative_url }) §1.15/§5.9:
 
-$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
 
-If direct computation is cheaper than memory traversal (such as single-cycle integer additions $$Q(2) + Q(3)$$ or trivial powers), the compiler bypasses hash-table probes, lowering the operation directly to integer machine instructions via the HCA-Collapse engine.
+**Term provenance [v1.4.0 — CANDIDATE].** `h` is the referenced sub-expression commitment and `tier(h)` its declared memory tier, fixed by the node tuple's $$\mathrm{DCC}_{\mathrm{ref}}$$ storage binding (§2.1); `ΔW_compute` and `Δt_compute_bound` are the DCC-declared worst-case work and latency bounds of the direct re-evaluation of the referenced sub-expression under the profile's declared cost model (the per-opcode concrete bounds are supplied by the numeric substrate of [`docs/qm.md`]({ '/qm.html' | relative_url }) and, where applicable, the blade-multiplication scaling of [`docs/qm_geometry.md`]({ '/qm_geometry.html' | relative_url }) §8.1); `τ_U[tier(h)]` and `τ_t[tier(h)]` are the declared per-tier worst-case lookup bounds of the two-axis envelope, calibrated at Layer-0 onboarding; `ε_U` and `ε_t` are the declared gateway overhead slacks; `κ_dcc` and `κ_t` are the declared advantage margins within the governance-bounded range `[1, 64]` (recommended preset `κ_dcc = 2`, `κ_t = 4`, inherited unchanged from [`docs/qnPrimitive.md`]({ '/qnPrimitive.html' | relative_url }) §5.9). All quantities are declared, never runtime-sampled; an undeclared quantity forces the safe Direct-Compute fallback, and ties resolve to Direct Compute. Every admitted reuse executes under the Admission Ledger of [`docs/qnPrimitive.md`]({ '/qnPrimitive.html' | relative_url }) §5.9.
+
+If the direct path fails to clear either margin (such as single-cycle integer additions $$Q(2) + Q(3)$$ or trivial powers against an L1-resident commitment), the compiler bypasses hash-table probes, lowering the operation directly to integer machine instructions via the HCA-Collapse engine (§5); ties resolve to Direct Compute.
 
 ### 2.4. Acyclicity by Construction (Axiom 5)
 In classical graphs, circular references create non-halting loops and stack crashes. In a Content-Addressed DAG, **a circular dependency is mathematically impossible**. Because $$\mathcal{H}(\alpha)$$ requires each child hash $$\mathcal{H}_i$$ as an input, no child can declare $$\alpha$$ as a dependency without breaking the pre-image resistance of cryptographic hash functions. Acyclicity along the {% include term.html id="causal-arrow" %} is guaranteed by construction, satisfying **Axiom 5** ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }})).
