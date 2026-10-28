@@ -2,8 +2,8 @@
 layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
-version: 1.1.1
-updated: 2026-10-20
+version: 1.2.0
+updated: 2026-10-27
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -47,8 +47,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
-| **Version** | 1.1.1 |
-| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
+| **Version** | 1.2.0 |
+| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
@@ -72,6 +72,23 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+
+---
+
+## Review Integration Record (v1.2.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — as integrated upstream by the two committed anchors this file mirrors: the constitutional two-axis Layer-0 Hardware Telemetry Envelope of `docs/simemp.md` v1.3.0 (per-tier worst-case lookup bound table `τ_t`, consequentiality constraint, DCC telemetry schema) and the operational two-axis admission predicate of `docs/qnPrimitive.md` v1.4.0 (§1.15 term provenance, §5.9 margin governance and Admission Ledger). Both upstream records flag this file's §5.2 predicate mirror and §6 Memory Wall Latency Harvester coupling (declared stall-window workloads, deterministic prefetch, overlap credit against `τ_t` tiers) as deferred cross-file dependencies, discharged here. Qlog makes no new policy adjudication of its own: the advantage-margin range `[1, 64]` and the recommended preset (`κ_dcc = 2`, `κ_t = 4`) were BOC-adjudicated at `docs/qnPrimitive.md` §5.9 and are inherited unchanged. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place; the withdrawn v1.1.1-era wording is preserved verbatim in this record. New constructions introduced below are tagged **[v1.2.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v1.1.1-era, preserved verbatim):** the §5.2 bullet "The Inferential Breakeven Equation: Hash retrieval across the Memory Wall is admitted if and only if the computational work avoided exceeds retrieval dissipation" with its display inequality `Admit(Q(reuse)) ⟺ ΔW_search > ΔW_lookup + ε_overhead` and its closing claim "Combinatorially deep derivations utilize Q(reuse), achieving zero marginal Landauer dissipation (W = 0) for recurring sub-graphs"; the §4.2 clause "to ensure the macro-step is referenced at zero marginal Landauer cost (ΔW = 0)"; the §6 preamble figure "stalls processor execution for hundreds of clock cycles (≈ 50–100 ns)".
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Two-axis predicate mirror**: the Inferential Breakeven is re-issued as the Two-Axis Inferential Breakeven Predicate over the canonical tokens of `docs/qnPrimitive.md` §1.15 — `Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )` — with term-by-term provenance (declared cost model, declared static latency bound, Layer-0 Historical Calibration Benchmark calibration, No-Implicit fallback to direct inferential compute, ties resolve to Direct Inferential Compute); the Qlog-lexicon name `ΔW_search` for direct inferential re-derivation work is declared a prose alias of the canonical `ΔW_compute` so that admission decisions replay identically across files; §5.2 points to the Admission Ledger (`W_gross_reserve`, `W_actual_charge`, `W_refund`, `W_net`) of `docs/qnPrimitive.md` §5.9 instead of duplicating it | §5.2 | `QO-17` (via `docs/qnPrimitive.md` v1.4.0); F1 declared-bound discipline; consequentiality constraint (`docs/simemp.md` §4.4) | CANDIDATE |
+| **Harvester coupling to the tier table**: the stall window is declared as `Δt_stall ≤ τ_t[tier(h)]` against the touched tier instead of the withdrawn approximation; new §6.3 declares (i) **Deterministic Tier Prefetch** — read-ahead restricted to commitments whose admission is already declared by the §5.2 predicate along the sealed Chained Receipt Vector of the active Q(workflow), under a DCC-pinned deterministic schedule, scoped as a scheduled bus action that never blocks O(1) preemption; (ii) **Overlap Credit** — stall-window harvester completions recorded as declared overlap telemetry on the node-boundary receipt, feeding the Historical Calibration Benchmark class (e.g. validating the preset `κ_t` against the realized machine) and never an admission input or logical budget (the never-feeds-back rule of `docs/simemp.md` §4.4 extends to overlap telemetry, preserving `H(S_t \| D(S_t)) = 0` and receipt replay); (iii) the consequentiality reading — an admitted lookup's `κ_t` margin is headroom the harvester converts into useful work, so the wall is harvested rather than suffered, and a lookup failing the latency margin cannot be repaired by harvesting (admission is prior, declared, and final for the invocation) | §6, §6.3 (new) | `docs/simemp.md` v1.3.0 + `docs/qnPrimitive.md` v1.4.0 cross-file commitments; author field report ("consequently faster", memory-wall exploitation) | CANDIDATE |
+| Editorial: the zero-cost claims are scoped to re-derivation — §4.2's macro-step reference and §5.2's closing claim now state that the deduplicated body is never re-executed while the reference itself pays the declared lookup charge of the §5.2 predicate and Admission Ledger (the unqualified "zero marginal Landauer cost (ΔW = 0)" reading would contradict the two-axis predicate in the same file — the same defect class as Loop-2 finding F2) | §4.2, §5.2 | Internal consistency with rows 1–2 | EDITORIAL |
+| Editorial: the touched Q(reuse)-coupled statements (§5.2 predicate and provenance, §6.3 declarations) are re-encoded to engine-independent plain text per the `docs/abstractionLayers.md` v1.8.1 convention (Unicode operators; code spans for subscripted tokens); the remaining LaTeX spans of this file remain queued for file-wide re-encoding at its next versioned update | §5.2, §6.3 | Rendering Fix Record (`docs/abstractionLayers.md` v1.8.1); `docs/qnPrimitive.md` v1.4.0 EDITORIAL precedent | EDITORIAL |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qm.md` — §5.6 factorial rule re-derived as a corollary with a machine-derived threshold `k*` from the tier table and the §V inverse-root breakeven wording re-issued over the two-axis form; `docs/qm_geometry.md` — §7.2 predicate wording mirror; `docs/qexpr.md` — §2.3 breakeven admission bound mirror and the same zero-cost scoping for its "zero Landauer dissipation (W = 0)" normalization sentence; `docs/qstructures.md` §6 work-row precedent and `docs/qphy.md` physical-impedance grounding inherit the two-axis form at their next versioned updates; glossary — `q-reuse` definition refresh and registration of the *Latency Telemetry Envelope* and *Advantage Margin* terms at the queued glossary update. No `term.html` includes are used in this update, under the standing no-dead-entries discipline of `docs/qs_history.md` §8; front matter `terms_used` unchanged.
 
 ---
 
@@ -218,7 +235,7 @@ Under the {% include term.html id="boc-policy" text="Best of Choices (BOC) Polic
 - **BOC Abduction:** Minimal causal predecessor selection from terminal execution states under SIMEMP constraints.
 
 ### 4.2. Compositional and Topological Modes (Degrees 2 and 3)
-- **Macro-Hop Deduction:** Compresses an acyclic sub-graph of $x$ intermediate operations into a single canonical `Q(pattern)`. Utilizes hash-consing and deduplication ($Q(\text{reuse})$) to ensure the macro-step is referenced at zero marginal Landauer cost ($\Delta W = 0$).
+- **Macro-Hop Deduction:** Compresses an acyclic sub-graph of $x$ intermediate operations into a single canonical `Q(pattern)`. Utilizes hash-consing and deduplication ($Q(\text{reuse})$) to ensure the macro-step is referenced at zero marginal re-derivation cost ($\Delta W = 0$) — the deduplicated body is never re-executed; the reference itself pays the declared lookup charge of the §5.2 admission predicate and Admission Ledger.
 - **Anchored Markov Routing:** Traverses the sparse topology of universal $Q(\text{anchor})$ landmarks, using historical road receipt weights to bypass $\mathcal{O}(N)$ micro-step re-execution.
 
 ### 4.3. Emergent RSI Modes and Admission Invariants (Degree n)
@@ -245,17 +262,17 @@ Before scheduling memory bus transfers or search iterations, the gateway evaluat
 ### 5.2. Q(reuse): Lemma Memoization and Inferential Breakeven
 When intermediate `Q(patterns)` or sub-workflows are verified, they are indexed by their immutable commitment hash $\mathcal{H}(\mathcal{P})$:
 - **CAE-DAG Deduplication:** Identical sub-proofs share a single physical node in memory via {% include term.html id="hash-consing" %}.
-- **The Inferential Breakeven Equation:** Hash retrieval across the Memory Wall is admitted if and only if the computational work avoided exceeds retrieval dissipation:
+- **The Two-Axis Inferential Breakeven Predicate [v1.2.0 — CANDIDATE]:** Hash retrieval across the Memory Wall is admitted only when the direct inferential path is **consequently faster** and cheaper than retrieval — advantage declared on **both axes** of the Layer-0 Hardware Telemetry Envelope ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4), instantiating the canonical predicate of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15/§5.9:
 
-$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{search}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
 
-Trivial single-step inferences execute directly on integer ALUs. Combinatorially deep derivations utilize $Q(\text{reuse})$, achieving zero marginal Landauer dissipation ($W = 0$) for recurring sub-graphs.
+**Term provenance [v1.2.0 — CANDIDATE].** Every term of the conjunction is a declared deterministic quantity, never a runtime sample. `h` is the referenced lemma commitment; `tier(h)` is its declared memory tier, fixed by the referencing DCC profile's storage binding. `ΔW_compute` is the DCC-declared upper-bound work of direct inferential re-derivation — the search work this domain historically names `ΔW_search`, carried here under the canonical token of `docs/qnPrimitive.md` §1.15 so that admission decisions replay identically across files — produced by the cost model declared in the morphism's DCC profile. `Δt_compute_bound` is the DCC-declared worst-case latency bound of the direct inferential path, a static declared bound under the declared-bound discipline (Loop-2 finding F1 of `docs/AiReviews/AiReviewQnIRv0.2.md`), never a runtime measurement. `τ_U[tier(h)]` and `τ_t[tier(h)]` are the declared per-tier worst-case lookup bounds of the two-axis envelope, calibrated at Layer-0 onboarding through the Historical Calibration Benchmark receipt class; `ε_U` and `ε_t` are the DCC-declared fixed gateway overhead slacks. `κ_dcc` and `κ_t` are the DCC-declared advantage margins within the governance-bounded range `[1, 64]` and recommended preset (`κ_dcc = 2`, `κ_t = 4`) adjudicated at `docs/qnPrimitive.md` §5.9 — the floor excludes bare breakeven. All quantities **MUST** be declared; an undeclared quantity forces the safe fallback to direct inferential compute — trivial single-step inferences execute directly on integer ALUs (§5.1) without hash-table probes — and ties resolve to Direct Inferential Compute. Every admitted reuse executes under the **Admission Ledger** (`W_gross_reserve`, `W_actual_charge`, `W_refund`, `W_net`) of `docs/qnPrimitive.md` §5.9: the executed path pays only the declared lookup charge `W_net = τ_U[tier(h)] + ε_U`, never the reserved direct-compute ceiling. Combinatorially deep derivations therefore never re-derive recurring sub-graphs — the residual cost of a reference is the declared ledger charge, not zero and not a runtime sample.
 
 ---
 
 ## 6. The Memory Wall Latency Harvester (H_harvester)
 
-In physical hardware architectures, retrieving data across the Memory Wall stalls processor execution for hundreds of clock cycles ($\approx 50\text{--}100\text{ ns}$), during which silicon continues to dissipate static leakage power ($P_{\mathrm{leak}} = I_{\mathrm{leak}} V$).
+In physical hardware architectures, retrieving data across the Memory Wall stalls processor execution for a duration bounded by the touched tier's declared lookup bound `τ_t[tier(h)]` of the two-axis envelope ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4) — historically intuited as hundreds of clock cycles (≈ 50–100 ns), now a **declared per-tier quantity** rather than an approximation — during which silicon continues to dissipate static leakage power ($P_{\mathrm{leak}} = I_{\mathrm{leak}} V$). The consequentiality constraint of §5.2 is what makes this window harvestable rather than merely suffered: an admitted lookup has cleared the `κ_t` margin, so the primary route was slower by a declared factor, and the stall window is time the direct path would have consumed anyway.
 
 <pre>
                    THE MEMORY WALL LATENCY HARVESTER
@@ -283,6 +300,14 @@ During memory-stall windows ($\Delta t_{\mathrm{stall}}$), $\mathrm{Qlog}$ sched
 - **$\mathcal{O}(1)$ Preemption:** Background tasks yield or commit in a single clock cycle the instant data arrives on the bus, adding zero latency to primary execution.
 - **Deterministic Sandboxing:** Harvester tasks execute in read-only registers and cannot mutate sealed state.
 - **Thermal Metering:** Background execution is throttled by the local {% include term.html id="metric-envelope" %}, halting if temperature telemetry approaches hardware limits.
+
+### 6.3. Deterministic Prefetch, Overlap Credit, and the Never-Feeds-Back Boundary **[v1.2.0 — CANDIDATE]**
+
+**Deterministic Tier Prefetch [v1.2.0 — CANDIDATE].** During a stall window on tier `t`, the harvester may issue read-ahead requests for commitments whose `Q(reuse)` admission is already declared by the two-axis predicate (§5.2) along the sealed Chained Receipt Vector of the active `Q(workflow)` (§2.3), under a deterministic schedule pinned in the referencing DCC profile. Prefetch is a **scheduled bus action, not a stall-window workload**: it never blocks the `O(1)` preemption guarantee of §6.2, it is restricted to already-admitted lookups so that no speculative traffic is ever priced outside the declared envelope, and its latency is metered against the same declared tier table `τ_t`.
+
+**Overlap Credit [v1.2.0 — CANDIDATE].** Harvester work completed inside a stall window (`Δt_stall ≤ τ_t[tier(h)]`) is recorded as declared overlap telemetry on the node-boundary receipt: the tier touched, the declared window bound, and the identity of the completed stall-window workloads. Overlap credit is **calibration and auditing data** — it feeds the Historical Calibration Benchmark receipt class (for example, validating the preset margin `κ_t` against the realized machine) — and it is **never an input to an admission predicate or a logical budget**: admission is decided solely by the two-axis predicate of §5.2 before execution, and the never-feeds-back rule of `docs/simemp.md` §4.4 extends to overlap telemetry unchanged, preserving `H(S_t | D(S_t)) = 0` and receipt replay.
+
+**Consequentiality coupling [v1.2.0 — CANDIDATE].** The overlap credit is the physical reading of the consequentiality constraint: an admitted lookup carries its declared `κ_t` margin as headroom, and the harvester converts that headroom into useful register-pinned work — the memory wall is harvested, not suffered. A lookup that fails the latency margin cannot be repaired by harvesting: admission is prior, declared, and final for the invocation.
 
 ---
 
