@@ -3,7 +3,7 @@ layout: default
 title: Qlog — Quang Logics (Constructive Type Theory, Pattern Verification, and Epistemic Deduction)
 description: Canonical domain specification for Qlog, formalizing constructive type theory, inferential modes, Q(patterns), Q(workflows), and inverse causal reconstruction under SIMEMP constraints.
 version: 1.2.0
-updated: 2026-10-27
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -48,7 +48,7 @@ terms_used:
 |---|---|
 | **Document Title** | Qlog — Quang Logics: Constructive Type Theory, Pattern Verification, and Epistemic Deduction |
 | **Version** | 1.2.0 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
