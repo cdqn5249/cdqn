@@ -3,7 +3,7 @@ layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
 version: 1.4.0
-updated: 2026-10-27
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -55,7 +55,7 @@ terms_used:
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
 | **Version** | 1.4.0 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
