@@ -3,7 +3,7 @@ layout: default
 title: Qn Primitive Envelope — Governed Qn Artifact Model
 description: Governed Qn artifact model, operational axioms, candidate typed payload profiles, and Category B optimization primitives under SIMEMP consistency constraints; includes the canonical circuit-breaker receipt registry and the OP_BYPASS/OP_SATURATE split alignment.
 version: 1.4.0
-updated: 2026-10-27
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -67,7 +67,7 @@ terms_used:
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
 | **Version** | 1.4.0 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Primitive Specification — Category A/B Envelope Foundation |
