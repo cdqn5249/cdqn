@@ -17,6 +17,24 @@
 #   commitment hashes within the local causal DAG instead of allocating new
 #   physical memory bits. Mitigates the Memory Wall and eliminates redundant
 #   Landauer dissipation at zero marginal Q(1) cost.
+#
+# Glossary wave II (qphy v1.1.0 discharge):
+# - "Q(table)" definition re-issued over the two-axis consequentiality
+#   breakeven, discharging the queued glossary commitment of the committed
+#   docs/qphy.md v1.1.0 review-integration record (the defect flagged by the
+#   committed docs/qstructures.md v0.2.0 record: the definition still cited
+#   the single-axis "breakeven inequality"). No new entries, no slug changes,
+#   no term.html include changes, no md file changes.
+# - Withdrawn Q(table) definition (pre-wave II, preserved verbatim):
+#   The proposed keyed container contract surface: a bounded, content-addressed
+#   lookup structure grounded in hash-consing itself, the Content-Addressed
+#   Expression DAG already constituting a keyed index over committed
+#   expressions. Capacity is declared; growth is re-versioning rather than
+#   resizing; the work row declares the breakeven inequality under which keyed
+#   lookup is preferred over its recorded alternatives, in the manner of the
+#   committed Q(reuse) analysis. A contract surface under the five-row
+#   structural contract schema, never a runtime shape; pending deterministic
+#   measurement, BOC selection, and Q(rsi) sealing.
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -372,9 +390,16 @@
     lookup structure grounded in hash-consing itself, the Content-Addressed
     Expression DAG already constituting a keyed index over committed
     expressions. Capacity is declared; growth is re-versioning rather than
-    resizing; the work row declares the breakeven inequality under which keyed
-    lookup is preferred over its recorded alternatives, in the manner of the
-    committed Q(reuse) analysis. A contract surface under the five-row
+    resizing; the work row declares the Two-Axis Consequentiality Breakeven
+    under which keyed lookup is admitted over its recorded alternatives, in
+    the manner of the committed Q(reuse) analysis: admission is conditional,
+    never automatic — the direct compute path must be consequently faster, its
+    declared work bound ΔW_compute and latency bound Δt_compute_bound each
+    clearing the touched tier's declared lookup bounds τ_U[tier(h)] + ε_U and
+    τ_t[tier(h)] + ε_t by the declared Advantage Margin factors (κ_dcc on the
+    work axis, κ_t on the latency axis of the Latency Telemetry Envelope);
+    failed margins, ties, and undeclared terms fall back to Direct Compute.
+    A contract surface under the five-row
     structural contract schema, never a runtime shape; pending deterministic
     measurement, BOC selection, and Q(rsi) sealing.
 
