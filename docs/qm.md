@@ -2,8 +2,8 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic domain substrate of the Qn universe under SIMEMP constraints.
-version: 1.3.0
-updated: 2026-10-26
+version: 1.4.0
+updated: 2026-10-27
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -54,8 +54,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
+| **Version** | 1.4.0 |
+| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
@@ -95,6 +95,23 @@ Source: [`docs/AiReviews/AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/
 | "Neutralized" phrasing aligned to termination-not-decidability | §1.2 | Objection 4 (cosmetic) | editorial |
 
 Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline, to be integrated in subsequent versioned updates): `docs/q2_q9.md` §7.1 monoid scope correction ("single-digit prime anchor basis", not generator of the full positive cone) and §7.2 Collatz `MODAL_HYPOTHESIS` tagging; `docs/qexpr.md` §4.6 identity-table rule count (16 rules, including the first-root rule); glossary term additions for the new §3.6/§5.7 constructs.
+
+---
+
+## Review Integration Record (v1.4.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — as integrated upstream by the two committed anchors this file mirrors: the constitutional two-axis Layer-0 Hardware Telemetry Envelope of `docs/simemp.md` v1.3.0 and the operational two-axis admission predicate of `docs/qnPrimitive.md` v1.4.0 (§1.15 term provenance, §5.9 margin governance and Admission Ledger). The `docs/qnPrimitive.md` v1.4.0 record flags this file's mirror obligation — the §5.6 factorial rule re-derived as a corollary with a machine-derived threshold `k*` derived from the tier table, and the inverse-root breakeven wording re-issued over the two-axis form — discharged here; §5.5.V (the "§V" of the upstream flags) carries the same re-issue because its chiral-duality bullets quote the withdrawn single-axis inequality. Qm makes no new policy adjudication of its own: the margin range `[1, 64]` and the recommended preset (`κ_dcc = 2`, `κ_t = 4`) are inherited unchanged from `docs/qnPrimitive.md` §5.9, and `k*` is a derived per-profile quantity, not a new canon constant. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place; the withdrawn v1.3.0-era wording is preserved verbatim in this record. New constructions introduced below are tagged **[v1.4.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v1.3.0-era, preserved verbatim):** the §5.5.V clauses "Small integer powers disfavor memory lookups (ΔW_compute ≤ ΔW_lookup), executing directly on ALUs" and "require bounded Diophantine lattice searches (ΔW_compute ≫ ΔW_lookup). Roots cross the thermodynamic breakeven threshold immediately, prioritizing sub-graph reuse via Q(reuse)"; the §5.6.II prohibition justification "Initiating a 256-bit cryptographic hash lookup across the Memory Wall consumes dynamic bus power (O(C V² f)) that exceeds execution cost. Q(reuse) is strictly forbidden for n ≤ 2"; and the §5.6.II admission bullet "Admission of Q(reuse) for n ≥ 3: For k ≥ 3, factorial computation satisfies Q(k)! = Q(k) × Q(k-1)!. Because evaluating (k-1)! requires cumulative multiplications, the runtime retrieves the existing hash commitment of (k-1)! via Q(reuse), executing a single multiplication and avoiding redundant re-computation across the Memory Wall."
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Chiral duality re-issue**: forward powers fail the two-axis margins or tie, resolving to Direct Compute (the declared fallback) rather than merely "disfavoring" lookups; inverse roots remain strong work-axis candidates under their declared cost model, but admission is decided solely by the canonical two-axis predicate — a work-axis advantage alone is inadmissible. The automatic-admission claim "roots cross the thermodynamic breakeven threshold immediately" is withdrawn: the bare inequality `ΔW_compute ≫ ΔW_lookup` carries no latency-axis verdict, which is exactly the QO-17 defect | §5.5.V | `QO-17` (via `docs/qnPrimitive.md` v1.4.0); consequentiality constraint (`docs/simemp.md` §4.4) | CANDIDATE |
+| **Factorial admission re-derived as a fold-recurrence corollary**: §5.6.II now cites the canonical predicate; the blanket "admitted for n ≥ 3" is withdrawn as an implicit machine-uniformity assumption and replaced by a **machine-derived threshold** `k*` — both declared bounds of the direct path grow monotonically in `k` while the tier bounds, gateway slacks, and advantage margins are fixed declared constants, so the predicate's verdict on the recurrence is a threshold rule, derived deterministically at DCC declaration time (declared cost model + tier table + margins) and never runtime-sampled; a profile whose declared model yields `k* = 3` reproduces the historical behavior as a derived quantity, not a canon-fixed rule; the `n ≤ 2` prohibition is retained as the degenerate corollary (bypass precedence fires first per §5.6.I; the predicate rejects independently by the floor rule) | §5.6.II | Author field report (single-constant insufficiency across machines — the same defect class as the withdrawn blanket rule); F1 declared-bound discipline | CANDIDATE |
+| Editorial: the §5.6.I fixed-point identity resolves in `OP_BYPASS` (canonical contraction suite); the former umbrella name `OP_REWRITE` is a deprecated alias (`docs/qnPrimitive.md` §1.16, v1.3.0) | §5.6.I | `docs/qnPrimitive.md` v1.3.0 OP_BYPASS/OP_SATURATE split | EDITORIAL |
+| Editorial: the touched admission statements (§5.5.V bullet tails, §5.6.II) are re-encoded to engine-independent plain text per the `docs/abstractionLayers.md` v1.8.1 convention (Unicode operators; code spans for subscripted tokens); the remaining LaTeX spans of this file remain queued for file-wide re-encoding at its next versioned update | §5.5.V, §5.6.II | Rendering Fix Record (`docs/abstractionLayers.md` v1.8.1); `docs/qnPrimitive.md` v1.4.0 EDITORIAL precedent | EDITORIAL |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qm_geometry.md` — §7.2 predicate wording mirror (next queue item); `docs/qexpr.md` — §2.3 breakeven admission bound mirror and the same zero-cost scoping for its "zero Landauer dissipation (W = 0)" normalization sentence; `docs/qstructures.md` §6 work-row precedent and `docs/qphy.md` physical-impedance grounding inherit the two-axis form at their next versioned updates; glossary — `q-reuse` definition refresh and registration of the *Latency Telemetry Envelope* and *Advantage Margin* terms at the queued glossary update. No `term.html` includes are used in this update, under the standing no-dead-entries discipline of `docs/qs_history.md` §8; front matter `terms_used` unchanged.
 
 ---
 
@@ -505,8 +522,9 @@ $$\sqrt{\ominus Q(1)} \implies \vec{e}_1 \wedge \vec{e}_2 \quad (\mathrm{where} 
 
 #### V. The Chiral Optimization Duality
 Powers and roots form a **Chiral Morphism Pair** along the causal execution arrow:
-- Forward powers collapse geometric grades ($$I_2^2 \to -Q(1)$$) and compute in feed-forward polynomial steps. Small integer powers disfavor memory lookups ($$\Delta W_{\mathrm{compute}} \le \Delta W_{\mathrm{lookup}}$$), executing directly on ALUs.
-- Inverse roots expand geometric grades ($$\sqrt{\ominus Q(1)} \to I_2$$) and require bounded Diophantine lattice searches ($$\Delta W_{\mathrm{compute}} \gg \Delta W_{\mathrm{lookup}}$$). Roots cross the thermodynamic breakeven threshold immediately, prioritizing sub-graph reuse via {% include term.html id="q-reuse" %}.
+Powers and roots form a **Chiral Morphism Pair** along the causal execution arrow **[v1.4.0 — CANDIDATE]**:
+- Forward powers collapse geometric grades ($$I_2^2 \to -Q(1)$$) and compute in feed-forward polynomial steps. Small integer powers fall below the two-axis admission margins of §5.6.II — margin failures and ties resolve to Direct Compute, the declared fallback — executing directly on ALUs without hash-table probes.
+- Inverse roots expand geometric grades ($$\sqrt{\ominus Q(1)} \to I_2$$) and require bounded Diophantine lattice searches, so the declared cost model and declared latency bound of a root evaluation grow steeply with the requested grade — roots are typically strong candidates on the work axis. Admission is nonetheless decided solely by the canonical two-axis predicate of §5.6.II: a work-axis advantage alone is inadmissible, and the {% include term.html id="q-reuse" text="Q(reuse)" %} lookup is taken only when the latency axis clears its declared margin as well ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4, the consequentiality constraint). No root lookup is admitted by default.
 
 ### 5.6. Discrete Factorial and Combinatorial Morphisms
 
@@ -518,12 +536,15 @@ $$n! = \prod_{j=1}^n j$$
 The factorial morphism exhibits three canonical identity states in the range $$Q(0) \dots Q(2)$$:
 - **Empty Product Identity ($$Q(0)!$$):** In monoid theory, an empty product evaluates to the multiplicative identity $$Q(1)$$. Handled in $$\mathcal{O}(1)$$ via {% include term.html id="q-bypass" %}, emitting `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($$\Delta W = 0$$).
 - **Unit Invariant ($$Q(1)!$$):** Evaluates identically to $$Q(1)$$. Bypassed in $$\mathcal{O}(1)$$ via $$Q(\text{bypass})$$ ($$\Delta W = 0$$).
-- **Fixed-Point Invariant ($$Q(2)!$$):** $$2$$ is the unique positive integer satisfying $$n! = n$$. Recognized as an algebraic fixed-point identity in `OP_REWRITE`, bypassing execution in $$\mathcal{O}(1)$$ ($$\Delta W = 0$$).
+- **Fixed-Point Invariant ($$Q(2)!$$):** $$2$$ is the unique positive integer satisfying $$n! = n$$. Recognized as an algebraic fixed-point identity in `OP_BYPASS` (canonical contraction suite; the former umbrella name `OP_REWRITE` is a deprecated alias per `docs/qnPrimitive.md` §1.16), bypassing execution in $$\mathcal{O}(1)$$ ($$\Delta W = 0$$).
 
 #### II. Thermodynamic Optimization Boundary
-Under the **Metric Existential Invariant**, optimization morphisms adhere to strict thermodynamic breakeven bounds:
-- **Prohibition of $$Q(\text{reuse})$$ for $$n \le 2$$:** For $$Q(0)$$, $$Q(1)$$, and $$Q(2)$$, computational cost is zero (direct bypass). Initiating a 256-bit cryptographic hash lookup across the Memory Wall consumes dynamic bus power ($$\mathcal{O}(C V^2 f)$$) that exceeds execution cost. $$Q(\text{reuse})$$ is strictly forbidden for $$n \le 2$$.
-- **Admission of $$Q(\text{reuse})$$ for $$n \ge 3$$:** For $$k \ge 3$$, factorial computation satisfies $$Q(k)! = Q(k) \times Q(k-1)!$$. Because evaluating $$(k-1)!$$ requires cumulative multiplications, the runtime retrieves the existing hash commitment of $$(k-1)!$$ via $$Q(\text{reuse})$$, executing a single multiplication and avoiding redundant re-computation across the Memory Wall.
+Under the **Metric Existential Invariant**, optimization morphisms adhere to the canonical two-axis admission predicate ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15/§5.9, instantiated over the [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4 envelope) **[v1.4.0 — CANDIDATE]**:
+
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
+
+- **Degenerate boundary (`n ≤ 2`):** For `Q(0)`, `Q(1)`, and `Q(2)`, the identity class of §5.6.I fires first under the causal precedence `Q(bypass) ≺ Q(reuse) ≺ Direct Compute`: the bypass resolves the evaluation at zero metric cost, so `Q(reuse)` is never reached. Independently, the declared direct path costs zero, so both axis conjunctions of the predicate fail by the floor rule — admission is rejected even in the bypass's absence.
+- **Fold-recurrence corollary (`k ≥ 3`):** For `k ≥ 3`, factorial computation satisfies `Q(k)! = Q(k) × Q(k-1)!`. The declared cost model prices direct evaluation of `Q(k-1)!` at (k-2) cumulative multiplications of monotonically growing height, while the reuse path executes a single multiplication plus the declared lookup charge of the Admission Ledger ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §5.9). Because both declared bounds of the direct path grow monotonically in `k` while `τ_U[tier(h)]`, `τ_t[tier(h)]`, the gateway slacks, and the advantage margins are fixed declared constants of the profile, the predicate's verdict on the fold recurrence is a **machine-derived threshold** `k*` **[v1.4.0 — CANDIDATE]**: for `k ≥ k*` the conjunction holds and the runtime retrieves the existing hash commitment of `Q(k-1)!`, executing a single multiplication; for `k < k*` the runtime executes direct computation. `k*` is derived deterministically at DCC declaration time from the profile's declared cost model, the touched tier's declared bounds, and the declared margins — never sampled at runtime. It is not a canon-fixed constant: a profile whose declared model yields `k* = 3` reproduces the historical blanket behavior, but as a derived per-profile quantity, not a rule of canon.
 
 #### III. Non-Existence of Negative Factorials
 The factorial recurrence relation is given by:
