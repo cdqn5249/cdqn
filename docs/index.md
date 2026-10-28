@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.12.0
-updated: 2026-10-23
+version: 1.13.0
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -12,7 +12,8 @@ file_repo_path: docs/index.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /
 terms_used:
-  - boc-policy
+  - advantage-margin
+- boc-policy
   - cdqn
   - chronosa
   - computational-consistency
@@ -23,6 +24,7 @@ terms_used:
   - discrete-exterior-calculus
   - epistemic-anchorage
   - existential-invariant
+- latency-telemetry-envelope
   - licensed-work
   - local-first
   - metric-exhaustion
@@ -51,6 +53,7 @@ terms_used:
   - qlog
   - qn
   - qn-rsi
+- qnir
   - qphy
   - receipt
   - remainder-r
@@ -81,11 +84,23 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.12.0 |
-| **Last Updated** | 2026-10-23 (Bao Loc, Vietnam) |
+| **Version** | 1.13.0 |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
+
+---
+
+## Review Integration Record (v1.13.0)
+
+**Source:** [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — the Loop-2 adversarial review transcript (Kimi K3.1-Pro, October 2026; verdict "major revision; do not promote QnIR v0.2 to the canon") — together with the committed review-integration records of the canon wave it anchored: `docs/abstractionLayers.md` v1.9.1, `docs/simemp.md` v1.3.0, `docs/qnPrimitive.md` v1.4.0, `docs/qlog.md` v1.2.0, `docs/qm.md` v1.4.0, `docs/qm_geometry.md` v1.3.0, and the glossary wave (`docs/_data/glossary/primitives.yml`: `q-reuse` definition refresh; *Latency Telemetry Envelope* and *Advantage Margin* registered). This update discharges the final queued item of that wave: the portal-level review-program pointer (the optional item of the Loop-2 integration triage; QnIR remains [PENDING]).
+
+**Decision:** a new **Adversarial Review Program** section is added between §4 and §5 as a purely additive update — no existing heading is renumbered and no existing body line is mutated, per **Axiom 13** — giving the Documentation Portal its first on-site pointer to the review program and its artifacts of record. No withdrawn wording exists in this update. Front matter `terms_used` is extended for the first time in the wave (50 → 53) to admit three newly referenced term includes — `qnir`, `latency-telemetry-envelope`, `advantage-margin` — the latter two being the first `term.html` exercises of the glossary registrations committed in the glossary wave; include parity is preserved (distinct ids == `terms_used` entries). A companion `docs/_data/navigation.yml` entry for the review program remains unbudgeted and is not part of this update.
+
+| Change | Sections | Provenance | Status |
+|---|---|---|---|
+| New "Adversarial Review Program" section: Loop-1/Loop-2 program description, artifacts of record (both transcripts, GitHub blob links per house pattern), committed integration-wave inventory, and the QnIR [PENDING] status reaffirmation with the v0.3 repair-sequence pointer | New section between §4 and §5; front matter + Document Metadata bumped | Loop-2 integration triage (optional closing item); the six committed review-integration records + glossary wave | CANDIDATE |
 
 ---
 
@@ -247,6 +262,14 @@ To preserve lean, deterministic specifications while engaging with broader scien
 
 * **[Beyond the Infinite Void: What OpenAI's H10 Claim Teaches Us About Finite Computation]({{ '/reflections/h10_finite_computation.html' | relative_url }})**  
   *Published: 2026-10-13* · Analyzes OpenAI's claimed resolution of Hilbert's Tenth Problem over rational numbers ($H10(\mathbb{Q})$), the fallacy of unmetered search in classical mathematics, height bounds as physical memory limits, and the shift from Platonic non-constructive proof to Verified Computed Patterns under SIMEMP constraints.
+
+---
+
+## Adversarial Review Program
+
+The framework's specifications are stress-tested through an external adversarial review program: major draft artifacts are submitted to independent AI reviewers, and the verbatim returned transcripts are committed as artifacts of record under `docs/AiReviews/` [v1.13.0 — CANDIDATE]. Two loops are complete to date. Loop 1 (Google Deep Review, October 2026) reviewed the condensed Qn universe specification together with the QnIR v0.1 candidate draft ([`AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md)) and established the open-question protocol under which subsequent loops run. Loop 2 (Kimi K3.1-Pro, October 2026) reviewed the QnIR draft v0.2.2 ([`AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md)) and returned the verdict "major revision; do not promote QnIR v0.2 to the canon."
+
+Integration proceeds one file at a time under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7. The Loop-2 integration wave is committed across the canon: the conditional downgrade in `docs/abstractionLayers.md` v1.9.1; the two-axis {% include term.html id="latency-telemetry-envelope" text="Latency Telemetry Envelope" %} in `docs/simemp.md` v1.3.0 §4.4; the two-axis admission predicate, {% include term.html id="advantage-margin" text="Advantage Margin" %} governance, and Admission Ledger in `docs/qnPrimitive.md` v1.4.0 §1.15/§5.9; the predicate mirrors in `docs/qlog.md` v1.2.0, `docs/qm.md` v1.4.0, and `docs/qm_geometry.md` v1.3.0; and the unified glossary refresh of {% include term.html id="q-reuse" %} with both new terms registered. {% include term.html id="qnir" text="QnIR" %} itself remains [PENDING] in the milestone diagram above; its v0.3 minimal executable core and promotion criterion follow the repair sequence preserved in the Loop-2 transcript.
 
 ---
 
