@@ -2,8 +2,8 @@
 layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
 description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
-version: 1.0.5
-updated: 2026-10-19
+version: 1.1.0
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -51,8 +51,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qphy — Quang Physics: Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting |
-| **Version** | 1.0.5 |
-| **Last Updated** | 2026-10-19 (Bao Loc, Vietnam) |
+| **Version** | 1.1.0 |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Domain Specification — Category D ({% include term.html id="complexity-degree" text="Complexity Degree 3" %}) |
@@ -77,6 +77,22 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `docs/qlog.md` | Constructive type theory, pattern verification, and inferential modes | [qlog.html]({{ '/qlog.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+
+---
+
+## Review Integration Record (v1.1.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — as integrated upstream by the two committed anchors this file mirrors: the constitutional two-axis Layer-0 Hardware Telemetry Envelope of `docs/simemp.md` v1.3.0 and the operational two-axis admission predicate of `docs/qnPrimitive.md` v1.4.0 (§1.15 term provenance, §5.9 margin governance and Admission Ledger). Six committed records flag this file's mirror obligation — the physical-impedance breakeven grounding of §4.3 inherits the two-axis form and the tier-table naming (`docs/qnPrimitive.md` v1.4.0 flags the tier-table naming; `docs/qlog.md` v1.2.0, `docs/qm.md` v1.4.0, `docs/qm_geometry.md` v1.3.0, `docs/qexpr.md` v1.4.0 and `docs/qstructures.md` v0.2.0 flag the two-axis form, the last naming this update the last open content mirror of the Q(reuse) re-issue wave) — discharged here. The committed `docs/simemp.md` v1.3.0 record additionally directs this file to name the Layer-0 calibration-benchmark anchors at its next versioned update (the condensed specification prototypes `Q(Zbus)` / `Q(th2)`, which are not yet canon) — discharged as the §5 canonical anchor naming. Qphy makes no new policy adjudication of its own: the margin range `[1, 64]` and the recommended preset (`κ_dcc = 2`, `κ_t = 4`) are inherited unchanged from `docs/qnPrimitive.md` §5.9. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place; the withdrawn v1.0.5-era wording is preserved verbatim in this record. New constructions introduced below are tagged **[v1.1.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v1.0.5-era, preserved verbatim):** the §4.3 item-2 grounding sentence "This physical impedance formalizes the thermodynamic breakeven equation governing Q(reuse) in `docs/qlog.md` (§5.2)." with its item title "Breakeven Grounding" (the sentence's live `term.html` include is rendered as plain "Q(reuse)" here to keep the record inert). The withdrawn sentence grounds a single ("thermodynamic") breakeven equation; the committed breakeven is the Two-Axis Consequentiality Breakeven over the `docs/simemp.md` §4.4 envelope, so the single-axis grounding carries no latency-axis verdict — the QO-17 defect class.
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Two-axis grounding re-issue**: §4.3 item 2 is re-issued as the Two-Axis Breakeven Grounding — the capacitive transport impedance of this section is grounded as the physical source of the work axis (declared per-tier lookup work bounds `τ_U[tier(h)]`, bus-dissipation term of the declared direct-path cost model) and the finite signal propagation horizon (the physical Q(c) anchor of §5.1) as the physical source of the latency axis (declared per-tier worst-case lookup latency bounds `τ_t = { τ_reg, τ_L1, τ_L2, τ_L3, τ_DRAM, τ_storage, τ_remote }`, cycles against the node's declared reference clock — the tier-table naming inherited from the `docs/simemp.md` §4.4 Latency Telemetry Envelope); admission re-pointed to the canonical predicate of `docs/qnPrimitive.md` §1.15/§5.9 (mirrored at `docs/qlog.md` §5.2) with compact term provenance (declared cost model, Layer-0 Historical Calibration Benchmark calibration, No-Implicit fallback, ties resolve to Direct Compute, Admission Ledger `W_gross_reserve`/`W_actual_charge`/`W_refund`/`W_net`); margin range `[1, 64]` with preset `κ_dcc = 2`/`κ_t = 4` inherited unchanged; the work-axis-only "thermodynamic breakeven equation" grounding is withdrawn (no latency-axis verdict — the QO-17 defect class) | §4.3 | `QO-17` (via `docs/qnPrimitive.md` v1.4.0); consequentiality constraint (`docs/simemp.md` §4.4); F1 declared-bound discipline | CANDIDATE |
+| **Canonical anchor naming**: new §5 naming paragraph declares the five anchor contract designations (`DCC_ANCHOR_SECOND_LAW_v1`, `DCC_ANCHOR_CAUSAL_HORIZON_v1`, `DCC_ANCHOR_ACTION_PLANCK_v1`, `DCC_ANCHOR_MEMORY_WALL_v1`, `DCC_ANCHOR_DEC_D_v1`) as the canonical Layer-0 calibration-benchmark anchor names and maps the condensed-specification prototype spellings `Q(Zbus)` → `Q(Z_bus)` and `Q(th2)` → `Q(th_2)` so no distinct canon status is inferred for the prototypes | §5 | `docs/simemp.md` v1.3.0 cross-file dependency (Layer-0 calibration-benchmark anchor naming) | CANDIDATE |
+| Version and date bumps in the front matter and Document Metadata table (1.0.5 → 1.1.0; 2026-10-19 → 2026-10-28) | front matter, metadata table | Editorial consequence of the re-issues | EDITORIAL |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): glossary — the `q-table` definition's "breakeven inequality" wording inherits the two-axis form at the next glossary update (registered pre-wave, it cites the committed Q(reuse) analysis; unchanged by this file); no other open content mirror remains in the Q(reuse) re-issue wave — every file that states the Q(reuse) admission shape (`docs/qnPrimitive.md`, `docs/qlog.md`, `docs/qm.md`, `docs/qm_geometry.md`, `docs/qexpr.md`, `docs/qstructures.md`, `docs/qphy.md`) now carries the two-axis form; the substantive next horizon is the QnIR v0.3 minimal executable core per the Loop-2 repair sequence. No new `term.html` includes are used in this update — the re-issued §4.3 re-uses only the `q-reuse` include that pre-dates it — under the standing no-dead-entries discipline of `docs/qs_history.md` §8; front matter `terms_used` unchanged (32 entries).
 
 ---
 
@@ -202,7 +218,12 @@ Moving a packet of bits across a distance $\ell$ on physical silicon requires ch
 $$P_{\mathrm{bus}} = \alpha C(\ell) V^2 f + I_{\mathrm{leak}} V$$
 
 1. **Distance-Dependent Transport Cost:** Transporting bits across the Memory Wall incurs a strictly greater metric cost than local register operations ($W_{\mathrm{bus}} \gg W_{\mathrm{register}}$).
-2. **Breakeven Grounding:** This physical impedance formalizes the thermodynamic breakeven equation governing {% include term.html id="q-reuse" %} in `docs/qlog.md` (§5.2).
+2. **Two-Axis Breakeven Grounding [v1.1.0 — CANDIDATE]:**  
+   This physical impedance grounds the **work axis** of the Two-Axis Consequentiality Breakeven governing {% include term.html id="q-reuse" %}: the capacitive transport cost $P_{\mathrm{bus}}$ is the physical source of the declared per-tier lookup work bounds `τ_U[tier(h)]` and of the bus-dissipation term of the declared direct-path cost model, while the finite signal propagation horizon of the same interconnect — the physical Q(c) anchor of §5.1, built from local dielectric propagation delays — is the physical source of the **latency axis**: the declared per-tier worst-case lookup latency bounds `τ_t = { τ_reg, τ_L1, τ_L2, τ_L3, τ_DRAM, τ_storage, τ_remote }` (cycles against the node's declared reference clock) of the Latency Telemetry Envelope ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4). Admission remains governed by the canonical predicate of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15/§5.9, mirrored at `docs/qlog.md` §5.2:
+
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
+
+   **Term provenance [v1.1.0 — CANDIDATE].** `h` is the referenced commitment and `tier(h)` its declared memory tier; `ΔW_compute` and `Δt_compute_bound` are the DCC-declared worst-case work and latency bounds of the direct compute path under the profile's declared cost model; `τ_U[tier(h)]` and `τ_t[tier(h)]` are the declared per-tier worst-case lookup bounds of the two-axis envelope, calibrated at Layer-0 onboarding through the Historical Calibration Benchmark receipt class of `docs/simemp.md` §4.4; `ε_U` and `ε_t` are the declared gateway overhead slacks; `κ_dcc` and `κ_t` are the declared advantage margins within the governance-bounded range `[1, 64]` (recommended preset `κ_dcc = 2`, `κ_t = 4`, inherited unchanged from `docs/qnPrimitive.md` §5.9). All quantities are declared, never runtime-sampled; an undeclared quantity forces the safe Direct-Compute fallback, and ties resolve to Direct Compute. Every admitted reuse executes under the Admission Ledger (`W_gross_reserve`, `W_actual_charge`, `W_refund`, `W_net`) of `docs/qnPrimitive.md` §5.9. An energetically cheap but latency-slower lookup converts the Memory Wall from a harvestable resource into a pure stall: the transport impedance formalized in this section is harvested rather than suffered only under the two-axis verdict.
 
 ---
 
@@ -231,6 +252,8 @@ In $\mathrm{Qphy}$, physical constants are not hardcoded static variables. They 
  │          │ (Poincaré Coboundary d²≡0)  │ topological nilpotency on mesh K.  │
  └──────────┴─────────────────────────────┴────────────────────────────────────┘
 </pre>
+
+**Canonical anchor naming [v1.1.0 — CANDIDATE].** The anchor contract designations of the table above — `DCC_ANCHOR_SECOND_LAW_v1`, `DCC_ANCHOR_CAUSAL_HORIZON_v1`, `DCC_ANCHOR_ACTION_PLANCK_v1`, `DCC_ANCHOR_MEMORY_WALL_v1`, and `DCC_ANCHOR_DEC_D_v1` — are the canonical Layer-0 calibration-benchmark anchor names of this specification: they are the designations under which the physical Q(anchor) spectrum of §5 is calibrated and referenced by Layer-0 telemetry anchoring (the role `docs/simemp.md` records for this file). The prototype spellings `Q(Zbus)` and `Q(th2)` used by the condensed specification ([`docs/AiReviews/Qn-Universe_to_QnIR-v0.1_Condensed-Specification_DRAFT-v0.1.pdf`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/Qn-Universe_to_QnIR-v0.1_Condensed-Specification_DRAFT-v0.1.pdf)) are not canon artifacts of their own: `Q(Zbus)` denotes `Q(Z_bus)` (`DCC_ANCHOR_MEMORY_WALL_v1`), and `Q(th2)` denotes `Q(th_2)` (`DCC_ANCHOR_SECOND_LAW_v1`).
 
 ### 5.1. Universal Physical Anchors and Capability Contracts
 - **{% include term.html id="q-th-2" text="Q(th_2)" %} (The Second Law Anchor):** Built from sampled thermal receipts and $\ln 2$ continued fraction generators. Enforces non-zero heat dissipation for bit-erasure.
