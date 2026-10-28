@@ -1,6 +1,22 @@
 # CDQN Unified Glossary — Primitives Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-23 (Bao Loc, Vietnam)
+# Updated: 2026-10-28 (Bao Loc, Vietnam)
+#
+# Glossary wave (QnIR v0.2 Loop-2 review integration):
+# - "Q(reuse)" definition re-issued over the two-axis consequentiality
+#   breakeven per docs/simemp.md v1.3.0 §4.4 and docs/qnPrimitive.md v1.4.0
+#   §1.15/§5.9. The withdrawn pre-wave definition is preserved verbatim
+#   below.
+# - New entries registered per the queued glossary commitment of the simemp
+#   v1.3.0, qnPrimitive v1.4.0, qlog v1.2.0, qm v1.4.0, and qm_geometry
+#   v1.3.0 review-integration records: "Latency Telemetry Envelope" and
+#   "Advantage Margin" (cited italic-only and unregistered pre-wave; no
+#   term.html includes are added in this wave, so no md file changes).
+# - Withdrawn Q(reuse) definition (pre-wave, preserved verbatim):
+#   A Category B optimization morphism that references existing immutable content
+#   commitment hashes within the local causal DAG instead of allocating new
+#   physical memory bits. Mitigates the Memory Wall and eliminates redundant
+#   Landauer dissipation at zero marginal Q(1) cost.
 
 - term: "Zoom z"
   slug: "zoom-z"
@@ -114,8 +130,19 @@
   definition: >
     A Category B optimization morphism that references existing immutable content
     commitment hashes within the local causal DAG instead of allocating new
-    physical memory bits. Mitigates the Memory Wall and eliminates redundant
-    Landauer dissipation at zero marginal Q(1) cost.
+    physical memory bits. Admission is conditional, never automatic: the
+    two-axis consequentiality breakeven admits the lookup only when the direct
+    compute path is consequently faster — its declared work bound ΔW_compute
+    and latency bound Δt_compute_bound must each clear the touched tier's
+    declared lookup bounds τ_U[tier(h)] + ε_U and τ_t[tier(h)] + ε_t by the
+    declared Advantage Margin factors (κ_dcc on the work axis, κ_t on the
+    latency axis of the Latency Telemetry Envelope) — so the Memory Wall
+    delay is harvested rather than suffered. The exchange is accounted
+    through the Admission Ledger (W_gross_reserve, W_actual_charge,
+    W_refund, W_net) over declared deterministic quantities, never runtime
+    samples; failed margins, ties, and undeclared terms fall back to Direct
+    Compute. When admitted, the lookup eliminates redundant re-derivation
+    while charging the declared lookup cost.
 
 - term: "Q(bypass)"
   slug: "q-bypass"
@@ -364,3 +391,36 @@
     contract shape under the five-row structural contract schema, never a
     runtime shape; pending implementation feedback, deterministic measurement,
     BOC selection, and Q(rsi) sealing.
+
+- term: "Latency Telemetry Envelope"
+  slug: "latency-telemetry-envelope"
+  category: "Primitives"
+  definition: >
+    The latency axis of the two-axis Layer-0 Hardware Telemetry Envelope: a
+    DCC-declared per-tier worst-case lookup bound table
+    τ_t = { τ_reg, τ_L1, τ_L2, τ_L3, τ_DRAM, τ_storage, τ_remote }, expressed
+    in cycles against the node's declared reference clock and calibrated at
+    Layer-0 onboarding through the Historical Calibration Benchmark receipt
+    class. A worst-case declared bound — never a runtime sample — is the only
+    admissible form, preserving the Observational Determinism Invariant and
+    receipt replay by construction. The envelope gates resource admission and
+    receipt auditing at the node boundary and never feeds back into logical
+    budgets; its twin energy axis carries the α_compute/β_bus coefficients.
+    It supplies the latency axis of the Q(reuse) admission predicate together
+    with the Advantage Margin.
+
+- term: "Advantage Margin"
+  slug: "advantage-margin"
+  category: "Primitives"
+  definition: >
+    The DCC-declared factor by which the direct compute path must exceed the
+    touched memory tier's declared lookup bound on each axis of the two-axis
+    admission predicate: κ_dcc on the work axis and κ_t on the latency axis.
+    Declared per profile within the governance-bounded range [1, 64], with
+    the recommended preset κ_dcc = 2, κ_t = 4 encoding the memory-wall
+    asymmetry: the work axis is already bounded by the declared cost model,
+    while the latency axis carries the machine-condition variance of the
+    wall. Both preset values are powers of two for deterministic scaling
+    semantics. The floor excludes bare breakeven — the direct path must be
+    consequently faster, and ties resolve to Direct Compute — while the
+    ceiling bounds margin inflation.
