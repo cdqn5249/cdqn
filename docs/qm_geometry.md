@@ -2,8 +2,8 @@
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
 description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
-version: 1.2.3
-updated: 2026-10-20
+version: 1.3.0
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -50,8 +50,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm Geometry — Multi-Axial Frames and Geometric Algebra |
-| **Version** | 1.2.3 |
-| **Last Updated** | 2026-10-20 (Bao Loc, Vietnam) |
+| **Version** | 1.3.0 |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category B/D ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
@@ -74,6 +74,21 @@ The following documents establish the physical, structural, and legal constraint
 | `docs/qexpr.md` | Layer 3 Content-Addressed Expression DAG container | [qexpr.html]({{ '/qexpr.html' | relative_url }}) |
 | `docs/qs.md` | Constructive relational intent and [Intent Contracts]({{ '/glossary.html' | relative_url }}#intent-contract) | [qs.html]({{ '/qs.html' | relative_url }}) |
 | `LICENSE.md` | Scaling Source License 1.0 governing the [Licensed Work]({{ '/glossary.html' | relative_url }}#licensed-work) | [LICENSE.md](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
+
+---
+
+## Review Integration Record (v1.3.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — as integrated upstream by the two committed anchors this file mirrors: the constitutional two-axis Layer-0 Hardware Telemetry Envelope of `docs/simemp.md` v1.3.0 and the operational two-axis admission predicate of `docs/qnPrimitive.md` v1.4.0 (§1.15 term provenance, §5.9 margin governance and Admission Ledger). The `docs/qnPrimitive.md` v1.4.0 record flags this file's mirror obligation — the §7.2 predicate wording mirror — discharged here; this is the last content mirror of the Q(reuse) re-issue wave before the queued glossary registration. Qm Geometry makes no new policy adjudication of its own: the margin range `[1, 64]` and the recommended preset (`κ_dcc = 2`, `κ_t = 4`) are inherited unchanged from `docs/qnPrimitive.md` §5.9. Under **Axiom 13**, this file is a new versioned artifact; no prior content is mutated in place; the withdrawn v1.2.3-era wording is preserved verbatim in this record. New constructions introduced below are tagged **[v1.3.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v1.2.3-era, preserved verbatim):** the §7.2 item-2 admission sentence "Under the Metric Invariant, Q(reuse) is admissible if and only if the computational work of re-evaluating the multivector product exceeds lookup dissipation" with its display inequality `Admit(Q(reuse)) ⟺ ΔW_compute > ΔW_lookup + ε_overhead` and its item title "Thermodynamic Breakeven for Sub-Graph Reuse (Q(reuse))".
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Two-axis predicate mirror**: §7.2 item 2 is re-issued as the Two-Axis Consequentiality Breakeven — advantage declared on **both axes** of the `docs/simemp.md` §4.4 envelope over the canonical tokens of `docs/qnPrimitive.md` §1.15/§5.9 (`ΔW_compute`, `Δt_compute_bound`, tier-indexed `τ_U[tier(h)]`/`τ_t[tier(h)]`, gateway slacks, margin range `[1, 64]` with preset `κ_dcc = 2`/`κ_t = 4` inherited unchanged), with compact term provenance anchoring the declared cost model to this file's own §8.1 blade-multiplication scaling; undeclared quantities force the Direct-Compute fallback, ties resolve to Direct Compute, and admitted reuse executes under the Admission Ledger of `docs/qnPrimitive.md` §5.9; the work-axis-only "if and only if" admission sentence and its display inequality are withdrawn (the bare form carries no latency-axis verdict — the QO-17 defect) | §7.2 | `QO-17` (via `docs/qnPrimitive.md` v1.4.0); consequentiality constraint (`docs/simemp.md` §4.4); F1 declared-bound discipline | CANDIDATE |
+| Editorial: the touched admission statement (§7.2 item 2) is re-encoded to engine-independent plain text per the `docs/abstractionLayers.md` v1.8.1 convention (Unicode operators; code spans for subscripted tokens); the remaining LaTeX spans of this file remain queued for file-wide re-encoding at its next versioned update; the §7.2 item-1 bypass receipt (`ΔW = 0`) and the §7 lifecycle table's composition/normalization bounds are untouched (reversible-symbolic and Q(bypass) zero-cost claims, canon-consistent and outside the admission path) | §7.2 | Rendering Fix Record (`docs/abstractionLayers.md` v1.8.1); `docs/qnPrimitive.md` v1.4.0 EDITORIAL precedent | EDITORIAL |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): glossary — `q-reuse` definition refresh and registration of the *Latency Telemetry Envelope* and *Advantage Margin* terms at the queued glossary update (next BOC item); `docs/qexpr.md` — §2.3 breakeven admission bound mirror and the same zero-cost scoping for its "zero Landauer dissipation (W = 0)" normalization sentence; `docs/qstructures.md` §6 work-row precedent and `docs/qphy.md` physical-impedance grounding inherit the two-axis form at their next versioned updates; optional `docs/index.md` review-program pointer closes the queue. No `term.html` includes are used in this update, under the standing no-dead-entries discipline of `docs/qs_history.md` §8; front matter `terms_used` unchanged.
 
 ---
 
@@ -361,10 +376,12 @@ $$Q(\text{bypass}) \prec Q(\text{reuse}) \prec \text{Direct Compute}$$
 
 1. **Identity Pre-Check ($$Q(\text{bypass})$$):**  
    Before initiating memory traversal, the engine inspects operand pairs in $$\mathcal{O}(1)$$ register time. If an algebraic identity is recognized—such as rotor cancellation ($$R R^\dagger \to Q(1)$$) or outer product nilpotency ($$\vec{e}_i \wedge \vec{e}_i \to Q(0)$$)—the gateway emits `RECEIPT_BYPASS_IDENTITY`, bypassing both computation and memory retrieval at zero work cost ($$\Delta W = 0$$).
-2. **Thermodynamic Breakeven for Sub-Graph Reuse ($$Q(\text{reuse})$$):**  
-   Querying a hash commitment across memory hierarchies incurs physical bus dissipation ($$\mathcal{O}(C V^2 f)$$). Under the Metric Invariant, $$Q(\text{reuse})$$ is admissible if and only if the computational work of re-evaluating the multivector product exceeds lookup dissipation:
+2. **Two-Axis Consequentiality Breakeven for Sub-Graph Reuse ($$Q(\text{reuse})$$) [v1.3.0 — CANDIDATE]:**  
+   Querying a hash commitment across memory hierarchies incurs declared lookup work (physical bus dissipation, `O(C·V²·f)`) and declared lookup latency (the Memory Wall). Under the Metric Invariant and the consequentiality constraint ([`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4), $$Q(\text{reuse})$$ is admissible if and only if its advantage over direct re-evaluation of the multivector product is declared on **both axes**, instantiating the canonical predicate of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15/§5.9:
 
-$$\mathrm{Admit}\big(Q(\text{reuse})\big) \iff \Delta W_{\mathrm{compute}} \gt \Delta W_{\mathrm{lookup}} + \epsilon_{\mathrm{overhead}}$$
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
+
+   **Term provenance [v1.3.0 — CANDIDATE].** `h` is the referenced multivector-product commitment and `tier(h)` its declared memory tier; `ΔW_compute` and `Δt_compute_bound` are the DCC-declared worst-case work and latency bounds of the direct geometric re-evaluation under the profile's declared cost model (for example the blade-multiplication scaling of §8.1); `τ_U[tier(h)]` and `τ_t[tier(h)]` are the declared per-tier worst-case lookup bounds of the two-axis envelope, calibrated at Layer-0 onboarding; `ε_U` and `ε_t` are the declared gateway overhead slacks; `κ_dcc` and `κ_t` are the declared advantage margins within the governance-bounded range `[1, 64]` (recommended preset `κ_dcc = 2`, `κ_t = 4`, inherited unchanged from `docs/qnPrimitive.md` §5.9). All quantities are declared, never runtime-sampled; an undeclared quantity forces the safe Direct-Compute fallback, and ties resolve to Direct Compute. Every admitted reuse executes under the Admission Ledger of `docs/qnPrimitive.md` §5.9.
 
 For complex Clifford rotor sandwiches ($$R \vec{v} R^\dagger$$) or high-dimensional grade contractions, $$Q(\text{reuse})$$ references existing immutable commitment hashes, eliminating redundant allocation across the Memory Wall. For trivial 1D scalar additions, direct computation executes immediately without hash-table overhead.
 
