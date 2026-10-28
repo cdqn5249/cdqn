@@ -2,8 +2,8 @@
 layout: default
 title: Qn Structures — Vision and Evaluation Framework for Category C Data Structures and Workflows
 description: Structural proposal for the Category C layer — a five-row contract schema and an evaluation ladder for Qn data structures and workflows, with a worked candidate register grounded in SIMEMP constraints and BOC selection. All artifacts herein are propositions pending deterministic measurement, BOC selection, and Q(rsi) sealing.
-version: 0.1.0
-updated: 2026-10-23
+version: 0.2.0
+updated: 2026-10-28
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -33,10 +33,14 @@ terms_used:
   - open-core-invariant
   - paternity-reference
   - payload
+  - q-array
   - q-bypass
   - q-datastruc
+  - q-matrix
   - q-patterns
   - q-reuse
+  - q-stream
+  - q-table
   - q-workflows
   - qm
   - qn
@@ -57,11 +61,35 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Structures — Vision and Evaluation Framework for Category C Data Structures and Workflows |
-| **Version** | 0.1.0 |
-| **Last Updated** | 2026-10-23 (Bao Loc, Vietnam) |
+| **Version** | 0.2.0 |
+| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Structural Proposal — Not a Finalized Specification |
+
+---
+
+## Review Integration Record (v0.2.0)
+
+Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md) — verbatim transcript and artifact of record of the Loop-2 adversarial review by Kimi K3.1-Pro (October 27th, 2026) of the QnIR v0.2 candidate draft v0.2.2 — as integrated upstream by the two committed anchors this file's §6 work-row precedent mirrors: the constitutional two-axis Layer-0 Hardware Telemetry Envelope of `docs/simemp.md` v1.3.0 and the operational two-axis admission predicate of `docs/qnPrimitive.md` v1.4.0 (§1.15 term provenance, §5.9 margin governance and Admission Ledger). The cross-file dependency paragraphs of the `docs/qnPrimitive.md` v1.4.0, `docs/qm_geometry.md` v1.3.0, and `docs/qexpr.md` v1.4.0 records flag this file's mirror obligation — the §6 work-row precedent (which cites `docs/qnPrimitive.md` §1.15 as the committed breakeven shape) inherits the two-axis form at its next versioned update — discharged here. Qstructures makes no new policy adjudication of its own: the predicate tokens, the margin range `[1, 64]`, and the recommended preset (`κ_dcc = 2`, `κ_t = 4`) are inherited unchanged from `docs/qnPrimitive.md` §5.9, and the proposal register of this document is unchanged — nothing herein redefines, amends, or overrides any canonical specification. Under **Axiom 13** the update is a new versioned artifact; no prior content is mutated in place; the withdrawn v0.1.0-era wording is preserved verbatim in this record. Every construction herein remains a candidate artifact under **Axiom 14** (`docs/qs.md` §6), tagged **[v0.2.0 — CANDIDATE]** pending BOC sealing; editorial corrections are applied directly and recorded here.
+
+**Withdrawn wording (v0.1.0-era, preserved verbatim):**
+1. Q(reuse) is admissible if and only if the predicted computational work of direct re-evaluation exceeds lookup and retrieval dissipation plus a declared overhead term (its live `term.html` include is rendered as plain "Q(reuse)" here to keep the record inert) — the work-axis-only "if and only if" form, composed of the two v1.3.0-era `docs/qnPrimitive.md` statements withdrawn there (the §1.15 provenance sentence and the §5.9 display inequality `Admit(Q(reuse)) ⟺ ΔW_compute > ΔW_lookup + ε_overhead`); the bare form carries no latency-axis verdict — the QO-17 defect;
+2. That inequality is a *declared breakeven rule* — a contract row, not a runtime heuristic — and it is measured in units of the Abstract Compute Unit U. (its live `term.html` include is rendered as plain text here to keep the record inert) — re-issued below with the U measurement confined to the work axis;
+3. the §6 work-row declaration items "(i) the work class per access morphism" and "(iii) the breakeven inequality under which the structure is preferred over its recorded alternatives" — re-issued below with the declared latency companion and the two-axis breakeven rule;
+4. the §5 registration-deferral paragraph "Deliberately, this document **registers nothing**. Glossary entries are data-only commits under the candidate pipeline, and the four proposed names remain plain text herein — they receive no include references and no concordance — until a separate registration commit follows the pipeline, as was done for the consultation vocabulary on 2026-10-22. The deferral is queued in Section 8." — the registration commit has since followed (glossary, portal index, navigation registry), so the deferral state no longer holds;
+5. the §8 item 1 "**Vocabulary registration.** The four proposed names of Section 5 await a data-only glossary commit; this document deliberately registers nothing itself, and until registration the names remain plain text with no concordance entries." — discharged;
+6. the §8 item 2 "**Navigation and index ripple.** One navigation entry and one portal index entry are proposed for a follow-up commit, honoring the one-change-per-commit discipline; no canonical file is modified by this document." — discharged;
+7. the §8 opening sentence "All items below remain in CANDIDATE status." — re-scoped to items 3–6.
+
+| Change | Section | Reviewer source | Type |
+|---|---|---|---|
+| **Two-axis re-issue of the work-row precedent**: the §6 admission precedent is re-issued as the Two-Axis Consequentiality Breakeven — advantage declared on **both axes** of the `docs/simemp.md` §4.4 envelope ("consequently faster") over the canonical tokens of `docs/qnPrimitive.md` §1.15/§5.9 (`ΔW_compute`, `Δt_compute_bound`, tier-indexed `τ_U[tier(h)]`/`τ_t[tier(h)]`, gateway slacks `ε_U`/`ε_t`, margin range `[1, 64]` with preset `κ_dcc = 2`/`κ_t = 4` inherited unchanged), with compact term provenance, the safe-fallback discipline for undeclared quantities, and Admission Ledger execution (`docs/qnPrimitive.md` §5.9); the U measurement is confined to the work axis, the latency axis being declared in cycles against the node's declared reference clock; a new comparability paragraph records the heterogeneity rationale — no single declared constant can be smart across machines whose lookup timings differ, so cross-node comparability comes from the declared envelopes themselves rather than from assumed identical timings | §6 | `QO-17` (via `docs/qnPrimitive.md` v1.4.0); consequentiality constraint (`docs/simemp.md` §4.4); F1 declared-bound discipline | CANDIDATE |
+| **Work-row declaration extension**: the §6 declaration triple is re-issued — item (i) gains the declared latency companion per access class, item (iii) becomes the two-axis breakeven rule (advantage declared on both axes of the envelope, never on the work axis alone), after the Q(reuse) precedent | §6 | author field report ("consequently faster", via `docs/qnPrimitive.md` v1.4.0); two-axis envelope (`docs/simemp.md` §4.4) | CANDIDATE |
+| **Registration-state reconciliation**: §5 adopts the four registered names as include references (`q-array`, `q-matrix`, `q-table`, `q-stream`, already exercised at the portal index and in the navigation registry) and re-issues its deferral paragraph; §8 items 1–2 are marked discharged and the §8 preamble re-scoped — the data-only registration was performed by separate commits, not by this proposal, which registers nothing itself | §5, §8 | glossary registration commit (`primitives.yml`); committed portal index and navigation-registry state; candidate-pipeline registration discipline (§3 step 1) | CANDIDATE |
+| Editorial: the §7 grounding-table rows are aligned — the Q(reuse) row is re-named to the two-axis consequentiality breakeven and gains §5.9 in its grounding; the structures-names row grounding is updated from "registration deferred" to the registered state — index alignment, no new claims | §7 | `docs/qnPrimitive.md` v1.4.0 record cross-file flag | EDITORIAL |
+
+Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qphy.md` — the physical-impedance breakeven grounding inherits the two-axis form and the tier-table naming at its next versioned update (the last open content mirror of the Q(reuse) re-issue wave); glossary — the `q-table` definition's "breakeven inequality" wording inherits the two-axis form at the next glossary update (registered pre-wave, it cites the committed Q(reuse) analysis); the unbudgeted `docs/_data/navigation.yml` review-program entry remains optional; the substantive next horizon is the QnIR v0.3 minimal executable core per the Loop-2 repair sequence. Front matter `terms_used` is extended with the four registered slugs (`q-array`, `q-matrix`, `q-table`, `q-stream`) — this file's first extension — under the include-parity discipline; no new glossary registrations are proposed, and no other new `term.html` include ids are used (the re-issued §6 re-uses only the `q-reuse` and `compute-unit-u` includes that pre-date it) under the standing no-dead-entries discipline of `docs/qs_history.md` §8.
 
 ---
 
@@ -152,19 +180,25 @@ The recoverable pair illustrates the document's method commitment: the ladder re
 
 ## 5. Proposed Nomenclature Extension
 
-The Qn universe already names operational morphisms and structure families in a consistent `Q(...)` pattern: {% include term.html id="q-reuse" %}, {% include term.html id="q-bypass" %}, {% include term.html id="qn-rsi" %}, and the registered trio {% include term.html id="q-datastruc" %}, {% include term.html id="q-patterns" %}, {% include term.html id="q-workflows" %}. It is proposed that the structure vocabulary extend in the same pattern with the four names used in Section 4 — `Q(array)`, `Q(matrix)`, `Q(table)`, `Q(stream)` — under one consistency rule: **a `Q(...)` name denotes a contract surface (the five rows of Section 2), never a runtime shape**. This rule is what keeps the nomenclature honest across heterogeneous hardware: the same `Q(array)` contract is satisfiable by different lowerings on different nodes, exactly as the compute unit evaluates identically across all nodes while local entropy parameterizes identity.
+The Qn universe already names operational morphisms and structure families in a consistent `Q(...)` pattern: {% include term.html id="q-reuse" %}, {% include term.html id="q-bypass" %}, {% include term.html id="qn-rsi" %}, and the registered trio {% include term.html id="q-datastruc" %}, {% include term.html id="q-patterns" %}, {% include term.html id="q-workflows" %}. It is proposed that the structure vocabulary extend in the same pattern with the four names used in Section 4 — {% include term.html id="q-array" text="Q(array)" %}, {% include term.html id="q-matrix" text="Q(matrix)" %}, {% include term.html id="q-table" text="Q(table)" %}, {% include term.html id="q-stream" text="Q(stream)" %} — under one consistency rule: **a `Q(...)` name denotes a contract surface (the five rows of Section 2), never a runtime shape**. This rule is what keeps the nomenclature honest across heterogeneous hardware: the same {% include term.html id="q-array" text="Q(array)" %} contract is satisfiable by different lowerings on different nodes, exactly as the compute unit evaluates identically across all nodes while local entropy parameterizes identity.
 
-Deliberately, this document **registers nothing**. Glossary entries are data-only commits under the candidate pipeline, and the four proposed names remain plain text herein — they receive no include references and no concordance — until a separate registration commit follows the pipeline, as was done for the consultation vocabulary on 2026-10-22. The deferral is queued in Section 8.
+Deliberately, this document itself still registers nothing: glossary entries are data-only commits under the candidate pipeline, made by a separate registration commit rather than by this proposal. That separate registration has now followed — the four names are registered in the glossary (`primitives.yml`) and exercised as include references at the portal index and in the navigation registry — so from this update the names carry include references and concordance entries herein. The deferral queued in Section 8, item 1, is discharged. [v0.2.0 — CANDIDATE]
 
 ---
 
 ## 6. Breakeven Rules and the Work Row
 
-The work row of Section 2 has one committed precedent whose shape every admitted structure should follow: {% include term.html id="q-reuse" %} is admissible if and only if the predicted computational work of direct re-evaluation exceeds lookup and retrieval dissipation plus a declared overhead term ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15). That inequality is a *declared breakeven rule* — a contract row, not a runtime heuristic — and it is measured in units of the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}.
+The work row of Section 2 has one committed precedent whose shape every admitted structure should follow: {% include term.html id="q-reuse" %} is admissible under the **Two-Axis Consequentiality Breakeven** of [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15/§5.9 — its advantage over direct re-evaluation must be declared on **both axes** of the Layer-0 Hardware Telemetry Envelope of [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.4, the work axis and the latency axis, the consequentiality constraint that retrieval be *consequently faster* than direct compute rather than merely cheaper in work:
+
+`Admit(Q(reuse)) ⟺ ( ΔW_compute > κ_dcc · (τ_U[tier(h)] + ε_U) ) ∧ ( Δt_compute_bound > κ_t · (τ_t[tier(h)] + ε_t) )`
+
+Every token of that predicate is a declared deterministic quantity, never a runtime sample: `ΔW_compute` and `Δt_compute_bound` are the DCC-declared worst-case work and latency bounds of the direct re-evaluation path; `τ_U[tier(h)]` and `τ_t[tier(h)]` are the declared per-tier worst-case lookup bounds, calibrated at Layer-0 onboarding; `ε_U` and `ε_t` are the declared gateway overhead slacks; and `κ_dcc`, `κ_t` are the declared advantage margins within the governance-bounded range `[1, 64]` (recommended preset `κ_dcc = 2`, `κ_t = 4`, inherited unchanged from [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §5.9). An undeclared quantity forces the safe fallback to direct execution, and every admitted reuse executes under the Admission Ledger of `docs/qnPrimitive.md` §5.9. That predicate is a *declared breakeven rule* — a contract row, not a runtime heuristic — with its work axis measured in units of the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %} and its latency axis in cycles against the node's declared reference clock. [v0.2.0 — CANDIDATE]
 
 Two properties make U the right unit for comparable work rows across heterogeneous nodes. First, platform invariance: while local entropy parameterizes cryptographic identity, the metric magnitude of U evaluates identically across all nodes ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §4.2), so a work row declared on one node is interpretable on every node. Second, the thermodynamic leash: unbounded recursive execution is physically prohibited, every workflow operates within a finite, non-renewable work budget, and metric depletion halts execution deterministically under {% include term.html id="metric-exhaustion" text="metric exhaustion" %} — so no structure's work row can be rendered moot by unmetered iteration.
 
-It is proposed, therefore, that every admitted structure declare in its work row: (i) the work class per access morphism, (ii) the versioning amplification — the cost emitted by row 1's growth-as-versioning discipline — and (iii) the breakeven inequality under which the structure is preferred over its recorded alternatives. A structure without a breakeven rule is not wrong; it is simply not yet comparable, and the {% include term.html id="boc-policy" text="BOC" %} policy requires comparability among recorded alternatives before selection.
+Platform invariance, however, belongs to the work axis alone, and that limitation is the substance of the two-axis re-issue: no single declared constant can be smart across heterogeneous hardware, because every machine reports different lookup timings and every lookup's cost varies with the memory tier it touches and with machine condition. The latency axis is therefore declared per tier — `τ_t[tier(h)]` in cycles against the node's declared reference clock, calibrated at Layer-0 onboarding — so that comparability across nodes comes from the declared envelopes themselves rather than from assumed identical timings, and retrieval is admitted only when it is consequently faster on both axes. A work row that declares advantage on the work axis alone is incomplete under this discipline: it reports how much work a structure saves, but not when retrieval is worth the Memory Wall at all. [v0.2.0 — CANDIDATE]
+
+It is proposed, therefore, that every admitted structure declare in its work row: (i) the work class per access morphism, measured in units of the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}, with its declared latency companion per access class in cycles against the node's declared reference clock, (ii) the versioning amplification — the cost emitted by row 1's growth-as-versioning discipline — and (iii) the breakeven rule under which the structure is preferred over its recorded alternatives — declared on **both axes** of the Layer-0 Hardware Telemetry Envelope, after the {% include term.html id="q-reuse" %} precedent above, never on the work axis alone. A structure without a breakeven rule is not wrong; it is simply not yet comparable, and the {% include term.html id="boc-policy" text="BOC" %} policy requires comparability among recorded alternatives before selection. [v0.2.0 — CANDIDATE]
 
 ---
 
@@ -181,22 +215,22 @@ The following table records, for each element of this proposal, whether it is al
 | Universal Envelope carriage and immutable lifecycle | Grounded | [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.3, §1.10 |
 | Q(dataStruc), Q(patterns), Q(workflows) definitions | Grounded | Glossary (`primitives.yml`); [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) §2 |
 | Workflow as DAG of patterns under Intent Contract | Grounded | [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}) §2 |
-| Q(reuse) breakeven inequality | Grounded | [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15; [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §7.2 |
+| Q(reuse) two-axis consequentiality breakeven | Grounded | [`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15, §5.9; [`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }}) §7.2 |
 | Memory Wall locality accounting | Grounded | [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) §4.1 |
 | Candidate pipeline (measure, select, seal) | Grounded | [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6 |
 | **Five-row structural contract schema** | **New** | Composes the SIMEMP disciplines per structure |
 | **Evaluation ladder (nomination to sealing)** | **New** | Instantiates the §6 pipeline for structures |
-| **Proposed Q(array), Q(matrix), Q(table), Q(stream) names** | **New** | Plain-text vocabulary; registration deferred |
+| **Proposed Q(array), Q(matrix), Q(table), Q(stream) names** | **New** | Registered in the glossary (`primitives.yml`); include references adopted in this update |
 | **Recoverable-contract analysis (chain, ring)** | **New** | First worked pass of the ladder |
 
 ---
 
 ## 8. Open Questions and Integration Queue
 
-All items below remain in CANDIDATE status. Sealing of any item occurs exclusively through the candidate pipeline of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6 — deterministic measurement, {% include term.html id="boc-policy" text="BOC" %} selection, {% include term.html id="qn-rsi" text="Q(rsi)" %} sealing — at implementation time or under a dedicated optimization loop.
+Items 1 and 2 record their discharge; items 3–6 remain in CANDIDATE status. Sealing of any item occurs exclusively through the candidate pipeline of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6 — deterministic measurement, {% include term.html id="boc-policy" text="BOC" %} selection, {% include term.html id="qn-rsi" text="Q(rsi)" %} sealing — at implementation time or under a dedicated optimization loop.
 
-1. **Vocabulary registration.** The four proposed names of Section 5 await a data-only glossary commit; this document deliberately registers nothing itself, and until registration the names remain plain text with no concordance entries.
-2. **Navigation and index ripple.** One navigation entry and one portal index entry are proposed for a follow-up commit, honoring the one-change-per-commit discipline; no canonical file is modified by this document.
+1. **Vocabulary registration.** Discharged [v0.2.0 — CANDIDATE]: the four proposed names of Section 5 are registered in the glossary (`primitives.yml`) as data-only commits under the candidate pipeline, and this document now carries their include references and concordance entries; the registration itself was performed by a separate commit, not by this proposal.
+2. **Navigation and index ripple.** Discharged [v0.2.0 — CANDIDATE]: the navigation registry entry and the portal index entry are present in the committed state, honoring the one-change-per-commit discipline; no canonical file is modified by this document.
 3. **Row measurement of canonical candidates.** The five canonical-admitted families of Section 4 await deterministic measurement at {% include term.html id="qnir" %} lowering boundaries; their work rows are proposals until receipt-backed measurements exist.
 4. **Recoverable pair.** The sequenced chain and bounded ring remain open contract shapes; the ladder records their stall reasons so that future nominations — including machine-proposed ones under a {% include term.html id="qn-rsi" text="Q(rsi)" %} loop — can re-enter with findings attached.
 5. **Final selections.** Which structures are ultimately admitted depends on implementation feedback and {% include term.html id="qn-rsi" text="Q(rsi)" %} optimization; this framework is proposed as the stable part, and selections are its outputs, revisable only by new versioned artifacts along the {% include term.html id="causal-arrow" %}.
