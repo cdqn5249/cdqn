@@ -1,7 +1,14 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-23 (Bao Loc, Vietnam)
+# Updated: 2026-10-28 (Bao Loc, Vietnam)
+#
+# Review-program registry entry (companion discharge): the committed
+# docs/index.md v1.13.0 record flags the navigation.yml review-program entry
+# as an unbudgeted companion — discharged here as a purely additive internal
+# anchor to the rendered "Adversarial Review Program" portal section (anchor
+# id verified against the live Pages render). No existing entry is mutated;
+# the six-key entry schema is re-used unchanged.
 
 - title: "Portal"
   url: "/"
@@ -136,6 +143,13 @@
   status: "Vision"
   external: false
   
+- title: "Adversarial Review Program"
+  url: "/#adversarial-review-program"
+  slug: "adversarial-review-program"
+  description: "External adversarial review program for major draft artifacts: Loop-1 and Loop-2 transcripts of record, committed integration waves, and the QnIR v0.3 repair-sequence pointer"
+  status: "Canonical"
+  external: false
+
 - title: "CDQN Glossary"
   url: "/glossary.html"
   slug: "glossary"
