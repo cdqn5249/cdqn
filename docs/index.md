@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.13.0
-updated: 2026-10-28
+version: 1.14.0
+updated: 2026-10-29
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -13,7 +13,7 @@ parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /
 terms_used:
   - advantage-margin
-  - boc-policy
+- boc-policy
   - cdqn
   - chronosa
   - computational-consistency
@@ -24,7 +24,7 @@ terms_used:
   - discrete-exterior-calculus
   - epistemic-anchorage
   - existential-invariant
-  - latency-telemetry-envelope
+- latency-telemetry-envelope
   - licensed-work
   - local-first
   - metric-exhaustion
@@ -53,7 +53,7 @@ terms_used:
   - qlog
   - qn
   - qn-rsi
-  - qnir
+- qnir
   - qphy
   - receipt
   - remainder-r
@@ -84,8 +84,8 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.13.0 |
-| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
+| **Version** | 1.14.0 |
+| **Last Updated** | 2026-10-29 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
@@ -101,6 +101,18 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Change | Sections | Provenance | Status |
 |---|---|---|---|
 | New "Adversarial Review Program" section: Loop-1/Loop-2 program description, artifacts of record (both transcripts, GitHub blob links per house pattern), committed integration-wave inventory, and the QnIR [PENDING] status reaffirmation with the v0.3 repair-sequence pointer | New section between §4 and §5; front matter + Document Metadata bumped | Loop-2 integration triage (optional closing item); the six committed review-integration records + glossary wave | CANDIDATE |
+
+---
+
+## Standing Queue Record (v1.14.0)
+
+**Source:** the two committed registry discharges of 2026-10-28 — the glossary wave II (`docs/_data/glossary/primitives.yml`: the `q-table` definition re-issued from the single-axis "breakeven inequality" wording to the Two-Axis Consequentiality Breakeven form, discharging the glossary promise queued by the committed `docs/qphy.md` v1.1.0 record and pre-flagged by the `docs/qstructures.md` v0.2.0 record) and the `docs/_data/navigation.yml` "Adversarial Review Program" registry entry (discharging the companion entry that the v1.13.0 Decision record above explicitly left unbudgeted) — together with the five validated BOC strategy sessions of 2026-10-29 (conversion warrant: Observation Interface Ω and trace refinement; Q(reuse) residency and the Memory Wall reading; storage semantics: residency classes, lifecycle state machine, retention classes; the Q(anchor) over-time re-derivation from canon: dual predicate, witness ladder, qlog §8 regimes; anchor persistence and evidence residency on the physical node). The sessions validated existing design where the canon already carried it (qlog §8 crystallization/fracture ladder; qphy §5 calibration spectrum; abstractionLayers §8.4 consensus) and surfaced new explicit content where it did not.
+
+**Decision:** a two-part purely additive update per **Axiom 13** — no existing heading is renumbered, no existing body line is mutated, and no withdrawn wording exists. (1) **Receipt closure** (this record): the two registry discharges above are acknowledged and the v1.13.0 unbudgeted-companion flag is retired; the flagged sentence remains verbatim in the v1.13.0 record. (2) A new **Standing Governance Queue** section is added after the Adversarial Review Program section: six priced, trigger-gated governance entries banked under the BOC policy of `docs/simemp.md` §7 — governance metadata only (scope, trigger, owner slot per entry), no design content, and no new glossary registrations under the no-dead-entries discipline (no canon file yet references any candidate term). The section exercises no term include beyond ids already listed in front matter `terms_used`; include parity is preserved (distinct ids == `terms_used` entries, 53 == 53). Every entry is maintained as CANDIDATE pending deterministic measurement, BOC selection, and Q(rsi) sealing when its trigger fires. QnIR remains [PENDING]; the main line remains the v0.3 minimal executable core per the Loop-2 repair sequence.
+
+| Change | Sections | Provenance | Status |
+|---|---|---|---|
+| New "Standing Governance Queue" section (six trigger-gated entries Q1–Q6) + receipt closure of the two committed registry discharges (glossary wave II `q-table` two-axis re-issue; navigation.yml review-program entry) | New record section after the v1.13.0 record; new content section between the Adversarial Review Program section and §5; front matter + Document Metadata bumped; `terms_used` unchanged (53) | 2026-10-29 BOC strategy sessions (five validated derivations); committed registry wave of 2026-10-28 | CANDIDATE |
 
 ---
 
@@ -270,6 +282,23 @@ To preserve lean, deterministic specifications while engaging with broader scien
 The framework's specifications are stress-tested through an external adversarial review program: major draft artifacts are submitted to independent AI reviewers, and the verbatim returned transcripts are committed as artifacts of record under `docs/AiReviews/` [v1.13.0 — CANDIDATE]. Two loops are complete to date. Loop 1 (Google Deep Review, October 2026) reviewed the condensed Qn universe specification together with the QnIR v0.1 candidate draft ([`AiReviewQnIRv0.1.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.1.md)) and established the open-question protocol under which subsequent loops run. Loop 2 (Kimi K3.1-Pro, October 2026) reviewed the QnIR draft v0.2.2 ([`AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md)) and returned the verdict "major revision; do not promote QnIR v0.2 to the canon."
 
 Integration proceeds one file at a time under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7. The Loop-2 integration wave is committed across the canon: the conditional downgrade in `docs/abstractionLayers.md` v1.9.1; the two-axis {% include term.html id="latency-telemetry-envelope" text="Latency Telemetry Envelope" %} in `docs/simemp.md` v1.3.0 §4.4; the two-axis admission predicate, {% include term.html id="advantage-margin" text="Advantage Margin" %} governance, and Admission Ledger in `docs/qnPrimitive.md` v1.4.0 §1.15/§5.9; the predicate mirrors in `docs/qlog.md` v1.2.0, `docs/qm.md` v1.4.0, and `docs/qm_geometry.md` v1.3.0; and the unified glossary refresh of {% include term.html id="q-reuse" %} with both new terms registered. {% include term.html id="qnir" text="QnIR" %} itself remains [PENDING] in the milestone diagram above; its v0.3 minimal executable core and promotion criterion follow the repair sequence preserved in the Loop-2 transcript.
+
+---
+
+## Standing Governance Queue
+
+The derivations validated in the 2026-10-29 BOC strategy sessions are banked here as trigger-gated governance entries under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7. An entry admits to design only when its trigger fires; designing before the gate would reproduce the unbudgeted-companion pattern this queue exists to prevent. Entries carry no canon commitment — each is priced metadata (scope, trigger, owner slot) that enters the CANDIDATE pipeline with its owning wave, and session-only reasoning stays outside the canon: only this priced record is canon. [v1.14.0 — CANDIDATE]
+
+| # | Entry | Scope | Trigger | Owner slot | Status |
+|---|---|---|---|---|---|
+| Q1 | Storage Semantics & Residency Contract | Logical residency contract (artifact classes × lifecycle phases; the derivation-vs-evaluation split), the lifecycle state machine (DRAFT → LIVE → SUPERSEDED → ARCHIVED → DEACCESSIONED), and the four retention classes (append-forever, decay-and-archive, recomputable-drop, lineage) under the two-axis retention breakeven | First legacy-conversion wave or first mass-witness production | Dedicated storage-semantics file or simemp annex, nominated at trigger time | QUEUED |
+| Q2 | Anchor Governance Package | `Θ_χ` crystallization/revocation threshold adjudication (pricing home; exact-vs-sampled χ measurement with declared tolerance at out-cone scale); Class P re-calibration trigger table (substrate change, drift alarm, scheduled interval); `DCC_ANCHOR_*_v1` → v2 contract succession (epoch and in-flight-receipt overlap rules) | First pending crystallization, first fracture exercise, or any anchor contract requiring a v2 designation | qlog §8 extension (v1.3.0 or later) | QUEUED |
+| Q3 | Anchor Evidence Residency Classing | Residency classing of anchor-associated artifacts: contract designations, migration, fracture, and crystallization receipts append-forever; Class P calibration receipts decay-and-archive; χ computations recomputable-drop | Rides the Q1 wave (same trigger) | The storage-semantics wave | QUEUED |
+| Q4 | cdqn Node Contract & Anchor Re-instantiation Sequence | Five-capability substrate contract (persistent byte-exact artifact store; append-only witness/ledger store; compute arena; execution arena; `W_*` movement accounting) and the re-instantiation sequence (contract load → Class I re-derivation → Class P local calibration → Class S library citation) | QnOS/node design start, or QnIR v0.3 promotion requiring a reference execution substrate | Future node-contract file | QUEUED |
+| Q5 | Grounding-Class Sealing | Promotion of the dual-predicate {% include term.html id="q-anchor" text="Q(anchor)" %} refinement and the Anchor Grounding Classes I/P/S witness ladder from CANDIDATE to sealed canon (`docs/_data/glossary/architecture.yml`; `docs/qs_history.md`) | Deterministic measurement runs available | qs_history.md / architecture.yml sealing path | QUEUED |
+| Q6 | Glossary Wave III | Candidate terms held out under no-dead-entries until first canon reference: *Observation Interface Ω*, *Residency Class*, *Lifecycle State*, *Retention Breakeven*, *Succession Event*, *Proof-of-Life Audit*, *Anchor Budget* | Any canon file referencing a listed term | `docs/_data/glossary/primitives.yml` (architecture.yml as needed) | QUEUED |
+
+The queue's deferral discipline: nothing here is rejected and nothing here is scheduled — each entry is banked behind its named trigger, and the wave that fires a trigger prices the design before the design begins. The substantive main line is unchanged: the {% include term.html id="qnir" text="QnIR" %} v0.3 minimal executable core per the Loop-2 repair sequence. [v1.14.0 — CANDIDATE]
 
 ---
 
