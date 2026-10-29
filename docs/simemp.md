@@ -1,9 +1,9 @@
 ---
 layout: default
 title: SIMEMP Constraints
-description: Foundational physical, computational, and architectural constraints governing the Qn and cdqn stack under Dependencies Determinism.
+description: Foundational physical, computational, and architectural constraints for the Qn and cdqn stack
 version: 1.3.0
-updated: 2026-10-28
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -43,7 +43,7 @@ terms_used:
 |---|---|
 | **Document Title** | SIMEMP: Thesis and Constraints for the Qn and cdqn Stack |
 | **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Constitutional Specification — Foundational Invariants |
