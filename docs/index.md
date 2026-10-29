@@ -13,7 +13,7 @@ parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /
 terms_used:
   - advantage-margin
-- boc-policy
+  - boc-policy
   - cdqn
   - chronosa
   - computational-consistency
@@ -24,7 +24,7 @@ terms_used:
   - discrete-exterior-calculus
   - epistemic-anchorage
   - existential-invariant
-- latency-telemetry-envelope
+  - latency-telemetry-envelope
   - licensed-work
   - local-first
   - metric-exhaustion
@@ -53,7 +53,7 @@ terms_used:
   - qlog
   - qn
   - qn-rsi
-- qnir
+  - qnir
   - qphy
   - receipt
   - remainder-r
