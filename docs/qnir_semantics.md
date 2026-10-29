@@ -1,7 +1,7 @@
 ---
 layout: default
 title: QnIR Semantics — Operational Semantics of the QnIR v0.3 Working Draft (Repair Step 2)
-description: Topical companion of the QnIR v0.3 working draft carrying §2 (Repair Step 2): typed configurations, the small-step transition relation with the instruction-level closure of sixteen closed opcodes, block arguments and dynamic instances, the token lifecycle algebra with the total terminalization function, deterministic encodings, and the fixed-width/exact reconciliation. Content-identical structural split (v0.3.0-draft.5-struct.1) of the committed v0.3.0-draft.5 monolith; not promoted to the canon.
+description: Topical companion of the QnIR v0.3 working draft carrying §2 (Repair Step 2): typed configurations, the small-step transition relation with the instruction-level closure of sixteen closed opcodes, block arguments and dynamic instances, the token lifecycle algebra with the total terminalization function, deterministic encodings, and the fixed-width/exact reconciliation. Content-identical structural split (v0.3.0-draft.5-struct.1) of the committed v0.3.0-draft.5 monolith: not promoted to the canon.
 version: 0.3.0-draft.5-struct.1
 updated: 2026-10-29
 author: Christophe Duy Quang Nguyen
