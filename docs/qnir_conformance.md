@@ -1,7 +1,7 @@
 ---
 layout: default
 title: QnIR Conformance — The Conformance Oracle Specification of the QnIR v0.3 Working Draft (Repair Step 4)
-description: Topical companion of the QnIR v0.3 working draft carrying §4 (Repair Step 4): the differential protocol, the normative assembler and validator, the reference interpreter and the second-implementation requirement, and the conformance vector suite with the Step-4 acceptance condition. Content-identical structural split (v0.3.0-draft.5-struct.1) of the committed v0.3.0-draft.5 monolith; not promoted to the canon.
+description: Topical companion of the QnIR v0.3 working draft carrying §4 (Repair Step 4) — the differential protocol, the normative assembler and validator, the reference interpreter and the second-implementation requirement, and the conformance vector suite with the Step-4 acceptance condition. Content-identical structural split (v0.3.0-draft.5-struct.1) of the committed v0.3.0-draft.5 monolith; not promoted to the canon.
 version: 0.3.0-draft.5-struct.1
 updated: 2026-10-29
 author: Christophe Duy Quang Nguyen
