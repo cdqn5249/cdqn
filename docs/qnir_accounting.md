@@ -1,7 +1,7 @@
 ---
 layout: default
 title: QnIR Work Accounting — The Ledger, Bounds, and Budget Admission of the QnIR v0.3 Working Draft (Repair Step 3)
-description: Topical companion of the QnIR v0.3 working draft carrying §3 (Repair Step 3): the ledger equation, static operand bounds as the cost domain, reserve/charge/refund as typed ledger movements, sound control-flow budget admission, and the accounting soundness statement with its acceptance condition. Content-identical structural split (v0.3.0-draft.5-struct.1) of the committed v0.3.0-draft.5 monolith; not promoted to the canon.
+description: Topical companion of the QnIR v0.3 working draft carrying §3 (Repair Step 3) — the ledger equation, static operand bounds as the cost domain, reserve/charge/refund as typed ledger movements, sound control-flow budget admission, and the accounting soundness statement with its acceptance condition. Content-identical structural split (v0.3.0-draft.5-struct.1) of the committed v0.3.0-draft.5 monolith; not promoted to the canon.
 version: 0.3.0-draft.5-struct.1
 updated: 2026-10-29
 author: Christophe Duy Quang Nguyen
