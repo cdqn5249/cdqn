@@ -19,6 +19,14 @@
 # six-key entry schema is re-used unchanged; the status value "Draft" is new
 # to this registry and is the honest state: the draft is not promoted to the
 # canon (index milestone QnIR [PENDING] unchanged).
+#
+# Loop-3 repair wave (qnir.md v0.3.0-draft.5): budgeted companions — two
+# one-line additive description extensions, both budgeted by the wave's own
+# record (qnir.md, Wave record v0.3.0-draft.5, cross-file dependencies item 1):
+# the "QnIR Draft" entry's description extended to record the R1 repair wave
+# (Loop-3 F9/F10/F12 discharged), and the "Adversarial Review Program" entry's
+# description extended to record the committed Loop-3 transcript of record.
+# No entry is added or removed; the six-key entry schema is re-used unchanged.
 
 - title: "Portal"
   url: "/"
@@ -156,14 +164,14 @@
 - title: "QnIR Draft"
   url: "/qnir.html"
   slug: "qnir"
-  description: "QnIR v0.3 working draft — Step-1 frozen minimal core, Step-2 operational semantics (Eval(Intent, D, V) = Execution), Step-3 work accounting, and Step-4 conformance-oracle specification, with extension deferral and inherited constraint registers under the Loop-2 repair sequence"
+  description: "QnIR v0.3 working draft — Step-1 frozen minimal core, Step-2 operational semantics (Eval(Intent, D, V) = Execution), Step-3 work accounting, and Step-4 conformance-oracle specification, with extension deferral and inherited constraint registers under the Loop-2 repair sequence; Loop-3 repair stage R1 committed (F9/F10/F12: instruction-level closure of sixteen opcodes, the zoom normalizer, and the total terminalization function) — R2–R6 forward"
   status: "Draft"
   external: false
   
 - title: "Adversarial Review Program"
   url: "/#adversarial-review-program"
   slug: "adversarial-review-program"
-  description: "External adversarial review program for major draft artifacts: Loop-1 and Loop-2 transcripts of record, committed integration waves, and the QnIR v0.3 repair-sequence pointer"
+  description: "External adversarial review program for major draft artifacts: Loop-1, Loop-2, and Loop-3 transcripts of record, committed integration waves, and the QnIR v0.3 repair-sequence pointer and Loop-3 R1–R6 repair ladder"
   status: "Canonical"
   external: false
 
