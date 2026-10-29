@@ -156,7 +156,7 @@
 - title: "QnIR Draft"
   url: "/qnir.html"
   slug: "qnir"
-  description: "QnIR v0.3 working draft — Step-1 frozen minimal core and Step-2 operational semantics (Eval(Intent, D, V) = Execution), with extension deferral and inherited constraint registers under the Loop-2 repair sequence"
+  description: "QnIR v0.3 working draft — Step-1 frozen minimal core, Step-2 operational semantics (Eval(Intent, D, V) = Execution), and Step-3 work accounting, with extension deferral and inherited constraint registers under the Loop-2 repair sequence"
   status: "Draft"
   external: false
   
