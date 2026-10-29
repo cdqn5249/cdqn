@@ -3,189 +3,188 @@
 # License: Scaling Source License (SSL) 1.0
 # Updated: 2026-10-30 (Bao Loc, Vietnam)
 #
-# Entry budgeting and per-wave history live in the program documents (docs/qnir.md Wave
-# records; docs/index.md Adversarial Review Program section). This registry carries data
-# only — descriptions are kept short, with no per-wave recap, under the maintainer's
-# readability ruling (qnir.md, Wave record v0.3.0-draft.8).
+# Data only — descriptions are short menu entries under the maintainer's readability
+# ruling; entry budgeting and per-wave history live in docs/qnir.md Wave records
+# (currently v0.3.0-draft.8.1).
 
 - title: "Portal"
   url: "/"
   slug: "index"
-  description: "Documentation root and architectural index"
+  description: "Documentation root and index"
   status: "Canonical"
   external: false
 
 - title: "SIMEMP Constraints"
   url: "/simemp.html"
   slug: "simemp"
-  description: "Foundational physical and computational constraints"
+  description: "Physical and computational constraints"
   status: "Canonical"
   external: false
 
 - title: "Abstraction Layers"
   url: "/abstractionLayers.html"
   slug: "abstractionLayers"
-  description: "Structural framework, gateways, and fractal cdqn protocol"
+  description: "Layer framework and gateways"
   status: "Canonical"
   external: false
 
 - title: "Category A Primitives"
   url: "/q0_q1.html"
   slug: "q0_q1"
-  description: "Q(0) local genesis, Q(1) unit calibration, and node onboarding"
+  description: "Q(0)–Q(1): genesis and calibration"
   status: "Canonical"
   external: false
 
 - title: "Single-Digit Primitives"
   url: "/q2_q9.html"
   slug: "q2_q9"
-  description: "Single digits Q(2)...Q(9), secondary DCC anchors, and parity"
+  description: "Q(2)–Q(9) and secondary DCC anchors"
   status: "Canonical"
   external: false
 
 - title: "Qn Primitive Envelope"
   url: "/qnPrimitive.html"
   slug: "qnPrimitive"
-  description: "Governed artifact envelope, axioms, and lifecycle"
+  description: "Governed artifact envelope and axioms"
   status: "Canonical"
   external: false
 
 - title: "Qm Mathematics"
   url: "/qm.html"
   slug: "qm"
-  description: "Constructive numeric, relational, and algebraic substrate"
+  description: "Numeric and algebraic substrate"
   status: "Canonical"
   external: false
 
 - title: "Qm Geometry"
   url: "/qm_geometry.html"
   slug: "qm_geometry"
-  description: "Multi-axial frames, Clifford geometric algebra, and float-free rotations"
+  description: "Multi-axial frames and geometric algebra"
   status: "Canonical"
   external: false
 
 - title: "Qm Calculus"
   url: "/qm_calculus.html"
   slug: "qm_calculus"
-  description: "Discrete Exterior Calculus, continued fractions, and invariant dynamics"
+  description: "Discrete calculus and dynamics"
   status: "Canonical"
   external: false
 
 - title: "Qexpr Container"
   url: "/qexpr.html"
   slug: "qexpr"
-  description: "Content-Addressed Expression DAG, hash-consing, and canonical node classes"
+  description: "Content-addressed expression DAG"
   status: "Canonical"
   external: false
 
 - title: "Qs Semantics"
   url: "/qs.html"
   slug: "qs"
-  description: "Constructive relational intent, epistemic spectrum, source receipts, and human-agent alignment"
+  description: "Relational intent and epistemics"
   status: "Canonical"
   external: false
 
 - title: "Qlog Logics"
   url: "/qlog.html"
   slug: "qlog"
-  description: "Constructive type theory, pattern verification, and inferential modes"
+  description: "Constructive type theory and patterns"
   status: "Canonical"
   external: false
 
 - title: "Qphy Physics"
   url: "/qphy.html"
   slug: "qphy"
-  description: "Discrete field dynamics, computational thermodynamics, and physical entropy"
+  description: "Discrete fields and thermodynamics"
   status: "Canonical"
   external: false
 
 - title: "Qchem Chemistry"
   url: "/qchem.html"
   slug: "qchem"
-  description: "Discrete stoichiometry, molecular graphs, and reaction energetics"
+  description: "Stoichiometry and molecular graphs"
   status: "Canonical"
   external: false
 
 - title: "Qbio Biology"
   url: "/qbio.html"
   slug: "qbio"
-  description: "Biosemiotics, metabolic homeostasis, and active inference"
+  description: "Biosemiotics and homeostasis"
   status: "Canonical"
   external: false
   
 - title: "Chronosa Vision"
   url: "/chronosa.html"
   slug: "chronosa"
-  description: "Operational vision for an emergent, non-local causal intelligence"
+  description: "Emergent causal intelligence vision"
   status: "Vision"
   external: false
 
 - title: "Qs History Proposal"
   url: "/qs_history.html"
   slug: "qs_history"
-  description: "Vision and research proposal for historical anchoring and the Qs History Library"
+  description: "Historical anchoring proposal"
   status: "Vision"
   external: false
 
 - title: "Qs History Library"
   url: "/history_library.html"
   slug: "history_library"
-  description: "Post-seal history ingestion: historical anchor artifacts, calendar projection contracts, and the five-gate ingestion firewall"
+  description: "History ingestion framework"
   status: "Vision"
   external: false
 
 - title: "Qn Structures Proposal"
   url: "/qstructures.html"
   slug: "qstructures"
-  description: "Vision and evaluation framework for Category C data structures and workflows"
+  description: "Category C structures and workflows"
   status: "Vision"
   external: false
 
 - title: "QnIR Draft"
   url: "/qnir.html"
   slug: "qnir"
-  description: "QnIR v0.3 working draft under the Loop-3 repair program — frozen core, operational semantics, work accounting, and the golden-first conformance-oracle specification, with the per-wave log and the R1–R6 repair ladder in the draft itself"
+  description: "QnIR v0.3 working draft"
   status: "Draft"
   external: false
 
 - title: "QnIR Semantics"
   url: "/qnir_semantics.html"
   slug: "qnir_semantics"
-  description: "QnIR v0.3 working draft, Repair Step 2 — typed configurations, the small-step transition relation over sixteen closed opcodes, the token lifecycle and total terminalization function, and the versioned byte grammar"
+  description: "QnIR draft — operational semantics"
   status: "Draft"
   external: false
 
 - title: "QnIR Work Accounting"
   url: "/qnir_accounting.html"
   slug: "qnir_accounting"
-  description: "QnIR v0.3 working draft, Repair Step 3 — the ledger equation, typed reserve/charge/refund movements, and sound budget admission under the escrow conservation identities"
+  description: "QnIR draft — work accounting"
   status: "Draft"
   external: false
 
 - title: "QnIR Conformance"
   url: "/qnir_conformance.html"
   slug: "qnir_conformance"
-  description: "QnIR v0.3 working draft, Repair Step 4 — the golden-first differential protocol, the normative assembler and validator, the reference interpreter and second implementation, and the conformance vector suite"
+  description: "QnIR draft — conformance oracle"
   status: "Draft"
   external: false
 
 - title: "Adversarial Review Program"
   url: "/#adversarial-review-program"
   slug: "adversarial-review-program"
-  description: "External adversarial review program for major draft artifacts: Loop-1, Loop-2, and Loop-3 transcripts of record, committed integration waves, and the QnIR v0.3 repair-sequence pointer and Loop-3 R1–R6 repair ladder"
+  description: "Review transcripts and repair ladder"
   status: "Canonical"
   external: false
 
 - title: "CDQN Glossary"
   url: "/glossary.html"
   slug: "glossary"
-  description: "Unified glossary and bidirectional source registry"
+  description: "Unified glossary"
   status: "Canonical"
   external: false
 
 - title: "License (SSL 1.0)"
   url: "https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md"
   slug: "license"
-  description: "Scaling Source License terms and open core invariants"
+  description: "Scaling Source License terms"
   status: "Canonical"
   external: true
