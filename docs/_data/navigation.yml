@@ -164,10 +164,37 @@
 - title: "QnIR Draft"
   url: "/qnir.html"
   slug: "qnir"
-  description: "QnIR v0.3 working draft — Step-1 frozen minimal core, Step-2 operational semantics (Eval(Intent, D, V) = Execution), Step-3 work accounting, and Step-4 conformance-oracle specification, with extension deferral and inherited constraint registers under the Loop-2 repair sequence; Loop-3 repair stage R1 committed (F9/F10/F12: instruction-level closure of sixteen opcodes, the zoom normalizer, and the total terminalization function) — R2–R6 forward"
+  description: "QnIR v0.3 working draft — Step-1 frozen minimal core, Step-2 operational semantics (Eval(Intent, D, V) = Execution), Step-3 work accounting, and Step-4 conformance-oracle specification, with extension deferral and inherited constraint registers under the Loop-2 repair sequence; Loop-3 repair stage R1 committed (F9/F10/F12: instruction-level closure of sixteen opcodes, the zoom normalizer, and the total terminalization function) — R2–R6 forward; body split content-identically at v0.3.0-draft.5-struct.1 into three topical companion entries below"
   status: "Draft"
   external: false
   
+# Structural split wave (qnir.md v0.3.0-draft.5-struct.1): budgeted companions — three purely
+# additive six-key entries for the topical companion files created by the content-identical split of
+# docs/qnir.md under the Qm multi-file convention (docs/qnir_semantics.md §2, docs/qnir_accounting.md
+# §3, docs/qnir_conformance.md §4), plus a one-line additive description extension of the QnIR Draft
+# entry. No existing entry is mutated beyond that clause; the six-key entry schema is re-used unchanged.
+
+- title: "QnIR Semantics"
+  url: "/qnir_semantics.html"
+  slug: "qnir_semantics"
+  description: "QnIR v0.3 working draft, Repair Step 2 — typed configurations, the small-step transition relation with sixteen closed opcodes, the token lifecycle and total terminalization function, and deterministic encodings"
+  status: "Draft"
+  external: false
+
+- title: "QnIR Work Accounting"
+  url: "/qnir_accounting.html"
+  slug: "qnir_accounting"
+  description: "QnIR v0.3 working draft, Repair Step 3 — the ledger equation, static operand bounds, typed reserve/charge/refund movements, and sound control-flow budget admission"
+  status: "Draft"
+  external: false
+
+- title: "QnIR Conformance"
+  url: "/qnir_conformance.html"
+  slug: "qnir_conformance"
+  description: "QnIR v0.3 working draft, Repair Step 4 — the differential protocol, the normative assembler and validator, the reference interpreter and second implementation, and the conformance vector suite"
+  status: "Draft"
+  external: false
+
 - title: "Adversarial Review Program"
   url: "/#adversarial-review-program"
   slug: "adversarial-review-program"
