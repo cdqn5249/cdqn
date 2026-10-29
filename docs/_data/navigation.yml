@@ -1,7 +1,7 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-28 (Bao Loc, Vietnam)
+# Updated: 2026-10-29 (Bao Loc, Vietnam)
 #
 # Review-program registry entry (companion discharge): the committed
 # docs/index.md v1.13.0 record flags the navigation.yml review-program entry
@@ -9,6 +9,16 @@
 # anchor to the rendered "Adversarial Review Program" portal section (anchor
 # id verified against the live Pages render). No existing entry is mutated;
 # the six-key entry schema is re-used unchanged.
+#
+# QnIR draft registry entry (budgeted companion of the qnir.md v0.3.0-draft.1
+# wave): one purely additive six-key entry for the QnIR v0.3 working draft
+# opened under the Loop-2 repair sequence (docs/AiReviews/AiReviewQnIRv0.2.md
+# §5). The entry is budgeted up front by the wave's own record (qnir.md,
+# Status and Program of Record, cross-file dependencies item 1) so that no
+# unbudgeted-companion flag can recur. No existing entry is mutated; the
+# six-key entry schema is re-used unchanged; the status value "Draft" is new
+# to this registry and is the honest state: the draft is not promoted to the
+# canon (index milestone QnIR [PENDING] unchanged).
 
 - title: "Portal"
   url: "/"
@@ -141,6 +151,13 @@
   slug: "qstructures"
   description: "Vision and evaluation framework for Category C data structures and workflows"
   status: "Vision"
+  external: false
+
+- title: "QnIR Draft"
+  url: "/qnir.html"
+  slug: "qnir"
+  description: "QnIR v0.3 working draft — Step-1 frozen minimal core, extension deferral register, and inherited constraint register under the Loop-2 repair sequence"
+  status: "Draft"
   external: false
   
 - title: "Adversarial Review Program"
