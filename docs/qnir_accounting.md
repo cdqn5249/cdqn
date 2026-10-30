@@ -1,9 +1,9 @@
 ---
 layout: default
 title: QnIR Work Accounting — The Ledger, Bounds, and Budget Admission of the QnIR v0.3 Working Draft (Repair Step 3)
-description: Topical companion of the QnIR v0.3 working draft carrying §3 (Repair Step 3) — the ledger equation, static operand bounds as the cost domain, reserve/charge/refund as typed ledger movements, sound control-flow budget admission, and the accounting soundness statement with its acceptance condition. Split content-identically at v0.3.0-draft.5-struct.1; content wave v0.3.0-draft.7 (Loop-3 R3) committed the escrow conservation identities, the declared-metering scoping of the work claims, and the specified sound terminating surrogate; not promoted to the canon.
-version: 0.3.0-draft.7
-updated: 2026-10-29
+description: QnIR v0.3 draft, §3 work accounting — the ledger equation, typed movements, and sound budget admission
+version: 0.3.0-draft.8.1
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -21,7 +21,7 @@ terms_used:
 
 # QnIR Work Accounting — The Ledger, Bounds, and Budget Admission of the QnIR v0.3 Working Draft (Repair Step 3)
 
-This file is a topical companion of the QnIR v0.3 working draft, created by the structural split wave v0.3.0-draft.5-struct.1: it carries §3 (§3.1–§3.6) of the draft's body, moved byte-identically from the committed v0.3.0-draft.5 monolith (`docs/qnir.md`, 127,195 bytes, sha-256 `cf2de12fdbdcc7467e9af87aaab2fa21d3a59a68c7971f17f38e3074fad8bb35`) with global section numbering preserved and no wording change of any kind. The program of record — the status and promotion criterion, every per-wave Wave record, the Loop-3 disposition and the binding R1–R6 ladder, the numbered References (the bracketed citations of this part resolve there), and the Document Map of the split — lives in [`docs/qnir.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir.md); this companion inherits its DRAFT status and is not promoted to the canon. Cross-references to sections of other parts resolve through that Document Map under the preserved global numbering, and the [v0.3.0-draft.5 — DRAFT] tags in the moved text below mark the declaration vintage of the moved bytes, not a re-declaration. The front-matter `terms_used` of this file lists exactly the distinct `term.html` include ids of this body under the include-parity discipline. Amended since the split by the content waves recorded in the program of record (currently v0.3.0-draft.7 — Loop-3 stage R3, the conservation identities of §3.3, the declared-metering scoping of §3.2/§3.5, and the surrogate specification of §3.4); the split's byte-identity statement describes the structural wave, and the current content is governed by the version stamp above.
+This file carries §3 (§3.1–§3.6) of the QnIR v0.3 working draft, split content-identically from the committed v0.3.0-draft.5 monolith with global section numbering preserved. The program of record — status, Wave records, repair ladder, and References — lives in [`docs/qnir.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir.md); this companion inherits its DRAFT status and is not promoted to the canon. The §3 body below is committed at v0.3.0-draft.7 (Loop-3 stage R3), and the front-matter `terms_used` lists exactly the distinct `term.html` include ids of this body under the include-parity discipline.
 
 ---
 
