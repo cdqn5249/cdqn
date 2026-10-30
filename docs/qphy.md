@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qphy — Quang Physics (Discrete Field Dynamics, Computational Thermodynamics, and Physical Entropy Accounting)
-description: Canonical domain specification for Qphy, formalizing non-equilibrium computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the axiomatic world model under SIMEMP constraints.
+description: Computational thermodynamics, discrete exterior field mechanics, physical Q(anchors), and the world model
 version: 1.1.0
-updated: 2026-10-28
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
