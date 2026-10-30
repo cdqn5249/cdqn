@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qm Geometry — Multi-Axial Frames and Geometric Algebra
-description: Constructive multi-dimensional spatial representation, Clifford geometric algebras, float-free rotations, non-Euclidean subspaces, and deferred symbolic collapse under SIMEMP constraints.
+description: Multi-axial frames, Clifford geometric algebras, and float-free rotations
 version: 1.3.0
-updated: 2026-10-28
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
