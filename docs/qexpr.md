@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
-description: Canonical specification of the Layer 3 Content-Addressed Expression DAG (CAE-DAG), arity-indexed child commitments, hash-consing deduplication, symbolic irrationals, six canonical node classes (Class 6 split into canonical contraction OP_BYPASS and bounded saturation OP_SATURATE), and hardware-aware collapse under SIMEMP constraints.
+description: Layer 3 specification — the content-addressed expression DAG with hash-consing and six canonical node classes
 version: 1.4.0
-updated: 2026-10-28
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
