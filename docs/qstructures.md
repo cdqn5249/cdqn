@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Qn Structures — Vision and Evaluation Framework for Category C Data Structures and Workflows
-description: Structural proposal for the Category C layer — a five-row contract schema and an evaluation ladder for Qn data structures and workflows, with a worked candidate register grounded in SIMEMP constraints and BOC selection. All artifacts herein are propositions pending deterministic measurement, BOC selection, and Q(rsi) sealing.
+description: Category C proposal — contract schema, evaluation ladder, and candidate register for Qn data structures
 version: 0.2.0
-updated: 2026-10-28
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
