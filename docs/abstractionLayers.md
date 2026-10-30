@@ -1,9 +1,9 @@
 ---
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
-description: Structural thesis defining the abstraction-layer framework, CAE-DAG symbolic composition, substrate-invariant decoupling, and Q(anchor) consensus under SIMEMP constraints.
+description: Structural thesis — abstraction-layer framework, CAE-DAG symbolic composition, and Q(anchor) consensus
 version: 1.9.1
-updated: 2026-10-27
+updated: 2026-10-30
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
