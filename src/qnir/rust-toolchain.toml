@@ -1,0 +1,6 @@
+# Toolchain pinning for the QnIR conformance artifact (conformance §4.1/§4.2:
+# each artifact records its toolchain as independence and reproducibility
+# evidence; the exact build stamp is recorded in the run log under
+# docs/logs/qnir/).
+[toolchain]
+channel = "1.99.1"
