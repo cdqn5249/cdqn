@@ -1,5 +1,6 @@
-//! QnIR conformance artifact — the normative assembler and validator
-//! (conformance §4.2, artifact-share increment 2, R6).
+//! QnIR conformance artifact — the normative assembler and validator with
+//! the reference interpreter (conformance §4.2/§4.3, artifact-share
+//! increments 2–3, R6).
 //!
 //! The tool reads the committed golden corpus (`docs/qnir_goldens.md`,
 //! repository bytes) and, over the full declared seed:
@@ -12,23 +13,31 @@
 //!             envelope and byte-compares the committed envelope, then
 //!             validates: the §2.1 static legality classes, the §3.2
 //!             dispatch-time operand bounds, and the §3.4 admission rule
-//!             through the declared `B_hat` surrogate.
+//!             through the declared `B_hat` surrogate;
+//!   suite X execution — executes each committed envelope through the
+//!             committed transition relation and compares the full expected
+//!             outcome at the five agreement points of §4.1 (records, state
+//!             roots, terminal receipt, reconstructed ledger; value
+//!             encodings under suite E) — the reference interpreter's
+//!             increment (§4.3), after the assembler's (§4.5's order).
 //!
 //! The tool never generates or edits goldens (§4.2): the corpus is its check
 //! target. Its output is a deterministic transcript; a same-binary rerun is
 //! reproducibility evidence only (§4.2) — never independent reproduction,
-//! never conformance. The transition relation is NOT executed here: that is
-//! the reference interpreter's increment (§4.3), next in the declared order
-//! (§4.5).
+//! never conformance.
 
 mod bhat;
 mod cbor;
 mod insn;
+mod interp;
+mod sha256;
 mod value;
 
 use insn::{SrcInsn, *};
 use std::fs;
 use value::{enc_value, Value};
+
+pub(crate) use interp::suite_x_exec;
 
 // ------------------------------------------------------------ text helpers
 
@@ -40,7 +49,7 @@ fn normalize(s: &str) -> String {
 
 /// Strips all whitespace and decodes a hex dump (spaced words or byte
 /// groups) to bytes.
-fn hex_to_bytes(s: &str) -> Vec<u8> {
+pub(crate) fn hex_to_bytes(s: &str) -> Vec<u8> {
     let clean: String = s.chars().filter(|c| !c.is_whitespace()).collect();
     (0..clean.len() / 2)
         .map(|i| u8::from_str_radix(&clean[2 * i..2 * i + 2], 16).unwrap())
@@ -48,12 +57,12 @@ fn hex_to_bytes(s: &str) -> Vec<u8> {
 }
 
 /// A parsed fenced code block with the last non-empty text line before it.
-struct Fence {
-    marker: String,
-    body: String,
+pub(crate) struct Fence {
+    pub(crate) marker: String,
+    pub(crate) body: String,
 }
 
-fn fences(section: &str) -> Vec<Fence> {
+pub(crate) fn fences(section: &str) -> Vec<Fence> {
     let mut out = Vec::new();
     let mut marker = String::new();
     let mut in_fence = false;
@@ -80,11 +89,11 @@ fn fences(section: &str) -> Vec<Fence> {
     out
 }
 
-fn fence_after<'a>(f: &'a [Fence], needle: &str) -> Option<&'a Fence> {
+pub(crate) fn fence_after<'a>(f: &'a [Fence], needle: &str) -> Option<&'a Fence> {
     f.iter().find(|k| k.marker.contains(needle))
 }
 
-fn line_starting<'a>(section: &'a str, prefix: &str) -> Option<String> {
+pub(crate) fn line_starting<'a>(section: &'a str, prefix: &str) -> Option<String> {
     section
         .lines()
         .map(|l| l.trim())
@@ -348,13 +357,13 @@ fn parse_i_input(line: &str, insns: &dyn Fn(&str, &str) -> Option<u64>) -> SrcIn
 
 // ------------------------------------------------------------ corpus parsing
 
-struct Vector {
-    id: String,
-    name: String,
-    section: String,
+pub(crate) struct Vector {
+    pub(crate) id: String,
+    pub(crate) name: String,
+    pub(crate) section: String,
 }
 
-fn parse_vectors(md: &str, family_header: &str) -> Vec<Vector> {
+pub(crate) fn parse_vectors(md: &str, family_header: &str) -> Vec<Vector> {
     let start = md.find(family_header).unwrap_or_else(|| {
         panic!("family header not found: {family_header}")
     });
@@ -395,17 +404,17 @@ fn parse_vectors(md: &str, family_header: &str) -> Vec<Vector> {
 }
 
 /// The declared per-vector parameters of a Family X vector.
-struct XParams {
-    w_budget: u64,
-    sem: String,
-    enc: String,
-    prof: String,
-    admission_bp: u64,
-    expected_outcome_tag: u64,
-    expected_outcome_name: String,
+pub(crate) struct XParams {
+    pub(crate) w_budget: u64,
+    pub(crate) sem: String,
+    pub(crate) enc: String,
+    pub(crate) prof: String,
+    pub(crate) admission_bp: u64,
+    pub(crate) expected_outcome_tag: u64,
+    pub(crate) expected_outcome_name: String,
 }
 
-fn parse_x_params(section: &str) -> XParams {
+pub(crate) fn parse_x_params(section: &str) -> XParams {
     let pl = line_starting(section, "Declared parameters:").unwrap();
     let wb: String = pl
         .split("`W_budget` = ")
@@ -475,22 +484,22 @@ fn parse_admission(section: &str) -> u64 {
 
 // ------------------------------------------------------------------- suites
 
-struct Report {
+pub(crate) struct Report {
     lines: Vec<String>,
     failures: usize,
 }
 
 impl Report {
-    fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Report {
             lines: Vec::new(),
             failures: 0,
         }
     }
-    fn say(&mut self, s: String) {
+    pub(crate) fn say(&mut self, s: String) {
         self.lines.push(s);
     }
-    fn fail(&mut self, s: String) {
+    pub(crate) fn fail(&mut self, s: String) {
         self.failures += 1;
         self.lines.push(format!("  FAIL {s}"));
     }
@@ -845,7 +854,7 @@ fn validate_x(
     }
     if admitted {
         rep.say(format!(
-            "  {id} {name}: well-formed; {defining} static value ids; B_hat = {} U (declared bound {} U); W_budget = {} U; ADMITTED (execution deferred to the reference interpreter increment, §4.3)",
+            "  {id} {name}: well-formed; {defining} static value ids; B_hat = {} U (declared bound {} U); W_budget = {} U; ADMITTED (the execution share of this transcript checks the outcome)",
             bh, params.admission_bp, params.w_budget
         ));
         true
@@ -1102,7 +1111,7 @@ fn main() {
         std::process::exit(2);
     });
 
-    println!("QnIR conformance artifact — assembler and validator (R6 increment 2, conformance §4.2)");
+    println!("QnIR conformance artifact — assembler, validator, and reference interpreter (R6 increments 2–3, conformance §4.2/§4.3)");
     println!("corpus: {path} ({} bytes, repository bytes)", md.len());
     let n_vectors = ["## Family E —", "## Family I —", "## Family M —", "## Family X —"]
         .iter()
@@ -1115,6 +1124,7 @@ fn main() {
     suite_i(&md, &mut rep);
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
+    suite_x_exec(&md, &mut rep);
 
     println!();
     for l in &rep.lines {
@@ -1123,7 +1133,7 @@ fn main() {
     println!();
     if rep.failures == 0 {
         println!(
-            "result: PASS — every committed vector reproduces under the committed rules; the artifact never generates or edits goldens (§4.2), and the transition relation is not executed here (§4.3's increment follows)"
+            "result: PASS — every committed vector reproduces under the committed rules, the executions matching the full committed expected outcomes; the artifact never generates or edits goldens (§4.2)"
         );
     } else {
         println!("result: FAIL — {} failing check(s)", rep.failures);
