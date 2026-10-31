@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.10
-updated: 2026-10-30
+version: 0.3.0-draft.11
+updated: 2026-10-31
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -25,8 +25,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1) |
-| **Version** | 0.3.0-draft.10 |
-| **Last Updated** | 2026-10-30 (Bao Loc, Vietnam) |
+| **Version** | 0.3.0-draft.11 |
+| **Last Updated** | 2026-10-31 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Working Draft under the Loop-2 Repair Sequence and the Loop-3 Repair Program (R1–R6) — Not Promoted to the Canon |
@@ -258,13 +258,13 @@ Input bytes: an INT_POS encoding with magnitude words [0, 5]. Expected verdict: 
 
 ### M4 value-non-normalized-zoom
 
-Cites: §2.6 value grammar (a non-normalized zoom encoding is malformed); §2.3 N(6, −2) = (3, −1).
+Cites: §2.6 value grammar (a non-normalized zoom encoding is malformed); §2.3 N(6, −2) = (3, −1). The bytes are re-issued at v0.3.0-draft.11: the draft.10 form omitted the two component count words and did not parse as the pair it declares (the draft.11 wave record of docs/qnir.md names the disagreeing point and its §4.1 adjudication against §2.6).
 
 Input bytes: a ZOOM encoding of the pair (6, −2) without normalization. Expected verdict: **malformed — non-normalized zoom encoding**. Bytes:
 
 ```
-0000000000000004 0000000000000001 0000000000000006 0000000000000002
-0000000000000002
+0000000000000004 0000000000000001 0000000000000001 0000000000000006
+0000000000000002 0000000000000001 0000000000000002
 ```
 
 ### M5 value-count-exceeds-artifact
