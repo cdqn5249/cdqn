@@ -1,11 +1,11 @@
 # CDQN Documentation Navigation Registry
 # Author: Christophe Duy Quang Nguyen
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-30 (Bao Loc, Vietnam)
+# Updated: 2026-10-31 (Bao Loc, Vietnam)
 #
 # Data only — descriptions are short menu entries under the maintainer's readability
 # ruling; entry budgeting and per-wave history live in docs/qnir.md Wave records
-# (currently v0.3.0-draft.10).
+# (currently v0.3.0-draft.11).
 
 - title: "Portal"
   url: "/"
@@ -171,6 +171,12 @@
   url: "/qnir_goldens.html"
   slug: "qnir_goldens"
   description: "Golden corpus — hand-derived vectors"
+  status: "Draft"
+  external: false
+- title: "QnIR Artifact Logs"
+  url: "/logs/qnir/"
+  slug: "qnir_logs"
+  description: "Conformance artifact run transcripts"
   status: "Draft"
   external: false
 
