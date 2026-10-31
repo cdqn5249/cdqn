@@ -5,7 +5,7 @@
 #
 # Data only — descriptions are short menu entries under the maintainer's readability
 # ruling; entry budgeting and per-wave history live in docs/qnir.md Wave records
-# (currently v0.3.0-draft.11).
+# (currently v0.3.0-draft.12).
 
 - title: "Portal"
   url: "/"
