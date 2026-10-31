@@ -1,8 +1,8 @@
 [package]
 name = "qnir"
-version = "0.3.0-draft.11"
+version = "0.3.0-draft.12"
 edition = "2021"
-description = "QnIR conformance artifact: normative assembler and validator (R6 increment 2)"
+description = "QnIR conformance artifact: normative assembler, validator, and reference interpreter (R6 increments 2-3)"
 license = "Scaling Source License (SSL 1.0)"
 
 # Standard library only (QO-33): no dependencies, no default features.
