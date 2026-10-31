@@ -12,3 +12,4 @@ This folder holds the run transcripts and reproducibility evidence of the QnIR d
 ## Logs
 
 - [R6 increment 2 — the assembler and validator (v0.3.0-draft.11)](r6-increment-2-assembler-validator.html) — first run against the committed draft.10 corpus found the M4 byte defect; 34/34 after the declared repair; same-binary rerun byte-identical.
+- [R6 increment 3 — the reference interpreter (v0.3.0-draft.12)](r6-increment-3-reference-interpreter.html) — 8/8 committed executions reproduced at the five agreement points; one decoder defect found in the increment-2 artifact and repaired in-wave; same-binary rerun byte-identical.
