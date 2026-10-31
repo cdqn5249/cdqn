@@ -5,7 +5,7 @@
 #
 # Data only — descriptions are short menu entries under the maintainer's readability
 # ruling; entry budgeting and per-wave history live in docs/qnir.md Wave records
-# (currently v0.3.0-draft.9.1).
+# (currently v0.3.0-draft.10).
 
 - title: "Portal"
   url: "/"
@@ -165,6 +165,12 @@
   url: "/qnir_conformance.html"
   slug: "qnir_conformance"
   description: "QnIR draft — conformance oracle"
+  status: "Draft"
+  external: false
+- title: "QnIR Goldens"
+  url: "/qnir_goldens.html"
+  slug: "qnir_goldens"
+  description: "Golden corpus — hand-derived vectors"
   status: "Draft"
   external: false
 
