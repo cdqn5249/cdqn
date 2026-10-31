@@ -225,9 +225,15 @@ fn dec(r: &mut Reader) -> Result<Cbor, CborError> {
             Ok(Cbor::Map(entries))
         }
         7 => match n {
-            20 => Ok(Cbor::Null),
-            21 => Ok(Cbor::Bool(false)),
-            22 => Ok(Cbor::Bool(true)),
+            // RFC 8949 simple values: false = 20, true = 21, null = 22.
+            // (Repaired at v0.3.0-draft.12: the increment-2 table was off by
+            // one — 20 decoded as null and 22 as true — a defect the
+            // reference interpreter's receipt decode surfaced, since the
+            // terminal receipt's nil-selected-token key is the corpus's only
+            // committed simple value; see the increment-3 wave record.)
+            20 => Ok(Cbor::Bool(false)),
+            21 => Ok(Cbor::Bool(true)),
+            22 => Ok(Cbor::Null),
             _ => Err(CborError("unsupported simple value".into())),
         },
         _ => Err(CborError("unsupported CBOR major type".into())),
