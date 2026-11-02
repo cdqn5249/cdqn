@@ -655,6 +655,7 @@ class Machine:
         self.per_class = {}
         self.traversals = {}        # (block, index, slot) -> traversal count
         self.pending_miss = None    # (token, fallback block)
+        self.fatal_selected = None  # DR2: the fatal token of a terminalizing birth
         edges = block_graph(self.blocks)
         dom = dominators(len(self.blocks), edges)
         self.back_edges = sorted({(s, d) for (s, d) in edges if d in dom[s]})
@@ -916,7 +917,15 @@ class Machine:
     def rejection(self, ttype, pc, decoded, pre):
         """A typed rejection (§2.5): posts nothing, births the fatal token
         terminalizing at its own transition, is final; the terminal
-        settlement posts into this record (§3.3, P11)."""
+        settlement posts into this record (§3.3, P11).  Loop-3 expansion
+        increment 1 (v0.3.0-draft.14) repair, registered from the F12
+        combination vectors: under §2.5 T case (3) — itemization at every
+        exit — the other outstanding tokens terminalize at this exit exactly
+        as at a HALT exit (DR1 of the corpus), their terminalize events
+        riding this record after the birth event in the pool's canonical
+        identifier order; and under §2.5 T case (1) + §2.6 receipt key 3
+        (DR2 of the corpus) the receipt's selected token for a fatal-birth
+        DOMAIN_ERROR exit is the outcome-determining fatal token itself."""
         self.step += 1
         self.clock += 1
         tok = self.birth(TOKEN_TYPES_REV[ttype], pc, birth_step=self.step)
@@ -924,29 +933,46 @@ class Machine:
         outcome = (OUTCOME["EXPRESSION_TOO_COMPLEX"]
                    if ttype == "EXPRESSION_TOO_COMPLEX" else OUTCOME["DOMAIN_ERROR"])
         self.halt = [1, outcome]
+        # DR2 (v0.3.0-draft.14): the fatal token is the outcome-determining
+        # token of a terminalizing-birth exit
+        self.fatal_selected = (tid(tok) if outcome == OUTCOME["DOMAIN_ERROR"]
+                               else None)
         refund = 0
         if self.escrow_open:
             refund = self.outstanding()
             if refund:
                 self.acc["refunded"] += refund
+        # DR1 (v0.3.0-draft.14): terminalization at every exit (§2.5 T
+        # case 3) — the other outstanding tokens terminalize here, their
+        # events after the birth event in canonical identifier order
+        events = [[1, tid(tok)]]
+        for t in sorted((t for t in self.pool if t["state"] == ST_OUT),
+                        key=tid):
+            t["state"] = ST_TERM
+            events.append([3, tid(t)])
         post = self.config_bytes(pc)
-        self.emit(pc, decoded, 0, refund, [[1, tid(tok)]], [], pre, post)
+        self.emit(pc, decoded, 0, refund, events, [], pre, post)
         self.boundaries.append((self.step, dict(self.acc)))
         return self.pack(outcome)
 
     def build_receipt(self, outcome):
         """The terminal receipt (§2.5/§2.6): deterministic CBOR map, closed
         keys 0–4; the outcome-determining token selected for NO_SOLUTION and
-        DOMAIN_ERROR; nil otherwise (the RFC 8949 nil, 0xf6)."""
+        DOMAIN_ERROR (under DR2, v0.3.0-draft.14: at a terminalizing-birth
+        exit the fatal birthed token; at a HALT exit the earliest-birth
+        outstanding Tier S token); nil otherwise (the RFC 8949 nil, 0xf6)."""
         item = [[t["birth"], t["block"], t["index"], t["serial"], t["type"],
                  t["tier"], t["state"]] for t in sorted(self.pool, key=tid)]
         selected = None
         if outcome in (OUTCOME["NO_SOLUTION"], OUTCOME["DOMAIN_ERROR"]):
-            cands = [t for t in self.pool if t["state"] == ST_TERM
-                     and t["type"] in (TOKEN_TYPES_REV["STATUS_NEG_EVEN_ROOT"],
-                                       TOKEN_TYPES_REV["STATUS_DOMAIN_ERROR"])]
-            if cands:
-                selected = tid(sorted(cands, key=tid)[0])
+            if self.fatal_selected is not None:
+                selected = self.fatal_selected
+            else:
+                cands = [t for t in self.pool if t["state"] == ST_TERM
+                         and t["type"] in (TOKEN_TYPES_REV["STATUS_NEG_EVEN_ROOT"],
+                                           TOKEN_TYPES_REV["STATUS_DOMAIN_ERROR"])]
+                if cands:
+                    selected = tid(sorted(cands, key=tid)[0])
         return cbor_encode({0: b"QnIR-Terminal", 1: outcome, 2: item,
                             3: selected, 4: list(self.versions)})
 
