@@ -435,6 +435,7 @@ struct Machine<'a> {
     per_class: Vec<(&'static str, u64, u64)>,
     traversals: HashMap<(u64, u64, u64), u64>,
     pending_miss: Option<(Token, u64)>,
+    fatal_selected: Option<[u64; 5]>,
 }
 
 impl<'a> Machine<'a> {
@@ -500,6 +501,7 @@ impl<'a> Machine<'a> {
             per_class: Vec::new(),
             traversals: HashMap::new(),
             pending_miss: None,
+            fatal_selected: None,
         })
     }
 
@@ -967,6 +969,15 @@ impl<'a> Machine<'a> {
 
     /// A typed rejection (§2.5): posts nothing, births the fatal token,
     /// is final; the terminal settlement posts into this record (§3.3).
+    /// Loop-3 expansion increment 1 (v0.3.0-draft.14) repair, registered
+    /// from the F12 combination vectors: under §2.5 T case (3) — itemization
+    /// at every exit — the other outstanding tokens terminalize at this
+    /// exit exactly as at a HALT exit (DR1 of the corpus), their
+    /// terminalize events riding this record after the birth event in the
+    /// pool's canonical identifier order; and under §2.5 T case (1) + §2.6
+    /// receipt key 3 (DR2 of the corpus) the receipt's selected token for a
+    /// fatal-birth DOMAIN_ERROR exit is the outcome-determining fatal token
+    /// itself (recorded in `fatal_selected`).
     fn fatal(&mut self, ttype: u64, pc: (u64, u64), decoded: Vec<u8>, pre: Vec<u8>) -> u64 {
         self.step += 1;
         self.clock += 1;
@@ -981,12 +992,39 @@ impl<'a> Machine<'a> {
             OUTCOME_DOMAIN_ERROR
         };
         self.halt = (1, outcome);
+        // DR2 (v0.3.0-draft.14): the fatal token is the outcome-determining
+        // token of a terminalizing-birth exit
+        self.fatal_selected = if outcome == OUTCOME_DOMAIN_ERROR {
+            Some(tid(&tok))
+        } else {
+            None
+        };
         let mut refund = 0u64;
         if self.escrow_open {
             refund = self.outstanding_escrow();
             if refund > 0 {
                 self.acc.refunded += refund;
             }
+        }
+        // DR1 (v0.3.0-draft.14): terminalization at every exit (§2.5 T
+        // case 3) — the other outstanding tokens terminalize here, their
+        // events after the birth event in canonical identifier order
+        let mut events = vec![(1, tid(&tok))];
+        let mut others: Vec<(u64, u64, u64, u64, u64)> = self
+            .pool
+            .iter()
+            .filter(|t| t.state == STATE_OUTSTANDING)
+            .map(full_id)
+            .collect();
+        others.sort();
+        for id5 in &others {
+            let pt = self
+                .pool
+                .iter_mut()
+                .find(|p| &full_id(p) == id5)
+                .expect("an outstanding token is in the pool");
+            pt.state = STATE_TERMINALIZED;
+            events.push((3, tid(pt)));
         }
         let post = self.config_now(pc);
         self.records.push(Rec {
@@ -999,7 +1037,7 @@ impl<'a> Machine<'a> {
             refunded: refund,
             step: self.step,
             clock: self.clock,
-            events: vec![(1, tid(&tok))],
+            events,
         });
         self.boundaries.push((self.step, self.acc));
         outcome
@@ -1026,21 +1064,28 @@ impl<'a> Machine<'a> {
             .collect();
         let selected: Cbor =
             if outcome == OUTCOME_NO_SOLUTION || outcome == OUTCOME_DOMAIN_ERROR {
-                let cands: Vec<[u64; 5]> = self
-                    .pool
-                    .iter()
-                    .filter(|t| {
-                        t.state == STATE_TERMINALIZED
-                            && (t.ttype == TT_STATUS_NEG_EVEN_ROOT
-                                || t.ttype == TT_STATUS_DOMAIN_ERROR)
-                    })
-                    .map(|t| [t.birth, t.block, t.index, t.serial, t.ttype])
-                    .collect();
-                match cands.iter().copied().min() {
-                    Some(tid5) => {
-                        Cbor::Array(tid5.iter().map(|&v| Cbor::UInt(v)).collect())
+                // DR2 (v0.3.0-draft.14): the outcome-determining token — at
+                // a terminalizing-birth exit the fatal birthed token; at a
+                // HALT exit the earliest-birth outstanding Tier S token
+                if let Some(f) = &self.fatal_selected {
+                    Cbor::Array(f.iter().map(|&v| Cbor::UInt(v)).collect())
+                } else {
+                    let cands: Vec<[u64; 5]> = self
+                        .pool
+                        .iter()
+                        .filter(|t| {
+                            t.state == STATE_TERMINALIZED
+                                && (t.ttype == TT_STATUS_NEG_EVEN_ROOT
+                                    || t.ttype == TT_STATUS_DOMAIN_ERROR)
+                        })
+                        .map(|t| [t.birth, t.block, t.index, t.serial, t.ttype])
+                        .collect();
+                    match cands.iter().copied().min() {
+                        Some(tid5) => {
+                            Cbor::Array(tid5.iter().map(|&v| Cbor::UInt(v)).collect())
+                        }
+                        None => Cbor::Null,
                     }
-                    None => Cbor::Null,
                 }
             } else {
                 Cbor::Null
