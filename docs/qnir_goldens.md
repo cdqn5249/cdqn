@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.14
-updated: 2026-11-01
+version: 0.3.0-draft.15
+updated: 2026-11-02
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -37,7 +37,7 @@ terms_used:
 
 This corpus is the seed suite of §4.4: a small suite derived from the normative rules of §1–§3 and §4, reviewed independently of both implementations, and committed before any implementation exists — the golden-first order (F17/F18), discharged here under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7 as artifact-share increment 1 of the {% include term.html id="qnir" text="QnIR" %} draft. Under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline, every vector cites the committed rule that produces each expected value; where the committed text leaves a rendering choice open, the choice is declared in the parameter block below and binds the vectors exactly as a version component of `V` (§2.1) — a change to any of them is a new encoding version. Charges are measured in the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}; the terminal {% include term.html id="receipt" text="receipt" %} of every execution vector is a committed artifact of §2.5/§2.6.
 
-**The corpus binds 64 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 38 executions (family X — the 8 seed vectors of increment 1 and the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
+**The corpus binds 68 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 42 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, and the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
 
 ## Expansion Increment 1 — the QO-22/F12 Combination Completion (v0.3.0-draft.14)
 
@@ -75,6 +75,31 @@ Every expansion vector declares `W_budget` = 100 U, `D` = no entries, the declar
 | X29–X33 | `STATUS_DOMAIN_ERROR` | not promoted | all three | `HALT` / terminalizing birth | the class's own verdict at a `HALT` exit (`DOMAIN_ERROR`, the pool token selected); the birthed token's outcome at a terminalizing birth |
 | X34–X38 | `STATUS_DOMAIN_ERROR` | promoted | all three | `HALT` / terminalizing birth | as X29–X33 — the `PROMOTE` row's no-token-effect branch |
 
+## Expansion Increment 2 — the CLOAD-Hit and Multi-Block Fallback Completion (v0.3.0-draft.15)
+
+This expansion is R6 expansion increment 2 of the Loop-3 stage (the program of record, `docs/qnir.md`, wave record v0.3.0-draft.15), discharging the Suite Register's second bullet — the `CLOAD` hit vectors over a populated dependency store with the bound value checked against its declared bound, and the multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block. Its vectors are X39–X42 below, appended after X38 and derived after the committed four-artifact order and expansion increment 1 (F18 applied to expansions), from the normative rules of §2.1–§2.6 and §3 through the same anchored derivation instrument of record (a third codebase, sharing no code with either implementation and consulting neither; over the committed corpus it re-derives every committed execution vector byte-exact — all 38 — before any expansion byte was derived), and checked by both implementations only after these bytes were fixed. The seed's and increment 1's independently derived vectors are retained byte-unchanged. The increment adds no execution rule to either artifact: the hit path with its pre-dispatch bound check, the store binding, and the multi-block fallback routing are committed §2.3/§2.4/§2.5 rules both implementations already execute — the increment's artifact share is the declared dependency table's harness plumbing (the declared rendering parameter P12 below), not a new execution surface.
+
+**The declared reading** (declared here under the No Implicit Rule discipline where the committed text leaves the point open; it cites its rule and binds the expansion vectors as a version component of `V`):
+
+- **DR3 — the fallback completion site (§2.5 tier rule).** The committed rule consumes the miss token "only when that fallback entry completes successfully — the fallback block completes, births no token, and ends in no typed rejection". The fallback block's completion is its final instruction's own transition: the consume event rides that transition's record whether the block ends in `HALT` (the seed's X6 shape) or in a control transfer — X9's committed bytes already carry the consume on the fallback block's `JMP` (record 3, pc [1, 1]) — and X42 fixes the site decisively beyond that shape: the consume event rides the fallback block's `JMP` while the `SUCCESS` outcome is declared two blocks later, so the consumption site is the fallback block's own completion, never the execution's eventual exit. The rule's own negatives stand: a fallback block that misses again, births, or ends in a typed rejection never consumes (the committed §2.5 F12 rule; the X11/X12/X16/X17 residue shape).
+
+**The declared rendering parameter** (declared here under §4.3's own delegation, binding the vectors exactly as a version component of `V`; no canon byte changes):
+
+- **P12 — the declared dependency table:** a vector whose Declared parameters declare `D` = { addr i → v, … } populates the dependency environment's constant-table entry cited by the i-th declared content address (the addresses themselves ride the Intent's declared dependency list, envelope key 4, per P9) with the canonical integer value v, encoded per §2.6 (`INT_POS`); a `CLOAD` hit binds exactly that canonical table value to a fresh instance (§2.3), and the store component of the canonical configuration encoding (P2) carries it from the hit transition onward. Every vector declaring `D` = no entries — every seed and expansion-increment-1 vector — carries the empty table. The declared table is vector input (§2.1's `D`), never envelope content: the Intent envelope of a hit vector is byte-identical to the same program's miss envelope (X39's and X40's envelopes are byte-equal to X6's), the three vectors differing in the declared `D` and hence in the entire expected outcome — `Eval(Intent, D, V) = Execution` with `D` a first-class declared input.
+
+**The scope disposition.** The bullet's declared scope is realized in full by four vectors: the hit path within the bound (X39 — the first populated-store execution of the corpus, the store component populated by the hit's fresh instance from the hit transition onward), the bound check's boundary (X40 — the hit value equal to its declared bound is admitted; "exceeds" is strict), the bound check's rejection side (X41 — the hit value exceeding its declared bound: the typed rejection before dispatch, no binding and no store effect, the fatal `EXPRESSION_TOO_COMPLEX` birth terminalizing at its own transition with the nil-selected receipt of the X10 shape, and the terminal settlement's refund riding the rejection record where the escrow is open — the X5 precedent, the `CONST` lead transition having completed), and the multi-block fallback completion (X42 — the consume event at the fallback block's `JMP`, the `SUCCESS` two blocks later, DR3). The escrow-never-opened shape (a typed rejection at the execution's first attempted transition, before any completed transition) is not part of this bullet's declared scope and stays unexercised — the reserve's first-completed-transition opening (§3.3) is fixed by the committed text and by every committed vector's settlement trace, and a vector for the unopened-escrow shape belongs to the budget-boundary family's registered expansion (Suite Register bullet 5), not to this increment.
+
+## The Expansion Vector Register (X39–X42)
+
+Every expansion vector declares `W_budget` = 100 U and `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1) under the declared profile `qir-prof-golden-1`; the declared initial status pool is empty in every vector of this increment (no vector declares a pool — the pool machinery is increment 1's surface); the declared dependency table rides P12. Every program cites the seed's single declared content address (P9) in its Intent dependency list; the hit vectors populate its constant-table entry, X42 leaves the store empty.
+
+| Vectors | Surface | Declared `D` | Outcome surface |
+|---|---|---|---|
+| X39 | `CLOAD` hit, value within the bound | { addr 0 → 7 } | `SUCCESS`; the store gains the hit's fresh instance (static value id 0, instance 0, value 7) from the hit transition onward |
+| X40 | `CLOAD` hit at the bound's boundary | { addr 0 → 9 } | `SUCCESS`; the value equal to the declared bound does not exceed it — the strict reading of the §2.3 rejection clause is fixed |
+| X41 | `CLOAD` hit, value exceeding the bound | { addr 0 → 10 } | `EXPRESSION_TOO_COMPLEX` (the typed rejection before dispatch, fatal at its own transition), nil selected; the rejection posts nothing and the open escrow's residue (12 U) refunds at the rejection record |
+| X42 | multi-block fallback completion | no entries | `SUCCESS`; the miss token is consumed at the fallback block's `JMP` (record 3) and the outcome is declared two blocks later (record 4) — DR3's consumption site |
+
 ## Declared Artifact-Wave Parameters
 
 Declared here under §4.3's own delegation ("the hash's own algorithm and output width are declared with the encoding version at the artifact wave"); they ride the encoding version `qir-enc-1` of every vector's `V` and bind the vectors — no canon byte changes:
@@ -90,6 +115,8 @@ Declared here under §4.3's own delegation ("the hash's own algorithm and output
 - **P9 — dependency addresses:** the seed's single declared content address is the 8-byte string `h'0000000000000001'` (a declared vector parameter; §2.1 cites `D` by content address).
 - **P10 — static value ids:** dense from 0 over the Intent's value-defining instructions in block-then-index scan order (§2.6: "static value ids are dense words over the Intent"); a `ref` operand cites these ids; an operand reads the current instance of its static id (§2.4: redefinition mints, never overwrites).
 - **P11 — rejection records:** a typed rejection emits its own record with `work_charged = 0` (§3.1: rejection transitions post nothing), the terminal settlement's refund in `work_refunded` where the escrow is open (§3.3: settled by the execution's final transition, whatever its posting status), and the fatal birth traced in the status field (§2.5).
+
+- **P12 — the declared dependency table (expansion increment 2):** the rendering of the declared dependency environment's populated constant-table entries in a vector's Declared parameters line — `D` = { addr i → v, … } over the Intent's declared dependency list (envelope key 4), the values canonical integers encoded per §2.6 (`INT_POS`); the empty table renders as the committed `D` = no entries form. The table is declared vector input (§2.1's `D`), never envelope content; the `CLOAD` hit binds exactly the declared canonical table value (§2.3). Declared by expansion increment 2 (v0.3.0-draft.15); every vector committed before this increment carries the empty table.
 
 ## The Declared Profile (`qir-prof-golden-1`)
 
@@ -18090,6 +18117,808 @@ refunded fields plus the terminal receipt's itemization):
     reserve_outstanding after terminal settlement       : 0
 ```
 
+### X39 — `exec-cload-hit-success`
+
+Cites: §2.3 CLOAD row (hit: binds `D`'s canonical table value to a fresh instance; fall-through); §2.1 (the declared dependency environment, each entry cited by content address) and §2.2 (the dynamic value store component of the canonical configuration); §2.4 (redefinition mints, never overwrites — the fresh instance); §4.4 Suite Register bullet 2 — the CLOAD-hit surface over a populated store; declared parameter P12.
+
+Declared parameters: `W_budget` = 100 U; `D` = { addr 0 → 7 }; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The dependency table rides the declared rendering parameter P12 (the constant-table entry of the declared content address h'0000000000000001', encoded per §2.6).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CLOAD addr=0 fallback=block 1 bnd=(int, <=9)
+  1: JMP block 2
+block 1 (arity 0):
+  0: CONST imm=9 bnd=(int, <=9)
+  1: HALT
+block 2 (arity 0):
+  0: HALT
+```
+
+Intent envelope (canonical CBOR, 353 bytes; instruction stream entry a byte string of 34 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04814800
+00000000 00000105 03065901 10000000
+00000000 00000000 00000000 00000000
+00000000 02000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 0c000000
+00000000 02000000 00000000 00000000
+00000000 00000000 00000000 01000000
+00000000 00000000 00000000 02000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 10000000
+00000000 00000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 10000000 00000000 00078008
+80
+```
+
+Admission: no back-edges; the maximum path is 3 transitions (12 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (3 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000002 0000000000000000 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids  [h'0000000000000001']
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      000000000000000c 0000000000000002 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181c18 20000202 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181c18 20000202 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        3
+ 4  pc                [2, 0]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181c18 20000202 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820200 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83182018 20000303 82010180
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 32 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_load        4 U (1 posting)
+    q_jmp         4 U (1 posting)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  32 /    0
+    step  2:   28 /  32 /    0
+    step  3:   32 /  32 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 32 = 32 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 32 = 68
+    refund_final = B(P) - charged                       : 32 - 32 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+### X40 — `exec-cload-hit-boundary`
+
+Cites: §2.3 CLOAD row (hit value exceeds its declared bound: typed rejection before dispatch — the value equal to its bound does not exceed it and is admitted); §2.4 instance minting; §4.4 Suite Register bullet 2 — the bound check's boundary; declared parameter P12.
+
+Declared parameters: `W_budget` = 100 U; `D` = { addr 0 → 9 }; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The dependency table rides the declared rendering parameter P12 (the constant-table entry of the declared content address h'0000000000000001', encoded per §2.6).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CLOAD addr=0 fallback=block 1 bnd=(int, <=9)
+  1: JMP block 2
+block 1 (arity 0):
+  0: CONST imm=9 bnd=(int, <=9)
+  1: HALT
+block 2 (arity 0):
+  0: HALT
+```
+
+Intent envelope (canonical CBOR, 353 bytes; instruction stream entry a byte string of 34 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04814800
+00000000 00000105 03065901 10000000
+00000000 00000000 00000000 00000000
+00000000 02000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 0c000000
+00000000 02000000 00000000 00000000
+00000000 00000000 00000000 01000000
+00000000 00000000 00000000 02000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 10000000
+00000000 00000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 10000000 00000000 00078008
+80
+```
+
+Admission: no back-edges; the maximum path is 3 transitions (12 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (3 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000002 0000000000000000 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids  [h'0000000000000001']
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      000000000000000c 0000000000000002 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83181c18 20000202 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83181c18 20000202 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        3
+ 4  pc                [2, 0]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83181c18 20000202 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820200 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000980 83182018 20000303 82010180
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 32 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_load        4 U (1 posting)
+    q_jmp         4 U (1 posting)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  32 /    0
+    step  2:   28 /  32 /    0
+    step  3:   32 /  32 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 32 = 32 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 32 = 68
+    refund_final = B(P) - charged                       : 32 - 32 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+### X41 — `exec-cload-hit-bound-rejection`
+
+Cites: §2.3 CLOAD row (hit value exceeds its declared bound: typed rejection before dispatch — no binding, no store effect); §2.5 failure behavior (the typed rejection is fatal, births EXPRESSION_TOO_COMPLEX, terminalizing at its own transition) and T case (1); §2.6 receipt key 3 (the selected token's identifier rides `NO_SOLUTION`/`DOMAIN_ERROR` exits only — nil at an `EXPRESSION_TOO_COMPLEX` exit, the X10 shape); §3.3 with P11 (the rejection posts nothing; the escrow is open — the `CONST` completed first — so the terminal settlement's refund rides the rejection record, the X5 precedent); §4.4 Suite Register bullet 2; declared parameter P12.
+
+Declared parameters: `W_budget` = 100 U; `D` = { addr 0 → 10 }; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The dependency table rides the declared rendering parameter P12 (the constant-table entry of the declared content address h'0000000000000001', encoded per §2.6).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=1 bnd=(int, <=1)
+  1: CLOAD addr=0 fallback=block 1 bnd=(int, <=9)
+  2: JMP block 2
+block 1 (arity 0):
+  0: CONST imm=9 bnd=(int, <=9)
+  1: HALT
+block 2 (arity 0):
+  0: HALT
+```
+
+Intent envelope (canonical CBOR, 425 bytes; instruction stream entry a byte string of 43 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04814800
+00000000 00000105 03065901 58000000
+00000000 00000000 00000000 00000000
+00000000 03000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 00000000
+00000000 02000000 00000000 00000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 09000000 00000000 00000000
+00000000 0c000000 00000000 02000000
+00000000 00000000 00000000 00000000
+00000000 01000000 00000000 00000000
+00000000 02000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 09000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 09000000 00000000 00000000
+00000000 10000000 00000000 00000000
+00000000 02000000 00000000 00000000
+00000000 01000000 00000000 10000000
+00000000 00078008 80
+```
+
+Admission: no back-edges; the maximum path is 4 transitions (16 U) plus the gateway 20 U.
+
+Expected terminal outcome: **EXPRESSION_TOO_COMPLEX** (tag 3).
+
+Expected transition records (2 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      93ab24e7 f2606907 f06dcf4b 7635845f
+                     6eb6539a 724150fd f46ad665 3ba966a9
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000180 83181818 24000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — rejection (posts nothing)
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000180 83181818 24000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      93ab24e7 f2606907 f06dcf4b 7635845f
+                     6eb6539a 724150fd f46ad665 3ba966a9
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000002 0000000000000000 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000180 83181818 24000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000181 87020001 00030203 83181818
+                     240c0202 82010380 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 9  work_charged      0
+10  work_refunded     12
+11  clock             2
+12  status            [[1, [2, 0, 1, 0, 3]]]
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      3 (EXPRESSION_TOO_COMPLEX)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+      [2, 0, 1, 0, 3, 2, 3]   # EXPRESSION_TOO_COMPLEX tier S state terminalized
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01030281 87020001 00030203 03f60483
+  6e76302e 332e302d 64726166 742e3569
+  7169722d 656e632d 31717169 722d7072
+  6f662d67 6f6c6465 6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 24 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  36 /    0
+    step  2:   24 /  36 /   12
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 36 = 24 + 12 + 0
+    remaining_budget = W_budget - charged               : 100 - 24 = 76
+    refund_final = B(P) - charged                       : 36 - 24 = 12
+    reserve_outstanding after terminal settlement       : 0
+```
+### X42 — `exec-cload-miss-multiblock-completion`
+
+Cites: §2.3 CLOAD row (miss: births `STATUS_LOOKUP_MISS`, routes to the declared fallback edge); §2.5 tier rule under the declared reading DR3 (the fallback entry completes successfully at the fallback block's final instruction — the consume event rides that transition's record whether the block ends in `HALT`, the seed's X6 shape, or in a control transfer; a fallback block that rejects never consumes); §4.4 Suite Register bullet 2 — the multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block.
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The dependency table rides the declared rendering parameter P12 (the constant-table entry of the declared content address h'0000000000000001', encoded per §2.6).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CLOAD addr=0 fallback=block 1 bnd=(int, <=9)
+  1: JMP block 2
+block 1 (arity 0):
+  0: CONST imm=9 bnd=(int, <=9)
+  1: JMP block 3
+block 2 (arity 0):
+  0: ADD ref=0 ref=0 bnd=(int, <=18)
+  1: JMP block 3
+block 3 (arity 0):
+  0: HALT
+```
+
+Intent envelope (canonical CBOR, 489 bytes; instruction stream entry a byte string of 51 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04814800
+00000000 00000105 04065901 98000000
+00000000 00000000 00000000 00000000
+00000000 02000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 0c000000
+00000000 02000000 00000000 00000000
+00000000 00000000 00000000 01000000
+00000000 00000000 00000000 02000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 0c000000
+00000000 03000000 00000000 00000000
+00000000 00000000 00000000 02000000
+00000000 00000000 00000000 02000000
+00000000 05000000 00000000 00000000
+00000000 00000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 12000000 00000000 00000000
+00000000 0c000000 00000000 03000000
+00000000 00000000 00000000 00000000
+00000000 03000000 00000000 00000000
+00000000 01000000 00000000 10000000
+00000000 00078008 80
+```
+
+Admission: no back-edges; the maximum path is 5 transitions (20 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (4 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      336033c5 f1409164 cd2ad4e0 ebabbd46
+                     535a7170 07188ed8 c8201460 be6822d0
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000002 0000000000000000 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids  [h'0000000000000001']
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80808187 01000000 01010183
+                     18181828 00010182 00008083 6e76302e
+                     332e302d 64726166 742e3569 7169722d
+                     656e632d 31717169 722d7072 6f662d67
+                     6f6c6465 6e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            [[1, [1, 0, 0, 0, 1]]]
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80808187 01000000 01010183
+                     18181828 00010182 00008083 6e76302e
+                     332e302d 64726166 742e3569 7169722d
+                     656e632d 31717169 722d7072 6f662d67
+                     6f6c6465 6e2d31
+ 2  program_root      336033c5 f1409164 cd2ad4e0 ebabbd46
+                     535a7170 07188ed8 c8201460 be6822d0
+ 3  step_index        2
+ 4  pc                [1, 0]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808187 01000000 01010183
+                     18181828 00010182 00008083 6e76302e
+                     332e302d 64726166 742e3569 7169722d
+                     656e632d 31717169 722d7072 6f662d67
+                     6f6c6465 6e2d31
+ 8  post_state_root   8a820100 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010101 83181c18
+                     28000202 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820100 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010101 83181c18
+                     28000202 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 2  program_root      336033c5 f1409164 cd2ad4e0 ebabbd46
+                     535a7170 07188ed8 c8201460 be6822d0
+ 3  step_index        3
+ 4  pc                [1, 1]
+ 5  decoded_word      000000000000000c 0000000000000003 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820100 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010101 83181c18
+                     28000202 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 8  post_state_root   8a820101 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010102 83182018
+                     28000303 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            [[2, [1, 0, 0, 0, 1]]]
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 4 — completed
+ 1  prev_root         8a820101 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010102 83182018
+                     28000303 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 2  program_root      336033c5 f1409164 cd2ad4e0 ebabbd46
+                     535a7170 07188ed8 c8201460 be6822d0
+ 3  step_index        4
+ 4  pc                [3, 0]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820101 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010102 83182018
+                     28000303 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 8  post_state_root   8a820300 80818301 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000981 87010000 00010102 83182418
+                     28040404 82010180 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 9  work_charged      4
+10  work_refunded     4
+11  clock             4
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+      [1, 0, 0, 0, 1, 1, 2]   # STATUS_LOOKUP_MISS tier O state consumed
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010281 87010000 00010102 03f60483
+  6e76302e 332e302d 64726166 742e3569
+  7169722d 656e632d 31717169 722d7072
+  6f662d67 6f6c6465 6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 36 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_load        4 U (1 posting)
+    q_const       4 U (1 posting)
+    q_jmp         4 U (1 posting)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  40 /    0
+    step  2:   28 /  40 /    0
+    step  3:   32 /  40 /    0
+    step  4:   36 /  40 /    4
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 40 = 36 + 4 + 0
+    remaining_budget = W_budget - charged               : 100 - 36 = 64
+    refund_final = B(P) - charged                       : 40 - 36 = 4
+    reserve_outstanding after terminal settlement       : 0
+```
+
 ## Suite Register
 
 This seed is increment 1 of the golden corpus (§4.5: "a small suite"). The
@@ -18098,7 +18927,7 @@ increments of the same stage, hand-derived under this file's discipline and
 committed before the artifacts that need them:
 
 - the remaining `QO-22`/F12 terminalization combinations (every combination of {outstanding Tier S token class} × {promoted, not promoted} × {fallback success, fallback repeated miss, fallback typed rejection} × {exit event}) — **discharged at v0.3.0-draft.14 as expansion increment 1 (X9–X38) for every cell a conforming golden can fix**: the 30 reachable `HALT` and terminalizing-birth cells are vectors above, the 6 fallback-typed-rejection-`HALT` cells are declared unreachable (§2.5 failure behavior), and the 18 fuel-backstop cells remain registered to this register's fuel-backstop fixture bullet below (§3.4/F16 — unobservable by a conforming golden);
-- `CLOAD` hit vectors (D entries present, bound value checked against its declared bound), and a multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block;
+- `CLOAD` hit vectors (D entries present, bound value checked against its declared bound), and a multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block — **discharged at v0.3.0-draft.15 as expansion increment 2 (X39–X42)**: the hit path within the bound, the bound check's strict boundary, the bound check's typed rejection before dispatch, and the multi-block completion fixing the consumption site at the fallback block's own completion under the declared reading DR3, over the declared dependency-table rendering P12;
 - `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload);
 - depth-ceiling vectors and the fuel-backstop-on-validator-defect vector (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16);
 - per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family;
