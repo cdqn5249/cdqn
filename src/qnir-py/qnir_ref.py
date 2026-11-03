@@ -95,6 +95,11 @@ def enc_value(v):
     if len(v) == 3 and v[0] == "zoom":
         q, ze = zoom_normalized(v[1], v[2])
         return w(TAG_ZOOM) + enc_int(q) + enc_int(ze)
+    if len(v) == 2 and v[0] == "zoom":
+        # the decoded form (decode_value returns the normalized pair); the
+        # pair is already normalized by the decoding rule (§2.6)
+        q, ze = v[1]
+        return w(TAG_ZOOM) + enc_int(q) + enc_int(ze)
     raise ValueError(f"unsupported value {v!r}")
 
 
@@ -291,6 +296,11 @@ CLASS_OF = {"CONST": "q_const", "CLOAD": "q_load", "TUPLE": "q_tuple",
 TOKEN_TYPES = {1: "STATUS_LOOKUP_MISS", 2: "STATUS_NEG_EVEN_ROOT",
                3: "EXPRESSION_TOO_COMPLEX", 4: "STATUS_DOMAIN_ERROR"}
 CC_NAMES = {0: "LT", 1: "LE", 2: "EQ", 3: "NE", 4: "GT", 5: "GE"}
+RTAG_NAMES = {1: "int", 3: "tuple", 4: "zoom"}
+# P13(a) (expansion increment 3): the declared zoom ranges — the normalized
+# exponent within [-4, 4], the normalized mantissa within [0, 2^64)
+ZOOM_EXP_LO, ZOOM_EXP_HI = -4, 4
+ZOOM_MAN_HI = 1 << 64
 DEFINING = {"CONST", "CLOAD", "TUPLE", "FIELD", "ADD", "SUB", "MUL", "DIV",
             "MOD", "CMP", "OBS"}
 ARITH = ("ADD", "SUB", "MUL", "DIV", "MOD")
@@ -367,12 +377,30 @@ def decode_instruction(ws, i, end):
         lo = value()
         hi = value()
         ins["rng"] = (lo, hi)
+    elif name == "TUPLE":
+        # cnt (k), then k field declarations (rtag word + bound value) in
+        # field order, then k component references (expansion increment 3)
+        k = word()
+        fields = []
+        for _ in range(k):
+            rtag = word()
+            if rtag not in (1, 3, 4):
+                raise Malformed(S_TTYPE)
+            fields.append((rtag, value()))
+        ins["fields"] = fields
+        ins["refs"] = [word() for _ in range(k)]
+    elif name == "FIELD":
+        ins["a"] = word()
+        ins["idx"] = word()
+    elif name == "EMIT":
+        # cnt (the declared kind immediate), cnt (k), then k refs
+        ins["kind"] = word()
+        k = word()
+        ins["refs"] = [word() for _ in range(k)]
     elif name in ("PROMOTE", "HALT"):
         pass
     else:
-        # TUPLE, FIELD, EMIT: operand shapes are expansion obligations of the
-        # seed; no committed vector exercises them.
-        raise ValueError(f"opcode {name} operand grammar is an expansion obligation")
+        raise ValueError(f"opcode {name} has no operand rule in the committed inventory")
     ins["ext"] = word()
     return ins, i
 
@@ -469,7 +497,20 @@ def listing_of(blocks):
         for k, ins in enumerate(b["instrs"]):
             op = ins["op"]
             if op == "CONST":
-                t = f"CONST imm={ins['imm']} bnd=(int, <={ins['rbnd']})"
+                imm = ins["imm"]
+                if isinstance(imm, tuple) and imm and imm[0] == "zoom":
+                    q, ze = (imm[1] if len(imm) == 2 else (imm[1], imm[2]))
+                    lit = f"zoom({q}, {ze})"
+                    kind = "zoom"
+                elif isinstance(imm, tuple) and imm and imm[0] == "tuple":
+                    # no committed source program carries a tuple literal;
+                    # the rendering is declared deterministic for it
+                    lit = "tuple(" + ", ".join(repr(f) for f in imm[1]) + ")"
+                    kind = "tuple"
+                else:
+                    lit = str(imm)
+                    kind = "int"
+                t = f"CONST imm={lit} bnd=({kind}, <={ins['rbnd']})"
             elif op == "CLOAD":
                 t = (f"CLOAD addr={ins['addr']} fallback=block {ins['fallback']} "
                      f"bnd=(int, <={ins['rbnd']})")
@@ -477,6 +518,20 @@ def listing_of(blocks):
                 t = f"{op} ref={ins['a']} ref={ins['b']} bnd=(int, <={ins['rbnd']})"
             elif op == "CMP":
                 t = f"CMP ref={ins['a']} ref={ins['b']} rng=[{ins['rng'][0]}, {ins['rng'][1]}]"
+            elif op == "TUPLE":
+                fs = ", ".join(f"({RTAG_NAMES[rt]}, <={b})"
+                               for (rt, b) in ins["fields"])
+                rs = " ".join(f"ref={r}" for r in ins["refs"])
+                t = f"TUPLE k={len(ins['fields'])} fields=[{fs}]"
+                if rs:
+                    t += f" {rs}"
+            elif op == "FIELD":
+                t = f"FIELD ref={ins['a']} idx={ins['idx']}"
+            elif op == "EMIT":
+                rs = " ".join(f"ref={r}" for r in ins["refs"])
+                t = f"EMIT kind={ins['kind']} k={len(ins['refs'])}"
+                if rs:
+                    t += f" {rs}"
             elif op == "BR":
                 t = (f"BR cc={CC_NAMES[ins['cc']]} ref={ins['cond']} "
                      f"true=block {ins['true_blk']} false=block {ins['false_blk']}")
@@ -623,6 +678,37 @@ def tid(t):
     return [t["birth"], t["block"], t["index"], t["serial"], t["type"]]
 
 
+def _is_zoom(v):
+    return isinstance(v, tuple) and v and v[0] == "zoom"
+
+
+def zoom_pair(v):
+    """The operand's normalized zoom pair under §2.3's N: a zoom-carrying
+    value is already stored normalized; an integer operand compares as the
+    dyadic (v, 0) under N (expansion increment 3)."""
+    if _is_zoom(v):
+        return v[1]
+    return zoom_normalized(v, 0)
+
+
+def cmp_under_n(a, b):
+    """The zoom-boundary comparison under N (§2.3): equal exactly when the
+    normalized pairs are equal; otherwise, for normalized (q1, z1), (q2, z2)
+    with z1 ≤ z2, the ordering is decided by comparing q1 against
+    q2·2^(z2−z1) in exact integer arithmetic — the exponent difference is
+    non-negative, so the shift is exact and the comparison never rounds."""
+    (q1, z1), (q2, z2) = zoom_pair(a), zoom_pair(b)
+    if (q1, z1) == (q2, z2):
+        return 0
+    neg = False
+    if z1 > z2:
+        (q1, z1), (q2, z2) = (q2, z2), (q1, z1)
+        neg = True
+    shifted = q2 * (1 << (z2 - z1))
+    c = -1 if q1 < shifted else (1 if q1 > shifted else 0)
+    return -c if neg else c
+
+
 class Machine:
     def __init__(self, envelope_bytes, D, w_budget, profile):
         env = decode_envelope(envelope_bytes)
@@ -644,7 +730,10 @@ class Machine:
         self.clock = 0
         self.step = 0
         self.halt = [0, 0]
-        self.receipts = []          # P7: emission ordinals; no witness in the seed
+        self.receipts = []          # the receipt-order queue (P2 component 9):
+        #                            the witness records in emission order,
+        #                            each the P13(d) entry
+        self.step_receipt_ids = []  # the ordinals the current transition emitted
         self.store = {}             # (static id, instance id) -> value
         self.current = {}           # static id -> current instance id
         self.next_iid = 0
@@ -678,11 +767,12 @@ class Machine:
 
     def emit(self, pc, decoded, charged, refunded, events, io_ids, pre, post):
         """One transition record: the fourteen fields of §2.6's F5 list, in
-        order, through deterministic CBOR."""
+        order, through deterministic CBOR.  Field 13 (P13(d), expansion
+        increment 3) carries the ordinals the transition emitted."""
         rec = [[1, pre], [2, self.prog_root], [3, self.step], [4, list(pc)],
                [5, decoded], [6, list(io_ids)], [7, pre], [8, post],
                [9, charged], [10, refunded], [11, self.clock], [12, events],
-               [13, list(self.receipts)], [14, list(self.versions)]]
+               [13, list(self.step_receipt_ids)], [14, list(self.versions)]]
         self.records.append(cbor_encode(rec))
 
     def decoded_at(self, blk, idx):
@@ -698,6 +788,9 @@ class Machine:
         self.next_iid += 1
 
     def read(self, sid):
+        return self.store[(sid, self.current[sid])]
+
+    def read_value(self, sid):
         return self.store[(sid, self.current[sid])]
 
     def birth(self, ttype, pc, birth_step=None):
@@ -740,6 +833,7 @@ class Machine:
                 # fuel backstop (§3.4): defense in depth after admission
                 return self.rejection("EXPRESSION_TOO_COMPLEX", pc, decoded, pre)
             try:
+                self.step_receipt_ids = []
                 transfer = self.dispatch(ins, pc, events, io_ids)
             except Rejection as r:
                 return self.rejection(r.token_type, pc, decoded, pre)
@@ -793,9 +887,21 @@ class Machine:
 
     # -------------------------------------------------------- the rules (§2.3)
     def do_CONST(self, ins, pc, events, io_ids):
-        if ins["imm"] > ins["rbnd"]:
+        imm, rbnd = ins["imm"], ins["rbnd"]
+        if _is_zoom(imm):
+            # P13(c) (expansion increment 3): a zoom literal's declared
+            # INT_POS upper bound constrains the normalized exponent — the
+            # pair's range-bearing component
+            if imm[1][1] > rbnd:
+                raise Rejection("EXPRESSION_TOO_COMPLEX")
+        elif isinstance(imm, tuple):
+            # P13(c): a tuple-result declaration's bound word is present and
+            # vacuous — the check compares an INT_POS quantity, and a tuple
+            # carries none
+            pass
+        elif imm > rbnd:
             raise Rejection("EXPRESSION_TOO_COMPLEX")
-        self.mint(ins["sid"], ins["imm"])
+        self.mint(ins["sid"], imm)
 
     def do_CLOAD(self, ins, pc, events, io_ids):
         addr = self.deps[ins["addr"]]
@@ -843,7 +949,20 @@ class Machine:
         self.mint(ins["sid"], r)
 
     def do_CMP(self, ins, pc, events, io_ids):
-        a, b = self.read(ins["a"]), self.read(ins["b"])
+        x, y = self.read_value(ins["a"]), self.read_value(ins["b"])
+        if _is_zoom(x) or _is_zoom(y):
+            # P13(b) (expansion increment 3): the CMP row's pre-dispatch
+            # declared-range check over each zoom-carrying operand
+            for v in (x, y):
+                if _is_zoom(v):
+                    m, z = v[1]
+                    if not (ZOOM_EXP_LO <= z <= ZOOM_EXP_HI
+                            and 0 <= m < ZOOM_MAN_HI):
+                        raise Rejection("EXPRESSION_TOO_COMPLEX")
+            r = cmp_under_n(x, y)
+            self.mint(ins["sid"], r)
+            return None
+        a, b = x, y
         self.mint(ins["sid"], -1 if a < b else (1 if a > b else 0))
 
     def do_BR(self, ins, pc, events, io_ids):
@@ -884,10 +1003,40 @@ class Machine:
             events.append([2, tid(tok)])
 
     def do_TUPLE(self, ins, pc, events, io_ids):
-        raise ValueError("TUPLE is an expansion obligation of the seed")
+        # §2.3's TUPLE row (expansion increment 3): binds the canonical tuple
+        # value over the components to a fresh instance; any component
+        # exceeding its declared bound fires the typed rejection before
+        # dispatch — under P13(c)'s bound reading the check compares integer
+        # components against their INT_POS bounds, a TUPLE-typed field's
+        # bound (and a tuple component under it) carrying no INT_POS quantity
+        comps = [self.read_value(r) for r in ins["refs"]]
+        for (rtag, b), v in zip(ins["fields"], comps):
+            if rtag == 1 and isinstance(v, int) and not isinstance(v, bool):
+                if v > b:
+                    raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(ins["sid"], ("tuple", comps))
+        return None
 
-    do_FIELD = do_TUPLE
-    do_EMIT = do_TUPLE
+    def do_FIELD(self, ins, pc, events, io_ids):
+        # §2.3's FIELD row (expansion increment 3): binds the i-th
+        # component's canonical value to a fresh instance; no run-time
+        # rejection — postulate (v) excludes arity and type mismatches at
+        # Intent formation
+        v = self.read_value(ins["a"])
+        self.mint(ins["sid"], v[1][ins["idx"]])
+        return None
+
+    def do_EMIT(self, ins, pc, events, io_ids):
+        # §2.3's EMIT row + P13(d) (expansion increment 3): the witness
+        # record — (the declared kind, the cited values' current-instance
+        # canonical encodings, the emission position) — appends to the
+        # receipt-order queue; the ordinal (P7) rides the entry and field 13
+        # cites it
+        encs = [enc_value(self.read_value(r)) for r in ins["refs"]]
+        ordn = len(self.receipts)
+        self.receipts.append([ordn, ins["kind"], encs, [pc[0], pc[1]]])
+        self.step_receipt_ids.append(ordn)
+        return None
 
     def do_HALT(self, ins, pc, events, io_ids):
         return ("halt",)
@@ -951,6 +1100,7 @@ class Machine:
             t["state"] = ST_TERM
             events.append([3, tid(t)])
         post = self.config_bytes(pc)
+        self.step_receipt_ids = []   # a rejection transition emits no witness
         self.emit(pc, decoded, 0, refund, events, [], pre, post)
         self.boundaries.append((self.step, dict(self.acc)))
         return self.pack(outcome)
