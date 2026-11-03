@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.15
-updated: 2026-11-02
+version: 0.3.0-draft.16
+updated: 2026-11-03
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -25,19 +25,19 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1) |
-| **Version** | 0.3.0-draft.15 |
-| **Last Updated** | 2026-11-02 (Bao Loc, Vietnam) |
+| **Version** | 0.3.0-draft.16 |
+| **Last Updated** | 2026-11-03 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Working Draft under the Loop-2 Repair Sequence and the Loop-3 Repair Program (R1–R6) — Not Promoted to the Canon |
 
-*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft — the first artifact increment under the declared order of conformance §4.5 (F18): the goldens precede all code, and no implementation exists or is drafted at this version. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. Nothing herein redefines, amends, or overrides any canonical specification.
+*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft — the first artifact increment under the declared order of conformance §4.5 (F18): the goldens precede all code, and no implementation exists or is drafted at this version. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), and at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
 
 ## Scope and Derivation Discipline
 
 This corpus is the seed suite of §4.4: a small suite derived from the normative rules of §1–§3 and §4, reviewed independently of both implementations, and committed before any implementation exists — the golden-first order (F17/F18), discharged here under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7 as artifact-share increment 1 of the {% include term.html id="qnir" text="QnIR" %} draft. Under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline, every vector cites the committed rule that produces each expected value; where the committed text leaves a rendering choice open, the choice is declared in the parameter block below and binds the vectors exactly as a version component of `V` (§2.1) — a change to any of them is a new encoding version. Charges are measured in the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}; the terminal {% include term.html id="receipt" text="receipt" %} of every execution vector is a committed artifact of §2.5/§2.6.
 
-**The corpus binds 68 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 42 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, and the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
+**The corpus binds 75 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 49 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, and the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
 
 ## Expansion Increment 1 — the QO-22/F12 Combination Completion (v0.3.0-draft.14)
 
@@ -100,6 +100,33 @@ Every expansion vector declares `W_budget` = 100 U and `V` = (v0.3.0-draft.5, qi
 | X41 | `CLOAD` hit, value exceeding the bound | { addr 0 → 10 } | `EXPRESSION_TOO_COMPLEX` (the typed rejection before dispatch, fatal at its own transition), nil selected; the rejection posts nothing and the open escrow's residue (12 U) refunds at the rejection record |
 | X42 | multi-block fallback completion | no entries | `SUCCESS`; the miss token is consumed at the fallback block's `JMP` (record 3) and the outcome is declared two blocks later (record 4) — DR3's consumption site |
 
+## Expansion Increment 3 — the TUPLE/FIELD/zoom-CMP/EMIT-witness Completion (v0.3.0-draft.16)
+
+This expansion is R6 expansion increment 3 of the Loop-3 stage (the program of record, `docs/qnir.md`, wave record v0.3.0-draft.16), discharging the Suite Register's third bullet — the `TUPLE`/`FIELD` value and execution vectors, the zoom `CMP` execution vectors (the boundary comparison under N), and the `EMIT` witness vectors (the receipt ordinals and the witness payload). Its vectors are X43–X49 below, appended after X42 and derived after the committed four-artifact order and expansion increments 1–2 (F18 applied to expansions), from the normative rules of §2.1–§2.6 and §3 through the same anchored derivation instrument of record (a third codebase, sharing no code with either implementation and consulting neither; over the committed corpus it re-derives every committed execution vector byte-exact — all 42 — before any expansion byte was derived), and checked by both implementations only after these bytes were fixed. The seed's and increments 1–2's independently derived vectors are retained byte-unchanged. Unlike increments 1–2, whose artifact shares changed no execution rule, this increment's artifact share implements new opcode execution surfaces in both artifacts: the `TUPLE`, `FIELD`, and `EMIT` rows of §2.3's closed inventory and the zoom-carrying operand surface of the `CMP` row (the zoom-boundary comparison under N with the declared-range rejection) are committed rules no committed vector exercised before this corpus byte — the corpus adds no execution rule of its own, and the implementations are bound to exactly the committed rows.
+
+**The declared readings and rendering parameters** (declared here under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline where the committed text leaves the point open; each cites its rule and binds the expansion vectors as a version component of `V`; collected as parameter **P13** in the declared-parameter block below):
+
+- **P13(a) — the declared zoom ranges (§2.3's zoom declaration: "each within the pair's declared ranges").** For every zoom-carrying value of this increment's vectors, the normalized exponent z lies within [−4, 4] and the normalized mantissa q within [0, 2^64). The ranges are declared here because no envelope key carries them — the declared-vector-input shape of P12's `D` (§2.1's declared inputs ride the vector, not the envelope).
+- **P13(b) — the CMP pre-dispatch declared-range check (§2.3 CMP row).** A zoom-carrying operand whose normalized exponent or mantissa lies outside the declared ranges of P13(a) fires the row's typed rejection before dispatch — no binding, no result instance, the fatal `EXPRESSION_TOO_COMPLEX` birth terminalizing at its own transition.
+- **P13(c) — the bound reading over a non-integer result (§2.3 CONST row, "literal exceeds its declared bound"; §2.3 TUPLE row, "any component exceeds its declared bound").** The declared INT_POS upper bound of a zoom-result declaration constrains the normalized exponent — the pair's range-bearing component; z > bound fires the producing row's typed rejection before dispatch. A tuple-result declaration's or a TUPLE-typed field's bound word is present and vacuous: the check compares an INT_POS quantity, and a tuple carries none.
+- **P13(d) — the witness rendering (§2.3 EMIT row; P7; P2 component 9).** The receipt-order queue carries the witness records in emission order, each entry `[ordinal, kind, [the cited values' current-instance canonical encodings as byte strings of their §2.6 word encodings], [block, index]]` — the ordinal P7's (dense from 0), kind the declared kind immediate, the emission position the emitting instruction's pc; record field 13 carries the ordinals the transition emitted (dense from 0; `[]` when it emits none). The terminal receipt is unchanged: closed keys 0–4, tokens only — the witness queue rides the state roots, not the receipt.
+
+**The scope disposition.** The bullet's declared scope is realized in full by seven vectors: the flat tuple build over two in-bound integer components with both field extractions (X43), the component-bound typed rejection before dispatch with the open escrow's residue refunding at the rejection record — the X5/X41 precedent (X44), the nested tuple construction with a tuple-valued component and the chained field extraction through it (X45 — two store entries carrying byte-equal canonical values under distinct names, the §2.2 name discipline), the zoom boundary comparison's equal branch (X46 — the corpus's first zoom-carrying executions, two instances of one normalized pair, result 0), the ordered branch with the exact shift decided in both directions ((3, −1) against (1, 0): 3 against 2, and its symmetric −1) (X47), the CMP declared-range rejection with the residue refunding at the rejection record (X48), and two witness records with their ordinals, payload, and queue (X49).
+
+## The Expansion Vector Register (X43–X49)
+
+Every expansion vector declares `W_budget` = 100 U and `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1) under the declared profile `qir-prof-golden-1`; the declared initial status pool is empty in every vector of this increment; `D` = no entries in every vector (the dependency surface is increments 1–2's). Every program is a single-block program; no block declares arguments.
+
+| Vectors | Surface | Outcome surface |
+|---|---|---|
+| X43 | `TUPLE` build over two in-bound integer components; both `FIELD` extractions | `SUCCESS`; the store carries the tuple value and both extracted instances |
+| X44 | `TUPLE` component-bound rejection | `EXPRESSION_TOO_COMPLEX` (the typed rejection before dispatch, fatal at its own transition), nil selected; the rejection posts nothing and the open escrow's residue (8 U) refunds at the rejection record |
+| X45 | nested `TUPLE` construction; chained `FIELD` extractions | `SUCCESS`; two store entries carry byte-equal tuple canonical values under distinct names |
+| X46 | zoom `CMP`, the equal branch under N | `SUCCESS`; the corpus's first zoom-carrying executions — two zoom instances, result 0 |
+| X47 | zoom `CMP`, the ordered branch under N (the exact shift, both directions) | `SUCCESS`; results 1 and −1 |
+| X48 | zoom `CMP` declared-range rejection | `EXPRESSION_TOO_COMPLEX` (the typed rejection before dispatch), nil selected; the rejection posts nothing and the open escrow's residue (8 U) refunds at the rejection record |
+| X49 | `EMIT` witness records | `SUCCESS`; receipt ordinals 0 and 1; the queue rides the post-state roots from the first emission onward; field 13 cites each transition's own ordinals |
+
 ## Declared Artifact-Wave Parameters
 
 Declared here under §4.3's own delegation ("the hash's own algorithm and output width are declared with the encoding version at the artifact wave"); they ride the encoding version `qir-enc-1` of every vector's `V` and bind the vectors — no canon byte changes:
@@ -117,6 +144,8 @@ Declared here under §4.3's own delegation ("the hash's own algorithm and output
 - **P11 — rejection records:** a typed rejection emits its own record with `work_charged = 0` (§3.1: rejection transitions post nothing), the terminal settlement's refund in `work_refunded` where the escrow is open (§3.3: settled by the execution's final transition, whatever its posting status), and the fatal birth traced in the status field (§2.5).
 
 - **P12 — the declared dependency table (expansion increment 2):** the rendering of the declared dependency environment's populated constant-table entries in a vector's Declared parameters line — `D` = { addr i → v, … } over the Intent's declared dependency list (envelope key 4), the values canonical integers encoded per §2.6 (`INT_POS`); the empty table renders as the committed `D` = no entries form. The table is declared vector input (§2.1's `D`), never envelope content; the `CLOAD` hit binds exactly the declared canonical table value (§2.3). Declared by expansion increment 2 (v0.3.0-draft.15); every vector committed before this increment carries the empty table.
+
+- **P13 — the declared zoom ranges, the CMP pre-dispatch check, the non-integer bound reading, and the witness rendering (expansion increment 3):** (a) the declared zoom ranges of §2.3's zoom declaration ("each within the pair's declared ranges") for this increment's vectors — the normalized exponent z within [−4, 4], the normalized mantissa q within [0, 2^64) — declared here because no envelope key carries them (the P12 declared-vector-input shape); (b) the CMP row's pre-dispatch check compares each zoom-carrying operand's normalized pair against (a) — outside, the row's typed rejection before dispatch; (c) the bound reading over a non-integer result — a zoom-result declaration's INT_POS upper bound constrains the normalized exponent (z > bound fires the producing row's typed rejection before dispatch), and a tuple-result or TUPLE-typed field declaration's bound word is present and vacuous (the check compares an INT_POS quantity, and a tuple carries none); (d) the witness rendering — the receipt-order queue (P2 component 9) carries the witness records in emission order, each entry [ordinal, kind, [the cited values' current-instance canonical encodings as byte strings of their §2.6 word encodings], [block, index]], the ordinal P7's (dense from 0), record field 13 carrying the ordinals the transition emitted (dense from 0, `[]` when it emits none). Declared by expansion increment 3 (v0.3.0-draft.16); every vector committed before this increment carries the empty queue and the empty field-13 list.
 
 ## The Declared Profile (`qir-prof-golden-1`)
 
@@ -18919,6 +18948,2476 @@ refunded fields plus the terminal receipt's itemization):
     reserve_outstanding after terminal settlement       : 0
 ```
 
+### X43 — `exec-tuple-field-extract`
+
+Cites: §2.3 TUPLE row (binds the canonical tuple value over the components to a fresh instance; fall-through; each component checked against its declared bound before dispatch) and FIELD row (binds the i-th component's canonical value to a fresh instance; no run-time rejection — postulate (v)); §2.2 (the dynamic value store component carrying the tuple value) and §2.4 (redefinition mints, never overwrites); §2.6 (the tuple value grammar, fields in declared order); §4.4 Suite Register bullet 3 — the `TUPLE`/`FIELD` execution surface; declared parameter P13(c) (the bound reading).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=7 bnd=(int, <=9)
+  1: CONST imm=9 bnd=(int, <=9)
+  2: TUPLE k=2 fields=[(int, <=9), (int, <=9)] ref=0 ref=1
+  3: FIELD ref=2 idx=0
+  4: FIELD ref=2 idx=1
+  5: HALT
+```
+
+Intent envelope (canonical CBOR, 424 bytes; instruction stream entry a byte string of 44 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590160 00000000 00000000 00000000
+00000000 00000000 00000006 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000007 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000000 00000000
+00000003 00000000 00000002 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000001 00000000
+00000000 00000000 00000004 00000000
+00000002 00000000 00000000 00000000
+00000000 00000000 00000004 00000000
+00000002 00000000 00000001 00000000
+00000000 00000000 00000010 00000000
+00000000 07800880
+```
+
+Admission: no back-edges; the maximum path is 6 transitions (24 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (6 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      39133fcb e7a0bb2d bfbd4cd5 db575b7e
+                     994e7804 192c35ff 3b583094 918b6fb1
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000007 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 2c000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 2c000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      39133fcb e7a0bb2d bfbd4cd5 db575b7e
+                     994e7804 192c35ff 3b583094 918b6fb1
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 2c000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     8083181c 182c0002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     8083181c 182c0002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 2  program_root      39133fcb e7a0bb2d bfbd4cd5 db575b7e
+                     994e7804 192c35ff 3b583094 918b6fb1
+ 3  step_index        3
+ 4  pc                [0, 2]
+ 5  decoded_word      0000000000000003 0000000000000002 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000009
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     8083181c 182c0002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 8  post_state_root   8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 20182c00 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 4 — completed
+ 1  prev_root         8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 20182c00 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 2  program_root      39133fcb e7a0bb2d bfbd4cd5 db575b7e
+                     994e7804 192c35ff 3b583094 918b6fb1
+ 3  step_index        4
+ 4  pc                [0, 3]
+ 5  decoded_word      0000000000000004 0000000000000002 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 20182c00 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 8  post_state_root   8a820003 80848300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078083 1824182c 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             4
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 5 — completed
+ 1  prev_root         8a820003 80848300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078083 1824182c 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 2  program_root      39133fcb e7a0bb2d bfbd4cd5 db575b7e
+                     994e7804 192c35ff 3b583094 918b6fb1
+ 3  step_index        5
+ 4  pc                [0, 4]
+ 5  decoded_word      0000000000000004 0000000000000002 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820003 80848300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078083 1824182c 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 8  post_state_root   8a820004 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078304 04581800 00000000 00000100
+                     00000000 00000100 00000000 00000980
+                     83182818 2c000505 82000080 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             5
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 6 — completed
+ 1  prev_root         8a820004 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078304 04581800 00000000 00000100
+                     00000000 00000100 00000000 00000980
+                     83182818 2c000505 82000080 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 2  program_root      39133fcb e7a0bb2d bfbd4cd5 db575b7e
+                     994e7804 192c35ff 3b583094 918b6fb1
+ 3  step_index        6
+ 4  pc                [0, 5]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820004 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078304 04581800 00000000 00000100
+                     00000000 00000100 00000000 00000980
+                     83182818 2c000505 82000080 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 8  post_state_root   8a820005 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09830303 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078304 04581800 00000000 00000100
+                     00000000 00000100 00000000 00000980
+                     83182c18 2c000606 82010180 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             6
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 44 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       8 U (2 postings)
+    q_field       8 U (2 postings)
+    q_tuple       4 U (1 posting)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  44 /    0
+    step  2:   28 /  44 /    0
+    step  3:   32 /  44 /    0
+    step  4:   36 /  44 /    0
+    step  5:   40 /  44 /    0
+    step  6:   44 /  44 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 44 = 44 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 44 = 56
+    refund_final = B(P) - charged                       : 44 - 44 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+### X44 — `exec-tuple-component-bound-rejection`
+
+Cites: §2.3 TUPLE row (any component exceeds its declared bound: typed rejection before dispatch — no binding, no store effect); §2.5 failure behavior (the typed rejection is fatal, births EXPRESSION_TOO_COMPLEX, terminalizing at its own transition) and T case (1); §2.6 receipt key 3 (nil at an `EXPRESSION_TOO_COMPLEX` exit, the X10 shape); §3.3 with P11 (the rejection posts nothing; the escrow is open — the `CONST` completed first — so the terminal settlement's refund rides the rejection record, the X5 precedent); §4.4 Suite Register bullet 3; declared parameter P13(c) (the bound reading).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=7 bnd=(int, <=9)
+  1: TUPLE k=2 fields=[(int, <=9), (int, <=4)] ref=0 ref=0
+  2: HALT
+```
+
+Intent envelope (canonical CBOR, 287 bytes; instruction stream entry a byte string of 27 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+0658d800 00000000 00000000 00000000
+00000000 00000000 00000300 00000000
+00000100 00000000 00000100 00000000
+00000100 00000000 00000700 00000000
+00000100 00000000 00000100 00000000
+00000100 00000000 00000900 00000000
+00000000 00000000 00000300 00000000
+00000200 00000000 00000100 00000000
+00000100 00000000 00000100 00000000
+00000900 00000000 00000100 00000000
+00000100 00000000 00000100 00000000
+00000400 00000000 00000000 00000000
+00000000 00000000 00000000 00000000
+00001000 00000000 00000007 800880
+```
+
+Admission: no back-edges; the maximum path is 3 transitions (12 U) plus the gateway 20 U.
+
+Expected terminal outcome: **EXPRESSION_TOO_COMPLEX** (tag 3).
+
+Expected transition records (2 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      e195df75 17b4292d 536ff37b 745cc1ca
+                     4b175ebe e0ac01cd 57851666 d09ee8f8
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000007 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — rejection (posts nothing)
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      e195df75 17b4292d 536ff37b 745cc1ca
+                     4b175ebe e0ac01cd 57851666 d09ee8f8
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000003 0000000000000002 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000009
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000004 0000000000000000 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 20000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000781 87020001 00030203 83181818
+                     20080202 82010380 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 9  work_charged      0
+10  work_refunded     8
+11  clock             2
+12  status            [[1, [2, 0, 1, 0, 3]]]
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      3 (EXPRESSION_TOO_COMPLEX)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+      [2, 0, 1, 0, 3, 2, 3]   # EXPRESSION_TOO_COMPLEX tier S state terminalized
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01030281 87020001 00030203 03f60483
+  6e76302e 332e302d 64726166 742e3569
+  7169722d 656e632d 31717169 722d7072
+  6f662d67 6f6c6465 6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 24 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  32 /    0
+    step  2:   24 /  32 /    8
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 32 = 24 + 8 + 0
+    remaining_budget = W_budget - charged               : 100 - 24 = 76
+    refund_final = B(P) - charged                       : 32 - 24 = 8
+    reserve_outstanding after terminal settlement       : 0
+```
+### X45 — `exec-tuple-nested-field-extract`
+
+Cites: §2.3 TUPLE row (the canonical tuple value over the components, one component itself a tuple value) and FIELD row (the i-th component's canonical value bound to a fresh instance — here a tuple, then an integer from that tuple); §2.2 (the store's entries are names (static value id, instance id): two entries may carry byte-equal canonical values under distinct names); §2.4 (redefinition mints, never overwrites); §2.6 (the nested tuple value grammar); §4.4 Suite Register bullet 3; declared parameter P13(c) (a TUPLE-typed field's bound word is present and vacuous — no INT_POS quantity to compare).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=7 bnd=(int, <=9)
+  1: CONST imm=3 bnd=(int, <=9)
+  2: CONST imm=5 bnd=(int, <=9)
+  3: TUPLE k=2 fields=[(int, <=9), (int, <=9)] ref=1 ref=2
+  4: TUPLE k=2 fields=[(int, <=9), (tuple, <=0)] ref=0 ref=3
+  5: FIELD ref=4 idx=1
+  6: FIELD ref=5 idx=0
+  7: HALT
+```
+
+Intent envelope (canonical CBOR, 592 bytes; instruction stream entry a byte string of 65 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590208 00000000 00000000 00000000
+00000000 00000000 00000008 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000007 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000003 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000000 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000005 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000003 00000000
+00000002 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000001 00000000
+00000002 00000000 00000000 00000000
+00000003 00000000 00000002 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000003 00000000 00000001 00000000
+00000000 00000000 00000000 00000000
+00000003 00000000 00000000 00000000
+00000004 00000000 00000004 00000000
+00000001 00000000 00000000 00000000
+00000004 00000000 00000005 00000000
+00000000 00000000 00000000 00000000
+00000010 00000000 00000000 07800880
+```
+
+Admission: no back-edges; the maximum path is 8 transitions (32 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (8 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000007 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 34000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 34000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000003 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 34000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     8083181c 18340002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     8083181c 18340002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        3
+ 4  pc                [0, 2]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000005 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     8083181c 18340002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 8  post_state_root   8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05808318
+                     20183400 03038200 0080836e 76302e33
+                     2e302d64 72616674 2e356971 69722d65
+                     6e632d31 71716972 2d70726f 662d676f
+                     6c64656e 2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 4 — completed
+ 1  prev_root         8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05808318
+                     20183400 03038200 0080836e 76302e33
+                     2e302d64 72616674 2e356971 69722d65
+                     6e632d31 71716972 2d70726f 662d676f
+                     6c64656e 2d31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        4
+ 4  pc                [0, 3]
+ 5  decoded_word      0000000000000003 0000000000000002 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000009
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000001 0000000000000002
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05808318
+                     20183400 03038200 0080836e 76302e33
+                     2e302d64 72616674 2e356971 69722d65
+                     6e632d31 71716972 2d70726f 662d676f
+                     6c64656e 2d31
+ 8  post_state_root   8a820003 80848300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058083 18241834 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             4
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 5 — completed
+ 1  prev_root         8a820003 80848300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058083 18241834 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        5
+ 4  pc                [0, 4]
+ 5  decoded_word      0000000000000003 0000000000000002 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000009
+                     0000000000000003 0000000000000001 0000000000000000
+                     0000000000000000 0000000000000003 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820003 80848300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058083 18241834 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 8  post_state_root   8a820004 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000580
+                     83182818 34000505 82000080 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             5
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 6 — completed
+ 1  prev_root         8a820004 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000580
+                     83182818 34000505 82000080 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        6
+ 4  pc                [0, 5]
+ 5  decoded_word      0000000000000004 0000000000000004 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820004 80858300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000580
+                     83182818 34000505 82000080 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 8  post_state_root   8a820005 80868300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 8083182c 18340006 06820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             6
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 7 — completed
+ 1  prev_root         8a820005 80868300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 8083182c 18340006 06820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        7
+ 4  pc                [0, 6]
+ 5  decoded_word      0000000000000004 0000000000000005 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820005 80868300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 8083182c 18340006 06820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820006 80878300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 83060658 18000000 00000000
+                     01000000 00000000 01000000 00000000
+                     03808318 30183400 07078200 0080836e
+                     76302e33 2e302d64 72616674 2e356971
+                     69722d65 6e632d31 71716972 2d70726f
+                     662d676f 6c64656e 2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             7
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 8 — completed
+ 1  prev_root         8a820006 80878300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 83060658 18000000 00000000
+                     01000000 00000000 01000000 00000000
+                     03808318 30183400 07078200 0080836e
+                     76302e33 2e302d64 72616674 2e356971
+                     69722d65 6e632d31 71716972 2d70726f
+                     662d676f 6c64656e 2d31
+ 2  program_root      5735ed26 1b863460 7afd6fdf cee3fcf8
+                     f204c583 5ec8c7a8 af5a025e 709d3aa5
+ 3  step_index        8
+ 4  pc                [0, 7]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820006 80878300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 83060658 18000000 00000000
+                     01000000 00000000 01000000 00000000
+                     03808318 30183400 07078200 0080836e
+                     76302e33 2e302d64 72616674 2e356971
+                     69722d65 6e632d31 71716972 2d70726f
+                     662d676f 6c64656e 2d31
+ 8  post_state_root   8a820007 80878300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000003
+                     83020258 18000000 00000000 01000000
+                     00000000 01000000 00000000 05830303
+                     58400000 00000000 00030000 00000000
+                     00020000 00000000 00010000 00000000
+                     00010000 00000000 00030000 00000000
+                     00010000 00000000 00010000 00000000
+                     00058304 04586800 00000000 00000300
+                     00000000 00000200 00000000 00000100
+                     00000000 00000100 00000000 00000700
+                     00000000 00000300 00000000 00000200
+                     00000000 00000100 00000000 00000100
+                     00000000 00000300 00000000 00000100
+                     00000000 00000100 00000000 00000583
+                     05055840 00000000 00000003 00000000
+                     00000002 00000000 00000001 00000000
+                     00000001 00000000 00000003 00000000
+                     00000001 00000000 00000001 00000000
+                     00000005 83060658 18000000 00000000
+                     01000000 00000000 01000000 00000000
+                     03808318 34183400 08088201 0180836e
+                     76302e33 2e302d64 72616674 2e356971
+                     69722d65 6e632d31 71716972 2d70726f
+                     662d676f 6c64656e 2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             8
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 52 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const      12 U (3 postings)
+    q_tuple       8 U (2 postings)
+    q_field       8 U (2 postings)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  52 /    0
+    step  2:   28 /  52 /    0
+    step  3:   32 /  52 /    0
+    step  4:   36 /  52 /    0
+    step  5:   40 /  52 /    0
+    step  6:   44 /  52 /    0
+    step  7:   48 /  52 /    0
+    step  8:   52 /  52 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 52 = 52 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 52 = 48
+    refund_final = B(P) - charged                       : 52 - 52 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+### X46 — `exec-cmp-zoom-boundary-equal`
+
+Cites: §2.3 CONST row (the literal's canonical value bound to a fresh instance — a zoom literal in its normalized form per §2.6) and CMP row (the comparison result −1, 0, or 1 bound to a fresh instance; the zoom-boundary comparison under N: equal exactly when the normalized pairs are equal); §2.3's zoom declaration (a program declaring zoom-carrying values; the declared ranges ride P13(a)) and the minimal-zoom normalizer N; §2.6 (the ZOOM value grammar, the normalized form); §4.4 Suite Register bullet 3 — the zoom `CMP` execution surface; declared parameter P13(c) (the zoom bound reading).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=zoom(1, 0) bnd=(zoom, <=4)
+  1: CONST imm=zoom(1, 0) bnd=(zoom, <=4)
+  2: CMP ref=0 ref=1 rng=[-1, 1]
+  3: HALT
+```
+
+Intent envelope (canonical CBOR, 384 bytes; instruction stream entry a byte string of 39 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590138 00000000 00000000 00000000
+00000000 00000000 00000004 00000000
+00000001 00000000 00000004 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000000 00000000 00000004 00000000
+00000001 00000000 00000001 00000000
+00000004 00000000 00000000 00000000
+00000001 00000000 00000004 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000000 00000000 00000004 00000000
+00000001 00000000 00000001 00000000
+00000004 00000000 00000000 00000000
+0000000a 00000000 00000000 00000000
+00000001 00000000 00000002 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000000 00000000
+00000010 00000000 00000000 07800880
+```
+
+Admission: no back-edges; the maximum path is 4 transitions (16 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (4 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      9dfe3b80 173a63ae 76b8a3cd aacf7afe
+                     4785a459 3be302c9 23ea2c1e 302cd23c
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000004 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000080 83181818
+                     24000101 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000080 83181818
+                     24000101 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 2  program_root      9dfe3b80 173a63ae 76b8a3cd aacf7afe
+                     4785a459 3be302c9 23ea2c1e 302cd23c
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000001 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000004 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000080 83181818
+                     24000101 82000080 836e7630 2e332e30
+                     2d647261 66742e35 69716972 2d656e63
+                     2d317171 69722d70 726f662d 676f6c64
+                     656e2d31
+ 8  post_state_root   8a820001 80828300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     8083181c 18240002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80828300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     8083181c 18240002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 2  program_root      9dfe3b80 173a63ae 76b8a3cd aacf7afe
+                     4785a459 3be302c9 23ea2c1e 302cd23c
+ 3  step_index        3
+ 4  pc                [0, 2]
+ 5  decoded_word      000000000000000a 0000000000000000 0000000000000001
+                     0000000000000002 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80828300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     8083181c 18240002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 8  post_state_root   8a820002 80838300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     83020250 00000000 00000001 00000000
+                     00000000 80831820 18240003 03820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 4 — completed
+ 1  prev_root         8a820002 80838300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     83020250 00000000 00000001 00000000
+                     00000000 80831820 18240003 03820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      9dfe3b80 173a63ae 76b8a3cd aacf7afe
+                     4785a459 3be302c9 23ea2c1e 302cd23c
+ 3  step_index        4
+ 4  pc                [0, 3]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820002 80838300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     83020250 00000000 00000001 00000000
+                     00000000 80831820 18240003 03820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820003 80838300 00583000 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000083 01015830
+                     00000000 00000004 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000000
+                     83020250 00000000 00000001 00000000
+                     00000000 80831824 18240004 04820101
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             4
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 36 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       8 U (2 postings)
+    q_cmp         4 U (1 posting)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  36 /    0
+    step  2:   28 /  36 /    0
+    step  3:   32 /  36 /    0
+    step  4:   36 /  36 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 36 = 36 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 36 = 64
+    refund_final = B(P) - charged                       : 36 - 36 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+### X47 — `exec-cmp-zoom-order-exact-shift`
+
+Cites: §2.3 CMP row (the zoom-boundary comparison under N: for normalized (q1, z1), (q2, z2) with z1 ≤ z2 the ordering is decided by comparing q1 against q2·2^(z2−z1) in exact integer arithmetic — the exponent difference is non-negative, so the shift is exact and the comparison never rounds); §2.3's zoom declaration and the minimal-zoom normalizer N; §2.6 (the ZOOM value grammar, the normalized form); §4.4 Suite Register bullet 3 — the zoom `CMP` execution surface; declared parameter P13(c) (the zoom bound reading).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=zoom(3, -1) bnd=(zoom, <=4)
+  1: CONST imm=zoom(1, 0) bnd=(zoom, <=4)
+  2: CMP ref=0 ref=1 rng=[-1, 1]
+  3: CMP ref=1 ref=0 rng=[-1, 1]
+  4: HALT
+```
+
+Intent envelope (canonical CBOR, 472 bytes; instruction stream entry a byte string of 50 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590190 00000000 00000000 00000000
+00000000 00000000 00000005 00000000
+00000001 00000000 00000004 00000000
+00000001 00000000 00000001 00000000
+00000003 00000000 00000002 00000000
+00000001 00000000 00000001 00000000
+00000004 00000000 00000001 00000000
+00000001 00000000 00000004 00000000
+00000000 00000000 00000001 00000000
+00000004 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000000 00000000
+00000004 00000000 00000001 00000000
+00000001 00000000 00000004 00000000
+00000000 00000000 0000000a 00000000
+00000000 00000000 00000001 00000000
+00000002 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000000 00000000 0000000a 00000000
+00000001 00000000 00000000 00000000
+00000002 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000000 00000000 00000010 00000000
+00000000 07800880
+```
+
+Admission: no back-edges; the maximum path is 5 transitions (20 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (5 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      0a4fcf36 09da6434 13c64be5 8aa17450
+                     244cc23f 371e6beb 9a68d15e a9805912
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000003 0000000000000002
+                     0000000000000001 0000000000000001 0000000000000004
+                     0000000000000001 0000000000000001 0000000000000004
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000180 83181818 28000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000180 83181818 28000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      0a4fcf36 09da6434 13c64be5 8aa17450
+                     244cc23f 371e6beb 9a68d15e a9805912
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000001 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000004 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000180 83181818 28000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 8083181c 18280002
+                     02820000 80836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 8083181c 18280002
+                     02820000 80836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 2  program_root      0a4fcf36 09da6434 13c64be5 8aa17450
+                     244cc23f 371e6beb 9a68d15e a9805912
+ 3  step_index        3
+ 4  pc                [0, 2]
+ 5  decoded_word      000000000000000a 0000000000000000 0000000000000001
+                     0000000000000002 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 8083181c 18280002
+                     02820000 80836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 8  post_state_root   8a820002 80838300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01808318 20182800 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 4 — completed
+ 1  prev_root         8a820002 80838300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01808318 20182800 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 2  program_root      0a4fcf36 09da6434 13c64be5 8aa17450
+                     244cc23f 371e6beb 9a68d15e a9805912
+ 3  step_index        4
+ 4  pc                [0, 3]
+ 5  decoded_word      000000000000000a 0000000000000001 0000000000000000
+                     0000000000000002 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820002 80838300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01808318 20182800 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 8  post_state_root   8a820003 80848300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01830303 58180000 00000000
+                     00020000 00000000 00010000 00000000
+                     00018083 18241828 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             4
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 5 — completed
+ 1  prev_root         8a820003 80848300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01830303 58180000 00000000
+                     00020000 00000000 00010000 00000000
+                     00018083 18241828 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 2  program_root      0a4fcf36 09da6434 13c64be5 8aa17450
+                     244cc23f 371e6beb 9a68d15e a9805912
+ 3  step_index        5
+ 4  pc                [0, 4]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820003 80848300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01830303 58180000 00000000
+                     00020000 00000000 00010000 00000000
+                     00018083 18241828 00040482 00008083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 8  post_state_root   8a820004 80848300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000300 00000000
+                     00000200 00000000 00000100 00000000
+                     00000183 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 83020258 18000000
+                     00000000 01000000 00000000 01000000
+                     00000000 01830303 58180000 00000000
+                     00020000 00000000 00010000 00000000
+                     00018083 18281828 00050582 01018083
+                     6e76302e 332e302d 64726166 742e3569
+                     7169722d 656e632d 31717169 722d7072
+                     6f662d67 6f6c6465 6e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             5
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 40 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       8 U (2 postings)
+    q_cmp         8 U (2 postings)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  40 /    0
+    step  2:   28 /  40 /    0
+    step  3:   32 /  40 /    0
+    step  4:   36 /  40 /    0
+    step  5:   40 /  40 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 40 = 40 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 40 = 60
+    refund_final = B(P) - charged                       : 40 - 40 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+### X48 — `exec-cmp-zoom-range-rejection`
+
+Cites: §2.3 CMP row (a zoom-carrying operand outside its declared zoom range: typed rejection before dispatch — no binding, no result instance) and CONST row (the zoom literal admitted at its own declared bound 8 under P13(c) — the producing instructions completed); §2.5 failure behavior (the typed rejection is fatal, births EXPRESSION_TOO_COMPLEX, terminalizing at its own transition) and T case (1); §2.6 receipt key 3 (nil at an `EXPRESSION_TOO_COMPLEX` exit, the X10 shape); §3.3 with P11 (the rejection posts nothing; the escrow is open — the two `CONST`s completed — so the terminal settlement's refund rides the rejection record, the X5 precedent); §4.4 Suite Register bullet 3; declared parameters P13(a) (the declared ranges) and P13(b) (the pre-dispatch check).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=zoom(1, 5) bnd=(zoom, <=8)
+  1: CONST imm=zoom(1, 0) bnd=(zoom, <=4)
+  2: CMP ref=0 ref=1 rng=[-1, 1]
+  3: HALT
+```
+
+Intent envelope (canonical CBOR, 392 bytes; instruction stream entry a byte string of 40 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590140 00000000 00000000 00000000
+00000000 00000000 00000004 00000000
+00000001 00000000 00000004 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000005 00000000
+00000004 00000000 00000001 00000000
+00000001 00000000 00000008 00000000
+00000000 00000000 00000001 00000000
+00000004 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000000 00000000
+00000004 00000000 00000001 00000000
+00000001 00000000 00000004 00000000
+00000000 00000000 0000000a 00000000
+00000000 00000000 00000001 00000000
+00000002 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000000 00000000 00000010 00000000
+00000000 07800880
+```
+
+Admission: no back-edges; the maximum path is 4 transitions (16 U) plus the gateway 20 U.
+
+Expected terminal outcome: **EXPRESSION_TOO_COMPLEX** (tag 3).
+
+Expected transition records (3 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      3be3c421 739ad254 ba455d6b 3299db7d
+                     ceeaaf83 1280732e 20b0d3f5 ea5b0118
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000005 0000000000000004
+                     0000000000000001 0000000000000001 0000000000000008
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000580 83181818 24000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000580 83181818 24000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      3be3c421 739ad254 ba455d6b 3299db7d
+                     ceeaaf83 1280732e 20b0d3f5 ea5b0118
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000001 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000 0000000000000004 0000000000000001
+                     0000000000000001 0000000000000004 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000580 83181818 24000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000583 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 8083181c 18240002
+                     02820000 80836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — rejection (posts nothing)
+ 1  prev_root         8a820001 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000583 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 8083181c 18240002
+                     02820000 80836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 2  program_root      3be3c421 739ad254 ba455d6b 3299db7d
+                     ceeaaf83 1280732e 20b0d3f5 ea5b0118
+ 3  step_index        3
+ 4  pc                [0, 2]
+ 5  decoded_word      000000000000000a 0000000000000000 0000000000000001
+                     0000000000000002 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000583 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 8083181c 18240002
+                     02820000 80836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 8  post_state_root   8a820002 80828300 00583800 00000000
+                     00000400 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000100 00000000 00000100 00000000
+                     00000583 01015830 00000000 00000004
+                     00000000 00000001 00000000 00000001
+                     00000000 00000001 00000000 00000001
+                     00000000 00000000 81870300 02000302
+                     0383181c 18240803 03820103 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 9  work_charged      0
+10  work_refunded     8
+11  clock             3
+12  status            [[1, [3, 0, 2, 0, 3]]]
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      3 (EXPRESSION_TOO_COMPLEX)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+      [3, 0, 2, 0, 3, 2, 3]   # EXPRESSION_TOO_COMPLEX tier S state terminalized
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01030281 87030002 00030203 03f60483
+  6e76302e 332e302d 64726166 742e3569
+  7169722d 656e632d 31717169 722d7072
+  6f662d67 6f6c6465 6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 28 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       8 U (2 postings)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  36 /    0
+    step  2:   28 /  36 /    0
+    step  3:   28 /  36 /    8
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 36 = 28 + 8 + 0
+    remaining_budget = W_budget - charged               : 100 - 28 = 72
+    refund_final = B(P) - charged                       : 36 - 28 = 8
+    reserve_outstanding after terminal settlement       : 0
+```
+### X49 — `exec-emit-witness-queue`
+
+Cites: §2.3 EMIT row (appends the witness record to the receipt-order queue — the declared witness payload: (the declared kind, the cited values' current instance canonical encodings, the emission position) — ordered per the state tuple's receipt ordering; no run-time rejection — binding-before-use is a static legality rule, postulate (v)); P7 (the emission ordinal, dense from 0; the receipt-order queue and record field 13 carry ordinals); §2.2 (the receipt-order queue component of the canonical configuration, in emission order); §4.4 Suite Register bullet 3 — the `EMIT` witness surface; declared parameter P13(d) (the witness rendering).
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The declared zoom ranges ride P13(a) (the normalized exponent within [-4, 4], the normalized mantissa within [0, 2^64)); the witness rendering rides P13(d).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CONST imm=7 bnd=(int, <=9)
+  1: CONST imm=9 bnd=(int, <=9)
+  2: TUPLE k=2 fields=[(int, <=9), (int, <=9)] ref=0 ref=1
+  3: EMIT kind=1 k=2 ref=2 ref=0
+  4: EMIT kind=2 k=0
+  5: HALT
+```
+
+Intent envelope (canonical CBOR, 440 bytes; instruction stream entry a byte string of 46 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590170 00000000 00000000 00000000
+00000000 00000000 00000006 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000007 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000009 00000000 00000000 00000000
+00000003 00000000 00000002 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000001 00000000
+00000000 00000000 0000000f 00000000
+00000001 00000000 00000002 00000000
+00000002 00000000 00000000 00000000
+00000000 00000000 0000000f 00000000
+00000002 00000000 00000000 00000000
+00000000 00000000 00000010 00000000
+00000000 07800880
+```
+
+Admission: no back-edges; the maximum path is 6 transitions (24 U) plus the gateway 20 U.
+
+Expected terminal outcome: **SUCCESS** (tag 1).
+
+Expected transition records (6 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      01a44187 b5033f24 f3f4b3df cfb1d19f
+                     87c726b8 5fe91d3c 1ad67204 348c8b13
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000007 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 2c000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 9  work_charged      24
+10  work_refunded     0
+11  clock             1
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — completed
+ 1  prev_root         8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 2c000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 2  program_root      01a44187 b5033f24 f3f4b3df cfb1d19f
+                     87c726b8 5fe91d3c 1ad67204 348c8b13
+ 3  step_index        2
+ 4  pc                [0, 1]
+ 5  decoded_word      0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000001 0000000000000001
+                     0000000000000001 0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80818300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000780 83181818 2c000101 82000080
+                     836e7630 2e332e30 2d647261 66742e35
+                     69716972 2d656e63 2d317171 69722d70
+                     726f662d 676f6c64 656e2d31
+ 8  post_state_root   8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     8083181c 182c0002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             2
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 3 — completed
+ 1  prev_root         8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     8083181c 182c0002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 2  program_root      01a44187 b5033f24 f3f4b3df cfb1d19f
+                     87c726b8 5fe91d3c 1ad67204 348c8b13
+ 3  step_index        3
+ 4  pc                [0, 2]
+ 5  decoded_word      0000000000000003 0000000000000002 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000009
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000 0000000000000001
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820001 80828300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     8083181c 182c0002 02820000 80836e76
+                     302e332e 302d6472 6166742e 35697169
+                     722d656e 632d3171 7169722d 70726f66
+                     2d676f6c 64656e2d 31
+ 8  post_state_root   8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 20182c00 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             3
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 4 — completed
+ 1  prev_root         8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 20182c00 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 2  program_root      01a44187 b5033f24 f3f4b3df cfb1d19f
+                     87c726b8 5fe91d3c 1ad67204 348c8b13
+ 3  step_index        4
+ 4  pc                [0, 3]
+ 5  decoded_word      000000000000000f 0000000000000001 0000000000000002
+                     0000000000000002 0000000000000000 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820002 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 20182c00 03038200
+                     0080836e 76302e33 2e302d64 72616674
+                     2e356971 69722d65 6e632d31 71716972
+                     2d70726f 662d676f 6c64656e 2d31
+ 8  post_state_root   8a820003 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 24182c00 04048200
+                     00818400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             4
+12  status            []
+13  receipt_ids       [0]
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 5 — completed
+ 1  prev_root         8a820003 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 24182c00 04048200
+                     00818400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 2  program_root      01a44187 b5033f24 f3f4b3df cfb1d19f
+                     87c726b8 5fe91d3c 1ad67204 348c8b13
+ 3  step_index        5
+ 4  pc                [0, 4]
+ 5  decoded_word      000000000000000f 0000000000000002 0000000000000000
+                     0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820003 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 24182c00 04048200
+                     00818400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03836e76 302e332e 302d6472
+                     6166742e 35697169 722d656e 632d3171
+                     7169722d 70726f66 2d676f6c 64656e2d
+                     31
+ 8  post_state_root   8a820004 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 28182c00 05058200
+                     00828400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03840102 80820004 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             5
+12  status            []
+13  receipt_ids       [1]
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 6 — completed
+ 1  prev_root         8a820004 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 28182c00 05058200
+                     00828400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03840102 80820004 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 2  program_root      01a44187 b5033f24 f3f4b3df cfb1d19f
+                     87c726b8 5fe91d3c 1ad67204 348c8b13
+ 3  step_index        6
+ 4  pc                [0, 5]
+ 5  decoded_word      0000000000000010 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820004 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 28182c00 05058200
+                     00828400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03840102 80820004 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 8  post_state_root   8a820005 80838300 00581800 00000000
+                     00000100 00000000 00000100 00000000
+                     00000783 01015818 00000000 00000001
+                     00000000 00000001 00000000 00000009
+                     83020258 40000000 00000000 03000000
+                     00000000 02000000 00000000 01000000
+                     00000000 01000000 00000000 07000000
+                     00000000 01000000 00000000 01000000
+                     00000000 09808318 2c182c00 06068201
+                     01828400 01825840 00000000 00000003
+                     00000000 00000002 00000000 00000001
+                     00000000 00000001 00000000 00000007
+                     00000000 00000001 00000000 00000001
+                     00000000 00000009 58180000 00000000
+                     00010000 00000000 00010000 00000000
+                     00078200 03840102 80820004 836e7630
+                     2e332e30 2d647261 66742e35 69716972
+                     2d656e63 2d317171 69722d70 726f662d
+                     676f6c64 656e2d31
+ 9  work_charged      4
+10  work_refunded     0
+11  clock             6
+12  status            []
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      1 (SUCCESS)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01010280 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 44 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_const       8 U (2 postings)
+    q_emit        8 U (2 postings)
+    q_tuple       4 U (1 posting)
+    q_halt        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  44 /    0
+    step  2:   28 /  44 /    0
+    step  3:   32 /  44 /    0
+    step  4:   36 /  44 /    0
+    step  5:   40 /  44 /    0
+    step  6:   44 /  44 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 44 = 44 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 44 = 56
+    refund_final = B(P) - charged                       : 44 - 44 = 0
+    reserve_outstanding after terminal settlement       : 0
+```
+
 ## Suite Register
 
 This seed is increment 1 of the golden corpus (§4.5: "a small suite"). The
@@ -18928,7 +21427,7 @@ committed before the artifacts that need them:
 
 - the remaining `QO-22`/F12 terminalization combinations (every combination of {outstanding Tier S token class} × {promoted, not promoted} × {fallback success, fallback repeated miss, fallback typed rejection} × {exit event}) — **discharged at v0.3.0-draft.14 as expansion increment 1 (X9–X38) for every cell a conforming golden can fix**: the 30 reachable `HALT` and terminalizing-birth cells are vectors above, the 6 fallback-typed-rejection-`HALT` cells are declared unreachable (§2.5 failure behavior), and the 18 fuel-backstop cells remain registered to this register's fuel-backstop fixture bullet below (§3.4/F16 — unobservable by a conforming golden);
 - `CLOAD` hit vectors (D entries present, bound value checked against its declared bound), and a multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block — **discharged at v0.3.0-draft.15 as expansion increment 2 (X39–X42)**: the hit path within the bound, the bound check's strict boundary, the bound check's typed rejection before dispatch, and the multi-block completion fixing the consumption site at the fallback block's own completion under the declared reading DR3, over the declared dependency-table rendering P12;
-- `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload);
+- `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload) — **discharged at v0.3.0-draft.16 as expansion increment 3 (X43–X49)**: the flat and nested tuple constructions with their field extractions, the component-bound typed rejection before dispatch, the zoom boundary comparison under N in both branches (equal; ordered with the exact shift), the `CMP` declared-range rejection, and two witness records with their ordinals and payload, over the declared parameter P13;
 - depth-ceiling vectors and the fuel-backstop-on-validator-defect vector (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16);
 - per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family;
 - encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version.
