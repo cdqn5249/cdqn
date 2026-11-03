@@ -25,19 +25,19 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1) |
-| **Version** | 0.3.0-draft.16 |
+| **Version** | 0.3.0-draft.17 |
 | **Last Updated** | 2026-11-03 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Working Draft under the Loop-2 Repair Sequence and the Loop-3 Repair Program (R1–R6) — Not Promoted to the Canon |
 
-*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft — the first artifact increment under the declared order of conformance §4.5 (F18): the goldens precede all code, and no implementation exists or is drafted at this version. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), and at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
+*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft — the first artifact increment under the declared order of conformance §4.5 (F18): the goldens precede all code, and no implementation exists or is drafted at this version. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion), and at v0.3.0-draft.17 its fourth (R6 expansion increment 4, the per-class ledger trace publications and the budget-boundary per-combination completion); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
 
 ## Scope and Derivation Discipline
 
 This corpus is the seed suite of §4.4: a small suite derived from the normative rules of §1–§3 and §4, reviewed independently of both implementations, and committed before any implementation exists — the golden-first order (F17/F18), discharged here under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7 as artifact-share increment 1 of the {% include term.html id="qnir" text="QnIR" %} draft. Under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline, every vector cites the committed rule that produces each expected value; where the committed text leaves a rendering choice open, the choice is declared in the parameter block below and binds the vectors exactly as a version component of `V` (§2.1) — a change to any of them is a new encoding version. Charges are measured in the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}; the terminal {% include term.html id="receipt" text="receipt" %} of every execution vector is a committed artifact of §2.5/§2.6.
 
-**The corpus binds 75 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 49 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, and the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
+**The corpus binds 76 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 50 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16, and the 1 expansion vector of R6 expansion increment 4, v0.3.0-draft.17).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
 
 ## Expansion Increment 1 — the QO-22/F12 Combination Completion (v0.3.0-draft.14)
 
@@ -126,6 +126,40 @@ Every expansion vector declares `W_budget` = 100 U and `V` = (v0.3.0-draft.5, qi
 | X47 | zoom `CMP`, the ordered branch under N (the exact shift, both directions) | `SUCCESS`; results 1 and −1 |
 | X48 | zoom `CMP` declared-range rejection | `EXPRESSION_TOO_COMPLEX` (the typed rejection before dispatch), nil selected; the rejection posts nothing and the open escrow's residue (8 U) refunds at the rejection record |
 | X49 | `EMIT` witness records | `SUCCESS`; receipt ordinals 0 and 1; the queue rides the post-state roots from the first emission onward; field 13 cites each transition's own ordinals |
+
+## Expansion Increment 4 — the Per-Class Ledger Trace Publications and the Budget-Boundary Per-Combination Completion (v0.3.0-draft.17)
+
+This expansion is R6 expansion increment 4 of the Loop-3 stage (the program of record, `docs/qnir.md`, wave record v0.3.0-draft.17), discharging the Suite Register's fifth bullet — the per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family. Its vector is X50 below, appended after X49 and derived after the committed four-artifact order and expansion increments 1–3 (F18 applied to expansions), from the normative rules of §2.1–§2.6 and §3 through the same anchored derivation instrument of record (a third codebase, sharing no code with either implementation and consulting neither; over the committed corpus it re-derives every committed execution vector byte-exact — all 49 — before any expansion byte was derived), and checked by both implementations only after these bytes were fixed. The seed's and increments 1–3's independently derived vectors are retained byte-unchanged. The increment adds no execution rule to either artifact and declares no new rendering parameter: the escrow-never-opened settlement shape rides the committed rules — §3.3's reserve opening (once, by the execution's first completed transition), §3.4's admission and refusal, §2.5's typed-rejection failure behavior, and P11's settlement discipline (the refund riding the rejection record where the escrow is open) — and the dependency table rides P12; the corpus adds no execution rule of its own.
+
+**The scope disposition.** The bullet's declared scope is realized in full by one vector and the register below. The family's settlement surface closes per combination: the open-escrow terminal settlements are the committed precedents (X1 — refund at `HALT`; X3, X10 — refund at the terminalizing exits), the open-escrow rejection-record refunds are the committed precedents (X5, X41, X44, X48 — the residue refunding at the rejection record), the admission refusal's zero-posting ledger is X2's (no execution — the refusal is the single rejection transition), and the last reachable cell — the escrow-never-opened typed rejection at the execution's first attempted transition — is X50: the declared table value (10) exceeds the `CLOAD`'s declared bound (9) before any transition completes, so the gateway never posts, the reserve never opens (§3.3: the reserve is opened once, by the execution's first completed transition), and no refund posts anywhere (Work(E) = 0 U; the program bytes are X39's — the envelope is byte-identical, the entire expected outcome differing by the declared `D`, the X39/X40/X6 precedent). The never-opened terminal settlement is unreachable by declaration: a terminal settlement requires a completed transition, and any completed transition opens the escrow. The publications beyond the seed's summaries are the Per-Class Ledger Trace Register below: one ledger trace per declared rule class, each citing the committed vector whose ledger block carries the class's postings, each mechanically checkable against the equation of §3.1 through the protocol of §4.1 — the cited vector's run reproducing the class trace at §4.1's agreement point 5.
+
+## The Expansion Vector Register (X50)
+
+The vector declares `W_budget` = 100 U and `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1) under the declared profile `qir-prof-golden-1`; the declared initial status pool is empty; the dependency table rides P12. The program is a three-block program; no block declares arguments.
+
+| Vectors | Surface | Outcome surface |
+|---|---|---|
+| X50 | `CLOAD` declared-bound rejection at the execution's first attempted transition (the declared table value exceeds the bound) | `EXPRESSION_TOO_COMPLEX` (the typed rejection before dispatch, fatal at its own transition), nil selected; the rejection posts nothing, the gateway never posts, the reserve never opens, and no refund posts anywhere — the escrow-never-opened settlement shape, Work(E) = 0 U |
+
+## The Per-Class Ledger Trace Register (expansion increment 4)
+
+The seed's vectors carry per-vector ledger summaries — each vector's reconstructed-ledger block lists the per-class traces of its own postings. This register is the publication beyond those summaries that §4.4 requires: **one ledger trace per declared rule class, each publication citing the committed vector whose ledger block carries the class's postings, each mechanically checkable against the equation of §3.1 through the protocol of §4.1** — the cited vector's run reproduces the class trace at §4.1's agreement point 5 (the reconstructed ledger with every §3.3 conservation identity). The declared class inventory of the profile `qir-prof-golden-1` is thereby published in full: the seed's six classes (the gateway and `q_const … q_halt`) and the four classes the expansions added (`q_load` — expansion increment 2; `q_tuple`, `q_field`, `q_emit` — expansion increment 3). Per §3.1 the gateway charge posts with the first completed transition's own rule charge as one posted quantity, so the gateway's posting site is that transition's; every class charge below is site-stable at 4 U (the declared profile).
+
+| Class | Publication — postings in the cited vector's committed ledger | Class trace | The cited ledger's §3.1/§3.3 check |
+|---|---|---|---|
+| `gateway` | X1 — step 1 at [0, 0]: 20 U, posted with the first completed transition's own `q_const` charge as one 24 U quantity (§3.1) | 20 U (1 posting) | X1: Σ classes + gateway = 40 + 20 = Work(E) = 60 U; 100 = 60 + 40 + 0; remaining 100 − 60 = 40; refund 100 − 60 = 40; outstanding 0 |
+| `q_const` | X1 — steps 1, 2 at [0, 0], [0, 1]: 4 U each | 8 U (2 postings) | X1 (as above) |
+| `q_add` | X1 — steps 3, 6, 7, 8, 9 at [0, 2], [2, 0], [2, 1], [2, 2], [2, 3]: 4 U each | 20 U (5 postings) | X1 (as above) |
+| `q_cmp` | X1 — step 4 at [0, 3]: 4 U (the zoom-carrying postings: X46–X48) | 4 U (1 posting) | X1 (as above); X46: 36 = 36 + 0 + 0 |
+| `q_br` | X1 — step 5 at [0, 4]: 4 U | 4 U (1 posting) | X1 (as above) |
+| `q_jmp` | X39 — step 2 at [0, 1]: 4 U (the fallback-completion posting: X42, the fallback block's own `JMP`, DR3) | 4 U (1 posting) | X39: Σ classes + gateway = 12 + 20 = Work(E) = 32 U; 32 = 32 + 0 + 0; remaining 100 − 32 = 68; refund 32 − 32 = 0; outstanding 0 |
+| `q_halt` | X1 — step 10 at [2, 4]: 4 U (also X39 — step 3 at [2, 0]) | 4 U (1 posting) | X1 (as above) |
+| `q_load` | X39 — step 1 at [0, 0]: 4 U, posted with the gateway as one 24 U quantity (also X40, X42; the rejections X41, X50 post nothing — P11) | 4 U (1 posting) | X39 (as above) |
+| `q_tuple` | X43 — step 3 at [0, 2]: 4 U (also X45) | 4 U (1 posting) | X43: Σ classes + gateway = 24 + 20 = Work(E) = 44 U; 44 = 44 + 0 + 0; remaining 100 − 44 = 56; refund 44 − 44 = 0; outstanding 0 |
+| `q_field` | X43 — steps 4, 5 at [0, 3], [0, 4]: 4 U each (also X45) | 8 U (2 postings) | X43 (as above) |
+| `q_emit` | X49 — steps 4, 5 at [0, 3], [0, 4]: 4 U each | 8 U (2 postings) | X49: Σ classes + gateway = 24 + 20 = Work(E) = 44 U; 44 = 44 + 0 + 0; remaining 100 − 44 = 56; refund 44 − 44 = 0; outstanding 0 |
+
+The X50 ledger closes the register's settlement dimension: its zero-posting block (Work(E) = 0 U, no per-class postings, the escrow never opened) is the committed rendering of the family's last reachable settlement cell.
 
 ## Declared Artifact-Wave Parameters
 
@@ -21418,6 +21452,126 @@ refunded fields plus the terminal receipt's itemization):
     reserve_outstanding after terminal settlement       : 0
 ```
 
+### X50 — `exec-escrow-never-opened-rejection`
+
+Cites: §2.3 CLOAD row (hit value exceeds its declared bound: typed rejection before dispatch — no binding, no store effect); §2.5 failure behavior (the typed rejection is fatal, births EXPRESSION_TOO_COMPLEX, terminalizing at its own transition) and T case (1); §2.6 receipt key 3 (nil at an `EXPRESSION_TOO_COMPLEX` exit, the X10 shape); §3.4 (the admission passes — `W_budget` ≥ `B_hat(P)` — and on a pass the transition completes normally and opens the escrow; the rejected first attempted transition completes nothing); §3.3 with P11 (the rejection posts nothing; the escrow is never opened — no completed transition precedes the rejection — so no refund posts anywhere: the escrow-never-opened settlement shape, the X2 precedent's zero-posting ledger at the execution's first attempted transition); §4.4 Suite Register bullet 5 — the budget-boundary family's escrow-never-opened settlement shape; declared parameter P12.
+
+Declared parameters: `W_budget` = 100 U; `D` = { addr 0 → 10 }; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The dependency table rides the declared rendering parameter P12 (the constant-table entry of the declared content address h'0000000000000001', encoded per §2.6).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6); the envelope is byte-identical to X39's committed envelope (equal programs are byte-equal envelopes; the declared `D` is vector input, never envelope content — the X39/X40/X6 precedent):
+
+```text
+block 0 (arity 0):
+  0: CLOAD addr=0 fallback=block 1 bnd=(int, <=9)
+  1: JMP block 2
+block 1 (arity 0):
+  0: CONST imm=9 bnd=(int, <=9)
+  1: HALT
+block 2 (arity 0):
+  0: HALT
+```
+
+Intent envelope (canonical CBOR, 353 bytes; instruction stream entry a byte string of 34 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04814800
+00000000 00000105 03065901 10000000
+00000000 00000000 00000000 00000000
+00000000 02000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 0c000000
+00000000 02000000 00000000 00000000
+00000000 00000000 00000000 01000000
+00000000 00000000 00000000 02000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 01000000 00000000 01000000
+00000000 01000000 00000000 09000000
+00000000 00000000 00000000 10000000
+00000000 00000000 00000000 02000000
+00000000 00000000 00000000 01000000
+00000000 10000000 00000000 00078008
+80
+```
+
+Admission: no back-edges; the maximum path is 3 transitions (12 U) plus the gateway 20 U.
+
+Expected terminal outcome: **EXPRESSION_TOO_COMPLEX** (tag 3).
+
+Expected transition records (1 record, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — rejection (posts nothing)
+ 1  prev_root         8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root      a40114b5 468188bc b9baecb8 6d0b4603
+                     f5d62626 93aafda1 bf202b93 a16823ae
+ 3  step_index        1
+ 4  pc                [0, 0]
+ 5  decoded_word      0000000000000002 0000000000000000 0000000000000001
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids  []
+ 7  pre_state_root    8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root   8a820000 80808187 01000000 03020383
+                     00000001 01820103 80836e76 302e332e
+                     302d6472 6166742e 35697169 722d656e
+                     632d3171 7169722d 70726f66 2d676f6c
+                     64656e2d 31
+ 9  work_charged      0
+10  work_refunded     0
+11  clock             1
+12  status            [[1, [1, 0, 0, 0, 3]]]
+13  receipt_ids       []
+14  versions          ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      3 (EXPRESSION_TOO_COMPLEX)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+      [1, 0, 0, 0, 3, 2, 3]   # EXPRESSION_TOO_COMPLEX tier S state terminalized
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01030281 87010000 00030203 03f60483
+  6e76302e 332e302d 64726166 742e3569
+  7169722d 656e632d 31717169 722d7072
+  6f662d67 6f6c6465 6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 0 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:    0 /   0 /    0
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 0 = 0 + 0 + 0
+    remaining_budget = W_budget - charged               : 100 - 0 = 100
+    refund_final                                        : the escrow never opened (typed rejection at the execution's first attempted transition) — no terminal refund
+    reserve_outstanding after terminal settlement       : 0
+```
+
 ## Suite Register
 
 This seed is increment 1 of the golden corpus (§4.5: "a small suite"). The
@@ -21429,7 +21583,7 @@ committed before the artifacts that need them:
 - `CLOAD` hit vectors (D entries present, bound value checked against its declared bound), and a multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block — **discharged at v0.3.0-draft.15 as expansion increment 2 (X39–X42)**: the hit path within the bound, the bound check's strict boundary, the bound check's typed rejection before dispatch, and the multi-block completion fixing the consumption site at the fallback block's own completion under the declared reading DR3, over the declared dependency-table rendering P12;
 - `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload) — **discharged at v0.3.0-draft.16 as expansion increment 3 (X43–X49)**: the flat and nested tuple constructions with their field extractions, the component-bound typed rejection before dispatch, the zoom boundary comparison under N in both branches (equal; ordered with the exact shift), the `CMP` declared-range rejection, and two witness records with their ordinals and payload, over the declared parameter P13;
 - depth-ceiling vectors and the fuel-backstop-on-validator-defect vector (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16);
-- per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family;
+- per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family — **discharged at v0.3.0-draft.17 as expansion increment 4 (X50 and the Per-Class Ledger Trace Register)**: the escrow-never-opened settlement shape (the typed rejection at the execution's first attempted transition — the family's last reachable settlement cell, over the declared rendering P12) with the remaining cells fixed by declaration (the open-escrow terminal settlements and rejection-record refunds are the committed X1/X3/X5/X10/X41/X44/X48 precedents, the admission refusal's zero-posting ledger is X2's, and the never-opened terminal settlement is unreachable — a terminal settlement requires a completed transition, which opens the escrow), and one ledger-trace publication per declared rule class (the Per-Class Ledger Trace Register — the gateway and `q_const`, `q_add`, `q_cmp`, `q_br`, `q_jmp`, `q_halt`, `q_load`, `q_tuple`, `q_field`, `q_emit`), each mechanically checkable against the equation of §3.1 through the protocol of §4.1;
 - encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version.
 
 The independently reviewed goldens of this increment are retained unchanged
