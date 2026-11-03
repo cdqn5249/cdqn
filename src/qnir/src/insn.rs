@@ -79,10 +79,10 @@ pub fn token_type_name(tag: u64) -> Option<&'static str> {
     })
 }
 
-/// Instructions not exercised by the seed corpus (§4.5 registers their
-/// vectors as expansion increments); the assembler types them, it does not
-/// guess their operand layouts.
-pub const UNEXERCISED: [u64; 3] = [OP_TUPLE, OP_FIELD, OP_EMIT];
+/// The instruction decode and the assembler cover the closed inventory of
+/// sixteen opcodes (§2.3); expansion increment 3 (v0.3.0-draft.16) adds the
+/// `TUPLE`/`FIELD`/`EMIT` rows' operand layouts and the `ZOOM` result-type
+/// tag to the surface the seed corpus exercised.
 
 #[derive(Clone, Debug)]
 pub struct Insn {
@@ -120,14 +120,8 @@ fn err(verdict: &str) -> String {
 /// malformed surface of the instruction grammar is typed here.
 pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
     let tag = r.next("instruction")?;
-    let name = op_name(tag)
+    let _name = op_name(tag)
         .ok_or_else(|| err("unknown opcode tag"))?;
-    if UNEXERCISED.contains(&tag) {
-        return Err(err(&format!(
-            "opcode {} is not exercised by the seed corpus",
-            name
-        )));
-    }
     let mut refs = Vec::new();
     let mut targets = Vec::new();
     let mut addr = None;
@@ -135,7 +129,9 @@ pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
         OP_CONST => {
             dec_value(r)?; // imm
             let rtag = r.next("instruction")?;
-            if rtag != 1 && rtag != 3 {
+            // the declared result type over the closed value forms: INT_POS,
+            // TUPLE, and — expansion increment 3 — ZOOM
+            if rtag != 1 && rtag != 3 && rtag != 4 {
                 return Err(err("unknown result type tag"));
             }
             dec_value(r)?; // bound
@@ -165,6 +161,34 @@ pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
             refs.push(r.next("instruction")?);
             dec_value(r)?; // range lo
             dec_value(r)?; // range hi
+        }
+        OP_TUPLE => {
+            // cnt (k), then k field declarations (rtag word + bound value)
+            // in field order, then k component references in field order
+            let k = r.take_count("tuple field count")?;
+            for _ in 0..k {
+                let rtag = r.next("instruction")?;
+                if rtag != 1 && rtag != 3 && rtag != 4 {
+                    return Err(err("unknown result type tag"));
+                }
+                dec_value(r)?;
+            }
+            for _ in 0..k {
+                refs.push(r.next("instruction")?);
+            }
+        }
+        OP_FIELD => {
+            // ref, idx
+            refs.push(r.next("instruction")?);
+            r.next("instruction")?; // the declared field index
+        }
+        OP_EMIT => {
+            // cnt (the declared kind immediate), cnt (k), then k refs
+            r.next("instruction")?; // the declared kind
+            let k = r.take_count("emit reference count")?;
+            for _ in 0..k {
+                refs.push(r.next("instruction")?);
+            }
         }
         OP_BR => {
             let c = r.next("instruction")?;
@@ -257,6 +281,21 @@ pub enum SrcInsn {
     Const {
         imm: Value,
         bound: i128,
+        /// the declared result type tag: 1 (int), 3 (tuple), 4 (zoom)
+        rtag: u64,
+    },
+    Tuple {
+        /// (rtag, bound) per field, in field order
+        fields: Vec<(u64, i128)>,
+        refs: Vec<u64>,
+    },
+    Field {
+        a: u64,
+        idx: u64,
+    },
+    Emit {
+        kind: u64,
+        refs: Vec<u64>,
     },
     Cload {
         addr: u64,
@@ -293,10 +332,10 @@ pub enum SrcInsn {
     Halt,
 }
 
-fn enc_bound(bound: i128) -> Vec<u8> {
-    // result declaration: the type-tag word (int = 1) followed by one bound
-    // value encoding, an INT_POS upper bound (§2.6)
-    let mut v = w(1);
+fn enc_bound(rtag: u64, bound: i128) -> Vec<u8> {
+    // result declaration: the type-tag word followed by one bound value
+    // encoding, an INT_POS upper bound (§2.6)
+    let mut v = w(rtag);
     v.extend_from_slice(&enc_value(&Value::int(bound)));
     v
 }
@@ -305,10 +344,37 @@ fn enc_bound(bound: i128) -> Vec<u8> {
 /// in declared order, one uniform trailing ext word (§2.6).
 pub fn enc_insn(s: &SrcInsn) -> Vec<u8> {
     let (tag, mut body) = match s {
-        SrcInsn::Const { imm, bound } => {
+        SrcInsn::Const {
+            imm,
+            bound,
+            rtag,
+        } => {
             let mut b = enc_value(imm);
-            b.extend_from_slice(&enc_bound(*bound));
+            b.extend_from_slice(&enc_bound(*rtag, *bound));
             (OP_CONST, b)
+        }
+        SrcInsn::Tuple { fields, refs } => {
+            let mut b = w(refs.len() as u64);
+            for (rtag, bound) in fields {
+                b.extend_from_slice(&enc_bound(*rtag, *bound));
+            }
+            for r in refs {
+                b.extend_from_slice(&w(*r));
+            }
+            (OP_TUPLE, b)
+        }
+        SrcInsn::Field { a, idx } => {
+            let mut b = w(*a);
+            b.extend_from_slice(&w(*idx));
+            (OP_FIELD, b)
+        }
+        SrcInsn::Emit { kind, refs } => {
+            let mut b = w(*kind);
+            b.extend_from_slice(&w(refs.len() as u64));
+            for r in refs {
+                b.extend_from_slice(&w(*r));
+            }
+            (OP_EMIT, b)
         }
         SrcInsn::Cload {
             addr,
@@ -317,13 +383,13 @@ pub fn enc_insn(s: &SrcInsn) -> Vec<u8> {
         } => {
             let mut b = w(*addr);
             b.extend_from_slice(&w(*fallback));
-            b.extend_from_slice(&enc_bound(*bound));
+            b.extend_from_slice(&enc_bound(1, *bound));
             (OP_CLOAD, b)
         }
         SrcInsn::Arith { tag, a, b, bound } => {
             let mut bb = w(*a);
             bb.extend_from_slice(&w(*b));
-            bb.extend_from_slice(&enc_bound(*bound));
+            bb.extend_from_slice(&enc_bound(1, *bound));
             (*tag, bb)
         }
         SrcInsn::Cmp { a, b, lo, hi } => {
