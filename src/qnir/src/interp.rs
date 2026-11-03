@@ -787,13 +787,7 @@ impl<'a> Machine<'a> {
             let mut events: Vec<(u64, [u64; 5])> = Vec::new();
             let mut io_ids: Vec<Vec<u8>> = Vec::new();
             let mut gateway = 0u64;
-            if !self.escrow_open {
-                // admission passed (§3.4); the escrow opens with this
-                // transition
-                self.escrow_open = true;
-                self.acc.reserved += self.bh; // reserve B(P) in full (§3.3)
-                gateway = self.profile.gateway;
-            } else if self.outstanding_escrow() < c {
+            if self.escrow_open && self.outstanding_escrow() < c {
                 // fuel backstop (§3.4): after admission, defense in depth
                 let outcome = self.fatal(TT_EXPRESSION_TOO_COMPLEX, pc, decoded, pre);
                 return Ok(self.pack(outcome));
@@ -811,6 +805,16 @@ impl<'a> Machine<'a> {
                     }
                 };
             let transfer = transfer.unwrap_or(Transfer::Fall);
+            if !self.escrow_open {
+                // §3.3: the reserve is opened once, by the execution's
+                // first COMPLETED transition (§3.4: on a pass the
+                // transition completes normally and opens the escrow) — a
+                // typed rejection at the first attempted transition never
+                // opens it
+                self.escrow_open = true;
+                self.acc.reserved += self.bh; // reserve B(P) in full (§3.3)
+                gateway = self.profile.gateway;
+            }
             let post_charge = gateway + c;
             self.acc.charged += post_charge;
             per_class_add(&mut self.per_class, class_of(tag), c);
