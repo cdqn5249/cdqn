@@ -26,7 +26,7 @@ use crate::bhat::{self, Profile};
 use crate::cbor::{self, Cbor};
 use crate::insn::{decode_envelope, op_name, token_type_name, Intent};
 use crate::sha256::sha256;
-use crate::value::{dec_value, enc_value, skip_value, w, words_of, Value, WordReader};
+use crate::value::{dec_value, enc_value, normalize_zoom, skip_value, w, words_of, Value, WordReader};
 use std::collections::HashMap;
 
 // ------------------------------------------ artifact-wave parameters (P5–P8)
@@ -47,6 +47,12 @@ const TT_STATUS_DOMAIN_ERROR: u64 = 4;
 const OUTCOME_NO_SOLUTION: u64 = 2; // P8 (§2.6 closed terminal vocabulary)
 const OUTCOME_EXPRESSION_TOO_COMPLEX: u64 = 3;
 const OUTCOME_DOMAIN_ERROR: u64 = 4;
+
+// P13(a) (expansion increment 3): the declared zoom ranges — the normalized
+// exponent within [-4, 4], the normalized mantissa within [0, 2^64)
+const ZOOM_EXP_LO: i128 = -4;
+const ZOOM_EXP_HI: i128 = 4;
+const ZOOM_MAN_HI: i128 = 1i128 << 64;
 
 fn class_of(tag: u64) -> &'static str {
     match tag {
@@ -88,12 +94,15 @@ fn outcome_name(tag: u64) -> &'static str {
 enum Exec {
     Const { imm: Value, bound: i128 },
     Cload { addr: u64, fallback: u64, bound: i128 },
+    Tuple { fields: Vec<(u64, i128)>, refs: Vec<u64> },
+    Field { a: u64, idx: u64 },
     Arith { tag: u64, a: u64, b: u64, bound: i128 },
     Cmp { a: u64, b: u64 },
     Br { cc: u64, cond: u64, t: u64, f: u64 },
     Jmp { target: u64 },
     Obs { ttype: u64 },
     Promote,
+    Emit { kind: u64, refs: Vec<u64> },
     Halt,
 }
 
@@ -137,6 +146,57 @@ fn value_as_i128(v: &Value, what: &str) -> Result<i128, String> {
     }
 }
 
+/// The operand's normalized zoom pair under §2.3's N: a zoom-carrying value
+/// is already stored normalized; an integer operand compares as the dyadic
+/// (v, 0) under N.
+fn zoom_pair(v: &Value) -> (i128, i128) {
+    match v {
+        Value::Zoom(m, z) => (*m, *z),
+        Value::Int { neg, mag } => {
+            let mut m: u128 = 0;
+            for word in mag {
+                m = (m << 64) | *word as u128;
+            }
+            let v = m as i128;
+            normalize_zoom(if *neg { -v } else { v }, 0)
+        }
+        _ => panic!("zoom comparison over a non-dyadic value"),
+    }
+}
+
+/// The zoom-boundary comparison under N (§2.3): equal exactly when the
+/// normalized pairs are equal; otherwise, for normalized (q1, z1), (q2, z2)
+/// with z1 ≤ z2, the ordering is decided by comparing q1 against
+/// q2·2^(z2−z1) in exact integer arithmetic — the exponent difference is
+/// non-negative, so the shift is exact and the comparison never rounds.
+fn cmp_under_n(a: &Value, b: &Value) -> i128 {
+    let (mut q1, mut z1) = zoom_pair(a);
+    let (mut q2, mut z2) = zoom_pair(b);
+    if (q1, z1) == (q2, z2) {
+        return 0;
+    }
+    let neg = if z1 > z2 {
+        std::mem::swap(&mut q1, &mut q2);
+        std::mem::swap(&mut z1, &mut z2);
+        true
+    } else {
+        false
+    };
+    let shifted = q2 * (1i128 << (z2 - z1) as u32);
+    let c = if q1 < shifted {
+        -1
+    } else if q1 > shifted {
+        1
+    } else {
+        0
+    };
+    if neg {
+        -c
+    } else {
+        c
+    }
+}
+
 fn dec_edge_exec(r: &mut WordReader) -> Result<u64, String> {
     let blk = r.next("instruction")?;
     let arity = r.take_count("edge")?;
@@ -173,7 +233,9 @@ fn decode_exec_stream(stream: &[u8]) -> Result<Vec<ExecBlock>, String> {
                 1 => {
                     let imm = dec_value(&mut r)?;
                     let rtag = r.next("instruction")?;
-                    if rtag != 1 && rtag != 3 {
+                    // the declared result type over the closed value forms:
+                    // INT_POS, TUPLE, and — expansion increment 3 — ZOOM
+                    if rtag != 1 && rtag != 3 && rtag != 4 {
                         return Err("unknown result type tag".to_string());
                     }
                     let b = dec_value(&mut r)?;
@@ -195,6 +257,30 @@ fn decode_exec_stream(stream: &[u8]) -> Result<Vec<ExecBlock>, String> {
                         fallback,
                         bound: value_as_i128(&b, "bound")?,
                     }
+                }
+                3 => {
+                    // cnt (k), then k field declarations (rtag word + bound
+                    // value) in field order, then k component references
+                    let k = r.take_count("tuple field count")?;
+                    let mut fields = Vec::with_capacity(k);
+                    for _ in 0..k {
+                        let rtag = r.next("instruction")?;
+                        if rtag != 1 && rtag != 3 && rtag != 4 {
+                            return Err("unknown result type tag".to_string());
+                        }
+                        let b = dec_value(&mut r)?;
+                        fields.push((rtag, value_as_i128(&b, "field bound")?));
+                    }
+                    let mut refs = Vec::with_capacity(k);
+                    for _ in 0..k {
+                        refs.push(r.next("instruction")?);
+                    }
+                    Exec::Tuple { fields, refs }
+                }
+                4 => {
+                    let a = r.next("instruction")?;
+                    let idx = r.next("instruction")?;
+                    Exec::Field { a, idx }
                 }
                 5 | 6 | 7 | 8 | 9 => {
                     let a = r.next("instruction")?;
@@ -246,10 +332,20 @@ fn decode_exec_stream(stream: &[u8]) -> Result<Vec<ExecBlock>, String> {
                     Exec::Obs { ttype }
                 }
                 14 => Exec::Promote,
+                15 => {
+                    // cnt (the declared kind immediate), cnt (k), then k refs
+                    let kind = r.next("instruction")?;
+                    let k = r.take_count("emit reference count")?;
+                    let mut refs = Vec::with_capacity(k);
+                    for _ in 0..k {
+                        refs.push(r.next("instruction")?);
+                    }
+                    Exec::Emit { kind, refs }
+                }
                 16 => Exec::Halt,
                 _ => {
                     return Err(format!(
-                        "opcode {name} is not exercised by the seed corpus"
+                        "opcode {name} has no execution rule in the committed inventory"
                     ))
                 }
             };
@@ -360,10 +456,11 @@ fn full_id(t: &Token) -> (u64, u64, u64, u64, u64) {
 }
 
 /// One transition record, structured (the fourteen fields of §2.6's F5;
-/// fields 1/2/3/13/14 are derivable from the run and carried implicitly:
+/// fields 1/2/3/14 are derivable from the run and carried implicitly:
 /// field 1 = the record's pre state, field 2 = the program root, field 3 =
-/// the post-transition step index, field 13 = the receipt-order queue,
-/// field 14 = the version bindings).
+/// the post-transition step index, field 14 = the version bindings; field 13
+/// rides `receipt_ids` — expansion increment 3, P13(d): the ordinals the
+/// transition emitted).
 pub(crate) struct Rec {
     pc: (u64, u64),
     decoded: Vec<u8>,
@@ -375,6 +472,7 @@ pub(crate) struct Rec {
     step: u64,
     clock: u64,
     events: Vec<(u64, [u64; 5])>,
+    receipt_ids: Vec<u64>,
 }
 
 struct FatalErr {
@@ -426,7 +524,12 @@ struct Machine<'a> {
     clock: u64,
     step: u64,
     halt: (u64, u64),
-    receipts: Vec<u64>,
+    /// The receipt-order queue (P2 component 9, §2.2): the witness records
+    /// in emission order, each the P13(d) entry [ordinal, kind, [the cited
+    /// values' current-instance canonical encodings], [block, index]].
+    receipts: Vec<Cbor>,
+    /// The ordinals the transition being emitted appended (record field 13).
+    step_receipt_ids: Vec<u64>,
     next_iid: u64,
     next_serial: u64,
     escrow_open: bool,
@@ -493,6 +596,7 @@ impl<'a> Machine<'a> {
             step: 0,
             halt: (0, 0),
             receipts: Vec::new(),
+            step_receipt_ids: Vec::new(),
             next_iid: 0,
             next_serial: intent.pool.len() as u64,
             escrow_open: false,
@@ -550,7 +654,7 @@ impl<'a> Machine<'a> {
             Cbor::UInt(self.clock),
             Cbor::UInt(self.step),
             Cbor::Array(vec![Cbor::UInt(self.halt.0), Cbor::UInt(self.halt.1)]),
-            Cbor::Array(self.receipts.iter().map(|&r| Cbor::UInt(r)).collect()),
+            Cbor::Array(self.receipts.clone()),
             Cbor::Array(
                 self.versions
                     .iter()
@@ -597,8 +701,13 @@ impl<'a> Machine<'a> {
                     v
                 }
             }
-            _ => panic!("seed execution reads only integer values"),
+            _ => panic!("integer read over a non-integer value"),
         }
+    }
+
+    fn read_value(&self, sid: u64) -> Value {
+        let iid = self.current[&sid];
+        self.store[&(sid, iid)].clone()
     }
 
     fn birth_token(&mut self, ttype: u64, pc: (u64, u64), birth_step: u64, tier: u64) -> Token {
@@ -652,6 +761,8 @@ impl<'a> Machine<'a> {
                     ins.op,
                     Exec::Const { .. }
                         | Exec::Cload { .. }
+                        | Exec::Tuple { .. }
+                        | Exec::Field { .. }
                         | Exec::Arith { .. }
                         | Exec::Cmp { .. }
                         | Exec::Obs { .. }
@@ -688,7 +799,10 @@ impl<'a> Machine<'a> {
                 return Ok(self.pack(outcome));
             }
             let transfer =
-                match self.dispatch(&ins.op, pc, &mut events, &mut io_ids, &sids) {
+                match {
+                    self.step_receipt_ids.clear();
+                    self.dispatch(&ins.op, pc, &mut events, &mut io_ids, &sids)
+                } {
                     Ok(t) => t,
                     Err(f) => {
                         // the raised type names the declared rejection surface
@@ -726,6 +840,7 @@ impl<'a> Machine<'a> {
                     step: self.step,
                     clock: self.clock,
                     events,
+                    receipt_ids: std::mem::take(&mut self.step_receipt_ids),
                 });
                 self.boundaries.push((self.step, self.acc));
                 return Ok(self.pack(outcome));
@@ -744,6 +859,7 @@ impl<'a> Machine<'a> {
                 step: self.step,
                 clock: self.clock,
                 events,
+                receipt_ids: std::mem::take(&mut self.step_receipt_ids),
             });
             self.boundaries.push((self.step, self.acc));
             pre = post;
@@ -779,11 +895,65 @@ impl<'a> Machine<'a> {
                         self.mint(sid, Value::int(v));
                     }
                     Err(_) => {
-                        // a non-integer constant carries no §3.2 bound surface
-                        // in the seed; minted as declared
+                        // P13(c) (expansion increment 3): a zoom literal's
+                        // declared INT_POS upper bound constrains the
+                        // normalized exponent (the pair's range-bearing
+                        // component); a tuple literal's bound word is
+                        // present and vacuous (no INT_POS quantity to
+                        // compare)
+                        match imm {
+                            Value::Zoom(_, z) => {
+                                if *z > *bound {
+                                    return Err(etc());
+                                }
+                            }
+                            Value::Tuple(_) => {}
+                            Value::Int { .. } => unreachable!(),
+                        }
                         self.mint(sid, imm.clone());
                     }
                 }
+                Ok(None)
+            }
+            Exec::Tuple { fields, refs } => {
+                // §2.3's TUPLE row: binds the canonical tuple value over the
+                // components to a fresh instance; any component exceeding its
+                // declared bound fires the typed rejection before dispatch
+                // (under P13(c)'s bound reading the check compares integer
+                // components against their INT_POS bounds — a TUPLE-typed
+                // field's bound is present and vacuous)
+                let comps: Vec<Value> = refs.iter().map(|r| self.read_value(*r)).collect();
+                for ((rtag, b), v) in fields.iter().zip(comps.iter()) {
+                    if *rtag == 1 {
+                        if let Value::Int { neg, mag } = v {
+                            let mut m: u128 = 0;
+                            for word in mag {
+                                m = (m << 64) | *word as u128;
+                            }
+                            let vi = m as i128;
+                            let vi = if *neg { -vi } else { vi };
+                            if vi > *b {
+                                return Err(etc());
+                            }
+                        }
+                    }
+                }
+                let sid = sids[pc.0 as usize][pc.1 as usize].unwrap();
+                self.mint(sid, Value::Tuple(comps));
+                Ok(None)
+            }
+            Exec::Field { a, idx } => {
+                // §2.3's FIELD row: binds the i-th component's canonical
+                // value to a fresh instance; no run-time rejection —
+                // postulate (v) excludes arity and type mismatches at Intent
+                // formation
+                let v = self.read_value(*a);
+                let comp = match &v {
+                    Value::Tuple(fs) => fs[*idx as usize].clone(),
+                    _ => panic!("postulate (v): FIELD reads a tuple value"),
+                };
+                let sid = sids[pc.0 as usize][pc.1 as usize].unwrap();
+                self.mint(sid, comp);
                 Ok(None)
             }
             Exec::Cload { addr, fallback, bound } => {
@@ -863,10 +1033,31 @@ impl<'a> Machine<'a> {
                 Ok(None)
             }
             Exec::Cmp { a, b } => {
-                let (x, y) = (self.read_i(*a), self.read_i(*b));
-                let r = if x < y {
+                let (x, y) = (self.read_value(*a), self.read_value(*b));
+                if matches!(x, Value::Zoom(_, _)) || matches!(y, Value::Zoom(_, _)) {
+                    // P13(b) (expansion increment 3): the CMP row's
+                    // pre-dispatch declared-range check over each
+                    // zoom-carrying operand
+                    for v in [&x, &y] {
+                        if let Value::Zoom(m, z) = v {
+                            if !(ZOOM_EXP_LO <= *z
+                                && *z <= ZOOM_EXP_HI
+                                && 0 <= *m
+                                && *m < ZOOM_MAN_HI)
+                            {
+                                return Err(etc());
+                            }
+                        }
+                    }
+                    let r = cmp_under_n(&x, &y);
+                    let sid = sids[pc.0 as usize][pc.1 as usize].unwrap();
+                    self.mint(sid, Value::int(r));
+                    return Ok(None);
+                }
+                let (xi, yi) = (self.read_i(*a), self.read_i(*b));
+                let r = if xi < yi {
                     -1
-                } else if x > y {
+                } else if xi > yi {
                     1
                 } else {
                     0
@@ -922,6 +1113,26 @@ impl<'a> Machine<'a> {
                         events.push((2, tid(pt)));
                     }
                 }
+                Ok(None)
+            }
+            Exec::Emit { kind, refs } => {
+                // §2.3's EMIT row + P13(d): the witness record — (the
+                // declared kind, the cited values' current-instance canonical
+                // encodings, the emission position) — appends to the
+                // receipt-order queue; the ordinal (P7) rides the entry and
+                // field 13 cites it
+                let encs: Vec<Cbor> = refs
+                    .iter()
+                    .map(|r| Cbor::Bytes(enc_value(&self.read_value(*r))))
+                    .collect();
+                let ordn = self.receipts.len() as u64;
+                self.receipts.push(Cbor::Array(vec![
+                    Cbor::UInt(ordn),
+                    Cbor::UInt(*kind),
+                    Cbor::Array(encs),
+                    Cbor::Array(vec![Cbor::UInt(pc.0), Cbor::UInt(pc.1)]),
+                ]));
+                self.step_receipt_ids.push(ordn);
                 Ok(None)
             }
             Exec::Halt => Ok(Some(Transfer::Halt)),
@@ -1038,6 +1249,7 @@ impl<'a> Machine<'a> {
             step: self.step,
             clock: self.clock,
             events,
+            receipt_ids: Vec::new(),
         });
         self.boundaries.push((self.step, self.acc));
         outcome
@@ -1741,12 +1953,21 @@ fn exec_vector_check(
                 rep,
             );
         }
-        // field 13 receipt_ids: no seed vector emits a witness (P7)
-        if !iv_nums(&parse_iv(&f[12])).is_empty() {
+        // field 13 receipt_ids (P13(d), expansion increment 3): the ordinals
+        // the transition emitted — every vector committed before that
+        // increment shows the empty list
+        let got_ids: Vec<i128> = iv_nums(&parse_iv(&f[12]));
+        let want_ids: Vec<i128> = rec.receipt_ids.iter().map(|&v| v as i128).collect();
+        if got_ids != want_ids {
             return cmp_fail(
                 id,
                 name,
-                &format!("record {} field 13 carries receipts — outside the seed's declared scope (P7)", ri + 1),
+                &format!(
+                    "record {} field 13 (receipt ordinals) diverges: run {:?} vs committed \"{}\"",
+                    ri + 1,
+                    rec.receipt_ids,
+                    f[12]
+                ),
                 rep,
             );
         }
