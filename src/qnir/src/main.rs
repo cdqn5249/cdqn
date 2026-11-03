@@ -309,6 +309,7 @@ fn parse_i_input(line: &str, insns: &dyn Fn(&str, &str) -> Option<u64>) -> SrcIn
         return SrcInsn::Const {
             imm: Value::int(tok.trim().parse().unwrap()),
             bound: b,
+            rtag: 1,
         };
     }
     if let Some(rest) = l.strip_prefix("ADD of static value ids ") {
@@ -915,20 +916,118 @@ fn parse_src_insn(body: &str) -> SrcInsn {
     let b = normalize(body);
     let op: String = b.chars().take_while(|c| c.is_ascii_uppercase()).collect();
     let bound_of = |s: &str| -> i128 {
-        let after = s.split("bnd=(int, <=").nth(1).unwrap();
+        let after = s
+            .split("bnd=(int, <=")
+            .nth(1)
+            .or_else(|| s.split("bnd=(zoom, <=").nth(1))
+            .unwrap();
         let tok: String = after.trim_start().chars().take_while(|c| c.is_ascii_digit() || *c == '-').collect();
         tok.trim().parse().unwrap()
     };
     match op.as_str() {
         "CONST" => {
             let imm = b.split("imm=").nth(1).unwrap();
-            let imm_tok: String = imm
-                .chars()
-                .take_while(|c| c.is_ascii_digit() || *c == '-')
-                .collect();
+            let rtag: u64 = if b.contains("bnd=(zoom, <=") {
+                4
+            } else if b.contains("bnd=(tuple, <=") {
+                3
+            } else {
+                1
+            };
+            let imm_val = if let Some(z) = imm.strip_prefix("zoom(") {
+                // a zoom literal in its normalized form: zoom(m, z) bnd=(zoom, <=n)
+                let inner = z.split(") bnd=").next().unwrap_or(z).trim_end_matches(')');
+                let (m, ze) = inner.split_once(", ").unwrap();
+                Value::Zoom(int_of(m), int_of(ze))
+            } else {
+                let imm_tok: String = imm
+                    .chars()
+                    .take_while(|c| c.is_ascii_digit() || *c == '-')
+                    .collect();
+                val_of(&imm_tok)
+            };
             SrcInsn::Const {
-                imm: val_of(&imm_tok),
+                imm: imm_val,
                 bound: bound_of(&b),
+                rtag,
+            }
+        }
+        "TUPLE" => {
+            let k_str: String = b
+                .split("k=")
+                .nth(1)
+                .unwrap()
+                .chars()
+                .take_while(|c| c.is_ascii_digit())
+                .collect();
+            let k: usize = u64_of(&k_str) as usize;
+            let fields_body = b.split("fields=[").nth(1).unwrap();
+            let fields_body = &fields_body[..fields_body.rfind(']').unwrap()];
+            let mut fields = Vec::new();
+            for part in fields_body.split("), (") {
+                let part = part.trim_start_matches('(');
+                let (ty, bnd) = part.split_once(", <=").unwrap();
+                let rtag = match ty {
+                    "int" => 1u64,
+                    "tuple" => 3u64,
+                    "zoom" => 4u64,
+                    _ => panic!("unknown tuple field type {ty}"),
+                };
+                fields.push((rtag, int_of(bnd.trim_end_matches(')'))));
+            }
+            let refs: Vec<u64> = b
+                .split_whitespace()
+                .filter_map(|t| t.strip_prefix("ref="))
+                .map(u64_of)
+                .collect();
+            assert!(fields.len() == k && refs.len() == k, "TUPLE arity");
+            SrcInsn::Tuple { fields, refs }
+        }
+        "FIELD" => {
+            let a: String = b
+                .split("ref=")
+                .nth(1)
+                .unwrap()
+                .chars()
+                .take_while(|c| c.is_ascii_digit())
+                .collect();
+            let idx: String = b
+                .split("idx=")
+                .nth(1)
+                .unwrap()
+                .chars()
+                .take_while(|c| c.is_ascii_digit())
+                .collect();
+            SrcInsn::Field {
+                a: u64_of(&a),
+                idx: u64_of(&idx),
+            }
+        }
+        "EMIT" => {
+            let kind: String = b
+                .split("kind=")
+                .nth(1)
+                .unwrap()
+                .chars()
+                .take_while(|c| c.is_ascii_digit())
+                .collect();
+            let k_str: String = b
+                .split("k=")
+                .nth(1)
+                .unwrap()
+                .chars()
+                .take_while(|c| c.is_ascii_digit())
+                .collect();
+            let k: usize = u64_of(&k_str) as usize;
+            let refs: Vec<u64> = b
+                .split_whitespace()
+                .filter_map(|t| t.strip_prefix("ref="))
+                .map(u64_of)
+                .collect();
+            assert!(refs.len() == k, "EMIT arity");
+            SrcInsn::Emit {
+                kind: u64_of(&kind),
+                refs,
             }
         }
         "CLOAD" => {
