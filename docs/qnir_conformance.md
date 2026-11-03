@@ -2,7 +2,7 @@
 layout: default
 title: QnIR Conformance — The Conformance Oracle Specification of the QnIR v0.3 Working Draft (Repair Step 4)
 description: QnIR v0.3 draft, §4 the conformance oracle — golden-first protocol, assembler, validator, interpreters
-version: 0.3.0-draft.16
+version: 0.3.0-draft.17
 updated: 2026-11-03
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
