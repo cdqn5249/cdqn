@@ -823,13 +823,7 @@ class Machine:
             events = []
             io_ids = []
             gateway = 0
-            if not self.escrow_open:
-                # admission passed (§3.4); the escrow opens with this
-                # transition and the reserve takes B(P) in full (§3.3)
-                self.escrow_open = True
-                self.acc["reserved"] += self.BH
-                gateway = self.profile["gateway"]
-            elif self.outstanding() < c:
+            if self.escrow_open and self.outstanding() < c:
                 # fuel backstop (§3.4): defense in depth after admission
                 return self.rejection("EXPRESSION_TOO_COMPLEX", pc, decoded, pre)
             try:
@@ -839,6 +833,15 @@ class Machine:
                 return self.rejection(r.token_type, pc, decoded, pre)
             if transfer is None:
                 transfer = ("fall", None)
+            if not self.escrow_open:
+                # §3.3: the reserve is opened once, by the execution's
+                # first COMPLETED transition (§3.4: on a pass the
+                # transition completes normally and opens the escrow) — a
+                # typed rejection at the first attempted transition never
+                # opens it; the reserve takes B(P) in full (§3.3)
+                self.escrow_open = True
+                self.acc["reserved"] += self.BH
+                gateway = self.profile["gateway"]
             post_charge = gateway + c
             self.acc["charged"] += post_charge
             cls = CLASS_OF[ins["op"]]
