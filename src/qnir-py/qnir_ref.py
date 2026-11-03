@@ -1304,9 +1304,18 @@ def run_x_family(corpus, profile):
         body = by_id[vid]
         params = next(ln for ln in body if ln.startswith("Declared parameters:"))
         wb = int(re.search(r"`W_budget` = (\d+) U", params).group(1))
-        if "no entries" not in params:
-            raise ValueError("a populated dependency store is an expansion obligation")
+        # P12 (expansion increment 2): the declared dependency table — the
+        # declared constant-table values behind the cited addresses of the
+        # vector's own envelope dependency list (§2.1: D is declared vector
+        # input, never envelope content; the values ride §2.6's INT_POS)
         D = {}
+        dm = re.search(r"`D` = \{([^}]*)\}", params)
+        if dm:
+            deps = decode_envelope(envelopes[vid])["deps"]
+            for part in dm.group(1).split(","):
+                m2 = re.search(r"addr (\d+) → (-?\d+)", part)
+                if m2:
+                    D[deps[int(m2.group(1))]] = enc_int(int(m2.group(2)))
         v_line = re.search(r"`V` = \(([^)]*)\)", params).group(1)
         V = [s.strip() for s in v_line.split(",")]
         adm = next(ln for ln in body if ln.startswith("Admission:"))
