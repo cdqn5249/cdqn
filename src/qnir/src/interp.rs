@@ -1146,14 +1146,19 @@ pub fn run_vector(
     envelope: &[u8],
     w_budget: u64,
     profile: &Profile,
+    dep_values: &[(Vec<u8>, Vec<u8>)],
 ) -> Result<RunOutcome, String> {
     let intent = decode_envelope(envelope)?;
     let stream_words = envelope_stream_words(envelope)?;
+    // P12 (expansion increment 2): the declared dependency table — the
+    // declared constant-table values behind the cited content addresses
+    // (§2.1: D is declared vector input, never envelope content)
+    let d: HashMap<Vec<u8>, Vec<u8>> = dep_values.iter().cloned().collect();
     let machine = Machine::new(
         envelope,
         &intent,
         stream_words,
-        HashMap::new(),
+        d,
         w_budget,
         profile,
     )?;
@@ -1283,6 +1288,56 @@ fn all_nums(s: &str) -> Vec<u64> {
         out.push(cur.parse().expect("number"));
     }
     out
+}
+
+/// P12 (expansion increment 2): parses the vector's declared dependency
+/// table (`D` = { addr i → v, … }) from the Declared parameters line and
+/// resolves each cited index against the envelope's dependency list,
+/// encoding each declared value per §2.6. The committed empty form
+/// (`D` = no entries) yields no entries.
+fn declared_dep_values(
+    section: &str,
+    envelope: &[u8],
+) -> Result<Vec<(Vec<u8>, Vec<u8>)>, String> {
+    let inner = match crate::line_starting(section, "Declared parameters:") {
+        Some(pl) => match pl.split("`D` = {").nth(1) {
+            Some(t) => match t.split('}').next() {
+                Some(x) => x.trim().to_string(),
+                None => return Ok(Vec::new()),
+            },
+            None => return Ok(Vec::new()),
+        },
+        None => return Ok(Vec::new()),
+    };
+    if inner.is_empty() {
+        return Ok(Vec::new());
+    }
+    let intent = decode_envelope(envelope)?;
+    let mut out = Vec::new();
+    for part in inner.split(',') {
+        let t = part.trim();
+        if t.is_empty() {
+            continue;
+        }
+        let nums = all_nums(t);
+        if nums.len() < 2 {
+            return Err(format!(
+                "the declared dependency entry {t:?} is malformed"
+            ));
+        }
+        let idx = nums[0] as usize;
+        let addr = intent
+            .deps
+            .get(idx)
+            .ok_or_else(|| {
+                format!(
+                    "the declared dependency index {idx} is not in the envelope's dependency list"
+                )
+            })?
+            .clone();
+        out.push((addr, enc_value(&Value::int(nums[1] as i128))));
+    }
+    Ok(out)
 }
 
 struct RcptTxt {
@@ -1557,7 +1612,20 @@ fn exec_vector_check(
     let ledger = parse_ledger_block(&ledger_fence[0].body);
 
     // ---- run the committed transition relation over the committed envelope
-    let outcome = match run_vector(envelope, params.w_budget, profile) {
+    // P12 (expansion increment 2): the vector's declared dependency table,
+    // resolved against the envelope's dependency list and encoded per §2.6
+    let dep_values = match declared_dep_values(section, envelope) {
+        Ok(v) => v,
+        Err(e) => {
+            return cmp_fail(
+                id,
+                name,
+                &format!("the declared dependency table is malformed — {e}"),
+                rep,
+            );
+        }
+    };
+    let outcome = match run_vector(envelope, params.w_budget, profile, &dep_values) {
         Ok(o) => o,
         Err(e) => {
             return cmp_fail(
