@@ -2,7 +2,7 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.16
+version: 0.3.0-draft.17
 updated: 2026-11-03
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
