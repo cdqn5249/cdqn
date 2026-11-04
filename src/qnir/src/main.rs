@@ -34,6 +34,7 @@ mod sha256;
 mod value;
 
 use insn::{SrcInsn, *};
+use crate::cbor::Cbor;
 use std::fs;
 use value::{enc_value, Value};
 
@@ -593,6 +594,145 @@ fn suite_i(md: &str, rep: &mut Report) {
     ));
 }
 
+/// The declared shape of a Family R input (expansion increment 5): a
+/// side-table record built from its declared index and payload reading, or
+/// the populated-table envelope checked against its declared record.
+enum RInput {
+    Record { idx: u64, payload: Option<Value> },
+    Envelope { idx: u64 },
+}
+
+fn parse_r_index(l: &str) -> u64 {
+    let after = l.split("(index ").nth(1).expect("the declared record index");
+    let tok: String = after
+        .chars()
+        .take_while(|c| c.is_ascii_digit())
+        .collect();
+    tok.parse().expect("the record index word")
+}
+
+/// Parses one Family R declared input line.
+fn parse_r_input(line: &str) -> RInput {
+    let l = normalize(line);
+    let l = l.trim_start_matches("Input:").trim();
+    let idx = parse_r_index(l);
+    if l.contains("Intent envelope") {
+        return RInput::Envelope { idx };
+    }
+    if l.contains("the empty payload") {
+        return RInput::Record { idx, payload: None };
+    }
+    if let Some(rest) = l.split("the exact integer ").nth(1) {
+        let tok: String = rest
+            .chars()
+            .take_while(|c| c.is_ascii_digit())
+            .collect();
+        return RInput::Record {
+            idx,
+            payload: Some(parse_int_with_negpow(&tok)),
+        };
+    }
+    if let Some(rest) = l.split("the tuple ").nth(1) {
+        let end = rest.find("))").expect("the tuple's closing form");
+        let tok = &rest[..end + 1];
+        return RInput::Record {
+            idx,
+            payload: Some(parse_tuple(tok)),
+        };
+    }
+    panic!("unrecognized family R input form: {line}");
+}
+
+fn suite_r(md: &str, rep: &mut Report) {
+    let vectors =
+        parse_vectors(md, "## Family R — EXT Side-Table Record Encodings");
+    let mut pass = 0usize;
+    for v in &vectors {
+        let f = fences(&v.section);
+        let input = line_starting(&v.section, "Input:").unwrap();
+        let want =
+            hex_to_bytes(&fence_after(&f, "Expected canonical bytes")
+                .unwrap()
+                .body);
+        let ok = match parse_r_input(&input) {
+            RInput::Record { idx, payload } => {
+                let pay = match payload {
+                    None => Vec::new(),
+                    Some(val) => enc_value(&val),
+                };
+                let got =
+                    cbor::encode(&Cbor::Array(vec![
+                        Cbor::UInt(idx),
+                        Cbor::Bytes(pay),
+                    ]));
+                got == want
+            }
+            RInput::Envelope { idx } => {
+                let decoded = match insn::decode_envelope(&want) {
+                    Ok(_) => cbor::decode(&want).map_err(|e| e.0).unwrap(),
+                    Err(_) => {
+                        rep.fail(format!(
+                            "{} {}: the committed envelope bytes do not \
+                             decode as a statically legal Intent",
+                            v.id, v.name
+                        ));
+                        continue;
+                    }
+                };
+                let declared = match &decoded {
+                    Cbor::Map(entries) => {
+                        entries
+                            .iter()
+                            .find(|(k, _)| matches!(k, Cbor::UInt(7)))
+                            .map(|(_, v)| v)
+                    }
+                    _ => None,
+                };
+                match declared {
+                    Some(Cbor::Array(items)) => {
+                        items.len() == 1
+                            && matches!(
+                                &items[0],
+                                Cbor::Array(p)
+                                    if p.len() == 2
+                                        && matches!(
+                                            &p[0],
+                                            Cbor::UInt(n) if *n == idx
+                                        )
+                                        && matches!(
+                                            &p[1],
+                                            Cbor::Bytes(b) if b.is_empty()
+                                        )
+                            )
+                    }
+                    _ => false,
+                }
+            }
+        };
+        if ok {
+            pass += 1;
+            rep.say(format!(
+                "  {} {}: match ({} bytes)",
+                v.id,
+                v.name,
+                want.len()
+            ));
+        } else {
+            rep.fail(format!(
+                "{} {}: canonical bytes or declared record diverge",
+                v.id, v.name
+            ));
+        }
+    }
+    rep.say(format!(
+        "suite R (EXT side-table record encodings): {} — {}/{} committed \
+         vectors re-encode byte-exactly",
+        if pass == vectors.len() { "PASS" } else { "FAIL" },
+        pass,
+        vectors.len()
+    ));
+}
+
 /// The declared shape of a Family M input, from its committed input
 /// description: envelope-level, block-stream-level, single-instruction, or
 /// bare value.
@@ -604,6 +744,10 @@ fn m_shape(section: &str) -> &'static str {
         "stream"
     } else if input.contains("instruction") {
         "insn"
+    } else if input.contains("side-table record") || input.contains("side-table array") {
+        // the EXT surface (expansion increment 5): a single record or a
+        // side-table array
+        "extrec"
     } else {
         "value"
     }
@@ -662,6 +806,10 @@ fn suite_m(md: &str, rep: &mut Report) {
                         format!("malformed — {e}")
                     }
                 }
+            },
+            "extrec" => match insn::check_ext_record_or_table(&bytes) {
+                Ok(_) => "canonical".to_string(),
+                Err(e) => format!("malformed — {e}"),
             },
             _ => unreachable!(),
         };
@@ -1212,15 +1360,22 @@ fn main() {
 
     println!("QnIR conformance artifact — assembler, validator, and reference interpreter (R6 increments 2–3, conformance §4.2/§4.3)");
     println!("corpus: {path} ({} bytes, repository bytes)", md.len());
-    let n_vectors = ["## Family E —", "## Family I —", "## Family M —", "## Family X —"]
-        .iter()
-        .map(|h| parse_vectors(&md, h).len())
-        .sum::<usize>();
+    let n_vectors = [
+        "## Family E —",
+        "## Family I —",
+        "## Family R —",
+        "## Family M —",
+        "## Family X —",
+    ]
+    .iter()
+    .map(|h| parse_vectors(&md, h).len())
+    .sum::<usize>();
     println!("declared seed: {n_vectors} vectors");
 
     let mut rep = Report::new();
     suite_e(&md, &mut rep);
     suite_i(&md, &mut rep);
+    suite_r(&md, &mut rep);
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
     suite_x_exec(&md, &mut rep);
