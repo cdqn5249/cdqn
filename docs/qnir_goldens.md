@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.17
-updated: 2026-11-03
+version: 0.3.0-draft.18
+updated: 2026-11-04
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -25,19 +25,19 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1) |
-| **Version** | 0.3.0-draft.17 |
-| **Last Updated** | 2026-11-03 (Bao Loc, Vietnam) |
+| **Version** | 0.3.0-draft.18 |
+| **Last Updated** | 2026-11-04 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Working Draft under the Loop-2 Repair Sequence and the Loop-3 Repair Program (R1–R6) — Not Promoted to the Canon |
 
-*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft — the first artifact increment under the declared order of conformance §4.5 (F18): the goldens precede all code, and no implementation exists or is drafted at this version. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion), and at v0.3.0-draft.17 its fourth (R6 expansion increment 4, the per-class ledger trace publications and the budget-boundary per-combination completion); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
+*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft — the first artifact increment under the declared order of conformance §4.5 (F18): the goldens precede all code, and no implementation exists or is drafted at this version. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion), at v0.3.0-draft.17 its fourth (R6 expansion increment 4, the per-class ledger trace publications and the budget-boundary per-combination completion), and at v0.3.0-draft.18 its fifth (R6 expansion increment 5, the `EXT`-payload encoding vectors); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
 
 ## Scope and Derivation Discipline
 
 This corpus is the seed suite of §4.4: a small suite derived from the normative rules of §1–§3 and §4, reviewed independently of both implementations, and committed before any implementation exists — the golden-first order (F17/F18), discharged here under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7 as artifact-share increment 1 of the {% include term.html id="qnir" text="QnIR" %} draft. Under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline, every vector cites the committed rule that produces each expected value; where the committed text leaves a rendering choice open, the choice is declared in the parameter block below and binds the vectors exactly as a version component of `V` (§2.1) — a change to any of them is a new encoding version. Charges are measured in the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}; the terminal {% include term.html id="receipt" text="receipt" %} of every execution vector is a committed artifact of §2.5/§2.6.
 
-**The corpus binds 76 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 12 malformed surfaces (family M), 50 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16, and the 1 expansion vector of R6 expansion increment 4, v0.3.0-draft.17).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
+**The corpus binds 83 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 4 `EXT` side-table record encodings (family R), 15 malformed surfaces (family M), 50 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16, the 1 expansion vector of R6 expansion increment 4, v0.3.0-draft.17, and the 7 encoding vectors of R6 expansion increment 5, v0.3.0-draft.18 — R1–R4 in family R and M13–M15 in family M).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
 
 ## Expansion Increment 1 — the QO-22/F12 Combination Completion (v0.3.0-draft.14)
 
@@ -161,6 +161,29 @@ The seed's vectors carry per-vector ledger summaries — each vector's reconstru
 
 The X50 ledger closes the register's settlement dimension: its zero-posting block (Work(E) = 0 U, no per-class postings, the escrow never opened) is the committed rendering of the family's last reachable settlement cell.
 
+## Expansion Increment 5 — the `EXT`-Payload Encoding Vectors (v0.3.0-draft.18)
+
+This expansion is R6 expansion increment 5 of the Loop-3 stage (the program of record, `docs/qnir.md`, wave record v0.3.0-draft.18), discharging the Suite Register's sixth bullet — the encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version. Its vectors are R1–R4 and M13–M15 below — R1–R4 in the new Family R (`EXT` side-table record encodings, between Families I and M), M13–M15 appended to Family M — derived after the committed four-artifact order and expansion increments 1–4 (F18 applied to expansions), from the normative rules of §2.1–§2.6 and §3 through the same anchored derivation instrument of record (a third codebase, sharing no code with either implementation and consulting neither; over the committed corpus it re-derives every committed execution vector byte-exact — all 50 — before any expansion byte was derived), and checked by both implementations only after these bytes were fixed. The seed's and increments 1–4's independently derived vectors are retained byte-unchanged. The increment adds no execution rule to either artifact: the vectors ride the committed envelope grammar (key 7), the committed value grammar, and the committed duplicate-key rule, with the payload reading declared as P14 below — the corpus adds no execution rule of its own, and the implementations' artifact share is the declared reading check (the payload reading and the record-index uniqueness in the envelope decode path) plus the new Family R suite surface.
+
+**The declared reading** (declared here under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline where the committed text leaves the point open; it cites its rule and binds the expansion vectors as a version component of `V`; collected as parameter **P14** in the declared-parameter block below): the reading types of an `EXT` side-table record's payload byte string under the encoding version `qir-enc-1` are the closed two-type set — the empty payload (the reading: no content) and the value payload (exactly one complete §2.6 value encoding, the reading: that value) — with the type determined by the payload itself, so the reading is total over the payload bytes and no per-record type tag exists or is needed.
+
+**The scope disposition.** The bullet's declared scope is realized in full by four canonical vectors and three malformed counterparts: the empty-payload record (R1 — the reading "no content"), the integer-payload record (R2), the tuple-payload record (R3 — the composite form of the value grammar as payload), and the populated-table envelope (R4 — the committed M9 program with its side table carrying exactly the record the bitmask references, the dangling reference resolving); the malformed counterparts at the payload extent (M13 — trailing bytes after the complete value; M14 — the non-canonical value, M3's rule at the payload extent) and at the record structure (M15 — the duplicate record index, the committed duplicate-key rule's case). The instruction-bitmask coupling's committed surface is fixed by M9 (the dangling reference, statically illegal) and R4 (the reference resolving); no reading type beyond the declared two-type set is reachable — a payload is empty or it is bytes, and the reading is total over the payload.
+
+## The Expansion Vector Register (R1–R4, M13–M15)
+
+The vectors carry no declared parameters beyond P14 — no budget line: the families R and M fix encodings and verdicts, not executions. `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1) rides each vector's encoding as committed.
+
+| Vectors | Surface | Outcome surface |
+|---|---|---|
+| R1 | the empty-payload record (index 0) | canonical; the reading: no content |
+| R2 | the integer-payload record (index 1; the exact integer 42) | canonical; the reading: the value 42 |
+| R3 | the tuple-payload record (index 2; the tuple (1, −2)) | canonical; the reading: the tuple value |
+| R4 | the M9 complement — the populated-table envelope (the record the bitmask references) | canonical; the dangling reference resolved, the record's payload reading empty |
+| M13 | the value payload with trailing bytes after the complete value | `malformed — trailing bytes after the record's value payload` |
+| M14 | the value payload non-canonical (magnitude words [0, 5]) | `malformed — leading zero magnitude word (non-canonical)` |
+| M15 | the duplicate record index in one side table | `malformed — duplicate side-table record index` |
+
+
 ## Declared Artifact-Wave Parameters
 
 Declared here under §4.3's own delegation ("the hash's own algorithm and output width are declared with the encoding version at the artifact wave"); they ride the encoding version `qir-enc-1` of every vector's `V` and bind the vectors — no canon byte changes:
@@ -181,6 +204,7 @@ Declared here under §4.3's own delegation ("the hash's own algorithm and output
 
 - **P13 — the declared zoom ranges, the CMP pre-dispatch check, the non-integer bound reading, and the witness rendering (expansion increment 3):** (a) the declared zoom ranges of §2.3's zoom declaration ("each within the pair's declared ranges") for this increment's vectors — the normalized exponent z within [−4, 4], the normalized mantissa q within [0, 2^64) — declared here because no envelope key carries them (the P12 declared-vector-input shape); (b) the CMP row's pre-dispatch check compares each zoom-carrying operand's normalized pair against (a) — outside, the row's typed rejection before dispatch; (c) the bound reading over a non-integer result — a zoom-result declaration's INT_POS upper bound constrains the normalized exponent (z > bound fires the producing row's typed rejection before dispatch), and a tuple-result or TUPLE-typed field declaration's bound word is present and vacuous (the check compares an INT_POS quantity, and a tuple carries none); (d) the witness rendering — the receipt-order queue (P2 component 9) carries the witness records in emission order, each entry [ordinal, kind, [the cited values' current-instance canonical encodings as byte strings of their §2.6 word encodings], [block, index]], the ordinal P7's (dense from 0), record field 13 carrying the ordinals the transition emitted (dense from 0, `[]` when it emits none). Declared by expansion increment 3 (v0.3.0-draft.16); every vector committed before this increment carries the empty queue and the empty field-13 list.
 
+- **P14 — the declared `EXT` payload reading and the record structure (expansion increment 5):** (a) under the encoding version `qir-enc-1`, the reading types of an `EXT` side-table record's payload byte string (envelope key 7: "whose reading is the record's own declared type under the encoding version") are the closed two-type set: **the empty payload** (length 0 — the reading is no content) and **the value payload** (exactly one complete §2.6 value encoding — the reading is that value); the type is determined by the payload itself, so the reading is total over the payload bytes and no per-record type tag exists or is needed; (b) a payload decoding otherwise — a non-canonical value, a truncated value, a payload whose length is not a multiple of the 64-bit word, or trailing bytes after a complete value — makes the carrying Intent malformed, the value grammar's own error surfacing at the payload extent; (c) the record structure is the committed two-element array of the record index word and the payload byte string, the index word the record's key (the instruction bitmask's selection target, §2.6): a duplicate record index in one side table is the committed duplicate-key rule's case — malformed; (d) every vector committed before this increment carries the empty `EXT` side table, so the reading is exercised by this increment's vectors only. Declared by expansion increment 5 (v0.3.0-draft.18).
 ## The Declared Profile (`qir-prof-golden-1`)
 
 One profile for every execution vector; the coefficients are profile parameters riding `V` (§3.2/§3.6 — no numeric charge table exists in the draft itself, and the corpus does not create one):
@@ -348,6 +372,64 @@ Input: BR on condition code NE over static value id 0, true edge to block 1, fal
 0000000000000000 0000000000000002 0000000000000000 0000000000000000
 ```
 
+## Family R — EXT Side-Table Record Encodings
+
+Each vector fixes the expected canonical bytes of one `EXT` side-table record over the declared payload reading P14, or the canonical envelope bytes of the committed dangling-side-table program (M9) with its side table carrying the record the bitmask references — the M9 complement (§2.6 blocks-and-`EXT`-side-table: envelope key 7, "each a two-element array of the record index word and the payload byte string, whose reading is the record's own declared type under the encoding version"; the instruction's trailing `ext` bitmask word).
+
+### R1 enc-ext-record-empty
+
+Cites: §2.6 blocks-and-`EXT`-side-table (the record's two-element array form); P14 (the empty payload's reading: no content).
+
+Input: the `EXT` side-table record (index 0, the empty payload). Expected verdict: canonical. Expected canonical bytes:
+
+```
+820040
+```
+
+### R2 enc-ext-record-int
+
+Cites: §2.6 blocks-and-`EXT`-side-table (the payload byte string); §2.6 value grammar (INT_POS, one magnitude word); P14 (the value payload's reading: exactly one complete §2.6 value encoding).
+
+Input: the `EXT` side-table record (index 1, the value payload carrying the exact integer 42). Expected verdict: canonical. Expected canonical bytes:
+
+```
+82015818 00000000 00000001 00000000
+00000001 00000000 0000002a
+```
+
+### R3 enc-ext-record-tuple
+
+Cites: §2.6 blocks-and-`EXT`-side-table (the payload byte string); §2.6 value grammar (tuples: the field count word, then k complete field encodings in declared order); P14.
+
+Input: the `EXT` side-table record (index 2, the value payload carrying the tuple (1, −2)). Expected verdict: canonical. Expected canonical bytes:
+
+```
+82025840 00000000 00000003 00000000
+00000002 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000002 00000000 00000001 00000000
+00000002
+```
+
+### R4 enc-ext-envelope-populated
+
+Cites: §2.6 blocks-and-`EXT`-side-table (the instruction's trailing `ext` bitmask word: bit i set means the instruction carries side-table record i); M9's committed input (the same one-block program — the declared-difference precedent of X50's ride on X39's envelope); P14 (the record's payload reading: no content — the reference resolving, the Intent statically legal).
+
+Input: the M9 program's Intent envelope with its `EXT` side table carrying exactly the record (index 0, the empty payload). Expected verdict: canonical. Expected canonical bytes:
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06585000 00000000 00000000 00000000
+00000000 00000000 00000100 00000000
+00000100 00000000 00000100 00000000
+00000000 00000000 00000100 00000000
+00000100 00000000 00000000 00000000
+00000107 81820040 0880
+```
+
 ## Family M — The Malformed Surface
 
 Each vector fixes the expected verdict for one declared malformed or statically illegal class (§2.6: unknown-field rejection is total over every structure of the grammar).
@@ -486,6 +568,40 @@ a9004b516e49522d 496e74656e74016e 76302e332e302d64 726166742e350269
 7169722d656e632d 3103717169722d70 726f662d676f6c64 656e2d3104800501
 0658280000000000 0000000000000000 0000000000000000 0000010000000000
 0000100000000000 0000000780088107
+```
+
+### M13 ext-payload-trailing-bytes
+
+Cites: P14 (the value payload's reading: exactly one complete §2.6 value encoding — no trailing bytes); §2.6 value grammar.
+
+Input bytes: an `EXT` side-table record of declared value reading whose payload carries trailing bytes after its complete value encoding. Expected verdict: **malformed — trailing bytes after the record's value payload**. Bytes:
+
+```
+82005820 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000000
+```
+
+### M14 ext-payload-leading-zero
+
+Cites: P14 (the value payload's reading: the §2.6 value grammar's own canonicality at the payload extent); §2.6 value grammar (minimal big-endian, no leading zero word — the M3 rule).
+
+Input bytes: an `EXT` side-table record of declared value reading whose payload carries a non-canonical integer encoding (magnitude words [0, 5]). Expected verdict: **malformed — leading zero magnitude word (non-canonical)**. Bytes:
+
+```
+82005820 00000000 00000001 00000000
+00000002 00000000 00000000 00000000
+00000005
+```
+
+### M15 ext-record-duplicate-index
+
+Cites: §2.6 canonical maps (a duplicate key in any encoded artifact is malformed — the record index word is the record's key, the bitmask's selection target); §2.6 blocks-and-`EXT`-side-table.
+
+Input bytes: an `EXT` side-table array carrying two records with the same record index word. Expected verdict: **malformed — duplicate side-table record index**. Bytes:
+
+```
+82820040 820040
 ```
 
 ## Family X — Execution Vectors
@@ -21584,7 +21700,7 @@ committed before the artifacts that need them:
 - `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload) — **discharged at v0.3.0-draft.16 as expansion increment 3 (X43–X49)**: the flat and nested tuple constructions with their field extractions, the component-bound typed rejection before dispatch, the zoom boundary comparison under N in both branches (equal; ordered with the exact shift), the `CMP` declared-range rejection, and two witness records with their ordinals and payload, over the declared parameter P13;
 - depth-ceiling vectors and the fuel-backstop-on-validator-defect vector (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16);
 - per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family — **discharged at v0.3.0-draft.17 as expansion increment 4 (X50 and the Per-Class Ledger Trace Register)**: the escrow-never-opened settlement shape (the typed rejection at the execution's first attempted transition — the family's last reachable settlement cell, over the declared rendering P12) with the remaining cells fixed by declaration (the open-escrow terminal settlements and rejection-record refunds are the committed X1/X3/X5/X10/X41/X44/X48 precedents, the admission refusal's zero-posting ledger is X2's, and the never-opened terminal settlement is unreachable — a terminal settlement requires a completed transition, which opens the escrow), and one ledger-trace publication per declared rule class (the Per-Class Ledger Trace Register — the gateway and `q_const`, `q_add`, `q_cmp`, `q_br`, `q_jmp`, `q_halt`, `q_load`, `q_tuple`, `q_field`, `q_emit`), each mechanically checkable against the equation of §3.1 through the protocol of §4.1;
-- encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version.
+- encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version — **discharged at v0.3.0-draft.18 as expansion increment 5 (R1–R4, M13–M15)**: the declared payload reading P14 (the closed two-type set — the empty payload and the exactly-one-§2.6-value payload — total over the payload bytes, no per-record type tag existing or needed), the canonical record encodings over both reading types (R1–R3, the new Family R), the populated-table envelope resolving M9's dangling reference (R4 — the committed M9 program, the declared-difference precedent), and the malformed counterparts at the payload extent and the record structure (M13 — trailing bytes after the complete value; M14 — the non-canonical value, M3's rule at the payload extent; M15 — the duplicate record index, the committed duplicate-key rule's case).
 
 The independently reviewed goldens of this increment are retained unchanged
 by every later expansion (§4.5); the assembler and validator are implemented
