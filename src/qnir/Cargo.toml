@@ -1,6 +1,6 @@
 [package]
 name = "qnir"
-version = "0.3.0-draft.17"
+version = "0.3.0-draft.18"
 edition = "2021"
 description = "QnIR conformance artifact: normative assembler, validator, and reference interpreter (R6 increments 2-3; expansion increments 3-4's execution surface)"
 license = "Scaling Source License (SSL 1.0)"
