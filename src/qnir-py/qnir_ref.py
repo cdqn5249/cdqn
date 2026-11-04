@@ -160,6 +160,12 @@ class Malformed(Exception):
 
 
 S_DUP_KEY = "malformed — duplicate envelope key"
+S_EXT_TRAIL = ("malformed — trailing bytes after the record's "
+               "value payload")
+S_EXT_DUP = "malformed — duplicate side-table record index"
+S_EXT_REC = "malformed — the EXT record structure is not [index, payload]"
+S_EXT_IDX = "malformed — the EXT record index must be a word"
+S_EXT_PAY = "malformed — the EXT record payload must be a byte string"
 
 
 def _cb_head(b, i):
@@ -457,10 +463,56 @@ def decode_stream(stream, n_blocks):
 S_ENV_KEY = "malformed — unknown envelope key"
 
 
+def check_ext_payload(payload):
+    """P14 (expansion increment 5): the declared EXT payload reading —
+    the empty payload reads as no content, any other payload as exactly
+    one complete §2.6 value encoding with no trailing bytes."""
+    if payload == b"":
+        return None
+    ws = words_of(payload)
+    _, nxt = decode_value(ws, 0, len(ws))
+    if nxt != len(ws):
+        raise Malformed(S_EXT_TRAIL)
+    return None
+
+
+def check_ext_table(items):
+    """P14: the record structure (two-element [index, payload] arrays),
+    the committed duplicate-key rule over the record index words (the
+    bitmask's selection target), and the payload reading of every record."""
+    seen = set()
+    for it in items:
+        if (not isinstance(it, list) or len(it) != 2
+                or not isinstance(it[0], int)
+                or not isinstance(it[1], (bytes, bytearray))):
+            raise Malformed(S_EXT_REC)
+        if it[0] in seen:
+            raise Malformed(S_EXT_DUP)
+        seen.add(it[0])
+        check_ext_payload(bytes(it[1]))
+    return True
+
+
+def check_ext_record_or_table(bs):
+    """The Family M / EXT surface: the bytes carry either one record
+    (a two-element array whose first element is the index word) or a side
+    table (an array of records)."""
+    m = cbor_decode(bs)
+    if not isinstance(m, list):
+        raise Malformed(S_EXT_REC)
+    if m and isinstance(m[0], int):
+        check_ext_table([m])
+    else:
+        check_ext_table(m)
+    return True
+
+
 def decode_envelope(bs):
     """Strict decode of one Intent envelope: canonical CBOR map, closed keys
     0–8, token type tags in the closed §2.5 vocabulary, the committed stream,
-    and static legality of every ext bit against the EXT side table (§2.1)."""
+    and static legality of every ext bit against the EXT side table (§2.1);
+    the side table's records carry the declared payload reading P14 and
+    unique index words (expansion increment 5)."""
     m = cbor_decode(bs)
     if not isinstance(m, dict):
         raise ValueError("envelope is not a map")
@@ -477,6 +529,9 @@ def decode_envelope(bs):
             raise Malformed(S_TTYPE)
         pool_decl.append(t)
     blocks = decode_stream(m[6], m[5])
+    # the EXT side table: the declared record structure, unique index
+    # words, and the payload reading P14 (expansion increment 5)
+    check_ext_table(m[7])
     side_len = len(m[7])
     for b in blocks:
         for ins in b["instrs"]:
@@ -1305,7 +1360,7 @@ I_INPUTS = {
 M_KINDS = {"M1": "insn", "M2": "value", "M3": "value", "M4": "value",
            "M5": "value", "M6": "value", "M7": "insn", "M8": "envelope",
            "M9": "envelope", "M10": "stream", "M11": "envelope",
-           "M12": "envelope"}
+           "M12": "envelope", "M13": "ext", "M14": "ext", "M15": "ext"}
 
 
 def build_insn(spec):
@@ -1340,6 +1395,9 @@ def classify(bs, kind):
         return "canonical"
     if kind == "envelope":
         decode_envelope(bs)
+        return "canonical"
+    if kind == "ext":
+        check_ext_record_or_table(bs)
         return "canonical"
     raise ValueError(kind)
 
@@ -1387,6 +1445,50 @@ def run_family_i(corpus):
         got = build_insn(I_INPUTS[key])
         if got != want:
             fails.append(f"{vid}: canonical words differ (agreement point 1)")
+    return len(vecs), fails
+
+
+# The declared inputs of the Family R vectors (expansion increment 5):
+# R1–R3 carry the record's declared index and payload reading (P14); R4
+# carries the populated-table envelope (the M9 complement), checked as the
+# canonical bytes decoding to exactly the declared record.
+R_INPUTS = {
+    "R1": (0, None),
+    "R2": (1, 42),
+    "R3": (2, ("tuple", [1, -2])),
+    "R4": (0, None),
+}
+
+
+def run_family_r(corpus):
+    """Family R — the EXT side-table record encodings (expansion increment
+    5): R1–R3 build the declared record through the committed CBOR and
+    value grammars and match the committed canonical bytes; R4 decodes the
+    committed envelope bytes and matches the declared side-table record."""
+    fails = []
+    vecs = corpus.vectors(corpus.between("## Family R", "## Family M"),
+                          r"R\d+")
+    for vid, body in vecs:
+        key = vid.split()[0]
+        idx, payload_src = R_INPUTS[key]
+        _, ls = fence_after(body, "Expected canonical bytes:")
+        want = groups_to_bytes(ls)
+        try:
+            if key == "R4":
+                dec = decode_envelope(want)
+                got_ok = dec["side"] == [[idx, b""]]
+                got = want if got_ok else None
+            else:
+                payload = b"" if payload_src is None else enc_value(payload_src)
+                got = cbor_encode([idx, payload])
+        except (Malformed, ValueError) as e:
+            got = None
+            fails.append(f"{vid}: the committed bytes do not read as "
+                         f"declared ({e}) (agreement point 1)")
+            continue
+        if got != want:
+            fails.append(f"{vid}: canonical bytes diverge from the committed "
+                         "bytes (agreement point 1)")
     return len(vecs), fails
 
 
@@ -1579,6 +1681,12 @@ def main():
                f"{'PASS' if not fails_i else 'FAIL'} — {n - len(fails_i)}/{n} "
                f"canonical bytes reproduced (agreement point 1)")
 
+    n, fails_r = run_family_r(corpus)
+    ok &= not fails_r
+    out.append(f"family R (EXT side-table record encodings): "
+               f"{'PASS' if not fails_r else 'FAIL'} — {n - len(fails_r)}/{n} "
+               f"canonical bytes reproduced (agreement point 1)")
+
     n, fails_m = run_family_m(corpus)
     ok &= not fails_m
     out.append(f"family M (malformed surfaces): "
@@ -1596,7 +1704,7 @@ def main():
                f"{'PASS' if not fails_x else 'FAIL'} — "
                f"{n_pass}/{n_x} committed expected outcomes reproduced at the "
                f"five agreement points of §4.1")
-    fails = fails + fails_i + fails_m + fails_x
+    fails = fails + fails_i + fails_r + fails_m + fails_x
     for f in fails:
         out.append(f"  FAIL — {f}")
     out.append(f"result: {'PASS' if ok else 'FAIL'} — "
