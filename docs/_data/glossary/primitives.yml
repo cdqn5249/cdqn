@@ -1,6 +1,21 @@
 # CDQN Unified Glossary — Primitives Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-28 (Bao Loc, Vietnam)
+# Updated: 2026-11-04 (Bao Loc, Vietnam)
+#
+# Glossary wave (simemp v1.2.0 deferred-dependency discharge):
+# - "Abstract Compute Unit U" definition re-issued per docs/simemp.md v1.2.0
+#   §4.4 (QO-2): U is the platform-invariant logical work quantum, deliberately
+#   not a physical measurement; the Landauer floor rides as a scale relation
+#   anchored in Qphy, not a per-node meter reading. Discharges the queued
+#   glossary commitment of the simemp v1.2.0 review-integration record ("the
+#   boc-policy and compute-unit-u entries refresh at the queued glossary
+#   update"). The withdrawn pre-wave definition is preserved verbatim below.
+# - Withdrawn Abstract Compute Unit U definition (pre-wave, preserved verbatim):
+#   The fundamental, invariant quantum of governed computational work representing
+#   the minimal state transition from local genesis Q(0) to first unit Q(1) along
+#   dimensional axis d1. Calibrated to physical Landauer dissipation limits
+#   (W >= k_B T ln 2) to maintain platform-invariant accounting across
+#   heterogeneous hardware substrates.
 #
 # Glossary wave (QnIR v0.2 Loop-2 review integration):
 # - "Q(reuse)" definition re-issued over the two-axis consequentiality
@@ -85,11 +100,18 @@
   slug: "compute-unit-u"
   category: "Primitives"
   definition: >
-    The fundamental, invariant quantum of governed computational work representing
-    the minimal state transition from local genesis Q(0) to first unit Q(1) along
-    dimensional axis d1. Calibrated to physical Landauer dissipation limits
-    (W >= k_B T ln 2) to maintain platform-invariant accounting across
-    heterogeneous hardware substrates.
+    The fundamental, platform-invariant logical work quantum of the Qn and cdqn
+    stack: the unique unit in which totality guarantees, static instruction
+    costs, and cross-node receipt verification are expressed, normalized by
+    definition so that the minimal governed state transition Q(0) → Q(1) costs
+    exactly 1 U. U is deliberately not a physical measurement: joule costs vary
+    continuously with silicon process node, voltage-frequency scaling, ambient
+    temperature, and cache residency, and folding them into U would break
+    deterministic cross-node receipt verification under the substrate/invariant
+    separation. The theoretical Landauer floor (W >= k_B T ln 2) anchors the
+    unit as a scale relation declared in Qphy, not a per-node meter reading;
+    node-local per-unit energy coefficients gate battery and thermal leash
+    enforcement at the node boundary and never feed back into logical budgets.
 
 - term: "Successor Morphism S"
   slug: "successor-morphism"
