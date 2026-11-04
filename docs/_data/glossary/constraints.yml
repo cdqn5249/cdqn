@@ -1,6 +1,18 @@
 # CDQN Unified Glossary — Constraints Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-22 (Bao Loc, Vietnam)
+# Updated: 2026-11-04 (Bao Loc, Vietnam)
+#
+# Glossary wave (simemp v1.2.0 deferred-dependency discharge):
+# - "BOC Policy" definition re-issued per docs/simemp.md v1.2.0 §7 (QO-1):
+#   the two-stage constrained lexicographic decision model replaces the
+#   retired v1.1.1 scalar argmax formulation. Discharges the queued glossary
+#   commitment of the simemp v1.2.0 review-integration record ("the
+#   boc-policy and compute-unit-u entries refresh at the queued glossary
+#   update"). The withdrawn pre-wave definition is preserved verbatim below.
+# - Withdrawn BOC Policy definition (pre-wave, preserved verbatim):
+#   Best of Choices. The formal decision framework used to resolve design
+#   conflicts by selecting the implementation path that maximizes SIMEMP
+#   compliance and minimizes implicit state.
 
 - term: "Dependencies Determinism"
   slug: "dependencies-determinism"
@@ -67,9 +79,28 @@
   slug: "boc-policy"
   category: "Constraints"
   definition: >
-    Best of Choices. The formal decision framework used to resolve design
-    conflicts by selecting the implementation path that maximizes SIMEMP
-    compliance and minimizes implicit state.
+    Best of Choices. The formal decision framework used to resolve
+    architectural and design conflicts, specified as a two-stage constrained
+    lexicographic decision model over declared DCC metadata. Stage 1 is a hard
+    admission filter: a candidate is admissible only if all three Tier 1
+    Existential Invariants (Identity, Metric, Security) hold; a candidate
+    failing any predicate is discarded outright (REJECTION_BY_GATEWAY) and
+    never ranked. Stage 2 minimizes the lexicographic key
+    (ImplicitDeps(c), perm_π(ΔW_worst(c), M_coupling(c), P_coverage(c))) over
+    the admissible set: the minimization of implicit state is fixed in first
+    position, never tradeable by any Tier 2 priority declaration, followed by
+    the declared priority permutation π over worst-case declared work
+    (Efficiency), external dependency and interface boundary count
+    (Modularity), and supported target hardware profile count (Portability).
+    Where Tier 2 quantities remain qualitative, BOC operates as a structured
+    architectural rationale rubric: every design verdict tabulates each
+    finalist's Tier 1 pass/fail status and its Tier 2 trade-off vector under
+    the declared priority ordering. The v1.1.1 scalar formulation
+    (Selection = argmax(SIMEMP Compliance(c))) is retired: it carried no
+    declared codomain, metric space, or partial order. When implementation
+    paths conflict, BOC selects the option that minimizes implicit state and
+    guarantees invariant preservation, even if it requires higher operational
+    overhead.
 
 - term: "Scaling Threshold"
   slug: "scaling-threshold"
