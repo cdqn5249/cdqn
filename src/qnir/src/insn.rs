@@ -467,6 +467,74 @@ pub fn enc_envelope(
 
 // ---------------------------------------------------- envelope decode + checks
 
+/// P14 (expansion increment 5): the declared `EXT` side-table payload
+/// reading — the empty payload reads as no content, any other payload as
+/// exactly one complete §2.6 value encoding with no trailing bytes.
+pub fn check_ext_payload(payload: &[u8]) -> Result<(), String> {
+    if payload.is_empty() {
+        return Ok(());
+    }
+    let words = crate::value::words_of(payload)?;
+    let mut r = WordReader::new(&words);
+    dec_value(&mut r)?;
+    if r.i != words.len() {
+        return Err(
+            "trailing bytes after the record's value payload".to_string()
+        );
+    }
+    Ok(())
+}
+
+/// P14: the record structure (a two-element [index, payload] array), the
+/// committed duplicate-key rule over the record index words (the bitmask's
+/// selection target), and the payload reading of every record.
+pub fn check_ext_table(items: &[Cbor]) -> Result<(), String> {
+    let mut seen: std::collections::HashSet<u64> = std::collections::HashSet::new();
+    for it in items {
+        let pair = match it {
+            Cbor::Array(p) if p.len() == 2 => p,
+            _ => {
+                return Err(
+                    err("the EXT record structure is not [index, payload]")
+                );
+            }
+        };
+        let idx = match &pair[0] {
+            Cbor::UInt(n) => *n,
+            _ => return Err(err("the EXT record index must be a word")),
+        };
+        let payload = match &pair[1] {
+            Cbor::Bytes(b) => b,
+            _ => return Err(err("the EXT record payload must be a byte string")),
+        };
+        if !seen.insert(idx) {
+            return Err(err("duplicate side-table record index"));
+        }
+        check_ext_payload(payload)?;
+    }
+    Ok(())
+}
+
+/// The Family M / EXT surface: the bytes carry either one record (a
+/// two-element array whose first element is the index word) or a side
+/// table (an array of records).
+pub fn check_ext_record_or_table(bytes: &[u8]) -> Result<(), String> {
+    let decoded = cbor::decode(bytes).map_err(|e| e.0)?;
+    let items = match decoded {
+        Cbor::Array(items) => items,
+        _ => {
+            return Err(
+                err("the EXT record structure is not [index, payload]")
+            );
+        }
+    };
+    if matches!(items.first(), Some(Cbor::UInt(_))) {
+        check_ext_table(&[Cbor::Array(items)])
+    } else {
+        check_ext_table(&items)
+    }
+}
+
 /// Decodes an Intent envelope with every declared static surface typed:
 /// unknown envelope key (M8), duplicate envelope key (M11, in cbor::decode),
 /// missing profile reference (§2.1), unknown token type tag (M12), unknown
@@ -524,7 +592,13 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
         _ => return Err(err("the instruction stream must be a byte string")),
     };
     let ext_table = match fields[7].take() {
-        Some(Cbor::Array(items)) => items,
+        Some(Cbor::Array(items)) => {
+            // P14 (expansion increment 5): the declared record structure,
+            // unique record index words, and the payload reading of every
+            // record
+            check_ext_table(&items)?;
+            items
+        }
         _ => return Err(err("the EXT side table must be an array")),
     };
     let pool = match fields[8].take() {
