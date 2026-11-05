@@ -7,7 +7,7 @@ Independence declaration (conformance §4.1/§4.3): implemented from the
 committed text of docs/qnir.md §1, docs/qnir_semantics.md §2,
 docs/qnir_accounting.md §3, docs/qnir_conformance.md §4, and the committed
 golden corpus docs/qnir_goldens.md with its declared artifact-wave parameters
-(P1–P11) and its declared profile.  This implementation consults neither the
+(P1–P14) and its declared profile.  This implementation consults neither the
 reference interpreter's code nor its outputs; its conformance is decided
 against the committed golden results at the five agreement points of §4.1,
 nowhere else.  It never generates or edits the golden corpus (§4.2): the
@@ -704,8 +704,8 @@ def b_hat(blocks, gateway, charge_of, trip_ceiling):
 
 # ================================================================== machine
 # Executes the committed transition relation of §2.3 under §2.5's lifecycle
-# algebra and §3's accounting, with the corpus preamble's artifact-wave
-# parameters P1–P11 and the declared profile.
+# algebra and §3's accounting, with the corpus's declared artifact-wave
+# parameters P1–P14 and the declared profile.
 #
 # Instance ids mint in transition order from 0 (§2.4); a redefinition mints,
 # never overwrites; an operand reads the current instance of its static id.
