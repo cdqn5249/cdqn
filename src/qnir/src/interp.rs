@@ -18,7 +18,7 @@
 //!
 //! The interpreter reads the committed corpus and never generates or edits
 //! goldens (§4.2); the transition relation it executes is the committed one,
-//! with the artifact-wave parameters of the corpus preamble (P1–P11) and the
+//! with the corpus's declared artifact-wave parameters (P1–P14) and the
 //! declared profile `qir-prof-golden-1` (§3.2/§3.6 — profile data, never
 //! built-in constants).
 
