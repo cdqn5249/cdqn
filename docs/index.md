@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.14.0
-updated: 2026-10-29
+version: 1.14.1
+updated: 2026-11-05
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -84,8 +84,8 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.14.0 |
-| **Last Updated** | 2026-10-29 (Bao Loc, Vietnam) |
+| **Version** | 1.14.1 |
+| **Last Updated** | 2026-11-05 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
@@ -113,6 +113,12 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Change | Sections | Provenance | Status |
 |---|---|---|---|
 | New "Standing Governance Queue" section (six trigger-gated entries Q1–Q6) + receipt closure of the two committed registry discharges (glossary wave II `q-table` two-axis re-issue; navigation.yml review-program entry) | New record section after the v1.13.0 record; new content section between the Adversarial Review Program section and §5; front matter + Document Metadata bumped; `terms_used` unchanged (53) | 2026-10-29 BOC strategy sessions (five validated derivations); committed registry wave of 2026-10-28 | CANDIDATE |
+
+---
+
+## Editorial Correction Record (v1.14.1)
+
+**Source:** the cross-file dependency registered by the committed `docs/simemp.md` v1.2.0 record ("`docs/index.md` — the SSL scaling-threshold table there quotes 3 of 5 thresholds (a touch-up may ride along a later index update)"). **Decision:** under **Axiom 13** this file is a new versioned artifact; the registered touch-up rides this update as an editorial correction applied directly and recorded here — the §5 scaling-threshold enumeration is completed from 3 of the 5 thresholds of `LICENSE.md` §1.5 to all 5 (annual gross revenue >$1,000,000 USD and capital raised/enterprise valuation/AUM >$5,000,000 USD added ahead of the three operational thresholds, which stand unchanged); no heading is renumbered, no other body line is mutated, no withdrawn wording exists, `terms_used` unchanged (53 == 53), and QnIR remains [PENDING].
 
 ---
 
@@ -314,4 +320,4 @@ Every downstream implementation must preserve the two {% include term.html id="o
 1. **Anti-Patent Defense:** Automatic license termination upon initiating patent litigation against the Author or project ecosystem.
 2. **Non-Scaling Open Access:** Royalty-free access for non-commercial, academic, and sub-threshold deployments of the {% include term.html id="licensed-work" %}.
 
-Entities exceeding the {% include term.html id="scaling-threshold" %} (>10,000 active instances/agents, >100,000 MAU, or >10,000,000 monthly transactions) must execute a separate Commercial License Agreement. Processing, wrapping, or settling a sovereign {% include term.html id="payload" %} does not by itself trigger scaling usage.
+Entities exceeding the {% include term.html id="scaling-threshold" %} (annual gross revenue >$1,000,000 USD, capital raised/enterprise valuation/AUM >$5,000,000 USD, >10,000 active instances/agents, >100,000 MAU, or >10,000,000 monthly transactions) must execute a separate Commercial License Agreement. Processing, wrapping, or settling a sovereign {% include term.html id="payload" %} does not by itself trigger scaling usage.
