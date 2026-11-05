@@ -48,6 +48,7 @@ Each specification exists as a source `.md` (this repository) and a rendered `.h
 ```
 cdqn/
 ├── docs/       # Architectural specifications, documentation portal, and essays
+├── src/        # QnIR conformance artifacts (Rust reference interpreter, Python second implementation)
 ├── LICENSE.md  # Scaling Source License (SSL) 1.0 terms
 └── README.md   # Project inquiry and entry points
 ```
