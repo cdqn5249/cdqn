@@ -4,7 +4,7 @@ title: SIMEMP Constraints
 description: Foundational physical, computational, and architectural constraints for the Qn and cdqn stack
 version: 1.4.0
 updated: 2026-11-07
-author: "Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen"
+author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
 license_location: repository root
