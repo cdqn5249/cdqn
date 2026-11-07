@@ -4,7 +4,7 @@ title: BOC Decision and Comparison Specification
 description: BOC outcomes, evidence applicability, Tier-2 metrics, and lexicographic comparison rules
 version: 0.2.0
 updated: 2026-11-07
-author: "Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen"
+author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
 license_location: repository root
