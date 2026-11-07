@@ -21,6 +21,13 @@
   status: "Canonical"
   external: false
 
+- title: "BOC Policy"
+  url: "/boc.html"
+  slug: "boc"
+  description: "SIMEMP §7 constrained decision procedure"
+  status: "Provisional"
+  external: false
+
 - title: "Abstraction Layers"
   url: "/abstractionLayers.html"
   slug: "abstractionLayers"
