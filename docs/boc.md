@@ -2,7 +2,7 @@
 layout: default
 title: BOC Decision, Comparison, and Receipt Specification
 description: BOC decision outcomes, comparison rules, and immutable auditable receipt requirements
-version: 0.3.1
+version: 0.4.0
 updated: 2026-11-07
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
 license: Scaling Source License (SSL) 1.0
@@ -25,10 +25,10 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | BOC: Decision, Comparison, and Receipt Specification |
-| **Version** | 0.3.1 |
+| **Version** | 0.4.0 |
 | **Last Updated** | 2026-11-07 |
 | **Author** | Christophe Duy Quang Nguyen via GPT-6 (OpenAI) |
-| **Status** | Provisional implementation specification for the Qn universe; subject to replacement or binding by equivalent Qn artefacts |
+| **Status** | Provisional implementation specification for the Qn-universe implementation; subject to replacement or binding by equivalent Qn artefacts |
 | **Parent Policy** | `docs/simemp.md` §7 |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
@@ -41,7 +41,7 @@ The Best of Choices (BOC) policy defined in `docs/simemp.md` §7 uses two stages
 1. Tier 1 is a hard admission gate.
 2. Tier 2 selects by constrained lexicographic minimization among admissible candidates.
 
-This document defines a provisional implementation-level BOC contract: invocation domain, result states, evidence discipline, temporal applicability, lineage requirements, Tier-2 metric domains, comparison semantics, and decision-receipt requirements. It operationalizes the parent policy in `docs/simemp.md` §7 for current Qn-universe implementation and integration work. It is not a declaration that these structures, encodings, algorithms, or receipt forms are native or canonical Qn artefacts. The parent policy and this document MUST be kept aligned while this provisional contract is in use.
+This document defines a provisional implementation-level BOC contract: invocation domain, result states, evidence discipline, temporal applicability, lineage requirements, Tier-2 metric domains, comparison semantics, decision-receipt requirements, and operational evaluation protocol. It operationalizes the parent policy in `docs/simemp.md` §7 for current Qn-universe implementation and integration work. It is not a declaration that these structures, encodings, algorithms, or receipt forms are native or canonical Qn artefacts. The parent policy and this document MUST be kept aligned while this provisional contract is in use.
 
 A BOC result is a justified decision under a bound conditional context. It is not an eternal property of a candidate. Historical outcomes remain immutable, while their applicability to a later invocation may change as dependencies, workload, policy, evidence, or operating conditions change.
 
@@ -486,7 +486,7 @@ The following is an illustrative outer-envelope shape, not a complete JSON Schem
     "time_basis": "UTC"
   },
   "specification": {
-    "boc": "0.3.0",
+    "boc": "0.4.0",
     "simemp": "1.4.0",
     "dcc_profile": {
       "id": "<profile-id>",
@@ -518,11 +518,141 @@ The following is an illustrative outer-envelope shape, not a complete JSON Schem
 
 The example intentionally uses placeholders and an illustrative unresolved result. It is not a receipt for an actual evaluation and MUST NOT be committed or presented as evidence of a completed BOC invocation.
 
-## 10. Explicit non-goals
+## 10. Operational evaluation protocol
+
+This section defines a provisional execution protocol for implementations of the BOC policy. It makes evaluation ordering, budget reservation, checkpoints, interruption, and recovery explicit without claiming that the protocol is a native Qn execution primitive. An equivalent accepted Qn artefact takes precedence under §1.1.
+
+### 10.1. Execution lifecycle
+
+Execution lifecycle state is distinct from `Result_BOC`. A BOC invocation has one of these operational states:
+
+- `PREPARED`: invocation inputs and the evaluation plan have been bound; evaluation has not begun.
+- `RUNNING`: an evaluation operation is in progress or the next planned operation is ready.
+- `PAUSED`: execution has stopped at a valid checkpoint and may be resumed.
+- `COMPLETED`: one of the four BOC result states has been established and its receipt sealed.
+- `ABORTED`: execution was terminated without establishing a BOC result.
+
+`PREPARED`, `RUNNING`, `PAUSED`, and `ABORTED` are lifecycle states, not additional BOC outcomes. An invocation that reaches `COMPLETED` MUST have exactly one `Result_BOC` under §3. A paused or aborted invocation MUST NOT be represented as `SELECTED`, `NO_ADMISSIBLE_CANDIDATE`, or another completed decision result.
+
+A `PAUSED` invocation MAY resume only from a verified checkpoint and under the same immutable invocation inputs and evaluation-plan version. If those inputs or the plan must change, the prior invocation is not resumed; a new invocation is created and linked to the prior execution record.
+
+An `ABORTED` invocation MUST retain an execution record containing the reason, last valid checkpoint, completed operations, budget accounting, and any partial evidence. It MUST NOT be represented as a completed decision receipt. If a later invocation uses its partial evidence, the applicability checks in §2.3 and §8.4 apply.
+
+### 10.2. Evaluation plan binding
+
+Before the first candidate is inspected, the invocation MUST bind a versioned evaluation plan. The plan MUST declare:
+
+- the canonical candidate ordering;
+- the ordered Tier-1 predicate list and the evaluation rule for each predicate;
+- the Tier-2 metric definitions and their required evidence modalities;
+- the deterministic operation ordering for candidate and metric evaluation;
+- the budget unit, operation-cost model, reservation rule, and settlement rule;
+- the checkpoint boundaries and recoverable state;
+- the implementation/tool versions that can affect evaluation; and
+- any permitted concurrency and its deterministic scheduling rule.
+
+The plan MUST be compatible with the bound DCC profile, workload, and BOC specification version. It MUST NOT be changed after evaluation begins. A plan correction or version change requires a new invocation.
+
+Candidate order MUST be derived from a declared canonical ordering of candidate identifiers, not from insertion order, discovery order, network arrival, or evaluator preference. The ordering is procedural only and MUST NOT affect candidate identity or comparison priority.
+
+Tier-1 predicates MUST be evaluated in the order declared by the bound plan. Tier-2 metrics MUST be evaluated in the exact component order prescribed by `LexKey` and `π`, subject to the comparison requirements in §8. A plan MAY declare a deterministic sub-operation order within a metric, but it MUST NOT reorder the BOC priority key.
+
+### 10.3. Budget model and reservation
+
+The invocation budget `B` MUST declare a finite non-negative limit and an explicit accounting unit. The evaluation plan MUST define how every chargeable operation consumes that unit. The budget model MUST distinguish at least:
+
+- gateway invocation charges governed by `docs/simemp.md`;
+- Tier-1 predicate evaluation;
+- Tier-2 metric evaluation;
+- evidence acquisition or validation when charged to the invocation; and
+- receipt construction, verification, and sealing when charged to the invocation.
+
+The plan MUST state whether a charge is a fixed amount, a measured amount, or a reserved upper bound settled against actual consumption. No charge may be introduced after the operation has begun unless the bound plan explicitly defines the measurement and settlement rule.
+
+Before a chargeable operation starts, the evaluator MUST reserve its declared cost or upper bound. If the reservation cannot be satisfied, that operation MUST NOT begin. The invocation then returns `BUDGET_EXHAUSTED` if the unfinished operation is required to establish the BOC result. A partial evaluation MUST NOT be promoted to a winner.
+
+Where an operation is charged by measured consumption, the measurement source and accounting granularity MUST be fixed by the plan. Where an upper bound is reserved and actual consumption is lower, the plan MUST specify whether and when the unused reservation is released. An operation that exceeds its declared upper bound is an accounting/protocol violation; the evaluator MUST stop that operation safely, record the overrun, and MUST NOT claim a conforming completed selection from the affected execution.
+
+Gateway fees MUST be charged exactly as required by the parent SIMEMP policy. They MUST NOT be conflated with candidate execution work or silently refunded on failure, pause, abort, or budget exhaustion. A resumed invocation MUST NOT incur the same invocation gateway fee a second time unless the parent policy explicitly defines a separate charge for a distinct invocation.
+
+### 10.4. Deterministic operation scheduling
+
+The default provisional execution mode is sequential and deterministic. Given identical bound invocation inputs, evaluation plan, evidence snapshot, implementation/tool versions, and deterministic operation outcomes, a conforming evaluator MUST execute the same ordered operation sequence and produce the same decision trace.
+
+Parallel evaluation MAY be used only when the bound plan defines deterministic task partitioning, budget reservation, result collection, and checkpoint semantics. Completion order, thread scheduling, or resource contention MUST NOT change candidate ordering, metric priority, budget allocation, or the final comparison rule. If deterministic parallel accounting cannot be established, the evaluator MUST use sequential mode.
+
+An evaluator MUST NOT selectively evaluate a candidate earlier because it appears promising, nor change operation order in response to intermediate candidate scores, unless that adaptive strategy is itself explicitly specified and versioned in the bound plan and is proven not to alter the BOC decision semantics. The default profile does not permit adaptive candidate prioritization.
+
+### 10.5. Tier-1 execution and short-circuiting
+
+Tier-1 predicates MUST be evaluated using the bound predicate order and evidence rules. An implementation MAY stop evaluating further Tier-1 predicates for a candidate after a decisive `FAIL` only if the plan declares that short-circuit rule and the remaining predicates are recorded as `NOT_EVALUATED` rather than as `PASS`, `FAIL`, or `UNRESOLVED`.
+
+`NOT_EVALUATED` is an execution-coverage status, not a fourth evidence state. It MUST be kept distinct from the three Tier-1 evidence states in §5.1. The receipt MUST identify the decisive failure and the unevaluated predicates.
+
+A candidate with a decisive Tier-1 `FAIL` is rejected and MUST NOT enter Tier 2. If no candidate is admitted, BOC may return `NO_ADMISSIBLE_CANDIDATE` only when every candidate's admissibility is established. A candidate with unresolved evidence that could change the empty-admissible-set conclusion requires `INCONCLUSIVE`, as specified in §3.2 and §3.3.
+
+### 10.6. Tier-2 execution and comparison completion
+
+Every Tier-1-admissible candidate MUST receive the Tier-2 evidence required to establish its comparison position under the complete lexicographic key, unless budget exhaustion or an unresolved comparison prevents completion.
+
+A metric later in `π` MAY be skipped for a candidate pair only after an earlier component has established a strict ordering for that pair. Such a skip MUST be recorded as `NOT_REQUIRED_BY_LEXICOGRAPHIC_ORDER`, not as an unknown value or an inferred metric result. If a component is unresolved or incomparable and could determine the ordering, later components MUST NOT be used to bypass it.
+
+An implementation MAY reuse applicable metric evidence under §8.4. The receipt MUST record the evidence reference and the applicability determination. Evidence reuse does not reduce the required comparison coverage unless the plan's deterministic accounting rule explicitly assigns a lower cost to validated reuse.
+
+### 10.7. Atomic operations and checkpoints
+
+Each planned evaluation operation MUST have a stable operation identifier and a defined completion boundary. Its result and budget settlement MUST be committed atomically: either the operation is recorded as completed with its evidence and charge, or it remains incomplete and MUST be safely retried or abandoned under the plan.
+
+A checkpoint MUST contain enough state to resume without changing the invocation's meaning. At minimum it MUST bind:
+
+- invocation identifier and immutable input commitments;
+- evaluation-plan identifier/version and commitment;
+- last completed operation and next planned operation;
+- candidate and predicate/metric progress states;
+- budget consumed, reserved, and remaining;
+- evidence references and their integrity/applicability status; and
+- checkpoint creation time or logical observation point.
+
+A checkpoint MUST be integrity-protected using an implementation mechanism declared by the provisional profile or its accepted Qn equivalent. A checkpoint is not a completed decision receipt and MUST NOT be treated as one.
+
+### 10.8. Interruption, resumption, and recovery
+
+Interruption MAY result from resource limits, process termination, infrastructure failure, or an authorized pause. An interruption MUST NOT change the bound invocation inputs or completed operation records.
+
+On resumption, the evaluator MUST:
+
+1. validate the checkpoint integrity and invocation/plan commitments;
+2. verify that the same specification, profile, plan, and required implementation versions remain available;
+3. verify that evidence required for the next operations remains accessible and applicable;
+4. reconcile reserved and settled budget charges without double charging completed operations;
+5. resume at the first incomplete operation; and
+6. record the resumption event in the execution history.
+
+If any required check fails, the evaluator MUST NOT continue as though the checkpoint were valid. It MUST either retain the invocation as `PAUSED` pending resolution or mark it `ABORTED` with a reason. A changed workload, candidate set, DCC profile, priority permutation, budget contract, or evaluation plan requires a new invocation.
+
+Completed operations MUST be idempotent across recovery: replay MUST NOT duplicate their evidence records or charges. If the implementation cannot establish idempotency, it MUST stop and record an unresolved recovery condition rather than risk double accounting or altered results.
+
+### 10.9. Budget exhaustion and incomplete execution
+
+If the remaining budget cannot reserve the next required operation, the invocation MUST stop before that operation begins. If the missing operation could affect admission, comparison, or receipt validity, the completed BOC result is `BUDGET_EXHAUSTED`.
+
+The receipt MUST include all completed operations, the blocked next operation, its required reservation, remaining budget, and any candidates or comparisons left incomplete. A partial ranking MUST be retained as diagnostic trace only; it MUST NOT be exposed as a selected result.
+
+If the BOC result was already fully established and the remaining work is optional or not required by the bound plan, budget exhaustion of that optional work does not invalidate the established result. The receipt MUST distinguish required work from optional diagnostics.
+
+### 10.10. Operational reproducibility
+
+A decision is operationally reproducible only when an independent evaluator can recover the bound invocation, evaluation plan, evidence snapshot or equivalent immutable evidence, implementation/tool versions, operation order, and accounting semantics sufficiently to reconstruct the same decision trace.
+
+The receipt SHOULD classify reproducibility as `REPRODUCIBLE`, `PARTIALLY_REPRODUCIBLE`, `NON_REPRODUCIBLE`, or `NOT_YET_TESTED`, with reasons and missing dependencies. This classification is metadata about the receipt and is not a BOC result state.
+
+A later reproduction attempt MUST create a linked verification or post-mortem record. It MUST NOT overwrite the original receipt or change the original result. A discrepancy MUST be recorded and investigated; it MUST NOT silently rewrite historical evidence.
+
+## 11. Explicit non-goals
 
 This provisional version does not yet define a complete machine-readable JSON Schema, the exact budget schedule for each predicate or metric evaluation, or the canonical Qn-universe representations of time, epochs, lineage transitions, and evidence-validity intervals. The receipt requirements in §9 define the logical content and a provisional implementation canonicalization/commitment profile; they do not establish that RFC 8785 JCS, SHA-256, or the proposed envelope is the native Qn representation. Equivalent Qn artefacts MUST be preferred when established and mapped as specified in §1.1. Interoperable implementations still require a published schema and conformance vectors. BOC MUST NOT be claimed fully mechanically decidable where these unresolved implementation contracts are required for execution.
 
-## 11. Conformance tests
+## 12. Conformance tests
 
 | Test | Input condition | Required result |
 |---|---|---|
@@ -568,7 +698,26 @@ This provisional version does not yet define a complete machine-readable JSON Sc
 | BOC-3-T14 | Commitment verifies but decision logic or evidence applicability is not checked | Receipt MUST NOT be labelled fully verified |
 | BOC-3-T15 | Historical receipt is replaced during algorithm migration | Conformance failure; add a linked commitment |
 
-## 12. Normative references
+
+| BOC-4-T01 | Candidate order is supplied in a different insertion order but canonical IDs and invocation inputs are unchanged | Evaluation operation order is unchanged |
+| BOC-4-T02 | Evaluation plan is modified after the first operation begins | Original invocation MUST NOT continue under the modified plan |
+| BOC-4-T03 | Required operation cannot reserve its declared cost before starting | Operation does not begin; result is `BUDGET_EXHAUSTED` if decision-critical |
+| BOC-4-T04 | Operation exceeds its declared upper-bound reservation | Safe stop, overrun recorded, no conforming selection from affected execution |
+| BOC-4-T05 | Candidate has a decisive Tier-1 failure and plan permits short-circuiting | Remaining predicates are `NOT_EVALUATED`; candidate is not admitted |
+| BOC-4-T06 | Tier-1 predicate is skipped but recorded as `PASS` | Conformance failure |
+| BOC-4-T07 | Later Tier-2 metric is skipped after an earlier strict lexicographic ordering | Skip is recorded as `NOT_REQUIRED_BY_LEXICOGRAPHIC_ORDER` |
+| BOC-4-T08 | Earlier Tier-2 component is unresolved and later component favors one candidate | Later component MUST NOT bypass the unresolved comparison |
+| BOC-4-T09 | Execution is interrupted after an atomic operation checkpoint | Resume continues at the next incomplete operation |
+| BOC-4-T10 | Resume attempts to change candidate set, workload, DCC profile, `π`, budget, or plan | Resume is rejected; a new invocation is required |
+| BOC-4-T11 | Completed operation is replayed during recovery | Evidence and charges are not duplicated |
+| BOC-4-T12 | Checkpoint integrity or invocation commitment cannot be verified | Execution remains paused or is aborted; it does not continue |
+| BOC-4-T13 | Budget exhaustion leaves a required candidate comparison incomplete | `BUDGET_EXHAUSTED`; partial ranking is not selected |
+| BOC-4-T14 | Budget exhaustion occurs only after the result is fully established and affects optional diagnostics | Established result remains valid; optional work is recorded as incomplete |
+| BOC-4-T15 | Parallel evaluator completion order differs while deterministic plan and evidence are identical | Decision trace and result remain unchanged |
+| BOC-4-T16 | Same invocation is resumed and gateway fee is charged twice without parent-policy authorization | Conformance failure |
+| BOC-4-T17 | Reproduction attempt contradicts a sealed historical receipt | Original receipt remains immutable; discrepancy is recorded in a linked record |
+
+## 13. Normative references
 
 | Document | Role |
 |---|---|
@@ -582,9 +731,9 @@ This provisional version does not yet define a complete machine-readable JSON Sc
 
 ---
 
-## 13. Versioning and integration
+## 14. Versioning and integration
 
-This document is a versioned, provisional implementation specification subordinate to `docs/simemp.md` §7. Version 0.3.0 added immutable decision-receipt content, evidence-manifest, canonicalization, integrity-commitment, signature, and verification requirements to the BOC-1 and BOC-2 decision and comparison rules. Version 0.3.1 clarifies that these implementation specifications remain provisional pending equivalent native Qn artefacts, establishes Qn artefact precedence and mapping requirements, and limits conformance language to this provisional BOC profile. It retains the parent policy correction from `P_coverage` to `P_gap`.
+This document is a versioned, provisional implementation specification subordinate to `docs/simemp.md` §7. Version 0.3.0 added immutable decision-receipt content, evidence-manifest, canonicalization, integrity-commitment, signature, and verification requirements to the BOC-1 and BOC-2 decision and comparison rules. Version 0.3.1 clarified that these implementation specifications remain provisional pending equivalent native Qn artefacts, established Qn artefact precedence and mapping requirements, and limited conformance language to this provisional BOC profile. Version 0.4.0 adds a provisional operational evaluation protocol for deterministic scheduling, budget reservation and settlement, Tier-1 short-circuit recording, Tier-2 comparison completion, atomic checkpoints, interruption, recovery, idempotency, and operational reproducibility. It retains the parent policy correction from `P_coverage` to `P_gap`.
 
 Any future change to result states, invocation inputs, evidence semantics, lineage/applicability rules, receipt fields, canonicalization, or commitment semantics MUST be made through a new versioned artifact under the repository's versioning discipline. When an equivalent Qn artefact becomes authoritative, update the mapping and disposition through a versioned change; do not leave duplicate competing definitions. Historical decision receipts remain immutable.
 
