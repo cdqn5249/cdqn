@@ -1,10 +1,10 @@
 ---
 layout: default
-title: BOC Decision Domain
-description: Decision outcomes, evidence, context, and lineage rules for Best of Choices
-version: 0.1.0
-updated: 2026-11-06
-author: Christophe Duy Quang Nguyen
+title: BOC Decision and Comparison Specification
+description: BOC outcomes, evidence applicability, Tier-2 metrics, and lexicographic comparison rules
+version: 0.2.0
+updated: 2026-11-07
+author: "Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
 license_location: repository root
@@ -20,15 +20,15 @@ terms_used:
   - lineage
 ---
 
-# BOC: Decision Domain and Invocation Boundary
+# BOC: Decision Domain and Comparison Semantics
 
 | Field | Specification |
 |---|---|
-| **Document Title** | BOC: Decision Domain and Invocation Boundary |
-| **Version** | 0.1.0 |
-| **Last Updated** | 2026-11-06 |
-| **Author** | Christophe Duy Quang Nguyen |
-| **Status** | Candidate Specification — BOC-1 |
+| **Document Title** | BOC: Decision Domain and Comparison Semantics |
+| **Version** | 0.2.0 |
+| **Last Updated** | 2026-11-07 |
+| **Author** | Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen |
+| **Status** | Candidate Specification — BOC-1 and BOC-2 |
 | **Parent Policy** | `docs/simemp.md` §7 |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
@@ -41,7 +41,7 @@ The Best of Choices (BOC) policy defined in `docs/simemp.md` §7 uses two stages
 1. Tier 1 is a hard admission gate.
 2. Tier 2 selects by constrained lexicographic minimization among admissible candidates.
 
-This document defines the BOC invocation domain, result states, evidence discipline, temporal applicability, and lineage requirements. It refines the parent policy; it does not replace or silently amend its Tier-1 predicates, Tier-2 metrics, or priority permutation.
+This document defines the BOC invocation domain, result states, evidence discipline, temporal applicability, lineage requirements, Tier-2 metric domains, and comparison semantics. It operationalizes the parent policy in `docs/simemp.md` §7. The parent policy and this document MUST be updated together when a constitutional Tier-2 metric changes.
 
 A BOC result is a justified decision under a bound conditional context. It is not an eternal property of a candidate. Historical outcomes remain immutable, while their applicability to a later invocation may change as dependencies, workload, policy, evidence, or operating conditions change.
 
@@ -181,7 +181,7 @@ Each required Tier-1 predicate has exactly three evidence states:
 
 `UNRESOLVED` is not equivalent to `PASS` or `FAIL`. It MUST NOT be used as a favorable default or as a proven violation.
 
-Tier-2 values require an equivalent explicit evidence classification in the metric specification. Unknown values MUST NOT be replaced with zero, an assumed best value, or an unstated default.
+Tier-2 values MUST use the evidence modalities and comparison requirements defined in §8. Unknown values MUST NOT be replaced with zero, an assumed best value, or an unstated default.
 
 ### 5.2. Failure justification and post-mortem
 
@@ -220,20 +220,108 @@ Without valid adjudication, the result is `INCONCLUSIVE`.
 
 Adjudication MUST NOT waive a Tier-1 failure, alter `π` after evaluation, or change the candidate set retroactively.
 
-## 7. Explicit non-goals
+## 7. Tier-2 metric domains
 
-This document does not yet define:
+Tier 2 minimizes the following key:
 
-- exact mathematical domains or units of `ImplicitDeps`, `ΔW_worst`, `M_coupling`, or `P_coverage`;
-- whether Tier-2 components use total orders, partial orders, or bounded ordinal rubrics;
-- normalization and comparison of heterogeneous quantitative and qualitative evidence;
-- canonical receipt encoding or cryptographic structure;
-- exact budget schedule for each predicate or metric evaluation; or
-- canonical Qn-universe representation of time, epochs, lineage transitions, and evidence-validity intervals.
+`LexKey(c) = ( ImplicitDeps(c), perm_π(ΔW_worst(c), M_coupling(c), P_gap(c)) )`
 
-These are subsequent BOC specification steps. BOC MUST NOT be claimed fully mechanically decidable until the required domains and comparison rules are specified.
+`ImplicitDeps` is always the first component. The calling DCC profile declares `π`, a permutation of the three operational-agility components. Every invocation MUST also bind a finite required target-profile set `R` in its DCC decision context.
 
-## 8. Conformance tests
+### 7.1. `ImplicitDeps`
+
+`ImplicitDeps(c)` is the count of distinct dependencies used by the candidate's construction or required execution path that are absent from its declared dependency commitment but are discoverable and attributable to the candidate.
+
+- The value is a non-negative integer count over a declared dependency graph and observation boundary.
+- Each dependency is counted once by its canonical dependency identity.
+- A dependency that is present but undisclosed contributes to this count.
+- A dependency whose identity or causal origin cannot be verified is not merely a Tier-2 burden: it makes the relevant Tier-1 identity/lineage predicate `UNRESOLVED` or `FAIL`, according to the evidence.
+- Declaring a dependency does not make it free of cost; declared external dependencies may contribute to `M_coupling`.
+
+The dependency graph, discovery boundary, canonical identity rule, and evidence snapshot MUST be bound to the metric record. The value MUST NOT be inferred from an incomplete scan presented as exhaustive.
+
+### 7.2. `ΔW_worst`
+
+`ΔW_worst(c)` is the candidate's declared worst-case logical work bound for the common workload contract `W`, expressed in Abstract Compute Units (`U`). It is a static or formally derived bound, not a runtime sample and not physical energy.
+
+The bound MUST identify:
+
+- the workload contract and covered input domain;
+- the cost model and its version;
+- the derivation or measurement basis used to establish the bound;
+- the declared worst-case value and unit (`U`); and
+- any assumptions or preconditions required for the bound to hold.
+
+Candidate values are comparable only when their workload domains and cost-model semantics are compatible. A candidate lacking a justified finite bound cannot receive a favorable default; if the missing bound can affect the decision, the invocation is `INCONCLUSIVE`.
+
+### 7.3. `M_coupling`
+
+`M_coupling(c)` is the count of distinct external coupling edges in the candidate's declared architecture graph. An edge represents either an external dependency contract or an externally visible interface boundary crossing the candidate boundary.
+
+- The graph boundary and edge-classification rule MUST be declared by the DCC profile.
+- Each canonical edge is counted once; multiple references to the same edge do not multiply the count.
+- Internal edges wholly within the candidate boundary are excluded.
+- A declared external dependency remains a coupling even though it is not an implicit dependency.
+
+The metric is a non-negative integer. Candidates are comparable only when evaluated against the same graph-boundary and edge-classification rules.
+
+### 7.4. `P_gap` — portability gap
+
+The parent policy's former `P_coverage` count rewarded a larger supported-profile count even though the complete Tier-2 key is minimized. That direction is inconsistent with the intended portability objective. `P_coverage` is therefore retired as the optimization component and replaced by `P_gap`.
+
+For the finite required target-profile set `R` bound by the invocation:
+
+`P_gap(c) = | R \ SupportedProfiles(c) |`
+
+`SupportedProfiles(c)` contains only profiles for which the candidate has admissible compatibility evidence under the DCC profile's declared compatibility predicate. `P_gap` is a non-negative integer; zero means every required profile is supported. BOC minimizes `P_gap`.
+
+The receipt MUST identify `R`, the compatibility predicate and version, the supported subset, and evidence for each claimed supported profile. Profiles outside `R` do not affect this metric. The set `R` MUST be fixed before candidate evaluation and MUST be common to all candidates in the invocation.
+
+`P_coverage` MAY appear in historical receipts but MUST NOT be used as a current minimization component. A migration from historical `P_coverage` values to `P_gap` requires the original required-profile set and per-profile support evidence; a scalar coverage count alone is insufficient to reconstruct `P_gap`.
+
+## 8. Evidence modalities and comparison
+
+Every Tier-2 metric value MUST carry one evidence modality:
+
+- `MEASURED`: observed using a declared method, instrument/tool version, calibration state, and operating conditions;
+- `FORMALLY_DERIVED`: established by a reproducible derivation, proof, or valid upper bound;
+- `QUALITATIVE`: assigned through a versioned ordinal rubric with recorded rationale and evidence;
+- `UNKNOWN`: insufficient, absent, contradictory, or inapplicable evidence.
+
+`UNKNOWN` MUST NOT be converted to zero, a best-case value, or a favorable ordinal level. A metric record MUST include its definition/version, value or ordinal level, unit/domain, evidence modality, provenance, candidate/dependency identity, observation context, and validity conditions.
+
+### 8.1. Quantitative comparability
+
+Quantitative values are comparable only when they share compatible metric definitions, domains, units, workload/profile context, and evaluation semantics. A unit conversion is permitted only when the conversion is explicit, deterministic, and preserves the metric's meaning. Runtime observations MUST NOT replace a required worst-case declared bound.
+
+### 8.2. Qualitative rubric mode
+
+A qualitative value MUST be assigned using the same versioned rubric for every candidate compared on that component. The rubric MUST define an ordinal ordering and the evidence required for each level. A rubric level is an ordinal judgment, not a measured quantity.
+
+Qualitative values from different rubric versions are not comparable unless a declared, validated mapping establishes equivalence. A qualitative value MUST NOT be compared directly with a quantitative value merely by assigning it a convenient number. Mixed modalities require an explicit, versioned mapping that is justified independently of the candidate outcome; absent such a mapping, the comparison is unresolved.
+
+### 8.3. Lexicographic comparison
+
+Comparison follows the exact component order in `LexKey(c)`:
+
+1. Compare `ImplicitDeps`.
+2. If equal, compare the operational-agility components in the order declared by `π`.
+3. Stop at the first component with a strict ordering.
+4. Proceed to the next component only when the current component is established equal under compatible semantics.
+
+If the first component needed to distinguish two candidates is unknown or incomparable, BOC MUST NOT skip it and use a later component to manufacture an ordering. If that unresolved comparison could affect the selected candidate, the result is `INCONCLUSIVE`.
+
+No weighted sum, averaging, hidden normalization, or implicit tie-break is permitted. A complete-key tie is handled only under §6.
+
+### 8.4. Evidence applicability
+
+The applicability checks in §2.3 apply to each metric observation independently. Historical evidence may be reused only when its candidate identity or explicitly justified derivation mapping, dependency lineage, metric definition, workload/profile set, method, and validity conditions remain applicable. Reuse of a metric observation does not reuse a previous BOC ranking or result.
+
+## 9. Explicit non-goals
+
+This version does not yet define canonical receipt encoding or cryptographic structure, the exact budget schedule for each predicate or metric evaluation, or a canonical Qn-universe representation of time, epochs, lineage transitions, and evidence-validity intervals. Those remain separately specified obligations. BOC MUST NOT be claimed fully mechanically decidable where these unresolved implementation contracts are required for execution.
+
+## 10. Conformance tests
 
 | Test | Input condition | Required result |
 |---|---|---|
@@ -251,8 +339,20 @@ These are subsequent BOC specification steps. BOC MUST NOT be claimed fully mech
 | BOC-1-T12 | Non-reproducible failure is silently converted to `PASS` | Conformance failure |
 | BOC-1-T13 | Dependency change overwrites a historical receipt | Conformance failure |
 | BOC-1-T14 | A failure determining rejection has no traceable justification or evidence reference | Conformance failure |
+| BOC-2-T01 | Candidate has one discoverable dependency absent from its commitment | `ImplicitDeps` increases by one |
+| BOC-2-T02 | Dependency identity or origin cannot be verified | Tier-1 identity/lineage is `UNRESOLVED` or `FAIL`; not a favorable Tier-2 count |
+| BOC-2-T03 | Two candidates have compatible worst-case logical-work bounds | Compare `ΔW_worst` in `U` under the same workload and cost model |
+| BOC-2-T04 | Candidate architecture adds one distinct external coupling edge | `M_coupling` increases by one |
+| BOC-2-T05 | Required profile set has five entries and candidate supports four | `P_gap = 1` |
+| BOC-2-T06 | Candidate supports more profiles outside the required set | No change to `P_gap` |
+| BOC-2-T07 | A historical receipt contains only scalar `P_coverage` without profile identities | It cannot be converted to `P_gap` |
+| BOC-2-T08 | Tier-2 value is `UNKNOWN` and could change the ordering | `INCONCLUSIVE`; no favorable default |
+| BOC-2-T09 | Qualitative values use different rubric versions without a validated mapping | Incomparable; `INCONCLUSIVE` if decision-relevant |
+| BOC-2-T10 | Earlier lexicographic component is unknown but a later component favors one candidate | Later component MUST NOT decide the comparison |
+| BOC-2-T11 | `P_coverage` is minimized as the current portability component | Conformance failure |
+| BOC-2-T12 | A measured runtime sample is substituted for a required worst-case bound | Conformance failure |
 
-## 9. Normative references
+## 11. Normative references
 
 | Document | Role |
 |---|---|
@@ -266,10 +366,10 @@ These are subsequent BOC specification steps. BOC MUST NOT be claimed fully mech
 
 ---
 
-## 10. Versioning and integration
+## 12. Versioning and integration
 
-This document is a versioned BOC specification artifact subordinate to `docs/simemp.md` §7. Its rules refine the invocation and evidence lifecycle without changing the parent policy's Tier-1 predicates or Tier-2 key.
+This document is a versioned BOC specification artifact subordinate to `docs/simemp.md` §7. Version 0.2.0 defines the Tier-2 metric domains and comparison semantics and is coordinated with the parent policy correction from `P_coverage` to `P_gap`.
 
 Any future change to result states, invocation inputs, evidence semantics, or lineage/applicability rules MUST be made through a new versioned artifact under the repository's versioning discipline. Historical decision receipts remain immutable.
 
-The parent SIMEMP document should reference this specification in a subsequent coordinated update. Until that integration is committed, `docs/simemp.md` §7 remains the constitutional parent policy and this document is its candidate operational refinement.
+The parent policy is coordinated in `docs/simemp.md` v1.4.0. The two documents MUST remain aligned: changes to the Tier-2 key or metric direction require coordinated versioned updates.
