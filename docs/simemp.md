@@ -2,9 +2,9 @@
 layout: default
 title: SIMEMP Constraints
 description: Foundational physical, computational, and architectural constraints for the Qn and cdqn stack
-version: 1.3.0
-updated: 2026-10-30
-author: Christophe Duy Quang Nguyen
+version: 1.4.0
+updated: 2026-11-07
+author: "Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
 license_location: repository root
@@ -42,9 +42,9 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | SIMEMP: Thesis and Constraints for the Qn and cdqn Stack |
-| **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
-| **Author** | Christophe Duy Quang Nguyen |
+| **Version** | 1.4.0 |
+| **Last Updated** | 2026-11-07 |
+| **Author** | Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Constitutional Specification — Foundational Invariants |
 
@@ -83,12 +83,24 @@ Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/
 
 Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qnPrimitive.md` — the operational admission predicate over the two axes and the governance-bounded `κ_dcc`/`κ_t` ranges with recommended preset land in §1.15/§5.9 at its next versioned update (this file supplies only the constitutional envelope and schema; the commitment is already flagged in the v1.9.0 record of `docs/abstractionLayers.md`); until that definition lands, the single-axis predicate of `docs/qnPrimitive.md` §1.15/§5.9 remains the operative canon text and this file's consequentiality constraint binds it as a CANDIDATE obligation discharged there; `docs/qlog.md` — §5.2 predicate mirror and the §6 Memory Wall Latency Harvester coupling (declared stall-window workloads, deterministic prefetch, overlap credit against `τ_t` tiers) at its next versioned update; `docs/qm.md` — §5.6 factorial rule re-derived as a corollary with a machine-derived threshold `k*` at its next versioned update; `docs/qm_geometry.md` — §7.2 predicate wording mirror; glossary — registration of the *Latency Telemetry Envelope* and *Advantage Margin* terms at the queued glossary update (no term includes are used in this update, under the standing no-dead-entries discipline of `docs/qs_history.md` §8); front matter `terms_used` unchanged.
 
+## Review Integration Record (v1.4.0)
+
+This update coordinates the BOC Tier-2 metric semantics with `docs/boc.md` v0.2.0. It corrects the portability optimization direction: the former supported-profile count `P_coverage`, when minimized, rewarded reduced coverage. The current key therefore minimizes `P_gap`, the count of required target profiles not supported by the candidate. The required profile set is finite, common to all candidates in an invocation, and bound before evaluation. The update also makes the four Tier-2 metric names and their comparison contract explicit. Under **Axiom 13**, this is a new versioned artifact; historical receipts and prior document versions remain unchanged.
+
+| Change | Section | Rationale | Type |
+|---|---|---|---|
+| **Portability direction corrected**: replace minimization of supported-profile count `P_coverage` with minimization of unsupported required-profile count `P_gap = |R \ SupportedProfiles(c)|`; bind finite required profile set `R` and profile compatibility evidence to the invocation | §7 | A minimized coverage count rewards less portability; the gap metric restores the intended direction | CANDIDATE |
+| **Tier-2 metric contract aligned**: define `ImplicitDeps` as discoverable undeclared dependency count, `ΔW_worst` as a declared worst-case logical-work bound in `U`, `M_coupling` as distinct external coupling-edge count, and `P_gap` as required-profile shortfall | §7 | Establish consistent metric domains and prevent undeclared interpretation | CANDIDATE |
+| **Comparison and evidence discipline**: require compatible definitions and contexts, versioned ordinal rubrics for qualitative values, explicit `UNKNOWN` handling, and strict lexicographic comparison without weighted scoring or skipping incomparable earlier components | §7 | Prevent artificial scores and favorable treatment of missing evidence | CANDIDATE |
+| **BOC operational specification linked**: `docs/boc.md` defines invocation, temporal evidence applicability, metric domains, and comparison semantics subordinate to this policy | §7; Normative References | Coordinate constitutional rule and operational specification | EDITORIAL |
+
 ## Normative References
 
-The following documents establish the structural, mathematical, and legal constraints derived from this constitutional framework.
+The following documents establish the structural, mathematical, legal, and BOC operational constraints derived from this constitutional framework.
 
 | Document | Role | Target |
 |---|---|---|
+| `docs/boc.md` | BOC invocation, evidence, Tier-2 metric, and comparison specification | [boc.html]({{ '/boc.html' | relative_url }}) |
 | `docs/abstractionLayers.md` | Layer architecture and [SIMEMP Gateway]({{ '/glossary.html' | relative_url }}#simemp-gateway) validation | [abstractionLayers.html]({{ '/abstractionLayers.html' | relative_url }}) |
 | `docs/qnPrimitive.md` | Universal Envelope, operational axioms, and optimization primitives | [qnPrimitive.html]({{ '/qnPrimitive.html' | relative_url }}) |
 | `docs/q0_q1.md` | Primary genesis origin [Q(0)]({{ '/glossary.html' | relative_url }}#q0) and first unit [Q(1)]({{ '/glossary.html' | relative_url }}#q1) | [q0_q1.html]({{ '/q0_q1.html' | relative_url }}) |
@@ -317,23 +329,35 @@ Stochastic and generative artificial intelligence processes are integrated via a
 
 ## 7. The BOC Policy
 
-The {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} is the formal decision framework used to resolve architectural and design conflicts. Version 1.1.1 expressed it as the scalar maximization `Selection = argmax(SIMEMP Compliance(c))` over a `SIMEMP Compliance(c)` quantity that carried no declared codomain, metric space, or partial order — a formulation that could not be evaluated mechanically and under which any design choice could be rationalized post hoc as BOC-compliant. That scalar formulation is retired. Under the external review (`QO-1`), BOC is specified as a **two-stage constrained lexicographic decision model** over declared DCC metadata, mechanically decidable wherever its inputs are declared [v1.2.0 — CANDIDATE]:
+The {% include term.html id="boc-policy" text="Best of Choices (BOC) Policy" %} is the formal decision framework used to resolve architectural and design conflicts. Version 1.1.1 expressed it as the scalar maximization `Selection = argmax(SIMEMP Compliance(c))` over a quantity with no declared codomain, metric space, or partial order. That scalar formulation is retired. BOC is a **two-stage constrained lexicographic decision model** over declared DCC metadata, mechanically decidable wherever its inputs and evidence contracts are defined.
 
-**Stage 1 — Tier 1 hard admission filter (binary).** A candidate is admissible only if all three {% include term.html id="existential-invariant" text="Existential Invariants" %} hold as boolean predicates:
+**Stage 1 — Tier 1 hard admission filter.** A candidate is admissible only if all three {% include term.html id="existential-invariant" text="Existential Invariants" %} hold as boolean predicates:
 
 `C_valid = { c ∈ C | I_Id(c) ∧ I_Met(c) ∧ I_Sec(c) = 1 }`
 
-where `I_Id(c)` verifies a collision-resistant identity envelope with intact causal lineage, `I_Met(c)` verifies that every resource ceiling in the Metric envelope is finite and declared, and `I_Sec(c)` verifies that capability and PQC signature contracts validate. A candidate failing any predicate is discarded outright (terminal status `REJECTION_BY_GATEWAY`); inadmissible candidates are never ranked, because Tier-1 invariants are admission predicates, not quantities to be maximized.
+`I_Id(c)` verifies a collision-resistant identity envelope with intact causal lineage; `I_Met(c)` verifies that every resource ceiling in the Metric envelope is finite and declared; and `I_Sec(c)` verifies that capability and PQC signature contracts validate. A candidate failing any predicate is discarded outright (terminal status `REJECTION_BY_GATEWAY`); inadmissible candidates are never ranked. Each predicate is recorded as `PASS`, `FAIL`, or `UNRESOLVED`. An unresolved predicate that could change admission prevents a definitive `NO_ADMISSIBLE_CANDIDATE` result.
 
-**Stage 2 — Tier 2 lexicographic ordering over `C_valid`.** Among admissible candidates, BOC minimizes the lexicographic key:
+**Stage 2 — Tier 2 lexicographic ordering.** Among admissible candidates, BOC minimizes:
 
-`LexKey(c) = ( ImplicitDeps(c), perm_π(ΔW_worst(c), M_coupling(c), P_coverage(c)) )`
+`LexKey(c) = ( ImplicitDeps(c), perm_π(ΔW_worst(c), M_coupling(c), P_gap(c)) )`
 
-The leading component is the constitutional mandate to **minimize implicit state**: `ImplicitDeps(c)` attests the candidate's residual implicit-state burden — dependencies present in its construction but absent from its declared dependency commitment — and its minimization is fixed in first position, never tradeable by any Tier-2 priority declaration. The trailing triple carries the {% include term.html id="operational-agility" text="Operational Agilities" %}, mutually ordered by an explicit priority permutation `π ∈ S_3` declared in the calling {% include term.html id="dcc-profile" %}: `ΔW_worst(c)` the worst-case declared work (Efficiency), `M_coupling(c)` the external dependency and interface boundary count (Modularity), and `P_coverage(c)` the supported target hardware profile count (Portability). Ties inside a component resolve to the next component.
+`ImplicitDeps(c)` is the count of distinct discoverable dependencies used by the candidate but absent from its declared dependency commitment. An untraceable or unverifiable dependency is handled by the applicable Tier-1 identity/lineage predicate, not silently converted into a Tier-2 count. `ΔW_worst(c)` is the candidate's declared worst-case logical-work bound for the common workload contract, expressed in Abstract Compute Units (`U`); it is not a runtime sample or physical-energy value. `M_coupling(c)` is the count of distinct external coupling edges, comprising external dependency contracts and externally visible interface-boundary crossings under the DCC-declared graph boundary.
 
-**Rubric mode.** Where Tier-2 quantities remain qualitative architectural judgments during high-level specification design — before measurable DCC metadata exists — BOC operates explicitly as a **structured architectural rationale rubric**: every design verdict must tabulate each finalist's Tier-1 pass/fail status and its Tier-2 trade-off vector together with the declared priority ordering used, and a verdict that cannot produce this tabulation is not BOC-compliant. Residual ties at the full key are never broken implicitly ({% include term.html id="no-implicit-rule" %}): they force either refinement of the declared DCC metadata or explicit principal adjudication recorded in the design verdict.
+`P_gap(c)` is the number of required target hardware profiles not supported by the candidate. For the finite required profile set `R` bound before evaluation:
 
-When implementation paths conflict, the BOC policy selects the option that minimizes implicit state and guarantees invariant preservation, even if it requires higher operational overhead.
+`P_gap(c) = | R \ SupportedProfiles(c) |`
+
+A profile is supported only when it satisfies the DCC-declared compatibility predicate and has admissible evidence. BOC minimizes `P_gap`; zero means all required profiles are supported. The former `P_coverage(c)` (supported-profile count) is retired as a minimization component because minimizing it rewards reduced coverage and contradicts portability. Historical `P_coverage` values remain historical and cannot be converted to `P_gap` without the required profile identities and support evidence.
+
+The leading component `ImplicitDeps` is the constitutional mandate to minimize implicit state and is fixed in first position. The trailing triple carries the {% include term.html id="operational-agility" text="Operational Agilities" %}, ordered by an explicit priority permutation `π ∈ S_3` declared in the calling {% include term.html id="dcc-profile" %}. The priority permutation MUST NOT move `ImplicitDeps` from first position.
+
+**Evidence and comparison.** Every Tier-2 value carries one evidence modality: `MEASURED`, `FORMALLY_DERIVED`, `QUALITATIVE`, or `UNKNOWN`. Quantitative values are comparable only under compatible metric definitions, units, workload/profile contexts, and evaluation semantics. Qualitative values require the same versioned ordinal rubric, or an explicit validated mapping. Qualitative and quantitative values MUST NOT be compared by assigning an arbitrary numeric score. `UNKNOWN` is never zero, optimal, or harmless. In lexicographic comparison, the next component is examined only when the preceding component is established equal; an unknown or incomparable decision-relevant component cannot be skipped. No weighted average or implicit normalization is permitted.
+
+**Rubric mode.** Where Tier-2 quantities remain qualitative architectural judgments, BOC operates as a structured rationale rubric. Every verdict MUST tabulate each finalist's Tier-1 evidence state, Tier-2 trade-off vector, evidence modality, rubric version where applicable, and declared priority ordering. A verdict that cannot produce this tabulation is not BOC-compliant. Residual full-key ties require refinement of DCC metadata or explicit principal adjudication recorded in the decision receipt; no silent tie-breaking is permitted.
+
+**Conditional validity and failure history.** A BOC result is a decision under a specific candidate identity, dependency lineage, DCC profile, workload, target-profile set, evidence context, and observation point. It is not an eternal property of a candidate. Historical receipts remain immutable. Evidence may be reused in a later invocation only after its applicability to the new context is checked; reuse of evidence does not reuse the previous decision. Failures require traceable justification and, where feasible, reproduction or post-mortem analysis. A non-reproducible failure is not automatically a pass. A changed dependency lineage or evaluation context triggers reassessment, not automatic exoneration or automatic rejection.
+
+The operational requirements, result states, evidence records, metric domains, and conformance tests are specified in [BOC specification]({{ '/boc.html' | relative_url }}). When implementation paths conflict, BOC selects the option that minimizes implicit state and preserves Tier-1 invariants, even if it requires higher operational overhead.
 
 ---
 
