@@ -1,8 +1,8 @@
 ---
 layout: default
-title: BOC Decision and Comparison Specification
-description: BOC outcomes, evidence applicability, Tier-2 metrics, and lexicographic comparison rules
-version: 0.2.0
+title: BOC Decision, Comparison, and Receipt Specification
+description: BOC decision outcomes, comparison rules, and immutable auditable receipt requirements
+version: 0.3.1
 updated: 2026-11-07
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
 license: Scaling Source License (SSL) 1.0
@@ -20,15 +20,15 @@ terms_used:
   - lineage
 ---
 
-# BOC: Decision Domain and Comparison Semantics
+# BOC: Decision, Comparison, and Receipt Specification
 
 | Field | Specification |
 |---|---|
-| **Document Title** | BOC: Decision Domain and Comparison Semantics |
-| **Version** | 0.2.0 |
+| **Document Title** | BOC: Decision, Comparison, and Receipt Specification |
+| **Version** | 0.3.1 |
 | **Last Updated** | 2026-11-07 |
-| **Author** | Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen |
-| **Status** | Candidate Specification — BOC-1 and BOC-2 |
+| **Author** | Christophe Duy Quang Nguyen via GPT-6 (OpenAI) |
+| **Status** | Provisional implementation specification for the Qn universe; subject to replacement or binding by equivalent Qn artefacts |
 | **Parent Policy** | `docs/simemp.md` §7 |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
@@ -41,9 +41,21 @@ The Best of Choices (BOC) policy defined in `docs/simemp.md` §7 uses two stages
 1. Tier 1 is a hard admission gate.
 2. Tier 2 selects by constrained lexicographic minimization among admissible candidates.
 
-This document defines the BOC invocation domain, result states, evidence discipline, temporal applicability, lineage requirements, Tier-2 metric domains, and comparison semantics. It operationalizes the parent policy in `docs/simemp.md` §7. The parent policy and this document MUST be updated together when a constitutional Tier-2 metric changes.
+This document defines a provisional implementation-level BOC contract: invocation domain, result states, evidence discipline, temporal applicability, lineage requirements, Tier-2 metric domains, comparison semantics, and decision-receipt requirements. It operationalizes the parent policy in `docs/simemp.md` §7 for current Qn-universe implementation and integration work. It is not a declaration that these structures, encodings, algorithms, or receipt forms are native or canonical Qn artefacts. The parent policy and this document MUST be kept aligned while this provisional contract is in use.
 
 A BOC result is a justified decision under a bound conditional context. It is not an eternal property of a candidate. Historical outcomes remain immutable, while their applicability to a later invocation may change as dependencies, workload, policy, evidence, or operating conditions change.
+
+### 1.1. Provisional status and Qn artefact precedence
+
+All implementation-facing specifications in this document are **provisional for the Qn-universe implementation**. They provide an explicit, testable bridge while equivalent native Qn artefacts, primitives, semantic rules, accounting constructs, lineage structures, and integrity mechanisms are unavailable, incomplete, or not yet adopted for these purposes.
+
+This document MUST NOT be interpreted as defining new foundational Qn semantics or as superseding an existing canonical Qn artefact. When an equivalent Qn artefact is identified and accepted for a given concern, that Qn artefact becomes authoritative for the corresponding implementation semantics. This document MUST then reference it, map the affected BOC requirement to it, and remove or mark as superseded any duplicate provisional mechanism. A BOC-level wrapper MAY remain where needed to express decision-policy requirements not already supplied by the Qn artefact.
+
+Equivalence MUST be demonstrated, not inferred from similar names or data shapes. The mapping MUST identify at least: (a) the BOC requirement; (b) the Qn artefact and version; (c) the semantic coverage; (d) any uncovered or divergent behavior; and (e) the disposition of the provisional rule. Until that mapping is reviewed, the provisional rule remains an implementation proposal and MUST NOT be presented as native Qn behavior.
+
+Where a native Qn artefact conflicts with this provisional document, do not silently adapt or reinterpret the Qn artefact. Record the conflict and resolve it through the governing Qn policy and versioning process. BOC MUST defer to established Qn semantics unless an authorized Qn-level change explicitly establishes otherwise.
+
+The word **MUST** in this document expresses a requirement for implementations claiming conformance to this provisional BOC profile. It does not, by itself, make the requirement a foundational or universal Qn-universe rule.
 
 ## 2. Invocation domain
 
@@ -317,11 +329,200 @@ No weighted sum, averaging, hidden normalization, or implicit tie-break is permi
 
 The applicability checks in §2.3 apply to each metric observation independently. Historical evidence may be reused only when its candidate identity or explicitly justified derivation mapping, dependency lineage, metric definition, workload/profile set, method, and validity conditions remain applicable. Reuse of a metric observation does not reuse a previous BOC ranking or result.
 
-## 9. Explicit non-goals
+## 9. Decision receipt and evidence commitment
 
-This version does not yet define canonical receipt encoding or cryptographic structure, the exact budget schedule for each predicate or metric evaluation, or a canonical Qn-universe representation of time, epochs, lineage transitions, and evidence-validity intervals. Those remain separately specified obligations. BOC MUST NOT be claimed fully mechanically decidable where these unresolved implementation contracts are required for execution.
+Every completed BOC invocation MUST produce one immutable decision receipt, regardless of whether its result is `SELECTED`, `INCONCLUSIVE`, `NO_ADMISSIBLE_CANDIDATE`, or `BUDGET_EXHAUSTED`. A malformed invocation that never begins evaluation MUST produce a validation error record, not a BOC decision receipt.
 
-## 10. Conformance tests
+The receipt is the authoritative record of what the invocation evaluated, what evidence it relied on, how it applied the BOC rules, and why it returned its result. A digest or signature alone is not a substitute for the inspectable receipt payload or the referenced evidence.
+
+### 9.1. Receipt requirements
+
+A conforming receipt MUST contain the following logical fields. Implementations MAY encode these fields in a schema-specific representation, but MUST preserve their meaning and distinguish absent, unknown, not applicable, and empty values.
+
+| Field | Required content |
+|---|---|
+| `receipt_schema` | Stable schema identifier and version |
+| `receipt_id` | Identifier derived from the canonical receipt payload commitment |
+| `invocation_id` | Unique identifier for this BOC invocation |
+| `created_at` | Observation/sealing time with declared time basis; it MUST NOT be treated as a substitute for the invocation's bound logical or physical time context |
+| `specification` | BOC specification version, parent SIMEMP policy version, and applicable DCC profile identifier/version |
+| `invocation` | Bound `C`, `P`, `W`, `π`, `B`, `A`, and `T`, including the required target-profile set `R` |
+| `candidates` | Candidate identities, artifact commitments, dependency-lineage commitments, and per-candidate evaluation records |
+| `tier1` | Predicate-level `PASS`, `FAIL`, or `UNRESOLVED` states with evidence references and justifications |
+| `tier2` | Metric definitions/versions, values or ordinal levels, units/domains, evidence modalities, applicability, and comparison outcomes for every admitted candidate evaluated |
+| `decision_trace` | Ordered procedure steps, comparisons, first decisive component where applicable, and selection or inconclusiveness rationale |
+| `result` | Exactly one member of `Result_BOC` |
+| `adjudication` | Explicit `NONE` or the authority, scope, rationale, selected candidate, and supporting evidence for a permitted tie adjudication |
+| `accounting` | Gateway charge, evaluation budget, consumed budget, and accounting references required by the parent policy |
+| `evidence_manifest` | Evidence item identifiers, media/content types, provenance, applicability conditions, and integrity commitments |
+| `history_links` | Parent, superseded, reassessment, post-mortem, or related receipt references; empty when none exist |
+| `integrity` | Canonicalization identifier, hash algorithm identifier, payload commitment, and any required signature records |
+
+A field that does not apply MUST be represented using the schema's explicit not-applicable or empty representation. Implementations MUST NOT omit a required field merely because its value is unknown. Unknown values MUST be explicit and accompanied by a reason where the schema requires one.
+
+### 9.2. Candidate evaluation record
+
+Each candidate record MUST include:
+
+- stable candidate identifier and candidate revision;
+- artifact identity commitment and the identity method/version;
+- dependency-lineage commitment and dependency manifest reference;
+- Tier-1 predicate outcomes and evidence references;
+- Tier-2 metric records if and only if the candidate was admitted to Tier 2;
+- candidate-level status (`ADMITTED`, `REJECTED`, or `UNRESOLVED`);
+- any historical receipt references used as evidence, with an explicit applicability determination; and
+- failure/post-mortem references where applicable.
+
+A rejected or unresolved candidate MUST NOT be assigned a fabricated Tier-2 key. A candidate not admitted to Tier 2 may have diagnostic measurements recorded separately, but those measurements MUST NOT be represented as a valid Tier-2 comparison key.
+
+### 9.3. Evidence manifest
+
+Every evidence item relied upon to establish a Tier-1 predicate, Tier-2 value, comparison, or adjudication MUST have a manifest entry. At minimum, an entry MUST identify:
+
+- a stable evidence-item identifier;
+- evidence type and media/content type;
+- producer, source, or collection process;
+- source/tool/instrument version and calibration information where relevant;
+- candidate and dependency context to which the evidence applies;
+- observation time or interval and relevant operating conditions;
+- validity interval or explicit invalidation conditions, if known;
+- provenance locator or retained-content reference; and
+- integrity algorithm identifier and content commitment.
+
+A locator is not proof that evidence remains available. Evidence needed to independently verify a decision MUST be retained or made retrievable under the repository's evidence-retention policy. If evidence is unavailable at sealing time, the receipt MUST mark the affected evidence unresolved and MUST NOT claim that the corresponding predicate or metric was established by that evidence.
+
+Evidence may be external, but the receipt MUST bind the exact version or content commitment relied upon. A mutable URL without a version, timestamped capture, or content commitment is insufficient as the sole evidence identity.
+
+### 9.4. Decision trace
+
+The decision trace MUST be sufficient for an independent reviewer to reconstruct the invocation's BOC procedure without relying on undocumented tie-breaking or hidden state. It MUST record:
+
+1. the frozen invocation inputs and candidate enumeration;
+2. the applicable gateway accounting event;
+3. every required Tier-1 predicate outcome and the evidence that supports it;
+4. the exact admissible candidate set;
+5. Tier-2 metric records and their applicability/comparability determinations;
+6. the effective component order, including `ImplicitDeps` first and the bound `π` thereafter;
+7. the first decisive component for each comparison that determines the selected candidate, or the precise unresolved/tied component where no unique result is established;
+8. any valid adjudication; and
+9. the final result and budget/accounting state.
+
+The trace MUST NOT imply that candidates were compared on a later component when an earlier component was unresolved or incomparable. It MUST NOT suppress candidates, failed predicates, or material evidence that could change the result.
+
+### 9.5. Canonical serialization
+
+The receipt payload MUST have a deterministic canonical byte representation before it is committed. For the initial JSON representation, implementations MUST use the JSON Canonicalization Scheme (JCS), RFC 8785, over a schema-validated JSON object encoded as UTF-8.
+
+In addition:
+
+- duplicate object member names MUST be rejected;
+- non-finite numeric values MUST be rejected;
+- values whose exactness cannot be preserved by the selected JSON number representation MUST be encoded as schema-defined decimal/integer strings or another exact typed representation;
+- unordered collections MUST be sorted by a schema-defined stable key before canonicalization;
+- arrays whose order is semantically significant MUST retain that order;
+- timestamps MUST use the schema's single declared normalized representation and retain the source time-basis metadata where needed;
+- absent, `null`, empty, unknown, and not-applicable MUST remain semantically distinct where the schema distinguishes them; and
+- implementations MUST NOT canonicalize an incomplete or schema-invalid receipt as a final receipt.
+
+If a future Qn-native canonical serialization is adopted, it MUST be introduced as a versioned canonicalization profile with deterministic test vectors and an explicit migration rule. It MUST NOT silently change the bytes or interpretation of already sealed receipts.
+
+### 9.6. Cryptographic commitment and receipt identity
+
+The integrity commitment MUST bind the complete canonical receipt payload, including the evidence manifest and decision trace, but excluding all derived envelope fields: `receipt_id`, `integrity.payload_commitment`, and signature bytes that sign that commitment. The receipt schema MUST define this projection precisely to avoid self-reference. The `receipt_id` is derived only after the payload commitment has been computed and is carried in the outer receipt envelope; it is not part of the committed payload.
+
+The commitment operation is:
+
+`payload_commitment = H(domain_separator || canonical_payload_bytes)`
+
+where:
+
+- `H` is the hash algorithm identified in the receipt and permitted by the applicable DCC/security profile;
+- `domain_separator` is the exact ASCII byte sequence `CDQN-BOC-RECEIPT-v1` followed by one NUL byte (`0x00`); and
+- `canonical_payload_bytes` are the bytes produced under §9.5 from the receipt payload projection defined above.
+
+The initial interoperable profile MUST support SHA-256 (`sha-256`). A deployment MAY require an additional algorithm under its security profile. Algorithm identifiers MUST be explicit; implementations MUST NOT infer an algorithm from digest length. Algorithm migration MUST preserve the original commitment and add a new linked commitment rather than rewriting a historical receipt.
+
+`receipt_id` MUST be encoded as the algorithm identifier, a colon, and the lowercase hexadecimal payload digest (for example, `sha-256:<lowercase-hex-digest>`). Because it is an envelope field derived from the commitment, it MUST NOT be included in the bytes being committed. It MUST NOT be treated as proof of semantic equality between candidates or as a substitute for comparing canonical candidate encodings. A hash match is an integrity/indexing result; where identity equality is material, the underlying canonical identity data or an explicitly defined collision-resolution procedure MUST also be checked.
+
+### 9.7. Signatures and authority
+
+A cryptographic signature MAY be attached to the payload commitment when required by the DCC/security profile or when an adjudication authority must attest to its action. A signature record MUST identify the signature algorithm, signer key identifier, signature bytes, key-validity context, and the role or authority scope under which it was produced.
+
+A valid signature establishes that the corresponding key signed the commitment; it does not independently establish that the evidence is true, the candidate is safe, or the BOC reasoning is correct. Signature validation and signer authorization MUST be recorded separately. An unsigned receipt remains structurally valid unless the applicable profile requires a signature; it MUST then be marked as not satisfying that profile's sealing requirement.
+
+### 9.8. Immutability, correction, and supersession
+
+Once sealed, a receipt MUST be immutable. Corrections, new measurements, post-mortem findings, dependency changes, revised policies, and reassessments MUST be represented by new linked records or a new BOC invocation. They MUST NOT overwrite the original payload or commitment.
+
+A later receipt MAY reference an earlier receipt as `REASSESSES`, `SUPERSEDES_FOR_CURRENT_CONTEXT`, `POST_MORTEM_OF`, or another explicitly defined relation. Such a relation MUST NOT imply that the earlier receipt was invalid under its original context. The new receipt MUST state what changed and which prior evidence remains applicable, is invalidated, or remains unresolved.
+
+If a receipt is found malformed or its commitment fails verification, a separate integrity finding MUST identify the failed check. The original bytes and observed commitment SHOULD be retained for audit; a corrected receipt is a new artifact and MUST link to the affected receipt where possible.
+
+### 9.9. Receipt verification
+
+A verifier MUST be able to:
+
+1. validate the receipt against its declared schema version;
+2. reconstruct the canonical payload bytes;
+3. recompute and compare the payload commitment;
+4. validate evidence-manifest commitments for available evidence;
+5. validate signatures and signer authorization when present or required;
+6. reconstruct the candidate admission set and Tier-2 comparison trace; and
+7. determine whether the recorded result follows from the bound rules and evidence.
+
+A commitment match alone is not a complete BOC verification. A receipt is fully verified only to the extent that its schema, integrity, evidence availability, authorization, and decision logic have each been checked and their verification outcomes recorded separately.
+
+### 9.10. Illustrative receipt shape
+
+The following is an illustrative outer-envelope shape, not a complete JSON Schema. The committed payload is the projection that excludes `receipt_id`, `integrity.payload_commitment`, and signature bytes. Field names and enumerations are normative only where defined in this document; implementations MUST publish and version a machine-readable schema before claiming interoperable receipt conformance.
+
+```json
+{
+  "receipt_schema": "cdqn.boc.receipt/1.0",
+  "receipt_id": "sha-256:<encoded-digest>",
+  "invocation_id": "<stable-invocation-id>",
+  "created_at": {
+    "value": "2026-11-07T00:00:00Z",
+    "time_basis": "UTC"
+  },
+  "specification": {
+    "boc": "0.3.0",
+    "simemp": "1.4.0",
+    "dcc_profile": {
+      "id": "<profile-id>",
+      "version": "<profile-version>"
+    }
+  },
+  "invocation": {
+    "candidate_set_commitment": "<commitment>",
+    "workload_commitment": "<commitment>",
+    "priority_permutation": ["<component-1>", "<component-2>", "<component-3>"],
+    "budget": {"unit": "<declared-unit>", "limit": "<exact-value>"},
+    "required_profiles": ["<profile-id>"],
+    "temporal_context_commitment": "<commitment>"
+  },
+  "candidates": [],
+  "decision_trace": [],
+  "result": "INCONCLUSIVE",
+  "adjudication": {"status": "NONE"},
+  "accounting": {},
+  "evidence_manifest": [],
+  "history_links": [],
+  "integrity": {
+    "canonicalization": "RFC8785-JCS",
+    "hash_algorithm": "sha-256",
+    "payload_commitment": "<digest>"
+  }
+}
+```
+
+The example intentionally uses placeholders and an illustrative unresolved result. It is not a receipt for an actual evaluation and MUST NOT be committed or presented as evidence of a completed BOC invocation.
+
+## 10. Explicit non-goals
+
+This provisional version does not yet define a complete machine-readable JSON Schema, the exact budget schedule for each predicate or metric evaluation, or the canonical Qn-universe representations of time, epochs, lineage transitions, and evidence-validity intervals. The receipt requirements in §9 define the logical content and a provisional implementation canonicalization/commitment profile; they do not establish that RFC 8785 JCS, SHA-256, or the proposed envelope is the native Qn representation. Equivalent Qn artefacts MUST be preferred when established and mapped as specified in §1.1. Interoperable implementations still require a published schema and conformance vectors. BOC MUST NOT be claimed fully mechanically decidable where these unresolved implementation contracts are required for execution.
+
+## 11. Conformance tests
 
 | Test | Input condition | Required result |
 |---|---|---|
@@ -351,8 +552,23 @@ This version does not yet define canonical receipt encoding or cryptographic str
 | BOC-2-T10 | Earlier lexicographic component is unknown but a later component favors one candidate | Later component MUST NOT decide the comparison |
 | BOC-2-T11 | `P_coverage` is minimized as the current portability component | Conformance failure |
 | BOC-2-T12 | A measured runtime sample is substituted for a required worst-case bound | Conformance failure |
+| BOC-3-T01 | Completed invocation has no receipt | Conformance failure |
+| BOC-3-T02 | Receipt omits one required invocation input or the bound result | Conformance failure |
+| BOC-3-T03 | Candidate rejected at Tier 1 is assigned a Tier-2 comparison key | Conformance failure |
+| BOC-3-T04 | Decision trace skips an unresolved earlier lexicographic component | Conformance failure |
+| BOC-3-T05 | Evidence used for a decision has no evidence-manifest entry | Conformance failure |
+| BOC-3-T06 | Mutable evidence URL is the sole identity of decision-critical evidence | Conformance failure |
+| BOC-3-T07 | Duplicate JSON member names or non-finite numbers are accepted in canonical payload | Conformance failure |
+| BOC-3-T08 | Two conforming encoders produce different canonical bytes for the same receipt data | Conformance failure |
+| BOC-3-T09 | Payload commitment excludes a decision-critical field or evidence-manifest entry | Conformance failure |
+| BOC-3-T10 | Hash algorithm is inferred rather than declared by identifier | Conformance failure |
+| BOC-3-T11 | Receipt is mutated after sealing to add a post-mortem result | Conformance failure; create a linked record |
+| BOC-3-T12 | Hash equality is treated as proof of candidate semantic equality | Conformance failure |
+| BOC-3-T13 | Signature validity is treated as proof that evidence is true or reasoning is correct | Conformance failure |
+| BOC-3-T14 | Commitment verifies but decision logic or evidence applicability is not checked | Receipt MUST NOT be labelled fully verified |
+| BOC-3-T15 | Historical receipt is replaced during algorithm migration | Conformance failure; add a linked commitment |
 
-## 11. Normative references
+## 12. Normative references
 
 | Document | Role |
 |---|---|
@@ -366,10 +582,10 @@ This version does not yet define canonical receipt encoding or cryptographic str
 
 ---
 
-## 12. Versioning and integration
+## 13. Versioning and integration
 
-This document is a versioned BOC specification artifact subordinate to `docs/simemp.md` §7. Version 0.2.0 defines the Tier-2 metric domains and comparison semantics and is coordinated with the parent policy correction from `P_coverage` to `P_gap`.
+This document is a versioned, provisional implementation specification subordinate to `docs/simemp.md` §7. Version 0.3.0 added immutable decision-receipt content, evidence-manifest, canonicalization, integrity-commitment, signature, and verification requirements to the BOC-1 and BOC-2 decision and comparison rules. Version 0.3.1 clarifies that these implementation specifications remain provisional pending equivalent native Qn artefacts, establishes Qn artefact precedence and mapping requirements, and limits conformance language to this provisional BOC profile. It retains the parent policy correction from `P_coverage` to `P_gap`.
 
-Any future change to result states, invocation inputs, evidence semantics, or lineage/applicability rules MUST be made through a new versioned artifact under the repository's versioning discipline. Historical decision receipts remain immutable.
+Any future change to result states, invocation inputs, evidence semantics, lineage/applicability rules, receipt fields, canonicalization, or commitment semantics MUST be made through a new versioned artifact under the repository's versioning discipline. When an equivalent Qn artefact becomes authoritative, update the mapping and disposition through a versioned change; do not leave duplicate competing definitions. Historical decision receipts remain immutable.
 
-The parent policy is coordinated in `docs/simemp.md` v1.4.0. The two documents MUST remain aligned: changes to the Tier-2 key or metric direction require coordinated versioned updates.
+The parent policy is coordinated in `docs/simemp.md` v1.4.0. The two documents MUST remain aligned: changes to the Tier-2 key or metric direction require coordinated versioned updates. This BOC document remains provisional for implementation until its requirements have been mapped to, and where appropriate replaced by, equivalent accepted Qn artefacts.
