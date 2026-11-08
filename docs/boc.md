@@ -2,9 +2,9 @@
 layout: default
 title: BOC Decision, Comparison, and Receipt Specification
 description: BOC decision outcomes, comparison rules, and immutable auditable receipt requirements
-version: 0.4.0
-updated: 2026-11-07
-author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
+version: 0.4.1
+updated: 2026-11-08
+author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
 license_location: repository root
@@ -25,9 +25,9 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | BOC: Decision, Comparison, and Receipt Specification |
-| **Version** | 0.4.0 |
-| **Last Updated** | 2026-11-07 |
-| **Author** | Christophe Duy Quang Nguyen via GPT-6 (OpenAI) |
+| **Version** | 0.4.1 |
+| **Last Updated** | 2026-11-08 |
+| **Author** | Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic) |
 | **Status** | Provisional implementation specification for the Qn-universe implementation; subject to replacement or binding by equivalent Qn artefacts |
 | **Parent Policy** | `docs/simemp.md` §7 |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -486,7 +486,7 @@ The following is an illustrative outer-envelope shape, not a complete JSON Schem
     "time_basis": "UTC"
   },
   "specification": {
-    "boc": "0.4.0",
+    "boc": "0.4.1",
     "simemp": "1.4.0",
     "dcc_profile": {
       "id": "<profile-id>",
@@ -697,8 +697,6 @@ This provisional version does not yet define a complete machine-readable JSON Sc
 | BOC-3-T13 | Signature validity is treated as proof that evidence is true or reasoning is correct | Conformance failure |
 | BOC-3-T14 | Commitment verifies but decision logic or evidence applicability is not checked | Receipt MUST NOT be labelled fully verified |
 | BOC-3-T15 | Historical receipt is replaced during algorithm migration | Conformance failure; add a linked commitment |
-
-
 | BOC-4-T01 | Candidate order is supplied in a different insertion order but canonical IDs and invocation inputs are unchanged | Evaluation operation order is unchanged |
 | BOC-4-T02 | Evaluation plan is modified after the first operation begins | Original invocation MUST NOT continue under the modified plan |
 | BOC-4-T03 | Required operation cannot reserve its declared cost before starting | Operation does not begin; result is `BUDGET_EXHAUSTED` if decision-critical |
@@ -733,7 +731,7 @@ This provisional version does not yet define a complete machine-readable JSON Sc
 
 ## 14. Versioning and integration
 
-This document is a versioned, provisional implementation specification subordinate to `docs/simemp.md` §7. Version 0.3.0 added immutable decision-receipt content, evidence-manifest, canonicalization, integrity-commitment, signature, and verification requirements to the BOC-1 and BOC-2 decision and comparison rules. Version 0.3.1 clarified that these implementation specifications remain provisional pending equivalent native Qn artefacts, established Qn artefact precedence and mapping requirements, and limited conformance language to this provisional BOC profile. Version 0.4.0 adds a provisional operational evaluation protocol for deterministic scheduling, budget reservation and settlement, Tier-1 short-circuit recording, Tier-2 comparison completion, atomic checkpoints, interruption, recovery, idempotency, and operational reproducibility. It retains the parent policy correction from `P_coverage` to `P_gap`.
+This document is a versioned, provisional implementation specification subordinate to `docs/simemp.md` §7. Version 0.3.0 added immutable decision-receipt content, evidence-manifest, canonicalization, integrity-commitment, signature, and verification requirements to the BOC-1 and BOC-2 decision and comparison rules. Version 0.3.1 clarified that these implementation specifications remain provisional pending equivalent native Qn artefacts, established Qn artefact precedence and mapping requirements, and limited conformance language to this provisional BOC profile. Version 0.4.0 adds a provisional operational evaluation protocol for deterministic scheduling, budget reservation and settlement, Tier-1 short-circuit recording, Tier-2 comparison completion, atomic checkpoints, interruption, recovery, idempotency, and operational reproducibility. It retains the parent policy correction from `P_coverage` to `P_gap`. Version 0.4.1 is a documentation-only correction: it removes a blank-line gap that split the §12 conformance table so that the BOC-4 rows rendered outside it, updates the illustrative receipt's specification-version field, and records co-attribution in the metadata. No requirement, result state, metric, receipt field, conformance test, or test outcome changed.
 
 Any future change to result states, invocation inputs, evidence semantics, lineage/applicability rules, receipt fields, canonicalization, or commitment semantics MUST be made through a new versioned artifact under the repository's versioning discipline. When an equivalent Qn artefact becomes authoritative, update the mapping and disposition through a versioned change; do not leave duplicate competing definitions. Historical decision receipts remain immutable.
 
