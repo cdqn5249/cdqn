@@ -2,8 +2,8 @@
 layout: default
 title: QnIR v0.3 — Independent Follow-up Review
 description: Independent audit of the v0.3.0-draft.18 specification, corpus, implementations, and artifact lineage
-version: 0.1.0
-updated: 2026-11-07
+version: 0.1.1
+updated: 2026-11-08
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -167,3 +167,65 @@ The updated corpus file delivered with this review is v0.3.0-draft.19. Its only 
 The current implementation evidence is real and useful: Python freshly reproduces all 83 committed vectors, and the repository records the corresponding Rust result. The outstanding issue is coverage of the conformance obligations, not a reason to discard the architecture or redo completed work.
 
 The next development increment should close the specific Step-4 gaps identified in F20 and reconcile the program-of-record status under F22. `docs/boc.md` remains v0.4.0; the BOC policy is sufficient to select this work without another BOC specification expansion.
+
+---
+
+## Correction Note — v0.1.1
+
+**Date:** 8 November 2026  
+**Author:** Christophe Duy Quang Nguyen via GPT-6 (OpenAI)
+
+This note corrects and updates the findings and implementation-status assessment in the preceding review. It does not replace the original review or change the QnIR design.
+
+### 1. Corrections to previous findings
+
+- **F20 — Call and collision coverage:** The previous claim that these cases were absent from the conformance corpus was too strong. Their traceability against the obligations in §4.4 remains **NOT VERIFIED**. Each obligation must be mapped to an existing vector, a justified not-applicable disposition, or a future test requirement.
+- **F21 — Golden corpus wording:** **CLOSED.** The wording was corrected in `qnir_goldens.md` v0.3.0-draft.19. The correction does not change the 83 vector bodies.
+- **F22 — Step-4 completion status:** **OPEN.** Delivery of the four conformance artifacts must not be conflated with acceptance of the complete Step-4 suite.
+- **F23 — Reproduction evidence:** The Python implementation was freshly reproduced against all 83 golden vectors, with all passing. The Rust result remains recorded evidence and was not independently rerun during this review. Independent derivation of the expected results is not yet fully certified.
+- **F24 — Step-5 strengthening:** Remains deferred until the foundational conformance and accounting issues are resolved.
+
+### 2. Newly detected blocking findings
+
+#### F25 — CLOAD fallback can exceed the trip ceiling
+
+CLOAD fallback edges are included in the control-flow graph and in the admission-time back-edge analysis. However, neither the Rust nor Python execution path applies the trip-ceiling check or increments the traversal counter when a lookup miss takes the fallback edge.
+
+Consequently, the admission bound does not currently bound actual execution.
+
+**Required correction:** Apply the trip ceiling to an actual CLOAD fallback traversal on lookup miss. Check the ceiling before committing the miss transition or creating its miss token. If exhausted, reject with `EXPRESSION_TOO_COMPLEX`; otherwise increment the corresponding edge traversal count and take the fallback. A lookup hit does not count as fallback traversal.
+
+The normative CLOAD semantics and accounting rules must be aligned with this behavior. Add a golden-first regression for a self-looping CLOAD miss with a trip ceiling of one. Derive the expected transition, tokens, receipt, and ledger independently before changing either implementation.
+
+#### F26 — Depth ceiling is undefined and unenforced
+
+The specification refers to depth-ceiling rejection at block entry and uses depth-bounded paths in its accounting bound. However, it does not define a complete operational measure of nesting depth for arbitrary block graphs. The Python profile reads `depth_ceiling` but does not enforce it; the Rust execution path also lacks enforcement.
+
+**Required correction:** Define the meaning and transition rules of nesting depth before implementing enforcement or adding expected vectors. In particular, resolve how depth changes across edges, how exits unwind it, and how irreducible or overlapping loop regions are treated. Do not assume a call stack or structured-loop model that the current architecture has not established.
+
+Until this is defined and enforced, the bounded-path accounting claim is not demonstrated.
+
+#### F27 — Fuel backstop defect-injection obligation remains outstanding
+
+The conformance register lists the `fuel-backstop-on-validator-defect` fixture as pending. This test concerns containment when an admitted Intent reveals a validator defect; it is not a normal successful execution case.
+
+**Required correction:** Specify the controlled test-only fault injection, expected validator-defect verdict, and runtime containment behavior. Verify that the backstop stops execution before overbilling, produces the required fatal outcome, and closes the ledger. Report the validator defect separately from successful containment.
+
+### 3. Revised milestone assessment
+
+| QnIR repair step | Revised status |
+|---|---|
+| Step 1 — Minimal core | Retain pass, subject to existing promotion conditions |
+| Step 2 — Operational semantics | Partial; reopen for F25 and F26 |
+| Step 3 — Work accounting and admission | Reopen; bounded execution is not yet demonstrated |
+| Step 4 — Conformance oracle and corpus | Partial; F20 traceability and F25–F27 remain outstanding |
+| Step 5 — Strengthen commitments | Deferred |
+| Step 6 — Extensions with evidence | Deferred |
+
+### 4. Current disposition
+
+Do not promote QnIR v0.3.
+
+The immediate priority is to resolve the bounded-control semantics and accounting defects, then establish their expected behavior through independently derived golden cases and conformance tests. Existing specifications, implementations, review records, and all 83 golden vectors remain preserved; no vector is to be deleted or silently rewritten.
+
+No change to `docs/boc.md` is required. Its current v0.4.0 policy is sufficient to select and govern the next work. This correction records the updated technical evidence; it does not introduce a new BOC procedure or milestone.
