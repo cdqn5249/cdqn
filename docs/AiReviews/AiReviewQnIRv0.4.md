@@ -229,3 +229,29 @@ Do not promote QnIR v0.3.
 The immediate priority is to resolve the bounded-control semantics and accounting defects, then establish their expected behavior through independently derived golden cases and conformance tests. Existing specifications, implementations, review records, and all 83 golden vectors remain preserved; no vector is to be deleted or silently rewritten.
 
 No change to `docs/boc.md` is required. Its current v0.4.0 policy is sufficient to select and govern the next work. This correction records the updated technical evidence; it does not introduce a new BOC procedure or milestone.
+
+### 5. Next-Agent TODO — F25 Dynamic Reproduction
+
+**Status:** INCONCLUSIVE — static gap confirmed; complete runtime reproduction pending.
+
+The current review iteration established a CLOAD fallback trip-ceiling enforcement omission by inspecting the Python and Rust execution paths. However, a complete looping-program reproduction has not yet been performed. The existing Python golden suite passes 83/83 but does not establish coverage of this specific case.
+
+**Required next-agent tasks:**
+
+1. Construct the smallest valid QnIR envelope in which a CLOAD lookup miss takes a declared fallback back-edge.
+2. Configure a trip ceiling of one and sufficient fuel to distinguish trip-ceiling rejection from fuel-backstop termination.
+3. Execute the envelope using the actual Python reference interpreter. Record both fallback attempts and determine whether the second is rejected with `EXPRESSION_TOO_COMPLEX`.
+4. Verify the exact rejection point, miss-token births, transition records, terminal receipt, and ledger settlement.
+5. Independently derive the expected result before adding a golden regression. Do not generate expected output from either implementation. Preserve all existing 83 vectors.
+6. Run the same regression against the Rust implementation when a working Rust toolchain is available. Record separately which implementations were freshly executed.
+7. Report F25 as **CONFIRMED**, **NOT REPRODUCED**, or **INCONCLUSIVE**, supported by the test artifact and execution evidence.
+
+**Environment limitation in the previous iteration:** Python was available, but Rust installation could not be completed because external package-host DNS resolution was unavailable. Root privileges were present; neither `rustc` nor `cargo` was installed. This is an execution-environment limitation, not a QnIR result or a ChatGPT plan restriction.
+
+**Scope boundaries:**
+- Do not implement a correction before completing the reproduction and independently deriving expected behavior.
+- Do not modify the existing golden vectors.
+- Keep F26 depth-ceiling semantics and F27 fuel-backstop defect injection as separate outstanding tasks.
+- Do not change the BOC policy or promote QnIR based on this partial result.
+
+**Deliverable:** reproducible test evidence, an independently derived expected result, and an updated finding disposition.
