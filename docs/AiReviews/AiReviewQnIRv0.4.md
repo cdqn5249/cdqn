@@ -2,9 +2,9 @@
 layout: default
 title: QnIR v0.3 — Independent Follow-up Review
 description: Independent audit of the v0.3.0-draft.18 specification, corpus, implementations, and artifact lineage
-version: 0.1.1
+version: 0.1.2
 updated: 2026-11-08
-author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
+author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
 license_location: repository root
@@ -255,3 +255,106 @@ The current review iteration established a CLOAD fallback trip-ceiling enforceme
 - Do not change the BOC policy or promote QnIR based on this partial result.
 
 **Deliverable:** reproducible test evidence, an independently derived expected result, and an updated finding disposition.
+
+---
+
+## Correction Note — v0.1.2
+
+**Date:** 8 November 2026  
+**Author:** Christophe Duy Quang Nguyen via Claude Sonnet 5.5 (Anthropic)
+
+This note independently re-verifies the v0.1.1 findings against the snapshot and executes the F25 reproduction that v0.1.1 left pending. It follows the repository's append-only discipline: the original review and the v0.1.1 note above are unchanged. It does not alter the QnIR design, any vector, or the BOC policy.
+
+### 1. Evidence record
+
+| Item | Result |
+|---|---|
+| Snapshot | `cdqn-main.zip` as supplied; `qnir_goldens.md` v0.3.0-draft.19, 1,045,702 bytes, SHA-256 `55ff6d8396a7dba092ee9de4ee2a42d38bf39f24cd874922ca3ce365e7021ed4`; `qnir.md` and `qnir_conformance.md` v0.3.0-draft.18; semantics and accounting v0.3.0-draft.8.1 |
+| Python reference | **Freshly executed**, CPython 3.12.3: 83/83 (E 11/11, I 3/3, R 4/4, M 15/15, 46 envelopes decode, 49 listings regenerate, X 50/50) |
+| Rust implementation | **Not rebuilt.** No `rustc`, `cargo`, or `rustup` in this environment, and network egress is disabled, so the pinned toolchain (`rust-toolchain.toml`, channel 1.99.1) could not be installed. The Rust 83/83 result remains recorded evidence only |
+| F25 reproduction | **Executed on the Python reference** (§2). Rust: static reading only |
+| Companion script | `f25_repro.py` (observes only; generates no expected values) |
+
+### 2. F25 — CONFIRMED (Python, executed)
+
+**Method.** The committed X42 envelope was decoded; one instruction word was patched (the `CLOAD` fallback operand, block 1 → block 0, a self-loop) and re-encoded with the reference's own deterministic CBOR. The dependency store `D` is empty, so every lookup misses. Profile: trip ceiling 1, depth ceiling 8, gateway 20 U, 4 U per instruction.
+
+**Control.** Unpatched X42 reproduces: 4 transitions, charged 36 U, refund 4 U, `SUCCESS`.
+
+**Variant (`CLOAD addr=0 fallback=block 0`).**
+
+| Observation | Value |
+|---|---|
+| Admission bound `B_hat(P)` | 44 U = gateway 20 + six 4-U transitions, i.e. one miss traversal, then hit, `JMP`, `ADD`, `JMP`, `HALT` |
+| Admission with `W_budget` 100, 300, 10000 | passes in all three |
+| Completed `CLOAD`-miss transitions | **6** (`q_load` charged 24 U), against one admitted fallback traversal |
+| Trip traversal counters at exit | **empty** — no fallback traversal was ever counted |
+| Termination | transition 7: fuel-backstop rejection, `EXPRESSION_TOO_COMPLEX` (tag 3) |
+| Ledger | reserved 44 = charged 44 + refunded 0 + outstanding 0 (closed, no overbilling) |
+| Tokens | six `STATUS_LOOKUP_MISS` and one `EXPRESSION_TOO_COMPLEX`, all terminalized |
+
+**Findings from the run.**
+
+1. The trip ceiling was not applied to the fallback edge. The edge is slot 0 of its own edge identity (semantics §2.6) and is included in `B_hat`, yet the miss path of `Machine.run` neither checks nor counts it. The Rust `Transfer::Miss` path (`interp.rs`, near lines 871–874) shows the same omission by reading, while its `BR`/`JMP` paths call `check_ceiling` (near lines 1086 and 1091). Rust was not executed.
+2. The fuel backstop fired on a program that passed admission. Accounting §3.4 describes the backstop as defense in depth that a sound admission never reaches. Here the defect is **not** a `B_hat` false admission: `B_hat` admits exactly what the trip-ceiling rule allows. It is a runtime/spec enforcement omission, and the backstop contained it correctly.
+3. The outcome tag alone cannot distinguish the proposed trip rejection from the backstop, since both are `EXPRESSION_TOO_COMPLEX`. A regression vector must pin the transition count, token set, and ledger.
+4. `W_budget` does not separate the two causes. The backstop is bounded by the `B_hat` escrow, not by `W`, so item 2 of the v0.1.1 TODO ("sufficient fuel") is moot.
+5. The semantics text states the ceiling precondition for `BR` and `JMP` only. The F25 correction therefore needs a **spec amendment first** (the `CLOAD` row and ceiling precondition in §2.3, aligned with accounting), then a hand-derived golden, then implementation changes.
+
+**Expected behavior under the proposed correction (a proposal, not an adjudicated golden).** Step 1: `CLOAD` misses; the site `(0, 0, 0)` count goes 0 → 1; one Tier O token is born. Step 2: `CLOAD` misses again; 1 + 1 exceeds the ceiling; rejection with `EXPRESSION_TOO_COMPLEX` before the second miss token is created. The exact transition bytes, receipt, and ledger must be derived by hand from §2.3, §2.5, §2.6, and §3 before either implementation is run against them.
+
+### 3. F26 — partially upheld
+
+- **Upheld: the depth measure is under-specified.** Semantics §2.3 says depth is derived from the record sequence but gives no rule for how edges change it, how exits unwind it, or how irreducible or overlapping loops count.
+- **Upheld: depth is not enforced.** Python reads `depth_ceiling` in `parse_profile` and never uses it. A search of the Rust interpreter finds no depth-ceiling use (the only `depth` variables are bracket counters in parsing).
+- **Overstated: the consequence.** Accounting §3.4 states that the `B_hat` state graph enforces trip ceilings and ignores depth ceilings, which only enlarges the maximized path family. `B_hat ≥ B` therefore holds without depth enforcement, and trip ceilings alone bound execution. The missing depth rule is a definitional gap and a spec/implementation divergence, not a break in the bounded-path claim.
+- **Disposition: OPEN, severity reduced.** It no longer reopens Step 3 by itself. Two options are recorded without choosing between them: (A) define and enforce depth; (B) retire the depth ceiling as redundant given trip ceilings. Option B changes a frozen profile parameter and needs explicit adjudication.
+
+### 4. Other re-checks
+
+| Item | v0.1.2 result |
+|---|---|
+| F20 | Still **NOT VERIFIED**. By vector title, only X7 (`exec-trip-ceiling-rejection`) matches loop, depth, call, collision, or fuel keywords. Family M was not mapped against the call/extension-boundary obligation; the traceability matrix is still required |
+| F21 | Version draft.19 is present. The corrected introductory wording was not re-read in this pass; the CLOSED status rests on v0.1.1 |
+| F22, F23, F24 | Unchanged |
+| Navigation | `navigation.yml` now lists BOC (29 entries); the body §6 observation is resolved |
+| `boc.md` §12 | A blank line before `BOC-4-T01` splits the conformance table, so the BOC-4 rows render outside it. This is a formatting defect, not a policy change. The sentence "No change to `docs/boc.md` is required" is corrected to: no **policy** change is required; one rendering fix is recommended |
+| Observation O1 | In the variant, the edge from unreachable block 1 to block 3 is classified as a back-edge. `dominators` initializes every node's dominator set to all nodes, and a node with no predecessors keeps that set. It does not affect this result, but the spec does not say how unreachable blocks are treated. A candidate finding, pending adjudication; not numbered |
+
+### 5. Governing disposition (supersedes the body and v0.1.1 step tables without editing them)
+
+The body above was written before F25–F27 and still describes Steps 2–3 as passing and the F20–F22 work as first. Where it conflicts with the v0.1.1 note or this note, this table governs.
+
+| QnIR repair step | v0.1.2 status |
+|---|---|
+| Step 1 — Minimal core | Pass, subject to existing promotion conditions |
+| Step 2 — Operational semantics | **Partial.** F25 confirmed (spec gap and implementation); F26 definitional gap open |
+| Step 3 — Work accounting and admission | **Reopened on F25 only.** The accounting document's claim that runtime enforces the admitted bound is not realized for the `CLOAD` fallback edge |
+| Step 4 — Conformance oracle and corpus | **Partial.** F20 mapping pending; F25 regression vector and F27 fixture outstanding |
+| Steps 5 and 6 | Deferred |
+
+Naming note: the file name carries the review-series index (fourth review); the title refers to the reviewed v0.3 draft lineage; the `version` field versions this review document itself.
+
+### 6. Next-step selection, in BOC rubric form
+
+The "BOC-selected" statements in the body (§5) and in v0.1.1 (§4) were narrative. The SIMEMP §7 rubric mode requires a tabulation, and a conforming `boc.md` invocation also requires a bound profile, priority permutation `π`, budget, and receipt, none of which exist for task selection. The table below is therefore a **QUALITATIVE, ad hoc rubric** (not a versioned, adopted rubric under `boc.md` §8.2) and does not claim a conforming BOC result. `ImplicitDeps` is read as the count of undeclared decisions the item would silently assume.
+
+| Candidate | Tier-1 gate (declared precondition met, finite goal) | `ImplicitDeps` | Note |
+|---|---|---|---|
+| C1 — F25: amend spec, derive golden, then fix | PASS (defect confirmed, bounded) | 0 | Spec amendment is itself the declaration; golden precedes code |
+| C4 — F20 traceability matrix | PASS | 0 | Maps obligations only; should list the F25 vector |
+| C2 — F26 depth: define or retire | PASS | 1 | Needs the A/B adjudication first |
+| C3 — F27 fuel-backstop fixture | PASS | 1 | Needs new declared fixture semantics (`qnir.md`) |
+| C5 — Step 5 commitments | UNRESOLVED | ≥ 1 | Depends on Step-4 acceptance, a declared precondition |
+
+C1 and C4 tie on the leading component, and no `π` is bound. Under `boc.md` §6 and §8.3 the strict result is therefore **INCONCLUSIVE pending adjudication** by the repository's authority. Recommended adjudication: C1 before C4, because the C4 matrix must reference the F25 regression vector and would otherwise be reopened immediately.
+
+### 7. Remaining work (replaces the v0.1.1 §5 TODO)
+
+1. Adjudicate C1 over C4, then amend semantics §2.3 (the `CLOAD` row and ceiling precondition) and align accounting.
+2. Hand-derive the F25 golden from a minimal program with no unreachable block (see O1), fixed before any implementation run. Keep the existing 83 vectors byte-unchanged.
+3. Apply the correction to Python and Rust. Run Rust on the pinned toolchain in a networked environment and record separately which implementations were freshly executed.
+4. Decide F26 (option A or B); specify the F27 fixture semantics; complete the F20 matrix.
+5. Fix the `boc.md` §12 table split (documentation only).
+
+**Scope boundaries.** No vector is deleted or edited. No implementation was changed in this pass. `QnIR` is not promoted. Step 5 is not started.
