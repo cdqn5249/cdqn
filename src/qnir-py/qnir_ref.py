@@ -970,6 +970,11 @@ class Machine:
                 raise Rejection("EXPRESSION_TOO_COMPLEX")
             self.mint(ins["sid"], v)
             return None
+        # On miss: check trip ceiling on fallback edge (slot 0) before birthing token (F25)
+        self.check_ceiling(pc, ins["fallback"], 0)
+        if (pc[0], ins["fallback"]) in self.back_edges:
+            site = (pc[0], pc[1], 0)
+            self.traversals[site] = self.traversals.get(site, 0) + 1
         tok = self.birth(TOKEN_TYPES_REV["STATUS_LOOKUP_MISS"], pc)
         tok["tier"] = TIER_O
         events.append([1, tid(tok)])

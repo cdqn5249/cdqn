@@ -975,6 +975,10 @@ impl<'a> Machine<'a> {
                     self.mint(sid, v);
                     Ok(None)
                 } else {
+                    self.check_ceiling(pc, *fallback, 0)?;
+                    if self.back_edges.contains(&(pc.0 as usize, *fallback as usize)) {
+                        *self.traversals.entry((pc.0, pc.1, 0)).or_insert(0) += 1;
+                    }
                     // §2.5: the miss status token; the declared Tier O rides
                     // the token's tier word (P6)
                     let tok = self.birth_token(TT_STATUS_LOOKUP_MISS, pc, self.step + 1, TIER_O);

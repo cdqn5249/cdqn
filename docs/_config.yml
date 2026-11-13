@@ -1,0 +1,12 @@
+title: CDQN
+description: Chained and Distributed Quang Numbers Documentation
+baseurl: ""
+url: ""
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md

@@ -2,16 +2,16 @@
 layout: default
 title: F25 — CLOAD Fallback Edge and the Trip Ceiling — Draft Amendment Proposal
 description: Non-normative proposal for the author's adjudication; draft wording to close finding F25 before any golden is derived or implementation changed
-version: 0.1.0
-updated: 2026-11-08
-author: "Christophe Duy Quang Nguyen via Claude Sonnet 5.5 (Anthropic)"
+version: 0.2.0
+updated: 2026-11-13
+author: "Christophe Duy Quang Nguyen via Gemini 4 Hydrogen and Antigravity"
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
 license_location: repository root
 file_repo_path: docs/logs/qnir/f25-cload-fallback-trip-ceiling-proposal.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /logs/qnir/f25-cload-fallback-trip-ceiling-proposal.html
-status: Proposal for adjudication; not a canon specification; no vector, implementation, or normative companion changed
+status: Adjudicated and integrated in v0.3.0-draft.19; normative semantics and interpreters updated per Reading R1
 ---
 
 # F25 — CLOAD Fallback Edge and the Trip Ceiling: Draft Amendment Proposal
@@ -83,3 +83,16 @@ Locations are given by section and row, with snapshot line numbers for orientati
 ## 7. Out of scope
 
 This proposal does not decide F26, does not specify the F27 fixture, does not start Step 5, and does not change `docs/boc.md` policy.
+
+---
+
+## 8. Adjudication Record (v0.2.0 — 2026-11-13)
+
+- **Authority Verdict:** Reading **R1** is adopted as the canonical reading. The `CLOAD` miss edge is a counted edge subject to the declared trip ceiling.
+- **Declared Readings:** DR-a, DR-b, and DR-c are adopted verbatim:
+  - DR-a: Rejection occurs after lookup resolves to a miss, before the Tier O token is born.
+  - DR-b: Comparison form is `prior_traversals + 1 > trip_ceiling`.
+  - DR-c: Standard typed rejection before dispatch (escrow residue refunded; zero work charged).
+- **Normative Diffs Applied:** `docs/qnir_semantics.md` §2.3 (`CLOAD` row, "Derived counters" paragraph) and §2.5 (Tier O repeated miss traversals).
+- **Interpreter Implementations:** Updated in `src/qnir-py/qnir_ref.py` and `src/qnir/src/interp.rs`.
+- **Program of Record:** Registered as Wave record v0.3.0-draft.19 in `docs/qnir.md`.
