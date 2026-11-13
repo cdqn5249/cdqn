@@ -3,3 +3,10 @@ docs/_site/
 docs/.jekyll-cache/
 docs/.jekyll-metadata
 Gemfile.lock
+
+# Python build artifacts
+__pycache__/
+*.pyc
+
+# Rust build artifacts
+src/qnir/target/

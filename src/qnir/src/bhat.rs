@@ -197,6 +197,10 @@ fn val(ctx: &mut Ctx, bid: usize, rem: &[u32]) -> Option<u64> {
     if let Some(v) = ctx.memo.get(&key) {
         return *v;
     }
+    // Cycle guard (mirrors the Python reference's pre-insert): a state
+    // re-entered while its own value is still undecided lies on a closed loop,
+    // and a closed loop is not a ceiling-bounded path.
+    ctx.memo.insert(key.clone(), None);
     let (total, term) = block_charge_and_flow(ctx.blocks, ctx.profile, bid);
     let v = match term {
         Term::Halt => Some(total),
@@ -216,9 +220,14 @@ fn val(ctx: &mut Ctx, bid: usize, rem: &[u32]) -> Option<u64> {
             join(a, b).map(|v| v + total)
         }
         Term::Cload { at, fallback } => {
-            // miss edge to the fallback target; hit path continues in-block
+            // miss edge to the fallback target (the traversal decrements the
+            // site's remaining trip budget when it is a declared back edge);
+            // hit path continues in-block.
             let rest = in_block_continue(ctx, bid, at + 1, rem);
-            let miss = val(ctx, fallback, rem);
+            let miss = match step_edge(ctx, bid, fallback, rem) {
+                Edge::Refused => None,
+                Edge::Go(nr) => val(ctx, fallback, &nr),
+            };
             join(rest, miss).map(|v| v + total)
         }
     };
@@ -258,7 +267,11 @@ fn in_block_continue(ctx: &mut Ctx, bid: usize, from_idx: usize, rem: &[u32]) ->
             }
             OP_CLOAD => {
                 let rest = in_block_continue(ctx, bid, k + 1, rem);
-                let miss = val(ctx, ins.targets[0] as usize, rem);
+                let tgt = ins.targets[0] as usize;
+                let miss = match step_edge(ctx, bid, tgt, rem) {
+                    Edge::Refused => None,
+                    Edge::Go(nr) => val(ctx, tgt, &nr),
+                };
                 return join(rest, miss).map(|v| v + total);
             }
             _ => {}
