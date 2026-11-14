@@ -174,6 +174,14 @@
   description: "QnIR draft — conformance oracle"
   status: "Draft"
   external: false
+
+- title: "QnIR Commitments"
+  url: "/qnir_commitments.html"
+  slug: "qnir_commitments"
+  description: "QnIR draft — commitments (repair step 5)"
+  status: "Draft"
+  external: false
+
 - title: "QnIR Goldens"
   url: "/qnir_goldens.html"
   slug: "qnir_goldens"

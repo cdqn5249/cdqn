@@ -525,3 +525,24 @@ Acceptance is of the oracle and its corpus: the artifacts exist as repository in
 The review's §5 order stated: "After those obligations are closed, Step 4 can be reassessed for acceptance. Only then should BOC select Step 5, beginning with the minimum lineage and identity semantics needed by the commitment design." The obligations are closed and Step 4 is accepted, so the next BOC increment is Step 5's first specification share — the minimum lineage and identity semantics — declared over the accepted oracle, with no implementation, no vector, and no promotion implied by beginning it.
 
 **Scope boundaries.** No corpus byte, artifact byte, or specification rule changes. `QnIR` is not promoted. Step 5 is not started by this note.
+
+## Correction Note - v0.1.9
+
+This note records the opening of Step 5 — its first specification share, the minimum lineage and identity semantics — committed at v0.3.0-draft.25. It follows the append-only discipline: the original review and the v0.1.1–v0.1.8 notes above are unchanged. No corpus byte, artifact byte, or committed §1–§4 rule changes; `QnIR` is not promoted.
+
+### 1. The share
+
+The review's §5 order is followed exactly: "beginning with the minimum lineage and identity semantics needed by the commitment design." The new companion `docs/qnir_commitments.md` §6 declares: **artifact identities** `(kind, version, digest)` over the closed kind vocabulary, with SHA-256 over each kind's declared byte basis and triple equality as the only identity relation; the **lineage binding** `(corpus A, implementation A, V, E, n)` with the evidence digest over the ordered canonical record encodings and the receipt encoding, the binding rule (outcome equality only between bindings of equal corpus identity and `V`; each implementation reproduced from its own execution; divergence recorded, never reconciled), lineage as external evidence metadata (the frozen encodings and the 84 vectors are untouched), and the `QO-24` separation (minimal-zoom denotational identity; provenance rides the binding, never the value key); and the versioned **extractor `qir-extractor-1`** and **verbalizer `qir-verbalizer-1`** identities with the Obj 15 read-back binding rule `(verbalizer identity, SHA-256 of the exact text)` and the generation rule. The Step-5 register records the two declared deliverables' specification shares as discharged with explicit artifact-share remainders, and keeps the full-transition trace roots and the collision-safe artifact comparison as future shares — the review's own deferral of the bucket resolution is respected.
+
+### 2. Step-5 state
+
+| Step-5 deliverable | State |
+|---|---|
+| Normative lineage | Specification share discharged (v0.3.0-draft.25); artifact share (emitted lineage blocks, logs citing them) future |
+| Versioned verbalizer/extractor identities | Specification share discharged (v0.3.0-draft.25); artifact share (per-run `(generation, digest)` pairs) future |
+| Full-transition trace roots | Future — the construction must be declared before implementation; the evidence digest is explicitly not the trace root |
+| Collision-safe artifact comparison (header-equal, payload-different) | Future — the §1.4 F6 bucket resolution; the conformance register's last future row |
+
+Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the artifact share of the declared lineage and identity semantics (both implementations emitting the lineage block and generation-bound read-back pairs, cited by the logs), then the trace-root declaration, then the collision bucket.
+
+**Scope boundaries.** No corpus, artifact, or §1–§4 specification byte changes. `QnIR` is not promoted; the step's register alone governs its discharge.
