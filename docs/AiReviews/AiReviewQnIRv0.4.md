@@ -496,3 +496,32 @@ The required deliverables of the F27 analysis are met. **Reproducible test evide
 The one remaining increment before Step-4 can be reassessed is the **acceptance reassessment itself**: the Step-4 row's status is to be re-assessed against the now-complete registered suite — 84 committed vectors plus the discharged fixture — under the review's own milestone framing (Step 4: "Build a conformance oracle — assembler, validator, interpreter, and independent second implementation. Re-encode all examples and add adversarial tests for loops, calls, collisions, unresolved statuses, and budget boundaries."). The next review qualifies only after Step-4 acceptance; the Adversarial Review Program's Steps 1–3 minimum has been met since v0.3.0-draft.3, but whether and when a review opens is the program's own act, and Steps 5 and 6 remain deferred.
 
 **Scope boundaries.** The fixture is not a golden vector and the 84 committed vectors are byte-unchanged. `QnIR` is not promoted. Step 5 is not started.
+
+## Correction Note - v0.1.8
+
+This note records the reassessment of Steps 2–4 against the committed evidence — the review's own §5 order item 5 — and the resulting Step-4 acceptance. It follows the append-only discipline: the original review and the v0.1.1–v0.1.7 notes above are unchanged. No vector, specification rule, or implementation is changed by this pass; `QnIR` is not promoted and Step 5 is not started.
+
+### 1. Steps 2–4 — reassessed and accepted (v0.3.0-draft.24)
+
+The reassessment record is `docs/logs/qnir/step4-acceptance-reassessment.md`. Against conformance §4.5's acceptance condition, the **five deliverables PASS**: the golden-first differential protocol with independence evidence (the corpus committed before any implementation; two independent standard-library implementations, each passing on its own run — mutual agreement never the criterion); the assembler and validator (E 11/11, I 3/3, M 15/15; the X assembly share 51/51; the 51/51 declared admission bounds); the reference interpreter and second implementation (X execution 51/51 at the five agreement points in both artifacts); the vector suite with the traceability register's family dispositions; and the re-encoding of every committed example against the frozen core only. The family dispositions carry the review's explicit classes: loops at/over the trip ceiling **PASS** (X7, X51) with nesting **NOT APPLICABLE** (retired at v0.3.0-draft.22); calls **NOT APPLICABLE** (M1 fixes a call construct's bytes; extension work by §1.3's register); collisions **PASS** in-core (X45) with the F6 header-equal/payload-different comparison **DEFERRED to Step 5** (F24's deferral stands); unresolved statuses, encoding, budget boundaries (including the F27 fixture), conservation, and the per-class traces all **PASS**.
+
+The revised milestone table (superseding the v0.1.1 statuses, which the original text and the v0.1.1 note retain):
+
+| QnIR repair step | Reassessed status |
+|---|---|
+| Step 1 — Minimal core | Retain pass (unchanged; promotion conditions unchanged) |
+| Step 2 — Operational semantics | **Accepted** — F25 (v0.3.0-draft.19) and F26 (v0.3.0-draft.22) closed; transition relation, terminalization, and encodings fully exercised |
+| Step 3 — Work accounting and admission | **Accepted** — the exact surrogate's admission with the committed refusal/exact/slack cells; the conservation identities across the suite; the F27 fixture's containment of an admitted under-reserved execution (`charged ≤ reserved`, no double billing) |
+| Step 4 — Conformance oracle and corpus | **Accepted** — the five §4.5 deliverables discharged by repository bytes (this note); the collision-bucket comparison remains Step 5's |
+| Step 5 — Strengthen commitments | Deferred — the next BOC increment (minimum lineage and identity semantics) |
+| Step 6 — Extensions with evidence | Deferred |
+
+### 2. What the acceptance is, and is not
+
+Acceptance is of the oracle and its corpus: the artifacts exist as repository increments, pass the golden-first differential protocol over the full suite, and carry their declared version bindings and independence evidence. It is **not** promotion. The promotion criterion is unchanged and unmet — Step 5's commitments (full-transition trace roots, collision-safe artifact comparison, normative lineage, versioned verbalizer/extractor identities) do not exist, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The collision bucket's comparison and the call construct are not quietly absorbed: the first remains Step 5's, the second Step 6's.
+
+### 3. Next selection
+
+The review's §5 order stated: "After those obligations are closed, Step 4 can be reassessed for acceptance. Only then should BOC select Step 5, beginning with the minimum lineage and identity semantics needed by the commitment design." The obligations are closed and Step 4 is accepted, so the next BOC increment is Step 5's first specification share — the minimum lineage and identity semantics — declared over the accepted oracle, with no implementation, no vector, and no promotion implied by beginning it.
+
+**Scope boundaries.** No corpus byte, artifact byte, or specification rule changes. `QnIR` is not promoted. Step 5 is not started by this note.
