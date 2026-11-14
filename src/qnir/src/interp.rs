@@ -76,7 +76,7 @@ fn class_of(tag: u64) -> &'static str {
     }
 }
 
-fn outcome_name(tag: u64) -> &'static str {
+pub(crate) fn outcome_name(tag: u64) -> &'static str {
     match tag {
         1 => "SUCCESS",
         2 => "NO_SOLUTION",
@@ -550,6 +550,7 @@ impl<'a> Machine<'a> {
         d: HashMap<Vec<u8>, Vec<u8>>,
         w_budget: u64,
         profile: &'a Profile,
+        b_inject: Option<u64>,
     ) -> Result<Self, String> {
         let blocks = decode_exec_stream(&words_to_bytes(&stream_words))?;
         if blocks.len() as u64 != intent.n_blocks {
@@ -577,7 +578,10 @@ impl<'a> Machine<'a> {
             d,
             w_budget,
             profile,
-            bh: bhat::b_hat(&intent.blocks, profile),
+            // the admission bound: the exact surrogate, or the declared
+            // injected bound of the F27 fixture mode (test-only validator-
+            // defect injection, §4.4) — never a conformance path
+            bh: b_inject.unwrap_or_else(|| bhat::b_hat(&intent.blocks, profile)),
             versions: [
                 intent.sem.clone(),
                 intent.enc.clone(),
@@ -1368,6 +1372,20 @@ pub fn run_vector(
     profile: &Profile,
     dep_values: &[(Vec<u8>, Vec<u8>)],
 ) -> Result<RunOutcome, String> {
+    run_vector_with(envelope, w_budget, None, profile, dep_values)
+}
+
+/// The one run entry point; `b_inject` is the F27 fixture mode's declared
+/// injected admission bound (a test-only validator-defect injection, §4.4 —
+/// never a conformance path): `Some(b)` overrides the validator's computed
+/// exact surrogate with the under-computed bound `b`.
+pub fn run_vector_with(
+    envelope: &[u8],
+    w_budget: u64,
+    b_inject: Option<u64>,
+    profile: &Profile,
+    dep_values: &[(Vec<u8>, Vec<u8>)],
+) -> Result<RunOutcome, String> {
     let intent = decode_envelope(envelope)?;
     let stream_words = envelope_stream_words(envelope)?;
     // P12 (expansion increment 2): the declared dependency table — the
@@ -1381,8 +1399,80 @@ pub fn run_vector(
         d,
         w_budget,
         profile,
+        b_inject,
     )?;
     machine.run()
+}
+
+/// The F27 fixture run's summary: the semantic content both artifacts
+/// check against the Fixture Register's declared expectation and render
+/// identically in their fixture blocks.
+pub(crate) struct FixtureRun {
+    pub(crate) outcome: u64,
+    pub(crate) n_records: usize,
+    pub(crate) last_pc: (u64, u64),
+    pub(crate) last_step: u64,
+    pub(crate) charged: u64,
+    pub(crate) reserved: u64,
+    pub(crate) refunded: u64,
+    /// The receipt itemization's (birth, type tag) pairs, in itemization order.
+    pub(crate) item: Vec<(u64, u64)>,
+    pub(crate) selected_nil: bool,
+}
+
+/// Runs one fixture execution (the F27 fault-injection mode) and summarizes
+/// its semantic content; the declared expectation's checks and the
+/// rendering live in the fixture suite.
+pub fn run_fixture(
+    envelope: &[u8],
+    w_budget: u64,
+    b_injected: Option<u64>,
+    profile: &Profile,
+) -> Result<FixtureRun, String> {
+    let out = run_vector_with(envelope, w_budget, b_injected, profile, &[])?;
+    let decoded = cbor::decode(&out.receipt).map_err(|e| e.0)?;
+    let mut item = Vec::new();
+    let mut selected_nil = false;
+    if let Cbor::Map(entries) = decoded {
+        for (k, v) in entries {
+            match k {
+                Cbor::UInt(2) => {
+                    if let Cbor::Array(items) = v {
+                        for it in items {
+                            if let Cbor::Array(fields) = it {
+                                let birth = match &fields[0] {
+                                    Cbor::UInt(n) => *n,
+                                    _ => return Err("receipt item birth".to_string()),
+                                };
+                                let ttype = match &fields[4] {
+                                    Cbor::UInt(n) => *n,
+                                    _ => return Err("receipt item type".to_string()),
+                                };
+                                item.push((birth, ttype));
+                            }
+                        }
+                    }
+                }
+                Cbor::UInt(3) => selected_nil = matches!(v, Cbor::Null),
+                _ => {}
+            }
+        }
+    }
+    let (last_pc, last_step) = match out.records.last() {
+        Some(r) => (r.pc, r.step),
+        None => return Err("a run has at least one record".to_string()),
+    };
+    Ok(FixtureRun {
+        outcome: out.outcome,
+        n_records: out.records.len(),
+        last_pc,
+        last_step,
+        charged: out.acc.charged,
+        reserved: out.acc.reserved,
+        refunded: out.acc.refunded,
+        item,
+        selected_nil,
+    })
 }
 
 // =========================================================== expected blocks

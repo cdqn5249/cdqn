@@ -38,7 +38,7 @@ use crate::cbor::Cbor;
 use std::fs;
 use value::{enc_value, Value};
 
-pub(crate) use interp::suite_x_exec;
+pub(crate) use interp::{outcome_name, suite_x_exec};
 
 // ------------------------------------------------------------ text helpers
 
@@ -963,6 +963,366 @@ fn suite_x(md: &str, rep: &mut Report) {
     ));
 }
 
+// ------------------------------------------------------------ fixture mode
+
+/// Digits before a marker ("8 U short", "1 backstop rejection record").
+fn u64_before(s: &str, marker: &str) -> u64 {
+    let left = s.split(marker).next().unwrap();
+    let tok: String = left
+        .chars()
+        .rev()
+        .take_while(|c| c.is_ascii_digit())
+        .collect::<String>()
+        .chars()
+        .rev()
+        .collect();
+    tok.parse().unwrap()
+}
+
+fn take_u64(s: &str) -> (u64, String) {
+    let tok: String = s.chars().take_while(|c| c.is_ascii_digit()).collect();
+    (tok.parse().unwrap(), s[tok.len()..].to_string())
+}
+
+/// Digits after a marker, chained through separators ("36 - 32 = 4").
+fn u64_chain(s: &str, marker: &str, seps: &[&str]) -> Vec<u64> {
+    let mut rest = s
+        .splitn(2, marker)
+        .nth(1)
+        .unwrap_or_else(|| panic!("marker absent: {marker}"))
+        .to_string();
+    let mut out = Vec::new();
+    let (v, r) = take_u64(&rest);
+    out.push(v);
+    rest = r;
+    for sep in seps {
+        rest = rest
+            .splitn(2, sep)
+            .nth(1)
+            .unwrap_or_else(|| panic!("separator absent: {sep}"))
+            .to_string();
+        let (v, r) = take_u64(&rest);
+        out.push(v);
+        rest = r;
+    }
+    out
+}
+
+fn ttype_of_name(name: &str) -> u64 {
+    match name {
+        "STATUS_LOOKUP_MISS" => 1,
+        "STATUS_NEG_EVEN_ROOT" => 2,
+        "EXPRESSION_TOO_COMPLEX" => 3,
+        "STATUS_DOMAIN_ERROR" => 4,
+        _ => panic!("unknown token type name: {name}"),
+    }
+}
+
+/// The F27 fuel-backstop fixture (§4.4's declared fixture semantics,
+/// v0.3.0-draft.23): a test-only validator-defect injection over the corpus's
+/// Fixture Register — never a conformance vector and never counted in the
+/// declared seed. The declared injection overrides the validator's computed
+/// bound with `B_injected` < `B_hat(P_f)`; the fixture's two declared verdict
+/// components (the validator-defect report and the containment verdict) are
+/// checked against the register's declared semantic expectation, and the
+/// fixture block is rendered byte-identically to the second implementation's.
+fn suite_fixture(md: &str, rep: &mut Report) {
+    let vectors = parse_vectors(md, "## Fixture Register");
+    if vectors.len() != 1 || vectors[0].id != "F27" {
+        rep.fail(format!(
+            "fixture register: expected exactly the F27 fixture, found {} section(s)",
+            vectors.len()
+        ));
+        return;
+    }
+    let section = &vectors[0].section;
+    let profile = bhat::golden_profile();
+
+    // declared parameters, the declared exact bound, and the declared
+    // expectation (parsed; the runs below are checked against it)
+    let pl = line_starting(section, "Declared parameters:").unwrap();
+    let w_budget = u64_chain(&pl, "`W_budget` = ", &[])[0];
+    let b_injected = u64_chain(&pl, "`B_injected` = ", &[])[0];
+    let al = line_starting(section, "Admission:").unwrap();
+    let bh_declared = u64_chain(&al, "`B_hat(P_f)` = ", &[])[0];
+    let shortfall_declared = u64_before(&al, " U short");
+    let ctrl = line_starting(section, "- control run").unwrap();
+    let ctrl_tag = u64_chain(&ctrl, "(tag ", &[])[0];
+    let ctrl_conservation = u64_chain(&ctrl, "conservation ", &[" = ", " + ", " + "]);
+    let inj = line_starting(section, "- injected run:").unwrap();
+    let inj_step = u64_chain(&inj, "fires at step ", &[])[0];
+    let inj_pc0 = u64_chain(&inj, "PC (", &[])[0];
+    let inj_pc1 = u64_chain(&inj, ", ", &[])[0];
+    let inj_tag = u64_chain(&inj, "(tag ", &[])[0];
+    let n_completed = u64_before(&inj, " completed transition records");
+    let n_rej = u64_before(&inj, " backstop rejection record");
+    let inj_charged = u64_chain(&inj, "charged ", &[])[0];
+    let inj_reserved = u64_chain(&inj, "reserved ", &[])[0];
+    let inj_refunded = u64_chain(&inj, "refunded ", &[])[0];
+    let inj_conservation = u64_chain(&inj, "conservation ", &[" = ", " + ", " + "]);
+    let rem = u64_chain(&inj, "remaining budget ", &["- ", "= "]);
+    let item_ln = line_starting(section, "- token itemization").unwrap();
+    let n_items = u64_before(&item_ln, " tokens terminalized");
+    let sel_nil_declared = item_ln.contains("selected token nil");
+    let mut expect_items: Vec<(u64, u64)> = Vec::new();
+    let mut cursor = 0usize;
+    while let Some(p) = item_ln[cursor..].find("birth ") {
+        let at = cursor + p + "birth ".len();
+        let (b, r) = take_u64(&item_ln[at..]);
+        let mut r = r.as_str();
+        if let Some(stripped) = r.strip_prefix(" at (") {
+            // the fatal token's rendering carries its stop site
+            let close = stripped.find(')').unwrap();
+            r = &stripped[close + 1..];
+        }
+        let r = r.trim_start_matches(", ");
+        let name: String = r
+            .chars()
+            .take_while(|c| c.is_ascii_uppercase() || *c == '_')
+            .collect();
+        expect_items.push((b, ttype_of_name(&name)));
+        cursor = at;
+    }
+
+    // the committed fixture envelope and the committed source form
+    let f = fences(section);
+    let envf = fence_after(&f, "Intent envelope").expect("fixture envelope fence");
+    let committed = hex_to_bytes(&envf.body);
+    let srcf = fence_after(&f, "source grammar's textual form")
+        .expect("fixture source fence");
+
+    // assembly share: the committed source form re-encodes byte-exactly
+    // (§4.2; the committed assembler mapping, as in suite X)
+    let src = parse_source_program(&srcf.body);
+    let mut stream = Vec::new();
+    for (bid, insns) in src.iter().enumerate() {
+        stream.extend_from_slice(&insn::w(bid as u64));
+        stream.extend_from_slice(&insn::w(0)); // argument signature arity
+        stream.extend_from_slice(&insn::w(insns.len() as u64));
+        for i in insns {
+            stream.extend_from_slice(&enc_insn(i));
+        }
+    }
+    let intent = decode_envelope(&committed).expect("the fixture envelope decodes");
+    let vt = pl.split("`V` = (").nth(1).unwrap();
+    let vend = vt.find(')').unwrap();
+    let mut parts = vt[..vend].split(',');
+    let sem = parts.next().unwrap().trim().to_string();
+    let enc = parts.next().unwrap().trim().to_string();
+    let prof = parts.next().unwrap().trim().to_string();
+    // the fixture program cites no CLOAD address, so the dependency list is
+    // the declared "no entries" table
+    let deps: Vec<Vec<u8>> = Vec::new();
+    let assembled = enc_envelope(
+        &sem,
+        &enc,
+        &prof,
+        &deps,
+        src.len() as u64,
+        &stream,
+        &intent.pool,
+    );
+
+    if assembled != committed {
+        rep.fail(format!(
+            "{}: assembled envelope diverges from the committed bytes (assembled {} B, committed {} B)",
+            vectors[0].id,
+            assembled.len(),
+            committed.len()
+        ));
+    }
+
+    // the exact surrogate: computed, and checked against the declared bound
+    let bh = bhat::b_hat(&intent.blocks, &profile);
+
+    if bh != bh_declared {
+        rep.fail(format!(
+            "computed B_hat(P_f) {} != declared {}",
+            bh, bh_declared
+        ));
+    }
+
+    if b_injected >= bh {
+        rep.fail("the declared injection must be below the exact bound".to_string());
+    }
+
+    if bh - b_injected != shortfall_declared {
+        rep.fail(format!(
+            "the injected bound's shortfall {} != declared {}",
+            bh - b_injected,
+            shortfall_declared
+        ));
+    }
+
+    // the control run: the exact bound refuses (the committed zero-posting
+    // shape), the escrow never opens
+    let control = interp::run_fixture(&committed, w_budget, None, &profile)
+        .expect("the control run executes");
+
+    if control.outcome != ctrl_tag {
+        rep.fail(format!(
+            "control run outcome {} != declared tag {}",
+            control.outcome, ctrl_tag
+        ));
+    }
+
+    if control.n_records != 1 || control.reserved != 0 {
+        rep.fail(format!(
+            "control run is not the single zero-posting refusal (records {}, reserved {})",
+            control.n_records, control.reserved
+        ));
+    }
+
+    if control.reserved != ctrl_conservation[0]
+        || control.charged != ctrl_conservation[1]
+        || control.refunded != ctrl_conservation[2]
+        || ctrl_conservation[3] != 0
+    {
+        rep.fail("control run conservation differs from the declared triple".to_string());
+    }
+
+    // the injected run: admitted under the defective bound; the backstop
+    // fires and the containment verdict is checked
+    let injected = interp::run_fixture(&committed, w_budget, Some(b_injected), &profile)
+        .expect("the injected run executes");
+
+    if injected.outcome != inj_tag {
+        rep.fail(format!(
+            "injected run outcome {} != declared tag {}",
+            injected.outcome, inj_tag
+        ));
+    }
+
+    if injected.last_step != inj_step || injected.last_pc != (inj_pc0, inj_pc1) {
+        rep.fail(format!(
+            "the backstop stop site differs from the declared site (step {} at PC ({}, {}))",
+            injected.last_step, injected.last_pc.0, injected.last_pc.1
+        ));
+    }
+
+    if injected.n_records != (n_completed + n_rej) as usize {
+        rep.fail(format!(
+            "record count {} != declared {} completed + {} rejection",
+            injected.n_records, n_completed, n_rej
+        ));
+    }
+
+    if injected.reserved != inj_reserved
+        || injected.charged != inj_charged
+        || injected.refunded != inj_refunded
+    {
+        rep.fail("injected run ledger differs from the declared accumulators".to_string());
+    }
+
+    if injected.reserved != inj_conservation[0]
+        || injected.charged != inj_conservation[1]
+        || injected.refunded != inj_conservation[2]
+        || injected.reserved - injected.charged - injected.refunded != inj_conservation[3]
+    {
+        rep.fail("injected run ledger differs from the declared conservation".to_string());
+    }
+
+    if rem[0] != w_budget
+        || rem[1] != injected.charged
+        || rem[2] != w_budget - injected.charged
+    {
+        rep.fail("the remaining budget differs from the declared identity".to_string());
+    }
+
+    if injected.charged > injected.reserved {
+        rep.fail("overbilling: charged exceeds the reserve".to_string());
+    }
+
+    if injected.item.len() != n_items as usize {
+        rep.fail(format!(
+            "itemization count {} != declared {}",
+            injected.item.len(),
+            n_items
+        ));
+    }
+
+    if injected.selected_nil != sel_nil_declared {
+        rep.fail("the receipt's selected token differs from the declared nil".to_string());
+    }
+
+    if injected.item != expect_items {
+        rep.fail("the itemization's (birth, type) pairs differ from the declared pairs".to_string());
+    }
+
+    // the fixture block (byte-identical to the second implementation's)
+    let items: Vec<String> = injected
+        .item
+        .iter()
+        .map(|&(b, t)| {
+            format!(
+                "birth {} {}",
+                b,
+                token_type_name(t).expect("a closed-vocabulary token type")
+            )
+        })
+        .collect();
+    let equality_note = if injected.charged == injected.reserved {
+        "equality — no overbilling"
+    } else {
+        "no overbilling"
+    };
+    let ctrl_cons = format!(
+        "{} = {} + {} + {}",
+        control.reserved, control.charged, control.refunded,
+        control.reserved - control.charged - control.refunded
+    );
+    let insns_n: usize = intent.blocks.iter().map(|b| b.insns.len()).sum();
+    let pool_txt: Vec<String> = intent.pool.iter().map(|p| p.to_string()).collect();
+    rep.say(
+        "fixture F27 fuel-backstop-on-validator-defect (test-only fault injection, §4.4):"
+            .to_string(),
+    );
+    rep.say(format!(
+        "  declared program P_f: {} block, {} instructions; declared pool [{}]; envelope {} bytes",
+        intent.blocks.len(), insns_n, pool_txt.join(", "), committed.len()
+    ));
+    rep.say(format!(
+        "  declared injection: B_injected = {} U; W_budget = {} U; exact surrogate B_hat(P_f) = {} U (the injected bound is {} U short)",
+        b_injected, w_budget, bh, bh - b_injected
+    ));
+    rep.say(format!(
+        "  control run (exact bound): REFUSED at admission — {} (tag {}); zero postings; the escrow never opened ({})",
+        outcome_name(control.outcome), control.outcome, ctrl_cons
+    ));
+    rep.say(
+        "  injected run: ADMITTED — the false admission the fixture evidences".to_string(),
+    );
+    rep.say(format!(
+        "    backstop fired at step {}, PC ({}, {}): {} (tag {}); {} completed + {} backstop rejection records",
+        injected.last_step, injected.last_pc.0, injected.last_pc.1,
+        outcome_name(injected.outcome), injected.outcome, n_completed, n_rej
+    ));
+    rep.say(format!(
+        "    token itemization: {} tokens terminalized ({}); selected nil",
+        injected.item.len(), items.join("; ")
+    ));
+    rep.say(format!(
+        "    ledger: reserved {} = charged {} + refunded {} + outstanding {}; remaining budget {} - {} = {}; charged <= reserved ({})",
+        injected.reserved, injected.charged, injected.refunded,
+        injected.reserved - injected.charged - injected.refunded,
+        w_budget, injected.charged, w_budget - injected.charged, equality_note
+    ));
+    rep.say(
+        "  verdict: validator defect evidenced (false admission under the injected bound); containment held (§3.4 defense in depth) — the fixture normalizes no defective execution".to_string(),
+    );
+    if rep.failures == 0 {
+        rep.say(
+            "fixture F27: PASS — the declared expectation reproduces under the committed rules"
+                .to_string(),
+        );
+    } else {
+        rep.say(format!(
+            "fixture F27: FAIL — {} failing check(s)",
+            rep.failures
+        ));
+    }
+}
+
 fn validate_x(
     id: &str,
     name: &str,
@@ -1344,8 +1704,9 @@ fn parse_src_insn(body: &str) -> SrcInsn {
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    if args.len() != 2 {
-        eprintln!("usage: qnir <path to docs/qnir_goldens.md>");
+    let fixture_mode = args.len() == 4 && args[2] == "--fixture" && args[3] == "F27";
+    if args.len() != 2 && !fixture_mode {
+        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27]");
         std::process::exit(2);
     }
     let path = &args[1];
@@ -1379,6 +1740,9 @@ fn main() {
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
     suite_x_exec(&md, &mut rep);
+    if fixture_mode {
+        suite_fixture(&md, &mut rep);
+    }
 
     println!();
     for l in &rep.lines {

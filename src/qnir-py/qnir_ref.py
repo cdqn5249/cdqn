@@ -765,7 +765,7 @@ def cmp_under_n(a, b):
 
 
 class Machine:
-    def __init__(self, envelope_bytes, D, w_budget, profile):
+    def __init__(self, envelope_bytes, D, w_budget, profile, b_inject=None):
         env = decode_envelope(envelope_bytes)
         self.blocks = env["blocks"]
         self.deps = env["deps"]
@@ -774,9 +774,13 @@ class Machine:
         self.D = D
         self.W = w_budget
         self.profile = profile
-        self.BH = b_hat(self.blocks, profile["gateway"],
-                        lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
-                        profile["trip_ceiling"])
+        # The admission bound: the exact surrogate, or the declared injected
+        # bound of the F27 fixture mode (test-only validator-defect
+        # injection, §4.4) — never a conformance path.
+        self.BH = (b_inject if b_inject is not None
+                   else b_hat(self.blocks, profile["gateway"],
+                              lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
+                              profile["trip_ceiling"]))
         self.prog_root = hashlib.sha256(envelope_bytes).digest()
         self.pool = [{"birth": 0, "block": 0, "index": 0, "serial": k,
                       "type": t, "tier": TIER_S, "state": ST_OUT}
@@ -1660,9 +1664,189 @@ def run_x_family(corpus, profile):
     return len(order), n_env, n_listings, n_pass, x_lines, fails
 
 
+def run_fixture(corpus, profile, fid="F27"):
+    """The F27 fuel-backstop fixture (§4.4's declared fixture semantics,
+    v0.3.0-draft.23): a test-only validator-defect injection over the
+    corpus's Fixture Register — never a conformance vector and never counted
+    in the declared seed. The declared injection overrides the validator's
+    computed bound with `B_injected` < `B_hat(P_f)`; the fixture's two
+    declared verdict components (the validator-defect report and the
+    containment verdict) are checked against the register's declared
+    semantic expectation, and the fixture block is rendered
+    byte-identically to the reference artifact's."""
+    fails = []
+    fixture_lines = corpus.between("## Fixture Register",
+                                   "## License and Invariant Lineage")
+    vecs = corpus.vectors(fixture_lines, r"F\d+")
+    if len(vecs) != 1 or vecs[0][0].split()[0] != fid:
+        return [f"fixture register: expected exactly the {fid} fixture, "
+                f"found {len(vecs)} section(s)"]
+    vid, body = vecs[0]
+    params = next(ln for ln in body if ln.startswith("Declared parameters:"))
+    wb = int(re.search(r"`W_budget` = (\d+) U", params).group(1))
+    b_inj = int(re.search(r"`B_injected` = (\d+) U", params).group(1))
+    adm = next(ln for ln in body if ln.startswith("Admission:"))
+    bh_decl = int(re.search(r"`B_hat\(P_f\)` = (\d+) U", adm).group(1))
+    shortfall = int(re.search(r"(\d+) U short", adm).group(1))
+    ctrl = next(ln for ln in body if ln.startswith("- control run"))
+    ctrl_tag = int(re.search(r"\(tag (\d+)\)", ctrl).group(1))
+    ctrl_cons = [int(x) for x in re.search(
+        r"conservation (\d+) = (\d+) \+ (\d+) \+ (\d+)", ctrl).groups()]
+    inj = next(ln for ln in body if ln.startswith("- injected run:"))
+    inj_step = int(re.search(r"fires at step (\d+)", inj).group(1))
+    inj_pc0, inj_pc1 = map(int, re.search(r"PC \((\d+), (\d+)\)", inj).groups())
+    inj_tag = int(re.search(r"\(tag (\d+)\)", inj).group(1))
+    n_completed = int(re.search(r"(\d+) completed transition records",
+                                inj).group(1))
+    n_rej = int(re.search(r"(\d+) backstop rejection record", inj).group(1))
+    inj_charged = int(re.search(r"charged (\d+) U", inj).group(1))
+    inj_reserved = int(re.search(r"reserved (\d+) U", inj).group(1))
+    inj_refunded = int(re.search(r"refunded (\d+) U", inj).group(1))
+    inj_cons = [int(x) for x in re.search(
+        r"conservation (\d+) = (\d+) \+ (\d+) \+ (\d+)", inj).groups()]
+    rem_w, rem_c, rem_r = map(int, re.search(
+        r"remaining budget (\d+) - (\d+) = (\d+)", inj).groups())
+    item_ln = next(ln for ln in body if ln.startswith("- token itemization"))
+    n_items = int(re.search(r"(\d+) tokens terminalized", item_ln).group(1))
+    sel_nil = "selected token nil" in item_ln
+    expect_items = [(int(b), TOKEN_TYPES_REV[name]) for b, name in
+                    re.findall(r"birth (\d+)(?: at \(\d+, \d+\))?, ([A-Z_]+)",
+                               item_ln)]
+    _, ls = fence_after(body, "Intent envelope")
+    committed = groups_to_bytes(ls)
+    env = decode_envelope(committed)
+    bh = b_hat(env["blocks"], profile["gateway"],
+               lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
+               profile["trip_ceiling"])
+    # the assembly share: the source listing regenerates from the committed
+    # envelope (the reference artifact's share re-encodes the bytes, §4.2)
+    _, src_ls = fence_after(body, "source grammar's textual form")
+    if listing_of(env["blocks"]) != src_ls:
+        fails.append(f"{vid}: source listing does not regenerate from the "
+                     "committed envelope (agreement point 1)")
+    if bh != bh_decl:
+        fails.append(f"{vid}: computed B_hat(P_f) {bh} != declared {bh_decl}")
+    if not b_inj < bh:
+        fails.append(f"{vid}: the declared injection must be below the exact "
+                     "bound")
+    if bh - b_inj != shortfall:
+        fails.append(f"{vid}: the injected bound's shortfall {bh - b_inj} "
+                     f"!= declared {shortfall}")
+    # the control run: the exact bound refuses; the escrow never opens
+    control = Machine(committed, {}, wb, profile).run()
+    if control["outcome"] != ctrl_tag:
+        fails.append(f"{vid}: control run outcome {control['outcome']} != "
+                     f"declared tag {ctrl_tag}")
+    if len(control["records"]) != 1 or control["acc"]["reserved"] != 0:
+        fails.append(f"{vid}: control run is not the single zero-posting "
+                     f"refusal (records {len(control['records'])}, reserved "
+                     f"{control['acc']['reserved']})")
+    ca = control["acc"]
+    if [ca["reserved"], ca["charged"], ca["refunded"]] != ctrl_cons[:3] \
+            or ctrl_cons[3] != 0:
+        fails.append(f"{vid}: control run conservation differs from the "
+                     "declared triple")
+    # the injected run: admitted under the defective bound; the backstop
+    # fires and the containment verdict is checked
+    injected = Machine(committed, {}, wb, profile, b_inj).run()
+    rec_fields = dict(cbor_decode(injected["records"][-1]))
+    last_pc = tuple(rec_fields[4])
+    last_step = rec_fields[3]
+    rcpt = cbor_decode(injected["receipt"])
+    item = [(e[0], e[4]) for e in rcpt[2]]
+    selected_nil = rcpt[3] is None
+    b = injected["acc"]
+    if injected["outcome"] != inj_tag:
+        fails.append(f"{vid}: injected run outcome {injected['outcome']} != "
+                     f"declared tag {inj_tag}")
+    if last_step != inj_step or last_pc != (inj_pc0, inj_pc1):
+        fails.append(f"{vid}: the backstop stop site differs from the "
+                     f"declared site (step {last_step} at PC {last_pc})")
+    if len(injected["records"]) != n_completed + n_rej:
+        fails.append(f"{vid}: record count {len(injected['records'])} != "
+                     f"declared {n_completed} completed + {n_rej} rejection")
+    if [b["reserved"], b["charged"], b["refunded"]] != \
+            [inj_reserved, inj_charged, inj_refunded]:
+        fails.append(f"{vid}: injected run ledger differs from the declared "
+                     "accumulators")
+    if [b["reserved"], b["charged"], b["refunded"]] != inj_cons[:3] \
+            or b["reserved"] - b["charged"] - b["refunded"] != inj_cons[3]:
+        fails.append(f"{vid}: injected run ledger differs from the declared "
+                     "conservation")
+    if (rem_w, rem_c, rem_r) != (wb, b["charged"], wb - b["charged"]):
+        fails.append(f"{vid}: the remaining budget differs from the declared "
+                     "identity")
+    if b["charged"] > b["reserved"]:
+        fails.append(f"{vid}: overbilling: charged exceeds the reserve")
+    if len(item) != n_items:
+        fails.append(f"{vid}: itemization count {len(item)} != declared "
+                     f"{n_items}")
+    if selected_nil != sel_nil:
+        fails.append(f"{vid}: the receipt's selected token differs from the "
+                     "declared nil")
+    if item != expect_items:
+        fails.append(f"{vid}: the itemization's (birth, type) pairs differ "
+                     "from the declared pairs")
+    # the fixture block (byte-identical to the reference artifact's)
+    lines = []
+    lines.append("fixture F27 fuel-backstop-on-validator-defect "
+                 "(test-only fault injection, §4.4):")
+    nb = len(env["blocks"])
+    ni = sum(len(bb["instrs"]) for bb in env["blocks"])
+    lines.append(f"  declared program P_f: {nb} block, {ni} instructions; "
+                 f"declared pool [{', '.join(str(p) for p in env['pool'])}]; "
+                 f"envelope {len(committed)} bytes")
+    lines.append(f"  declared injection: B_injected = {b_inj} U; "
+                 f"W_budget = {wb} U; exact surrogate B_hat(P_f) = {bh} U "
+                 f"(the injected bound is {bh - b_inj} U short)")
+    lines.append(f"  control run (exact bound): REFUSED at admission — "
+                 f"{OUTCOME_NAME[control['outcome']]} "
+                 f"(tag {control['outcome']}); zero postings; the escrow "
+                 f"never opened ({ca['reserved']} = {ca['charged']} + "
+                 f"{ca['refunded']} + "
+                 f"{ca['reserved'] - ca['charged'] - ca['refunded']})")
+    lines.append("  injected run: ADMITTED — the false admission the fixture "
+                 "evidences")
+    out = injected["outcome"]
+    lines.append(f"    backstop fired at step {last_step}, PC ({last_pc[0]}, "
+                 f"{last_pc[1]}): {OUTCOME_NAME[out]} (tag {out}); "
+                 f"{n_completed} completed + {n_rej} backstop rejection "
+                 "records")
+    items_txt = "; ".join(f"birth {bi} {TOKEN_TYPES[t]}" for bi, t in item)
+    lines.append(f"    token itemization: {len(item)} tokens terminalized "
+                 f"({items_txt}); selected nil")
+    eq_note = ("equality — no overbilling"
+               if b["charged"] == b["reserved"] else "no overbilling")
+    lines.append(f"    ledger: reserved {b['reserved']} = "
+                 f"charged {b['charged']} + refunded {b['refunded']} + "
+                 f"outstanding {b['reserved'] - b['charged'] - b['refunded']}; "
+                 f"remaining budget {wb} - {b['charged']} = "
+                 f"{wb - b['charged']}; charged <= reserved ({eq_note})")
+    lines.append("  verdict: validator defect evidenced (false admission "
+                 "under the injected bound); containment held (§3.4 defense "
+                 "in depth) — the fixture normalizes no defective execution")
+    if not fails:
+        lines.append("fixture F27: PASS — the declared expectation "
+                     "reproduces under the committed rules")
+    else:
+        lines.append(f"fixture F27: FAIL — {len(fails)} failing check(s)")
+        for x in fails:
+            lines.append(f"  FAIL — {x}")
+    return lines
+
+
 def main():
-    if len(sys.argv) != 2:
-        print("usage: qnir_ref.py <path to docs/qnir_goldens.md>", file=sys.stderr)
+    # The transcript bytes are compared byte-for-byte against the reference
+    # artifact's (§4.4's fixture block agreement): pin the redirected
+    # stdout's line endings to LF (Windows text mode otherwise translates).
+    if not sys.stdout.isatty():
+        sys.stdout.reconfigure(newline="\n")
+    fixture_id = None
+    if len(sys.argv) == 4 and sys.argv[2] == "--fixture":
+        fixture_id = sys.argv[3]
+    elif len(sys.argv) != 2:
+        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27]",
+              file=sys.stderr)
         return 2
     corpus = Corpus(sys.argv[1])
     profile = parse_profile(corpus)
@@ -1709,6 +1893,8 @@ def main():
                f"{'PASS' if not fails_x else 'FAIL'} — "
                f"{n_pass}/{n_x} committed expected outcomes reproduced at the "
                f"five agreement points of §4.1")
+    if fixture_id:
+        out.extend(run_fixture(corpus, profile, fixture_id))
     fails = fails + fails_i + fails_r + fails_m + fails_x
     for f in fails:
         out.append(f"  FAIL — {f}")

@@ -474,3 +474,25 @@ The v0.1.2 note's "Other re-checks" row recorded that a blank line before `BOC-4
 So two BOC increments remain before Step-4 can be reassessed: the F27 fixture wave (declared test-only fault-injection semantics, the expected validator-defect verdict, and the containment-and-ledger-closure check — a test-harness obligation, not a conforming golden) and the acceptance reassessment itself. The next review qualifies only after Step-4 acceptance; the Adversarial Review Program's Steps 1–3 minimum has been met since v0.3.0-draft.3, but whether and when a review opens is the program's own act, and Steps 5 and 6 remain deferred.
 
 **Scope boundaries.** No vector, specification, or implementation is changed. `QnIR` is not promoted. Step 5 is not started.
+
+## Correction Note - v0.1.7
+
+This note records the discharge of step 4 of the v0.1.6 table — the F27 fuel-backstop-on-validator-defect fixture — and the wave's evidence. It follows the append-only discipline: the original review and the v0.1.1–v0.1.6 notes above are unchanged. `QnIR` is not promoted; Step 5 is not started.
+
+### 1. F27 — DISCHARGED (v0.3.0-draft.23)
+
+The required deliverables of the F27 analysis are met. **Reproducible test evidence:** both artifacts gained a declared `--fixture F27` mode that mechanically checks the fixture's declared expectation and both report `fixture F27: PASS`, with the 10 rendered fixture lines byte-identical across the artifacts (fixture-block digest `ed67e6cbd242c69c`); the 84 committed vectors are byte-unchanged (normal mode 84/84 both artifacts after the wave). **An independently derived expected result:** the fixture's exact admission bound is hand-derived (`B_hat(P_f)` = 40 U = gateway 20 U + five 4 U transitions, exact since the F26 corollary) and the declared expectation — the control run's zero-posting refusal, the injected run's backstop stop at step 4 at PC (0, 3), the accumulators (charged 32 / reserved 32 / refunded 0, conservation 32 = 32 + 0 + 0, remaining 4 U, `charged` ≤ `reserved`), the two-token itemization, and the nil selection — was fixed from the committed rules of §2.5, §3.3, and §3.4 before any fixture run, and every number is asserted, never generated. **An updated finding disposition:** F27 is closed at v0.3.0-draft.23; the fixture is a test-only validator-defect injection committed as the corpus's Fixture Register — not a conforming golden, not counted in the declared seed, and committing no record or receipt bytes (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16 — so committing the defective execution's bytes would normalize it). The declared fixture semantics live in §4.4 of the conformance companion; the record of wave is `docs/logs/qnir/f27-fuel-backstop-fixture.md`.
+
+### 2. Steps to Step-4 completion (updated)
+
+| Order | Step | Status |
+|---|---|---|
+| 1 | F20 traceability register | discharged at v0.3.0-draft.21 |
+| 2 | F26 depth-ceiling adjudication | discharged at v0.3.0-draft.22 (option B: the depth ceiling retired; `B_hat(P) = B(P)` exactly) |
+| 3 | `boc.md` §12 table split | discharged — verified in the committed v0.4.1 bytes (v0.1.6) |
+| 4 | F27 fuel-backstop-on-validator-defect fixture | discharged at v0.3.0-draft.23 — this note |
+| 5 | Step-4 acceptance reassessment | the sole remaining item |
+
+The one remaining increment before Step-4 can be reassessed is the **acceptance reassessment itself**: the Step-4 row's status is to be re-assessed against the now-complete registered suite — 84 committed vectors plus the discharged fixture — under the review's own milestone framing (Step 4: "Build a conformance oracle — assembler, validator, interpreter, and independent second implementation. Re-encode all examples and add adversarial tests for loops, calls, collisions, unresolved statuses, and budget boundaries."). The next review qualifies only after Step-4 acceptance; the Adversarial Review Program's Steps 1–3 minimum has been met since v0.3.0-draft.3, but whether and when a review opens is the program's own act, and Steps 5 and 6 remain deferred.
+
+**Scope boundaries.** The fixture is not a golden vector and the 84 committed vectors are byte-unchanged. `QnIR` is not promoted. Step 5 is not started.

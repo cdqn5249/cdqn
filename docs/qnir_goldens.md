@@ -2,7 +2,7 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.22
+version: 0.3.0-draft.23
 updated: 2026-11-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
@@ -21858,7 +21858,7 @@ committed before the artifacts that need them:
 - `CLOAD` hit vectors (D entries present, bound value checked against its declared bound), and a multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block — **discharged at v0.3.0-draft.15 as expansion increment 2 (X39–X42)**: the hit path within the bound, the bound check's strict boundary, the bound check's typed rejection before dispatch, and the multi-block completion fixing the consumption site at the fallback block's own completion under the declared reading DR3, over the declared dependency-table rendering P12;
 - `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload) — **discharged at v0.3.0-draft.16 as expansion increment 3 (X43–X49)**: the flat and nested tuple constructions with their field extractions, the component-bound typed rejection before dispatch, the zoom boundary comparison under N in both branches (equal; ordered with the exact shift), the `CMP` declared-range rejection, and two witness records with their ordinals and payload, over the declared parameter P13;
 - depth-ceiling vectors — **discharged by retirement at v0.3.0-draft.22 (F26)**: the depth ceiling is withdrawn as redundant (the trip ceilings alone certify finiteness, and no complete operational measure of nesting depth exists for arbitrary block graphs — the adjudication record is [`docs/logs/qnir/f26-depth-ceiling-retirement.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/f26-depth-ceiling-retirement.md)), so no vector has a depth-ceiling target to fix;
-- the fuel-backstop-on-validator-defect vector (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16);
+- the fuel-backstop-on-validator-defect fixture (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16) — **discharged at v0.3.0-draft.23 as the Fixture Register below**: the declared test-only fault injection (`B_injected` = 32 U against the exact `B_hat(P_f)` = 40 U, at `W_budget` = 36 U the exact surrogate refuses), the false admission the injected run's backstop stop evidences, and the containment verdict checked against the declared semantic expectation — a fixture, not a conforming golden, not counted in the declared seed;
 - `CLOAD` fallback trip-ceiling regression vector (Finding F25: self-looping fallback edge under trip ceiling 1, resolving Reading R1) — **discharged at v0.3.0-draft.20 as expansion increment 6 (X51)**: the minimal self-looping-fallback program under the declared trip ceiling 1, with the first miss completing (one Tier O `STATUS_LOOKUP_MISS` born, site count 0 → 1, 24 U charged), the second traversal rejected under §2.3 before the second token is born (`EXPRESSION_TOO_COMPLEX`, nil selected, the open escrow's residue of 8 U refunded at the rejection record), the outstanding miss token terminalized at that record, and `B_hat(P) = 32` counting the fallback back-edge exactly once — under the declared reading DR4 (the rejected transition's field 6 is `[]`, the X41 precedent, correcting the F25 adjudication record's DR-a parenthetical);
 - per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family — **discharged at v0.3.0-draft.17 as expansion increment 4 (X50 and the Per-Class Ledger Trace Register)**: the escrow-never-opened settlement shape (the typed rejection at the execution's first attempted transition — the family's last reachable settlement cell, over the declared rendering P12) with the remaining cells fixed by declaration (the open-escrow terminal settlements and rejection-record refunds are the committed X1/X3/X5/X10/X41/X44/X48 precedents, the admission refusal's zero-posting ledger is X2's, and the never-opened terminal settlement is unreachable — a terminal settlement requires a completed transition, which opens the escrow), and one ledger-trace publication per declared rule class (the Per-Class Ledger Trace Register — the gateway and `q_const`, `q_add`, `q_cmp`, `q_br`, `q_jmp`, `q_halt`, `q_load`, `q_tuple`, `q_field`, `q_emit`), each mechanically checkable against the equation of §3.1 through the protocol of §4.1;
 - encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version — **discharged at v0.3.0-draft.18 as expansion increment 5 (R1–R4, M13–M15)**: the declared payload reading P14 (the closed two-type set — the empty payload and the exactly-one-§2.6-value payload — total over the payload bytes, no per-record type tag existing or needed), the canonical record encodings over both reading types (R1–R3, the new Family R), the populated-table envelope resolving M9's dangling reference (R4 — the committed M9 program, the declared-difference precedent), and the malformed counterparts at the payload extent and the record structure (M13 — trailing bytes after the complete value; M14 — the non-canonical value, M3's rule at the payload extent; M15 — the duplicate record index, the committed duplicate-key rule's case).
@@ -21866,6 +21866,87 @@ committed before the artifacts that need them:
 The independently reviewed goldens of this increment are retained unchanged
 by every later expansion (§4.5); the assembler and validator are implemented
 only after this corpus, are checked against it, and never generate it.
+
+## Fixture Register — the F27 Fuel-Backstop Fixture (v0.3.0-draft.23)
+
+This register discharges the Suite Register's last outstanding bullet — the
+fuel-backstop-on-validator-defect fixture (F27) — under the fixture semantics
+declared at v0.3.0-draft.23 in [`docs/qnir_conformance.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir_conformance.md) §4.4. A backstop
+stop on an admitted Intent evidences a validator defect, never a satisfied
+admission rule (F16, §3.4), so the fixture is **not a conforming golden**: it
+is a test-only validator-defect injection, its id is outside the X family, it
+is not counted in the declared seed (84 vectors), and no execution rule, no
+vector, and no committed expected byte of the corpus changes by it. The
+declared injection overrides the validator's computed admission bound with
+the declared `B_injected` — an under-computed surrogate, the defect class a
+false admission arises from — while the declared expectation below is fixed
+by hand from the committed rules of §2.5, §3.3, and §3.4 before any fixture
+run. The fixture commits no record or receipt bytes (a fixture that
+committed the defective execution's bytes would normalize it); its declared
+expectation is the semantic content of its fixture section, checked
+mechanically by both artifacts in their declared fixture mode
+(`--fixture F27`), whose fixture blocks must agree byte-for-byte. The
+fixture envelope's canonical bytes are input data produced through the
+committed normative assembler's one-to-one mapping (§4.2) and are verified
+by the same committed assembly and listing-regeneration checks the X
+vectors carry.
+
+### F27 — `fixture-fuel-backstop-validator-defect`
+
+Cites: §3.4 (the fuel backstop — defense in depth after admission; a false admission is a validator defect); §3.3 (the escrow settlement identities and the rejection-record settlement); §2.5 (the terminalization function — itemization at every exit); F16; F27; the F26 corollary (the surrogate is exact — `B_hat(P) = B(P)` for every well-formed Intent).
+
+Declared parameters: `W_budget` = 36 U; `B_injected` = 32 U; `D` = no entries; `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1); declared initial status pool [2] (one STATUS_NEG_EVEN_ROOT — the conformance birth path, X3's precedent).
+
+Admission: the exact bound `B_hat(P_f)` = 40 U — the gateway 20 U plus five 4 U transitions on the program's single bounded path (four `CONST`, then `HALT`); the surrogate is exact since F26, so `B(P_f)` = 40 U. The exact surrogate therefore refuses this Intent at `W_budget` = 36 U (40 > 36). The declared injection sets the validator's computed bound to `B_injected` = 32 U — 8 U short — so the same Intent is admitted (32 ≤ 36): the false admission the fixture evidences. Under the injected bound the escrow opens at 32 U, the gateway (20 U) and the first three transitions' charges (12 U) bring the charged total to exactly 32 U, and the fourth transition's declared charge (4 U) exceeds the outstanding escrow (0 U): the fuel backstop fires at the first transition the under-reserve cannot cover, exactly as §3.4 declares containment.
+
+Fixture program — the source grammar's textual form:
+
+```text
+block 0 (arity 0):
+  0: CONST imm=0 bnd=(int, <=0)
+  1: CONST imm=1 bnd=(int, <=1)
+  2: CONST imm=2 bnd=(int, <=2)
+  3: CONST imm=3 bnd=(int, <=3)
+  4: HALT
+```
+
+Intent envelope (canonical CBOR, 385 bytes; instruction stream entry a byte string of 39 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04800501
+06590138 00000000 00000000 00000000
+00000000 00000000 00000005 00000000
+00000001 00000000 00000001 00000000
+00000000 00000000 00000001 00000000
+00000001 00000000 00000000 00000000
+00000000 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000000 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000002 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000002 00000000
+00000000 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000003 00000000 00000001 00000000
+00000001 00000000 00000001 00000000
+00000003 00000000 00000000 00000000
+00000010 00000000 00000000 07800881
+02
+```
+
+Declared expectation (semantic content only — the fixture commits no record or receipt bytes):
+
+- control run (the exact bound, no injection): **REFUSED** at admission — `EXPRESSION_TOO_COMPLEX` (tag 3); the single rejection transition at PC (0, 0); zero postings; the escrow never opened; conservation 0 = 0 + 0 + 0.
+- injected run: **ADMITTED** — the false admission the fixture evidences; the backstop fires at step 4 at PC (0, 3) — `EXPRESSION_TOO_COMPLEX` (tag 3); 3 completed transition records and 1 backstop rejection record; charged 32 U, reserved 32 U, refunded 0 U, conservation 32 = 32 + 0 + 0; remaining budget 36 - 32 = 4 U; charged ≤ reserved with equality — no overbilling.
+- token itemization at the backstop exit: 2 tokens terminalized and itemized — the declared pool token (birth 0, STATUS_NEG_EVEN_ROOT, Tier S) and the fatal token (birth 4 at (0, 3), EXPRESSION_TOO_COMPLEX); the receipt's selected token nil (DR2's fatal selection is the DOMAIN_ERROR exit's).
+
+The fixture verdict separates its two declared components: the **validator-defect report** — the backstop stopped an admitted Intent, evidencing a false admission localized to the injected bound's 8 U shortfall against the exact 40 U — and the **containment verdict** — the declared stop site and step, the outcome tag 3, the itemization, and the closed ledger with charged ≤ reserved (no overbilling: charged never exceeds the under-reserve it opened against, and the defective execution was contained exactly as §3.4 declares).
 
 ## License and Invariant Lineage
 
