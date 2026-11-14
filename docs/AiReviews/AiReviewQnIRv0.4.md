@@ -2,7 +2,7 @@
 layout: default
 title: QnIR v0.3 — Independent Follow-up Review
 description: Independent audit of the v0.3.0-draft.18 specification, corpus, implementations, and artifact lineage
-version: 0.1.5
+version: 0.1.6
 updated: 2026-11-14
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL 1.0)
@@ -452,3 +452,25 @@ This note records Finding F26's closure by the author's A/B adjudication at v0.3
 2. Fix the `boc.md` §12 table split (documentation only).
 
 **Scope boundaries.** No vector is deleted or edited. No execution rule was changed. `QnIR` is not promoted. Step 5 is not started.
+
+## Correction Note - v0.1.6
+
+This note records the disposition of the review's last documentation item — the `boc.md` §12 conformance-table split — and the current count of steps to Step-4 completion. It follows the append-only discipline: the original review and the v0.1.1–v0.1.5 notes above are unchanged. No policy, specification, vector, or implementation changes in this pass.
+
+### 1. `boc.md` §12 — ALREADY DISCHARGED (verified; no edit required)
+
+The v0.1.2 note's "Other re-checks" row recorded that a blank line before `BOC-4-T01` split the §12 conformance table. The committed file already carries the fix: `docs/boc.md` v0.4.1 (commit `1be07f2`, 2026-11-08) removed the gap, and the document's own versioning paragraph records it ("Version 0.4.1 is a documentation-only correction: it removes a blank-line gap that split the §12 conformance table so that the BOC-4 rows rendered outside it, updates the illustrative receipt's specification-version field, and records co-attribution in the metadata. No requirement, result state, metric, receipt field, conformance test, or test outcome changed."). Verification of the committed bytes at this note's version: the §12 region is one contiguous table — the header `| Test | Input condition | Required result |`, its separator, then 58 rows in four contiguous groups (BOC-1: 14, BOC-2: 12, BOC-3: 15, BOC-4: 17), every identifier unique, and no blank or non-table line anywhere inside the table (the only non-table lines in the region are the section heading, the blank line after it, and the blank line before §13). No further edit to `boc.md` is required: the item is discharged by bytes already in the repository, so this note neither re-fixes the table nor bumps the document.
+
+### 2. Steps to Step-4 completion and the next review
+
+| Order | Step | Status |
+|---|---|---|
+| 1 | F20 traceability register | discharged at v0.3.0-draft.21 |
+| 2 | F26 depth-ceiling adjudication | discharged at v0.3.0-draft.22 (option B: the depth ceiling retired; `B_hat(P) = B(P)` exactly) |
+| 3 | `boc.md` §12 table split | discharged — verified in the committed v0.4.1 bytes, this note |
+| 4 | F27 fuel-backstop-on-validator-defect fixture | outstanding — the corpus Suite Register's sole remaining bullet |
+| 5 | Step-4 acceptance reassessment | after step 4 |
+
+So two BOC increments remain before Step-4 can be reassessed: the F27 fixture wave (declared test-only fault-injection semantics, the expected validator-defect verdict, and the containment-and-ledger-closure check — a test-harness obligation, not a conforming golden) and the acceptance reassessment itself. The next review qualifies only after Step-4 acceptance; the Adversarial Review Program's Steps 1–3 minimum has been met since v0.3.0-draft.3, but whether and when a review opens is the program's own act, and Steps 5 and 6 remain deferred.
+
+**Scope boundaries.** No vector, specification, or implementation is changed. `QnIR` is not promoted. Step 5 is not started.
