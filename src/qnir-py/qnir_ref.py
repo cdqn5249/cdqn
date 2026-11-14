@@ -1414,11 +1414,11 @@ def parse_profile(c):
     g = int(re.search(r"`g = (\d+)` U", text).group(1))
     q = int(re.search(r"q_const … q_halt = (\d+)` U", text).group(1))
     trip = int(re.search(r"trip ceiling (\d+) per back-edge site", text).group(1))
-    depth = int(re.search(r"depth ceiling (\d+)", text).group(1))
     charges = {("q_load" if op == "CLOAD" else f"q_{op.lower()}"): q
                for op in OPCODES.values()}
-    return {"gateway": g, "charges": charges, "trip_ceiling": trip,
-            "depth_ceiling": depth}
+    # The depth ceiling is retired (F26, v0.3.0-draft.22): the profile declares
+    # trip ceilings only, and no depth counter exists.
+    return {"gateway": g, "charges": charges, "trip_ceiling": trip}
 
 
 # ================================================================== runners

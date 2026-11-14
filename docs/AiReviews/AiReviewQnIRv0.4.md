@@ -2,7 +2,7 @@
 layout: default
 title: QnIR v0.3 — Independent Follow-up Review
 description: Independent audit of the v0.3.0-draft.18 specification, corpus, implementations, and artifact lineage
-version: 0.1.4
+version: 0.1.5
 updated: 2026-11-14
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL 1.0)
@@ -424,3 +424,31 @@ The program of record's v0.3.0-draft.21 wave record carries the clarification in
 3. Fix the `boc.md` §12 table split (documentation only).
 
 **Scope boundaries.** No vector is deleted or edited. No implementation was changed in this pass. `QnIR` is not promoted. Step 5 is not started.
+
+## Correction Note - v0.1.5
+
+This note records Finding F26's closure by the author's A/B adjudication at v0.3.0-draft.22. It follows the repository's append-only discipline: the original review and the v0.1.1–v0.1.4 notes above are unchanged. It does not alter the BOC policy, any committed vector, or any execution rule.
+
+### 1. F26 — CLOSED (option B: the depth ceiling retired as redundant)
+
+- **The adjudication.** The review's required correction was to define the meaning and transition rules of nesting depth before enforcing it or adding expected vectors, and its audit recorded two options without choosing — (A) define and enforce depth, (B) retire the depth ceiling as redundant. The author adopted **B**, under the standing rubric-mode BOC key: B carries `ImplicitDeps` = 0 (it rides committed rules — every block-graph cycle contains a back-edge, since a back-edge's target dominates its source; every back-edge site carries a finite declared trip ceiling; the §3.4 surrogate already ignored depth), the smallest ΔW_worst, and the smaller coupling; A would have required inventing the normative nesting-depth measure F26 itself says is missing — an undeclared semantics surface, the exact class of implicit rule the BOC policy's admission filter excludes.
+- **The reason, stated positively.** The depth ceiling was redundant for the boundedness claim: because every cycle contains a back-edge with a finite trip ceiling, the trip-bounded state graph is finite, so every execution is finite. The depth counter was declared without a total operational measure and enforced by no rule; retiring it is a withdrawal with its reason recorded at each site (semantics §2.1/§2.3/§2.5/§2.6, accounting §3.4/§3.5, conformance §4.4, the corpus profile and register, and the program of record's §1.2 row) — the F13/F15/F12 withdrawal discipline, not a silent deletion.
+- **The corollary — a strengthening, not a concession.** With depth gone, the surrogate's state graph is exactly the bounded-path family, so **`B_hat(P) = B(P)` for every well-formed Intent**: the declared one-sided obligation holds as equality, and false admission and false rejection by the static bound are both impossible by construction. The fuel backstop remains what §3.4 declares — defense in depth against implementation defects, which is F27's subject, not a repair for surrogate slack. `QO-17`'s polynomial-time question is untouched.
+- **Evidence.** Both artifacts were rebuilt and rerun against the edited corpus: 84/84 each (suite E 11/11, I 3/3, R 4/4, M 15/15, X 51/51; all 51 declared bounds match); transcript digests `38e7b55d09a2f7dd` and `7969721e6679df28`; same-binary and same-source reruns byte-identical; corpus digest of record `d6a0e9fa67ecf1c2` over 1,060,082 LF/repository bytes. No vector byte changed; no vector's bound, outcome, or settlement moved. The adjudication record is [`docs/logs/qnir/f26-depth-ceiling-retirement.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/f26-depth-ceiling-retirement.md).
+
+### 2. Step status after this note
+
+| QnIR repair step | Status after v0.1.5 |
+|---|---|
+| Step 1 — Minimal core | Pass, subject to existing promotion conditions |
+| Step 2 — Operational semantics | F25 and F26 closed (the depth ceiling retired; the trip ceilings carry the boundedness claim) |
+| Step 3 — Work accounting and admission | Pass, subject to existing promotion conditions; `B_hat` is exact |
+| Step 4 — Conformance oracle and corpus | F20 mapping discharged; the depth-ceiling register row closed by declaration; F27 fixture outstanding |
+| Steps 5 and 6 | Deferred |
+
+### 3. Remaining work
+
+1. Specify the F27 fuel-backstop fixture semantics (shape, expected verdict, checking protocol at the validator boundary) — the Suite Register's sole remaining outstanding bullet.
+2. Fix the `boc.md` §12 table split (documentation only).
+
+**Scope boundaries.** No vector is deleted or edited. No execution rule was changed. `QnIR` is not promoted. Step 5 is not started.

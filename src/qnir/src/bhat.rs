@@ -19,7 +19,8 @@ pub struct Profile {
 
 /// The declared profile of the corpus (`qir-prof-golden-1`): gateway 20 U,
 /// every rule charge class 4 U (site-stable, inclusive of the base dispatch
-/// quantity), trip ceiling 1 per back-edge site, depth ceiling 8.
+/// quantity), trip ceiling 1 per back-edge site (the depth ceiling of earlier
+/// versions is retired — F26, v0.3.0-draft.22).
 pub fn golden_profile() -> Profile {
     let mut charge = [0u64; 17];
     for tag in 1..=16u64 {

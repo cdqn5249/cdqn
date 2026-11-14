@@ -1,0 +1,46 @@
+---
+layout: default
+title: F26 — The Depth Ceiling Retirement (Adjudication Record)
+description: The A/B adjudication of Finding F26 — the depth ceiling is retired as redundant, and the admission surrogate becomes exact
+nav_exclude: true
+---
+
+# F26 — The Depth Ceiling Retirement (Adjudication Record)
+
+Adjudication record of Finding F26 of [`docs/AiReviews/AiReviewQnIRv0.4.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.4.md) under the [BOC policy](https://github.com/cdqn5249/cdqn/blob/main/docs/boc.md) of `docs/simemp.md` §7. Decision wave: v0.3.0-draft.22. **Option B is adopted: the depth ceiling is retired.** No vector is added, deleted, or edited; no execution rule changes on any committed vector.
+
+## The finding
+
+F26 records that the specification refers to depth-ceiling rejection at block entry and uses depth-bounded paths in its accounting bound, but **does not define a complete operational measure of nesting depth for arbitrary block graphs**; neither implementation enforces the ceiling (the Python profile parses `depth_ceiling` and never uses it; the Rust execution path has no depth check). Its required correction: "Define the meaning and transition rules of nesting depth before implementing enforcement or adding expected vectors. In particular, resolve how depth changes across edges, how exits unwind it, and how irreducible or overlapping loop regions are treated. Do not assume a call stack or structured-loop model that the current architecture has not established." The review's later audit (F26 analysis) records the disposition as OPEN with severity reduced, notes that "trip ceilings alone bound execution" and that the missing depth rule is "a definitional gap and a spec/implementation divergence, not a break in the bounded-path claim", and records two options without choosing: **(A)** define and enforce depth; **(B)** retire the depth ceiling as redundant given trip ceilings — changing a frozen profile parameter and needing explicit adjudication.
+
+## The BOC adjudication
+
+The selection is between A (define a total nesting-depth measure, enforce it in both artifacts, derive at/over vectors) and B (withdraw the depth ceiling from the profile, the transition rules, the admission bound, and the conformance families). Under rubric mode (π = Efficiency, Modularity, Portability) and the recorded key `LexKey(c) = (ImplicitDeps(c), perm_π(ΔW_worst(c), M_coupling(c), P_coverage(c)))`:
+
+- **ImplicitDeps.** B = 0: the retirement rides committed rules only — every block-graph cycle contains a back-edge whose target dominates its source (§2.6's declared back-edge definition), every back-edge site carries a finite declared trip ceiling (the profile parameter), and the validator's surrogate already ignores depth (§3.4's committed soundness argument). A = 1: the wave would have to invent the normative measure F26 says is missing — how depth changes across edges, how exits unwind it, and how irreducible or overlapping regions behave — a new semantics surface, not a declared reading of an existing one.
+- **ΔW_worst.** B: prose withdrawal at four sites (semantics §2.3, accounting §3.4, conformance §4.4, corpus profile and register) plus the profile-parse line in the second implementation; no vector, no new rejection surface, no admission change on any committed vector. A: a new normative definition, a new runtime rejection surface in both artifacts, at least two hand-derived vectors, and a re-derived admission interaction.
+- **M_coupling.** B removes a coupled, unenforced surface. A adds one, spanning §2.3, §2.5, §3.4, both artifacts, and the corpus, with the new depth semantics additionally coupled to the admission bound's path family.
+- **P_coverage.** Both close the register row. B closes it by declaration (the obligation's target ceases to exist); A closes it with vectors over a surface the review itself warns cannot be defined without architecture the core has not established.
+
+The key selects **B** on the leading components, and the engineering argument is stronger than the ordering alone: the depth ceiling is **redundant for the boundedness claim**. Every cycle in a well-formed block graph contains a back-edge (§2.6: a back-edge's target dominates its source, so a cycle without one would be a cycle among mutually reachable blocks whose entry is dominated by one of themselves — impossible in the declared graph), and every back-edge site has a finite declared trip ceiling, so the trip-bounded state graph of §3.4 is finite and every execution is finite. The depth ceiling never contributed to that certification, carried no runtime rule either artifact enforced, and could not be observed by any committed vector.
+
+## The corollary: the admission surrogate becomes exact
+
+§3.4 declares the trip-ceiling unrolling surrogate `B_hat(P)` and its obligation `B_hat(P) ≥ B(P)`, with the one recorded source of slack: the state graph "enforces the trip ceilings and ignores the depth ceilings, which only enlarges the maximized family". Retiring the depth ceiling removes that slack entirely. The state graph's paths are then exactly the bounded control-flow paths of `B(P)`: every bounded path is a state-graph path with equal charge, and every state-graph path projects to a control-flow path from the entry to an exit that respects the trip ceilings. Therefore **`B_hat(P) = B(P)` for every well-formed Intent** — the surrogate is not merely sound but exact, and the requirement's one-sided inequality holds as equality. False rejection and false admission by the static bound are both impossible by construction; the fuel backstop remains what §3.4 declares it to be, defense in depth against implementation defects (the F27 fixture's subject), not a repair for surrogate slack. `QO-17`'s polynomial-time question is untouched: the state graph is still exponential in the number of distinct back-edges.
+
+## What the wave changes
+
+- **`docs/qnir_semantics.md`** (v0.3.0-draft.8.3): §2.3's bounded-structured-control row and the `BR`/`JMP` rejection columns drop the depth-ceiling clause; §2.3's derived-counters paragraph defines the trip count as the only derived ceiling counter and records the retirement (with its reason) rather than deleting it silently.
+- **`docs/qnir_accounting.md`** (v0.3.0-draft.8.2): §3.4's admission bound drops "and the declared depth ceilings on nesting"; the surrogate paragraph states the exactness equality; the fuel-bound paragraph's "both ceilings" becomes the trip ceilings.
+- **`docs/qnir_conformance.md`** (v0.3.0-draft.22): §4.4's loops family drops the depth-ceiling obligation; the traceability register's depth row changes from OPEN (F26) to CLOSED BY DECLARATION, citing this record; the register's closing paragraph lists only the fuel-backstop fixture as remaining.
+- **`docs/qnir_goldens.md`** (v0.3.0-draft.22): the declared profile drops the depth ceiling line; the Suite Register's outstanding bullet splits — the depth-ceiling half is discharged by retirement, the fuel-backstop half remains registered. No vector byte changes.
+- **`src/qnir-py/qnir_ref.py`**: the profile parse no longer reads a `depth_ceiling` that does not exist. **`src/qnir/src/bhat.rs`**: the profile doc comment drops the retired parameter. No execution rule changes; the crate rides v0.3.0-draft.22.
+- **`docs/qnir.md`** (v0.3.0-draft.22): the §1.2 family-5 row records the retirement; the wave record carries the adjudication and the run evidence.
+
+## Evidence and non-edits
+
+Both artifacts were rebuilt and rerun against the edited corpus — the Rust reference interpreter (rustc 1.99.1, x86_64-pc-windows-msvc, release profile, standard library only) and the Python second implementation (CPython 3.12.10, standard library only). Both pass **84/84** (suite E 11/11, I 3/3, R 4/4, M 15/15, X 51/51 at §4.1's five agreement points; all 51 declared bounds match, every admission line unchanged). Transcript digests (16-hex prefixes): reference `38e7b55d09a2f7dd`, second implementation `7969721e6679df28`; the same-binary and same-source reruns are byte-identical (reproducibility evidence only, §4.2). The corpus digest of record is `d6a0e9fa67ecf1c2` over 1,060,082 LF/repository bytes. The vectors are byte-unchanged and no vector's expected outcome, bound, or settlement moves: no committed vector nests anywhere near the retired ceiling, and `B_hat` already ignored it, so every declared bound in the corpus is unchanged. Declared non-edits: `docs/index.md` (QnIR [PENDING] stands), the glossary, the AiReview transcripts (append-only — the v0.1.5 note records this adjudication), and `docs/_data/navigation.yml`.
+
+## The retirement is a withdrawal, not a silent rewrite
+
+Following the repair program's withdrawal discipline (F13's withdrawn budget-balance form, F15's withdrawn token key, F12's corrected wording): the normative text no longer declares a depth ceiling, the withdrawal is recorded in the sections that carried it, and this record is its citation. A future draft that wants a depth ceiling must first publish the total operational measure F26 names — how depth changes across edges, how exits unwind it, and how irreducible or overlapping regions are treated — and then carry its own enforced rule and vectors.
