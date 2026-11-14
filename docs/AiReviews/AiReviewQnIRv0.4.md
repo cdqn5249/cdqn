@@ -2,8 +2,8 @@
 layout: default
 title: QnIR v0.3 — Independent Follow-up Review
 description: Independent audit of the v0.3.0-draft.18 specification, corpus, implementations, and artifact lineage
-version: 0.1.2
-updated: 2026-11-08
+version: 0.1.3
+updated: 2026-11-14
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -358,3 +358,37 @@ C1 and C4 tie on the leading component, and no `π` is bound. Under `boc.md` §6
 5. Fix the `boc.md` §12 table split (documentation only).
 
 **Scope boundaries.** No vector is deleted or edited. No implementation was changed in this pass. `QnIR` is not promoted. Step 5 is not started.
+
+## Correction Note - v0.1.3
+
+This note records F25's closure at the artifact level and the two corrections the closure forced. It follows the repository's append-only discipline: the original review, the v0.1.1 note, and the v0.1.2 note above are unchanged. It does not alter the QnIR design, the BOC policy, or any committed vector.
+
+### 1. F25 — CLOSED (specification amended, both implementations corrected, golden committed)
+
+- **Specification.** Reading R1 was adopted in the author's adjudication of [`docs/logs/qnir/f25-cload-fallback-trip-ceiling-proposal.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/f25-cload-fallback-trip-ceiling-proposal.md): the `CLOAD` miss edge is a counted edge subject to the declared trip ceiling. `docs/qnir_semantics.md` §2.3 (the `CLOAD` row's rejection column and the derived-count paragraph) and §2.5 (the Tier O repeated-miss rule) were amended accordingly.
+- **Implementations.** Both artifacts enforce the ceiling before a repeated miss token is born, with the traversal counted at the fallback-edge site `(block id, instruction index, slot 0)`.
+- **Golden.** The Suite Register's F25 regression bullet is discharged at v0.3.0-draft.20 as expansion increment 6: X51 (`exec-cload-fallback-trip-ceiling-self-loop`), the minimal self-looping-fallback program under trip ceiling 1 — first miss completes (one Tier O `STATUS_LOOKUP_MISS` born, site count 0 → 1, 24 U charged), second traversal rejected before the second token is born (`EXPRESSION_TOO_COMPLEX`, nil selected, 8 U refunded at the rejection record), outstanding miss token terminalized there, `B_hat(P) = 32`. The 83 previously committed vectors are byte-unchanged. Both artifacts pass the expanded corpus 84/84, suite X 51/51 each (run log [`docs/logs/qnir/r6-expansion-6-cload-fallback-trip-ceiling.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/r6-expansion-6-cload-fallback-trip-ceiling.md)).
+- **Provenance.** X51 was derived by hand from the amended rules before either artifact executed it; no third derivation instrument was used for this vector, and the corpus declares that provenance. Per F23's distinction: the two implementations' agreement is artifact confirmation of the fixed bytes, not an independent re-derivation of them.
+
+### 2. Corrections the closure forced
+
+- **DR-a's field-6 parenthetical was wrong.** The v0.1.1 proposed reading claimed the lookup's address "still appears in the transition's input/output ids (field 6)" on the ceiling rejection. A typed rejection posts nothing and binds nothing, so the rejected transition's field 6 is `[]` — the committed X41 bytes (record 2) already say so. The proposal log's §4 row is corrected and the corpus declares the reading as DR4; the address rides only the completed miss transition's field 6.
+- **A second Rust defect surfaced under verification.** The ceiling check committed at v0.3.0-draft.19 was correct, but the Rust artifact's admission DP (`src/qnir/src/bhat.rs`) traversed the `CLOAD` miss edge without consuming the fallback site's trip budget and carried no cycle guard, so it admitted X51's graph and then recursed without bound (stack overflow) — the same admission/runtime divergence class this review's F25 finding targets, on the validator side. The repair applies the Python artifact's existing treatment (`step_edge` on both miss-edge call sites; pre-recursion cycle guard). No committed bound changed; all 84 declared bounds match after the repair. This confirms F25's original observation in a second place: the trip ceiling must be enforced on the fallback edge everywhere the declared boundedness is claimed — runtime, admission, and the accounting identity alike.
+
+### 3. Step status after this note
+
+| QnIR repair step | Status after v0.1.3 |
+|---|---|
+| Step 1 — Minimal core | Pass, subject to existing promotion conditions |
+| Step 2 — Operational semantics | F25 closed; F26 (depth ceiling) open — the A/B adjudication is still needed |
+| Step 3 — Work accounting and admission | F25 closed (runtime, admission DP, and accounting §3.4 now agree on the fallback edge) |
+| Step 4 — Conformance oracle and corpus | Partial: F20 traceability mapping pending; F27 fuel-backstop fixture outstanding |
+| Steps 5 and 6 | Deferred |
+
+### 4. Remaining work (supersedes nothing; carries §7 forward)
+
+1. Complete the F20 traceability matrix (every §4.4 obligation mapped to a vector, a cited not-applicable disposition, or a future test requirement).
+2. Decide F26 (option A or B); specify the F27 fixture semantics.
+3. Fix the `boc.md` §12 table split (documentation only).
+
+**Scope boundaries.** No vector is deleted or edited. `QnIR` is not promoted. Step 5 is not started.

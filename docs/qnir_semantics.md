@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Semantics — Operational Semantics of the QnIR v0.3 Working Draft (Repair Step 2)
 description: QnIR v0.3 draft, §2 operational semantics — typed configurations and the small-step transition relation
-version: 0.3.0-draft.8.1
-updated: 2026-11-13
+version: 0.3.0-draft.8.2
+updated: 2026-11-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -23,7 +23,7 @@ terms_used:
 
 # QnIR Semantics — Operational Semantics of the QnIR v0.3 Working Draft (Repair Step 2)
 
-This file carries §2 (§2.1–§2.8) of the QnIR v0.3 working draft, split content-identically from the committed v0.3.0-draft.5 monolith with global section numbering preserved. The program of record — status, Wave records, repair ladder, and References — lives in [`docs/qnir.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir.md); this companion inherits its DRAFT status and is not promoted to the canon. The §2 body below is committed at v0.3.0-draft.6 (Loop-3 stage R2), and the front-matter `terms_used` lists exactly the distinct `term.html` include ids of this body under the include-parity discipline.
+This file carries §2 (§2.1–§2.8) of the QnIR v0.3 working draft, split content-identically from the committed v0.3.0-draft.5 monolith with global section numbering preserved. The program of record — status, Wave records, repair ladder, and References — lives in [`docs/qnir.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir.md); this companion inherits its DRAFT status and is not promoted to the canon. The §2 body below is committed at v0.3.0-draft.6 (Loop-3 stage R2); §2.3 and §2.5 were amended at v0.3.0-draft.8.2 (Finding F25, Reading R1: the `CLOAD` miss edge is a counted edge subject to the declared trip ceiling, traversal-counted at its fallback-edge site and rejected before a repeated miss token is born when the ceiling is exhausted), and the front-matter `terms_used` lists exactly the distinct `term.html` include ids of this body under the include-parity discipline.
 
 ---
 

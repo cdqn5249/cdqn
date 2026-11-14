@@ -2,8 +2,8 @@
 layout: default
 title: F25 — CLOAD Fallback Edge and the Trip Ceiling — Draft Amendment Proposal
 description: Non-normative proposal for the author's adjudication; draft wording to close finding F25 before any golden is derived or implementation changed
-version: 0.2.0
-updated: 2026-11-13
+version: 0.3.0
+updated: 2026-11-14
 author: "Christophe Duy Quang Nguyen via Gemini 4 Hydrogen and Antigravity"
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -11,7 +11,7 @@ license_location: repository root
 file_repo_path: docs/logs/qnir/f25-cload-fallback-trip-ceiling-proposal.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /logs/qnir/f25-cload-fallback-trip-ceiling-proposal.html
-status: Adjudicated and integrated in v0.3.0-draft.19; normative semantics and interpreters updated per Reading R1
+status: Adjudicated and integrated; normative semantics and interpreters updated per Reading R1 at v0.3.0-draft.19; regression vector X51 derived and committed at v0.3.0-draft.20
 ---
 
 # F25 — CLOAD Fallback Edge and the Trip Ceiling: Draft Amendment Proposal
@@ -60,7 +60,7 @@ Locations are given by section and row, with snapshot line numbers for orientati
 
 | Id | Question | Proposed reading |
 |---|---|---|
-| DR-a | Where does the rejection occur relative to the lookup? A miss cannot be known before the lookup runs | After the lookup resolves to a miss, before the miss token is born. The address still appears in the transition's input/output ids (field 6), as it does for the existing hit-bound rejection |
+| DR-a | Where does the rejection occur relative to the lookup? A miss cannot be known before the lookup runs | After the lookup resolves to a miss, before the miss token is born. The rejected transition's input/output ids (field 6) are the empty list: a rejection posts nothing and binds nothing, and the committed X41 bytes are decisive (corrected at the X51 derivation — see §9) |
 | DR-b | Comparison form | Reject when prior traversals + 1 exceeds the ceiling, the same form `BR` and `JMP` use in the Python reference's `check_ceiling` |
 | DR-c | Ledger and receipt consequences of the new rejection | Exactly those of the existing "typed rejection before dispatch" rule. No new charging rule is proposed. To be confirmed when the golden is derived |
 
@@ -90,9 +90,21 @@ This proposal does not decide F26, does not specify the F27 fixture, does not st
 
 - **Authority Verdict:** Reading **R1** is adopted as the canonical reading. The `CLOAD` miss edge is a counted edge subject to the declared trip ceiling.
 - **Declared Readings:** DR-a, DR-b, and DR-c are adopted verbatim:
-  - DR-a: Rejection occurs after lookup resolves to a miss, before the Tier O token is born.
+  - DR-a: Rejection occurs after lookup resolves to a miss, before the Tier O token is born. (The field-6 parenthetical of §4 is struck; see §9.)
   - DR-b: Comparison form is `prior_traversals + 1 > trip_ceiling`.
   - DR-c: Standard typed rejection before dispatch (escrow residue refunded; zero work charged).
 - **Normative Diffs Applied:** `docs/qnir_semantics.md` §2.3 (`CLOAD` row, "Derived counters" paragraph) and §2.5 (Tier O repeated miss traversals).
 - **Interpreter Implementations:** Updated in `src/qnir-py/qnir_ref.py` and `src/qnir/src/interp.rs`.
 - **Program of Record:** Registered as Wave record v0.3.0-draft.19 in `docs/qnir.md`.
+
+---
+
+## 9. Derivation Addendum (v0.3.0 — 2026-11-14)
+
+This addendum records the regression vector's derivation and the two corrections verification forced. It does not change Reading R1 or DR-b/DR-c.
+
+- **X51 derived and committed.** The Suite Register vector is committed at v0.3.0-draft.20 in [`docs/qnir_goldens.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir_goldens.md) as `exec-cload-fallback-trip-ceiling-self-loop`: `block 0` = `CLOAD addr=0 fallback=block 0` then `HALT`, no unreachable block, empty `D`, trip ceiling 1, `W_budget` = 100 U. Expected: two records — the first miss completes (one Tier O `STATUS_LOOKUP_MISS` born, site count 0 → 1, 24 U charged); the second traversal is rejected before a second token is born (`EXPRESSION_TOO_COMPLEX`, nil selected, 8 U refunded at the rejection record), with the outstanding miss token terminalized there. `B_hat(P) = 32`. The 83 vectors committed before it are byte-unchanged.
+- **DR-a field 6 corrected.** The §4 parenthetical was wrong: a typed rejection posts nothing and binds nothing, so the rejected transition's field 6 is `[]` — the committed X41 bytes (record 2) already say so. DR4 in the corpus declares the correct reading; the address rides only the completed miss transition's field 6.
+- **Rust `B_hat` defect registered and repaired.** The ceiling check of v0.3.0-draft.19 was correct in `interp.rs`, but the Rust admission DP (`src/qnir/src/bhat.rs`) traversed the `CLOAD` miss edge without consuming the fallback site's trip budget and carried no cycle guard, so it admitted X51's graph and then recursed without bound (stack overflow). The repair applies the Python artifact's existing treatment: both miss-edge call sites step through `step_edge` and `val` pre-inserts the cycle guard. Both artifacts then reproduce X51 byte-exactly, including the receipt and both state roots.
+- **Derivation of record.** X51 was derived by hand from the amended rules before either artifact executed it; no third derivation instrument was used for this vector (increments 1–5's instrument is not re-used), and the two artifacts are independent checks of the fixed bytes, not their source. This respects the F23 distinction between corpus reproduction and independent derivation: the vector's provenance is the maintainer's derivation plus two implementations' agreement, and the corpus declares it.
+- **Run evidence.** [`docs/logs/qnir/r6-expansion-6-cload-fallback-trip-ceiling.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/r6-expansion-6-cload-fallback-trip-ceiling.md) records both artifacts over the 84-vector corpus (suite X 51/51 each), the toolchains, and the corpus digest `32028d2c76681893` over 1,059,386 repository bytes.

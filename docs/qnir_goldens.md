@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1)
 description: Hand-derived conformance vectors — expected bytes and outcomes fixed from the normative rules of the QnIR draft before any code
-version: 0.3.0-draft.19
-updated: 2026-11-07
+version: 0.3.0-draft.20
+updated: 2026-11-14
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -25,19 +25,19 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnIR Goldens — The Hand-Derived Golden Corpus of the QnIR v0.3 Working Draft (Artifact Share, Increment 1) |
-| **Version** | 0.3.0-draft.19 |
-| **Last Updated** | 2026-11-07 (Bao Loc, Vietnam) |
+| **Version** | 0.3.0-draft.20 |
+| **Last Updated** | 2026-11-14 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Working Draft under the Loop-2 Repair Sequence and the Loop-3 Repair Program (R1–R6) — Not Promoted to the Canon |
 
-*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft. At its initial publication (v0.3.0-draft.10), the goldens preceded all implementation artifacts; the assembler, validator, reference interpreter, and second implementation were added only in the subsequent declared order. The corpus remains hand-derived and implementation-independent: implementations check it but never generate or edit its expected results. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion), at v0.3.0-draft.17 its fourth (R6 expansion increment 4, the per-class ledger trace publications and the budget-boundary per-combination completion), and at v0.3.0-draft.18 its fifth (R6 expansion increment 5, the `EXT`-payload encoding vectors); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
+*Christophe Duy Quang Nguyen note:* This file is the committed golden corpus of the QnIR v0.3 working draft. At its initial publication (v0.3.0-draft.10), the goldens preceded all implementation artifacts; the assembler, validator, reference interpreter, and second implementation were added only in the subsequent declared order. The corpus remains hand-derived and implementation-independent: implementations check it but never generate or edit its expected results. Every expected byte and outcome below is derived from the normative rules of §1–§3 and §4 and cites the rule that produces it. At v0.3.0-draft.14 the corpus hosts its first registered expansion (R6 expansion increment 1, the `QO-22`/F12 terminalization-combination completion): the independently reviewed seed vectors are retained unchanged, and the expansion vectors are hand-derived under the same discipline after the four-artifact order completed, before the artifact runs that check them. At v0.3.0-draft.15 the corpus hosted its second registered expansion (R6 expansion increment 2, the `CLOAD`-hit and multi-block fallback completion), at v0.3.0-draft.16 its third (R6 expansion increment 3, the `TUPLE`/`FIELD`/zoom-`CMP`/`EMIT`-witness completion), at v0.3.0-draft.17 its fourth (R6 expansion increment 4, the per-class ledger trace publications and the budget-boundary per-combination completion), at v0.3.0-draft.18 its fifth (R6 expansion increment 5, the `EXT`-payload encoding vectors), and at v0.3.0-draft.20 its sixth (R6 expansion increment 6, the `CLOAD` fallback trip-ceiling regression vector); the independently reviewed seed vectors remain byte-unchanged through every expansion. Nothing herein redefines, amends, or overrides any canonical specification.
 
 ## Scope and Derivation Discipline
 
 This corpus began as the seed suite of §4.4: its initial vectors were derived from the normative rules of §1–§3 and §4, reviewed independently of both implementations, and committed before any implementation existed — the golden-first order (F17/F18), discharged here under the {% include term.html id="boc-policy" text="BOC policy" %} of `docs/simemp.md` §7 as artifact-share increment 1 of the {% include term.html id="qnir" text="QnIR" %} draft. Under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline, every vector cites the committed rule that produces each expected value; where the committed text leaves a rendering choice open, the choice is declared in the parameter block below and binds the vectors exactly as a version component of `V` (§2.1) — a change to any of them is a new encoding version. Charges are measured in the {% include term.html id="compute-unit-u" text="Abstract Compute Unit U" %}; the terminal {% include term.html id="receipt" text="receipt" %} of every execution vector is a committed artifact of §2.5/§2.6.
 
-**The corpus binds 83 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 4 `EXT` side-table record encodings (family R), 15 malformed surfaces (family M), 50 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16, the 1 expansion vector of R6 expansion increment 4, v0.3.0-draft.17, and the 7 encoding vectors of R6 expansion increment 5, v0.3.0-draft.18 — R1–R4 in family R and M13–M15 in family M).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
+**The corpus binds 84 vectors: 11 value encodings (family E), 3 instruction encodings (family I), 4 `EXT` side-table record encodings (family R), 15 malformed surfaces (family M), 51 executions (family X — the 8 seed vectors of increment 1, the 30 expansion vectors of R6 expansion increment 1, v0.3.0-draft.14, the 4 expansion vectors of R6 expansion increment 2, v0.3.0-draft.15, the 7 expansion vectors of R6 expansion increment 3, v0.3.0-draft.16, the 1 expansion vector of R6 expansion increment 4, v0.3.0-draft.17, the 7 encoding vectors of R6 expansion increment 5, v0.3.0-draft.18 — R1–R4 in family R and M13–M15 in family M — and the 1 execution vector of R6 expansion increment 6, v0.3.0-draft.20).** Each vector is committed data, citable by repository bytes; equal vectors are byte-equal vectors (§4.4).
 
 ## Expansion Increment 1 — the QO-22/F12 Combination Completion (v0.3.0-draft.14)
 
@@ -182,7 +182,23 @@ The vectors carry no declared parameters beyond P14 — no budget line: the fami
 | M13 | the value payload with trailing bytes after the complete value | `malformed — trailing bytes after the record's value payload` |
 | M14 | the value payload non-canonical (magnitude words [0, 5]) | `malformed — leading zero magnitude word (non-canonical)` |
 | M15 | the duplicate record index in one side table | `malformed — duplicate side-table record index` |
+## Expansion Increment 6 — the `CLOAD` Fallback Trip-Ceiling Regression Vector (v0.3.0-draft.20)
 
+This expansion is R6 expansion increment 6 of the Loop-3 stage (the program of record, `docs/qnir.md`, wave record v0.3.0-draft.20), discharging the Suite Register's `CLOAD` fallback trip-ceiling regression bullet — the regression vector registered when the F25 resolution adopted Reading R1 at v0.3.0-draft.19. Its single vector is X51 below, appended after X50 and derived from the amended normative text of §2.3 (the `CLOAD` row's rejection column and the derived-count paragraph), §2.5 (the Tier O repeated-miss rule), §3.3, and §3.4 — the amendment the F25 adjudication record fixes in `docs/logs/qnir/f25-cload-fallback-trip-ceiling-proposal.md` v0.2.0 — after the committed four-artifact order and expansion increments 1–5 (F18 applied to expansions). The vector was derived by hand from the amended rules before either artifact executed it, and both implementations were then run against the fixed bytes — the golden-first order applied to expansions. Unlike increments 1–5, the derivation of record here is the maintainer's hand derivation from the amended text: no third derivation instrument was used, and the two artifacts are the vector's independent checks, not its source. The seed's and increments 1–5's independently derived vectors are retained byte-unchanged. The increment adds no execution rule of its own to either artifact — the ceiling on the `CLOAD` miss edge, the zero-posting rejection, the open-escrow settlement, and the admission DP's counting of fallback back-edges are the amended or already-committed rules — but it completes the artifact share of the F25 resolution: verifying the vector exposed that the Rust artifact's `B_hat` admitted the self-loop while traversing the miss edge without consuming the site's remaining budget, so the correction the vector pins is the miss edge's `step_edge` treatment, which the Python artifact already applied.
+
+**The declared reading** (declared here under the {% include term.html id="no-implicit-rule" text="No Implicit Rule" %} discipline where the committed text leaves the point open; it cites its rule and binds the expansion vector as a version component of `V`):
+
+- **DR4 — the rejected miss carries no input/output ids (field 6 = `[]`).** The F25 adjudication record's DR-a parenthetical — that "the address still appears in the transition's input/output ids (field 6)" — is corrected here: a typed rejection posts nothing and binds nothing, so its record's field 6 is the empty list. The committed X41 bytes are decisive (the hit-bound rejection's record 2 carries `[]`); both artifacts' rejection path emits exactly that; and the address is already cited by the first, completed miss transition's field 6, where the binding occurred. The second traversal is rejected before any binding and therefore cites nothing.
+
+**The scope disposition.** The bullet's declared scope is realized in full by one vector: X51 — the minimal self-looping-fallback program (`block 0`: `CLOAD addr=0 fallback=block 0` at index 0, `HALT` at index 1; no unreachable block, honoring observation O1 of the review that registered F25), `D` = no entries, trip ceiling 1, `W_budget` = 100 U. The first traversal completes — the miss token is born, the fallback site's count moves 0 → 1, and the transition charges the gateway and the `q_load` class (24 U). The second traversal is refused at the declared ceiling — the typed rejection fires after the lookup resolves to a miss and before a second token is born (§2.3's amended row and §2.5's amended Tier O rule), the fatal `EXPRESSION_TOO_COMPLEX` birth terminalizes at its own transition together with the outstanding miss token, the rejection posts nothing, and the open escrow's residue refunds there (32 − 24 = 8 U, the X5/X41 precedent). The vector pins the admission side as well: `B_hat(P) = 32` — gateway 20 + miss `CLOAD` 4 + hit `CLOAD` 4 + `HALT` 4 — counts the fallback back-edge exactly once, so the admission passes and the fuel backstop stays unfirable (§3.4/F16).
+
+## The Expansion Vector Register (X51)
+
+The vector declares `W_budget` = 100 U, `D` = no entries, the empty initial status pool, and `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1) under the declared profile `qir-prof-golden-1`. The program cites the seed's single declared content address (P9) in its Intent dependency list; the declared table stays empty, so every traversal of the fallback edge is a miss.
+
+| Vector | Surface | Declared `D` | Outcome surface |
+|---|---|---|---|
+| X51 | `CLOAD` miss on a self-looping fallback edge under trip ceiling 1 | no entries | the first miss completes (one Tier O `STATUS_LOOKUP_MISS` born, site count 0 → 1, 24 U charged = gateway + `q_load`); the second traversal is rejected under §2.3 before the second token is born — `EXPRESSION_TOO_COMPLEX` (tag 3), nil selected, the open escrow's residue (8 U) refunded at the rejection record, the outstanding miss token terminalized there; `B_hat(P) = 32` (gateway 20 + miss `CLOAD` 4 + hit `CLOAD` 4 + `HALT` 4) |
 
 ## Declared Artifact-Wave Parameters
 
@@ -21688,6 +21704,149 @@ refunded fields plus the terminal receipt's itemization):
     reserve_outstanding after terminal settlement       : 0
 ```
 
+### X51 — `exec-cload-fallback-trip-ceiling-self-loop`
+
+Cites: §2.3 `CLOAD` row (a miss whose fallback edge is a back edge with an exhausted declared trip ceiling: typed rejection before the miss token is born — the F25 amendment) and the derived-count paragraph (the `CLOAD` miss edge's site is `(block id, instruction index, slot 0)`; a hit traverses no edge and increments no count; a completed miss increments its site's count); §2.5 failure behavior (the typed rejection is fatal, births `EXPRESSION_TOO_COMPLEX`, terminalizing at its own transition) and T case (1); §2.5 Tier O repeated-miss rule (each repeated miss is a further traversal of the fallback edge subject to the same declared trip ceiling, and the traversal that would exceed it is rejected before its token is born); §2.6 receipt key 3 (nil at an `EXPRESSION_TOO_COMPLEX` exit, the X10 shape); §3.3 with P11 (the rejection posts nothing; the escrow is open — the miss completed first — so the terminal settlement's refund rides the rejection record, the X5 precedent); §3.4 (the admission bound counts the fallback back-edge once, so the admission passes and the fuel backstop stays unfirable — F16); §4.4 Suite Register — the `CLOAD` fallback trip-ceiling regression bullet (Finding F25, Reading R1); declared reading DR4.
+
+Declared parameters: `W_budget` = 100 U; `D` = no entries; the declared initial status pool is empty (§2.5: empty unless the Intent declares entries); `V` = (v0.3.0-draft.5, qir-enc-1, qir-prof-golden-1). The dependency environment rides the declared rendering parameter P12: the empty table is the committed `D` = no entries form, and the program still cites the seed's declared content address in its Intent dependency list (P9).
+
+Intent — program in the source grammar's textual form, rendered from the committed bytes (the assembler's mapping is one-to-one, §2.6):
+
+```text
+block 0 (arity 0):
+  0: CLOAD addr=0 fallback=block 0 bnd=(int, <=9)
+  1: HALT
+```
+
+Intent envelope (canonical CBOR, 184 bytes; instruction stream entry a byte string of 13 words):
+
+```
+a9004b51 6e49522d 496e7465 6e74016e
+76302e33 2e302d64 72616674 2e350269
+7169722d 656e632d 31037171 69722d70
+726f662d 676f6c64 656e2d31 04814800
+00000000 00000105 01065868 00000000
+00000000 00000000 00000000 00000000
+00000002 00000000 00000002 00000000
+00000000 00000000 00000000 00000000
+00000001 00000000 00000001 00000000
+00000001 00000000 00000009 00000000
+00000000 00000000 00000010 00000000
+00000000 07800880
+```
+
+Admission: one back-edge — the `CLOAD` fallback self-loop (block 0 → block 0, slot 0 of the site identity) — under the trip ceiling 1; the maximum bounded path is 2 transitions (8 U) plus the gateway 20 U: B(P) = 32 U.
+
+Expected terminal outcome: **EXPRESSION_TOO_COMPLEX** (tag 3).
+
+Expected transition records (2 records, complete ordered sequence; field values canonical per §2.6):
+
+```
+record 1 — completed
+ 1  prev_root        8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 2  program_root     961cefb2 c4e24865 68855822 857efff5
+                     c82316f2 7a026f69 03e334f6 f6fd23a3
+ 3  step_index       1
+ 4  pc               [0, 0]
+ 5  decoded_word     0000000000000002 0000000000000000 0000000000000000
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids [h'0000000000000001']
+ 7  pre_state_root   8a820000 80808083 00000000 00820000
+                     80836e76 302e332e 302d6472 6166742e
+                     35697169 722d656e 632d3171 7169722d
+                     70726f66 2d676f6c 64656e2d 31
+ 8  post_state_root  8a820000 80808187 01000000 01010183
+                     18181820 00010182 00008083 6e76302e
+                     332e302d 64726166 742e3569 7169722d
+                     656e632d 31717169 722d7072 6f662d67
+                     6f6c6465 6e2d31
+ 9  work_charged     24
+10  work_refunded    0
+11  clock            1
+12  status           [[1, [1, 0, 0, 0, 1]]]
+13  receipt_ids      []
+14  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+```
+record 2 — rejection (posts nothing)
+ 1  prev_root        8a820000 80808187 01000000 01010183
+                     18181820 00010182 00008083 6e76302e
+                     332e302d 64726166 742e3569 7169722d
+                     656e632d 31717169 722d7072 6f662d67
+                     6f6c6465 6e2d31
+ 2  program_root     961cefb2 c4e24865 68855822 857efff5
+                     c82316f2 7a026f69 03e334f6 f6fd23a3
+ 3  step_index       2
+ 4  pc               [0, 0]
+ 5  decoded_word     0000000000000002 0000000000000000 0000000000000000
+                     0000000000000001 0000000000000001 0000000000000001
+                     0000000000000009 0000000000000000
+ 6  input_output_ids []
+ 7  pre_state_root   8a820000 80808187 01000000 01010183
+                     18181820 00010182 00008083 6e76302e
+                     332e302d 64726166 742e3569 7169722d
+                     656e632d 31717169 722d7072 6f662d67
+                     6f6c6465 6e2d31
+ 8  post_state_root  8a820000 80808287 01000000 01010387
+                     02000001 03020383 18181820 08020282
+                     01038083 6e76302e 332e302d 64726166
+                     742e3569 7169722d 656e632d 31717169
+                     722d7072 6f662d67 6f6c6465 6e2d31
+ 9  work_charged     0
+10  work_refunded    8
+11  clock            2
+12  status           [[1, [2, 0, 0, 1, 3]], [3, [1, 0, 0, 0, 1]]]
+13  receipt_ids      []
+14  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+```
+
+Expected terminal receipt:
+
+```
+terminal receipt (deterministic CBOR map, closed keys 0–4):
+  0  domain_tag       13 bytes — the byte string "QnIR-Terminal" (canonical bytes below)
+  1  outcome_tag      3 (EXPRESSION_TOO_COMPLEX)
+  2  token_itemization (each entry: [birth step, block, index, serial, type, tier, state word])
+      [1, 0, 0, 0, 1, 1, 3]   # STATUS_LOOKUP_MISS tier O state terminalized
+      [2, 0, 0, 1, 3, 2, 3]   # EXPRESSION_TOO_COMPLEX tier S state terminalized
+  3  selected_token   nil   # no outcome-determining token for this outcome (§2.5)
+  4  versions         ["v0.3.0-draft.5", "qir-enc-1", "qir-prof-golden-1"]
+
+canonical bytes:
+  a5004d51 6e49522d 5465726d 696e616c
+  01030282 87010000 00010103 87020000
+  01030203 03f60483 6e76302e 332e302d
+  64726166 742e3569 7169722d 656e632d
+  31717169 722d7072 6f662d67 6f6c6465
+  6e2d31
+```
+
+Expected reconstructed ledger and conservation:
+
+```
+reconstructed ledger (§3.1: derived from the records' charged and
+refunded fields plus the terminal receipt's itemization):
+  Work(E) = 24 U (sum over completed transitions; the
+           rejection/refusal transition posts nothing)
+  per-class traces (one trace per declared class, §3.1/§4.4):
+    gateway      20 U (1 posting)
+    q_load        4 U (1 posting)
+  settlement trace (charged / reserved / refunded after each transition):
+    step  1:   24 /  32 /    0
+    step  2:   24 /  32 /    8
+  conservation identities at the terminal settlement (§3.3):
+    reserved = charged + refunded + reserve_outstanding : 32 = 24 + 8 + 0
+    remaining_budget = W_budget - charged               : 100 - 24 = 76
+    refund_final = B(P) - charged                       : 32 - 24 = 8
+    reserve_outstanding after terminal settlement       : 0
+```
+
+
 ## Suite Register
 
 This seed is increment 1 of the golden corpus (§4.5: "a small suite"). The
@@ -21699,7 +21858,7 @@ committed before the artifacts that need them:
 - `CLOAD` hit vectors (D entries present, bound value checked against its declared bound), and a multi-block fallback completion vector fixing the consumption site beyond a HALT-terminated fallback block — **discharged at v0.3.0-draft.15 as expansion increment 2 (X39–X42)**: the hit path within the bound, the bound check's strict boundary, the bound check's typed rejection before dispatch, and the multi-block completion fixing the consumption site at the fallback block's own completion under the declared reading DR3, over the declared dependency-table rendering P12;
 - `TUPLE`/`FIELD` value and execution vectors, zoom `CMP` execution vectors (boundary comparison under N), and `EMIT` witness vectors (receipt ordinals and the witness payload) — **discharged at v0.3.0-draft.16 as expansion increment 3 (X43–X49)**: the flat and nested tuple constructions with their field extractions, the component-bound typed rejection before dispatch, the zoom boundary comparison under N in both branches (equal; ordered with the exact shift), the `CMP` declared-range rejection, and two witness records with their ordinals and payload, over the declared parameter P13;
 - depth-ceiling vectors and the fuel-backstop-on-validator-defect vector (a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule — F16);
-- `CLOAD` fallback trip-ceiling regression vector (Finding F25: self-looping fallback edge under trip ceiling 1, resolving Reading R1) — registered for expansion;
+- `CLOAD` fallback trip-ceiling regression vector (Finding F25: self-looping fallback edge under trip ceiling 1, resolving Reading R1) — **discharged at v0.3.0-draft.20 as expansion increment 6 (X51)**: the minimal self-looping-fallback program under the declared trip ceiling 1, with the first miss completing (one Tier O `STATUS_LOOKUP_MISS` born, site count 0 → 1, 24 U charged), the second traversal rejected under §2.3 before the second token is born (`EXPRESSION_TOO_COMPLEX`, nil selected, the open escrow's residue of 8 U refunded at the rejection record), the outstanding miss token terminalized at that record, and `B_hat(P) = 32` counting the fallback back-edge exactly once — under the declared reading DR4 (the rejected transition's field 6 is `[]`, the X41 precedent, correcting the F25 adjudication record's DR-a parenthetical);
 - per-class ledger trace publications beyond the seed's summaries, and the per-combination expansion of the budget-boundary family — **discharged at v0.3.0-draft.17 as expansion increment 4 (X50 and the Per-Class Ledger Trace Register)**: the escrow-never-opened settlement shape (the typed rejection at the execution's first attempted transition — the family's last reachable settlement cell, over the declared rendering P12) with the remaining cells fixed by declaration (the open-escrow terminal settlements and rejection-record refunds are the committed X1/X3/X5/X10/X41/X44/X48 precedents, the admission refusal's zero-posting ledger is X2's, and the never-opened terminal settlement is unreachable — a terminal settlement requires a completed transition, which opens the escrow), and one ledger-trace publication per declared rule class (the Per-Class Ledger Trace Register — the gateway and `q_const`, `q_add`, `q_cmp`, `q_br`, `q_jmp`, `q_halt`, `q_load`, `q_tuple`, `q_field`, `q_emit`), each mechanically checkable against the equation of §3.1 through the protocol of §4.1;
 - encoding vectors for `EXT` record payloads whose reading types the corpus declares with its encoding version — **discharged at v0.3.0-draft.18 as expansion increment 5 (R1–R4, M13–M15)**: the declared payload reading P14 (the closed two-type set — the empty payload and the exactly-one-§2.6-value payload — total over the payload bytes, no per-record type tag existing or needed), the canonical record encodings over both reading types (R1–R3, the new Family R), the populated-table envelope resolving M9's dangling reference (R4 — the committed M9 program, the declared-difference precedent), and the malformed counterparts at the payload extent and the record structure (M13 — trailing bytes after the complete value; M14 — the non-canonical value, M3's rule at the payload extent; M15 — the duplicate record index, the committed duplicate-key rule's case).
 
