@@ -2,7 +2,7 @@
 layout: default
 title: QnIR v0.3 — Independent Follow-up Review
 description: Independent audit of the v0.3.0-draft.18 specification, corpus, implementations, and artifact lineage
-version: 0.1.3
+version: 0.1.4
 updated: 2026-11-14
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL 1.0)
@@ -392,3 +392,35 @@ This note records F25's closure at the artifact level and the two corrections th
 3. Fix the `boc.md` §12 table split (documentation only).
 
 **Scope boundaries.** No vector is deleted or edited. `QnIR` is not promoted. Step 5 is not started.
+
+## Correction Note - v0.1.4
+
+This note records the F20 traceability register's commitment and F22's status clarification, both at v0.3.0-draft.21. It follows the repository's append-only discipline: the original review, the v0.1.1–v0.1.3 notes above are unchanged. It does not alter the QnIR design, the BOC policy, or any committed vector.
+
+### 1. F20 — the traceability register is committed (the mapping requirement discharged)
+
+- **The register.** §4.4 of [`docs/qnir_conformance.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir_conformance.md) (v0.3.0-draft.21) now carries the traceability register: every declared target of the adversarial families paragraph is mapped to exactly one of four disposition classes, each cited to repository bytes — COVERED (committed vectors, by id), CLOSED BY DECLARATION (rule citations), OPEN (a registered obligation whose resolving decision is pending), FUTURE TEST REQUIREMENT (a later-step owner). This is the explicit dispositions-and-evidence mapping this review's §5 item 5 required, and the review's §5 items 2–3 are answered by it: the call/extension-boundary obligation is closed by declaration (the closed core inventory and total grammar make any call construct's bytes an unknown opcode — M1's committed verdict fixes the class; no dedicated call vector can exist), and the collision-surface obligation is covered on the declared in-core surface by X45, with the F6 header-equal/payload-different comparison registered as a future test requirement owned by Step 5.
+- **What remains open, and where.** The register's OPEN and FUTURE rows are exactly the corpus's Suite Register's two outstanding bullets: the depth-ceiling vectors (awaiting the A/B adjudication — dedicated vectors or a cited unreachable disposition) and the fuel-backstop-on-validator-defect fixture (awaiting declared fixture semantics — a backstop stop on an admitted Intent evidences a validator defect, never a satisfied admission rule, so it cannot be a conforming golden). These stand as their own obligations; the F20 finding's defect — the missing explicit mapping and evidence — is repaired.
+- **No bytes moved.** No vector was added or edited (the corpus digest of record remains `32028d2c76681893` over 1,059,386 repository bytes); no implementation was changed and no run was required (the register binds no artifact input).
+
+### 2. F22 — the current-status clarification is recorded
+
+The program of record's v0.3.0-draft.21 wave record carries the clarification in the required form: the four ordered implementation artifacts exist as committed and pass the currently committed 84-vector corpus on their runs of record, while the full Step-4 suite and acceptance remain partial — the §4.4 suite closes pending the depth-ceiling adjudication and the fuel-backstop fixture, and the traceability register's OPEN and FUTURE rows are the standing list of what remains.
+
+### 3. Step status after this note
+
+| QnIR repair step | Status after v0.1.4 |
+|---|---|
+| Step 1 — Minimal core | Pass, subject to existing promotion conditions |
+| Step 2 — Operational semantics | F25 closed; F26 (depth ceiling) open — the A/B adjudication is still needed |
+| Step 3 — Work accounting and admission | Pass, subject to existing promotion conditions |
+| Step 4 — Conformance oracle and corpus | F20 mapping discharged (register committed); F27 fixture outstanding; acceptance partial by the register's OPEN/FUTURE rows |
+| Steps 5 and 6 | Deferred |
+
+### 4. Remaining work (carries §7 forward, reordered by the register)
+
+1. Decide F26 (option A or B: dedicated depth-ceiling vectors, or a cited unreachable-or-declared disposition).
+2. Specify the F27 fuel-backstop fixture semantics (shape, expected verdict, checking protocol at the validator boundary).
+3. Fix the `boc.md` §12 table split (documentation only).
+
+**Scope boundaries.** No vector is deleted or edited. No implementation was changed in this pass. `QnIR` is not promoted. Step 5 is not started.
