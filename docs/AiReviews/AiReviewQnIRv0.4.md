@@ -617,3 +617,24 @@ All four modes PASS (normal 84/84 both artifacts, `--fixture F27` PASS both); th
 Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the collision-safe artifact comparison, whose construction must be declared before its artifact/test share.
 
 **Scope boundaries.** No corpus, vector, or §1–§5 specification byte changes; the transcript additions are external evidence metadata. `QnIR` is not promoted; the step's register alone governs its discharge.
+
+## Correction Note - v0.1.13
+
+This note records the collision comparison's specification share — the `qir-artifact-cmp-1` procedure declared in §6.7 of `docs/qnir_commitments.md` — committed at v0.3.0-draft.29. It follows the append-only discipline: the original review and the v0.1.1–v0.1.12 notes above are unchanged. No corpus byte, transcript byte, implementation byte, or committed §1–§4 rule changes; `QnIR` is not promoted.
+
+### 1. The share
+
+F6's obligation — a shallow header comparison cannot detect different payloads under equal headers, so the draft must compare full canonical encodings or retain a collision bucket of complete artifacts and quarantine both on a genuine collision — is answered as a construction. §6.7 declares the **complete artifact** as the §6.2 identity triple (the declared summary) together with the artifact's complete canonical bytes (the artifact itself), closes the projection (the complete canonical byte string is the only comparison surface; coarser projections are never comparison surfaces), and declares the procedure **`qir-artifact-cmp-1`**: `same` (complete bytes agree, the equality claim permitted), `different` (kinds, versions, or bytes differ under differing summaries), and `collision` (identity triples agree while complete bytes differ — the genuine SHA-256 collision, both artifacts quarantined). Quarantine means: no equality claim between the members, neither stands as *the* canonical artifact of its kind, both complete byte strings are retained in the collision bucket register, the divergence is recorded in the adjudication register (§6.3), and an entry is resolved only by a recorded wave adjudication — never by deletion or re-running. The bucket register is empty over the committed corpus; the publication rendering is fixed (`lineage: collision bucket (qir-artifact-cmp-1, entries = <n>)` after the trace-root lines, with one entry line per pair), the pins line is fixed (`qir-artifact-cmp-1 known-answer pins: 4/4 reproduced (commitments §6.7)`), and four decision-rule pins are declared — the collision row supplying equal triples, since no SHA-256 collision is constructible and none is claimed. `qir-artifact-cmp-1` is the fourth generation under §6.4's versioning rule.
+
+### 2. Step-5 state
+
+| Step-5 deliverable | State |
+|---|---|
+| Normative lineage | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Versioned verbalizer/extractor identities | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Full-transition trace roots | **DISCHARGED** (specification v0.3.0-draft.27; artifact v0.3.0-draft.28) |
+| Collision-safe artifact comparison (header-equal, payload-different) | **Specification share DISCHARGED (v0.3.0-draft.29)**; artifact share future (both implementations' comparison core, the pins line, the bucket state line, and the committed test surface §4.4 fixes) |
+
+Nothing is emitted or implemented at this wave: the implementations still emit the draft.28 header, lineage, and trace-root lines. Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the collision comparison's artifact share and committed test surface, which empties the register and closes Step 5.
+
+**Scope boundaries.** No corpus, vector, transcript, implementation, or §1–§5 specification byte changes. `QnIR` is not promoted; the step's register alone governs its discharge.
