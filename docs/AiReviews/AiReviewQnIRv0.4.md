@@ -569,3 +569,26 @@ The binding-level agreement of record: `E = 8acdeaa1fadd7b3b0b672d11e2ed0e67599f
 Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the trace-root declaration (the format declared before any implementation), then the collision bucket.
 
 **Scope boundaries.** No corpus, vector, or §1–§5 specification byte changes; the transcript additions are external evidence metadata. `QnIR` is not promoted; the step's register alone governs its discharge.
+
+## Correction Note - v0.1.11
+
+This note records the third of Step 5's four deliverables reaching its specification share — the full-transition trace-root construction declared in §6.6 of `docs/qnir_commitments.md` — committed at v0.3.0-draft.27. It follows the append-only discipline: the original review and the v0.1.1–v0.1.10 notes above are unchanged. No corpus byte, transcript byte, implementation byte, or committed §1–§4 rule changes; `QnIR` is not promoted.
+
+### 1. The share
+
+The construction `qir-trace-root-1` is declared in full, format before implementation: leaf `SHA-256(0x00 || r)` over each transition record's canonical fourteen-pair encoding; node `SHA-256(0x01 || x || y)`; levels pairwise and left to right with an odd level's final value promoted unchanged; the root is the single remaining value; a one-record trace's root is its leaf value; the empty trace's root is the declared constant `SHA-256(0x02)`. The three single-byte prefixes separate the domains; no new cryptographic assumption is introduced and no security proof is claimed. Six known-answer pins over toy byte strings pin the carry rule at two levels (construction examples — not corpus vectors, not counted in the declared seed, no conformance status).
+
+The scopes are closed to `run` (the X-family evidence sequence) and `vector <id>`, and the publication rendering is fixed as `lineage: trace root (qir-trace-root-1, scope = <run|vector id>, n = <records>, root = <64 lowercase hex>)`. The declared boundaries: the root binds the trace's records (bytes, order, multiplicity) and not the terminal receipts, the corpus identity, `V`, the implementation identity, or the transcript text — receipts remain bound by the evidence digest, and `E` and the root are two commitments over the same record bytes at different structures, neither superseding the other. The `QO-24` separation is unchanged; `qir-trace-root-1` is a generation under §6.4's versioning rule.
+
+### 2. Step-5 state
+
+| Step-5 deliverable | State |
+|---|---|
+| Normative lineage | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Versioned verbalizer/extractor identities | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Full-transition trace roots | **Specification share DISCHARGED (v0.3.0-draft.27)**; artifact share future (emission in both implementations, the `run` and `vector` scopes, the pins, cross-implementation agreement recorded as evidence) |
+| Collision-safe artifact comparison (header-equal, payload-different) | Future — the §1.4 F6 bucket resolution; the conformance register's last future row |
+
+Nothing is emitted or implemented at this wave: the implementations still emit the draft.26 five-line block and nothing more. Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the trace-root artifact share, then the collision bucket.
+
+**Scope boundaries.** No corpus, vector, transcript, implementation, or §1–§5 specification byte changes. `QnIR` is not promoted; the step's register alone governs its discharge.
