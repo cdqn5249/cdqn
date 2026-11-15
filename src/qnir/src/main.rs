@@ -38,7 +38,7 @@ use crate::cbor::Cbor;
 use std::fs;
 use value::{enc_value, Value};
 
-pub(crate) use interp::{outcome_name, suite_x_exec};
+pub(crate) use interp::{outcome_name, suite_x_exec, trace_root};
 
 // ------------------------------------------------------------ text helpers
 
@@ -1770,6 +1770,42 @@ fn lineage_lines(
     ]
 }
 
+/// The six declared known-answer pins of the trace-root construction
+/// `qir-trace-root-1` (commitments §6.6), recomputed from the toy byte
+/// strings `A`–`E` at every run; the return value is the number of pins
+/// reproduced (construction examples, never corpus vectors).
+fn trace_pins_ok() -> usize {
+    let a: &[u8] = &[0x41];
+    let b: &[u8] = &[0x42];
+    let c: &[u8] = &[0x43];
+    let d: &[u8] = &[0x44];
+    let e: &[u8] = &[0x45];
+    let cases: [(&[&[u8]], &str); 6] = [
+        (&[], "dbc1b4c900ffe48d575b5da5c638040125f65db0fe3e24494b76ea986457d986"),
+        (&[a], "c00b4d3c929cb5cc316691ed4636f634576f2c9b2954767234c5274e9dde185d"),
+        (
+            &[a, b],
+            "ed692f01f7f6c46930d7ad8f9adad3f9f38b7379cf6a8d2f399a0ba1e914fe25",
+        ),
+        (
+            &[a, b, c],
+            "961d2e2be20f538ffdf56962a86d1bd165498f222684ee4c5e02c1e9f852adc5",
+        ),
+        (
+            &[a, b, c, d],
+            "5c8dc617d287a4297eb2bcb81b37644b5138e57ad461c657db152109e3fc9fca",
+        ),
+        (
+            &[a, b, c, d, e],
+            "2bdbcd79bf92b8dad52ba685f01bef520f0cda04468a13a6bd27bfbeebff64d7",
+        ),
+    ];
+    cases
+        .iter()
+        .filter(|(input, want)| to_hex(&trace_root(input)) == *want)
+        .count()
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let fixture_mode = args.len() == 4 && args[2] == "--fixture" && args[3] == "F27";
@@ -1801,13 +1837,25 @@ fn main() {
     .sum::<usize>();
     println!("declared seed: {n_vectors} vectors");
 
+    // The trace-root construction's declared known-answer pins (commitments
+    // §6.6): recomputed at every run, published in the header, and a run
+    // failure when any pin diverges (construction examples, never corpus
+    // vectors — not counted in the declared seed).
+    let n_pins = trace_pins_ok();
+    println!("qir-trace-root-1 known-answer pins: {n_pins}/6 reproduced (commitments §6.6)");
+
     let mut rep = Report::new();
+    if n_pins != 6 {
+        rep.fail(format!(
+            "qir-trace-root-1 known-answer pins: {n_pins}/6 reproduced (commitments §6.6)"
+        ));
+    }
     suite_e(&md, &mut rep);
     suite_i(&md, &mut rep);
     suite_r(&md, &mut rep);
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
-    let (e_digest, n_ev, v_tuple) = suite_x_exec(&md, &mut rep);
+    let (e_digest, n_ev, v_tuple, run_root, v_roots) = suite_x_exec(&md, &mut rep);
     if fixture_mode {
         suite_fixture(&md, &mut rep);
     }
@@ -1830,6 +1878,20 @@ fn main() {
     println!();
     for l in lineage_lines(&md, &to_hex(&e_digest), n_ev, &v_tuple) {
         println!("{l}");
+    }
+    // The trace-root publication (commitments §6.6): one line per published
+    // scope — the run scope first, then each vector scope in committed
+    // document order. The roots bind the trace's records only; the fixture's
+    // injected runs contribute nothing in either mode.
+    println!(
+        "lineage: trace root (qir-trace-root-1, scope = run, n = {n_ev}, root = {})",
+        to_hex(&run_root)
+    );
+    for (id, n_vec, root) in &v_roots {
+        println!(
+            "lineage: trace root (qir-trace-root-1, scope = {id}, n = {n_vec}, root = {})",
+            to_hex(root)
+        );
     }
     if rep.failures != 0 {
         std::process::exit(1);

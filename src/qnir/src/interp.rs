@@ -555,6 +555,48 @@ pub(crate) fn encode_record(
     ]))
 }
 
+/// The declared full-transition trace-root construction `qir-trace-root-1`
+/// (commitments §6.6): the leaf `SHA-256(0x00 || r)` over each record's
+/// canonical encoding, the node `SHA-256(0x01 || x || y)`, levels formed
+/// pairwise and left to right with an odd level's final value promoted
+/// unchanged (never duplicated, never hashed against itself), the root the
+/// single remaining value — a one-record trace's root is its leaf value —
+/// and the empty trace's root the declared constant `SHA-256(0x02)`. The
+/// three single-byte prefixes give leaves, nodes, and the empty constant
+/// disjoint domains.
+pub(crate) fn trace_root(records: &[&[u8]]) -> [u8; 32] {
+    if records.is_empty() {
+        return sha256(&[0x02]);
+    }
+    let mut lvl: Vec<[u8; 32]> = records
+        .iter()
+        .map(|r| {
+            let mut m = Vec::with_capacity(1 + r.len());
+            m.push(0x00u8);
+            m.extend_from_slice(r);
+            sha256(&m)
+        })
+        .collect();
+    while lvl.len() > 1 {
+        let mut nxt: Vec<[u8; 32]> = Vec::with_capacity((lvl.len() + 1) / 2);
+        let mut i = 0usize;
+        while i + 1 < lvl.len() {
+            let mut m = [0u8; 65];
+            m[0] = 0x01;
+            m[1..33].copy_from_slice(&lvl[i]);
+            m[33..65].copy_from_slice(&lvl[i + 1]);
+            nxt.push(sha256(&m));
+            i += 2;
+        }
+        if i < lvl.len() {
+            // the odd level's final value is promoted unchanged
+            nxt.push(lvl[i]);
+        }
+        lvl = nxt;
+    }
+    lvl[0]
+}
+
 enum Transfer {
     Fall,
     To(u64),
@@ -1960,8 +2002,9 @@ fn exec_vector_check(
     profile: &Profile,
     rep: &mut crate::Report,
     ev: &mut Vec<u8>,
+    all_recs: &mut Vec<Vec<u8>>,
     n_ev: &mut usize,
-) -> bool {
+) -> (bool, Option<(usize, [u8; 32])>) {
     // ---- the vector's committed expected blocks (§4.4)
     let recs_region = between(
         section,
@@ -1995,32 +2038,36 @@ fn exec_vector_check(
     let dep_values = match declared_dep_values(section, envelope) {
         Ok(v) => v,
         Err(e) => {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 &format!("the declared dependency table is malformed — {e}"),
                 rep,
-            );
+            ), None);
         }
     };
     let prog_root = sha256(envelope).to_vec();
     let outcome = match run_vector(envelope, params.w_budget, profile, &dep_values) {
         Ok(o) => o,
         Err(e) => {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 &format!("the reference interpreter rejected the run — {e}"),
                 rep,
-            );
+            ), None);
         }
     };
     // The lineage binding's evidence digest accumulates the run's own
     // canonical record encodings followed by the canonical receipt encoding,
     // immediately after the successful run and before any agreement check,
     // so a later failing check never changes the evidence (commitments §6.3).
+    // The same record bytes, in record order, are this vector's trace: the
+    // vector-scope root of `qir-trace-root-1` is computed over them
+    // (commitments §6.6), and they are appended to the run scope's sequence.
+    let mut recs: Vec<Vec<u8>> = Vec::with_capacity(outcome.records.len());
     for rec in &outcome.records {
-        ev.extend(encode_record(
+        let bytes = encode_record(
             rec,
             &prog_root,
             [
@@ -2028,14 +2075,19 @@ fn exec_vector_check(
                 params.enc.as_str(),
                 params.prof.as_str(),
             ],
-        ));
+        );
+        ev.extend_from_slice(&bytes);
+        recs.push(bytes.clone());
+        all_recs.push(bytes);
     }
-    *n_ev += outcome.records.len();
+    let n_vec = outcome.records.len();
+    *n_ev += n_vec;
     ev.extend_from_slice(&outcome.receipt);
+    let v_root = trace_root(&recs.iter().map(|b| b.as_slice()).collect::<Vec<_>>());
 
     // ---- agreement point: the terminal outcome
     if outcome.outcome != params.expected_outcome_tag {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             &format!(
@@ -2046,12 +2098,12 @@ fn exec_vector_check(
                 params.expected_outcome_tag
             ),
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
 
     // ---- agreement points: record sequence + state roots (fields 1–14)
     if declared_count != outcome.records.len() || rec_fences.len() != outcome.records.len() {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             &format!(
@@ -2061,7 +2113,7 @@ fn exec_vector_check(
                 rec_fences.len()
             ),
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     for (ri, rec) in outcome.records.iter().enumerate() {
         let parsed = parse_record_block(&rec_fences[ri].body);
@@ -2073,12 +2125,12 @@ fn exec_vector_check(
             "completed"
         };
         if parsed.class != want_class {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 &format!("record {} is a {} but committed as \"{}\"", ri + 1, want_class, parsed.class),
                 rep,
-            );
+            ), Some((n_vec, v_root)));
         }
         // field 1 prev_root: the record's pre state — for consecutive records
         // the previous record's post is this record's pre, and the first
@@ -2098,12 +2150,12 @@ fn exec_vector_check(
         ];
         for (num, verdict) in &checks {
             if !verdict.ends_with("true") {
-                return cmp_fail(
+                return (cmp_fail(
                     id,
                     name,
                     &format!("record {} field {} diverges from the committed bytes ({})", ri + 1, num, verdict),
                     rep,
-                );
+                ), Some((n_vec, v_root)));
             }
         }
         // field 12 status: the transition's birth/consume/terminalize traces
@@ -2124,7 +2176,7 @@ fn exec_vector_check(
             })
             .collect();
         if got_status != rec.events {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 &format!(
@@ -2134,7 +2186,7 @@ fn exec_vector_check(
                     f[11]
                 ),
                 rep,
-            );
+            ), Some((n_vec, v_root)));
         }
         // field 13 receipt_ids (P13(d), expansion increment 3): the ordinals
         // the transition emitted — every vector committed before that
@@ -2142,7 +2194,7 @@ fn exec_vector_check(
         let got_ids: Vec<i128> = iv_nums(&parse_iv(&f[12]));
         let want_ids: Vec<i128> = rec.receipt_ids.iter().map(|&v| v as i128).collect();
         if got_ids != want_ids {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 &format!(
@@ -2152,24 +2204,24 @@ fn exec_vector_check(
                     f[12]
                 ),
                 rep,
-            );
+            ), Some((n_vec, v_root)));
         }
         // field 14 versions: the vector's declared V
         let q: Vec<&str> = f[13].split('"').collect();
         let got_versions = [q[1], q[3], q[5]];
         if got_versions != [params.sem.as_str(), params.enc.as_str(), params.prof.as_str()] {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 &format!("record {} field 14 (versions) diverges from the declared V", ri + 1),
                 rep,
-            );
+            ), Some((n_vec, v_root)));
         }
     }
 
     // ---- agreement point: terminal receipt (canonical bytes decide, §4.4)
     if rcpt.bytes != outcome.receipt {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             &format!(
@@ -2178,19 +2230,19 @@ fn exec_vector_check(
                 rcpt.bytes.len()
             ),
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     if rcpt.outcome_tag != outcome.outcome {
-        return cmp_fail(id, name, "receipt outcome_tag disagrees with the run", rep);
+        return (cmp_fail(id, name, "receipt outcome_tag disagrees with the run", rep), Some((n_vec, v_root)));
     }
     let got_item = interp_itemization(&outcome.receipt).expect("run receipt decodes");
     if got_item != rcpt.itemization {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             "receipt token_itemization diverges from the committed table",
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     let got_sel = interp_selected(&outcome.receipt).expect("run receipt decodes");
     match (got_sel, rcpt.selected) {
@@ -2199,18 +2251,18 @@ fn exec_vector_check(
             // both nil-form annotations over bytes already byte-compared
         }
         _ => {
-            return cmp_fail(
+            return (cmp_fail(
                 id,
                 name,
                 "receipt selected_token diverges from the committed table",
                 rep,
-            );
+            ), Some((n_vec, v_root)));
         }
     }
 
     // ---- agreement point: reconstructed ledger (§3.1/§3.3)
     if ledger.work_e != outcome.acc.charged {
-        return cmp_fail(id, name, "Work(E) diverges from the run's charged total", rep);
+        return (cmp_fail(id, name, "Work(E) diverges from the run's charged total", rep), Some((n_vec, v_root)));
     }
     let mut committed_pc: Vec<(String, u64, u64)> = ledger.per_class.clone();
     committed_pc.sort();
@@ -2221,7 +2273,7 @@ fn exec_vector_check(
         .collect();
     run_pc.sort();
     if committed_pc != run_pc {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             &format!(
@@ -2229,7 +2281,7 @@ fn exec_vector_check(
                 run_pc, committed_pc
             ),
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     let run_settle: Vec<(u64, u64, u64, u64)> = outcome
         .boundaries
@@ -2237,12 +2289,12 @@ fn exec_vector_check(
         .map(|(s, a)| (*s, a.charged, a.reserved, a.refunded))
         .collect();
     if ledger.settlement != run_settle {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             "settlement trace diverges from the run's boundaries",
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     let outstanding = outcome.acc.reserved - outcome.acc.charged - outcome.acc.refunded;
     let (r1, c1, f1, o1) = ledger.ident1;
@@ -2252,51 +2304,51 @@ fn exec_vector_check(
         || f1 != outcome.acc.refunded
         || o1 != outstanding
     {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             "conservation identity 1 (reserved = charged + refunded + reserve_outstanding) diverges",
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     let (w2, c2, r2) = ledger.ident2;
     if w2 != params.w_budget || r2 != w2 - c2 || r2 != params.w_budget - outcome.acc.charged {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             "conservation identity 2 (remaining_budget = W_budget - charged) diverges",
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
     match ledger.refund_final {
         Ok((b3, c3, r3)) => {
             if b3 != outcome.bh || r3 != b3 - c3 || r3 != outcome.bh - outcome.acc.charged {
-                return cmp_fail(
+                return (cmp_fail(
                     id,
                     name,
                     "conservation identity 3 (refund_final = B(P) - charged) diverges",
                     rep,
-                );
+                ), Some((n_vec, v_root)));
             }
         }
         Err(()) => {
             if outcome.acc.charged != 0 || outcome.acc.reserved != 0 || outcome.outcome != 3 {
-                return cmp_fail(
+                return (cmp_fail(
                     id,
                     name,
                     "the committed escrow-never-opened form contradicts the run",
                     rep,
-                );
+                ), Some((n_vec, v_root)));
             }
         }
     }
     if ledger.outstanding_final != 0 {
-        return cmp_fail(
+        return (cmp_fail(
             id,
             name,
             "the reserve outlives the terminal settlement in the committed ledger",
             rep,
-        );
+        ), Some((n_vec, v_root)));
     }
 
     rep.say(format!(
@@ -2311,7 +2363,7 @@ fn exec_vector_check(
         outcome.acc.refunded,
         outstanding
     ));
-    true
+    (true, Some((n_vec, v_root)))
 }
 
 /// The suite: every committed Family X vector is executed and compared at
@@ -2319,7 +2371,13 @@ fn exec_vector_check(
 pub fn suite_x_exec(
     md: &str,
     rep: &mut crate::Report,
-) -> ([u8; 32], usize, (String, String, String)) {
+) -> (
+    [u8; 32],
+    usize,
+    (String, String, String),
+    [u8; 32],
+    Vec<(String, usize, [u8; 32])>,
+) {
     let vectors = crate::parse_vectors(md, "## Family X — Execution Vectors");
     let profile = bhat::golden_profile();
     // committed envelopes first pass (a vector may cite another's, §4.4)
@@ -2337,8 +2395,10 @@ pub fn suite_x_exec(
     // order, accumulated by exec_vector_check (commitments §6.3); E/I/R/M
     // runs contribute nothing, and neither does the fixture's injected run
     let mut ev: Vec<u8> = Vec::new();
+    let mut all_recs: Vec<Vec<u8>> = Vec::new();
     let mut n_ev = 0usize;
     let mut v_tuple: Option<(String, String, String)> = None;
+    let mut v_roots: Vec<(String, usize, [u8; 32])> = Vec::new();
     let mut pass = 0usize;
     for (vi, v) in vectors.iter().enumerate() {
         let params = crate::parse_x_params(&v.section);
@@ -2358,7 +2418,7 @@ pub fn suite_x_exec(
         } else {
             committed[vi].1.clone()
         };
-        if exec_vector_check(
+        let (ok, tail) = exec_vector_check(
             &v.id,
             &v.name,
             &v.section,
@@ -2367,9 +2427,14 @@ pub fn suite_x_exec(
             &profile,
             rep,
             &mut ev,
+            &mut all_recs,
             &mut n_ev,
-        ) {
+        );
+        if ok {
             pass += 1;
+        }
+        if let Some((n_vec, v_root)) = tail {
+            v_roots.push((v.id.clone(), n_vec, v_root));
         }
     }
     rep.say(format!(
@@ -2378,9 +2443,15 @@ pub fn suite_x_exec(
         pass,
         vectors.len()
     ));
+    // the run-scope root: every executed X-family vector's records, in
+    // committed document order then record order — the sequence the evidence
+    // digest accumulates minus the per-vector receipt encodings (§6.6)
+    let run_root = trace_root(&all_recs.iter().map(|b| b.as_slice()).collect::<Vec<_>>());
     (
         sha256(&ev),
         n_ev,
         v_tuple.expect("the committed X family declares at least one vector"),
+        run_root,
+        v_roots,
     )
 }

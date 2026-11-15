@@ -592,3 +592,28 @@ The scopes are closed to `run` (the X-family evidence sequence) and `vector <id>
 Nothing is emitted or implemented at this wave: the implementations still emit the draft.26 five-line block and nothing more. Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the trace-root artifact share, then the collision bucket.
 
 **Scope boundaries.** No corpus, vector, transcript, implementation, or §1–§5 specification byte changes. `QnIR` is not promoted; the step's register alone governs its discharge.
+
+## Correction Note - v0.1.12
+
+This note records the trace-root row's artifact share — both implementations computing and emitting the declared `qir-trace-root-1` roots — committed at v0.3.0-draft.28. It follows the append-only discipline: the original review and the v0.1.1–v0.1.11 notes above are unchanged. The transcript additions are external evidence metadata; no corpus byte, committed §1–§4 rule, or frozen encoding changes; `QnIR` is not promoted.
+
+### 1. The share
+
+Each run of either artifact now prints the header line `qir-trace-root-1 known-answer pins: 6/6 reproduced (commitments §6.6)` — the six declared pins of §6.6 recomputed from the construction at every run, a run failure if any diverges, never counted in the declared seed — and, after the §6.3 five-line lineage block, the publication line for the `run` scope followed by one line per executed `vector` scope in committed document order, exactly the rendering §6.6 fixed: 52 published lines per run (`scope = run, n = 336`, then `scope = X1` through `scope = X51`, the vector `n` values summing to 336). The roots bind the trace's records only — bytes, order, multiplicity — collected immediately after each successful run and before any agreement check, so a failing check never changes a published root and a pre-run failure publishes no scope; the fixture's injected runs contribute nothing.
+
+### 2. The evidence
+
+All four modes PASS (normal 84/84 both artifacts, `--fixture F27` PASS both); the 52 published trace lines are byte-identical across the two implementations and across normal and fixture mode — recorded as evidence, never the criterion. `E = 8acdeaa1fadd7b3b0b672d11e2ed0e67599ff7a260d7fe9dcd04f97823ffcc72` with `n = 336` is unchanged; the fixture block remains byte-identical (`ed67e6cbd242c69c`); the corpus is unchanged. The transcripts changed (a declared output addition), so each read-back pair is a new generation-bound commitment per §6.4, cited by the wave record.
+
+### 3. Step-5 state
+
+| Step-5 deliverable | State |
+|---|---|
+| Normative lineage | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Versioned verbalizer/extractor identities | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Full-transition trace roots | **DISCHARGED** (specification v0.3.0-draft.27; artifact v0.3.0-draft.28) |
+| Collision-safe artifact comparison (header-equal, payload-different) | Future — the §1.4 F6 bucket resolution; the conformance register's last future row |
+
+Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the collision-safe artifact comparison, whose construction must be declared before its artifact/test share.
+
+**Scope boundaries.** No corpus, vector, or §1–§5 specification byte changes; the transcript additions are external evidence metadata. `QnIR` is not promoted; the step's register alone governs its discharge.

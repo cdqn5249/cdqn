@@ -1208,7 +1208,7 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
-IMPL_VERSION = "0.3.0-draft.26"
+IMPL_VERSION = "0.3.0-draft.28"
 
 # The implementation artifact's declared source set (commitments §6.2), in
 # the declared path order.
@@ -1231,6 +1231,52 @@ def impl_identity():
         with open(f, "rb") as fh:
             joined.extend(fh.read().replace(b"\r\n", b"\n"))
     return IMPL_VERSION, lf_sha256(bytes(joined))
+
+
+# The declared full-transition trace-root construction `qir-trace-root-1`
+# (commitments §6.6): the leaf SHA-256(0x00 || r) over each record's canonical
+# encoding, the node SHA-256(0x01 || x || y), levels formed pairwise and left
+# to right with an odd level's final value promoted unchanged (never
+# duplicated, never hashed against itself), the root the single remaining
+# value — a one-record trace's root is its leaf value — and the empty trace's
+# root the declared constant SHA-256(0x02).  The three single-byte prefixes
+# give leaves, nodes, and the empty constant disjoint domains.
+
+TRACE_ROOT_PINS = [
+    ([], "dbc1b4c900ffe48d575b5da5c638040125f65db0fe3e24494b76ea986457d986"),
+    ([b"A"], "c00b4d3c929cb5cc316691ed4636f634576f2c9b2954767234c5274e9dde185d"),
+    ([b"A", b"B"],
+     "ed692f01f7f6c46930d7ad8f9adad3f9f38b7379cf6a8d2f399a0ba1e914fe25"),
+    ([b"A", b"B", b"C"],
+     "961d2e2be20f538ffdf56962a86d1bd165498f222684ee4c5e02c1e9f852adc5"),
+    ([b"A", b"B", b"C", b"D"],
+     "5c8dc617d287a4297eb2bcb81b37644b5138e57ad461c657db152109e3fc9fca"),
+    ([b"A", b"B", b"C", b"D", b"E"],
+     "2bdbcd79bf92b8dad52ba685f01bef520f0cda04468a13a6bd27bfbeebff64d7"),
+]
+
+
+def trace_root(records):
+    """The root of `qir-trace-root-1` over a trace's canonical record
+    encodings (commitments §6.6)."""
+    if not records:
+        return hashlib.sha256(b"\x02").digest()
+    lvl = [hashlib.sha256(b"\x00" + r).digest() for r in records]
+    while len(lvl) > 1:
+        nxt = [hashlib.sha256(b"\x01" + lvl[i] + lvl[i + 1]).digest()
+               for i in range(0, len(lvl) - 1, 2)]
+        if len(lvl) % 2:
+            nxt.append(lvl[-1])  # the odd level's final value is promoted unchanged
+        lvl = nxt
+    return lvl[0]
+
+
+def trace_pins_ok():
+    """The six declared known-answer pins of §6.6, recomputed at every run
+    (construction examples, never corpus vectors); the return value is the
+    number of pins reproduced."""
+    return sum(1 for recs, want in TRACE_ROOT_PINS
+               if trace_root(recs).hex() == want)
 
 
 class Corpus:
@@ -1595,7 +1641,9 @@ def run_x_family(corpus, profile):
     # agreement check, so a failing check never changes the evidence
     # (commitments §6.3); families E/I/R/M and the fixture contribute nothing
     ev = bytearray()
+    all_recs = []
     n_ev = 0
+    v_roots = []
     v_first = None
     for vid in order:
         body = by_id[vid]
@@ -1647,10 +1695,16 @@ def run_x_family(corpus, profile):
         try:
             res = Machine(envelopes[vid], D, wb, profile).run()
             # the evidence accumulates before any agreement check
-            # (commitments §6.3)
-            for rb in res["records"]:
+            # (commitments §6.3); the same record bytes, in record order, are
+            # this vector's trace — the vector-scope root of
+            # `qir-trace-root-1` is computed over them (commitments §6.6),
+            # and they are appended to the run scope's sequence
+            vrecs = list(res["records"])
+            for rb in vrecs:
                 ev.extend(rb)
-            n_ev += len(res["records"])
+            all_recs.extend(vrecs)
+            n_ev += len(vrecs)
+            v_roots.append((vid, len(vrecs), trace_root(vrecs).hex()))
             ev.extend(res["receipt"])
             if res["B_hat"] != b_committed:
                 raise AssertionError(
@@ -1702,8 +1756,12 @@ def run_x_family(corpus, profile):
         except (AssertionError, Malformed, ValueError) as e:
             fails.append(f"{vid}: {e}")
             x_lines.append(f"  {vid} {tags[vid]}: FAILED — {e}")
+    # the run-scope root: every executed X-family vector's records, in
+    # committed document order then record order — the sequence the evidence
+    # digest accumulates minus the per-vector receipt encodings (§6.6)
+    run_root = trace_root(all_recs).hex()
     return (len(order), n_env, n_listings, n_pass, x_lines, fails,
-            lf_sha256(bytes(ev)), n_ev, tuple(v_first))
+            lf_sha256(bytes(ev)), n_ev, tuple(v_first), run_root, v_roots)
 
 
 def run_fixture(corpus, profile, fid="F27"):
@@ -1900,6 +1958,18 @@ def main():
                f"{platform.machine()}; standard library only (QO-35)")
     ok = True
 
+    # The trace-root construction's declared known-answer pins (commitments
+    # §6.6): recomputed at every run, published in the header, and a run
+    # failure when any pin diverges (construction examples, never corpus
+    # vectors — not counted in the declared seed).
+    n_pins = trace_pins_ok()
+    head_fails = (["qir-trace-root-1 known-answer pins: "
+                   f"{n_pins}/6 reproduced (commitments §6.6)"]
+                  if n_pins != 6 else [])
+    ok &= not head_fails
+    out.append(f"qir-trace-root-1 known-answer pins: {n_pins}/6 reproduced "
+               "(commitments §6.6)")
+
     n, fails = run_family_e(corpus)
     ok &= not fails
     out.append(f"family E (value encodings): "
@@ -1924,8 +1994,8 @@ def main():
                f"{'PASS' if not fails_m else 'FAIL'} — {n - len(fails_m)}/{n} "
                f"committed verdicts reproduced (agreement point 2)")
 
-    n_x, n_env, n_list, n_pass, x_lines, fails_x, e_hex, n_ev, v_tuple = \
-        run_x_family(corpus, profile)
+    (n_x, n_env, n_list, n_pass, x_lines, fails_x, e_hex, n_ev, v_tuple,
+     run_root, v_roots) = run_x_family(corpus, profile)
     ok &= not fails_x
     out.append(f"program envelopes: {'PASS' if not fails_x else 'FAIL'} — "
                f"{n_env}/{n_env} committed envelope byte blocks decode; "
@@ -1938,7 +2008,7 @@ def main():
                f"five agreement points of §4.1")
     if fixture_id:
         out.extend(run_fixture(corpus, profile, fixture_id))
-    fails = fails + fails_i + fails_r + fails_m + fails_x
+    fails = head_fails + fails + fails_i + fails_r + fails_m + fails_x
     for f in fails:
         out.append(f"  FAIL — {f}")
     out.append(f"result: {'PASS' if ok else 'FAIL'} — "
@@ -1957,6 +2027,15 @@ def main():
     out.append(f"lineage: V = ({v_tuple[0]}, {v_tuple[1]}, {v_tuple[2]})")
     out.append(f"lineage: evidence (n = {n_ev} records, E = {e_hex})")
     out.append("lineage: generations (qir-extractor-1, qir-verbalizer-1)")
+    # The trace-root publication (commitments §6.6): one line per published
+    # scope — the run scope first, then each vector scope in committed
+    # document order. The roots bind the trace's records only; the fixture's
+    # injected runs contribute nothing in either mode.
+    out.append(f"lineage: trace root (qir-trace-root-1, scope = run, "
+               f"n = {n_ev}, root = {run_root})")
+    for vid, n_vec, root in v_roots:
+        out.append(f"lineage: trace root (qir-trace-root-1, scope = {vid}, "
+                   f"n = {n_vec}, root = {root})")
     print("\n".join(out))
     return 0 if ok else 1
 
