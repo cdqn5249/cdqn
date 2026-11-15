@@ -1208,7 +1208,7 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
-IMPL_VERSION = "0.3.0-draft.28"
+IMPL_VERSION = "0.3.0-draft.30"
 
 # The implementation artifact's declared source set (commitments §6.2), in
 # the declared path order.
@@ -1277,6 +1277,71 @@ def trace_pins_ok():
     number of pins reproduced."""
     return sum(1 for recs, want in TRACE_ROOT_PINS
                if trace_root(recs).hex() == want)
+
+
+# ============================================================ artifact comparison
+# The collision-safe comparison `qir-artifact-cmp-1` (commitments §6.7):
+# total, deterministic, symmetric up to the declared entry order. A complete
+# artifact is the (kind, version, digest) identity triple (the summary) plus
+# the complete canonical bytes (the artifact itself). Verdicts: 0 = same,
+# 1 = different, 2 = collision (genuine collision — triples agree, bytes differ).
+
+def cmp_artifacts(a, b):
+    if a[0] != b[0] or a[1] != b[1]:
+        return 1
+    if a[3] == b[3]:
+        return 0
+    if a[2] == b[2]:
+        return 2
+    return 1
+
+
+def collision_entries(arts):
+    n = 0
+    for i in range(len(arts)):
+        for j in range(i + 1, len(arts)):
+            if cmp_artifacts(arts[i], arts[j]) == 2:
+                n += 1
+    return n
+
+
+def artifact_cmp_pins_ok():
+    """The four declared known-answer pins of §6.7, recomputed at every run
+    as a decision rule over supplied triples. The return value is the number
+    of pins reproduced."""
+    import hashlib
+    da = hashlib.sha256(b"payload-a").digest()
+    db = hashlib.sha256(b"payload-b").digest()
+    dc = hashlib.sha256(b"payload-c").digest()
+    a = ("record", "V", da, b"payload-a")
+    b_same = a
+    b_coll = ("record", "V", da, b"payload-b")   # supplied equal digest
+    b_diff = ("record", "V", db, b"payload-b")
+    c_diffkind = ("receipt", "V", dc, b"payload-c")
+    pins = [
+        (cmp_artifacts(a, b_same), 0),
+        (cmp_artifacts(a, b_coll), 2),
+        (cmp_artifacts(a, b_diff), 1),
+        (cmp_artifacts(a, c_diffkind), 1),
+    ]
+    return sum(1 for got, want in pins if got == want)
+
+
+def artifact_cmp_selftest():
+    """The collision comparison's self-test: four toy complete artifacts fed
+    to the comparison core, checking the quarantine verdicts (§6.7)."""
+    import hashlib
+    da = hashlib.sha256(b"payload-a").digest()
+    db = hashlib.sha256(b"payload-b").digest()
+    dc = hashlib.sha256(b"payload-c").digest()
+    a = ("record", "V", da, b"payload-a")
+    coll = ("record", "V", da, b"payload-b")
+    diff = ("record", "V", db, b"payload-b")
+    cross = ("receipt", "V", dc, b"payload-c")
+    got = [cmp_artifacts(a, a), cmp_artifacts(a, coll),
+           cmp_artifacts(a, diff), cmp_artifacts(a, cross)]
+    want = [0, 2, 1, 1]
+    return sum(1 for g, w in zip(got, want) if g == w)
 
 
 class Corpus:
@@ -1642,9 +1707,19 @@ def run_x_family(corpus, profile):
     # (commitments §6.3); families E/I/R/M and the fixture contribute nothing
     ev = bytearray()
     all_recs = []
+    retained = []
     n_ev = 0
     v_roots = []
     v_first = None
+
+    # retained complete artifacts: corpus + implementation (§6.7)
+    import hashlib as _h
+    corpus_bytes = corpus.text.encode("utf-8")
+    impl_bytes = open(IMPL_SOURCES[0], "rb").read().replace(b"\r\n", b"\n")
+    impl_v, impl_d = impl_identity()
+    retained.append(("corpus", corpus.version, _h.sha256(corpus_bytes).digest(),
+                    corpus_bytes))
+    retained.append(("implementation", impl_v, bytes.fromhex(impl_d), impl_bytes))
     for vid in order:
         body = by_id[vid]
         params = next(ln for ln in body if ln.startswith("Declared parameters:"))
@@ -1665,6 +1740,11 @@ def run_x_family(corpus, profile):
         V = [s.strip() for s in v_line.split(",")]
         if v_first is None:
             v_first = V
+        # retained complete artifact: intent envelope
+        vstr = "(" + ", ".join(V) + ")"
+        retained.append(("intent", vstr,
+                        hashlib.sha256(envelopes[vid]).digest(),
+                        envelopes[vid]))
         adm = next(ln for ln in body if ln.startswith("Admission:"))
         m = re.search(r"B\(P\) = (\d+) U", adm)
         if m:
@@ -1705,6 +1785,12 @@ def run_x_family(corpus, profile):
             all_recs.extend(vrecs)
             n_ev += len(vrecs)
             v_roots.append((vid, len(vrecs), trace_root(vrecs).hex()))
+            for rb in vrecs:
+                retained.append(("record", vstr,
+                                hashlib.sha256(rb).digest(), rb))
+            retained.append(("receipt", vstr,
+                            hashlib.sha256(res["receipt"]).digest(),
+                            res["receipt"]))
             ev.extend(res["receipt"])
             if res["B_hat"] != b_committed:
                 raise AssertionError(
@@ -1756,12 +1842,16 @@ def run_x_family(corpus, profile):
         except (AssertionError, Malformed, ValueError) as e:
             fails.append(f"{vid}: {e}")
             x_lines.append(f"  {vid} {tags[vid]}: FAILED — {e}")
+    # the collision bucket: collision pairs among the retained complete
+    # artifacts (commitments §6.7). With the committed corpus this is 0.
+    entries = collision_entries(retained)
     # the run-scope root: every executed X-family vector's records, in
     # committed document order then record order — the sequence the evidence
     # digest accumulates minus the per-vector receipt encodings (§6.6)
     run_root = trace_root(all_recs).hex()
     return (len(order), n_env, n_listings, n_pass, x_lines, fails,
-            lf_sha256(bytes(ev)), n_ev, tuple(v_first), run_root, v_roots)
+            lf_sha256(bytes(ev)), n_ev, tuple(v_first), run_root, v_roots,
+            entries)
 
 
 def run_fixture(corpus, profile, fid="F27"):
@@ -1970,6 +2060,19 @@ def main():
     out.append(f"qir-trace-root-1 known-answer pins: {n_pins}/6 reproduced "
                "(commitments §6.6)")
 
+    n_cmp_pins = artifact_cmp_pins_ok()
+    n_cmp_self = artifact_cmp_selftest()
+    cmp_head_fails = (["qir-artifact-cmp-1 known-answer pins: "
+                       f"{n_cmp_pins}/4; self-test: {n_cmp_self}/4 "
+                       "(commitments §6.7)"]
+                      if (n_cmp_pins != 4 or n_cmp_self != 4) else [])
+    head_fails = head_fails + cmp_head_fails
+    ok &= not cmp_head_fails
+    out.append(f"qir-artifact-cmp-1 known-answer pins: {n_cmp_pins}/4 reproduced "
+               "(commitments §6.7)")
+    out.append(f"qir-artifact-cmp-1 self-test: {n_cmp_self}/4 verdicts reproduced "
+               "(commitments §6.7)")
+
     n, fails = run_family_e(corpus)
     ok &= not fails
     out.append(f"family E (value encodings): "
@@ -1995,7 +2098,7 @@ def main():
                f"committed verdicts reproduced (agreement point 2)")
 
     (n_x, n_env, n_list, n_pass, x_lines, fails_x, e_hex, n_ev, v_tuple,
-     run_root, v_roots) = run_x_family(corpus, profile)
+     run_root, v_roots, entries) = run_x_family(corpus, profile)
     ok &= not fails_x
     out.append(f"program envelopes: {'PASS' if not fails_x else 'FAIL'} — "
                f"{n_env}/{n_env} committed envelope byte blocks decode; "
@@ -2036,6 +2139,8 @@ def main():
     for vid, n_vec, root in v_roots:
         out.append(f"lineage: trace root (qir-trace-root-1, scope = {vid}, "
                    f"n = {n_vec}, root = {root})")
+    # The collision bucket state (commitments §6.7).
+    out.append(f"lineage: collision bucket (qir-artifact-cmp-1, entries = {entries})")
     print("\n".join(out))
     return 0 if ok else 1
 

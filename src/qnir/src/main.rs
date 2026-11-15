@@ -38,7 +38,7 @@ use crate::cbor::Cbor;
 use std::fs;
 use value::{enc_value, Value};
 
-pub(crate) use interp::{outcome_name, suite_x_exec, trace_root};
+pub(crate) use interp::{cmp_artifacts, CompleteArtifact, outcome_name, suite_x_exec, trace_root};
 
 // ------------------------------------------------------------ text helpers
 
@@ -1713,7 +1713,18 @@ fn to_hex(bytes: &[u8]) -> String {
 /// LF-normalized — the working copy's line endings are a checkout artifact
 /// and never participate — and the set excludes generated files (`Cargo.lock`
 /// is generated; `target/` is build output).
-fn impl_identity() -> (String, String) {
+pub(crate) fn impl_identity() -> (String, String) {
+    let joined = impl_source_bytes();
+    (
+        env!("CARGO_PKG_VERSION").to_string(),
+        to_hex(&crate::sha256::sha256(&joined)),
+    )
+}
+
+/// The implementation artifact's declared source bytes (LF-normalized), in
+/// the declared path order — the byte basis of the `implementation` kind
+/// (commitments §6.2) and of the collision bucket's retained artifacts.
+pub(crate) fn impl_source_bytes() -> Vec<u8> {
     const SOURCES: [&str; 9] = [
         "src/qnir/Cargo.toml",
         "src/qnir/rust-toolchain.toml",
@@ -1732,10 +1743,7 @@ fn impl_identity() -> (String, String) {
         });
         joined.extend_from_slice(text.replace("\r\n", "\n").as_bytes());
     }
-    (
-        env!("CARGO_PKG_VERSION").to_string(),
-        to_hex(&crate::sha256::sha256(&joined)),
-    )
+    joined
 }
 
 /// The declared lineage block (commitments §6.3): the run's lineage binding
@@ -1806,6 +1814,83 @@ fn trace_pins_ok() -> usize {
         .count()
 }
 
+/// The four declared known-answer pins of the collision comparison
+/// `qir-artifact-cmp-1` (commitments §6.7), recomputed at every run as a
+/// decision rule over supplied triples — no SHA-256 collision is constructed.
+/// The return value is the number of pins reproduced.
+fn artifact_cmp_pins_ok() -> usize {
+    let a = CompleteArtifact {
+        kind: "record".into(),
+        version: "V".into(),
+        digest: crate::sha256::sha256(b"payload-a"),
+        bytes: b"payload-a".to_vec(),
+    };
+    let b_same = a.clone();
+    let b_coll = CompleteArtifact {
+        kind: "record".into(),
+        version: "V".into(),
+        digest: a.digest, // supplied equal — the synthetic collision
+        bytes: b"payload-b".to_vec(),
+    };
+    let b_diff = CompleteArtifact {
+        kind: "record".into(),
+        version: "V".into(),
+        digest: crate::sha256::sha256(b"payload-b"),
+        bytes: b"payload-b".to_vec(),
+    };
+    let c_diffkind = CompleteArtifact {
+        kind: "receipt".into(),
+        version: "V".into(),
+        digest: crate::sha256::sha256(b"payload-c"),
+        bytes: b"payload-c".to_vec(),
+    };
+    let pins: [(u8, u8); 4] = [
+        (cmp_artifacts(&a, &b_same), 0),       // same
+        (cmp_artifacts(&a, &b_coll), 2),       // collision — quarantine both
+        (cmp_artifacts(&a, &b_diff), 1),       // different
+        (cmp_artifacts(&a, &c_diffkind), 1),   // different (cross-kind)
+    ];
+    pins.iter().filter(|(got, want)| got == want).count()
+}
+
+/// The collision comparison's self-test: four toy complete artifacts fed to
+/// the comparison core, checking the quarantine verdicts (commitments §6.7).
+/// Returns the number of verdicts reproduced.
+fn artifact_cmp_selftest() -> usize {
+    let a = CompleteArtifact {
+        kind: "record".into(),
+        version: "V".into(),
+        digest: crate::sha256::sha256(b"payload-a"),
+        bytes: b"payload-a".to_vec(),
+    };
+    let coll = CompleteArtifact {
+        kind: "record".into(),
+        version: "V".into(),
+        digest: a.digest,
+        bytes: b"payload-b".to_vec(),
+    };
+    let diff = CompleteArtifact {
+        kind: "record".into(),
+        version: "V".into(),
+        digest: crate::sha256::sha256(b"payload-b"),
+        bytes: b"payload-b".to_vec(),
+    };
+    let cross = CompleteArtifact {
+        kind: "receipt".into(),
+        version: "V".into(),
+        digest: crate::sha256::sha256(b"payload-c"),
+        bytes: b"payload-c".to_vec(),
+    };
+    let expected: [u8; 4] = [0, 2, 1, 1];
+    let got: [u8; 4] = [
+        cmp_artifacts(&a, &a),
+        cmp_artifacts(&a, &coll),
+        cmp_artifacts(&a, &diff),
+        cmp_artifacts(&a, &cross),
+    ];
+    got.iter().zip(expected.iter()).filter(|(g, w)| g == w).count()
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let fixture_mode = args.len() == 4 && args[2] == "--fixture" && args[3] == "F27";
@@ -1844,10 +1929,23 @@ fn main() {
     let n_pins = trace_pins_ok();
     println!("qir-trace-root-1 known-answer pins: {n_pins}/6 reproduced (commitments §6.6)");
 
+    // The collision comparison's declared known-answer pins and self-test
+    // (commitments §6.7): recomputed at every run, a run failure on
+    // divergence; no SHA-256 collision is constructed.
+    let n_cmp_pins = artifact_cmp_pins_ok();
+    let n_cmp_self = artifact_cmp_selftest();
+    println!("qir-artifact-cmp-1 known-answer pins: {n_cmp_pins}/4 reproduced (commitments §6.7)");
+    println!("qir-artifact-cmp-1 self-test: {n_cmp_self}/4 verdicts reproduced (commitments §6.7)");
+
     let mut rep = Report::new();
     if n_pins != 6 {
         rep.fail(format!(
             "qir-trace-root-1 known-answer pins: {n_pins}/6 reproduced (commitments §6.6)"
+        ));
+    }
+    if n_cmp_pins != 4 || n_cmp_self != 4 {
+        rep.fail(format!(
+            "qir-artifact-cmp-1 known-answer pins: {n_cmp_pins}/4; self-test: {n_cmp_self}/4 (commitments §6.7)"
         ));
     }
     suite_e(&md, &mut rep);
@@ -1855,7 +1953,7 @@ fn main() {
     suite_r(&md, &mut rep);
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
-    let (e_digest, n_ev, v_tuple, run_root, v_roots) = suite_x_exec(&md, &mut rep);
+    let (e_digest, n_ev, v_tuple, run_root, v_roots, entries) = suite_x_exec(&md, &mut rep);
     if fixture_mode {
         suite_fixture(&md, &mut rep);
     }
@@ -1893,6 +1991,9 @@ fn main() {
             to_hex(root)
         );
     }
+    // The collision bucket state (commitments §6.7): after the trace-root
+    // publication lines, the declared bucket-state line.
+    println!("lineage: collision bucket (qir-artifact-cmp-1, entries = {entries})");
     if rep.failures != 0 {
         std::process::exit(1);
     }

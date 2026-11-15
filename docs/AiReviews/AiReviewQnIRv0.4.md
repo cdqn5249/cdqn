@@ -638,3 +638,28 @@ F6's obligation — a shallow header comparison cannot detect different payloads
 Nothing is emitted or implemented at this wave: the implementations still emit the draft.28 header, lineage, and trace-root lines. Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the collision comparison's artifact share and committed test surface, which empties the register and closes Step 5.
 
 **Scope boundaries.** No corpus, vector, transcript, implementation, or §1–§5 specification byte changes. `QnIR` is not promoted; the step's register alone governs its discharge.
+
+## Correction Note - v0.1.14
+
+This note records the collision comparison's artifact share — both implementations running the declared `qir-artifact-cmp-1` comparison at every run — committed at v0.3.0-draft.30. It follows the append-only discipline: the original review and the v0.1.1–v0.1.13 notes above are unchanged. The transcript additions are external evidence metadata; no corpus byte, committed §1–§4 rule, or frozen encoding changes; `QnIR` is not promoted. **Step 5 is closed: its register is empty.**
+
+### 1. The share
+
+Each run of either artifact now prints the header lines `qir-artifact-cmp-1 known-answer pins: 4/4 reproduced (commitments §6.7)` and `qir-artifact-cmp-1 self-test: 4/4 verdicts reproduced (commitments §6.7)` — the four declared pins recomputed at every run and the quarantine verdicts checked against four toy complete artifacts, a run failure if any diverges, never counted in the declared seed — and, after the trace-root publication lines, `lineage: collision bucket (qir-artifact-cmp-1, entries = 0)` over the retained artifacts of the committed corpus. The comparison core binds complete artifacts only; the fixture's injected runs contribute nothing.
+
+### 2. The evidence
+
+All four modes PASS (normal 84/84 both artifacts, `--fixture F27` PASS both); the pins (6/6 and 4/4) and self-test (4/4) read as declared in all four transcripts; the 52 published trace lines and the bucket line (`entries = 0`) are byte-identical across the two implementations and across normal and fixture mode — recorded as evidence, never the criterion. `E = 8acdeaa1fadd7b3b0b672d11e2ed0e67599ff7a260d7fe9dcd04f97823ffcc72` with `n = 336` is unchanged; the fixture block remains byte-identical (`ed67e6cbd242c69c`); the corpus is unchanged. The transcripts changed (a declared output addition), so each read-back pair is a new generation-bound commitment per §6.4, cited by the wave record.
+
+### 3. Step-5 state
+
+| Step-5 deliverable | State |
+|---|---|
+| Normative lineage | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Versioned verbalizer/extractor identities | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Full-transition trace roots | **DISCHARGED** (specification v0.3.0-draft.27; artifact v0.3.0-draft.28) |
+| Collision-safe artifact comparison (header-equal, payload-different) | **DISCHARGED** (specification v0.3.0-draft.29; artifact v0.3.0-draft.30) |
+
+Step 5 is **closed**; its register is empty. The promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: none within Step 5 — Step 5 is closed. Step 6 (container BOC, call trade study, liveness histograms, choreographic refinement, class-specific AIRs, measured Realization A/B break-even) is the priced extension agenda; the recommended next act is the AIReview proposal for the Qn universe with QnIR design emphasis, at the point the maintainer named.
+
+**Scope boundaries.** No corpus, vector, or §1–§5 specification byte changes; the transcript additions are external evidence metadata. `QnIR` is not promoted; the step's register alone governed its discharge.

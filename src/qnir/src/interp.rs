@@ -1993,6 +1993,49 @@ fn cmp_fail(id: &str, name: &str, what: &str, rep: &mut crate::Report) -> bool {
 
 /// Executes one vector and compares the run against its committed expected
 /// outcome (the first divergence is reported; the vector then stops).
+/// A complete artifact (commitments §6.7): the §6.2 identity triple — the
+/// declared *summary* — together with the artifact's complete canonical
+/// bytes — the artifact itself. Every committed artifact of the draft is
+/// retained in this form, so no comparison is ever forced to rest on a
+/// summary alone.
+#[derive(Clone)]
+pub(crate) struct CompleteArtifact {
+    pub kind: String,
+    pub version: String,
+    pub digest: [u8; 32],
+    pub bytes: Vec<u8>,
+}
+
+/// The collision-safe comparison `qir-artifact-cmp-1` (commitments §6.7):
+/// total, deterministic, and symmetric up to the declared entry order.
+/// Returns 0 = `same`, 1 = `different`, 2 = `collision` (genuine collision —
+/// identity triples agree while complete bytes differ; both quarantined).
+pub(crate) fn cmp_artifacts(a: &CompleteArtifact, b: &CompleteArtifact) -> u8 {
+    if a.kind != b.kind || a.version != b.version {
+        return 1;
+    }
+    if a.bytes == b.bytes {
+        return 0;
+    }
+    if a.digest == b.digest {
+        return 2;
+    }
+    1
+}
+
+/// The number of collision pairs among a set of retained complete artifacts.
+pub(crate) fn collision_entries(arts: &[CompleteArtifact]) -> usize {
+    let mut n = 0usize;
+    for i in 0..arts.len() {
+        for j in (i + 1)..arts.len() {
+            if cmp_artifacts(&arts[i], &arts[j]) == 2 {
+                n += 1;
+            }
+        }
+    }
+    n
+}
+
 fn exec_vector_check(
     id: &str,
     name: &str,
@@ -2003,6 +2046,7 @@ fn exec_vector_check(
     rep: &mut crate::Report,
     ev: &mut Vec<u8>,
     all_recs: &mut Vec<Vec<u8>>,
+    retained: &mut Vec<CompleteArtifact>,
     n_ev: &mut usize,
 ) -> (bool, Option<(usize, [u8; 32])>) {
     // ---- the vector's committed expected blocks (§4.4)
@@ -2066,6 +2110,12 @@ fn exec_vector_check(
     // vector-scope root of `qir-trace-root-1` is computed over them
     // (commitments §6.6), and they are appended to the run scope's sequence.
     let mut recs: Vec<Vec<u8>> = Vec::with_capacity(outcome.records.len());
+    let vstr = format!(
+        "({}, {}, {})",
+        params.sem.as_str(),
+        params.enc.as_str(),
+        params.prof.as_str()
+    );
     for rec in &outcome.records {
         let bytes = encode_record(
             rec,
@@ -2078,11 +2128,23 @@ fn exec_vector_check(
         );
         ev.extend_from_slice(&bytes);
         recs.push(bytes.clone());
-        all_recs.push(bytes);
+        all_recs.push(bytes.clone());
+        retained.push(CompleteArtifact {
+            kind: "record".into(),
+            version: vstr.clone(),
+            digest: sha256(&bytes),
+            bytes: bytes.clone(),
+        });
     }
     let n_vec = outcome.records.len();
     *n_ev += n_vec;
     ev.extend_from_slice(&outcome.receipt);
+    retained.push(CompleteArtifact {
+        kind: "receipt".into(),
+        version: vstr,
+        digest: sha256(&outcome.receipt),
+        bytes: outcome.receipt.clone(),
+    });
     let v_root = trace_root(&recs.iter().map(|b| b.as_slice()).collect::<Vec<_>>());
 
     // ---- agreement point: the terminal outcome
@@ -2377,9 +2439,34 @@ pub fn suite_x_exec(
     (String, String, String),
     [u8; 32],
     Vec<(String, usize, [u8; 32])>,
+    usize,
 ) {
     let vectors = crate::parse_vectors(md, "## Family X — Execution Vectors");
     let profile = bhat::golden_profile();
+    let mut retained: Vec<CompleteArtifact> = Vec::new();
+    // retained complete artifacts for the collision bucket (commitments §6.7)
+    let corpus_version = md
+        .lines()
+        .find_map(|l| l.strip_prefix("version: "))
+        .unwrap_or("unknown")
+        .trim()
+        .to_string();
+    let corpus_lf = md.replace("\r\n", "\n");
+    let corpus_bytes = corpus_lf.as_bytes().to_vec();
+    retained.push(CompleteArtifact {
+        kind: "corpus".into(),
+        version: corpus_version,
+        digest: sha256(&corpus_bytes),
+        bytes: corpus_bytes,
+    });
+    let impl_bytes = crate::impl_source_bytes();
+    let (impl_version, _) = crate::impl_identity();
+    retained.push(CompleteArtifact {
+        kind: "implementation".into(),
+        version: impl_version,
+        digest: sha256(&impl_bytes),
+        bytes: impl_bytes,
+    });
     // committed envelopes first pass (a vector may cite another's, §4.4)
     let mut committed: Vec<(String, Vec<u8>)> = Vec::new();
     for v in &vectors {
@@ -2418,6 +2505,14 @@ pub fn suite_x_exec(
         } else {
             committed[vi].1.clone()
         };
+        if !env_ref.is_empty() {
+            retained.push(CompleteArtifact {
+                kind: "intent".into(),
+                version: format!("({}, {}, {})", params.sem, params.enc, params.prof),
+                digest: sha256(&env_ref),
+                bytes: env_ref.clone(),
+            });
+        }
         let (ok, tail) = exec_vector_check(
             &v.id,
             &v.name,
@@ -2428,6 +2523,7 @@ pub fn suite_x_exec(
             rep,
             &mut ev,
             &mut all_recs,
+            &mut retained,
             &mut n_ev,
         );
         if ok {
@@ -2437,6 +2533,9 @@ pub fn suite_x_exec(
             v_roots.push((v.id.clone(), n_vec, v_root));
         }
     }
+    // the collision bucket: collision pairs among the retained complete
+    // artifacts (commitments §6.7). With the committed corpus this is 0.
+    let entries = collision_entries(&retained);
     rep.say(format!(
         "suite X execution (reference interpreter): {} — {}/{} committed expected outcomes reproduced at the five agreement points of §4.1",
         if pass == vectors.len() { "PASS" } else { "FAIL" },
@@ -2453,5 +2552,6 @@ pub fn suite_x_exec(
         v_tuple.expect("the committed X family declares at least one vector"),
         run_root,
         v_roots,
+        entries,
     )
 }
