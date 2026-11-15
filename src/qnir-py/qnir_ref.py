@@ -1208,6 +1208,31 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
+IMPL_VERSION = "0.3.0-draft.26"
+
+# The implementation artifact's declared source set (commitments §6.2), in
+# the declared path order.
+IMPL_SOURCES = ["src/qnir-py/qnir_ref.py"]
+
+
+def lf_sha256(bs):
+    """SHA-256 over the LF-normalized bytes (the repository byte form; the
+    working copy's line endings are a checkout artifact and never
+    participate)."""
+    return hashlib.sha256(bs.replace(b"\r\n", b"\n")).hexdigest()
+
+
+def impl_identity():
+    """The implementation artifact's own identity (commitments §6.2): the
+    declared version and the digest over the declared source files' bytes in
+    the declared path order."""
+    joined = bytearray()
+    for f in IMPL_SOURCES:
+        with open(f, "rb") as fh:
+            joined.extend(fh.read().replace(b"\r\n", b"\n"))
+    return IMPL_VERSION, lf_sha256(bytes(joined))
+
+
 class Corpus:
     def __init__(self, path):
         self.text = open(path, "r", encoding="utf-8").read()
@@ -1564,6 +1589,14 @@ def run_x_family(corpus, profile):
     # admission + execution
     x_lines = []
     n_pass = 0
+    # the lineage binding's evidence: the canonical record encodings and the
+    # receipt encoding of every executed vector, in committed document order,
+    # accumulated immediately after each successful run and before any
+    # agreement check, so a failing check never changes the evidence
+    # (commitments §6.3); families E/I/R/M and the fixture contribute nothing
+    ev = bytearray()
+    n_ev = 0
+    v_first = None
     for vid in order:
         body = by_id[vid]
         params = next(ln for ln in body if ln.startswith("Declared parameters:"))
@@ -1582,6 +1615,8 @@ def run_x_family(corpus, profile):
                     D[deps[int(m2.group(1))]] = enc_int(int(m2.group(2)))
         v_line = re.search(r"`V` = \(([^)]*)\)", params).group(1)
         V = [s.strip() for s in v_line.split(",")]
+        if v_first is None:
+            v_first = V
         adm = next(ln for ln in body if ln.startswith("Admission:"))
         m = re.search(r"B\(P\) = (\d+) U", adm)
         if m:
@@ -1611,6 +1646,12 @@ def run_x_family(corpus, profile):
         ledger = parse_ledger(led_ls)
         try:
             res = Machine(envelopes[vid], D, wb, profile).run()
+            # the evidence accumulates before any agreement check
+            # (commitments §6.3)
+            for rb in res["records"]:
+                ev.extend(rb)
+            n_ev += len(res["records"])
+            ev.extend(res["receipt"])
             if res["B_hat"] != b_committed:
                 raise AssertionError(
                     f"B_hat {res['B_hat']} != committed declared bound {b_committed}")
@@ -1661,7 +1702,8 @@ def run_x_family(corpus, profile):
         except (AssertionError, Malformed, ValueError) as e:
             fails.append(f"{vid}: {e}")
             x_lines.append(f"  {vid} {tags[vid]}: FAILED — {e}")
-    return len(order), n_env, n_listings, n_pass, x_lines, fails
+    return (len(order), n_env, n_listings, n_pass, x_lines, fails,
+            lf_sha256(bytes(ev)), n_ev, tuple(v_first))
 
 
 def run_fixture(corpus, profile, fid="F27"):
@@ -1882,7 +1924,8 @@ def main():
                f"{'PASS' if not fails_m else 'FAIL'} — {n - len(fails_m)}/{n} "
                f"committed verdicts reproduced (agreement point 2)")
 
-    n_x, n_env, n_list, n_pass, x_lines, fails_x = run_x_family(corpus, profile)
+    n_x, n_env, n_list, n_pass, x_lines, fails_x, e_hex, n_ev, v_tuple = \
+        run_x_family(corpus, profile)
     ok &= not fails_x
     out.append(f"program envelopes: {'PASS' if not fails_x else 'FAIL'} — "
                f"{n_env}/{n_env} committed envelope byte blocks decode; "
@@ -1901,6 +1944,19 @@ def main():
     out.append(f"result: {'PASS' if ok else 'FAIL'} — "
                f"every committed vector reproduces under the committed rules; "
                f"the second implementation never generates or edits goldens (§4.2)")
+    # The lineage block (commitments §6.3): external evidence metadata after
+    # the declared result line, in normal and fixture mode alike — the
+    # fixture's own injected runs contribute nothing to the evidence. The
+    # corpus digest's byte basis is the LF text (the repository byte form).
+    impl_v, impl_d = impl_identity()
+    out.append("")
+    out.append(f"lineage: corpus identity (corpus, {corpus.version}, "
+               f"{hashlib.sha256(corpus.text.encode('utf-8')).hexdigest()})")
+    out.append(f"lineage: implementation identity (implementation, "
+               f"{impl_v}, {impl_d})")
+    out.append(f"lineage: V = ({v_tuple[0]}, {v_tuple[1]}, {v_tuple[2]})")
+    out.append(f"lineage: evidence (n = {n_ev} records, E = {e_hex})")
+    out.append("lineage: generations (qir-extractor-1, qir-verbalizer-1)")
     print("\n".join(out))
     return 0 if ok else 1
 

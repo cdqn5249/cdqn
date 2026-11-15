@@ -489,6 +489,72 @@ pub(crate) struct RunOutcome {
     pub(crate) bh: u64,
 }
 
+/// The canonical §2.6 record encoding of one transition record: the fourteen
+/// `[tag, value]` pairs of the F5 list, in order — the same bytes the second
+/// implementation's `rebuild_record` emits for the committed field tables,
+/// and the bytes the lineage binding's evidence digest accumulates
+/// (commitments §6.3). Fields 1 and 7 carry the record's pre state (the
+/// committed tables render prev_root and pre_state_root from the same
+/// configuration), field 2 the envelope's program root, field 14 the run's
+/// declared version tuple.
+pub(crate) fn encode_record(
+    rec: &Rec,
+    prog_root: &[u8],
+    versions: [&str; 3],
+) -> Vec<u8> {
+    let b = |v: &[u8]| Cbor::Bytes(v.to_vec());
+    let u = |v: u64| Cbor::UInt(v);
+    let pair = |tag: u64, v: Cbor| Cbor::Array(vec![Cbor::UInt(tag), v]);
+    cbor::encode(&Cbor::Array(vec![
+        pair(1, b(&rec.pre)),
+        pair(2, b(prog_root)),
+        pair(3, u(rec.step)),
+        pair(4, Cbor::Array(vec![u(rec.pc.0), u(rec.pc.1)])),
+        pair(5, b(&rec.decoded)),
+        pair(
+            6,
+            Cbor::Array(rec.io_ids.iter().map(|v| b(v)).collect()),
+        ),
+        pair(7, b(&rec.pre)),
+        pair(8, b(&rec.post)),
+        pair(9, u(rec.charged)),
+        pair(10, u(rec.refunded)),
+        pair(11, u(rec.clock)),
+        pair(
+            12,
+            Cbor::Array(
+                rec.events
+                    .iter()
+                    .map(|(kind, tid)| {
+                        // the event pair: [kind, the token id's five
+                        // components] — the committed tables render the
+                        // token id nested, never flattened
+                        Cbor::Array(vec![
+                            u(*kind),
+                            Cbor::Array(
+                                tid.iter().map(|&v| u(v)).collect(),
+                            ),
+                        ])
+                    })
+                    .collect(),
+            ),
+        ),
+        pair(
+            13,
+            Cbor::Array(rec.receipt_ids.iter().map(|&v| u(v)).collect()),
+        ),
+        pair(
+            14,
+            Cbor::Array(
+                versions
+                    .iter()
+                    .map(|v| Cbor::Text(v.to_string()))
+                    .collect(),
+            ),
+        ),
+    ]))
+}
+
 enum Transfer {
     Fall,
     To(u64),
@@ -1893,6 +1959,8 @@ fn exec_vector_check(
     params: &crate::XParams,
     profile: &Profile,
     rep: &mut crate::Report,
+    ev: &mut Vec<u8>,
+    n_ev: &mut usize,
 ) -> bool {
     // ---- the vector's committed expected blocks (§4.4)
     let recs_region = between(
@@ -1935,6 +2003,7 @@ fn exec_vector_check(
             );
         }
     };
+    let prog_root = sha256(envelope).to_vec();
     let outcome = match run_vector(envelope, params.w_budget, profile, &dep_values) {
         Ok(o) => o,
         Err(e) => {
@@ -1946,6 +2015,23 @@ fn exec_vector_check(
             );
         }
     };
+    // The lineage binding's evidence digest accumulates the run's own
+    // canonical record encodings followed by the canonical receipt encoding,
+    // immediately after the successful run and before any agreement check,
+    // so a later failing check never changes the evidence (commitments §6.3).
+    for rec in &outcome.records {
+        ev.extend(encode_record(
+            rec,
+            &prog_root,
+            [
+                params.sem.as_str(),
+                params.enc.as_str(),
+                params.prof.as_str(),
+            ],
+        ));
+    }
+    *n_ev += outcome.records.len();
+    ev.extend_from_slice(&outcome.receipt);
 
     // ---- agreement point: the terminal outcome
     if outcome.outcome != params.expected_outcome_tag {
@@ -1977,7 +2063,6 @@ fn exec_vector_check(
             rep,
         );
     }
-    let prog_root = sha256(envelope).to_vec();
     for (ri, rec) in outcome.records.iter().enumerate() {
         let parsed = parse_record_block(&rec_fences[ri].body);
         let f = &parsed.fields;
@@ -2231,7 +2316,10 @@ fn exec_vector_check(
 
 /// The suite: every committed Family X vector is executed and compared at
 /// the five agreement points of §4.1.
-pub fn suite_x_exec(md: &str, rep: &mut crate::Report) {
+pub fn suite_x_exec(
+    md: &str,
+    rep: &mut crate::Report,
+) -> ([u8; 32], usize, (String, String, String)) {
     let vectors = crate::parse_vectors(md, "## Family X — Execution Vectors");
     let profile = bhat::golden_profile();
     // committed envelopes first pass (a vector may cite another's, §4.4)
@@ -2244,9 +2332,23 @@ pub fn suite_x_exec(md: &str, rep: &mut crate::Report) {
         };
         committed.push((v.id.clone(), env));
     }
+    // the lineage binding's evidence: the canonical record encodings and
+    // receipt encodings of every executed vector, in committed document
+    // order, accumulated by exec_vector_check (commitments §6.3); E/I/R/M
+    // runs contribute nothing, and neither does the fixture's injected run
+    let mut ev: Vec<u8> = Vec::new();
+    let mut n_ev = 0usize;
+    let mut v_tuple: Option<(String, String, String)> = None;
     let mut pass = 0usize;
     for (vi, v) in vectors.iter().enumerate() {
         let params = crate::parse_x_params(&v.section);
+        if v_tuple.is_none() {
+            v_tuple = Some((
+                params.sem.clone(),
+                params.enc.clone(),
+                params.prof.clone(),
+            ));
+        }
         let env_ref: Vec<u8> = if committed[vi].1.is_empty() {
             committed
                 .iter()
@@ -2256,7 +2358,17 @@ pub fn suite_x_exec(md: &str, rep: &mut crate::Report) {
         } else {
             committed[vi].1.clone()
         };
-        if exec_vector_check(&v.id, &v.name, &v.section, &env_ref, &params, &profile, rep) {
+        if exec_vector_check(
+            &v.id,
+            &v.name,
+            &v.section,
+            &env_ref,
+            &params,
+            &profile,
+            rep,
+            &mut ev,
+            &mut n_ev,
+        ) {
             pass += 1;
         }
     }
@@ -2266,4 +2378,9 @@ pub fn suite_x_exec(md: &str, rep: &mut crate::Report) {
         pass,
         vectors.len()
     ));
+    (
+        sha256(&ev),
+        n_ev,
+        v_tuple.expect("the committed X family declares at least one vector"),
+    )
 }

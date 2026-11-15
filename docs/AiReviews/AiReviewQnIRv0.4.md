@@ -546,3 +546,26 @@ The review's §5 order is followed exactly: "beginning with the minimum lineage 
 Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the artifact share of the declared lineage and identity semantics (both implementations emitting the lineage block and generation-bound read-back pairs, cited by the logs), then the trace-root declaration, then the collision bucket.
 
 **Scope boundaries.** No corpus, artifact, or §1–§4 specification byte changes. `QnIR` is not promoted; the step's register alone governs its discharge.
+
+## Correction Note - v0.1.10
+
+This note records the artifact share of the two declared Step-5 deliverables — both implementations emitting the lineage block and the generation-bound read-back pairs — committed at v0.3.0-draft.26. It follows the append-only discipline: the original review and the v0.1.1–v0.1.9 notes above are unchanged. No corpus byte, vector byte, or committed §1–§4 rule changes; `QnIR` is not promoted.
+
+### 1. The share
+
+The draft.25 register's fixed remainders are discharged: each artifact's transcript now carries the declared five-line lineage block after its `result:` line, in normal and `--fixture F27` mode alike — the corpus identity (the corpus's declared version and the SHA-256 over the LF-normalized repository bytes), the implementation identity (each artifact's declared version and the digest over its declared source set in path order — artifact-specific by construction, per the triple-equality rule), the version tuple `V`, the evidence line `(n, E)` over the X-family execution evidence accumulated immediately after each successful run and before any agreement-point check, and the generations line naming `qir-extractor-1` and `qir-verbalizer-1`. The wave record cites each transcript's generation-bound read-back pair `(qir-verbalizer-1, SHA-256 of the exact transcript text)` per Obj 15.
+
+### 2. Step-5 state
+
+| Step-5 deliverable | State |
+|---|---|
+| Normative lineage | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Versioned verbalizer/extractor identities | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) |
+| Full-transition trace roots | Future — the construction must be declared before implementation; the evidence digest is explicitly not the trace root |
+| Collision-safe artifact comparison (header-equal, payload-different) | Future — the §1.4 F6 bucket resolution; the conformance register's last future row |
+
+The binding-level agreement of record: `E = 8acdeaa1fadd7b3b0b672d11e2ed0e67599ff7a260d7fe9dcd04f97823ffcc72` and `n = 336` are identical between the two implementations and between normal and fixture mode (the fixture's injected runs contribute nothing); the F27 fixture block remains byte-identical to its pre-wave recording. All four modes PASS: normal 84/84 both artifacts, `--fixture F27` PASS both. Per the generation rule, the changed transcripts are new generation-bound commitments, never compared against pre-wave transcript digests.
+
+Step 5 remains **open**; the promotion criterion is unchanged and unmet, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim is styled a theorem. The next BOC increment, recorded in the wave's own selection: the trace-root declaration (the format declared before any implementation), then the collision bucket.
+
+**Scope boundaries.** No corpus, vector, or §1–§5 specification byte changes; the transcript additions are external evidence metadata. `QnIR` is not promoted; the step's register alone governs its discharge.

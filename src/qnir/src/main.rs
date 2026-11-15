@@ -1702,6 +1702,74 @@ fn parse_src_insn(body: &str) -> SrcInsn {
 
 // --------------------------------------------------------------------- main
 
+/// Lowercase hex of a byte slice (the transcript's digest rendering).
+fn to_hex(bytes: &[u8]) -> String {
+    bytes.iter().map(|b| format!("{b:02x}")).collect()
+}
+
+/// The implementation artifact's own identity (commitments §6.2): the
+/// declared version and the SHA-256 over the concatenation of the declared
+/// source files' repository bytes, in the declared path order. The bytes are
+/// LF-normalized — the working copy's line endings are a checkout artifact
+/// and never participate — and the set excludes generated files (`Cargo.lock`
+/// is generated; `target/` is build output).
+fn impl_identity() -> (String, String) {
+    const SOURCES: [&str; 9] = [
+        "src/qnir/Cargo.toml",
+        "src/qnir/rust-toolchain.toml",
+        "src/qnir/src/bhat.rs",
+        "src/qnir/src/cbor.rs",
+        "src/qnir/src/insn.rs",
+        "src/qnir/src/interp.rs",
+        "src/qnir/src/main.rs",
+        "src/qnir/src/sha256.rs",
+        "src/qnir/src/value.rs",
+    ];
+    let mut joined = Vec::new();
+    for f in SOURCES {
+        let text = fs::read_to_string(f).unwrap_or_else(|e| {
+            panic!("the declared source set is unreadable at {f} (run from the repository root): {e}")
+        });
+        joined.extend_from_slice(text.replace("\r\n", "\n").as_bytes());
+    }
+    (
+        env!("CARGO_PKG_VERSION").to_string(),
+        to_hex(&crate::sha256::sha256(&joined)),
+    )
+}
+
+/// The declared lineage block (commitments §6.3): the run's lineage binding
+/// rendered as the transcript's trailing metadata lines — the corpus
+/// identity and the evidence digest ride the run; the implementation
+/// identity is the artifact's own declared source set (§6.2); the version
+/// tuple and the generations ride the binding. The corpus digest's byte
+/// basis is the LF-normalized repository bytes (commitments §6.2).
+fn lineage_lines(
+    md: &str,
+    e_hex: &str,
+    n_ev: usize,
+    v: &(String, String, String),
+) -> Vec<String> {
+    let corpus_version = md
+        .lines()
+        .find_map(|l| l.strip_prefix("version: "))
+        .unwrap_or("unknown")
+        .trim()
+        .to_string();
+    let lf = md.replace("\r\n", "\n");
+    let corpus_digest = to_hex(&crate::sha256::sha256(lf.as_bytes()));
+    let (impl_version, impl_digest) = impl_identity();
+    vec![
+        format!("lineage: corpus identity (corpus, {corpus_version}, {corpus_digest})"),
+        format!(
+            "lineage: implementation identity (implementation, {impl_version}, {impl_digest})"
+        ),
+        format!("lineage: V = ({}, {}, {})", v.0, v.1, v.2),
+        format!("lineage: evidence (n = {n_ev} records, E = {e_hex})"),
+        "lineage: generations (qir-extractor-1, qir-verbalizer-1)".to_string(),
+    ]
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let fixture_mode = args.len() == 4 && args[2] == "--fixture" && args[3] == "F27";
@@ -1739,7 +1807,7 @@ fn main() {
     suite_r(&md, &mut rep);
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
-    suite_x_exec(&md, &mut rep);
+    let (e_digest, n_ev, v_tuple) = suite_x_exec(&md, &mut rep);
     if fixture_mode {
         suite_fixture(&md, &mut rep);
     }
@@ -1755,6 +1823,15 @@ fn main() {
         );
     } else {
         println!("result: FAIL — {} failing check(s)", rep.failures);
+    }
+    // The lineage block (commitments §6.3): external evidence metadata after
+    // the declared result line, in normal and fixture mode alike — the
+    // fixture's own injected runs contribute nothing to the evidence.
+    println!();
+    for l in lineage_lines(&md, &to_hex(&e_digest), n_ev, &v_tuple) {
+        println!("{l}");
+    }
+    if rep.failures != 0 {
         std::process::exit(1);
     }
 }

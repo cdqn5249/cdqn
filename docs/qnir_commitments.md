@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Commitments — The Commitment Specification of the QnIR v0.3 Working Draft (Repair Step 5)
 description: QnIR v0.3 draft, §6 commitments — the minimum lineage and identity semantics (artifact identities, normative lineage, verbalizer and extractor identities)
-version: 0.3.0-draft.25
-updated: 2026-11-14
+version: 0.3.0-draft.26
+updated: 2026-11-15
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -33,7 +33,7 @@ Why the minimum is this and not more: a commitment claim is only meaningful if t
 
 ### 6.1 The commitment design's minimum
 
-The commitment design needs three things that the earlier steps do not supply: (i) an **identity** for every artifact a claim refers to, comparable across runs and artifacts by canonical bytes alone; (ii) a **lineage binding** that states, for a run's evidence, which corpus, which versions, and which implementation produced it; and (iii) declared, versioned **transformation identities** at the two byte boundaries — extraction (bytes to structure) and verbalization (bytes to text) — so that a read-back or a re-extraction claim is a claim about a named generation. The three are declared below. The full-transition trace root (a single published commitment over the complete transition trace) and the collision-safe comparison of complete artifacts remain future shares; this section fixes only what those shares must bind, not their constructions.
+The commitment design needs three things that the earlier steps do not supply: (i) an **identity** for every artifact a claim refers to, comparable across runs and artifacts by canonical bytes alone; (ii) a **lineage binding** that states, for a run's evidence, which corpus, which versions, and which implementation produced it; and (iii) declared, versioned **transformation identities** at the two byte boundaries — extraction (bytes to structure) and verbalization (bytes to text) — so that a read-back or a re-extraction claim is a claim about a named generation. The three are declared below. The full-transition trace root (a single published commitment over the complete transition trace) and the collision-safe comparison of complete artifacts remain future shares; this section fixes only what those shares must bind, not their constructions. The artifact share of the two declared deliverables — the committed lineage block and the generation-bound read-back pairs in each run's transcript — is emitted and cited at v0.3.0-draft.26 (§6.5).
 
 ### 6.2 Artifact identities
 
@@ -86,12 +86,12 @@ The Step-5 row's acceptance condition is the four deliverables named above. The 
 
 | Deliverable | State | Site and remainder |
 |---|---|---|
-| Normative lineage | **Specification share DISCHARGED (v0.3.0-draft.25)**; the artifact share FUTURE | §6.2/§6.3 declare identities and the binding rule; the remainder is the committed lineage block emitted by each artifact and cited by every run log — declaration first, emission second, per this draft's ordering discipline |
-| Versioned verbalizer/extractor identities | **Specification share DISCHARGED (v0.3.0-draft.25)**; the artifact share FUTURE | §6.4 declares `qir-extractor-1` and `qir-verbalizer-1`, their properties, and the binding rule; the remainder is each run's committed `(generation, text digest)` and `(generation, artifact identity)` pairs in its transcript block |
+| Normative lineage | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) | §6.2/§6.3 declare identities and the binding rule; the artifact share is the declared five-line lineage block emitted after each artifact's `result:` line, in normal and fixture mode alike (v0.3.0-draft.26) — corpus identity, implementation identity, `V`, the evidence line `(n, E)`, and the generations line — cited by the wave records of [`docs/logs/qnir/step5-lineage-artifact-share.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/step5-lineage-artifact-share.md) |
+| Versioned verbalizer/extractor identities | **DISCHARGED** (specification v0.3.0-draft.25; artifact v0.3.0-draft.26) | §6.4 declares `qir-extractor-1` and `qir-verbalizer-1`, their properties, and the binding rule; the artifact share is each run's committed read-back pair `(qir-verbalizer-1, SHA-256 of the exact transcript text)` and the block's `generations` line naming both generation identities (v0.3.0-draft.26) |
 | Full-transition trace roots | **FUTURE** (next Step-5 share) | The root's construction must be declared before implementation; the §6.3 evidence digest commits the same evidence bytes but is explicitly not the trace-root construction, and no root format is pre-empted here |
 | Collision-safe artifact comparison (header-equal, payload-different) | **FUTURE** (§1.4's F6 row; the conformance register's last future row) | The bucket resolution fixes how two complete artifacts that share headers but differ in payload are compared and quarantined; the register row of §4.4 fixes the test obligation, not the answer (F24's deferral stands) |
 
-The acceptance condition is met when all four are discharged and the artifact share of the two declared deliverables is emitted and cited. What this section deliberately does not deliver: **no trace-root format**, **no collision bucket**, **no change to any §2.6 encoding**, and **no artifact emission** — and therefore no promotion: the promotion criterion is unchanged and unmet while the two FUTURE rows stand, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim of this section is styled a theorem. The Step-5 row remains open until its register empties.
+The acceptance condition is met when all four are discharged and the artifact share of the two declared deliverables is emitted and cited. That artifact share is emitted and cited as of v0.3.0-draft.26; the two FUTURE rows below keep the condition unmet. What this section deliberately does not deliver: **no trace-root format**, **no collision bucket**, **no change to any §2.6 encoding** — and therefore no promotion: the promotion criterion is unchanged and unmet while the two FUTURE rows stand, `R11'`, `R12'`, `R19`, and the `O(polylog)` statement remain conditional, and no claim of this section is styled a theorem. The Step-5 row remains open until its register empties.
 
 Under {% include term.html id="computational-consistency" %}, the validity claimed for this section is internal consistency within declared boundaries: the identity vocabulary is consistent with §2.6's canonical encodings and hash policy, the lineage binding is consistent with §4.1's protocol and the logs' recorded practice, the transformation identities name only already-exercised boundaries, and nothing herein contradicts a canon file or changes a committed byte.
 
