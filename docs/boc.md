@@ -2,8 +2,8 @@
 layout: default
 title: BOC Decision, Comparison, and Receipt Specification
 description: BOC decision outcomes, comparison rules, and immutable auditable receipt requirements
-version: 0.4.1
-updated: 2026-11-08
+version: 0.4.2
+updated: 2026-11-18
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic)"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -25,14 +25,18 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | BOC: Decision, Comparison, and Receipt Specification |
-| **Version** | 0.4.1 |
-| **Last Updated** | 2026-11-08 |
+| **Version** | 0.4.2 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen via GPT-6 (OpenAI) and Claude Sonnet 5.5 (Anthropic) |
 | **Status** | Provisional implementation specification for the Qn-universe implementation; subject to replacement or binding by equivalent Qn artefacts |
 | **Parent Policy** | `docs/simemp.md` §7 |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 
 ---
+
+## Revision Record (v0.4.2)
+
+Under **Axiom 13** this is a new versioned artifact; no earlier table row, the §9 canonical RFC 8785 string rule, or the Stage-1 three-valued logic is mutated. This amendment places `ImplicitDeps(c) = 0` as a Stage-1 (`I_Id`/`I_Sec`) requirement at sealed SIMEMP Gateways and confines `ImplicitDeps(c) > 0` to pre-gateway synthesis/repair profiles (§7); bounds `MEASURED` `ΔW_worst(c)` to exhaustive deterministic evaluation over a finite/singleton workload domain and fixes `MEASURED`/`FORMALLY_DERIVED` comparability (§8.1–§8.2); adds deterministic frontier-reduction pruning so `UNKNOWN` on a dominated candidate is non-decision-affecting (§8.3); and keys atomic pre-operation reservation checkpoints by `op_id = H(invocation_id || candidate_id || stage_step)` so recovery never re-debits `B` or `W_gate` (§10.8). No new term includes are introduced.
 
 ## 1. Purpose and scope
 
@@ -240,6 +244,8 @@ Tier 2 minimizes the following key:
 
 `ImplicitDeps` is always the first component. The calling DCC profile declares `π`, a permutation of the three operational-agility components. Every invocation MUST also bind a finite required target-profile set `R` in its DCC decision context.
 
+**Stage-1 placement [v0.4.2].** At a sealed SIMEMP Gateway, `ImplicitDeps(c) = 0` is enforced as a **Stage-1** requirement under both the identity predicate `I_Id` and the security predicate `I_Sec`: a candidate with any discoverable undeclared dependency is inadmissible and never reaches Tier-2 ranking. The value `ImplicitDeps(c) > 0` is admissible **strictly inside pre-gateway synthesis/repair BOC profiles**, where it ranks candidate repairs before they cross the gateway; it MUST NOT be carried into a sealed invocation's Tier-2 key. This placement leaves the Stage-1 three-valued logic and the §9 receipt serialization untouched.
+
 ### 7.1. `ImplicitDeps`
 
 `ImplicitDeps(c)` is the count of distinct dependencies used by the candidate's construction or required execution path that are absent from its declared dependency commitment but are discoverable and attributable to the candidate.
@@ -306,6 +312,8 @@ Every Tier-2 metric value MUST carry one evidence modality:
 
 Quantitative values are comparable only when they share compatible metric definitions, domains, units, workload/profile context, and evaluation semantics. A unit conversion is permitted only when the conversion is explicit, deterministic, and preserves the metric's meaning. Runtime observations MUST NOT replace a required worst-case declared bound.
 
+**`MEASURED` scope and cross-modality comparability [v0.4.2].** For `ΔW_worst(c)`, the `MEASURED` modality is valid only when the value is obtained by **exhaustive deterministic evaluation of every element of a finite (including singleton) workload domain `W`** under the declared cost model; runtime sampling, profiling a subset of `W`, or extrapolating from observed executions is never a `MEASURED` worst-case bound and MUST be recorded as `UNKNOWN` or re-established as `FORMALLY_DERIVED`. A `MEASURED` value over finite `W` and a `FORMALLY_DERIVED` upper bound are comparable under this section only when both cover the same workload contract, cost model version, and unit (`U`); the declared upper bound that governs the comparison is the one valid for the whole common domain, and a finer value does not displace a coarser valid bound without a declared, independently justified mapping. Where the domains or cost-model versions differ, the values are incomparable; if the unresolved comparison is decision-affecting, §8.3 applies.
+
 ### 8.2. Qualitative rubric mode
 
 A qualitative value MUST be assigned using the same versioned rubric for every candidate compared on that component. The rubric MUST define an ordinal ordering and the evidence required for each level. A rubric level is an ordinal judgment, not a measured quantity.
@@ -322,6 +330,8 @@ Comparison follows the exact component order in `LexKey(c)`:
 4. Proceed to the next component only when the current component is established equal under compatible semantics.
 
 If the first component needed to distinguish two candidates is unknown or incomparable, BOC MUST NOT skip it and use a later component to manufacture an ordering. If that unresolved comparison could affect the selected candidate, the result is `INCONCLUSIVE`.
+
+**Frontier-reduction pruning [v0.4.2].** Before component `k` is evaluated, any candidate strictly dominated at an earlier component `j < k` (under the compatible semantics of §8.1) is pruned from the comparison frontier: the dominance at `j` already decides that pair, so `UNKNOWN` or incomparable evidence at `k` on a dominated candidate is **non-decision-affecting** and MUST NOT trigger a poison-pill `INCONCLUSIVE` that halts an otherwise decidable invocation. Pruning is deterministic, must be justified by the recorded value at `j`, and is traceable in the decision trace (§9.4). It never licenses skipping an unresolved earlier component for candidates that remain on the frontier, and it never converts an unresolved value at `j` into a favorable default.
 
 No weighted sum, averaging, hidden normalization, or implicit tie-break is permitted. A complete-key tie is handled only under §6.
 
@@ -631,6 +641,8 @@ On resumption, the evaluator MUST:
 If any required check fails, the evaluator MUST NOT continue as though the checkpoint were valid. It MUST either retain the invocation as `PAUSED` pending resolution or mark it `ABORTED` with a reason. A changed workload, candidate set, DCC profile, priority permutation, budget contract, or evaluation plan requires a new invocation.
 
 Completed operations MUST be idempotent across recovery: replay MUST NOT duplicate their evidence records or charges. If the implementation cannot establish idempotency, it MUST stop and record an unresolved recovery condition rather than risk double accounting or altered results.
+
+**Atomic reservation checkpoints [v0.4.2].** Every in-flight **pre-operation** budget reservation MUST be persisted atomically with the checkpoint before the operation starts, keyed by the deterministic operation identifier `op_id = H(invocation_id || candidate_id || stage_step)`. On resumption, step 4 reconciles reservations by `op_id`: a reservation already persisted for a completed or in-flight operation is recognized and settled once, never debited again. This holds for the candidate work budget `B` and for the outer gateway fee `W_gate` alike — a crash between the debit and the operation record MUST NOT cause a second charge of either. Where the checkpoint and the reservation record cannot be committed atomically, the evaluator MUST stop with an unresolved recovery condition under the rule above.
 
 ### 10.9. Budget exhaustion and incomplete execution
 

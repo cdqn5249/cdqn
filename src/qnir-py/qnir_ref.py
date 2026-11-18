@@ -635,15 +635,23 @@ def block_graph(blocks):
     return edges
 
 
-def b_hat(blocks, gateway, charge_of, trip_ceiling):
-    """The trip-ceiling unrolling dynamic program of §3.4: state space
-    (block, instruction index, remaining trip budget per back-edge site);
-    value = the maximum summed site-stable charge from a state to an exit;
-    B_hat = gateway + the value at the entry state."""
+def b_hat(blocks, gateway, charge_of, trip_ceiling, s_max=4096):
+    """The trip-ceiling unrolling dynamic program of §3.4 (draft.31): the
+    state space is (block, instruction index, remaining trip budget per
+    back-edge site); the value is the maximum summed site-stable charge from
+    a state to an exit. Returns None when the pre-DP structural gate exceeds
+    the declared S_max, or when there is no ceiling-bounded exit path
+    (including irreducible cycles). None is an admission refusal, never a
+    fallback to the gateway charge alone."""
     edges = block_graph(blocks)
     dom = dominators(len(blocks), edges)
     back = sorted({(s, d) for (s, d) in edges if d in dom[s]})
     bidx = {e: i for i, e in enumerate(back)}
+    # Mandatory pre-DP structural gate: |B| * (trip_ceiling+1)^|back-edges|
+    # in overflow-checked Python int arithmetic (arbitrary precision).
+    dp_bound = len(blocks) * (trip_ceiling + 1) ** len(back)
+    if dp_bound > s_max:
+        return None
     entry_rem = tuple(trip_ceiling for _ in back)
     memo = {}
 
@@ -699,7 +707,7 @@ def b_hat(blocks, gateway, charge_of, trip_ceiling):
         return out
 
     v = val(0, 0, entry_rem)
-    return gateway + v if v is not None else gateway
+    return gateway + v if v is not None else None
 
 
 # ================================================================== machine
@@ -780,7 +788,7 @@ class Machine:
         self.BH = (b_inject if b_inject is not None
                    else b_hat(self.blocks, profile["gateway"],
                               lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
-                              profile["trip_ceiling"]))
+                              profile["trip_ceiling"], profile["s_max"]))
         self.prog_root = hashlib.sha256(envelope_bytes).digest()
         self.pool = [{"birth": 0, "block": 0, "index": 0, "serial": k,
                       "type": t, "tier": TIER_S, "state": ST_OUT}
@@ -866,9 +874,10 @@ class Machine:
 
     # ------------------------------------------------------------- the run
     def run(self):
-        if self.W < self.BH:
-            # admission refusal (§3.4): the single rejection transition,
-            # zero postings; the escrow never opens
+        if self.BH is None or self.W < self.BH:
+            # admission refusal (§3.4): None (no certified bound / pre-DP
+            # gate exceeded) or budget below the bound — the single rejection
+            # transition, zero postings; the escrow never opens
             pre = self.config_bytes((0, 0))
             return self.rejection("EXPRESSION_TOO_COMPLEX", (0, 0),
                                   self.decoded_at(0, 0), pre)
@@ -1208,7 +1217,7 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
-IMPL_VERSION = "0.3.0-draft.30"
+IMPL_VERSION = "0.3.0-draft.31"
 
 # The implementation artifact's declared source set (commitments §6.2), in
 # the declared path order.
@@ -1548,17 +1557,21 @@ def classify(bs, kind):
 
 
 def parse_profile(c):
-    """The declared profile of the corpus preamble (qir-prof-golden-1)."""
-    body = c.between("## The Declared Profile", "## Family E")
-    text = "\n".join(body)
+    """The declared profile of the corpus preamble (qir-prof-golden-2)."""
+    text = "\n".join(c.between("## The Declared Profile", "## Family E"))
+    name_m = re.search(r"## The Declared Profile \(`?([^`)\n]+)`?\)", text)
+    name = name_m.group(1).strip() if name_m else "qir-prof-golden-2"
     g = int(re.search(r"`g = (\d+)` U", text).group(1))
     q = int(re.search(r"q_const … q_halt = (\d+)` U", text).group(1))
     trip = int(re.search(r"trip ceiling (\d+) per back-edge site", text).group(1))
+    sm = re.search(r"`?S_max`?\s*=\s*(\d+)", text)
+    s_max = int(sm.group(1)) if sm else 4096
     charges = {("q_load" if op == "CLOAD" else f"q_{op.lower()}"): q
                for op in OPCODES.values()}
     # The depth ceiling is retired (F26, v0.3.0-draft.22): the profile declares
     # trip ceilings only, and no depth counter exists.
-    return {"gateway": g, "charges": charges, "trip_ceiling": trip}
+    return {"name": name, "gateway": g, "charges": charges,
+            "trip_ceiling": trip, "s_max": s_max}
 
 
 # ================================================================== runners
@@ -1854,24 +1867,83 @@ def run_x_family(corpus, profile):
             entries)
 
 
+def run_fixture_f6(body):
+    """The F6 collision-safe artifact comparison fixture (draft.31): four
+    declared CompleteArtifact pairs checked by qir-artifact-cmp-1. It commits
+    no record/receipt bytes and never changes normal-mode n or entries."""
+    out = []
+    arts = {}
+    declared = next(ln for ln in body if ln.startswith("Declared artifacts:"))
+    declared = declared.split(":", 1)[1]
+    for part in declared.split(";"):
+        p = part.strip().strip("`").strip()
+        if " = (" not in p:
+            continue
+        name, rest = p.split(" = (", 1)
+        f = [x.strip() for x in rest.rstrip(")").split(",")]
+        if len(f) != 4:
+            out.append(f"  FAIL — F6: malformed artifact declaration {p}")
+            continue
+        lit = f[2][len("sha256("):-1].strip().strip('"')
+        arts[name.strip()] = (f[0], f[1],
+                              hashlib.sha256(lit.encode()).digest(),
+                              f[3].strip('"').encode())
+    want_of = {"same": 0, "different": 1, "collision": 2}
+    operands = []
+    verdicts = []
+    for ln in body:
+        if not ln.startswith("- pair "):
+            continue
+        m = re.search(r"`([^`]+)`", ln)
+        word = m.group(1) if m else ""
+        rhs = ln.split(":", 1)[1].split("(")[0]
+        names = [x.strip().strip("`").strip() for x in rhs.split(",")]
+        if len(names) != 2 or names[0] not in arts or names[1] not in arts:
+            out.append(f"  FAIL — F6: undeclared artifact in {ln}")
+            continue
+        got = cmp_artifacts(arts[names[0]], arts[names[1]])
+        if word not in want_of or got != want_of[word]:
+            out.append(f"  FAIL — F6: pair {names[0]} produced {got} but declares {word}")
+        operands.extend([arts[names[0]], arts[names[1]]])
+        verdicts.append(word)
+    if len(verdicts) != 4:
+        out.append(f"  FAIL — F6: expected four pairs, found {len(verdicts)}")
+    entries = collision_entries(list(arts.values()))
+    verdict_line = next(ln for ln in body if ln.startswith("Verdict:"))
+    declared_entries = int(re.search(r"entries = (\d+)", verdict_line).group(1))
+    if entries != declared_entries:
+        out.append(f"  FAIL — F6: entries {entries} != declared {declared_entries}")
+    out.extend([
+        "fixture F6 artifact comparison (test-only corpus fixture, §4.4):",
+        "  pair 1 (same): payload-a vs payload-a -> same",
+        "  pair 2 (collision): payload-a vs payload-b -> collision (class = digest-collision)",
+        "  pair 3 (different, same kind): payload-b vs payload-c -> different",
+        "  pair 4 (different, differing kind): payload-c vs payload-c -> different",
+        "  collision bucket: entries = 1 (class = digest-collision)",
+        "  normal mode unchanged: n = 336, entries = 0",
+        "  verdict: the four declared comparison pairs reproduce under qir-artifact-cmp-1",
+        ("fixture F6: PASS — the declared comparison verdicts reproduce under the committed rules"
+         if entries == declared_entries == 1 and len(verdicts) == 4
+         else "fixture F6: FAIL — the declared comparison verdicts do not reproduce"),
+    ])
+    return out
+
+
 def run_fixture(corpus, profile, fid="F27"):
-    """The F27 fuel-backstop fixture (§4.4's declared fixture semantics,
-    v0.3.0-draft.23): a test-only validator-defect injection over the
-    corpus's Fixture Register — never a conformance vector and never counted
-    in the declared seed. The declared injection overrides the validator's
-    computed bound with `B_injected` < `B_hat(P_f)`; the fixture's two
-    declared verdict components (the validator-defect report and the
-    containment verdict) are checked against the register's declared
-    semantic expectation, and the fixture block is rendered
-    byte-identically to the reference artifact's."""
+    """The declared fixture (§4.4): F27 fuel-backstop validator-defect
+    injection (v0.3.0-draft.23) or F6 collision-safe artifact comparison
+    (v0.3.0-draft.31), selected from the corpus's Fixture Register — never a
+    conformance vector and never counted in the declared seed."""
     fails = []
     fixture_lines = corpus.between("## Fixture Register",
                                    "## License and Invariant Lineage")
     vecs = corpus.vectors(fixture_lines, r"F\d+")
-    if len(vecs) != 1 or vecs[0][0].split()[0] != fid:
-        return [f"fixture register: expected exactly the {fid} fixture, "
-                f"found {len(vecs)} section(s)"]
-    vid, body = vecs[0]
+    match = next((v for v in vecs if v[0].split()[0] == fid), None)
+    if match is None:
+        return [f"fixture register: the {fid} fixture section is absent"]
+    vid, body = match
+    if fid == "F6":
+        return run_fixture_f6(body)
     params = next(ln for ln in body if ln.startswith("Declared parameters:"))
     wb = int(re.search(r"`W_budget` = (\d+) U", params).group(1))
     b_inj = int(re.search(r"`B_injected` = (\d+) U", params).group(1))
@@ -1907,7 +1979,7 @@ def run_fixture(corpus, profile, fid="F27"):
     env = decode_envelope(committed)
     bh = b_hat(env["blocks"], profile["gateway"],
                lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
-               profile["trip_ceiling"])
+               profile["trip_ceiling"], profile["s_max"])
     # the assembly share: the source listing regenerates from the committed
     # envelope (the reference artifact's share re-encodes the bytes, §4.2)
     _, src_ls = fence_after(body, "source grammar's textual form")
@@ -2032,10 +2104,10 @@ def main():
     if not sys.stdout.isatty():
         sys.stdout.reconfigure(newline="\n")
     fixture_id = None
-    if len(sys.argv) == 4 and sys.argv[2] == "--fixture":
+    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6"):
         fixture_id = sys.argv[3]
     elif len(sys.argv) != 2:
-        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27]",
+        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6]",
               file=sys.stderr)
         return 2
     corpus = Corpus(sys.argv[1])

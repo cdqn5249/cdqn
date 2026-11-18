@@ -2,8 +2,8 @@
 layout: default
 title: Qexpr — Content-Addressed Expression DAG (Layer 3 Symbolic Container)
 description: Layer 3 specification — the content-addressed expression DAG with hash-consing and six canonical node classes
-version: 1.4.0
-updated: 2026-10-30
+version: 1.4.1
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -54,13 +54,17 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qexpr — Content-Addressed Expression DAG: Layer 3 Symbolic Container |
-| **Version** | 1.4.0 |
-| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
+| **Version** | 1.4.1 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Specification — Layer 3 Structural Container ({% include term.html id="complexity-degree" text="Complexity Degree 2" %}) |
 
 ---
+
+## Revision Record (v1.4.1)
+
+Under **Axiom 13** this is a new versioned artifact; the v1.3.0 and v1.4.0 Review Integration Records and all prior tables are preserved verbatim. §2.2 fixes the strict bottom-up canonicalization pipeline (recursive `OP_BYPASS` / `qm` `z_min` normal form bounded by `D_max`/`N_max`, associative `OP_FOLD` flattening, bytewise `σ_sym` sort over child digests, root `OP_BYPASS` contraction) that must precede `H(α)`. §4.6 binds the specification-level Newman's-lemma confluence certificate of `OP_BYPASS` to DCC anchor `DCC_ANCHOR_BYPASS_CONFLUENCE_v1`, and §4.6.2 binds `OP_SATURATE`'s hashing-generation tag and comparator version to the Step-6 `QO-28` artifact discipline. No new term includes are introduced.
 
 ## Normative References
 
@@ -220,6 +224,8 @@ Because the arity $$k$$ is explicitly serialized, nullary and unary operators pr
 $$\mathcal{H}(\alpha) = \mathrm{Hash}\Big(\mathrm{OpCode} \,\|\, k \,\|\, \sigma_{\mathrm{sym}}(\mathcal{H}_1, \dots, \mathcal{H}_k) \,\|\, z \,\|\, r \,\|\, d \,\|\, \mathrm{DCC}_{\mathrm{ref}}\Big)$$
 
 so that $$A \circ B$$ and $$B \circ A$$ commit identically whenever the DCC declares $$\circ$$ commutative: one commitment exists per semantic value, and algebraic equality of commutative permutations collapses to the same $$\mathcal{O}(1)$$ machine-word comparison. Non-commutative opcodes hash in declaration order, unchanged. Because this changes commitment values, a DCC profile enabling sorting **MUST** declare a hashing-generation tag; commitments across distinct hashing generations compare only through signed migration receipts under {% include term.html id="structural-indirection" %} and the versioned-artifact discipline of **Axiom 13** — never by raw hash equality.
+
+**Strict bottom-up canonicalization pipeline [v1.4.1].** A node's committed digest `H(α)` is defined only after these four stages, applied bottom-up so every child is canonical before its parent: (1) **Recursive normal form** — apply `OP_BYPASS` identities to every child until no rule fires, and normalize each `qm` leaf to its canonical minimal zoom `z_min` ([`docs/qm.md`]({{ '/qm.html' | relative_url }}) §4.3), with reductions bounded by the declared `D_max` / `N_max` ceilings (§6); (2) **Associative flattening** — where the node's `<z, r, d>` tuple permits, flatten adjacent associative operations into one `OP_FOLD` spine with deterministic child order; (3) **Bytewise sort** — apply `σ_sym` to the child digests `H(c_i)`, comparing canonical digest bytes lexicographically (never values and never parse order) whenever the DCC declares the operator commutative; (4) **Root contraction** — contract the root `OP_BYPASS` identity last, then compute `H(α)` from the resulting tuple. No stage may be skipped or reordered: hashing a non-canonical child is a validator defect, not a distinct commitment generation.
 
 1. **Deduplication:** Any sub-expression with identical semantics, arity, and child commitments yields the identical commitment hash. Through {% include term.html id="hash-consing" %}, the runtime memory allocator maps it to the exact same physical node.
 2. **$$\mathcal{O}(1)$$ Structural Equality:** Verifying whether two sub-expressions $$A$$ and $$B$$ are identical requires zero recursive graph traversal:
@@ -390,7 +396,7 @@ All listed transformations emit `RECEIPT_BYPASS_IDENTITY` at zero metric cost ($
 Mandatory properties of the `OP_BYPASS` suite:
 
 1. **Terminating:** every rule strictly reduces expression size or height, so the contraction always reaches a normal form in linear rule applications.
-2. **Confluent [v1.3.0 — CANDIDATE, sealing item]:** the suite's critical pairs (e.g., $$Q(1)^{Q(1)}$$ under both $$A^{Q(1)} \to A$$ and $$Q(1)^k \to Q(1)$$) are locally joinable, and a unique normal form is asserted. A machine-checked confluence certificate (Newman's lemma over the critical-pair set) is a **QnIR v0.2 sealing prerequisite** under QO-5; until sealed, this property is a CANDIDATE proposition, not a theorem.
+2. **Confluent [v1.3.0 — CANDIDATE, sealing item]:** the suite's critical pairs (e.g., $$Q(1)^{Q(1)}$$ under both $$A^{Q(1)} \to A$$ and $$Q(1)^k \to Q(1)$$) are locally joinable, and a unique normal form is asserted. A machine-checked confluence certificate (Newman's lemma over the critical-pair set) is a **QnIR v0.2 sealing prerequisite** under QO-5; until sealed, this property is a CANDIDATE proposition, not a theorem. Under v1.4.1 the specification-level certificate is bound to DCC anchor `DCC_ANCHOR_BYPASS_CONFLUENCE_v1`, which names the critical-pair set, the Newman's-lemma argument, and the checking generation; the machine-checked artifact remains a sealing prerequisite, and until it exists the property is CANDIDATE, not a theorem.
 3. **Hash-governing:** the bypass normal form, together with the `DCC_SYM_COMMUTATIVE` child sorting of §2.2, is the input to canonical node hashing $$\mathcal{H}(\alpha)$$. One commitment exists per semantic value; `OP_BYPASS` never emits a new artifact — it discloses an identity that already held.
 4. **Cost:** zero metric cost ($$\Delta W = 0$$), as receipted above.
 
@@ -405,6 +411,8 @@ General equality saturation is a **workflow-scoped optimization operation**, nev
 4. **Deterministic polynomial-time greedy tree-cost extractor with hash tie-breaking.** Optimal extraction from a saturated e-graph is NP-hard, so "optimal extraction" is out of scope by construction; extraction is required to be greedy, polynomial-time, and totally tie-broken by commitment hash.
 
 **Termination and receipts:** saturation halting before any ceiling emits `RECEIPT_SATURATION_CONVERGED` **[v1.3.0 — CANDIDATE]**; ceiling exhaustion emits the existing dissipative receipts `RECEIPT_BUDGET_EXHAUSTED` or `RECEIPT_EXPRESSION_TOO_COMPLEX` with reason codes `K_MAX_REACHED`, `N_MAX_REACHED`, or `D_MAX_REACHED`. Totality in the Axiom-6 sense is preserved: every saturation halts with a receipt.
+
+**Version binding [v1.4.1].** A `OP_SATURATE` workflow additionally binds the §2.2 hashing-generation tag and the comparator version inside the Step-6 `QO-28` artifact discipline; both are part of the emitted saturation provenance and MUST NOT be inferred from the rule schedule or from the DCC profile alone. This binding records which comparison judged the extracted winner; it does not make `OP_SATURATE` participate in `H(α)`.
 
 **Artifact discipline:** the extractor's output is emitted as a **new versioned artifact (Axiom 13)** that records its input commitments, pinned schedule, ceilings, and extractor generation. `OP_SATURATE` never mutates canonical node identity and never participates in $$\mathcal{H}(\alpha)$$. Two saturation runs under different budgets or schedules MAY legitimately produce different versioned artifacts; this is measured, provenance-recorded divergence between artifacts — not state drift — provided each artifact carries its full saturation provenance.
 

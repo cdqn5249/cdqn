@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Commitments — The Commitment Specification of the QnIR v0.3 Working Draft (Repair Step 5)
 description: QnIR v0.3 draft, §6 commitments — the minimum lineage and identity semantics (artifact identities, normative lineage, verbalizer and extractor identities)
-version: 0.3.0-draft.30
-updated: 2026-11-15
+version: 0.3.0-draft.31
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -20,6 +20,8 @@ terms_used:
 # QnIR Commitments — The Commitment Specification of the QnIR v0.3 Working Draft (Repair Step 5)
 
 This file carries §6 of the QnIR v0.3 working draft, introduced at v0.3.0-draft.25 under the committed multi-file convention with global section numbering preserved. The program of record — status, Wave records, repair ladder, and References — lives in [`docs/qnir.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir.md); this companion inherits its DRAFT status and is not promoted to the canon. Unlike the three split companions (which reproduce committed monolith bytes), this companion is a **new section**: it has no monolith predecessor, and the §6 body below is its initial committed content.
+
+**Revision record (v0.3.0-draft.31 — Wave 1A specification alignment, 2026-11-18).** This additive amendment closes §6.7's reporting surface: the case-3 `collision` verdict is cross-referenced to the Terminal Outcome Lift Table `Φ_status` (`qnir_semantics.md` §2.5) and aligned with the unified outer `QUARANTINED` disposition tuple; it also points the test surface at the committed `F6` fixture (`qnir_conformance.md` §4.4). No comparison rule, class, register entry, or transcript byte changes; the disposition tuple is a projection of the procedure already declared here.
 
 ---
 
@@ -64,6 +66,8 @@ A **lineage binding** is the quintuple `L = (corpus A, implementation A, V, E, n
 The **binding rule**: a claim that a run reproduces a committed expected outcome is a claim about its lineage binding, and equality of outcomes is claimable only between bindings with equal `corpus A` and equal `V` — each implementation's evidence reproduced from its own execution under §4.1's protocol (mutual agreement never the criterion), with each implementation identity recorded. A binding with a different corpus identity or a different `V` is a different object of comparison; prose never bridges two lineages, and a re-derivation on new bytes is a new binding, not an amendment of the old one. Where two bindings with equal corpus identity and equal `V` disagree in `E`, the wave records a **divergence** in its adjudication register — the committed home for divergence — and no equality claim is made.
 
 **Lineage is external evidence.** A lineage binding is recorded as the run transcript's declared header block and in the wave record that cites the run — the practice the artifact logs already follow (corpus path and bytes, digests, versions, rerun equality). It is never embedded in the frozen encodings: no envelope, record, or receipt byte changes, and no vector moves. The **evidence digest** is a lineage-level digest over the evidence bytes; it is **not** the trace root, and no construction claimed in this subsection may be read as the trace-root format — the root's own construction is declared in §6.6.
+
+**Current-lineage binding note (v0.3.0-draft.31, Wave 1B).** This is a new binding, not an amendment of the draft.23–draft.30 bindings, which remain verbatim and are cited only as history. After the one-pass corpus migration, `corpus A` is the 1,080,404-byte LF form of `docs/qnir_goldens.md` with SHA-256 `fa72f316c2f3bccc94260bbe6f75abecfe18895ab22a551705301d60070c92b3`; `V = (v0.3.0-draft.8.4, qir-enc-1, qir-prof-golden-2)`; `n = 336`; `E = 0765cd5e665ae77303b5bcfce21b3d7a686af8726a1e365d2687220dc97dee75`. The two implementation identities under the same corpus and `V` are Rust `(implementation, 0.3.0-draft.31, 7d204647280a49e03fed16a19fb552e3094b3672f9770d564b37e3c88796bf0c)` and Python `(implementation, 0.3.0-draft.31, f9cf76560da5a263b3f3690a724ff806ed0ab6091c2dd197e788e80f61a9cbff)`; they are artifact-specific by §6.2's triple equality and are not compared for equality with each other. The `scope = run` trace root is `5c6c0b21fba2df0bff219d01270848038046dcfb33eb509375684e9d57408a79`, with 52 published roots byte-identical across both artifacts; the migrated F27 block digest is `6f6bd8f5ea344b31` and the F6 block digest is `498609033d35cf03` (normal mode's `entries = 0` unchanged).
 
 **The `QO-24` separation.** Denotational value identity is the minimal-zoom normal form of §2.6's comparison rule; provenance — zoom expansion history, the declared dependency table `D`, profile parameters, and every other input that shaped a run — rides the lineage binding, never the value key. Any two lineages that denote the same value carry the same value key; the binding is the only committed home for provenance, and a conservativity audit queries the binding (the evidence under its corpus and `V`), not the value key.
 
@@ -149,6 +153,8 @@ The **collision-safe artifact comparison** — the Step-5 row's second deliverab
 3. **`collision`** — the complete identity triples agree (so `kind`, `version`, and `digest` agree) while the complete canonical bytes differ. This is the **genuine collision**: a SHA-256 collision under §2.6's declared policy. Both artifacts are **quarantined**.
 
 Because no projection coarser than the identity triple is ever consulted, case 3 is the only case in which a declared summary reports equality over differing payloads — and it is the one case the summary cannot decide. The bucket exists for exactly that case: it retains both complete artifacts so the question is decidable by bytes, and a comparison on complete bytes always settles it.
+
+**The outer lift and the unified disposition (v0.3.0-draft.31).** `Φ_status` (`qnir_semantics.md` §2.5) lifts case 3 to the Axiom 6 Sealed 12-Status Registry as `QUARANTINED`; the commitment-side disposition is the single unified outer tuple **`<Status=QUARANTINED, Scope=SCOPE_COMMITMENT_COLLISION, Receipt=RECEIPT_DIGEST_COLLISION_QUARANTINED, ReEntry=PERMANENT_CRYPTO_HOLD>`**. The tuple is a reporting projection of the procedure above, not a new rule: `Scope` names the collision commitment, `Receipt` names the emitted quarantine receipt, and `ReEntry=PERMANENT_CRYPTO_HOLD` records that neither member is re-admitted as canonical without a recorded adjudication (§6.3). The `F6` fixture declared at `qnir_conformance.md` §4.4 exercises the tuple directly: its collision pair quarantines with `entries = 1`, class `digest-collision`, while its three non-collision pairs add no entry.
 
 **Quarantine.** A quarantined artifact remains citable by its full triple and its complete bytes, but:
 

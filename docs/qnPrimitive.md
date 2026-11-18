@@ -2,8 +2,8 @@
 layout: default
 title: Qn Primitive Envelope — Governed Qn Artifact Model
 description: Governed Qn artifact model — operational axioms, payload profiles, and Category B optimization primitives
-version: 1.4.0
-updated: 2026-10-30
+version: 1.4.1
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -66,13 +66,17 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Primitive Envelope — Governed Qn Artifact Model |
-| **Version** | 1.4.0 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
+| **Version** | 1.4.1 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Primitive Specification — Category A/B Envelope Foundation |
 
 ---
+
+## Revision Record (v1.4.1)
+
+Under **Axiom 13** this is a new versioned artifact; the `Review Integration Record (v1.4.0)`, its rubric table (including the historical `P_coverage` column at its recorded rows), and all earlier records are preserved verbatim — the retired metric appears there as historical record only and is not a current minimization component. §5.9 replaces the unregistered `HALTED` pseudo-terminal with the sealed Axiom-6 dispositions (`FAILURE`, or `REJECTION_BY_GATEWAY` on pre-dispatch refusal), full `W_gross_reserve` release, and the fallback/`STATUS_LOOKUP_MISS` settlement under Conservation Identity 3; it also registers `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` as circuit-breaker item 5, mapping `FRAME_SIGNATURE_INSUFFICIENT` to `EXPRESSION_TOO_COMPLEX`. No new term includes are introduced.
 
 ## Purpose and Scope
 
@@ -385,7 +389,7 @@ If the direct path fails to clear either margin (e.g. single-cycle integer ALU o
 - `W_refund = W_gross_reserve − W_actual_charge` — returned to the invoking remaining budget at completion;
 - `W_net = W_actual_charge` — recorded on the reuse receipt as the net metric cost of the morphism.
 
-All four fields are recorded in the reuse receipt. A faulted lookup (referenced commitment missing from the local store) emits the existing `HALTED` terminal status with no charge beyond the declared gateway fee; no new Axiom-6 terminal status is introduced.
+All four fields are recorded in the reuse receipt. **Fault and recovery semantics [v1.4.1].** A faulted lookup (referenced commitment missing from the local store, with no declared fallback block) is not an unregistered `HALTED` terminal: the sealed Axiom-6 registry admits no `HALTED` status. The gateway instead emits `FAILURE`, or `REJECTION_BY_GATEWAY` when the loss is detected as a pre-dispatch refusal, and releases the full `W_gross_reserve` back to the invoking budget — `0 U` is charged in the inner reuse ledger beyond the outer `W_gate` fee, which remains charged at the boundary under `docs/simemp.md` §6. By contrast, a recoverable lookup miss carries `STATUS_LOOKUP_MISS` and routes to the declared fallback block; it settles at terminalization under Conservation Identity 3 (`refund_final = I_opened * B(P) − charged`, `docs/qnir_accounting.md` §3.3), so the four-field ledger is macro-realized by the inner escrow without creating budget mid-run. No new Axiom-6 terminal status is introduced.
 
 **Margin governance [v1.4.0 — CANDIDATE].** `κ_dcc` and `κ_t` are declared per DCC profile within the governance-bounded range `[1, 64]`; the recommended preset is `κ_dcc = 2`, `κ_t = 4`. The asymmetry encodes the memory wall: the work axis is already bounded by the profile's declared cost model, so a tight factor suffices, while the latency axis carries the machine-condition variance of the wall, so the direct path must clear the touched tier's worst-case lookup by a factor of four before the lookup is worth its stall. The floor `κ ≥ 1` excludes bare breakeven — ties resolve to Direct Compute — and the ceiling bounds margin inflation. The range and preset are the BOC-selected values recorded in the v1.4.0 Review Integration Record.
 
@@ -405,8 +409,9 @@ $$Q(\text{bypass}) \prec Q(\text{reuse}) \prec \text{Direct Compute}$$
 | 2. Node count budget allocation | Count(Nodes) ≤ N_max | `RECEIPT_BUDGET_EXHAUSTED` | `BUDGET_EXHAUSTED` | `N_MAX_REACHED` |
 | 3. Metric collapse budget ceiling | Burn(U) ≤ Budget_Q1 | `RECEIPT_METRIC_EXHAUSTED` | `BUDGET_EXHAUSTED` | `U_BUDGET_EXHAUSTED` |
 | 4. Saturation iteration ceiling | Epochs(OP_SATURATE) ≤ K_max | `RECEIPT_BUDGET_EXHAUSTED` | `BUDGET_EXHAUSTED` | `K_MAX_REACHED` |
+| 5. Dimensional budget insufficiency | Supporting frame absent for an even root n ≥ Q(4) | `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` | `EXPRESSION_TOO_COMPLEX` | `FRAME_SIGNATURE_INSUFFICIENT` |
 
-Two non-breaker canonical receipts complete the registry: `RECEIPT_SATURATION_CONVERGED` (terminal state `SUCCESS`) is emitted when an `OP_SATURATE` workflow halts on convergence before any ceiling, and `RECEIPT_BYPASS_IDENTITY` (zero metric cost, $$\Delta W = 0$$) is emitted by every `OP_BYPASS` contraction. Breaker 3's receipt name is declared here for the first time; [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §6 inherits it at its next versioned touch-up.
+Two non-breaker canonical receipts complete the registry: `RECEIPT_SATURATION_CONVERGED` (terminal state `SUCCESS`) is emitted when an `OP_SATURATE` workflow halts on convergence before any ceiling, and `RECEIPT_BYPASS_IDENTITY` (zero metric cost, $$\Delta W = 0$$) is emitted by every `OP_BYPASS` contraction. Breaker 3's receipt name is declared here for the first time; [`docs/qexpr.md`]({{ '/qexpr.html' | relative_url }}) §6 inherits it at its next versioned touch-up. Item 5 is the dimensional guard: its `FRAME_SIGNATURE_INSUFFICIENT` reason originates in [`docs/qm.md`]({{ '/qm.html' | relative_url }}) even-root handling and terminates under the sealed Axiom-6 status `EXPRESSION_TOO_COMPLEX`, never a new status.
 
 ---
 

@@ -2,8 +2,8 @@
 layout: default
 title: Abstraction Layers — Structural Thesis for the Qn and cdqn Stack
 description: Structural thesis — abstraction-layer framework, CAE-DAG symbolic composition, and Q(anchor) consensus
-version: 1.9.1
-updated: 2026-10-30
+version: 1.9.2
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -82,13 +82,17 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Abstraction Layers — Structural Thesis for the Qn and cdqn Stack |
-| **Version** | 1.9.1 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
+| **Version** | 1.9.2 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Structural Thesis — Milestone 1 Fully Sealed Baseline |
 
 ---
+
+## Alignment Record (v1.9.2)
+
+Under **Axiom 13** this is a new versioned artifact; every prior Review Integration Record, Rendering Fix Record, and table is preserved verbatim. This amendment adds the Unified Two-Level Quarantine Disposition Schema to §3.6 — one sealed `QUARANTINED` status with three disjoint scopes and explicit `ReEntryPolicy` values (§4.4 Anchor-Cut, `qir-artifact-cmp-1` commitment collision, ingestion-sheaf disagreement) — and makes §4.4's origin-quotiented view explicit for content-addressed DAG/QnIR state digests (`Q̂(0)`, `H_pub`), with node-local `Q(0)_N` confined to outer `Lineage`/`Security` blocks. It also fixes the lowering of `OP_ANCHORCUT` witnesses to QnIR `EMIT` / `qir-trace-root-1` leaves with `O(1)` transition-step replay bounded by the declared profile state size until Step 6 Merkleized containers. No new term includes are introduced.
 
 ## Review Integration Record (v1.8.0)
 
@@ -282,6 +286,8 @@ No artifact may declare a parent or dependency born later in the causal sequence
 Every governed operation must terminate within its declared metric budget as a dissipative thermodynamic step ({% include term.html id="metric-exhaustion" %}), resolving to an explicit {% include term.html id="receipt" %}:
 `SUCCESS`, `FAILURE`, `NO_SOLUTION`, `TIMEOUT`, `BUDGET_EXHAUSTED`, `INCONCLUSIVE`, `QUARANTINED`, `PRECISION_INSUFFICIENT`, `EXPRESSION_TOO_COMPLEX`, `REJECTION_BY_GATEWAY`, `DIVISION_BY_ZERO_REJECTED`, or `ORDERING_INDETERMINATE_AT_ZOOM`. Silent non-termination is prohibited.
 
+**Unified Two-Level Quarantine Disposition Schema [v1.9.2].** `QUARANTINED` remains a single sealed Axiom-6 status; it never branches into new terminal statuses. Every quarantine receipt MUST carry the tuple `<Status=QUARANTINED, QuarantineScope, ReceiptType, ReEntryPolicy>`, whose two levels are the outer status and the scope-specific disposition triple. The scope register is closed and disjoint: (1) `SCOPE_EXECUTION_BISECTION` / `RECEIPT_ANCHOR_REVOKED` / `PERMANENT_REVOCATION` — the §4.4 Anchor-Cut challenge failure; (2) `SCOPE_COMMITMENT_COLLISION` / `RECEIPT_DIGEST_COLLISION_QUARANTINED` / `PERMANENT_CRYPTO_HOLD` — the `qir-artifact-cmp-1` collision of `docs/qnir_commitments.md` §6.7; (3) `SCOPE_INGESTION_SHEAF` / `RECEIPT_SHEAF_DISAGREEMENT_QUARANTINED` / `REENTRANT_AT_GATE_1_WITH_NEW_EVIDENCE` — the sheaf-gluing disagreement of `docs/history_library.md` §5. An entry is re-admitted only under the policy named by its own scope — only scope 3 permits re-entry, and only with new evidence at Gate 1 — and a disposition from one scope MUST NOT be used to resolve another.
+
 ### 3.7. Substrate Profile vs. Governed Invariant ("Car vs. Road" Disjunction)
 
 To reconcile physical hardware heterogeneity with platform-invariant verification, the architecture enforces an explicit disjunction between execution telemetry and algebraic invariants:
@@ -348,6 +354,8 @@ The review established a structural finding: **contract-verification-plus-receip
 **Realization B — Optimistic Interactive Anchor-Cut Bisection.** For deployments where full STARK generation exceeds the thermodynamic breakeven ([`docs/qnPrimitive.md`]({{ '/qnPrimitive.html' | relative_url }}) §1.15), π commits the **Merkle root of the K intermediate `OP_ANCHORCUT` witnesses** of the execution ([`docs/qm_calculus.md`]({{ '/qm_calculus.html' | relative_url }})). Receivers hold a protocol-enforced **Interactive Bisection Challenge Right**: upon ingesting `H(R_road)`, a receiver may challenge any segment `[κ_i, κ_{i+1}]` in O(log K) rounds, descending to a single origin-quotiented QnIR instruction step replayed deterministically at O(1) local cost. Failure to respond, or a hash mismatch, quarantines the receipt: terminal status `QUARANTINED` (§3.6) with receipt `RECEIPT_ANCHOR_REVOKED` — the receipt name is deliberately inherited from the anchor-fracture containment of [`docs/qlog.md`]({{ '/qlog.html' | relative_url }}); no new terminal status is introduced.
 
 **Origin-Quotiented Canonical Projection for Export.** Strictly local origins imply that identical deterministic computations on nodes A and B yield disjoint commitments, `H(S_out)_A ≠ H(S_out)_B`: a receiving node can neither verify a state transition nor deduplicate shared sub-expressions across peers by direct hash comparison. The {% include term.html id="exposure-functor" text="Exposure Functor" %} therefore computes public commitments only **after quotienting out the local root**, `Q(0)_A ↦ Q̂(0)`: during pure `Qm` evaluation the origin is treated as a formal canonical symbol, and the node-specific hardware seed remains bound solely in the envelope's lineage block. The public commitments `H_pub(S_in)` and `H_pub(S_out)` carried by `R_road` are computed over the quotiented projection, so any two nodes executing the same {% include term.html id="q-patterns" text="Q(pattern)" %} over identical relative inputs produce **identical portable commitments** — making Anchor Grounding Class I transitions verifiable by forced re-derivation on any peer.
+
+**State digests and QnIR lowering [v1.9.2].** Content-addressed DAG and QnIR state digests that cross a node boundary are likewise computed over the origin-quotiented view `Q̂(0)` — the projection underlying `H_pub` above and the equality tested by `docs/simemp.md` §1 — so equal relative computations on distinct nodes commit identically. The node-local origin `Q(0)_N` and node-specific hardware seed remain bound solely in the outer envelope's `Lineage` / `Security` blocks (§3.3), never inside the quotiented state digest. Each `OP_ANCHORCUT` witness of Realization B lowers to QnIR `EMIT` transitions whose digests are `qir-trace-root-1` leaves (`docs/qnir_commitments.md` §6.6): a challenged segment replays at `O(1)` transition steps per witness, bounded by the declared profile's state size, and the Merkleized-container optimization of the intermediate witness set remains conditional on Step 6.
 
 ---
 

@@ -2,8 +2,8 @@
 layout: default
 title: Qs — Quang Semantics (Constructive Relational Intent and Epistemic Grounding)
 description: Canonical specification of the constructive semantic base domain, multi-axial Clifford language frames, epistemic modal spectrum, human-agent intent contracts, and AI alignment under SIMEMP constraints.
-version: 1.3.0
-updated: 2026-10-26
+version: 1.3.1
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -48,13 +48,17 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding |
-| **Version** | 1.3.0 |
-| **Last Updated** | 2026-10-26 (Bao Loc, Vietnam) |
+| **Version** | 1.3.1 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
 
 ---
+
+## Revision Record (v1.3.1)
+
+Under **Axiom 13** this is a new versioned artifact; the `Review Integration Record (v1.3.0)` and all prior tables and records are preserved verbatim. §5.3 scopes the social residual to an opaque Layer-3 commitment handle `H(α_rem)` in `qir-enc-1` `EXT` key `7`, keeping the DEL reading `[CANDIDATE / NON-PROMOTING]` until finite `W_worlds_max` / `K_max` bounds are sealed and their exhaustion receipts bound. §6 fixes the pre-seal verbalizer fee `W_verbalize(|Contract|)` inside the outer `W_gate` (recorded even on §6.2 rejection) and maps principal co-signing wait latency to the `PAUSED` lifecycle state of `docs/boc.md` §10 via an atomic checkpoint receipt before `RUNNING`. No new term includes are introduced.
 
 ## Review Integration Record (v1.3.0)
 
@@ -398,6 +402,8 @@ Under this candidate reading:
 
 The full formal calculus — sequent presentation, discharge rules, and the interaction of CTD structure with the **Axiom 6** terminal states — is deferred to a dedicated versioned update. This subsection records the candidate anchoring only, so that downstream files do not hard-code an untyped reading of $r_{\mathrm{social}}$ in the interim.
 
+**Committed form and finite bounds [v1.3.1].** Until that update, $r_{\mathrm{social}}$ is scoped strictly as an **opaque Layer-3 commitment handle** `H(α_rem)` carried in `qir-enc-1` `EXT` key `7`; no consumer may interpret its bytes or infer CTD structure from the handle itself. This subsection remains gated `[CANDIDATE / NON-PROMOTING]` until finite DEL bounds are sealed: `W_worlds_max` on the possible-worlds enumeration and `K_max` on modal update depth, with exhaustion emitting `RECEIPT_BUDGET_EXHAUSTED` and `RECEIPT_EXPRESSION_TOO_COMPLEX` respectively. The handle commits to a residual sub-DAG; it is not a new epistemic credential, and §5.1/§5.2 continue to apply unchanged.
+
 ---
 
 ## 6. The Generative Candidate Pipeline (Q(rsi) Integration)
@@ -453,6 +459,10 @@ If the argmax is **degenerate** — multiple non-isomorphic candidate DAGs fit t
 4. **Sealing via {% include term.html id="qn-rsi" text="Q(rsi)" %}:** The selected candidate is sealed into `State: SEALED` as successor artifact $S_{k+1}$, advancing the monotonic causal index along the {% include term.html id="causal-arrow" %}. For parser-derived candidates carrying a `DCC_INTENT_CONTRACT_v1`, sealing additionally requires that the §6.1 handshake has returned a principal co-signature; without it, the candidate remains `MODAL_HYPOTHESIS` and is never sealed. Sub-optimal candidates emit negative receipts, ensuring the system never repeats failed paths.
 
 **Metering.** Every stage of the pipeline — parsing, deterministic measurement, BOC selection, verbalization, and co-signature verification — consumes finite compute and memory work and is metered under **Axiom 6**. Generation behind the stochastic boundary remains free; the attribution of gateway-crossing validation work to the invoking principal's remaining budget is a [`docs/simemp.md`]({{ '/simemp.html' | relative_url }}) concern and is deferred to that document's next versioned update.
+
+**Verbalization fee [v1.3.1].** Deterministic verbalization (`qir-verbalizer-1`, step 1 above) is a **pre-seal boundary transform**: it runs before the co-signature decision and is billed as a static, size-linear fee `W_verbalize(|Contract|)` inside the outer gateway fee `W_gate` fixed in `docs/simemp.md` §6 — not as an inner QnIR work posting. The charge is recorded regardless of the §6.2 outcome, including `RECEIPT_ROUNDTRIP_CONFIRMATION_REJECTED`, because the canonical read-back was produced in full before the principal could reject it.
+
+**Human wait latency [v1.3.1].** The interval between presentation of the read-back and the principal's co-signature is not unmetered ambient time: the invocation enters the `PAUSED` lifecycle state of `docs/boc.md` §10 at an **atomic checkpoint receipt**, established before the transition to `RUNNING` on co-signature. `PAUSED` is a lifecycle state and not a BOC outcome; on rejection the invocation is `ABORTED` with its checkpoint preserved, and no sealing decision is manufactured from the wait.
 
 ### 6.1. The Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake [v1.3.0 — CANDIDATE]
 

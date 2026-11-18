@@ -2,8 +2,8 @@
 layout: default
 title: SIMEMP Constraints
 description: Foundational physical, computational, and architectural constraints for the Qn and cdqn stack
-version: 1.4.0
-updated: 2026-11-07
+version: 1.4.1
+updated: 2026-11-18
 author: "Christophe Duy Quang Nguyen via GPT-6 (OpenAI)"
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -42,8 +42,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | SIMEMP: Thesis and Constraints for the Qn and cdqn Stack |
-| **Version** | 1.4.0 |
-| **Last Updated** | 2026-11-07 |
+| **Version** | 1.4.1 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen; GPT-6 (OpenAI), under the direction of Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Constitutional Specification — Foundational Invariants |
@@ -94,6 +94,10 @@ This update coordinates the BOC Tier-2 metric semantics with `docs/boc.md` v0.2.
 | **Comparison and evidence discipline**: require compatible definitions and contexts, versioned ordinal rubrics for qualitative values, explicit `UNKNOWN` handling, and strict lexicographic comparison without weighted scoring or skipping incomparable earlier components | §7 | Prevent artificial scores and favorable treatment of missing evidence | CANDIDATE |
 | **BOC operational specification linked**: `docs/boc.md` defines invocation, temporal evidence applicability, metric domains, and comparison semantics subordinate to this policy | §7; Normative References | Coordinate constitutional rule and operational specification | EDITORIAL |
 
+## Alignment Record (v1.4.1)
+
+This additive amendment aligns the constitutional text with the committed QnIR accounting and with the retired BOC portability metric. Under **Axiom 13** this is a new versioned artifact: the `Review Integration Record (v1.2.0)` and every earlier record and table are preserved verbatim, and every change is stated here. §1 states the Observational Determinism Invariant over origin-quotiented commitments `H_pub` (`docs/abstractionLayers.md` §4.4), binds the static bound tables `(τ_U, τ_t)` inside `Π_D(E)`, and confines node-local calibration receipts to Stage 1 qualification. §6 makes the Two-Tier Boundary explicit — the outer `W_gate > 0` deduction and the inner QnIR ledger with `ΔB_principal = W_gate + Work(E)` (`docs/qnir_accounting.md` §3.1/§3.4) — and §7 continues to use `P_gap`; the `P_coverage` occurrences inside the v1.2.0 record remain historical record only and are not a current minimization component. No new term includes are introduced.
+
 ## Normative References
 
 The following documents establish the structural, mathematical, legal, and BOC operational constraints derived from this constitutional framework.
@@ -133,7 +137,7 @@ If any dependency is implicit, hidden, or unmeasured (violating the {% include t
 
 This residual entropy manifests operationally as non-deterministic state drift, runtime instability, or unmodeled attack surfaces. The SIMEMP framework ensures that every state transition's causal entropy is fully accounted for by explicit, verifiable dependencies across the {% include term.html id="cdqn" %} stack.
 
-Within the constructive model, `H(S_t | D(S_t)) = 0` is a statement of functional purity — referential transparency over the declared dependency set — rather than a statistical measurement over an unmodeled probability distribution. Its operational content is made empirically falsifiable by the **Observational Determinism Invariant** [v1.2.0 — CANDIDATE]: for any two Layer-0 host execution environments `E_1`, `E_2` that agree on the declared dependency projections (`Π_D(E_1) = Π_D(E_2)`) and satisfy the active {% include term.html id="dcc-profile" %} hardware profile, evaluating the same governed transition must produce bit-identical output commitments (`H(S_t(E_1)) = H(S_t(E_2))`) and identical terminal receipt statuses. The invariant is deliberately stated over output commitments rather than raw values: commitments are what cross boundaries, so the comparison itself is verifiable at any receiving node without exposing payload content.
+Within the constructive model, `H(S_t | D(S_t)) = 0` is a statement of functional purity — referential transparency over the declared dependency set — rather than a statistical measurement over an unmodeled probability distribution. Its operational content is made empirically falsifiable by the **Observational Determinism Invariant** [v1.2.0 — CANDIDATE]: for any two Layer-0 host execution environments `E_1`, `E_2` that agree on the declared dependency projections (`Π_D(E_1) = Π_D(E_2)`) and satisfy the active {% include term.html id="dcc-profile" %} hardware profile, evaluating the same governed transition must produce bit-identical **origin-quotiented** output commitments (`H_pub(S_t(E_1)) = H_pub(S_t(E_2))`, where `H_pub` is the public commitment view of `docs/abstractionLayers.md` §4.4, computed after quotienting the node-local root `Q(0)_N ↦ Q̂(0)`) and identical terminal receipt statuses. The invariant is deliberately stated over output commitments rather than raw values: commitments are what cross boundaries, so the comparison itself is verifiable at any receiving node without exposing payload content. The shared DCC profile's static bound tables `(τ_U, τ_t)` are fixed inside the declared dependency projection `Π_D(E)` and are therefore common to both environments; node-local calibration receipts qualify each node at Stage 1 and remain in that node's outer Lineage/Security blocks, so calibration differences never enter the cross-node equality.
 
 Under this invariant, an incomplete dependency set `D' ⊂ D` is no longer merely a hidden-model assumption: it is an empirically detectable defect, exposed by differential execution testing of the same governed transition across heterogeneous environments. An implementation that silently depends on unmodeled Layer-0 physical state — microarchitectural timing, cache residency, runtime assumptions — diverges under differential testing at exactly the boundary where its declared projections fail to capture the executed environment, and is thereby discarded under the same discipline as any other Tier-1 violation.
 
@@ -317,6 +321,8 @@ Stochastic and generative artificial intelligence processes are integrated via a
 ```
 
 **Boundary Billing and Soundness Scope [v1.2.0 — CANDIDATE].** Generation behind the stochastic boundary is free of governance metering; every crossing of a {% include term.html id="simemp-gateway" %} into governed state is deterministic, metered, and receipted. Parsing, measuring, and validating an unverified candidate — PQC signature checks, DCC contract checks, metric-envelope evaluation — themselves consume finite compute and memory work. Every gateway invocation therefore deducts a static, DCC-declared verification fee `W_gate > 0` from the **invoking principal's** remaining work budget **before** any candidate is inspected, charged regardless of validation outcome, so failed and adversarial candidate floods are billed to their invoker and cannot induce free-riding metric exhaustion at the boundary. Gateway checks enforce **structural and resource compliance** — formal contract soundness, resource bounds, and representation constraints (the float prohibition) — and not informal-to-formal **semantic intent alignment**: whether a formalized candidate matches the human principal's actual intent is governed exclusively by the Deterministic Canonical Round-Trip Paraphrase & Co-Signing Handshake ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6.1), which gates the transition to `SEALED`.
+
+**Boundary Ledger Split [v1.4.1].** The `W_gate > 0` deduction is the **outer** charge, levied on the invoking principal before any inspection and charged regardless of the validation outcome. It is not a QnIR work posting: the inner QnIR ledger opens only against the forwarded budget `W_budget = B_principal − W_gate` and posts work `Work(E)` there, so the principal's total change is `ΔB_principal = W_gate + Work(E) ≥ W_gate > 0`. This is the Two-Tier Boundary / Kernel Accounting Split fixed in `docs/qnir_accounting.md` §3.1 and §3.4: the inner escrow-opening surcharge `g(Intent)`, the reserve/charge/refund identities, and the admission bound `B(P)` belong to the inner ledger and are never a second fee at this gateway. A failed or adversarial crossing is therefore billed at least `W_gate`, closing the free-crossing vector without double metering.
 
 1. **Context Declaration:** Establish explicit {% include term.html id="dcc-profile" text="DCC profiles" %}, objective functions, and finite budgets.
 2. **Generation:** Stochastic engines propose candidate structures (classified strictly as *unverified candidates*).

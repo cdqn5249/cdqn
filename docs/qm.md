@@ -2,8 +2,8 @@
 layout: default
 title: Qm — Quang Mathematics (Constructive Numeric and Relational Substrate)
 description: Canonical specification of the constructive numeric, relational, and algebraic substrate
-version: 1.4.0
-updated: 2026-10-30
+version: 1.4.1
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -54,13 +54,17 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qm — Quang Mathematics: Constructive Numeric and Relational Substrate |
-| **Version** | 1.4.0 |
-| **Last Updated** | 2026-10-27 (Bao Loc, Vietnam) |
+| **Version** | 1.4.1 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
 
 ---
+
+## Revision Record (v1.4.1)
+
+Under **Axiom 13** this is a new versioned artifact; the v1.3.0 and v1.4.0 Review Integration Records and every prior table are preserved verbatim. §3.6 designates `B = Q(2)` as the unique hash-governing radix for `Cons_B` trees before Layer-3 `H`-commitment, with `B = Q(8)` and the `Q(9)` RADIX boundary as surface/display morphisms only. §4.3 adds the constructive `z_min` reduction recurrence over the declared `Dyadic`, `Decimal`, and `Factorial` schedules, reconciles `δ_z = Q(1)/κ(z)` with the QnIR binary `ZOOM=4` exponent, and fixes the exact-integer/`TUPLE` lowering of non-dyadic leaves. The even-root guard receipt `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` / `FRAME_SIGNATURE_INSUFFICIENT` is bound to the sealed Axiom-6 terminal `EXPRESSION_TOO_COMPLEX`. No new term includes are introduced.
 
 ## Normative References
 
@@ -288,6 +292,8 @@ with explicit lineage $$\mathrm{Parent}(q) = \{B, \, q_{\mathrm{high}}, \, d_{\m
 
 Rules 1–3 give every constructed magnitude exactly one canonical Cons-chain. Consequently hash-consing equality extends unchanged from single digits to all of $$\mathbb{N}_{\le H_{\mathrm{max}}}$$: $$\mathcal{H}(A) = \mathcal{H}(B) \iff A \equiv B$$ holds for every constructed magnitude, restoring the content-addressed identity invariant at QnIR lowering boundaries.
 
+**Canonical radix for hashing [v1.4.1].** Among the admitted construction radices, `B = Q(2)` is the **unique hash-governing canonical radix** for `Cons_B` trees prior to Layer-3 `H`-commitment: the commitment hash is computed over the binary Cons-chain, so a magnitude has exactly one committed byte form independent of display radix. `B = Q(8)` and the `Q(9)` RADIX boundary (`DCC_ANCHOR_Q9_RADIX_v1`, §3.3) are **surface/display morphisms only** — they may re-render an already-committed value for octal or decimal contract interfaces, but never define a second hash input, never alter content identity, and never license a second canonical Cons-tree. A DCC profile that declares a display radix MUST still hash the binary canonical form; otherwise its commitments are structurally incomparable and rejected at the gateway.
+
 **Height and work.** The chain depth is
 
 $$h_{\mathrm{cons}}(q_z) = \lceil \log_B(q_z + 1) \rceil \le H_{\mathrm{max}}$$
@@ -382,6 +388,10 @@ the representation is algebraically exact.
 ### 4.3. Canonical Zoom Normalization **[v1.3.0 — CANDIDATE]**
 
 **[Review Integration Segment 4 Point 7]** Requirement-style identity — equality of values is equality of commitment hashes — holds across zoom levels only if values are hashed at a canonical zoom. Qm therefore fixes: a value that achieves exactness (collapsed residual, §3.4 form 1) is **re-expressed at its canonical minimal zoom** $$z_{\mathrm{min}}$$ — the smallest declared zoom at which the value attains Terminal Exactness — before any commitment hash is computed or compared. The re-expression is a deterministic re-canonicalization billed to the calling operation (never silent, never free-floating): two tuples denoting the same value at different zooms normalize to one commitment, so $$\mathcal{H}(A) = \mathcal{H}(B) \iff A \equiv B$$ holds zoom-invariantly. Tuples carrying unexpanded residual handles (§3.4 form 2) are never normalized across zooms; their equality claims are deferred to explicit metered zoom resolution (§6, §7).
+
+**Constructive `z_min` reduction [v1.4.1].** For a terminal-exact tuple `(q_z, r_z, z)` with `r_z = Q(0)`, the canonical minimal zoom is computed by a deterministic recurrence over the resolution schedule `κ` declared by the active DCC profile (§3.3). Let `ρ(z) = κ(z) / κ(z-1)`: `ρ = 2` for `Dyadic` (`κ(z) = 2^z`), `ρ = 10` for `Decimal` (`κ(z) = 10^z`), and `ρ = z+1` for `Factorial` (`κ(z) = (z+1)!`). While `z > 0` and `r_z = Q(0)`, divide `q_z` by `ρ(z)` as long as the division is exact (`q_z ← q_z / ρ(z)`), then set `z ← z-1` and repeat; stop when `r_z ≠ Q(0)`, when `z = 0`, or when the division is no longer exact. The resulting `z` is `z_min`; an exact zero (`q_z = Q(0)` and `r_z = Q(0)`) collapses directly to `z_min = 0`. Every step is a deterministic re-canonicalization billed to the calling operation and changes the representation only, never the value, so the hash after reduction is the unique zoom-invariant commitment of §4.3.
+
+**Zoom sign and QnIR lowering [v1.4.1].** The convention `δ_z = Q(1)/κ(z)` fixes `δ_z` as a **positive** scale subdivision at zoom `z`. QnIR's binary `ZOOM=4` word carries the exponent `z` with effective scale `2^-z`; for the `Dyadic` schedule the two agree exactly (`δ_z = 2^-z`), so a dyadic leaf lowers directly to a binary `ZOOM=4` word with the same exponent. `Decimal` and `Factorial` schedules are not powers of two: no exponent-only `ZOOM=4` word can denote their leaves, so those leaves lower to QnIR **exact integer / `TUPLE` rationals** (numerator and denominator as exact integer words, canonicalized under §3.6's binary radix), never to dyadic `ZOOM=4` words. This keeps the zoom sign convention uniform across schedules without asserting a false binary denotation.
 
 ---
 
@@ -518,7 +528,7 @@ $$\sqrt[n]{A} \implies \mathrm{Find} \; X \quad \mathrm{such} \; \mathrm{that} \
 
 $$\sqrt{\ominus Q(1)} \implies \vec{e}_1 \wedge \vec{e}_2 \quad (\mathrm{where} \; (\vec{e}_1 \wedge \vec{e}_2)^2 = -Q(1))$$
 
-  **[v1.3.0 — CANDIDATE, boundary restriction per Review Integration Segment 2 Point 4]** The 1D→2D bivector promotion is sound **for the square root only** ($$n = Q(2)$$) in Euclidean signature $$\mathcal{C}\ell_{2,0}$$, where $$(\vec{e}_1 \wedge \vec{e}_2)^2 = -Q(1)$$. It does **not** extend to higher even roots $$n \ge Q(4)$$: any pure bivector blade $$\beta \,(\vec{e}_1 \wedge \vec{e}_2)$$ satisfies $$\big(\beta \,(\vec{e}_1 \wedge \vec{e}_2)\big)^4 = +\,\beta^4\, Q(1) \ge Q(0)$$ — a non-negative scalar, never a negative one. Fourth and higher even roots of negative scalars are **mixed-grade rotors (spinors)** in the even subalgebra (e.g. $$\sqrt[4]{\ominus Q(1)} = \big(Q(1) \pm \vec{e}_1 \wedge \vec{e}_2\big) \times \mathrm{r}_{\sqrt{2}}$$, coupled to `DCC_ANCHOR_SQRT2_v1`), which exist only inside frames whose declared signature $$\eta$$ provides adjoining axes with $$\eta_{i,i}\,\eta_{j,j} = \oplus$$ (Lorentzian $$\mathcal{C}\ell_{1,1}$$ spacetime bivectors square to $$+Q(1)$$ and cannot serve). Such promotion crosses into Qm Degree 2 ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})). At Degree 1, an even root $$n \ge Q(4)$$ of a negative scalar is intercepted deterministically: if the calling DCC profile declares a supporting frame, the gateway routes the metered promotion to Layer 3; otherwise it emits `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` with reason code `FRAME_SIGNATURE_INSUFFICIENT`. No heuristic fallback exists.
+  **[v1.3.0 — CANDIDATE, boundary restriction per Review Integration Segment 2 Point 4]** The 1D→2D bivector promotion is sound **for the square root only** ($$n = Q(2)$$) in Euclidean signature $$\mathcal{C}\ell_{2,0}$$, where $$(\vec{e}_1 \wedge \vec{e}_2)^2 = -Q(1)$$. It does **not** extend to higher even roots $$n \ge Q(4)$$: any pure bivector blade $$\beta \,(\vec{e}_1 \wedge \vec{e}_2)$$ satisfies $$\big(\beta \,(\vec{e}_1 \wedge \vec{e}_2)\big)^4 = +\,\beta^4\, Q(1) \ge Q(0)$$ — a non-negative scalar, never a negative one. Fourth and higher even roots of negative scalars are **mixed-grade rotors (spinors)** in the even subalgebra (e.g. $$\sqrt[4]{\ominus Q(1)} = \big(Q(1) \pm \vec{e}_1 \wedge \vec{e}_2\big) \times \mathrm{r}_{\sqrt{2}}$$, coupled to `DCC_ANCHOR_SQRT2_v1`), which exist only inside frames whose declared signature $$\eta$$ provides adjoining axes with $$\eta_{i,i}\,\eta_{j,j} = \oplus$$ (Lorentzian $$\mathcal{C}\ell_{1,1}$$ spacetime bivectors square to $$+Q(1)$$ and cannot serve). Such promotion crosses into Qm Degree 2 ([`docs/qm_geometry.md`]({{ '/qm_geometry.html' | relative_url }})). At Degree 1, an even root $$n \ge Q(4)$$ of a negative scalar is intercepted deterministically: if the calling DCC profile declares a supporting frame, the gateway routes the metered promotion to Layer 3; otherwise it emits `RECEIPT_DIMENSIONAL_BUDGET_EXHAUSTED` with reason code `FRAME_SIGNATURE_INSUFFICIENT`. This receipt binds to the sealed Axiom-6 terminal status `EXPRESSION_TOO_COMPLEX` (registered as item 5 of the circuit-breaker registry in `docs/qnPrimitive.md` §5.9); it introduces no new terminal status. No heuristic fallback exists.
 
 #### V. The Chiral Optimization Duality
 Powers and roots form a **Chiral Morphism Pair** along the causal execution arrow:

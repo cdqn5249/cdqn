@@ -486,7 +486,8 @@ pub(crate) struct RunOutcome {
     pub(crate) per_class: Vec<(&'static str, u64, u64)>, // class, U, postings
     pub(crate) acc: Acc,
     pub(crate) receipt: Vec<u8>,
-    pub(crate) bh: u64,
+    /// None means the admission surrogate refused (no certified bound).
+    pub(crate) bh: Option<u64>,
 }
 
 /// The canonical §2.6 record encoding of one transition record: the fourteen
@@ -622,7 +623,7 @@ struct Machine<'a> {
     d: HashMap<Vec<u8>, Vec<u8>>,
     w_budget: u64,
     profile: &'a Profile,
-    bh: u64,
+    bh: Option<u64>,
     versions: [String; 3],
     back_edges: std::collections::BTreeSet<(usize, usize)>,
     store: HashMap<(u64, u64), Value>,
@@ -686,10 +687,10 @@ impl<'a> Machine<'a> {
             d,
             w_budget,
             profile,
-            // the admission bound: the exact surrogate, or the declared
-            // injected bound of the F27 fixture mode (test-only validator-
-            // defect injection, §4.4) — never a conformance path
-            bh: b_inject.unwrap_or_else(|| bhat::b_hat(&intent.blocks, profile)),
+            // the admission bound: the exact surrogate (None = refusal), or
+            // the declared injected bound of the F27 fixture mode (test-only
+            // validator-defect injection, §4.4) — never a conformance path
+            bh: b_inject.or_else(|| bhat::b_hat(&intent.blocks, profile)),
             versions: [
                 intent.sem.clone(),
                 intent.enc.clone(),
@@ -854,9 +855,10 @@ impl<'a> Machine<'a> {
     }
 
     fn run(mut self) -> Result<RunOutcome, String> {
-        if self.w_budget < self.bh {
-            // admission refusal (§3.4): the single rejection transition,
-            // zero postings
+        if self.bh.is_none() || self.w_budget < self.bh.unwrap() {
+            // admission refusal (§3.4): `None` (no certified bound / pre-DP
+            // gate exceeded) or budget below the bound — the single rejection
+            // transition, zero postings, escrow never opened
             let pre = self.config_now((0, 0));
             let decoded = self.decoded_at(0, 0);
             let outcome = self.fatal(TT_EXPRESSION_TOO_COMPLEX, (0, 0), decoded, pre);
@@ -924,7 +926,7 @@ impl<'a> Machine<'a> {
                 // typed rejection at the first attempted transition never
                 // opens it
                 self.escrow_open = true;
-                self.acc.reserved += self.bh; // reserve B(P) in full (§3.3)
+                self.acc.reserved += self.bh.unwrap(); // reserve B(P) in full (§3.3)
                 gateway = self.profile.gateway;
             }
             let post_charge = gateway + c;
@@ -2384,7 +2386,7 @@ fn exec_vector_check(
     }
     match ledger.refund_final {
         Ok((b3, c3, r3)) => {
-            if b3 != outcome.bh || r3 != b3 - c3 || r3 != outcome.bh - outcome.acc.charged {
+            if b3 != outcome.bh.unwrap_or(u64::MAX) || r3 != b3 - c3 || r3 != outcome.bh.unwrap_or(u64::MAX) - outcome.acc.charged {
                 return (cmp_fail(
                     id,
                     name,

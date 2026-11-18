@@ -2,8 +2,8 @@
 layout: default
 title: Qs History Library — Vision and Operational Proposal for Post-Seal History Ingestion
 description: Operational proposal for the Qs History Library — historical anchor artifacts, Calendar Projection Contracts, and the five-gate Anti-Poisoning Ingestion Firewall — as the concrete shape of post-seal consensus-history ingestion. All artifacts herein are propositions pending deterministic measurement and BOC selection.
-version: 0.1.1
-updated: 2026-10-22
+version: 0.1.2
+updated: 2026-11-18
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -57,13 +57,17 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs History Library — Vision and Operational Proposal for Post-Seal History Ingestion |
-| **Version** | 0.1.1 |
-| **Last Updated** | 2026-10-22 (Bao Loc, Vietnam) |
+| **Version** | 0.1.2 |
+| **Last Updated** | 2026-11-18 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Operational Proposal — Not a Finalized Specification |
 
 ---
+
+## Revision Record (v0.1.2)
+
+Under **Axiom 13** this is a new versioned artifact; the prior consultation and version tables remain verbatim. §5 tightens the proposal: the Gate-3 independence quorum (`k ≥ 2`) must root in distinct `HUMAN_IDENTITY` delegation chains or attested hardware diversity classes; the `O(1)` static Modality Ceiling tag check and the `qir-artifact-cmp-1` canonical byte/digest pre-check are hoisted ahead of deep DAG traversal; and a `SCOPE_INGESTION_SHEAF` `QUARANTINED` record may re-enter Gate 1 only with a strictly expanded witness set under a new Axiom-13 version digest and a fresh `W_gate > 0` fee, while `SCOPE_COMMITMENT_COLLISION` and `SCOPE_EXECUTION_BISECTION` stay permanently non-reentrant. The three scopes use the unified disposition schema of `docs/abstractionLayers.md` §3.6. No new term includes are introduced.
 
 ## Purpose and Epistemic Stance
 
@@ -158,6 +162,12 @@ It is proposed that library ingestion pass **five gates**, each a governed opera
 | 5. Append-Only Immutability | SEALED lifecycle; {% include term.html id="structural-indirection" %} | Sealed artifacts never mutate; corrections arrive as counter-receipts and migration receipts. History is never rewritten; it is re-witnessed. |
 
 **Gate ordering** is proposed as 1 → 2 → 3 → 4 → 5, ordered by evidentiary cost: deterministic hash verification first (cheap, local, decisive for most poisoning attempts), then modality typing (local computation), then quorum (economic — it requires other nodes' receipts), then consensus gluing (social — it requires the sheaf), and immutable commit last. A record rejected at an early gate never reaches the expensive ones, so the firewall's own {% include term.html id="metric-envelope" %} consumption is bounded by the ordering itself. **Challenge lifecycle** is proposed as follows: a QUARANTINED record is resolved only by a new receipt chain that re-enters the pipeline at Gate 1 — quarantine is a state, not a verdict, and no record is ever deleted; it is either eventually glued, or remains visible as a standing disagreement. This preserves the append-only discipline at every stage of the pipeline.
+
+**Gate-3 lineage grounding [v0.1.2].** The independence floor `k ≥ 2` for anchor-grade records is satisfied only by roots in **distinct `HUMAN_IDENTITY` delegation chains**, or — where the rooting authority is not a human chain — by **attested hardware diversity classes** whose genesis receipts demonstrate independent Layer-0 origins. Distinct document hashes, citation branches, or agent identities alone do not establish lineage disjointness.
+
+**Cheap checks before traversal [v0.1.2].** Before any deep CAE-DAG traversal, the gateway performs the `O(1)` static **Modality Ceiling tag check** (Gate 2) and the `qir-artifact-cmp-1` **canonical byte/digest pre-check** (`docs/qnir_commitments.md` §6.7): the declared modality-ceiling tag is checked statically and the artifact's complete canonical bytes are compared against its digest, with a mismatch rejecting or quarantining at the boundary at constant cost. Only records passing both pre-checks reach the expensive quorum and sheaf-gluing stages.
+
+**Re-entry discipline [v0.1.2].** A `QUARANTINED` record in scope `SCOPE_INGESTION_SHEAF` (`docs/abstractionLayers.md` §3.6) may re-enter Gate 1 only with a **strictly expanded witness set** under a **new Axiom-13 version digest**, paying a **fresh `W_gate > 0` fee**; no earlier witness set is silently reused and no fee is waived on re-entry. The other two quarantine scopes — `SCOPE_COMMITMENT_COLLISION` and `SCOPE_EXECUTION_BISECTION` — are **permanently non-reentrant**, with `ReEntryPolicy` values `PERMANENT_CRYPTO_HOLD` and `PERMANENT_REVOCATION` respectively; no new evidence reopens them.
 
 Residual threats are recorded honestly. Collusion across genuinely distinct roots remains an open challenge, in direct continuity with the hub-collusion resistance challenge of [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}) §8.5; its mitigation is economic and physical, since fabricating Layer 0 artifact provenance costs real-world work, and forging contemporary sensor receipts requires breaking post-quantum signatures across the {% include term.html id="dual-ring-pqc-boundary" %}, whose private root keys never leave the Inner Ring ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2.4). Slow poisoning of deep history is capped by the {% include term.html id="historical-horizon" %}: admitted poison can only ever occupy hypothesis or firewalled narrative modalities, with bounded grounding and no path to actuation. Finally, because every gate is itself a governed operation, the firewall as a whole is a legitimate candidate for optimization by a future {% include term.html id="qn-rsi" text="Q(rsi)" %} loop under strict semantic invariance — a library that can be fed is a liability; a library that can only be petitioned through receipts is an instrument.
 

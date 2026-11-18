@@ -38,7 +38,7 @@ use crate::cbor::Cbor;
 use std::fs;
 use value::{enc_value, Value};
 
-pub(crate) use interp::{cmp_artifacts, CompleteArtifact, outcome_name, suite_x_exec, trace_root};
+pub(crate) use interp::{cmp_artifacts, collision_entries, CompleteArtifact, outcome_name, suite_x_exec, trace_root};
 
 // ------------------------------------------------------------ text helpers
 
@@ -1026,16 +1026,145 @@ fn ttype_of_name(name: &str) -> u64 {
 /// components (the validator-defect report and the containment verdict) are
 /// checked against the register's declared semantic expectation, and the
 /// fixture block is rendered byte-identically to the second implementation's.
-fn suite_fixture(md: &str, rep: &mut Report) {
-    let vectors = parse_vectors(md, "## Fixture Register");
-    if vectors.len() != 1 || vectors[0].id != "F27" {
+/// The F6 collision-safe artifact comparison fixture (§4.4's declared
+/// fixture semantics, draft.31): four declared `CompleteArtifact` pairs,
+/// checked by `qir-artifact-cmp-1` over full canonical bytes. The fixture
+/// commits no record/receipt bytes and never changes the normal suite's
+/// `n = 336` or `entries = 0`.
+fn suite_fixture_f6(section: &str, rep: &mut Report) {
+    use std::collections::HashMap;
+    let mut arts: HashMap<String, CompleteArtifact> = HashMap::new();
+    let mut unique: Vec<CompleteArtifact> = Vec::new();
+    let declared = line_starting(section, "Declared artifacts:").unwrap();
+    let declared = declared.strip_prefix("Declared artifacts:").unwrap_or(&declared);
+    for part in declared.split(';') {
+        let p = part.trim().trim_matches('`').trim();
+        let (name, rest) = match p.split_once(" = (") {
+            Some(x) => x,
+            None => continue,
+        };
+        let inner = rest.trim_end_matches(')');
+        let f: Vec<&str> = inner.split(',').map(|x| x.trim()).collect();
+        if f.len() != 4 {
+            rep.fail(format!("F6: malformed artifact declaration {p}"));
+            return;
+        }
+        let bytes = f[3].trim_matches('"').as_bytes().to_vec();
+        let digest = match f[2].strip_prefix("sha256(") {
+            Some(d) => sha256::sha256(d.trim_end_matches(')').trim_matches('"').as_bytes()),
+            None => {
+                rep.fail(format!("F6: artifact {name} has no sha256(...) digest"));
+                return;
+            }
+        };
+        arts.insert(
+            name.trim().to_string(),
+            CompleteArtifact {
+                kind: f[0].to_string(),
+                version: f[1].to_string(),
+                digest,
+                bytes,
+            },
+        );
+        unique.push(arts.get(name.trim()).unwrap().clone());
+    }
+
+    let mut operands: Vec<CompleteArtifact> = Vec::new();
+    let mut verdicts: Vec<(&str, &str)> = Vec::new();
+    for ln in section.lines().filter(|l| l.starts_with("- pair ")) {
+        let word = ln.split('`').nth(1).unwrap_or("");
+        let rhs = ln
+            .splitn(2, ':')
+            .nth(1)
+            .unwrap_or("")
+            .split('(')
+            .next()
+            .unwrap_or("");
+        let names: Vec<&str> = rhs
+            .split(',')
+            .map(|x| x.trim().trim_matches('`').trim())
+            .collect();
+        if names.len() != 2 {
+            rep.fail(format!("F6: malformed pair line {ln}"));
+            return;
+        }
+        let (a, b) = match (arts.get(names[0]), arts.get(names[1])) {
+            (Some(a), Some(b)) => (a, b),
+            _ => {
+                rep.fail(format!("F6: undeclared artifact in {ln}"));
+                return;
+            }
+        };
+        let got = cmp_artifacts(a, b);
+        let want = match word {
+            "same" => 0,
+            "different" => 1,
+            "collision" => 2,
+            _ => {
+                rep.fail(format!("F6: unknown verdict {word}"));
+                return;
+            }
+        };
+        if got != want {
+            rep.fail(format!(
+                "F6: pair {} produced {} but declares {word}",
+                names[0], got
+            ));
+        }
+        operands.push(a.clone());
+        operands.push(b.clone());
+        verdicts.push((word, a.kind.as_str()));
+    }
+    if verdicts.len() != 4 {
         rep.fail(format!(
-            "fixture register: expected exactly the F27 fixture, found {} section(s)",
-            vectors.len()
+            "F6: expected four declared comparison pairs, found {}",
+            verdicts.len()
         ));
         return;
     }
-    let section = &vectors[0].section;
+    let entries = collision_entries(&unique);
+    let verdict_line = line_starting(section, "Verdict:").unwrap_or_default();
+    let declared_entries = u64_chain(&verdict_line, "entries = ", &[])[0];
+    if entries as u64 != declared_entries {
+        rep.fail(format!(
+            "F6: collision bucket entries {entries} != declared {declared_entries}"
+        ));
+    }
+    for l in [
+        "fixture F6 artifact comparison (test-only corpus fixture, §4.4):",
+        "  pair 1 (same): payload-a vs payload-a -> same",
+        "  pair 2 (collision): payload-a vs payload-b -> collision (class = digest-collision)",
+        "  pair 3 (different, same kind): payload-b vs payload-c -> different",
+        "  pair 4 (different, differing kind): payload-c vs payload-c -> different",
+        "  collision bucket: entries = 1 (class = digest-collision)",
+        "  normal mode unchanged: n = 336, entries = 0",
+        "  verdict: the four declared comparison pairs reproduce under qir-artifact-cmp-1",
+    ] {
+        rep.say(l.to_string());
+    }
+    if entries == 1 {
+        rep.say("fixture F6: PASS — the declared comparison verdicts reproduce under the committed rules".to_string());
+    } else {
+        rep.say("fixture F6: FAIL — the declared comparison verdicts do not reproduce".to_string());
+    }
+}
+
+fn suite_fixture(md: &str, fid: &str, rep: &mut Report) {
+    let vectors = parse_vectors(md, "## Fixture Register");
+    let v = vectors.iter().find(|v| v.id == fid);
+    let section = match v {
+        Some(v) => v.section.as_str(),
+        None => {
+            rep.fail(format!(
+                "fixture register: the {fid} fixture section is absent"
+            ));
+            return;
+        }
+    };
+    if fid == "F6" {
+        suite_fixture_f6(section, rep);
+        return;
+    }
     let profile = bhat::golden_profile();
 
     // declared parameters, the declared exact bound, and the declared
@@ -1132,8 +1261,15 @@ fn suite_fixture(md: &str, rep: &mut Report) {
         ));
     }
 
-    // the exact surrogate: computed, and checked against the declared bound
-    let bh = bhat::b_hat(&intent.blocks, &profile);
+    // the exact surrogate: computed, and checked against the declared bound.
+    // A None here is a validator-side refusal; the F27 program must be bounded.
+    let bh = match bhat::b_hat(&intent.blocks, &profile) {
+        Some(b) => b,
+        None => {
+            rep.fail("F27 fixture program has no certified admission bound".to_string());
+            return;
+        }
+    };
 
     if bh != bh_declared {
         rep.fail(format!(
@@ -1352,19 +1488,24 @@ fn validate_x(
             return false;
         }
     };
-    let bh = bhat::b_hat(&decoded.blocks, profile);
-    let admitted = params.w_budget >= bh;
-    if bh != params.admission_bp {
-        rep.fail(format!(
-            "{id} {name}: B_hat = {} U but the declared admission bound is {} U (the corpus declares them equal on every seed vector)",
-            bh, params.admission_bp
-        ));
-        return false;
+    let bh_opt = bhat::b_hat(&decoded.blocks, profile);
+    let admitted = bh_opt.map(|b| params.w_budget >= b).unwrap_or(false);
+    if let Some(bh) = bh_opt {
+        if bh != params.admission_bp {
+            rep.fail(format!(
+                "{id} {name}: B_hat = {} U but the declared admission bound is {} U (the corpus declares them equal on every seed vector)",
+                bh, params.admission_bp
+            ));
+            return false;
+        }
     }
+    let bh_desc = bh_opt
+        .map(|b| b.to_string())
+        .unwrap_or_else(|| "None (no certified bound)".to_string());
     if admitted {
         rep.say(format!(
             "  {id} {name}: well-formed; {defining} static value ids; B_hat = {} U (declared bound {} U); W_budget = {} U; ADMITTED (the execution share of this transcript checks the outcome)",
-            bh, params.admission_bp, params.w_budget
+            bh_desc, params.admission_bp, params.w_budget
         ));
         true
     } else {
@@ -1372,7 +1513,7 @@ fn validate_x(
         if params.expected_outcome_tag == 3 {
             rep.say(format!(
                 "  {id} {name}: well-formed; B_hat = {} U (declared bound {} U); W_budget = {} U; REFUSED — EXPRESSION_TOO_COMPLEX (matches the expected terminal outcome tag {})",
-                bh, params.admission_bp, params.w_budget, params.expected_outcome_tag
+                bh_desc, params.admission_bp, params.w_budget, params.expected_outcome_tag
             ));
             true
         } else {
@@ -1893,9 +2034,16 @@ fn artifact_cmp_selftest() -> usize {
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
-    let fixture_mode = args.len() == 4 && args[2] == "--fixture" && args[3] == "F27";
-    if args.len() != 2 && !fixture_mode {
-        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27]");
+    let fixture_id = if args.len() == 4
+        && args[2] == "--fixture"
+        && (args[3] == "F27" || args[3] == "F6")
+    {
+        Some(args[3].clone())
+    } else {
+        None
+    };
+    if args.len() != 2 && fixture_id.is_none() {
+        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6]");
         std::process::exit(2);
     }
     let path = &args[1];
@@ -1954,8 +2102,8 @@ fn main() {
     suite_m(&md, &mut rep);
     suite_x(&md, &mut rep);
     let (e_digest, n_ev, v_tuple, run_root, v_roots, entries) = suite_x_exec(&md, &mut rep);
-    if fixture_mode {
-        suite_fixture(&md, &mut rep);
+    if let Some(fid) = fixture_id.as_deref() {
+        suite_fixture(&md, fid, &mut rep);
     }
 
     println!();

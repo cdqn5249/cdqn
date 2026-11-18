@@ -15,12 +15,15 @@ pub struct Profile {
     /// One coefficient per declared charge class, keyed by opcode tag.
     pub charge: [u64; 17],
     pub trip_ceiling: u32,
+    /// Declared pre-DP structural state-cardinality ceiling (`S_max`).
+    pub s_max: u64,
 }
 
-/// The declared profile of the corpus (`qir-prof-golden-1`): gateway 20 U,
+/// The declared profile of the corpus (`qir-prof-golden-2`): gateway 20 U,
 /// every rule charge class 4 U (site-stable, inclusive of the base dispatch
 /// quantity), trip ceiling 1 per back-edge site (the depth ceiling of earlier
-/// versions is retired — F26, v0.3.0-draft.22).
+/// versions is retired — F26, v0.3.0-draft.22), and the pre-DP structural
+/// state-cardinality ceiling `S_max = 4096` (Wave 1A, draft.31).
 pub fn golden_profile() -> Profile {
     let mut charge = [0u64; 17];
     for tag in 1..=16u64 {
@@ -30,6 +33,7 @@ pub fn golden_profile() -> Profile {
         gateway: 20,
         charge,
         trip_ceiling: 1,
+        s_max: 4096,
     }
 }
 
@@ -281,13 +285,29 @@ fn in_block_continue(ctx: &mut Ctx, bid: usize, from_idx: usize, rem: &[u32]) ->
     unreachable!("block without terminator")
 }
 
-/// The `B_hat` dynamic program (§3.4). Returns the surrogate bound in U
-/// (gateway included). A graph with no ceiling-bounded path to an exit
-/// yields the gateway alone, matching the declared surrogate's behavior.
-pub fn b_hat(blocks: &[Block], profile: &Profile) -> u64 {
+/// The `B_hat` dynamic program (§3.4, draft.31). Returns `None` when the
+/// structural state cardinality cannot be bounded by the declared `S_max`,
+/// or when the state graph has no ceiling-bounded path to an exit (including
+/// irreducible cycles). `None` is an admission refusal at the gate — it is
+/// never flattened to the gateway charge alone.
+pub fn b_hat(blocks: &[Block], profile: &Profile) -> Option<u64> {
     let n = blocks.len();
     let edges = block_graph(blocks);
     let bes = back_edges(n, &edges);
+
+    // Mandatory pre-DP structural gate (§3.4): compute
+    // |B| * (trip_ceiling + 1)^|back-edges| in overflow-checked u128 before
+    // any state table is allocated. Overflow or a product above S_max refuses
+    // the Intent immediately; no partial/truncated DP is permitted.
+    let trip_states = (profile.trip_ceiling as u128) + 1;
+    let dp_bound = trip_states
+        .checked_pow(bes.len() as u32)
+        .and_then(|p| (n as u128).checked_mul(p));
+    match dp_bound {
+        Some(bound) if bound <= profile.s_max as u128 => {}
+        _ => return None,
+    }
+
     let be_index: HashMap<(usize, usize), usize> = bes
         .iter()
         .cloned()
@@ -301,8 +321,65 @@ pub fn b_hat(blocks: &[Block], profile: &Profile) -> u64 {
         be_index,
         memo: HashMap::new(),
     };
-    match val(&mut ctx, 0, &entry_rem) {
-        Some(v) => profile.gateway + v,
-        None => profile.gateway,
+    val(&mut ctx, 0, &entry_rem).map(|v| profile.gateway + v)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::insn::Insn;
+
+    fn jmp_block(id: u64, target: u64) -> Block {
+        Block {
+            id,
+            insns: vec![Insn {
+                tag: OP_JMP,
+                ext: 0,
+                refs: vec![],
+                targets: vec![target],
+                addr: None,
+            }],
+        }
+    }
+
+    fn halt_block(id: u64) -> Block {
+        Block {
+            id,
+            insns: vec![Insn {
+                tag: OP_HALT,
+                ext: 0,
+                refs: vec![],
+                targets: vec![],
+                addr: None,
+            }],
+        }
+    }
+
+    #[test]
+    fn infinite_jmp_zero_loop_is_refused_not_charged_gateway() {
+        // A self-loop under trip ceiling 1 has no ceiling-bounded exit path:
+        // val(...) is None and b_hat MUST refuse (never return gateway = 20).
+        let blocks = vec![jmp_block(0, 0)];
+        let profile = golden_profile();
+        assert_eq!(b_hat(&blocks, &profile), None);
+        assert_eq!(b_hat(&blocks, &profile), None);
+    }
+
+    #[test]
+    fn thirteen_back_edges_exceed_s_max_and_refuse_before_dp() {
+        // |B| * (trip_ceiling + 1)^back_edges = 14 * 2^13 = 114688 > 4096.
+        // The pre-DP gate returns None without allocating the state table.
+        let mut blocks: Vec<Block> = (0..13).map(|id| jmp_block(id, id)).collect();
+        blocks.push(halt_block(13));
+        let profile = golden_profile();
+        assert_eq!(b_hat(&blocks, &profile), None);
+    }
+
+    #[test]
+    fn simple_halt_still_yields_exact_bound() {
+        // gateway 20 + one HALT charge 4 = 24 U on a terminating program.
+        let blocks = vec![halt_block(0)];
+        let profile = golden_profile();
+        assert_eq!(b_hat(&blocks, &profile), Some(24));
     }
 }
