@@ -2,8 +2,8 @@
 layout: default
 title: Qs History — Vision and Proposal for Historical Anchoring in the Qn Universe
 description: Operational vision and research proposal for Anchor Grounding Classes, the Source-Receipt Invariant, Calendar Projection Contracts, the Qs History Library, and the Anti-Poisoning Ingestion Firewall. All artifacts herein are propositions pending deterministic measurement and BOC selection.
-version: 0.1.2
-updated: 2026-10-22
+version: 0.2.0
+updated: 2026-11-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -11,9 +11,10 @@ license_location: repository root
 file_repo_path: docs/qs_history.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qs_history.html
-status: Vision and Research Proposal — Not a Finalized Specification
+status: Sealed §1–§2 Anchor Grounding Classes (Q5); §3–§8 remain Vision and Research Proposal (CANDIDATE)
 terms_used:
   - boc-policy
+  - calendar-projection-contract
   - causal-arrow
   - cdqn
   - chronosa
@@ -22,6 +23,8 @@ terms_used:
   - dependencies-determinism
   - dual-ring-pqc-boundary
   - epistemic-anchorage
+  - grounding-class
+  - historical-anchor-artifact
   - historical-calibration-benchmark
   - historical-horizon
   - intent-contract
@@ -44,6 +47,7 @@ terms_used:
   - qm
   - qn
   - qn-rsi
+  - qs-history-library
   - receipt
   - simemp
   - simemp-gateway
@@ -59,11 +63,19 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs History — Vision and Proposal for Historical Anchoring in the Qn Universe |
-| **Version** | 0.1.2 |
-| **Last Updated** | 2026-10-22 (Bao Loc, Vietnam) |
+| **Version** | 0.2.0 |
+| **Last Updated** | 2026-11-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Vision and Research Proposal — Not a Finalized Specification |
+| **Status** | Sealed §1–§2 Anchor Grounding Classes (Q5); §3–§8 remain Vision and Research Proposal (CANDIDATE) |
+
+---
+
+## Revision Record (v0.2.0)
+
+Under **Axiom 13** this is a new versioned artifact; the v0.1.2 proposal text and all prior reasoning are preserved, with status fences added rather than historical text deleted. **`Q5` (Grounding-Class Sealing) has fired** on the Standing Governance Queue's trigger `Deterministic measurement runs available`. The deterministic evidence is of record in [`docs/logs/qnir/qo17-part1-layer0-calibration.md`]({{ '/logs/qnir/qo17-part1-layer0-calibration.html' | relative_url }}) — the `QO-17` Part 1 Layer-0 calibration against `441b73f` — and in [`docs/logs/qnir/phase1-draft31-stabilization.md`]({{ '/logs/qnir/phase1-draft31-stabilization.html' | relative_url }}) — the draft.31 stabilization wave and its six artifact runs.
+
+This version seals **§1 (One Arrow, Two Predicates)** and **§2 (Anchor Grounding Classes: the I / P / S witness ladder)**, and seals the glossary entries `q-anchor` and `grounding-class` in `docs/_data/glossary/architecture.yml`. **§3 (`Source-Receipt Invariant`), §4 (`Calendar Projection Contracts`), §5 (`Historical Anchor Artifact`), and §6–§8 (`Qs History Library` and the remaining open questions) remain `CANDIDATE`**: their Section 8 triggers have not fired, and none of their text is sealed by this version. The four coined slugs (`grounding-class`, `calendar-projection-contract`, `historical-anchor-artifact`, `qs-history-library`) are registered in `terms_used`; sealing is limited to the two named above, and no new glossary-term includes are introduced.
 
 ---
 
@@ -73,26 +85,32 @@ This document consolidates the propositions advanced during the October 2026 des
 
 Every design element proposed below carries the explicit status of a **candidate artifact** under **Axiom 14** ([`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6): it remains subject to deterministic measurement against the declared {% include term.html id="simemp" %} constraints, to selection under the {% include term.html id="boc-policy" %}, and to eventual sealing through a {% include term.html id="qn-rsi" text="Q(rsi)" %} recursive loop at implementation time. Nothing in this document redefines, amends, or overrides any existing canonical specification. Where a proposition is already grounded in existing canon, the grounding is cited; where it is genuinely new, it is marked as an unregistered proposed term that is deliberately **not** yet defined in the glossary.
 
+**Mixed status (v0.2.0).** The blanket candidate-status statement above now applies to §3–§8 only: §1 and §2 are sealed canon under `Q5`, and their glossary entries `q-anchor` and `grounding-class` carry sealed status in `docs/_data/glossary/architecture.yml`.
+
 In accordance with {% include term.html id="computational-consistency" %}, the validity claimed for these propositions is internal consistency within declared finite boundaries. The purpose of this document is to preserve the reasoning chain of the consultation so that future implementation work, or a Q(rsi) optimization loop, can measure and select among the recorded candidates rather than reconstruct them from conversation history.
 
 ---
 
 ## 1. Background: One Arrow, Two Predicates
 
+**Status (v0.2.0).** Sealed canon under `Q5` (see the Revision Record). The distinction below is no longer a proposal: the consultation's derivation is preserved as recorded, and the two-predicate reading of `Q(anchor)` is canon.
+
 The existing canon already fixes the temporal spine of the {% include term.html id="qn" %} universe. Every discrete {% include term.html id="q-event" text="Q(event)" %} is indexed along a strictly monotonic {% include term.html id="causal-arrow" %} whose birth order runs from the {% include term.html id="q0" text="Q(0)" %} genesis origin through the {% include term.html id="q1" text="Q(1)" %} unit and the inductive single digits ([`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }}) §3.5). Onboarding constructs this spine locally: the six-stage gateway of [`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §2 transitions the node from the {% include term.html id="layer-0" text="Layer 0" %} physical substrate to governed {% include term.html id="layer-1" text="Layer 1" %} across a {% include term.html id="simemp-gateway" %}, harvesting entropy, parameterizing the Inner Ring, assembling the genesis object, and sealing it into an immutable lifecycle state. The single digits are then born constructively along axis d1 via the discrete {% include term.html id="successor-morphism" text="Successor Morphism S" %} ([`docs/q2_q9.md`]({{ '/q2_q9.html' | relative_url }}) §2).
 
-Within this spine, the canon carries the Q(anchor) notion under one glossary definition ([`docs/_data/glossary/architecture.yml`]): a governed Qn artifact possessing high causal centrality within the lineage DAG, protected via abstract DCC contracts and {% include term.html id="structural-indirection" %} to prevent cascading dependency invalidation. The observation recorded by the consultation is that this single notion quietly covers two distinct predicates:
+Within this spine, the canon carries the Q(anchor) notion under one glossary definition ([`docs/_data/glossary/architecture.yml`]): a governed Qn artifact possessing high causal centrality within the lineage DAG, protected via abstract DCC contracts and {% include term.html id="structural-indirection" %} to prevent cascading dependency invalidation. The observation recorded by the consultation is that this single notion quietly covers two distinct predicates — a distinction sealed as canon in v0.2.0 (`Q5`):
 
 1. A **structural predicate**: out-cone centrality, formalized in [`docs/qm.md`]({{ '/qm.html' | relative_url }}) §8 as a threshold condition on the dependency DAG. It is computable locally from the lineage graph alone and requires no external witness.
 2. An **epistemic predicate**: grounding — the manner in which an artifact's asserted invariant is connected to reality. This predicate already appears across the canon in several forms: Layer 0 calibration of physical anchor contracts, the {% include term.html id="epistemic-anchorage" %} spectrum of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §4, the {% include term.html id="historical-calibration-benchmark" %}, and the shared-landmark sheaf gluing of [`docs/chronosa.md`]({{ '/chronosa.html' | relative_url }}) §3.1.
 
-The consultation claims **no contradiction** in the existing canon. It records only that the two predicates are not yet explicitly distinguished, and proposes below a vocabulary for distinguishing them. Under the {% include term.html id="no-implicit-rule" %}, making an implicit distinction explicit is a lawful, non-invasive refinement.
+The consultation claims **no contradiction** in the existing canon. It records only that, at the time of the consultation, the two predicates were not yet explicitly distinguished, and it proposed below the vocabulary for distinguishing them — the vocabulary sealed in v0.2.0 (`Q5`). Under the {% include term.html id="no-implicit-rule" %}, making an implicit distinction explicit is a lawful, non-invasive refinement.
 
 ---
 
 ## 2. Proposition 1 — Anchor Grounding Classes
 
-It is proposed that every {% include term.html id="q-anchor" text="Q(anchor)" %} declare **two** predicates instead of one:
+**Status (v0.2.0).** Sealed canon under `Q5`. The classes and the witness ladder below carry sealed canon status; the consultation's proposal register is preserved as the derivation of record.
+
+Every {% include term.html id="q-anchor" text="Q(anchor)" %} declares **two** predicates instead of one:
 
 - The **structural predicate**, unchanged from existing canon: out-cone centrality at or above the declared threshold.
 - The **epistemic predicate**, newly named: a **grounding class**, taking one of three values.
@@ -111,7 +129,7 @@ $$\forall\, A \neq B \implies Q(0)_A \neq Q(0)_B$$
 
 ([`docs/q0_q1.md`]({{ '/q0_q1.html' | relative_url }}) §3). What all nodes share is never the token; it is the **schema**: the role contract, the birth index, the invariant the anchor commits to. Consensus is on the schema, never on the token. The three classes form a witness ladder — self, then physics, then swarm — and it is observed that this ladder is also a complexity ladder: each rung buys consensus over a wider scope at a higher evidentiary cost.
 
-The proposed class names (grounding class, Class I/P/S) are **unregistered proposed terms**. Their glossary registration is deferred to the integration phase (Section 8).
+The class names (grounding class, Classes I/P/S) were unregistered proposed terms at the time of the consultation, with glossary registration deferred to the integration phase (Section 8). As of v0.2.0 (`Q5`) they are sealed: `q-anchor` and `grounding-class` carry sealed canon status in `docs/_data/glossary/architecture.yml`, while `calendar-projection-contract`, `historical-anchor-artifact`, and `qs-history-library` remain `CANDIDATE` until their respective Section 8 triggers fire.
 
 ---
 
@@ -210,7 +228,7 @@ Residual threats are recorded honestly. Collusion across genuinely distinct root
 
 ## 7. Relation to Existing Canon
 
-The following table records, for each proposed element, whether it is already grounded in canon or genuinely new. No proposition herein redefines existing canon; newly named concepts are unregistered proposed terms pending glossary integration.
+The following table records, for each proposed element, whether it is already grounded in canon or genuinely new. No proposition herein redefines existing canon; newly named concepts are unregistered proposed terms pending glossary integration, except `q-anchor` and `grounding-class`, which are sealed as of v0.2.0 (`Q5`); the remaining coined terms stay `CANDIDATE`.
 
 | Proposed element | Status | Canon grounding |
 |---|---|---|
@@ -241,7 +259,7 @@ All items below remain in `CANDIDATE` status. Sealing of any item occurs exclusi
 2. **Ingestion pipeline codification.** The firewall of Section 6 is the proposed shape of the post-seal consensus-history ingestion capability, and its operational semantics (gate ordering, quorum thresholds, challenge resolution) are now proposed in [`docs/history_library.md`]({{ '/history_library.html' | relative_url }}) §5; the item remains open until the pipeline passes deterministic measurement and its threshold values are declared, as tracked by items 1–2 of that document's §7.
 3. **Event frame definition.** The spatiotemporal coordinate frame of a discrete Q(event) — causal index, d-axes, zoom, causal-horizon cone — is used implicitly across the canon but not yet codified as a single frame definition.
 4. **Receipt and intent duality.** The complementary temporal roles of the node genesis receipt (backward-looking sealing) and the intent contract (forward-looking delegation) are exercised throughout the canon but not yet named as a duality.
-5. **Glossary registration.** The proposed terms — grounding class, source class, calendar projection contract, historical anchor artifact, ingestion gate — are now registered as CANDIDATE glossary entries (together with the Qs History Library), closing the deliberate deferral; they remain unsealed pending the candidate pipeline of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6.
+5. **Glossary registration.** The proposed terms — grounding class, source class, calendar projection contract, historical anchor artifact, ingestion gate — were registered as CANDIDATE glossary entries (together with the Qs History Library), closing the deliberate deferral. As of v0.2.0 (`Q5`), `grounding-class` is sealed together with `q-anchor`; `calendar-projection-contract`, `historical-anchor-artifact`, and `qs-history-library` remain `CANDIDATE` pending the candidate pipeline of [`docs/qs.md`]({{ '/qs.html' | relative_url }}) §6 and their respective Section 8 triggers. `source class` and `ingestion gate` remain unregistered vocabularies inside the still-candidate propositions of §3 and §6.
 
 A proposed integration order, subject to the author's decision: the Source-Receipt Invariant first, as it grounds the library and calendar propositions; the History Library and Calendar Projection Contracts second; the onboarding calibration stage third.
 

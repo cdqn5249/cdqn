@@ -1,6 +1,6 @@
 # CDQN Unified Glossary — Architecture Domain
 # License: Scaling Source License (SSL) 1.0
-# Updated: 2026-10-22 (Bao Loc, Vietnam)
+# Updated: 2026-11-19 (Bao Loc, Vietnam)
 
 - term: "Abstraction Layer"
   slug: "abstraction-layer"
@@ -103,29 +103,30 @@
     A governed Qn artifact possessing high causal centrality within the lineage
     directed acyclic graph. Protected via abstract DCC contracts and structural
     indirection to prevent cascading dependency invalidation across downstream
-    causal cones. Proposed refinement (CANDIDATE, docs/qs_history.md §1–2): the
-    notion carries two distinct predicates — the structural predicate (out-cone
+    causal cones. Sealed refinement (Q5, docs/qs_history.md §1–2): the notion
+    carries two distinct predicates — the structural predicate (out-cone
     centrality, computable locally from the lineage DAG) and the epistemic
-    predicate (grounding), the latter proposed as three Anchor Grounding
-    Classes: I (invariant, deterministic re-derivation, self-witnessed),
-    P (physical, independent calibration converging within declared tolerance
-    envelopes), and S (social, quorum-witnessed shared events) — pending
-    deterministic measurement and BOC selection.
+    predicate (grounding), the latter the three sealed Anchor Grounding Classes:
+    I (invariant, deterministic re-derivation, self-witnessed), P (physical,
+    independent calibration converging within declared tolerance envelopes),
+    and S (social, quorum-witnessed shared events). Deterministic evidence:
+    docs/logs/qnir/phase1-draft31-stabilization.md and
+    docs/logs/qnir/qo17-part1-layer0-calibration.md.
 
 - term: "Anchor Grounding Class"
   slug: "grounding-class"
   category: "Architecture"
   definition: >
-    The proposed epistemic predicate of a Q(anchor), complementing the
-    structural predicate of out-cone centrality. Three proposed classes:
-    I (Invariant — one deterministic rule executed by many; consensus by forced
-    re-derivation, self-witnessed), P (Physical — one shared nature measured by
-    many; consensus by independent calibration converging within declared
-    tolerance envelopes), and S (Social — one event witnessed by many; consensus
-    by sheaf gluing on shared landmarks). The three classes form a witness
-    ladder — self, then physics, then swarm. Proposed term (CANDIDATE,
-    docs/qs_history.md §2): glossary registration of the §2 proposition,
-    pending deterministic measurement and BOC selection.
+    The sealed epistemic predicate of a Q(anchor), complementing the structural
+    predicate of out-cone centrality (Q5; docs/qs_history.md §1–2). Three
+    sealed classes: I (Invariant — one deterministic rule executed by many;
+    consensus by forced re-derivation, self-witnessed), P (Physical — one shared
+    nature measured by many; consensus by independent calibration converging
+    within declared tolerance envelopes), and S (Social — one event witnessed by
+    many; consensus by sheaf gluing on shared landmarks). The three classes form
+    a witness ladder — self, then physics, then swarm. Deterministic evidence:
+    docs/logs/qnir/phase1-draft31-stabilization.md and
+    docs/logs/qnir/qo17-part1-layer0-calibration.md.
 
 - term: "Historical Anchor Artifact"
   slug: "historical-anchor-artifact"

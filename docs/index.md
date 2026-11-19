@@ -2,8 +2,8 @@
 layout: default
 title: CDQN Documentation Portal
 description: Root documentation portal and provisional architectural thesis for the CDQN project and SIMEMP constraints.
-version: 1.14.1
-updated: 2026-11-05
+version: 1.14.2
+updated: 2026-11-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -301,10 +301,12 @@ The derivations validated in the 2026-10-29 BOC strategy sessions are banked her
 | Q2 | Anchor Governance Package | `Θ_χ` crystallization/revocation threshold adjudication (pricing home; exact-vs-sampled χ measurement with declared tolerance at out-cone scale); Class P re-calibration trigger table (substrate change, drift alarm, scheduled interval); `DCC_ANCHOR_*_v1` → v2 contract succession (epoch and in-flight-receipt overlap rules) | First pending crystallization, first fracture exercise, or any anchor contract requiring a v2 designation | qlog §8 extension (v1.3.0 or later) | QUEUED |
 | Q3 | Anchor Evidence Residency Classing | Residency classing of anchor-associated artifacts: contract designations, migration, fracture, and crystallization receipts append-forever; Class P calibration receipts decay-and-archive; χ computations recomputable-drop | Rides the Q1 wave (same trigger) | The storage-semantics wave | QUEUED |
 | Q4 | cdqn Node Contract & Anchor Re-instantiation Sequence | Five-capability substrate contract (persistent byte-exact artifact store; append-only witness/ledger store; compute arena; execution arena; `W_*` movement accounting) and the re-instantiation sequence (contract load → Class I re-derivation → Class P local calibration → Class S library citation) | QnOS/node design start, or QnIR v0.3 promotion requiring a reference execution substrate | Future node-contract file | QUEUED |
-| Q5 | Grounding-Class Sealing | Promotion of the dual-predicate {% include term.html id="q-anchor" text="Q(anchor)" %} refinement and the Anchor Grounding Classes I/P/S witness ladder from CANDIDATE to sealed canon (`docs/_data/glossary/architecture.yml`; `docs/qs_history.md`) | Deterministic measurement runs available | qs_history.md / architecture.yml sealing path | QUEUED |
+| Q5 | Grounding-Class Sealing | Promotion of the dual-predicate {% include term.html id="q-anchor" text="Q(anchor)" %} refinement and the Anchor Grounding Classes I/P/S witness ladder from CANDIDATE to sealed canon (`docs/_data/glossary/architecture.yml`; `docs/qs_history.md`) | Deterministic measurement runs available | qs_history.md / architecture.yml sealing path | SEALED |
 | Q6 | Glossary Wave III | Candidate terms held out under no-dead-entries until first canon reference: *Observation Interface Ω*, *Residency Class*, *Lifecycle State*, *Retention Breakeven*, *Succession Event*, *Proof-of-Life Audit*, *Anchor Budget* | Any canon file referencing a listed term | `docs/_data/glossary/primitives.yml` (architecture.yml as needed) | QUEUED |
 
 The queue's deferral discipline: nothing here is rejected and nothing here is scheduled — each entry is banked behind its named trigger, and the wave that fires a trigger prices the design before the design begins. The substantive main line is unchanged: the {% include term.html id="qnir" text="QnIR" %} v0.3 minimal executable core per the Loop-2 repair sequence. [v1.14.0 — CANDIDATE]
+
+**`Q5` discharge (v1.14.2).** `Q5` fired on its trigger `Deterministic measurement runs available`: the `QO-17` Part 1 Layer-0 calibration ([`docs/logs/qnir/qo17-part1-layer0-calibration.md`]({{ '/logs/qnir/qo17-part1-layer0-calibration.html' | relative_url }})) and the draft.31 stabilization runs of record ([`docs/logs/qnir/phase1-draft31-stabilization.md`]({{ '/logs/qnir/phase1-draft31-stabilization.html' | relative_url }})) supply the deterministic evidence. `Q5` is sealed in [`docs/qs_history.md`]({{ '/qs_history.html' | relative_url }}) v0.2.0 §1–§2 and in `docs/_data/glossary/architecture.yml` (`q-anchor`, `grounding-class`). §3–§8 of `qs_history.md` remain `CANDIDATE`; `Q1`–`Q4` and `Q6` remain `QUEUED`.
 
 ---
 

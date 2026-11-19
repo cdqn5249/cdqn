@@ -2,8 +2,8 @@
 layout: default
 title: Qs — Quang Semantics (Constructive Relational Intent and Epistemic Grounding)
 description: Canonical specification of the constructive semantic base domain, multi-axial Clifford language frames, epistemic modal spectrum, human-agent intent contracts, and AI alignment under SIMEMP constraints.
-version: 1.3.1
-updated: 2026-11-18
+version: 1.3.2
+updated: 2026-11-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -48,8 +48,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qs — Quang Semantics: Constructive Relational Intent and Epistemic Grounding |
-| **Version** | 1.3.1 |
-| **Last Updated** | 2026-11-18 |
+| **Version** | 1.3.2 |
+| **Last Updated** | 2026-11-19 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Canonical Domain Specification — Category D (Local-First Base Domain) |
@@ -59,6 +59,14 @@ terms_used:
 ## Revision Record (v1.3.1)
 
 Under **Axiom 13** this is a new versioned artifact; the `Review Integration Record (v1.3.0)` and all prior tables and records are preserved verbatim. §5.3 scopes the social residual to an opaque Layer-3 commitment handle `H(α_rem)` in `qir-enc-1` `EXT` key `7`, keeping the DEL reading `[CANDIDATE / NON-PROMOTING]` until finite `W_worlds_max` / `K_max` bounds are sealed and their exhaustion receipts bound. §6 fixes the pre-seal verbalizer fee `W_verbalize(|Contract|)` inside the outer `W_gate` (recorded even on §6.2 rejection) and maps principal co-signing wait latency to the `PAUSED` lifecycle state of `docs/boc.md` §10 via an atomic checkpoint receipt before `RUNNING`. No new term includes are introduced.
+
+## Revision Record (v1.3.2)
+
+Under **Axiom 13** this is a new versioned artifact; the v1.3.1 record and all prior records are preserved verbatim. `Q5` sealed the grounding-class vocabulary of [`docs/qs_history.md`]({{ '/qs_history.html' | relative_url }}) §1–§2, so §4.3's artifact-level source declaration now cites **sealed** I / P / S vocabulary; §4.3 itself remains `State: CANDIDATE` under Axiom 14 and amends nothing.
+
+| Change | Section | Source | Type |
+|---|---|---|---|
+| **Grounding-class vocabulary sealed (`Q5`)**: §4.3's `SourceClass` field cites the sealed I / P / S vocabulary instead of the candidate vocabulary; the invariant stays `State: CANDIDATE` | §4.3 | `Q5` — [`docs/logs/qnir/qo17-part1-layer0-calibration.md`]({{ '/logs/qnir/qo17-part1-layer0-calibration.html' | relative_url }}) | cross-file coherence |
 
 ## Review Integration Record (v1.3.0)
 
@@ -303,8 +311,8 @@ where the content modality is drawn from the {% include term.html id="epistemic-
  │ ContentModality : one modality of the §4 spectrum, assigned per             │
  │                   atomic claim decomposition of the artifact                │
  │ SourceClass     : declared expression of where the asserted content         │
- │                   ultimately anchors (candidate vocabulary I / P / S,       │
- │                   docs/qs_history.md §2)                                    │
+ │                   ultimately anchors (sealed grounding-class vocabulary     │
+ │                   I / P / S; Q5, docs/qs_history.md §2)                     │
  │ SourceReceipts  : unbroken chain terminating in physically receipted        │
  │                   reality events; no dangling source references             │
  └─────────────────────────────────────────────────────────────────────────────┘
