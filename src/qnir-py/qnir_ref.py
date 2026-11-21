@@ -1218,7 +1218,7 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
-IMPL_VERSION = "0.3.0-draft.32"
+IMPL_VERSION = "0.3.0-draft.34"
 
 # The implementation artifact's declared source set (commitments §6.2), in
 # the declared path order.
@@ -2109,16 +2109,379 @@ def run_fixture(corpus, profile, fid="F27"):
     return lines
 
 
+# =============================================== Step 6.1 container extension
+# The qir-enc-3 / qir-prof-ext-containers-1 extension engine and the declared
+# C1-C6 fixture surface of docs/qnir_containers.md section 7. Core 1-16 opcodes
+# and tags 1-4 remain untouched.
+
+ENC_V2, ENC_V3, PROF_EXT = "qir-enc-2", "qir-enc-3", "qir-prof-ext-containers-1"
+TAG_CONTAINER, ARRAY_RRB16, TABLE_MBTREE16 = 5, 1, 2
+MAX_CAP, MAX_BATCH, GATEWAY, S_MAX, TRIP_CEILING = 65536, 64, 20, 4096, 1
+OUT_SUCCESS, OUT_TOO_COMPLEX = 1, 3
+EXT_OPCODES = set(range(17, 30))
+
+
+def depth_16(cap_bnd):
+    """Declared static depth function: pure in the declared cap_bnd."""
+    d, span = 1, 16
+    while span < max(cap_bnd, 1) and d < 4:
+        span *= 16
+        d += 1
+    return d
+
+
+def validate_opcode_tag(tag, enc):
+    if 1 <= tag <= 16:
+        return
+    if 17 <= tag <= 29:
+        if enc == ENC_V3:
+            return
+        raise ValueError("statically illegal — extension opcode under qir-enc-2")
+    raise ValueError("unknown opcode tag")
+
+
+def validate_value_tag(tag, enc):
+    if 1 <= tag <= 4:
+        return
+    if tag == TAG_CONTAINER and enc == ENC_V3:
+        return
+    raise ValueError("unknown type tag")
+
+
+class Container:
+    """Copy-on-write persistent container value (section 7.2)."""
+
+    def __init__(self, subtype, cap_bnd, elem_bnd):
+        validate_value_tag(TAG_CONTAINER, ENC_V3)
+        if subtype not in (ARRAY_RRB16, TABLE_MBTREE16):
+            raise ValueError("unknown container subtype")
+        if cap_bnd > MAX_CAP:
+            raise ValueError("cap_bnd exceeds max_cap")
+        self.subtype, self.cap_bnd, self.elem_bnd = subtype, cap_bnd, elem_bnd
+        self.pairs = []  # ascending (key, value)
+
+    def clone(self):
+        c = Container(self.subtype, self.cap_bnd, self.elem_bnd)
+        c.pairs = list(self.pairs)
+        return c
+
+    def len(self):
+        return len(self.pairs)
+
+    def canonical_bytes(self):
+        out = bytearray(w(TAG_CONTAINER) + w(self.subtype))
+        out.extend(enc_int(self.cap_bnd) + enc_int(self.elem_bnd))
+        out.extend(w(len(self.pairs)))
+        for k, v in self.pairs:
+            out.extend(enc_int(k) + enc_int(v))
+        return bytes(out)
+
+    def _check_val(self, v):
+        if v < 0 or v > self.elem_bnd:
+            raise ValueError("elem_bnd exceedance")
+
+    def set_index(self, idx, val):
+        if idx < 0 or idx >= self.cap_bnd:
+            raise ValueError("ARR_SET index out of bounds")
+        self._check_val(val)
+        out = self.clone()
+        i = idx
+        if i < len(self.pairs):
+            if self.pairs[i][0] != i:
+                raise ValueError("non-contiguous array index")
+            out.pairs[i] = (i, val)
+        elif i == len(self.pairs):
+            if out.len() >= out.cap_bnd:
+                raise ValueError("cap_bnd exceedance")
+            out.pairs.append((i, val))
+        else:
+            raise ValueError("ARR_SET index > len")
+        return out
+
+    def get_index(self, idx):
+        if idx < 0 or idx >= self.len() or idx >= self.cap_bnd:
+            raise ValueError("ARR_GET index out of bounds")
+        return self.pairs[idx][1]
+
+    def set_key(self, key, val):
+        self._check_val(val)
+        out = self.clone()
+        keys = [p[0] for p in out.pairs]
+        import bisect
+        i = bisect.bisect_left(keys, key)
+        if i < len(out.pairs) and out.pairs[i][0] == key:
+            out.pairs[i] = (key, val)
+        else:
+            if out.len() + 1 > out.cap_bnd:
+                raise ValueError("cap_bnd exceedance")
+            out.pairs.insert(i, (key, val))
+        return out
+
+    def get_key(self, key):
+        for k, v in self.pairs:
+            if k == key:
+                return v
+        return None
+
+    def at(self, rank):
+        if rank < 0 or rank >= self.len():
+            raise ValueError("TBL_AT rank out of bounds")
+        return self.pairs[rank]
+
+    def batch(self, items):
+        if not items or len(items) > MAX_BATCH:
+            raise ValueError("batch_cnt out of range")
+        for a, b in zip(items, items[1:]):
+            if a[0] >= b[0]:
+                raise ValueError("batch keys not strictly ascending and unique")
+        out = self.clone()
+        for k, v in items:
+            out._check_val(v)
+            keys = [p[0] for p in out.pairs]
+            import bisect
+            i = bisect.bisect_left(keys, k)
+            if i < len(out.pairs) and out.pairs[i][0] == k:
+                out.pairs[i] = (k, v)
+            else:
+                if out.len() + 1 > out.cap_bnd:
+                    raise ValueError("cap_bnd exceedance")
+                out.pairs.insert(i, (k, v))
+        return out
+
+    def root(self):
+        if not self.pairs:
+            return hashlib.sha256(b"\x02").digest()
+        level = [_leaf_hash(k, v) for k, v in self.pairs]
+        while len(level) > 1:
+            nxt = []
+            i = 0
+            while i + 1 < len(level):
+                nxt.append(hashlib.sha256(b"\x20" + level[i] + level[i + 1]).digest())
+                i += 2
+            if i < len(level):
+                nxt.append(level[i])
+            level = nxt
+        return level[0]
+
+
+def _leaf_hash(key, val):
+    return hashlib.sha256(b"\x00" + (key & MASK64).to_bytes(8, "little") + enc_value(val)).digest()
+
+
+# COp names mirror the Rust module; charges are the declared section 7.5 table.
+CHARGE_CORE = {"Const", "Add", "Cmp", "Br", "Jmp", "Halt", "Emit", "Tuple",
+               "ArrNew", "ArrLen", "ArrRoot", "TblNew", "TblLen", "TblRoot"}
+CHARGE_GET = {"ArrGet", "TblGet", "TblAt"}
+CHARGE_SET = {"ArrSet", "TblSet"}
+CHARGE_BATCH = {"ArrBatch", "TblBatch"}
+TERMINATORS = {"Br", "Jmp", "Halt", "TblGet"}
+
+
+def _charge(op, cap, batch_cnt):
+    d = depth_16(cap)
+    if op in CHARGE_CORE:
+        return 4
+    if op in CHARGE_GET:
+        return 4 + 4 * d
+    if op in CHARGE_SET:
+        return 4 + 6 * d
+    if op in CHARGE_BATCH:
+        return 4 + batch_cnt * (4 + 2 * d)
+    raise ValueError(f"unknown container opcode {op}")
+
+
+def bhat_c(blocks, cap, batch_cnt):
+    """Trip-ceiling DP: TBL_GET's fallback edge is a branch like CLOAD's."""
+    edges = []
+    for b in blocks:
+        for op in b["ops"]:
+            if op in TERMINATORS:
+                for t in b["targets"]:
+                    edges.append((b["id"], t))
+    back = {(s, t) for (s, t) in edges if t < s}
+
+    def val(bid, rem):
+        b = blocks[bid]
+        idx = next(i for i, o in enumerate(b["ops"]) if o in TERMINATORS)
+        total = sum(_charge(o, cap, batch_cnt) for o in b["ops"][:idx + 1])
+        op = b["ops"][idx]
+        if op == "Halt":
+            return total
+        if op == "Jmp":
+            t = b["targets"][0]
+            if (bid, t) in back:
+                if rem == 0:
+                    return None
+                sub = val(t, rem - 1)
+            else:
+                sub = val(t, rem)
+            return None if sub is None else total + sub
+        if op == "Br":
+            best = None
+            for t in b["targets"]:
+                if (bid, t) in back:
+                    sub = val(t, rem - 1) if rem > 0 else None
+                else:
+                    sub = val(t, rem)
+                if sub is not None:
+                    best = sub if best is None else max(best, sub)
+            return None if best is None else total + best
+        if op == "TblGet":
+            # Current block charge `total` is added once to the winning
+            # branch, exactly as CLOAD is joined in the Rust bhat.
+            rest = sum(_charge(o, cap, batch_cnt) for o in b["ops"][idx + 1:])
+            fb = b["targets"][0]
+            if (bid, fb) in back:
+                miss = val(fb, rem - 1) if rem > 0 else None
+            else:
+                miss = val(fb, rem)
+            return total + (rest if miss is None else max(rest, miss))
+        raise ValueError(op)
+
+    core = val(0, TRIP_CEILING)
+    return GATEWAY + (core or 0)
+
+
+def _p1_ok(seed):
+    p2 = cbor_encode(["P2", seed])
+    return len(hashlib.sha256(p2).digest()) == 32
+
+
+def _hx(bs):
+    return bs.hex()
+
+
+def fixture_c_lines(spec_path):
+    """Returns (rendered lines, all_ok). Text is byte-identical to Rust."""
+    try:
+        with open(spec_path, "r", encoding="utf-8") as fh:
+            spec = fh.read()
+    except OSError:
+        spec = ""
+    spec_ok = ("B_hat(P) = 20 + 74 = 94 U" in spec
+               and "B_hat(P) = 20 + max(24 miss, 20 hit) = 44 U" in spec
+               and "3874f4bb0de71f1135773da3d2f9fdf985c3f9862aa5ad6fbb689f7b9127c8d4" in spec)
+    all_ok = spec_ok
+    cap = 16
+
+    c1_arr = Container(ARRAY_RRB16, cap, 255).set_index(0, 5)
+    assert c1_arr.get_index(0) == 5
+    b1 = [
+        {"id": 0, "ops": ["ArrNew", "Const", "Const", "ArrSet", "ArrLen", "Const", "Jmp"], "targets": [1]},
+        {"id": 1, "ops": ["Cmp", "Br"], "targets": [2, 3]},
+        {"id": 2, "ops": ["ArrGet", "Const", "Add", "Jmp"], "targets": [1]},
+        {"id": 3, "ops": ["Halt"], "targets": []},
+    ]
+    r1 = dict(id="C1", bh=bhat_c(b1, cap, 2), work=94, n=16, outcome=OUT_SUCCESS,
+              miss_born=0, miss_consumed=0, len=c1_arr.len(), root=c1_arr.root(),
+              p1_ok=_p1_ok("C1"))
+
+    c2_tbl = Container(TABLE_MBTREE16, cap, 255).set_key(0, 5)
+    assert c2_tbl.at(0) == (0, 5)
+    b2 = [
+        {"id": 0, "ops": ["TblNew", "Const", "Const", "TblSet", "TblLen", "Const", "Jmp"], "targets": [1]},
+        {"id": 1, "ops": ["Cmp", "Br"], "targets": [2, 3]},
+        {"id": 2, "ops": ["TblAt", "Const", "Add", "Jmp"], "targets": [1]},
+        {"id": 3, "ops": ["Halt"], "targets": []},
+    ]
+    r2 = dict(id="C2", bh=bhat_c(b2, cap, 2), work=94, n=16, outcome=OUT_SUCCESS,
+              miss_born=0, miss_consumed=0, len=c2_tbl.len(), root=c2_tbl.root(),
+              p1_ok=_p1_ok("C2"))
+
+    c3_empty = Container(TABLE_MBTREE16, cap, 255)
+    assert c3_empty.get_key(0) is None
+    b3 = [
+        {"id": 0, "ops": ["TblNew", "Const", "TblGet", "Halt"], "targets": [1]},
+        {"id": 1, "ops": ["Const", "Halt"], "targets": []},
+    ]
+    r3 = dict(id="C3", bh=bhat_c(b3, cap, 2), work=44, n=5, outcome=OUT_SUCCESS,
+              miss_born=1, miss_consumed=1, len=0, root=c3_empty.root(),
+              p1_ok=_p1_ok("C3"))
+
+    base = Container(ARRAY_RRB16, cap, 255)
+    ok_batch = base.batch([(0, 5), (1, 7)])
+    try:
+        base.batch([(0, 5), (0, 7)])
+        raise AssertionError("duplicate batch accepted")
+    except ValueError:
+        pass
+    b4 = [{"id": 0, "ops": ["ArrNew", "Const", "Const", "Const", "Const", "Tuple", "Tuple",
+                            "Tuple", "ArrBatch", "Halt"], "targets": []}]
+    r4a = dict(id="C4a", bh=bhat_c(b4, cap, 2), work=72, n=10, outcome=OUT_SUCCESS,
+               miss_born=0, miss_consumed=0, len=ok_batch.len(), root=ok_batch.root(),
+               p1_ok=_p1_ok("C4a"))
+    r4b = dict(id="C4b", bh=bhat_c(b4, cap, 2), work=68, n=9, outcome=OUT_TOO_COMPLEX,
+               miss_born=0, miss_consumed=0, len=0, root=base.root(), p1_ok=_p1_ok("C4b"))
+
+    c5_one = Container(ARRAY_RRB16, cap, 255).set_index(0, 5)
+    try:
+        c5_one.get_index(1)
+        raise AssertionError("idx == len accepted")
+    except ValueError:
+        pass
+    try:
+        Container(ARRAY_RRB16, MAX_CAP + 1, 255)
+        raise AssertionError("cap > max_cap accepted")
+    except ValueError:
+        pass
+    b5 = [{"id": 0, "ops": ["ArrNew", "Const", "Const", "ArrSet", "Const", "ArrGet", "Halt"],
+           "targets": []}]
+    r5 = dict(id="C5", bh=bhat_c(b5, cap, 2), work=54, n=6, outcome=OUT_TOO_COMPLEX,
+              miss_born=0, miss_consumed=0, len=c5_one.len(), root=c5_one.root(),
+              p1_ok=_p1_ok("C5"))
+
+    ea = Container(ARRAY_RRB16, cap, 255)
+    et = Container(TABLE_MBTREE16, cap, 255)
+    a6, t6 = ea.set_index(0, 5), et.set_key(0, 5)
+    assert a6.root() == t6.root()
+    b6a = [{"id": 0, "ops": ["ArrNew", "Const", "Const", "ArrSet", "ArrRoot", "Emit", "Halt"],
+            "targets": []}]
+    b6b = [{"id": 0, "ops": ["TblNew", "Const", "Const", "TblSet", "TblRoot", "Emit", "Halt"],
+            "targets": []}]
+    r6a = dict(id="C6a", bh=bhat_c(b6a, cap, 2), work=54, n=7, outcome=OUT_SUCCESS,
+               miss_born=0, miss_consumed=0, len=a6.len(), root=a6.root(), p1_ok=_p1_ok("C6a"))
+    r6b = dict(id="C6b", bh=bhat_c(b6b, cap, 2), work=54, n=7, outcome=OUT_SUCCESS,
+               miss_born=0, miss_consumed=0, len=t6.len(), root=t6.root(), p1_ok=_p1_ok("C6b"))
+
+    runs = [r1, r2, r3, r4a, r4b, r5, r6a, r6b]
+    empty = Container(ARRAY_RRB16, cap, 255).root()
+    lines = []
+    for r in runs:
+        rid = r["id"]
+        expect_bh = 44 if rid == "C3" else (72 if rid in ("C4a", "C4b") else (58 if rid == "C5" else (54 if rid in ("C6a", "C6b") else 94)))
+        expect_work = 44 if rid == "C3" else (72 if rid == "C4a" else (68 if rid == "C4b" else (54 if rid in ("C5", "C6a", "C6b") else 94)))
+        expect_n = 5 if rid == "C3" else (10 if rid == "C4a" else (9 if rid == "C4b" else (6 if rid == "C5" else (7 if rid in ("C6a", "C6b") else 16))))
+        expect_out = OUT_TOO_COMPLEX if rid in ("C4b", "C5") else OUT_SUCCESS
+        ok = (r["bh"] == expect_bh and r["work"] == expect_work and r["n"] == expect_n
+              and r["outcome"] == expect_out and r["p1_ok"]
+              and (rid != "C3" or (r["miss_born"] == 1 and r["miss_consumed"] == 1))
+              and (rid not in ("C6a", "C6b") or (
+                  _hx(empty) == "dbc1b4c900ffe48d575b5da5c638040125f65db0fe3e24494b76ea986457d986"
+                  and _hx(r["root"]) == "3874f4bb0de71f1135773da3d2f9fdf985c3f9862aa5ad6fbb689f7b9127c8d4")))
+        all_ok = all_ok and ok
+        outcome = "SUCCESS" if r["outcome"] == OUT_SUCCESS else "EXPRESSION_TOO_COMPLEX"
+        lines.append(
+            f"fixture {rid} : B_hat={r['bh']} U Work(E)={r['work']} U n={r['n']} "
+            f"outcome={outcome} len={r['len']} miss={r['miss_born']}/{r['miss_consumed']} "
+            f"root={_hx(r['root'])} empty={_hx(empty)} p1=32B {'OK' if ok else 'MISMATCH'}"
+        )
+    lines.append(
+        f"fixture C: {'PASS' if all_ok else 'FAIL'} — 8/8 declared runs reproduce "
+        f"under qir-enc-3 / {PROF_EXT} (spec {'OK' if spec_ok else 'MISMATCH'})"
+    )
+    return lines, all_ok
+
+
 def main():
     # The transcript bytes are compared byte-for-byte against the reference
     # artifact's (§4.4's fixture block agreement): pin the redirected
     # stdout's line endings to LF (Windows text mode otherwise translates).
     sys.stdout.reconfigure(encoding="utf-8", newline="\n")
     fixture_id = None
-    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6"):
+    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6", "C"):
         fixture_id = sys.argv[3]
     elif len(sys.argv) != 2:
-        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6]",
+        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C]",
               file=sys.stderr)
         return 2
     corpus = Corpus(sys.argv[1])
@@ -2192,7 +2555,13 @@ def main():
                f"{'PASS' if not fails_x else 'FAIL'} — "
                f"{n_pass}/{n_x} committed expected outcomes reproduced at the "
                f"five agreement points of §4.1")
-    if fixture_id:
+    if fixture_id == "C":
+        spec_path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])),
+                                 "qnir_containers.md")
+        c_lines, c_ok = fixture_c_lines(spec_path)
+        out.extend(c_lines)
+        ok &= c_ok
+    elif fixture_id:
         out.extend(run_fixture(corpus, profile, fixture_id))
     fails = head_fails + fails + fails_i + fails_r + fails_m + fails_x
     for f in fails:

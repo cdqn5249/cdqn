@@ -28,6 +28,7 @@
 
 mod bhat;
 mod cbor;
+mod containers;
 mod insn;
 mod interp;
 mod sha256;
@@ -2036,14 +2037,14 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     let fixture_id = if args.len() == 4
         && args[2] == "--fixture"
-        && (args[3] == "F27" || args[3] == "F6")
+        && (args[3] == "F27" || args[3] == "F6" || args[3] == "C")
     {
         Some(args[3].clone())
     } else {
         None
     };
     if args.len() != 2 && fixture_id.is_none() {
-        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6]");
+        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C]");
         std::process::exit(2);
     }
     let path = &args[1];
@@ -2103,7 +2104,21 @@ fn main() {
     suite_x(&md, &mut rep);
     let (e_digest, n_ev, v_tuple, run_root, v_roots, entries) = suite_x_exec(&md, &mut rep);
     if let Some(fid) = fixture_id.as_deref() {
-        suite_fixture(&md, fid, &mut rep);
+        if fid == "C" {
+            let spec = std::path::PathBuf::from(&path)
+                .parent()
+                .unwrap_or_else(|| std::path::Path::new("."))
+                .join("qnir_containers.md");
+            let (lines, ok) = containers::fixture_c_lines(&spec.to_string_lossy());
+            for l in lines {
+                rep.say(l);
+            }
+            if !ok {
+                rep.fail("fixture C: a declared §7.6 expectation diverged".to_string());
+            }
+        } else {
+            suite_fixture(&md, fid, &mut rep);
+        }
     }
 
     println!();
