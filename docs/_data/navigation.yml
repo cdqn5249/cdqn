@@ -189,6 +189,13 @@
   status: "Draft"
   external: false
 
+- title: "QnIR Calls"
+  url: "/qnir_calls.html"
+  slug: "qnir_calls"
+  description: "QnIR draft — Step 6.2 call extension specification"
+  status: "Draft"
+  external: false
+
 - title: "QnIR Goldens"
   url: "/qnir_goldens.html"
   slug: "qnir_goldens"
