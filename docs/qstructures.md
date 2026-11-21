@@ -2,8 +2,8 @@
 layout: default
 title: Qn Structures — Vision and Evaluation Framework for Category C Data Structures and Workflows
 description: Category C proposal — contract schema, evaluation ladder, and candidate register for Qn data structures
-version: 0.2.0
-updated: 2026-10-30
+version: 0.3.0
+updated: 2026-11-21
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -11,7 +11,7 @@ license_location: repository root
 file_repo_path: docs/qstructures.md
 parent_repository: https://github.com/cdqn5249/cdqn
 permalink: /qstructures.html
-status: Vision and Structural Proposal — Not a Finalized Specification
+status: Candidate Specification — Measured Ladder Pass (Step 6.1 Container BOC); QnIR Extension Contract Pending
 terms_used:
   - boc-policy
   - cae-dag
@@ -61,11 +61,11 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | Qn Structures — Vision and Evaluation Framework for Category C Data Structures and Workflows |
-| **Version** | 0.2.0 |
-| **Last Updated** | 2026-10-30 (Bao Loc, Vietnam) |
+| **Version** | 0.3.0 |
+| **Last Updated** | 2026-11-21 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Vision and Structural Proposal — Not a Finalized Specification |
+| **Status** | Candidate Specification — Measured Ladder Pass (Step 6.1 Container BOC); QnIR Extension Contract Pending |
 
 ---
 
@@ -90,6 +90,12 @@ Source: [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/
 | Editorial: the §7 grounding-table rows are aligned — the Q(reuse) row is re-named to the two-axis consequentiality breakeven and gains §5.9 in its grounding; the structures-names row grounding is updated from "registration deferred" to the registered state — index alignment, no new claims | §7 | `docs/qnPrimitive.md` v1.4.0 record cross-file flag | EDITORIAL |
 
 Cross-file dependencies flagged (deferred under the one-file-at-a-time discipline): `docs/qphy.md` — the physical-impedance breakeven grounding inherits the two-axis form and the tier-table naming at its next versioned update (the last open content mirror of the Q(reuse) re-issue wave); glossary — the `q-table` definition's "breakeven inequality" wording inherits the two-axis form at the next glossary update (registered pre-wave, it cites the committed Q(reuse) analysis); the unbudgeted `docs/_data/navigation.yml` review-program entry remains optional; the substantive next horizon is the QnIR v0.3 minimal executable core per the Loop-2 repair sequence. Front matter `terms_used` is extended with the four registered slugs (`q-array`, `q-matrix`, `q-table`, `q-stream`) — this file's first extension — under the include-parity discipline; no new glossary registrations are proposed, and no other new `term.html` include ids are used (the re-issued §6 re-uses only the `q-reuse` and `compute-unit-u` includes that pre-date it) under the standing no-dead-entries discipline of `docs/qs_history.md` §8.
+
+---
+
+## Revision Record (v0.3.0)
+
+Under **Axiom 13** this v0.3.0 artifact is a new versioned document: §1–§9 prior text, the Review Integration Record (v0.2.0), and its withdrawn-wording register are preserved verbatim — no prior content is mutated in place. The revision changes only the front-matter and body-table version/date/status fields and adds one new section at the end, `## Measured Ladder Pass — Step 6.1 Container BOC (v0.3.0 — CANDIDATE)`, recording deterministic row measurements for `Q(array)` and `Q(table)` against the committed `6cc1ef1` (v0.3.0-draft.32) study. Evidence of record: `docs/logs/qnir/step6-1-container-boc-study.md` and its coupled `docs/logs/qnir/f-g0-1-state-root-repair-draft32.md`. The status advances from "Not a Finalized Specification" to "Candidate Specification — Measured Ladder Pass (Step 6.1 Container BOC); QnIR Extension Contract Pending": Ladder Steps 2–3 are measured for two families, while sealing (Step 5), the `qir-enc-3` opcode contract, and final QnIR core extension admission (Wave 4B) remain pending. **No new term include is introduced** — the `terms_used` list is unchanged, the `term-include` delta is 0, and `Q6` remains `QUEUED`. No canon file, glossary, navigation registry, or `src/` path is touched by this revision.
 
 ---
 
@@ -245,3 +251,38 @@ This proposal is part of the {% include term.html id="licensed-work" %} and alig
 - **Attribution:** Any implementation or research derivative referencing this document must preserve the canonical {% include term.html id="paternity-reference" %}.
 - **Open-Core Research:** Exploratory research and academic derivations of the propositions herein remain royalty-free under Non-Scaling Open Access, governed by the {% include term.html id="open-core-invariant" text="Open Core Invariants" %}.
 - **Safe Harbor Integrity:** The structure vocabulary proposed herein is designed to operate as technical infrastructure of the licensed work. It exercises no editorial control over, and acquires no intellectual property in, sovereign human {% include term.html id="payload" text="Payloads" %}.
+
+---
+
+## Measured Ladder Pass — Step 6.1 Container BOC (v0.3.0 — CANDIDATE)
+
+This section records the first receipt-backed filling of the five-row contract schema of §2 for two canonical-admitted candidates of §4. It is the measurement output of Ladder Steps 2–3, not a sealing: the evidence is the committed `6cc1ef1` (v0.3.0-draft.32) trade study in `docs/logs/qnir/step6-1-container-boc-study.md`, whose raw artifact is `container_boc_results.json` (SHA-256 `abed3d5d05788ed7427ebb4df090cbf4265809ee306e72b8e8caa9e73605f36c`, 28 rows, 12/12 enforced-rule checks PASS). Every candidate was measured under the same rules: SHA-256 32-byte leaf and node hashes (`SHA-256(0x00 ‖ key_le ‖ value)` for leaves, a domain-separated pairwise Merkle commitment per internal node), deterministic canonical CBOR as one ascending-key `{u64 => bstr(32)}` map, copy-on-write structural persistence with no mutation in place, and one stable ascending-key normalization of the same 64-update batch. Two warm-up and nine measured trials; cycles are `ns × 1.80` at the declared reference clock. The row figures below are *measurements in ns / cycles / SHA-256 calls / alloc B*; they are diagnostic evidence at execution boundaries and do not by themselves declare a U-denominated worst case or the two-axis breakeven of §6 — those remain contractual proposals for `qir-enc-3` (Wave 4B).
+
+**`Q(array)` = `RRBTree-16`** (persistent 16-way radix vector, positional keys `0..N`; dense niche winner)
+
+| §2 row | Declared contract surface | Measured evidence (N = 16 → 256 → 4096 → 65536) |
+|---|---|---|
+| 1. Footprint | Declared Metric Envelope ceiling; growth emits a new versioned artifact, never mutates in place | `mem_bytes` 1,752 → 29,400 → 471,768 → 7,549,656 B; canonical CBOR 9,195 B (256) / 151,275 B (4096), identical across all dense candidates; single-key proof 142 → 280 → 416 → 554 B; COW versioning 1,728 → 3,072 → 4,416 → 5,760 alloc B per update |
+| 2. Access | Enumerated morphisms only — point `get`, persistent `set` + incremental root, sorted batch `B = 64`, sequential `fold` | `get` 1.6 → 3.1 → 4.8 → 15.5 ns (2.9 → 5.6 → 8.6 → 27.9 cycles; 0 SHA calls); `set` 4,093.8 → 7,818.8 → 11,443.8 → 15,218.8 ns (7,369 → 14,074 → 20,599 → 27,394 cycles; 6 → 11 → 16 → 21 SHA calls); batch 271,500 → 528,400 → 700,100 → 998,000 ns total, 4,242 → 8,256 → 10,939 → 15,594 ns/item (384 → 704 → 1,024 → 1,344 SHA calls); `fold` 21 → 450 → 11,594 → 136,300 ns (1.3 → 1.8 → 2.8 → 2.1 ns/element) |
+| 3. Locality | SIMEMP Memory Wall movement class per access pattern, tier-indexed | 1,752/29,400 B in L1, 471,768 B in L2, 7,549,656 B in L3 (≈90 % of the i7-8565U's 8 MiB L3); no DRAM spill at any measured N; `get` rises from 1.6 ns (L1) to 15.5 ns (L3), matching the calibrated tier ladder (L1 3.4 ns → L3 11.2 ns → DRAM 125 ns in QO-17 Part 1) |
+| 4. Determinism | Iteration/traversal order fixed by causal index; no runtime-adaptive reordering | `fold` emits keys strictly ascending `0..N` and is byte-stable across repetitions; canonical CBOR digests `11ed127f…d5c1b` (256) and `9f2c068b…80d68` (4096) are identical to the other dense candidates; all structural checks PASS |
+| 5. Work | Work per access class in U, versioning amplification, declared breakeven rule | Versioning amplification 1,728 → 5,760 alloc B/update; 6 → 21 SHA calls/update; 384 → 1,344 SHA calls per sorted batch; physical costs above are in ns/cycles, with the U charge and two-axis breakeven rule declared-pending in `qir-enc-3`; no batch amortization was observed (ns/item ≈ set median) |
+
+**`Q(table)` = `MerkleBTree-16`** (persistent sorted B-tree, keys `i * 0x9E3779B97F4A7C15`; sparse niche winner)
+
+| §2 row | Declared contract surface | Measured evidence (N = 16 → 256 → 4096 → 65536) |
+|---|---|---|
+| 1. Footprint | Declared Metric Envelope ceiling; capacity is declared, growth is re-versioning | `mem_bytes` 2,400 → 33,544 → 528,560 → 8,445,528 B; canonical CBOR 11,003 B (256) / 176,123 B (4096), identical across all sparse candidates; single-key proof 176 → 312 → 448 → 584 B; COW versioning 2,005 → 3,480 → 4,968 → 6,474 alloc B per update |
+| 2. Access | Enumerated morphisms only — keyed `get`, persistent `set` + incremental root, sorted batch `B = 64`, key-order `fold` | `get` 6.4 → 12.9 → 26.4 → 54.8 ns (11.5 → 23.2 → 47.5 → 98.6 cycles; 0 SHA calls); `set` 5,512.5 → 11,231.2 → 12,987.5 → 16,956.2 ns (9,923 → 20,216 → 23,378 → 30,521 cycles; 8 → 13 → 18 → 23 SHA calls); batch 330,700 → 656,300 → 803,100 → 1,080,500 ns total, 5,167 → 10,255 → 12,548 → 16,883 ns/item (485 → 804 → 1,123 → 1,449 SHA calls); `fold` 28 → 393 → 8,219 → 172,800 ns (1.8 → 1.5 → 2.0 → 2.6 ns/element) |
+| 3. Locality | SIMEMP Memory Wall movement class per access pattern, tier-indexed | 2,400/33,544 B in L1, 528,560 B in L2, 8,445,528 B in DRAM at N = 65,536 (past the i7-8565U's 8 MiB L3); keyed `get` rises 6.4 → 54.8 ns across those tiers, while the three-order-of-magnitude spreading key space rules out a flat contiguous layout |
+| 4. Determinism | Iteration/traversal order fixed by causal index; no runtime-adaptive reordering | `fold` emits ascending keys, independent of insertion history or tree rotations; canonical CBOR digests `60d0ddb1…7ab7f3` (256) and `35434ff9…7c54e3` (4096) are identical across all sparse candidates; all structural checks PASS |
+| 5. Work | Work per access class in U, versioning amplification, declared breakeven rule | Versioning amplification 2,005 → 6,474 alloc B/update; 8 → 23 SHA calls/update; 485 → 1,449 SHA calls per sorted batch; U charge and two-axis breakeven declared-pending in `qir-enc-3`; comparison to `Q(reuse)` and to the rejected candidates is recorded below on the measured axes only |
+
+**Formal Step-3 rejection record (findings, not erasures).** Under `boc.md` v0.4.2, all four candidates pass Stage 1 with `ImplicitDeps(c) = 0`; at Stage 2 the efficiency component decides the frontier and §8.3 frontier reduction makes the later components non-decision-affecting for dominated candidates. The `ΔW_worst(c)` U-bound remains `UNKNOWN` until the container opcode cost model is declared, so the outcome below is an explicitly recorded adjudication rather than a fabricated Tier-2 key or a sealing.
+
+| Candidate | Niche(s) | Measured rejection ground | Disposition |
+|---|---|---|---|
+| `HAMT` | both | Lookup **30×–300×** slower than the dense winner (490.9 vs 1.6 ns at 16; 662.1 vs 15.5 ns at 65,536) and 12×–80× slower than the keyed winner, from one mandatory SHA-256 key digest per `get`; deterministic `fold` ~**50×** worse at scale (130.4 vs 2.6 ns/element; 8,547,000 vs 172,800 ns at 65,536) because key order must be restored by sorting; **18.85–18.90 MB** footprint spills past the 8 MiB L3 into DRAM (2.2–2.5× the winners), with proofs to 672 B | Rejected, recorded as a finding; revisitable only with a different commitment layout or a niche whose order is genuinely unordered |
+| `ChunkedFlat` | both | From **N ≥ 4096** the 32-entry chunk clone copies keys, values and Merkle levels: 5,808 → 7,056 alloc B/update vs 4,416 → 5,760; set 15,275 → 21,194 ns vs 11,444 → 15,219; batch 15.16 → 20.63 µs/item vs 10.94 → 15.59; lookup 21.7 → 58.1 ns vs 4.8 → 15.5 | Rejected on the update/copy penalty; revisitable with a declared different chunk size |
+
+**§8 item 3 discharge.** Item 3 ("Row measurement of canonical candidates") is **discharged for `Q(array)` and `Q(table)` only**: all five rows above are filled with deterministic, commit-state, receipt-adjacent measurements, and the Step-3 selections and rejections are recorded in the linking log. `Q(matrix)` and `Q(stream)` retain their §8 item 3 status — no row measurement for them is claimed here. The "record tuple" and "persistent tree" families of §4 were not part of this workload contract. Final QnIR core extension admission is **Wave 4B**, and the `qir-enc-3` container opcode specification plus the `Q1`/`Q3` residency contract are the next wave; no structure in this section is sealed, no glossary or canon file is changed, and no new term include is introduced. [v0.3.0 — CANDIDATE]
