@@ -182,6 +182,13 @@
   status: "Draft"
   external: false
 
+- title: "QnIR Containers"
+  url: "/qnir_containers.html"
+  slug: "qnir_containers"
+  description: "QnIR draft — Step 6.1 container extension specification"
+  status: "Draft"
+  external: false
+
 - title: "QnIR Goldens"
   url: "/qnir_goldens.html"
   slug: "qnir_goldens"
