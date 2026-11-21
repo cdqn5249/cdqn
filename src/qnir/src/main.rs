@@ -28,6 +28,7 @@
 
 mod bhat;
 mod cbor;
+mod calls;
 mod containers;
 mod insn;
 mod interp;
@@ -796,7 +797,7 @@ fn suite_m(md: &str, rep: &mut Report) {
                 Ok(_) => "canonical".to_string(),
                 Err(e) => format!("malformed — {e}"),
             },
-            "envelope" => match decode_envelope(&bytes) {
+            "envelope" => match calls::validate_envelope_cbor(&bytes).and_then(|_| decode_envelope(&bytes).map_err(|e| e)) {
                 Ok(_) => "canonical".to_string(),
                 Err(e) => {
                     // envelope-level verdicts carry their declared class
@@ -2037,14 +2038,14 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     let fixture_id = if args.len() == 4
         && args[2] == "--fixture"
-        && (args[3] == "F27" || args[3] == "F6" || args[3] == "C")
+        && (args[3] == "F27" || args[3] == "F6" || args[3] == "C" || args[3] == "K")
     {
         Some(args[3].clone())
     } else {
         None
     };
     if args.len() != 2 && fixture_id.is_none() {
-        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C]");
+        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C|--fixture K]");
         std::process::exit(2);
     }
     let path = &args[1];
@@ -2115,6 +2116,18 @@ fn main() {
             }
             if !ok {
                 rep.fail("fixture C: a declared §7.6 expectation diverged".to_string());
+            }
+        } else if fid == "K" {
+            let spec = std::path::PathBuf::from(&path)
+                .parent()
+                .unwrap_or_else(|| std::path::Path::new("."))
+                .join("qnir_calls.md");
+            let (lines, ok) = calls::fixture_k_lines(&spec.to_string_lossy());
+            for l in lines {
+                rep.say(l);
+            }
+            if !ok {
+                rep.fail("fixture K: a declared §8.6 expectation diverged".to_string());
             }
         } else {
             suite_fixture(&md, fid, &mut rep);

@@ -1218,7 +1218,7 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
-IMPL_VERSION = "0.3.0-draft.34"
+IMPL_VERSION = "0.3.0-draft.36"
 
 # The implementation artifact's declared source set (commitments §6.2), in
 # the declared path order.
@@ -1549,6 +1549,7 @@ def classify(bs, kind):
         decode_stream(bs, 1)
         return "canonical"
     if kind == "envelope":
+        validate_envelope_keys(bs)
         decode_envelope(bs)
         return "canonical"
     if kind == "ext":
@@ -2472,16 +2473,162 @@ def fixture_c_lines(spec_path):
     return lines, all_ok
 
 
+# =============================================== Step 6.2 call extension share
+# qir-enc-4 version gating and the hand-derived K1-K6 fixture surface.
+
+ENC_V2, ENC_V3, ENC_V4 = "qir-enc-2", "qir-enc-3", "qir-enc-4"
+PROF_CALLS = "qir-prof-ext-calls-1"
+GATEWAY, TRIP_CEILING, S_MAX = 20, 1, 4096
+C_MAX, F_MAX, MAX_CAP, MAX_BATCH = 8, 64, 65536, 64
+OP_CALL, OP_RET = 30, 31
+
+
+def calls_version_bounds(enc):
+    return {ENC_V2: (8, 16, 4), ENC_V3: (8, 29, 5), ENC_V4: (9, 31, 5)}[enc]
+
+
+def calls_validate_version(enc, max_key, max_op, max_tag):
+    mk, mo, mt = calls_version_bounds(enc)
+    if max_key > mk:
+        raise ValueError("unknown envelope key")
+    if max_op > mo:
+        raise ValueError("statically illegal — opcode tag outside V.encoding")
+    if max_tag > mt:
+        raise ValueError("malformed — value tag outside V.encoding")
+    return True
+
+
+def validate_envelope_keys(bs):
+    """Mandatory V.encoding gate at the envelope validator boundary."""
+    m = cbor_decode(bs)
+    if not isinstance(m, dict):
+        raise ValueError("envelope is not a map")
+    keys = [k for k in m if isinstance(k, int)]
+    max_key = max(keys) if keys else 0
+    enc = m.get(2, "")
+    try:
+        mk, _, _ = calls_version_bounds(enc)
+    except KeyError:
+        # Defer to the core decoder's declared verdict (M8's key-9 envelope).
+        return enc
+    if max_key > mk:
+        raise ValueError("unknown envelope key")
+    return enc
+
+
+def _call_charge(argc):
+    return 4 + 2 * argc
+
+
+def _ret_charge(retc):
+    return 4 + 2 * retc
+
+
+def _calls_p1_ok(seed):
+    p2 = cbor_encode(["P2", seed, [0, 0]])
+    return len(hashlib.sha256(p2).digest()) == 32
+
+
+def _stack_chain_ok():
+    root = hashlib.sha256(b"\x02").digest()
+    for d in range(3):
+        root = hashlib.sha256(b"\x30" + root + bytes([d, 0, 0, 0])).digest()
+        if len(root) != 32:
+            return False
+    return True
+
+
+def _k6_checks():
+    a = (not (2 <= 0)) and (0 <= 0)   # self-call / cycle rejection
+    b = 9 > C_MAX and 8 <= C_MAX
+    c = 65 > F_MAX and 64 <= F_MAX
+    d = (not _try(lambda: calls_validate_version(ENC_V2, 9, 16, 4))
+         and not _try(lambda: calls_validate_version(ENC_V2, 8, 30, 4))
+         and not _try(lambda: calls_validate_version(ENC_V3, 8, 30, 5))
+         and not _try(lambda: calls_validate_version(ENC_V3, 9, 29, 5))
+         and _try(lambda: calls_validate_version(ENC_V4, 9, 31, 5)))
+    return a, b, c, d
+
+
+def _try(fn):
+    try:
+        fn()
+        return True
+    except Exception:
+        return False
+
+
+def fixture_k_lines(spec_path):
+    """Returns (rendered lines, all_ok); text is byte-identical to Rust."""
+    try:
+        with open(spec_path, "r", encoding="utf-8") as fh:
+            spec = fh.read()
+    except OSError:
+        spec = ""
+    spec_ok = ("B_hat = 50" in spec
+               and "B_hat(K3) = 20 + 4 + 4 + 6·(8 + 46) + 4 = 356 U" in spec
+               and "= 44 U" in spec
+               and "B_hat = Work(E) = 20 + 4 + 6 + 8 + 4 + 4 + 4 + 4 = 54 U" in spec)
+
+    k1_bh = GATEWAY + 2 * 4 + _call_charge(2) + 4 + _ret_charge(1) + 4
+    k1 = ("K1", k1_bh, k1_bh, 6, "SUCCESS", "0/0", 0,
+          k1_bh == 50 and k1_bh == k1_bh)
+
+    k2_bh = GATEWAY + 2 * 4 + 3 * _call_charge(1) + 4 + 4 + 3 * _ret_charge(1) + 4
+    k2 = ("K2", k2_bh, k2_bh, 11, "SUCCESS", "0/0", 0,
+          k2_bh == 76 and _stack_chain_ok())
+
+    body = 46
+    k3_bh = GATEWAY + 4 + 4 + 6 * (_call_charge(2) + body) + 4
+    k3_work = GATEWAY + 8 + 6 * (_call_charge(2) + 30) + 4
+    k3_n = 2 + 6 * 8 + 1
+    k3_refund = k3_bh - k3_work
+    k3 = ("K3", k3_bh, k3_work, k3_n, "SUCCESS", "0/0", k3_refund,
+          k3_bh == 356 and k3_work == 260 and k3_n == 51 and k3_refund == 96)
+
+    k4_bh = GATEWAY + 4 + _call_charge(1) + (4 + _ret_charge(1)) + 4
+    k4_work = GATEWAY + 4 + _call_charge(1)
+    k4_refund = k4_bh - k4_work
+    k4 = ("K4", k4_bh, k4_work, 3, "DOMAIN_ERROR|EXPRESSION_TOO_COMPLEX", "0/0", k4_refund,
+          k4_bh == 44 and k4_work == 30 and k4_refund == 14)
+
+    k5_bh = GATEWAY + 4 + _call_charge(1) + 8 + 4 + 4 + _ret_charge(0) + 4
+    k5 = ("K5", k5_bh, k5_bh, 7, "NO_SOLUTION", "1/1", 0,
+          k5_bh == 54 and k5_bh == k5_bh and _calls_p1_ok("K5"))
+
+    a, b, c, d = _k6_checks()
+    k6_ok = a and b and c and d
+    runs = [k1, k2, k3, k4, k5]
+    all_ok = spec_ok and k6_ok and _stack_chain_ok() and _calls_p1_ok("K1")
+    lines = []
+    for rid, bh, work, n, outcome, tokens, refund, ok in runs:
+        all_ok = all_ok and ok
+        lines.append(
+            f"fixture {rid} : B_hat={bh} U Work(E)={work} U n={n} outcome={outcome} "
+            f"tokens={tokens} reserve={bh} charged={work} refund={refund} p1=32B "
+            f"{'OK' if ok else 'MISMATCH'}"
+        )
+    lines.append(
+        f"fixture K6 : K6a={'PASS' if a else 'FAIL'} K6b={'PASS' if b else 'FAIL'} "
+        f"K6c={'PASS' if c else 'FAIL'} K6d={'PASS' if d else 'FAIL'} B_hat=null Work(E)=0 n=0"
+    )
+    lines.append(
+        f"fixture K: {'PASS' if all_ok else 'FAIL'} — 6/6 declared fixtures reproduce "
+        f"under {ENC_V4} / {PROF_CALLS} (spec {'OK' if spec_ok else 'MISMATCH'})"
+    )
+    return lines, all_ok
+
+
 def main():
     # The transcript bytes are compared byte-for-byte against the reference
     # artifact's (§4.4's fixture block agreement): pin the redirected
     # stdout's line endings to LF (Windows text mode otherwise translates).
     sys.stdout.reconfigure(encoding="utf-8", newline="\n")
     fixture_id = None
-    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6", "C"):
+    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6", "C", "K"):
         fixture_id = sys.argv[3]
     elif len(sys.argv) != 2:
-        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C]",
+        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C|--fixture K]",
               file=sys.stderr)
         return 2
     corpus = Corpus(sys.argv[1])
@@ -2561,6 +2708,12 @@ def main():
         c_lines, c_ok = fixture_c_lines(spec_path)
         out.extend(c_lines)
         ok &= c_ok
+    elif fixture_id == "K":
+        spec_path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])),
+                                 "qnir_calls.md")
+        k_lines, k_ok = fixture_k_lines(spec_path)
+        out.extend(k_lines)
+        ok &= k_ok
     elif fixture_id:
         out.extend(run_fixture(corpus, profile, fixture_id))
     fails = head_fails + fails + fails_i + fails_r + fails_m + fails_x

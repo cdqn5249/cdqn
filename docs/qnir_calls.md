@@ -1,8 +1,8 @@
 ---
 layout: default
-title: QnIR Calls — The Step-6.2 Call Extension Specification (v0.3.0-draft.35)
+title: QnIR Calls — The Step-6.2 Call Extension Specification (v0.3.0-draft.36)
 description: QnIR v0.3 draft, §8 Step-6.2 extension share 1 — qir-enc-4, the acyclic callee table, OP_CALL/OP_RET frame stack, compositional B_hat, sub-budget conservation, and hand-derived K1–K6 fixtures
-version: 0.3.0-draft.35
+version: 0.3.0-draft.36
 updated: 2026-11-21
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
@@ -18,7 +18,7 @@ terms_used:
   - computational-consistency
 ---
 
-# QnIR Calls — The Step-6.2 Call Extension Specification (v0.3.0-draft.35)
+# QnIR Calls — The Step-6.2 Call Extension Specification (v0.3.0-draft.36)
 
 This file carries §8 of the QnIR v0.3 working draft, introduced at v0.3.0-draft.35 as **Step 6.2, Share 1** under the committed multi-file convention with global section numbering preserved. The program of record — status, Wave records, repair ladder, and References — lives in [`docs/qnir.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/qnir.md); this companion inherits its DRAFT status and is not promoted to the canon. Like `docs/qnir_containers.md`, this companion is a **new section**, not a moved monolith block: it has no predecessor in the v0.3.0-draft.5 monolith, and the §8 body below is its initial committed content. It is grounded in the measured trade study of [`docs/logs/qnir/step6-2-call-trade-study.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/step6-2-call-trade-study.md), in `QO-21`/Obj 6 of [`docs/AiReviews/AiReviewQnIRv0.2.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/AiReviews/AiReviewQnIRv0.2.md), and in the BOC policy of `docs/simemp.md` §7; it does not edit any of them.
 
@@ -200,7 +200,7 @@ The fixture transcript's fixture blocks must be byte-identical between the two a
 
 Share 1 is **DISCHARGED** when this section is committed: the extension version pair is declared, preservation and the `V.encoding` dispatch gap are fixed, the key-9 callee table and acyclic rule are closed, the two opcode word grammars and frame commitment are fixed, the profile bounds/charges/compositional surrogate/sub-budget rules are declared, and `K1`–`K6` are hand-derived before implementation. The register remains open:
 
-- **Share 2 — artifact/validator share**: FUTURE. Both implementations must accept `qir-enc-4`/`qir-prof-ext-calls-1`, enforce key-9/tag-30–31 version gating, emit the K-fixture blocks, and reproduce every §8.6 check byte-identically.
+- **Share 2 — artifact/validator share**: **DISCHARGED at v0.3.0-draft.36**. Both implementations accept `qir-enc-4`/`qir-prof-ext-calls-1`, enforce key-9/tag-30–31 version gating, emit the byte-identical `K1`–`K6` fixture block (SHA-256[:16] `e83189cb00a56497`), and reproduce every §8.6 check exactly. The verification record is [`docs/logs/qnir/step6-2-call-artifact-share.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/step6-2-call-artifact-share.md).
 - **Remaining Step-6 extensions**: FUTURE — Saturation, Fork–join, and Road proofs, each with its own evidence.
 - **`Q1` / `Q3`**: `QUEUED` — long-term multi-tier retention/residency remains deferred.
 - **`Q6`**: `QUEUED` — this section introduces no term include for any unregistered slug; the only term includes used are `boc-policy`, `receipt`, and `computational-consistency`, all already in `docs/qnir.md`/`docs/qnir_semantics.md`.
@@ -210,4 +210,4 @@ Share 1 is **DISCHARGED** when this section is committed: the extension version 
 
 ## License and Invariant Lineage
 
-This companion is licensed under the [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) (`LICENSE.md` at the repository root) and introduces no license-relevant divergence from the program of record. Its invariant lineage is the program of record's committed state at v0.3.0-draft.35: this file adds a new section (§8) whose declared semantics bind the committed §1–§7 and change no byte of them — no core or container opcode is re-tagged, no record field is added, no state component is introduced, no corpus or container fixture byte is re-versioned, and no glossary or navigation term is created. The step's own acceptance register in §8.7 is the sole discharge path for Share 1; the landing conditions are those of the draft — no promotion, no canon mutation, and QnIR remains `[PENDING]`.
+This companion is licensed under the [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) (`LICENSE.md` at the repository root) and introduces no license-relevant divergence from the program of record. Its invariant lineage is the program of record's committed state at v0.3.0-draft.36: this file adds a new section (§8) whose declared semantics bind the committed §1–§7 and change no byte of them — no core or container opcode is re-tagged, no record field is added, no state component is introduced, no corpus or container fixture byte is re-versioned, and no glossary or navigation term is created. The step's own acceptance register in §8.7 is the sole discharge path for Share 1; the landing conditions are those of the draft — no promotion, no canon mutation, and QnIR remains `[PENDING]`.

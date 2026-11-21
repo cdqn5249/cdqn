@@ -27,6 +27,8 @@ pub const OP_OBS: u64 = 13;
 pub const OP_PROMOTE: u64 = 14;
 pub const OP_EMIT: u64 = 15;
 pub const OP_HALT: u64 = 16;
+pub const OP_CALL: u64 = 30;
+pub const OP_RET: u64 = 31;
 
 pub fn op_name(tag: u64) -> Option<&'static str> {
     Some(match tag {
@@ -46,6 +48,8 @@ pub fn op_name(tag: u64) -> Option<&'static str> {
         OP_PROMOTE => "PROMOTE",
         OP_EMIT => "EMIT",
         OP_HALT => "HALT",
+        OP_CALL => "OP_CALL",
+        OP_RET => "OP_RET",
         _ => return None,
     })
 }
@@ -216,6 +220,25 @@ pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
             dec_value(r)?;
         }
         OP_PROMOTE | OP_HALT => {}
+        OP_CALL => {
+            // qir-enc-4: 30, cnt(callee_id), cnt(argc), argc×ref,
+            // cnt(retc), retc×bnd, ext  (§8.3).
+            r.next("instruction")?; // callee_id
+            let argc = r.take_count("call argument count")?;
+            for _ in 0..argc { refs.push(r.next("instruction")?); }
+            let retc = r.take_count("call return count")?;
+            for _ in 0..retc {
+                let rtag = r.next("instruction")?;
+                if rtag != 1 && rtag != 3 && rtag != 4 && rtag != 5 {
+                    return Err(err("unknown result type tag"));
+                }
+                dec_value(r)?;
+            }
+        }
+        OP_RET => {
+            let retc = r.take_count("return reference count")?;
+            for _ in 0..retc { refs.push(r.next("instruction")?); }
+        }
         _ => unreachable!(),
     }
     let ext = r.next("instruction")?;
