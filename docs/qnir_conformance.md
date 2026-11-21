@@ -2,8 +2,8 @@
 layout: default
 title: QnIR Conformance — The Conformance Oracle Specification of the QnIR v0.3 Working Draft (Repair Step 4)
 description: QnIR v0.3 draft, §4 the conformance oracle — golden-first protocol, assembler, validator, interpreters
-version: 0.3.0-draft.31
-updated: 2026-11-18
+version: 0.3.0-draft.32
+updated: 2026-11-19
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL 1.0)
 license_file: LICENSE.md
@@ -52,7 +52,7 @@ The agreement surface is exact, and every point on it is a committed artifact of
 
 The reference interpreter implements the transition relation of §2.3 exactly as committed: one instruction per step; the partial-function discipline, at most one successor per configuration; the declared advance rule of the clock (§2.2, one tick per transition); the lifecycle verbs and the total terminalization function of §2.5; the F5 field list committed at every transition under the encoding of §2.6; and the admission refusal and fuel backstop of §3.4. It implements the accounting as §3 declares it — the ledger observes and gates the execution; it does not steer it (§3.3) — and no family's rule reads an accumulator in its implementation any more than in the relation.
 
-The state-root function is the artifact share §2.6 named as the oracle's. The canonical configuration encoding is specified there — the value store in `(static value id, instance id)` order, the token pool in the full token-identifier order of §2.6 (F15, v0.3.0-draft.6), the receipt queue in emission order, every component through the value encoding — and the concrete hash is an encoding-version parameter. The declared requirement is byte-equality under a declared version: both implementations bind the same declared encoding version, and their roots are byte-equal at every step of every vector; the hash's own algorithm and output width are declared with the encoding version at the artifact wave, which is all that F5's discharge needs and all this section requires. The second implementation satisfies the same requirements from the same committed text under the independence declaration and evidence requirements of §4.1; nothing in this section requires or permits it to consult the reference interpreter's code or outputs, and its conformance is decided against the committed golden results at the agreement surface of §4.1, nowhere else.
+The state-root function is the artifact share §2.6 named as the oracle's. The canonical configuration encoding is specified there — the value store in `(static value id, instance id)` order, the token pool in the full token-identifier order of §2.6 (F15, v0.3.0-draft.6), the receipt queue in emission order, every component through the value encoding — and the concrete hash is an encoding-version parameter. The declared requirement is byte-equality under a declared version: both implementations bind the same declared encoding version, and their roots are byte-equal at every step of every vector; the hash's own algorithm and output width are declared with the encoding version at the artifact wave, which is all that F5's discharge needs and all this section requires. The `qir-enc-2` registration (v0.3.0-draft.32, F-G0-1) closes the oracle's P1 gap: the state roots MUST satisfy both cross-implementation byte equality AND the encoding version's declared `P1` algorithm and width — the 32-byte SHA-256(P2) digests of the canonical configuration encoding of P2 — which both artifacts' conformance checkers now assert. The second implementation satisfies the same requirements from the same committed text under the independence declaration and evidence requirements of §4.1; nothing in this section requires or permits it to consult the reference interpreter's code or outputs, and its conformance is decided against the committed golden results at the agreement surface of §4.1, nowhere else.
 
 ### 4.4 The Conformance Vector Suite (F7 / `QO-22`, Step-4 Share)
 

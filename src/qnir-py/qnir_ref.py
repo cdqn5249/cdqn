@@ -817,10 +817,11 @@ class Machine:
         self.back_edges = sorted({(s, d) for (s, d) in edges if d in dom[s]})
 
     # ------------------------------------------------ configuration + records
-    def config_bytes(self, pc):
-        """The canonical configuration encoding (P2): the ten components of
-        §2.2's table in that order, every component through deterministic
-        CBOR, values carried as byte strings of their §2.6 encodings."""
+    def config_root(self, pc):
+        """The P1 state root (draft.32, F-G0-1): the SHA-256 (exact 32
+        bytes) of the canonical configuration encoding P2 — the P2
+        pre-image is retained in-memory per F15 and never substituted for
+        the digest."""
         store_c = [[s, i, enc_value(v)] for (s, i), v in
                    sorted(self.store.items(), key=lambda kv: kv[0])]
         pool_c = [[t["birth"], t["block"], t["index"], t["serial"], t["type"],
@@ -830,7 +831,7 @@ class Machine:
                  [self.acc["charged"], self.acc["reserved"], self.acc["refunded"]],
                  self.clock, self.step, [self.halt[0], self.halt[1]],
                  list(self.receipts), list(self.versions)]
-        return cbor_encode(comps)
+        return hashlib.sha256(cbor_encode(comps)).digest()
 
     def emit(self, pc, decoded, charged, refunded, events, io_ids, pre, post):
         """One transition record: the fourteen fields of §2.6's F5 list, in
@@ -878,11 +879,11 @@ class Machine:
             # admission refusal (§3.4): None (no certified bound / pre-DP
             # gate exceeded) or budget below the bound — the single rejection
             # transition, zero postings; the escrow never opens
-            pre = self.config_bytes((0, 0))
+            pre = self.config_root((0, 0))
             return self.rejection("EXPRESSION_TOO_COMPLEX", (0, 0),
                                   self.decoded_at(0, 0), pre)
         pc = (0, 0)
-        pre = self.config_bytes(pc)
+        pre = self.config_root(pc)
         while True:
             blk, idx = pc
             ins = self.blocks[blk]["instrs"][idx]
@@ -931,7 +932,7 @@ class Machine:
                 refund = self.outstanding()
                 if refund:
                     self.acc["refunded"] += refund
-                post = self.config_bytes(pc)
+                post = self.config_root(pc)
                 self.emit(pc, decoded, post_charge, refund, events, io_ids,
                           pre, post)
                 self.boundaries.append((self.step, dict(self.acc)))
@@ -940,7 +941,7 @@ class Machine:
                 self.pending_miss[0]["state"] = ST_CONSUMED
                 events.append([2, tid(self.pending_miss[0])])
                 self.pending_miss = None
-            post = self.config_bytes(pc)
+            post = self.config_root(pc)
             self.emit(pc, decoded, post_charge, 0, events, io_ids, pre, post)
             self.boundaries.append((self.step, dict(self.acc)))
             pre = post
@@ -1175,7 +1176,7 @@ class Machine:
                         key=tid):
             t["state"] = ST_TERM
             events.append([3, tid(t)])
-        post = self.config_bytes(pc)
+        post = self.config_root(pc)
         self.step_receipt_ids = []   # a rejection transition emits no witness
         self.emit(pc, decoded, 0, refund, events, [], pre, post)
         self.boundaries.append((self.step, dict(self.acc)))
@@ -1217,7 +1218,7 @@ TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
 # whose fences and field tables carry the committed expected bytes and
 # outcomes (§4.4).  Nothing below writes to it.
 
-IMPL_VERSION = "0.3.0-draft.31"
+IMPL_VERSION = "0.3.0-draft.32"
 
 # The implementation artifact's declared source set (commitments §6.2), in
 # the declared path order.
@@ -1813,6 +1814,17 @@ def run_x_family(corpus, profile):
                     f"record count {len(res['records'])} != {len(committed_records)}")
             for k, (mine, want) in enumerate(zip(res["records"],
                                                  committed_records), 1):
+                # P1 (draft.32, F-G0-1): the committed state roots are
+                # 32-byte digests — the raw P2 pre-image can never pass as
+                # a root (the Python equivalent of the Rust checker's
+                # rec.pre.len() == 32 && rec.post.len() == 32).
+                for rec in (mine, want):
+                    f = {t: v for t, v in cbor_decode(rec)}
+                    for tag in (1, 7, 8):
+                        if len(f[tag]) != 32:
+                            raise AssertionError(
+                                f"record {k}: field {tag} is {len(f[tag])} "
+                                "bytes, not the 32-byte P1 digest (F-G0-1)")
                 if mine != want:
                     raise AssertionError(f"record {k} differs (agreement point 3)")
             if res["receipt"] != receipt_committed:
@@ -2101,8 +2113,7 @@ def main():
     # The transcript bytes are compared byte-for-byte against the reference
     # artifact's (§4.4's fixture block agreement): pin the redirected
     # stdout's line endings to LF (Windows text mode otherwise translates).
-    if not sys.stdout.isatty():
-        sys.stdout.reconfigure(newline="\n")
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")
     fixture_id = None
     if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6"):
         fixture_id = sys.argv[3]

@@ -62,7 +62,7 @@ terms_used:
 |---|---|
 | **Document Title** | Qn Structures — Vision and Evaluation Framework for Category C Data Structures and Workflows |
 | **Version** | 0.2.0 |
-| **Last Updated** | 2026-10-28 (Bao Loc, Vietnam) |
+| **Last Updated** | 2026-10-30 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Vision and Structural Proposal — Not a Finalized Specification |

@@ -725,7 +725,7 @@ impl<'a> Machine<'a> {
     /// The canonical configuration encoding (P2: §2.2's ten components in
     /// the table's order; a value inside CBOR rides as the byte string of
     /// its §2.6 word encoding).
-    fn config_now(&self, pc: (u64, u64)) -> Vec<u8> {
+    fn config_p2(&self, pc: (u64, u64)) -> Vec<u8> {
         let mut store_ids: Vec<(u64, u64)> = self.store.keys().copied().collect();
         store_ids.sort();
         let store_c: Vec<Cbor> = store_ids
@@ -776,6 +776,13 @@ impl<'a> Machine<'a> {
             ),
         ]);
         cbor::encode(&comps)
+    }
+
+    /// The P1 state root (draft.32, F-G0-1): the SHA-256 (exact 32 bytes)
+    /// of the canonical configuration encoding P2 — the P2 pre-image is
+    /// retained in-memory per F15 and never substituted for the digest.
+    fn state_root(&self, pc: (u64, u64)) -> Vec<u8> {
+        sha256(&self.config_p2(pc)).to_vec()
     }
 
     /// Record field 5: the full canonical bytes of the executed instruction.
@@ -859,7 +866,7 @@ impl<'a> Machine<'a> {
             // admission refusal (§3.4): `None` (no certified bound / pre-DP
             // gate exceeded) or budget below the bound — the single rejection
             // transition, zero postings, escrow never opened
-            let pre = self.config_now((0, 0));
+            let pre = self.state_root((0, 0));
             let decoded = self.decoded_at(0, 0);
             let outcome = self.fatal(TT_EXPRESSION_TOO_COMPLEX, (0, 0), decoded, pre);
             return Ok(self.pack(outcome));
@@ -890,7 +897,7 @@ impl<'a> Machine<'a> {
             sids.push(row);
         }
         let mut pc: (u64, u64) = (0, 0);
-        let mut pre = self.config_now(pc);
+        let mut pre = self.state_root(pc);
         loop {
             let blk = pc.0 as usize;
             let idx = pc.1 as usize;
@@ -946,7 +953,7 @@ impl<'a> Machine<'a> {
                 if refund > 0 {
                     self.acc.refunded += refund;
                 }
-                let post = self.config_now(pc);
+                let post = self.state_root(pc);
                 self.records.push(Rec {
                     pc,
                     decoded,
@@ -965,7 +972,7 @@ impl<'a> Machine<'a> {
             }
             // successful completion of the fallback block (its terminator fired)
             self.consume_pending_miss(blk, idx, &mut events);
-            let post = self.config_now(pc);
+            let post = self.state_root(pc);
             self.records.push(Rec {
                 pc,
                 decoded,
@@ -1359,7 +1366,7 @@ impl<'a> Machine<'a> {
             pt.state = STATE_TERMINALIZED;
             events.push((3, tid(pt)));
         }
-        let post = self.config_now(pc);
+        let post = self.state_root(pc);
         self.records.push(Rec {
             pc,
             decoded,
@@ -2199,6 +2206,21 @@ fn exec_vector_check(
         // field 1 prev_root: the record's pre state — for consecutive records
         // the previous record's post is this record's pre, and the first
         // record's prev root is the declared initial configuration (§2.6)
+        // P1 (draft.32, F-G0-1): the committed state roots are 32-byte
+        // digests — the raw P2 pre-image can never pass as a root.
+        if rec.pre.len() != 32 || rec.post.len() != 32 {
+            return (cmp_fail(
+                id,
+                name,
+                &format!(
+                    "record {} field 1/7/8 are not 32-byte P1 digests (run {}/{} bytes)",
+                    ri + 1,
+                    rec.pre.len(),
+                    rec.post.len()
+                ),
+                rep,
+            ), Some((n_vec, v_root)));
+        }
         let checks: [(usize, String); 11] = [
             (1, format!("prev_root {:?}", crate::hex_to_bytes(&f[0]) == rec.pre)),
             (2, format!("program_root {:?}", crate::hex_to_bytes(&f[1]) == prog_root)),
@@ -2556,4 +2578,43 @@ pub fn suite_x_exec(
         v_roots,
         entries,
     )
+}
+
+#[cfg(test)]
+mod draft32_tests {
+    use super::*;
+
+    /// P1 (draft.32, F-G0-1): the state root is the SHA-256, exactly 32
+    /// bytes, of the canonical configuration encoding P2 — the P2
+    /// pre-image is retained in-memory, never in place of the digest.
+    #[test]
+    fn state_root_is_p1_sha256_of_p2() {
+        let intent = Intent {
+            sem: "v0.3.0-draft.8.4".to_string(),
+            enc: "qir-enc-2".to_string(),
+            prof: "qir-prof-golden-2".to_string(),
+            deps: Vec::new(),
+            blocks: Vec::new(),
+            pool: Vec::new(),
+            n_blocks: 0,
+        };
+        let profile = bhat::golden_profile();
+        let m = Machine::new(
+            &[],
+            &intent,
+            Vec::new(),
+            HashMap::new(),
+            100,
+            &profile,
+            // the machine is not run in this test; the injected bound
+            // skips `b_hat` (the zero-block placeholder Intent has none)
+            Some(20),
+        )
+        .unwrap();
+        let p2 = m.config_p2((0, 0));
+        let root = m.state_root((0, 0));
+        assert_eq!(root.len(), 32);
+        assert_eq!(root, sha256(&p2));
+        assert_ne!(root, p2);
+    }
 }
