@@ -196,6 +196,13 @@
   status: "Draft"
   external: false
 
+- title: "QnLang Rung-0"
+  url: "/qnlang.html"
+  slug: "qnlang"
+  description: "QnLang v0.1 Rung-0 candidate specification"
+  status: "Draft"
+  external: false
+
 - title: "QnIR Goldens"
   url: "/qnir_goldens.html"
   slug: "qnir_goldens"
