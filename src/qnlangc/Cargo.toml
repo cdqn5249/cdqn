@@ -1,0 +1,7 @@
+[package]
+name = "qnlangc"
+version = "0.1.0-stage0"
+edition = "2021"
+description = "Stage 0 QnLang Rung-0 parser, CAE-AST builder and 14-gate checker (stdlib only)"
+
+[dependencies]

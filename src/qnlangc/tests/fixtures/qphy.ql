@@ -1,0 +1,11 @@
+Q(dcc) dcc1;
+Q(kappa) dyadic;
+Q(domain) Qphy;
+Q(mode) L0;
+Q(type) Jt : Qphy<unit(J), Qm[-255..255]>;
+Q(anchor) jzero : Q(0)<unit(J)> : Jt;
+Q(metric) ph : eta(1,1,1);
+Q(0)<unit(J)> -> energy : Jt;
+leash(energy, Q(4)) -> leashed : Jt;
+may_emit(leashed, receipt) -> authorized : bool;
+emit receipt;

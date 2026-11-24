@@ -1,0 +1,10 @@
+Q(dcc) d;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+Q(type) T : Qm[-255..255];
+Q(anchor) z : Q(0) : T;
+Q(metric) m : eta(1,1,1);
+Q(1) -> x : T;
+Q(2) -> y : T;
+x + y -> w : T;

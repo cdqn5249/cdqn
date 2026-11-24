@@ -1,0 +1,16 @@
+Q(dcc) dcc0;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+Q(type) T : Qm[-255..255];
+Q(anchor) zero : Q(0) : T;
+Q(metric) met : eta(2,3,5);
+Q(1) -> lo : T;
+Q(4) -> hi : T;
+[lo..hi] -> rng : Qm[-255..255];
+-Q(3) -> a : T;
+scale_leaf(a) -> sl : T;
+align(sl) -> al : T;
+zoom(al, z_min) -> v : T;
+v.exact? -> exact : bool;
+emit receipt;

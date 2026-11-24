@@ -2,8 +2,8 @@
 layout: default
 title: QnLang — Rung-0 Candidate Specification (High-Level Authoring Language)
 description: QnLang v0.1 Rung-0 — CAE-AST semantic model, operator hygiene, formal EBNF, six-domain type system, zero-concession compiler, and R11' lowering overview
-version: 0.1.0-draft.1
-updated: 2026-11-22
+version: 0.1.0-draft.3
+updated: 2026-11-24
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -70,8 +70,8 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnLang — Rung-0 Candidate Specification (High-Level Authoring Language) |
-| **Version** | 0.1.0-draft.1 |
-| **Last Updated** | 2026-11-22 |
+| **Version** | 0.1.0-draft.3 |
+| **Last Updated** | 2026-11-24 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
 | **Status** | Candidate Specification — QnLang Rung-0 (Not Promoted; QnLang remains [PENDING]) |
@@ -186,7 +186,7 @@ The {% include term.html id="q-bypass" text="Q(bypass)" %} suite of `Q(6:sym)` i
 The grammar is unambiguous and profile-bound. `:=` is the **meta-production** operator and never appears in source programs. `⟨...⟩` marks prose non-terminals; quoted tokens are literals; `[...]` is optional; `{...}` is repetition with a declared ceiling; `|` is alternation. Every bound is a source token, never an inferred default. The only `/` admitted in source is the dimensional ratio inside `unit(...)`; it is never value division. The only `..` admitted is inside `qtype` bounds and `range`.
 
 ```ebnf
-program          := { header_decl } { top_decl } ;
+program          := { header_decl } { top_decl | stmt } ;
 
 header_decl      := "Q(dcc)" ident ";"
                   | "Q(kappa)" ( "dyadic" | "dec" | "fact" ) ";"
@@ -198,13 +198,14 @@ top_decl         := "Q(type)" ident ":" qtype ";"
                   | "Q(metric)" ident ":" "eta(" sint "," sint "," sint ")" ";"
                   | "Q(blanket)" ident "{" "sense" ":" param_list ";"
                                               "state" ":" param_list ";"
-                                              "act" ":" param_list ";" "}"
-                  | "Q(variant)" ident "{" variant_arm { "," variant_arm } "}"
-                  | "Q(pattern)" ident "(" [ param_list ] ")" "->" qtype contract_tag block
-                  | "Q(workflow)" ident "(" [ param_list ] ")" "->" qtype contract_tag block
-                  | "Q(conjecture)" ident "(" [ param_list ] ")" contract_tag block
+                                              "act" ":" param_list ";" "}" [ ";" ]
+                  | "Q(variant)" ident "{" variant_arm { "," variant_arm } "}" [ ";" ]
+                  | "Q(pattern)" ident "(" [ param_list ] ")" "->" qtype contract_tag block [ ";" ]
+                  | "Q(workflow)" ident "(" [ param_list ] ")" "->" qtype contract_tag block [ ";" ]
+                  | "Q(conjecture)" ident "(" [ param_list ] ")" contract_tag block [ ";" ]
+                  | "Q(falsify)" ident "(" [ param_list ] ")" contract_tag block [ ";" ]
                   | "Q(experiment)" ident "for" ident contract_tag "{"
-                        { "case" ident ":" expr "->" ident ";" } "}" ;
+                        { "case" ident ":" expr "->" ident ";" } "}" [ ";" ] ;
 
 contract_tag     := "![" contract_item { "," contract_item } "]" ;
 contract_item    := "Qs(" ident "," ident ")" | "Qphy(" ident ")" | "Qchem"
@@ -281,6 +282,8 @@ bind             := expr "->" target_pat [ ":" qtype ] ";" ;
 stmt             := bind | expr ";" ;
 block            := "{" { stmt } [ "->" expr ] "}" ;
 ```
+
+**Revision record (v0.1.0-draft.2, Axiom 13 — additive §4 reconciliation).** Three proven gaps between the literal §4 EBNF and the §6.4 worked programs are closed here without changing any §6.4 program: (1) `program` now admits top-level `stmt` alongside `top_decl`, matching the bare bindings in every §6.4 example; (2) `top_decl` now includes the `Q(falsify)` production already declared in §5.2, named in the §4 prose, and used by the `Qs + Qlog` example (`Q(conjecture)` and `Q(experiment)` were already present); (3) every braced declaration (`Q(blanket)`, `Q(variant)`, `Q(pattern)`, `Q(workflow)`, `Q(conjecture)`, `Q(falsify)`, `Q(experiment)`) ends in `}` with an optional `[ ";" ]`, so the `Qbio` blanket and the `Qchem`/`Qs + Qlog` variants follow one uniform rule. No semantic, type, or affine rule is relaxed.
 
 No production introduces an implicit value, a pointer, a floating literal, an unbounded repetition, a Unicode multiplication dot, `===`, or a bare `/`. `=` is admitted **only** in `binary`; declarations use `:`. `Q(conjecture)` / `Q(falsify)` / `Q(experiment)` are proof-shaped declarations; they emit receipts under §6 and never change a value without an explicit follow-on binding.
 
@@ -521,6 +524,34 @@ The {% include term.html id="terminal-exactness" text="Terminal Exactness" %} ru
 1. **CAE-AST normalization** — hash-cons, apply `Q(bypass)` identities bottom-up, sort commutative children, freeze `z_min`.
 2. **Domain erasure** — `Qm`/`Qs`/`Qlog`/`Qphy`/`Qchem`/`Qbio` annotations become declared bounds, units, and receipt tags.
 3. **Encoding lowering** — normalized DAG flattens to `qir-enc-4` with explicit `trip(K)`, `cap(N)`, `budget(W U)`; byte grammar is owned by QnIR companions.
+
+**Closed Rung-0 `R11'` Lowering Table [v0.1.0-draft.3].** Each row is the one declared mapping for its construct; nothing below is resolved by convention or implementation accident. Stage 0B emits a single entry block (block 0): bounded structured control is flattened into that block with explicit declared ceilings, and the fallback block id of a load is carried as an operand witness. Multi-block CFG synthesis remains a Step-6.3 obligation and is not improvised here. Charges are `qir-prof-ext-calls-1` (§8.4): `gateway = 20 U`; core `4 U`; `ARR_NEW`/`TBL_NEW`/`ARR_LEN`/`*_ROOT` `4 U`; `ARR_GET`/`TBL_GET`/`TBL_AT` `8 U`; `ARR_SET`/`TBL_SET` `10 U`; `*_BATCH` `16 U`; `OP_CALL = 4 + 2·argc`; `OP_RET = 4 + 2·retc`. `B_hat` of a declaration is `gateway + Σ` site charges; at a call site the callee's **interior** bound is folded as one site-stable charge (§8.4), never its gateway twice. A `![budget(W U)]` on a top declaration is checked as `B_hat <= W`; one embedded in a `qtype` constrains only that container site. No budget is silently raised.
+
+| Source construct | Declared `qir-enc-4` lowering | Charge |
+|---|---|---|
+| `Q(k)`, `-Q(k)`, `Q(k)<unit(u)>` | `CONST` (tag 1) with `imm` = `INT_POS`/`INT_NEG` magnitude encoding and `bnd` from the declared qtype; the unit is erased into the bound, not an `EXT` payload | 4 U |
+| `qprim` into an anchor type | same `CONST`, with the anchor's declared `bnd` | 4 U |
+| `[lo..hi]`, `[lo..<hi]` | `TUPLE` (tag 3) of two `CONST` endpoint values with the declared qtype bound; `..<` records the exclusive endpoint as declared (no implicit decrement) | 4 + 2·4 U |
+| `.exact?` on `Qm[..]` | `CMP` (tag 10) of the value against canonical zero `Q(0)` with `rng = [0..0]`, result `bnd bool <= 1` | 4 + 4 U |
+| `scale_leaf`, `align` | §7.1 normalization identities: fold into the operand's frozen mantissa and `z_min`; no opcode, same SSA ref | 0 U |
+| `zoom(al, z_min)` | `CONST` with `imm = ZOOM(N(q), z_qnir)`, `z_qnir = -z_min` (`INT_NEG` for `z_min > 0`, `INT_POS 0` for `z_min = 0`), odd mantissa `N(q)`; canonical zero has `q = 0, z_min = 0` (qm.md §4.3) | 4 U |
+| `leash`, `metabolic_cap`, `may_emit`, `modal_as`, `cut`, `drop`, `reuse` | domain-erasure identities (§7.1 step 2): same SSA ref, authorization/affine burn recorded as a receipt witness; no opcode | 0 U |
+| `Q(2:cons)(a,b)` | `TUPLE` (tag 3), `cnt = 2`, two field `bnd`s, refs `a, b` | 4 U |
+| `Q(metric_dot)(a,b)` | `MUL` (tag 7) with the declared element bound, then the enclosing `=` becomes `CMP` (tag 10) against `Q(0)` with `rng = [-1..1]`, result `bnd bool <= 1` | 4 + 4 U |
+| `Q(arr_new)<T,cap(N)>` | tag 17 with `bnd(cap N)`, `bnd(elem bound of T)`, `ext = 0` | 4 U |
+| `Q(tbl_new)<K,V,cap(N)>` | tag 23 with `bnd(cap N)`, `bnd(elem bound of V)`, `ext = 0` | 4 U |
+| `Q(store)(arr,v)` | tag 20 `ARR_SET`: ref(container), ref(append index), ref(value); the append index is `CONST i` with `i` the source-order store ordinal for that container | 4 + 10 U |
+| `Q(store)(tbl,(k,v))` | tag 27 `TBL_SET`: ref(table), ref(key), ref(value) — the tuple is the declared `(key,value)` pair | 10 U |
+| `Q(fold) arr over [lo..<hi] init(e) as (acc,i)` | tag 18 `ARR_LEN`, then `hi-lo` fully unrolled iterations of tag 19 `ARR_GET(arr, CONST idx)` + tag 5 `ADD(acc, val)`; each iteration carries one `CMP` (tag 10) of `idx` against `hi` under `trip(1)` derived from `cap(N)`; result binds `acc` | 4 + n·(8 + 4 + 4) U |
+| `Q(load)(tbl,k) @[trip(K)] -> hit or_else B -> out` | tag 25 `TBL_GET`: ref(table), ref(key), `fallback_blk` witness (declared id 1), `bnd(val)`, `ext = 0`; the `or_else` body `B` is emitted in the join continuation; `hit` names the hit-path binding and `out` binds the join result (`hit` on the hit path, `B`'s tail on the miss path); `Q(0)`/`Q(1)` inhabit `bool`/`u64` by the typed-zero rule of §3.2; `K` bounds the miss traversal | 8 U + body |
+| `Q(halt_with)(r)` | `EMIT` (tag 15) `kind = 1` (the declared witness kind of X49), `k = 0`, then `HALT` (tag 16); admitted only in the caller entry (§8.3) | 4 + 4 U |
+| `emit receipt;` | `EMIT` (tag 15) `kind = 1`, `k = 0`; a single terminal `HALT` (tag 16) closes the entry block | 4 + 4 U |
+| `Q(pattern)`, `Q(workflow)`, `Q(falsify)` | one key-9 callee record `[UInt id, Bytes arg_bnds, Bytes ret_bnds, Bytes blocks]`; call sites use `OP_CALL` (tag 30), callee exits `OP_RET` (tag 31), dense ascending acyclic ids | as charged above |
+
+Two §6.4 ambiguities are resolved here explicitly, not by inference:
+
+- **`Qbio`, `Blanket -> inst : BioT`.** A zero-argument `Q(blanket)` instantiation lowers to `CONST` with `imm = Q(0)` and the `bnd` of the blanket's declared field type (`BioT` = `Qm[0..255]`); the blanket name is erased to that bound. The declared `Q(anchor) bzero : Q(0) : BioT` supplies genesis, so no implicit constant is introduced.
+- **`Qs + Qlog`, `Q(load)(tbl1,k) @[trip(1)] -> hit or_else { … } -> out : StepOut`.** `hit` is the `TBL_GET` hit binding; `-> out : StepOut` binds the join result; `(Q(0), Q(0))` inhabits `StepOut = Q(tuple)<bool,u64>` through the typed-zero rule of §3.2. The declared `![budget(64 U)]` on `step` and `![budget(80 U)]` on `route` are checked mechanically against compositional `B_hat` (§8.4) by `qnlangc --emit-qir`; a genuine exceedance is reported as `E_SMAX_OR_BUDGET` and the §6.4 annotation is flagged rather than silently raised. No `Q(pattern)`/`Q(workflow)` is admitted above its declared ceiling.
 
 {% include term.html id="q-anchor" text="Q(anchor)" %} commitments from `qs_history.md` may be cited as provenance; {% include term.html id="existential-invariant" text="Existential Invariants" %} reject a lowering that introduces approximate arithmetic, implicit state, or non-deterministic ordering through the {% include term.html id="simemp-gateway" text="SIMEMP Gateway" %}.
 
