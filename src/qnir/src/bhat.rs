@@ -118,13 +118,30 @@ enum Term {
     Cload { at: usize, fallback: usize },
 }
 
+/// qir-prof-ext-calls-1 site-stable charges for extension tags (§7.5/§8.4);
+/// core tags keep their profile charge. No default is inferred for an
+/// unassigned tag — it inherits the declared core class.
+pub fn charge_of(profile: &Profile, tag: u64) -> u64 {
+    if (tag as usize) < profile.charge.len() {
+        return profile.charge[tag as usize];
+    }
+    match tag {
+        17 | 18 | 23 | 24 => 4,
+        19 | 25 | 26 => 8,
+        20 | 27 => 10,
+        21 | 28 => 16,
+        30 | 31 => 6,
+        _ => 4,
+    }
+}
+
 /// Walk a block's instructions: the sum of charges up to the terminator,
 /// and the terminator's descriptor (§3.4's unrolling model).
 fn block_charge_and_flow(blocks: &[Block], profile: &Profile, bid: usize) -> (u64, Term) {
     let b = &blocks[bid];
     let mut total = 0u64;
     for (k, ins) in b.insns.iter().enumerate() {
-        total += profile.charge[ins.tag as usize];
+        total += charge_of(profile, ins.tag);
         match ins.tag {
             OP_BR => {
                 return (
@@ -292,6 +309,15 @@ fn in_block_continue(ctx: &mut Ctx, bid: usize, from_idx: usize, rem: &[u32]) ->
 /// never flattened to the gateway charge alone.
 pub fn b_hat(blocks: &[Block], profile: &Profile) -> Option<u64> {
     let n = blocks.len();
+
+    // Pre-dominator structural gate: an empty program, or a block count above
+    // the declared S_max, is refused before `dominators()` / `back_edges()` is
+    // entered. This bounds the O(|B|^3) dominator work by S_max and keeps a
+    // > 4096-block Intent from costing any dominator computation at all.
+    if n == 0 || n as u128 > profile.s_max as u128 {
+        return None;
+    }
+
     let edges = block_graph(blocks);
     let bes = back_edges(n, &edges);
 
@@ -373,6 +399,18 @@ mod tests {
         blocks.push(halt_block(13));
         let profile = golden_profile();
         assert_eq!(b_hat(&blocks, &profile), None);
+    }
+
+    #[test]
+    fn block_count_above_s_max_refuses_before_dominators() {
+        // |B| = 4097 > S_max = 4096: the pre-dominator guard returns None
+        // without entering the O(|B|^3) dominator computation. An empty
+        // program is refused for the same structural reason.
+        let blocks: Vec<Block> = (0..=4096).map(halt_block).collect();
+        assert_eq!(blocks.len(), 4097);
+        let profile = golden_profile();
+        assert_eq!(b_hat(&blocks, &profile), None);
+        assert_eq!(b_hat(&[], &profile), None);
     }
 
     #[test]

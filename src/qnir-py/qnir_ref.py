@@ -292,7 +292,11 @@ def decode_value(ws, i, end):
 # ------------------------------------------------ instruction grammar (§2.6)
 OPCODES = {1: "CONST", 2: "CLOAD", 3: "TUPLE", 4: "FIELD", 5: "ADD", 6: "SUB",
            7: "MUL", 8: "DIV", 9: "MOD", 10: "CMP", 11: "BR", 12: "JMP",
-           13: "OBS", 14: "PROMOTE", 15: "EMIT", 16: "HALT"}
+           13: "OBS", 14: "PROMOTE", 15: "EMIT", 16: "HALT",
+           17: "ARR_NEW", 18: "ARR_LEN", 19: "ARR_GET", 20: "ARR_SET",
+           21: "ARR_BATCH", 22: "ARR_ROOT", 23: "TBL_NEW", 24: "TBL_LEN",
+           25: "TBL_GET", 26: "TBL_AT", 27: "TBL_SET", 28: "TBL_BATCH",
+           29: "TBL_ROOT", 30: "OP_CALL", 31: "OP_RET"}
 OP_CODE = {v: k for k, v in OPCODES.items()}
 CLASS_OF = {"CONST": "q_const", "CLOAD": "q_load", "TUPLE": "q_tuple",
             "FIELD": "q_field", "ADD": "q_add", "SUB": "q_sub", "MUL": "q_mul",
@@ -317,7 +321,7 @@ S_PARTIAL = "malformed — trailing partial instruction"
 S_DANGLE = "statically illegal — dangling side-table reference"
 
 
-def decode_instruction(ws, i, end):
+def decode_instruction(ws, i, end, allow_ext=False):
     """Decode one §2.6 instruction: opcode tag word, declared operand fields
     in declared order, one uniform trailing ext word."""
     if i + 1 > end:
@@ -325,7 +329,7 @@ def decode_instruction(ws, i, end):
     tag = ws[i]
     i += 1
     name = OPCODES.get(tag)
-    if name is None:
+    if name is None or (not allow_ext and tag >= 17):
         raise Malformed(S_OPCODE)
 
     def word():
@@ -405,13 +409,41 @@ def decode_instruction(ws, i, end):
         ins["refs"] = [word() for _ in range(k)]
     elif name in ("PROMOTE", "HALT"):
         pass
+    elif name in ("ARR_NEW", "TBL_NEW"):
+        word(); value(); word(); value()  # cap_bnd, elem_bnd (rtag + INT_POS)
+    elif name in ("ARR_LEN", "TBL_LEN"):
+        word(); word(); value()   # ref(arr), rtag + len bnd
+    elif name in ("ARR_ROOT", "TBL_ROOT"):
+        word()
+    elif name in ("ARR_GET", "TBL_AT"):
+        word(); word(); word(); value()
+        if name == "TBL_AT":
+            word(); value()
+    elif name == "TBL_GET":
+        word(); word(); word(); word(); value()  # tbl, key, fallback, rtag, bnd
+    elif name in ("ARR_SET", "TBL_SET", "ARR_BATCH", "TBL_BATCH"):
+        word(); word(); word()
+        if name in ("ARR_BATCH", "TBL_BATCH"):
+            word()  # batch_cnt
+    elif name == "OP_CALL":
+        word()                       # callee_id
+        argc = word()
+        for _ in range(argc):
+            word()
+        retc = word()
+        for _ in range(retc):
+            word(); value()
+    elif name == "OP_RET":
+        retc = word()
+        for _ in range(retc):
+            word()
     else:
         raise ValueError(f"opcode {name} has no operand rule in the committed inventory")
     ins["ext"] = word()
     return ins, i
 
 
-def decode_stream(stream, n_blocks):
+def decode_stream(stream, n_blocks, allow_ext=False):
     """Decode the committed instruction stream: per block its id, argument
     signature, instruction count, and instructions in declared operand order.
     Static value ids are dense over the Intent's value-defining instructions
@@ -445,7 +477,7 @@ def decode_stream(stream, n_blocks):
         for _ in range(cnt):
             start = i
             try:
-                ins, i = decode_instruction(ws, i, end)
+                ins, i = decode_instruction(ws, i, end, allow_ext)
             except ValueError:
                 raise Malformed(S_PARTIAL)
             if ins["op"] in DEFINING:
@@ -516,8 +548,10 @@ def decode_envelope(bs):
     m = cbor_decode(bs)
     if not isinstance(m, dict):
         raise ValueError("envelope is not a map")
+    if 9 in m and 2 not in m:
+        raise Malformed(S_ENV_KEY)
     for k in m:
-        if not isinstance(k, int) or not 0 <= k <= 8:
+        if not isinstance(k, int) or not 0 <= k <= 9:
             raise Malformed(S_ENV_KEY)
     for key in range(9):
         if key not in m:
@@ -528,7 +562,22 @@ def decode_envelope(bs):
         if t not in TOKEN_TYPES:
             raise Malformed(S_TTYPE)
         pool_decl.append(t)
-    blocks = decode_stream(m[6], m[5])
+    if m[2] != "qir-enc-4" and 9 in m:
+        raise Malformed(S_ENV_KEY)
+    callees = m.get(9, [])
+    if not isinstance(callees, list):
+        raise ValueError("the callee table must be an array")
+    for rec in callees:
+        if (not isinstance(rec, list) or len(rec) != 4
+                or not isinstance(rec[0], int)
+                or not all(isinstance(x, (bytes, bytearray)) for x in rec[1:])):
+            raise ValueError("malformed callee record")
+    blocks = decode_stream(m[6], m[5], m[2] == "qir-enc-4")
+    if m[2] != "qir-enc-4":
+        for blk in blocks:
+            for ins in blk["instrs"]:
+                if OP_CODE[ins["op"]] >= 17:
+                    raise Malformed(S_OPCODE)
     # the EXT side table: the declared record structure, unique index
     # words, and the payload reading P14 (expansion increment 5)
     check_ext_table(m[7])
@@ -540,7 +589,7 @@ def decode_envelope(bs):
                     raise Malformed(S_DANGLE)
     return {"sem": m[1], "enc": m[2], "prof": m[3], "deps": m[4],
             "n_blocks": m[5], "stream": m[6], "side": m[7], "pool": pool_decl,
-            "blocks": blocks}
+            "blocks": blocks, "callees": callees}
 
 
 def listing_of(blocks):
@@ -635,6 +684,20 @@ def block_graph(blocks):
     return edges
 
 
+EXT_CHARGE = {"ARR_NEW": 4, "ARR_LEN": 4, "ARR_ROOT": 4, "ARR_GET": 8,
+              "ARR_SET": 10, "ARR_BATCH": 16, "TBL_NEW": 4, "TBL_LEN": 4,
+              "TBL_GET": 8, "TBL_AT": 8, "TBL_SET": 10, "TBL_BATCH": 16,
+              "TBL_ROOT": 4, "OP_CALL": 6, "OP_RET": 6}
+
+
+def ins_charge(ins, profile):
+    """qir-prof-ext-calls-1 site-stable charge; core tags keep their class."""
+    op = ins["op"]
+    if op in EXT_CHARGE:
+        return EXT_CHARGE[op]
+    return profile["charges"][CLASS_OF[op]]
+
+
 def b_hat(blocks, gateway, charge_of, trip_ceiling, s_max=4096):
     """The trip-ceiling unrolling dynamic program of §3.4 (draft.31): the
     state space is (block, instruction index, remaining trip budget per
@@ -643,8 +706,14 @@ def b_hat(blocks, gateway, charge_of, trip_ceiling, s_max=4096):
     the declared S_max, or when there is no ceiling-bounded exit path
     (including irreducible cycles). None is an admission refusal, never a
     fallback to the gateway charge alone."""
+    n = len(blocks)
+    # Pre-dominator structural gate: an empty program, or a block count above
+    # the declared S_max, is refused before dominators() is entered, bounding
+    # the O(n^3) dominator work by S_max.
+    if n == 0 or n > s_max:
+        return None
     edges = block_graph(blocks)
-    dom = dominators(len(blocks), edges)
+    dom = dominators(n, edges)
     back = sorted({(s, d) for (s, d) in edges if d in dom[s]})
     bidx = {e: i for i, e in enumerate(back)}
     # Mandatory pre-DP structural gate: |B| * (trip_ceiling+1)^|back-edges|
@@ -787,7 +856,7 @@ class Machine:
         # injection, §4.4) — never a conformance path.
         self.BH = (b_inject if b_inject is not None
                    else b_hat(self.blocks, profile["gateway"],
-                              lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
+                              lambda ins: ins_charge(ins, profile),
                               profile["trip_ceiling"], profile["s_max"]))
         self.prog_root = hashlib.sha256(envelope_bytes).digest()
         self.pool = [{"birth": 0, "block": 0, "index": 0, "serial": k,
@@ -888,7 +957,7 @@ class Machine:
             blk, idx = pc
             ins = self.blocks[blk]["instrs"][idx]
             decoded = self.decoded_at(blk, idx)
-            c = self.profile["charges"][CLASS_OF[ins["op"]]]
+            c = ins_charge(ins, self.profile)
             events = []
             io_ids = []
             gateway = 0
@@ -933,6 +1002,7 @@ class Machine:
                 if refund:
                     self.acc["refunded"] += refund
                 post = self.config_root(pc)
+                self.final_p1 = post
                 self.emit(pc, decoded, post_charge, refund, events, io_ids,
                           pre, post)
                 self.boundaries.append((self.step, dict(self.acc)))
@@ -1207,7 +1277,8 @@ class Machine:
         return {"outcome": outcome, "receipt": self.build_receipt(outcome),
                 "records": list(self.records), "boundaries": list(self.boundaries),
                 "acc": dict(self.acc), "per_class": dict(self.per_class),
-                "B_hat": self.BH, "versions": list(self.versions)}
+                "B_hat": self.BH, "versions": list(self.versions),
+                "final_p1": getattr(self, "final_p1", b"")}
 
 
 TOKEN_TYPES_REV = {v: k for k, v in TOKEN_TYPES.items()}
@@ -1991,7 +2062,7 @@ def run_fixture(corpus, profile, fid="F27"):
     committed = groups_to_bytes(ls)
     env = decode_envelope(committed)
     bh = b_hat(env["blocks"], profile["gateway"],
-               lambda ins: profile["charges"][CLASS_OF[ins["op"]]],
+               lambda ins: ins_charge(ins, profile),
                profile["trip_ceiling"], profile["s_max"])
     # the assembly share: the source listing regenerates from the committed
     # envelope (the reference artifact's share re-encodes the bytes, §4.2)
@@ -2619,11 +2690,62 @@ def fixture_k_lines(spec_path):
     return lines, all_ok
 
 
+def eval_cbor(path, budget=1000):
+    """Standalone qir-enc-4 envelope execution (no QnLang content in this tool)."""
+    with open(path, "rb") as fh:
+        raw = fh.read()
+    try:
+        env = decode_envelope(raw)
+    except Exception as exc:
+        print(f"ENVELOPE {path} ({len(raw)} bytes) decode: FAIL")
+        print(f"E_WIRE_MISMATCH {exc}")
+        return 1
+    print(f"ENVELOPE {path} ({len(raw)} bytes) V = ({env['sem']}, {env['enc']}, {env['prof']}) "
+          f"blocks={env['n_blocks']} callees={len(env['callees'])}")
+    profile = {"name": "qir-prof-ext-calls-1", "gateway": 20,
+               "charges": {c: 4 for c in set(CLASS_OF.values())},
+               "trip_ceiling": 1, "s_max": 4096}
+    blocks = env["blocks"]
+    # The committed inventory has execution rules for these opcodes only;
+    # validate the whole stream before running (the Rust artifact pre-decodes
+    # every instruction, so both implementations must agree).
+    supported = {"CONST", "CLOAD", "ADD", "DIV", "MOD", "CMP", "BR", "JMP",
+                 "OBS", "PROMOTE", "TUPLE", "FIELD", "EMIT", "HALT"}
+    for blk in blocks:
+        for ins in blk["instrs"]:
+            if ins["op"] not in supported:
+                print(f"EVAL_FAIL opcode {ins['op']} has no execution rule in the committed inventory")
+                return 1
+    bh = b_hat(blocks, 20, lambda ins: ins_charge(ins, profile), 1, 4096)
+    print(f"B_hat = {bh if bh is not None else 'null'}")
+    try:
+        res = Machine(raw, {}, budget, profile).run()
+    except Exception as exc:
+        print(f"EVAL_FAIL {type(exc).__name__}: {exc}")
+        return 1
+    recs = res["records"]
+    root = trace_root(recs).hex() if recs else hashlib.sha256(b"\x02").hexdigest()
+    print(f"outcome: {OUTCOME_NAME[res['outcome']]}")
+    print(f"Work(E) = {res['acc']['charged']} U")
+    print(f"n = {len(recs)}")
+    print(f"reserved/charged/refunded = {res['acc']['reserved']}/{res['acc']['charged']}/{res['acc']['refunded']} U")
+    print(f"final P1 = {res['final_p1'].hex()}")
+    print(f"qir-trace-root-1 (scope = vector, n = {len(recs)}, root = {root})")
+    return 0
+
+
 def main():
     # The transcript bytes are compared byte-for-byte against the reference
     # artifact's (§4.4's fixture block agreement): pin the redirected
     # stdout's line endings to LF (Windows text mode otherwise translates).
     sys.stdout.reconfigure(encoding="utf-8", newline="\n")
+    if len(sys.argv) >= 3 and sys.argv[1] == "--eval-cbor":
+        budget = 1000
+        if "--budget" in sys.argv:
+            i = sys.argv.index("--budget")
+            if i + 1 < len(sys.argv):
+                budget = int(sys.argv[i + 1])
+        return eval_cbor(sys.argv[2], budget)
     fixture_id = None
     if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6", "C", "K"):
         fixture_id = sys.argv[3]

@@ -431,9 +431,14 @@ fn back_edge_set(blocks: &[ExecBlock]) -> std::collections::BTreeSet<(usize, usi
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct Acc {
-    charged: u64,
-    reserved: u64,
-    refunded: u64,
+    pub(crate) charged: u64,
+    pub(crate) reserved: u64,
+    pub(crate) refunded: u64,
+}
+
+/// The final P1 config root (SHA-256 of the terminal configuration) of a run.
+pub(crate) fn final_p1_root(run: &RunOutcome) -> Vec<u8> {
+    run.records.last().map(|r| r.post.clone()).unwrap_or_default()
 }
 
 #[derive(Clone, Debug)]
@@ -2597,6 +2602,7 @@ mod draft32_tests {
             blocks: Vec::new(),
             pool: Vec::new(),
             n_blocks: 0,
+            callees: Vec::new(),
         };
         let profile = bhat::golden_profile();
         let m = Machine::new(

@@ -27,6 +27,20 @@ pub const OP_OBS: u64 = 13;
 pub const OP_PROMOTE: u64 = 14;
 pub const OP_EMIT: u64 = 15;
 pub const OP_HALT: u64 = 16;
+// qir-enc-3 / qir-enc-4 extension tags (qnir_containers.md §7.3.1).
+pub const OP_ARR_NEW: u64 = 17;
+pub const OP_ARR_LEN: u64 = 18;
+pub const OP_ARR_GET: u64 = 19;
+pub const OP_ARR_SET: u64 = 20;
+pub const OP_ARR_BATCH: u64 = 21;
+pub const OP_ARR_ROOT: u64 = 22;
+pub const OP_TBL_NEW: u64 = 23;
+pub const OP_TBL_LEN: u64 = 24;
+pub const OP_TBL_GET: u64 = 25;
+pub const OP_TBL_AT: u64 = 26;
+pub const OP_TBL_SET: u64 = 27;
+pub const OP_TBL_BATCH: u64 = 28;
+pub const OP_TBL_ROOT: u64 = 29;
 pub const OP_CALL: u64 = 30;
 pub const OP_RET: u64 = 31;
 
@@ -48,6 +62,19 @@ pub fn op_name(tag: u64) -> Option<&'static str> {
         OP_PROMOTE => "PROMOTE",
         OP_EMIT => "EMIT",
         OP_HALT => "HALT",
+        OP_ARR_NEW => "ARR_NEW",
+        OP_ARR_LEN => "ARR_LEN",
+        OP_ARR_GET => "ARR_GET",
+        OP_ARR_SET => "ARR_SET",
+        OP_ARR_BATCH => "ARR_BATCH",
+        OP_ARR_ROOT => "ARR_ROOT",
+        OP_TBL_NEW => "TBL_NEW",
+        OP_TBL_LEN => "TBL_LEN",
+        OP_TBL_GET => "TBL_GET",
+        OP_TBL_AT => "TBL_AT",
+        OP_TBL_SET => "TBL_SET",
+        OP_TBL_BATCH => "TBL_BATCH",
+        OP_TBL_ROOT => "TBL_ROOT",
         OP_CALL => "OP_CALL",
         OP_RET => "OP_RET",
         _ => return None,
@@ -114,15 +141,32 @@ pub struct Intent {
     /// Declared initial status pool (token type tags, declared order).
     pub pool: Vec<u64>,
     pub n_blocks: u64,
+    /// qir-enc-4 key 9: ordered callee records (§8.2). Empty under qir-enc-2/3.
+    pub callees: Vec<Cbor>,
 }
 
 fn err(verdict: &str) -> String {
     verdict.to_string()
 }
 
-/// Decodes one instruction starting at the reader position; every declared
-/// malformed surface of the instruction grammar is typed here.
+/// `bnd` = a result type-tag word followed by one INT_POS bound value.
+fn skip_bnd(r: &mut WordReader) -> Result<(), String> {
+    let rtag = r.next("instruction")?;
+    if rtag != 1 && rtag != 3 && rtag != 4 && rtag != 5 {
+        return Err(err("unknown result type tag"));
+    }
+    dec_value(r)?;
+    Ok(())
+}
+
+/// Strict core-only instruction decode (the standalone M-surface verdicts).
 pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
+    dec_insn_gated(r, false)
+}
+
+/// Gated decode: extension tags 17–31 are admitted only inside a
+/// qir-enc-4 Intent envelope (V.encoding gating, qnir_calls.md §8.2).
+pub fn dec_insn_gated(r: &mut WordReader, allow_ext: bool) -> Result<Insn, String> {
     let tag = r.next("instruction")?;
     let _name = op_name(tag)
         .ok_or_else(|| err("unknown opcode tag"))?;
@@ -220,7 +264,39 @@ pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
             dec_value(r)?;
         }
         OP_PROMOTE | OP_HALT => {}
-        OP_CALL => {
+        OP_ARR_NEW | OP_TBL_NEW if allow_ext => {
+            skip_bnd(r)?; // cap_bnd
+            skip_bnd(r)?; // elem_bnd
+        }
+        OP_ARR_LEN | OP_TBL_LEN if allow_ext => {
+            refs.push(r.next("instruction")?);
+            skip_bnd(r)?;
+        }
+        OP_ARR_ROOT | OP_TBL_ROOT if allow_ext => {
+            refs.push(r.next("instruction")?);
+        }
+        OP_ARR_GET | OP_TBL_AT if allow_ext => {
+            refs.push(r.next("instruction")?);
+            refs.push(r.next("instruction")?);
+            skip_bnd(r)?;
+            if tag == OP_TBL_AT { skip_bnd(r)?; }
+        }
+        OP_TBL_GET if allow_ext => {
+            refs.push(r.next("instruction")?); // tbl
+            refs.push(r.next("instruction")?); // key
+            let fb = r.next("instruction")?; // fallback_blk
+            targets.push(fb);
+            skip_bnd(r)?; // val bound
+        }
+        OP_ARR_SET | OP_TBL_SET | OP_ARR_BATCH | OP_TBL_BATCH if allow_ext => {
+            refs.push(r.next("instruction")?);
+            refs.push(r.next("instruction")?);
+            refs.push(r.next("instruction")?);
+            if tag == OP_ARR_BATCH || tag == OP_TBL_BATCH {
+                r.take_count("batch count")?;
+            }
+        }
+        OP_CALL if allow_ext => {
             // qir-enc-4: 30, cnt(callee_id), cnt(argc), argc×ref,
             // cnt(retc), retc×bnd, ext  (§8.3).
             r.next("instruction")?; // callee_id
@@ -235,11 +311,11 @@ pub fn dec_insn(r: &mut WordReader) -> Result<Insn, String> {
                 dec_value(r)?;
             }
         }
-        OP_RET => {
+        OP_RET if allow_ext => {
             let retc = r.take_count("return reference count")?;
             for _ in 0..retc { refs.push(r.next("instruction")?); }
         }
-        _ => unreachable!(),
+        _ => return Err(err("unknown opcode tag")),
     }
     let ext = r.next("instruction")?;
     Ok(Insn {
@@ -265,6 +341,10 @@ fn dec_edge(r: &mut WordReader) -> Result<(u64, Vec<u64>), String> {
 /// Decodes the instruction stream: per block its id, argument signature,
 /// instruction count, and instructions in declared operand order (§2.6).
 pub fn decode_stream(stream: &[u8], n_blocks: u64) -> Result<Vec<Block>, String> {
+    decode_stream_gated(stream, n_blocks, false)
+}
+
+pub fn decode_stream_gated(stream: &[u8], n_blocks: u64, allow_ext: bool) -> Result<Vec<Block>, String> {
     let words = crate::value::words_of(stream)?;
     let mut r = WordReader::new(&words);
     let mut blocks = Vec::new();
@@ -283,7 +363,7 @@ pub fn decode_stream(stream: &[u8], n_blocks: u64) -> Result<Vec<Block>, String>
         let cnt = r.take_count("instruction count")?;
         let mut insns = Vec::with_capacity(cnt);
         for _ in 0..cnt {
-            insns.push(dec_insn(&mut r)?);
+            insns.push(dec_insn_gated(&mut r, allow_ext)?);
         }
         blocks.push(Block {
             id,
@@ -570,16 +650,21 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
         Cbor::Map(entries) => entries,
         _ => return Err(err("the Intent envelope is not a map")),
     };
-    let mut fields: [Option<Cbor>; 9] = Default::default();
+    let mut fields: [Option<Cbor>; 10] = Default::default();
     for (k, v) in entries {
         let ki = match k {
-            Cbor::UInt(n) if n <= 8 => n as usize,
+            Cbor::UInt(n) if n <= 9 => n as usize,
             _ => return Err(err("unknown envelope key")),
         };
         if fields[ki].is_some() {
             return Err(err("duplicate envelope key"));
         }
         fields[ki] = Some(v);
+    }
+    // An envelope carrying only key 9 (no closed core fields) is the M8
+    // malformed surface: unknown envelope key, regardless of version text.
+    if fields[9].is_some() && fields[2].is_none() {
+        return Err(err("unknown envelope key"));
     }
     let domain = match fields[0].take() {
         Some(Cbor::Bytes(b)) if b == b"QnIR-Intent" => b,
@@ -588,6 +673,13 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
     let _ = domain;
     let sem = take_text(&mut fields[1], "semantics version")?;
     let enc_v = take_text(&mut fields[2], "encoding version")?;
+    // qir-enc-4's key 9 and extension tags are gated by V.encoding: under
+    // qir-enc-2/3 they remain unknown (the committed M8/M1 verdicts).
+    if enc_v != "qir-enc-4" {
+        if fields[9].is_some() {
+            return Err(err("unknown envelope key"));
+        }
+    }
     // a profile reference present is a static legality rule (§2.1)
     let prof = match fields[3].take() {
         Some(Cbor::Text(s)) => s,
@@ -643,7 +735,35 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
         }
         _ => return Err(err("the declared initial status pool must be an array")),
     };
-    let blocks = decode_stream(&stream, n_blocks)?;
+    // qir-enc-4 key 9: ordered, four-element callee records (§8.2).
+    let callees = match fields[9].take() {
+        Some(Cbor::Array(items)) => {
+            for it in &items {
+                match it {
+                    Cbor::Array(f)
+                        if f.len() == 4
+                            && matches!(f[0], Cbor::UInt(_))
+                            && matches!(f[1], Cbor::Bytes(_))
+                            && matches!(f[2], Cbor::Bytes(_))
+                            && matches!(f[3], Cbor::Bytes(_)) => {}
+                    _ => return Err(err("malformed callee record")),
+                }
+            }
+            items
+        }
+        None => Vec::new(),
+        _ => return Err(err("the callee table must be an array")),
+    };
+    let blocks = decode_stream_gated(&stream, n_blocks, enc_v == "qir-enc-4")?;
+    if enc_v != "qir-enc-4" {
+        for b in &blocks {
+            for i in &b.insns {
+                if i.tag >= 17 {
+                    return Err(err("unknown opcode tag"));
+                }
+            }
+        }
+    }
 
     // every flag combination known and every EXT side-table reference
     // resolving (§2.1): an ext bit set beyond the side table is a dangling
@@ -665,6 +785,7 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
         blocks,
         pool,
         n_blocks,
+        callees,
     })
 }
 

@@ -40,7 +40,10 @@ use crate::cbor::Cbor;
 use std::fs;
 use value::{enc_value, Value};
 
-pub(crate) use interp::{cmp_artifacts, collision_entries, CompleteArtifact, outcome_name, suite_x_exec, trace_root};
+pub(crate) use interp::{
+    cmp_artifacts, collision_entries, encode_record, final_p1_root, outcome_name, run_vector,
+    suite_x_exec, trace_root, CompleteArtifact,
+};
 
 // ------------------------------------------------------------ text helpers
 
@@ -2034,8 +2037,72 @@ fn artifact_cmp_selftest() -> usize {
     got.iter().zip(expected.iter()).filter(|(g, w)| g == w).count()
 }
 
+/// Standalone qir-enc-4 envelope execution (no QnLang content in this tool).
+fn eval_cbor(path: &str, budget: u64) {
+    let bytes = match fs::read(path) {
+        Ok(b) => b,
+        Err(e) => {
+            eprintln!("cannot read {path}: {e}");
+            std::process::exit(2);
+        }
+    };
+    let intent = match insn::decode_envelope(&bytes) {
+        Ok(i) => i,
+        Err(e) => {
+            println!("ENVELOPE {path} ({} bytes) decode: FAIL", bytes.len());
+            println!("CHANNEL_A (E_WIRE_MISMATCH, {}, envelope, expected a strict qir-enc-4 envelope, got {}, fix the emitter, receipt:qnir/--eval-cbor)", e, e);
+            println!("qir-verbalizer-1: E_WIRE_MISMATCH at {path}:1 — envelope decode; expected a strict qir-enc-4 envelope, got {e}; remedy fix the emitter");
+            std::process::exit(1);
+        }
+    };
+    println!(
+        "ENVELOPE {path} ({} bytes) V = ({}, {}, {}) blocks={} callees={}",
+        bytes.len(), intent.sem, intent.enc, intent.prof, intent.n_blocks, intent.callees.len()
+    );
+    let profile = bhat::golden_profile();
+    let bh = bhat::b_hat(&intent.blocks, &profile);
+    println!("B_hat = {}", bh.map(|v| v.to_string()).unwrap_or_else(|| "null".into()));
+    match run_vector(&bytes, budget, &profile, &[]) {
+        Ok(run) => {
+            let recs: Vec<Vec<u8>> = run
+                .records
+                .iter()
+                .map(|r| encode_record(r, &crate::sha256::sha256(&bytes), [&intent.sem, &intent.enc, &intent.prof]))
+                .collect();
+            let root = trace_root(&recs.iter().map(|b| b.as_slice()).collect::<Vec<_>>());
+            let p1 = final_p1_root(&run);
+            println!("outcome: {}", outcome_name(run.outcome));
+            println!("Work(E) = {} U", run.acc.charged);
+            println!("n = {}", run.records.len());
+            println!(
+                "reserved/charged/refunded = {}/{}/{} U",
+                run.acc.reserved, run.acc.charged, run.acc.refunded
+            );
+            println!("final P1 = {}", to_hex(&p1));
+            println!(
+                "qir-trace-root-1 (scope = vector, n = {}, root = {})",
+                recs.len(),
+                to_hex(&root)
+            );
+        }
+        Err(e) => {
+            println!("EVAL_FAIL {}", e);
+            std::process::exit(1);
+        }
+    }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
+    if args.len() >= 3 && args[1] == "--eval-cbor" {
+        let budget = if let Some(i) = args.iter().position(|a| a == "--budget") {
+            args.get(i + 1).and_then(|s| s.parse::<u64>().ok()).unwrap_or(1000)
+        } else {
+            1000
+        };
+        eval_cbor(&args[2], budget);
+        return;
+    }
     let fixture_id = if args.len() == 4
         && args[2] == "--fixture"
         && (args[3] == "F27" || args[3] == "F6" || args[3] == "C" || args[3] == "K")
@@ -2172,5 +2239,52 @@ fn main() {
     println!("lineage: collision bucket (qir-artifact-cmp-1, entries = {entries})");
     if rep.failures != 0 {
         std::process::exit(1);
+    }
+}
+
+// ------------------------------------------------- --eval-cbor unit tests
+#[cfg(test)]
+mod eval_cbor_tests {
+    use super::*;
+    use crate::cbor::Cbor;
+
+    fn words_to_bytes(words: Vec<u64>) -> Vec<u8> {
+        words.iter().flat_map(|w| w.to_be_bytes()).collect()
+    }
+
+    fn envelope(stream_words: &[u64]) -> Vec<u8> {
+        let words: Vec<u64> = [vec![0, 0, 2], stream_words.to_vec()].concat();
+        let entries = vec![
+            (Cbor::UInt(0), Cbor::Bytes(b"QnIR-Intent".to_vec())),
+            (Cbor::UInt(1), Cbor::Text("v0.3.0-draft.8.4".into())),
+            (Cbor::UInt(2), Cbor::Text("qir-enc-4".into())),
+            (Cbor::UInt(3), Cbor::Text("qir-prof-ext-calls-1".into())),
+            (Cbor::UInt(4), Cbor::Array(Vec::new())),
+            (Cbor::UInt(5), Cbor::UInt(1)),
+            (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(words))),
+            (Cbor::UInt(7), Cbor::Array(Vec::new())),
+            (Cbor::UInt(8), Cbor::Array(Vec::new())),
+            (Cbor::UInt(9), Cbor::Array(vec![Cbor::Array(vec![
+                Cbor::UInt(0), Cbor::Bytes(Vec::new()), Cbor::Bytes(Vec::new()), Cbor::Bytes(Vec::new()),
+            ])])),
+        ];
+        cbor::encode(&Cbor::Map(entries))
+    }
+
+    #[test]
+    fn qir_enc4_key9_and_extension_tags_decode() {
+        let i = insn::decode_envelope(&envelope(&[16, 0, 16, 0])).unwrap();
+        assert_eq!(i.enc, "qir-enc-4");
+        assert_eq!(i.callees.len(), 1);
+    }
+
+    #[test]
+    fn core_envelope_executes_standalone() {
+        // CONST imm=Q(0), bnd 255, ext; HALT, ext.
+        let bytes = envelope(&[1, 1, 0, 1, 1, 1, 255, 0, 16, 0]);
+        let run = run_vector(&bytes, 100, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "SUCCESS");
+        assert_eq!(run.acc.charged, 28);
+        assert_eq!(run.records.len(), 2);
     }
 }
