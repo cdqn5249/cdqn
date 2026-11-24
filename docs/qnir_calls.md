@@ -67,7 +67,7 @@ Two opcode words are added, both using §2.6's uniform trailing `ext` word:
 | `30` | `OP_CALL` | `30, cnt(callee_id), cnt(argc), argc × ref(arg_refs), cnt(retc), retc × bnd(ret_bnds), ext` |
 | `31` | `OP_RET` | `31, cnt(retc), retc × ref(ret_refs), ext` |
 
-Explicit §2.6 expansion: **`cnt` = 1 word**, **`ref` = 1 word**, **each `bnd` = variable `1 + (1 + len)` words** (one type-tag word, one count word, then `len` magnitude words under §2.6's INT_POS value grammar), and **`ext` = 1 word**; the opcode tag itself is 1 word. Thus `OP_CALL` occupies `3 + argc + retc + Σ_bnd_words(ret_bnds)` words and `OP_RET` occupies `3 + retc` words, the same closed word grammar as the core instruction stream.
+Explicit §2.6 expansion: **`cnt` = 1 word**, **`ref` = 1 word**, **each `bnd` = variable `1 + (1 + len)` words** (one type-tag word, one count word, then `len` magnitude words under §2.6's INT_POS value grammar), and **`ext` = 1 word**; the opcode tag itself is 1 word. Thus `OP_CALL` occupies `5 + argc + Σ_bnd_words(ret_bnds)` words (tag + `cnt(callee_id)` + `cnt(argc)` + `argc × ref` + `cnt(retc)` + `retc × bnd` + `ext`) and `OP_RET` occupies `3 + retc` words, the same closed word grammar as the core instruction stream.
 
 `OP_CALL` binds the callee's declared return values as fresh value instances in the caller's §2.2 component (3) store. `OP_RET` is the **terminator of a callee exit block**; it binds nothing in the caller beyond the declared returns and settles the sub-budget (§8.4). A `HALT` inside a callee is statically malformed unless a typed fatal rejection seals the execution directly at that transition (§2.5): a callee cannot successful-halt the whole program, because only the caller entry owns the terminal receipt. `OP_CALL` in the caller entry and `OP_RET` in any callee are the only new control surfaces; no call frame, closure value, or continuation object is admitted as a value form.
 
@@ -100,7 +100,7 @@ The profile `qir-prof-ext-calls-1` declares **`gateway = 20 U`, `trip_ceiling = 
 The Step-6 Containers row fixes five rules; the call extension inherits them and adds its frame rule:
 
 1. **Canonical serialization.** callee tables and frame bytes use the §2.6 word grammar and deterministic CBOR; a `(callee_id, arg bytes)` pair has one canonical encoding.
-2. **Hash function.** SHA-256, 32 bytes: `0x02` empty/root base, `0x00` leaf, `0x20` pairwise, `0x01` trace nodes — matching P1 and `qir-trace-root-1`.
+2. **Hash function.** SHA-256, 32 bytes: `0x02` empty/root base, `0x00` leaf, `0x20` pairwise, `0x01` trace nodes, `0x30` suspended frame-stack pre-images (`SHA-256(0x30 || S_d || frame_d)`) — matching P1 and `qir-trace-root-1`.
 3. **Persistence.** COW structural persistence with no in-place mutation; a frame push creates a new commitment, and the suspended frame's pre-image is retained per F15.
 4. **Cache model.** the `QO-17` tiers (L1d 3.4 ns, L2 4.8 ns, L3 11.2 ns, DRAM 125.0 ns) bound the access path; the 5,512 B P2 at `C=8,F=64` is a DRAM-bound measurement, not a core constant.
 5. **Batch / frame rules.** sorted `batch_cnt` behavior is unchanged from §7; frame live values `<= F_max`, depth `<= C_max`, and `C_max · F_max` memory are declared profile ceilings (Obj 2).
@@ -138,19 +138,27 @@ C2:1  ADD a0, c2, bnd INT_POS<=255 -> c3
 C2:2  OP_RET retc=1, ret_refs=(c3)
 ```
 
-Declared `W_budget=90`. `B_hat = Work(E) = 76` (gateway 20 + caller CONST 8 + 3·CALL 18 + C2 CONST/ADD 8 + 3·RET 18 + HALT 4), `n = 11`, outcome `SUCCESS`. Frame roots: `S0 = SHA-256(0x02)`, `S1 = SHA-256(S0 || frame0)`, `S2 = SHA-256(S1 || frame1)`, `S3 = SHA-256(S2 || frame2)`; P2 carries only `frame2` plus `parent_stack_root = S2` (1 live value, `<= 64`). Instance ids are monotone across all frames, so `v0/v1`, `c0/c1`, and `c2/c3` never alias; ledger `reserved=76, charged=76, refunded=0`.
+Declared `W_budget=90`. `B_hat = Work(E) = 76` (gateway 20 + caller CONST 8 + 3·CALL 18 + C2 CONST/ADD 8 + 3·RET 18 + HALT 4), `n = 11`, outcome `SUCCESS`. Frame roots: `S0 = SHA-256(0x02)`, `S1 = SHA-256(0x30 || S0 || frame0)`, `S2 = SHA-256(0x30 || S1 || frame1)`, `S3 = SHA-256(0x30 || S2 || frame2)`; P2 carries only `frame2` plus `parent_stack_root = S2` (1 live value, `<= 64`). Instance ids are monotone across all frames, so `v0/v1`, `c0/c1`, and `c2/c3` never alias; ledger `reserved=76, charged=76, refunded=0`.
 
 **`K3` — `m = 6` sequential calls to a `k = 2`-loop callee; compositional admission.**
 
 ```
 B0:0  CONST imm=5, bnd INT_POS<=255 -> v0
 B0:1  CONST imm=7, bnd INT_POS<=255 -> v1
-B0:2..B0:7  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v2..v7
+B0:2  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v2
+B0:3  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v3
+B0:4  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v4
+B0:5  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v5
+B0:6  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v6
+B0:7  OP_CALL callee_id=0, argc=2, arg_refs=(v0,v1), retc=1, ret_bnds=(INT_POS<=255) -> v7
 B0:8  HALT
-C0 block 0: ADD 4 U + BR 4 U -> block 1 / back-edge site 0 (trip ceiling 1)
-C0 block 1: ADD 4 U + BR 4 U -> block 2 / back-edge site 1 (trip ceiling 1)
-C0 block 2: ADD 4 U + JMP 4 U -> block 3
-C0 block 3: OP_RET retc=1, ret_refs=(c_ret) = 6 U
+C0:0  ADD a0, a1, bnd INT_POS<=255 -> c0
+C0:1  BR cc=LT ref=c0 true=C0 false=C1          (true edge self-loop = back-edge site 0)
+C1:0  ADD c0, c0, bnd INT_POS<=255 -> c1
+C1:1  BR cc=LT ref=c1 true=C1 false=C2          (true edge self-loop = back-edge site 1)
+C2:0  ADD c1, c1, bnd INT_POS<=255 -> c2
+C2:1  JMP C3
+C3:0  OP_RET retc=1, ret_refs=(c2)
 ```
 
 Declared `W_budget=400`. The callee's worst-case interior bound is `B_callee_body = 16 + 16 + 8 + 6 = 46 U` with `dp_states(C0) = 16`. Inline state product `24 · 2^12 = 98,304 > 4096` → **refused**; compositional `B_hat(K3) = 20 + 4 + 4 + 6·(8 + 46) + 4 = 356 U` with caller + callee DP states `1 + 16 = 17 <= 4096` → **admitted**. On the fast non-looping runtime path (`8 + 8 + 8 + 6 = 30 U` per call), `Work(E) = 20 + 8 + 6·(8 + 30) + 4 = 260 U`, `n = 2 + 6·(1 + 7) + 1 = 51`, outcome `SUCCESS`. Ledger `reserved=356, charged=260, refunded=96` (`356 = 260 + 96`), using `charge(OP_CALL) = 4 + 2·2 = 8 U` and `charge(OP_RET) = 4 + 2·1 = 6 U` exactly. The first inline refusal remains `m = 5`.
@@ -159,11 +167,17 @@ Declared `W_budget=400`. The callee's worst-case interior bound is `B_callee_bod
 
 ```
 K4a (DOMAIN_ERROR):
+B0:0  CONST imm=0, bnd INT_POS<=255 -> v0
+B0:1  OP_CALL callee_id=0, argc=1, arg_refs=(v0), retc=1, ret_bnds=(INT_POS<=255) -> v1
+B0:2  HALT
+C0:0  DIV a0, a0, bnd INT_POS<=255 -> c0        (a0 = 0: zero divisor, fatal DOMAIN_ERROR)
+C0:1  OP_RET retc=1, ret_refs=(c0)
+K4b (EXPRESSION_TOO_COMPLEX):
 B0:0  CONST imm=1, bnd INT_POS<=255 -> v0
 B0:1  OP_CALL callee_id=0, argc=1, arg_refs=(v0), retc=1, ret_bnds=(INT_POS<=255) -> v1
-C0:0  DIV a0, ZERO, bnd INT_POS<=255 -> fatal
-K4b (EXPRESSION_TOO_COMPLEX):
-C0:0  CONST imm=256, bnd INT_POS<=255 -> fatal   (pre-dispatch bound exceedance)
+B0:2  HALT
+C0:0  CONST imm=256, bnd INT_POS<=255 -> c0     (pre-dispatch bound exceedance, fatal EXPRESSION_TOO_COMPLEX)
+C0:1  OP_RET retc=1, ret_refs=(c0)
 ```
 
 Declared `W_budget=60`. Both variants: `B_hat = 20 + 4 + 6 + (4 + 6) + 4 = 44 U` (gateway + caller CONST + `OP_CALL` at `argc=1` + callee interior `DIV`/`CONST` 4 U + `OP_RET` at `retc=1` 6 U + caller HALT), `Work(E) = 20 + 4 + 6 + 0 = 30 U`, `n = 3`, no `OP_RET` and no caller `HALT` executed; terminal outcome `DOMAIN_ERROR` (tag 4) for `K4a` and `EXPRESSION_TOO_COMPLEX` (tag 3) for `K4b`, sealed at the fatal transition. Ledger `reserved=44, charged=30, refunded=14` (`44 = 30 + 14`) — conservation PASS with the outer caller's escrow intact. Zero new tokens.
@@ -171,17 +185,18 @@ Declared `W_budget=60`. Both variants: `B_hat = 20 + 4 + 6 + (4 + 6) + 4 = 44 U`
 **`K5` — token propagation across `OP_RET`.**
 
 ```
-B0 initial pool: [STATUS_NEG_EVEN_ROOT]
+B0 initial token pool: [STATUS_NEG_EVEN_ROOT]
 B0:0  CONST imm=0, bnd INT_POS<=2^64-1 -> v0
 B0:1  OP_CALL callee_id=0, argc=1, arg_refs=(v0), retc=0, ret_bnds=()   (no -> target: P10 defines 0 ids)
 B0:2  HALT
-C0:0  TBL_GET tbl_ref, key_ref=v0, fallback_blk=C1, bnd INT_POS<=255 -> c0
+C0:0  TBL_GET t0, a0, fallback_blk=C1, bnd INT_POS<=255 -> c0   (t0 = declared static empty-table input; a0 = key; hit -> C0:1, miss -> C1)
 C0:1  OP_RET retc=0, ret_refs=()
 C1:0  CONST imm=9, bnd INT_POS<=255 -> c9
-C1:1  JMP edge->C0:1 (arity 0; successful fallback completion)
+C1:1  JMP C2                  (block id; arity 0, successful fallback completion)
+C2:0  OP_RET retc=0, ret_refs=()
 ```
 
-Declared `W_budget=70`, `cap_bnd=16` (so `TBL_GET` charges `4 + 4·depth_16(16) = 8 U`). `B_hat = Work(E) = 20 + 4 + 6 + 8 + 4 + 4 + 4 + 4 = 54 U` (gateway + caller CONST + `OP_CALL` at `argc=1` + `TBL_GET` + fallback CONST + JMP + `OP_RET` at `retc=0` 4 U + caller HALT), `n = 7`, outcome `NO_SOLUTION`, tokens: `STATUS_NEG_EVEN_ROOT` outstanding from the initial pool and never consumed; `STATUS_LOOKUP_MISS` born at `C0:0`, consumed only after `C1` completes successfully, and absent from the terminal verdict. No new token types; ledger `reserved=54, charged=54, refunded=0`. With no successful fallback completion the miss token stays outstanding and the outcome is still `NO_SOLUTION` — Tier O never alters the outcome.
+Declared `W_budget=70`, `cap_bnd=16` (so `TBL_GET` charges `4 + 4·depth_16(16) = 8 U`). `t0` is the invocation's declared static `TABLE_MBTREE16` input (`cap_bnd=16`, `elem_bnd=255`, the ambient static-value precedent of `I3`), not an instruction, so it adds no charge; `a0` is the caller-supplied key `v0 = 0`. The listing declares two `OP_RET` exit blocks (`C0:1` hit exit, `C2:0` fallback exit); the measured miss path executes exactly one, so the declared figures are unchanged. `B_hat = Work(E) = 20 + 4 + 6 + 8 + 4 + 4 + 4 + 4 = 54 U` (gateway + caller CONST + `OP_CALL` at `argc=1` + `TBL_GET` + fallback CONST + JMP + `OP_RET` at `retc=0` 4 U + caller HALT), `n = 7`, outcome `NO_SOLUTION`, tokens: `STATUS_NEG_EVEN_ROOT` outstanding from the initial pool and never consumed; `STATUS_LOOKUP_MISS` born at `C0:0`, consumed only after `C1` completes successfully, and absent from the terminal verdict. No new token types; ledger `reserved=54, charged=54, refunded=0`. With no successful fallback completion the miss token stays outstanding and the outcome is still `NO_SOLUTION` — Tier O never alters the outcome.
 
 **`K6` — static rejections (no execution).**
 

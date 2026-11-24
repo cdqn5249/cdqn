@@ -391,7 +391,7 @@ the representation is algebraically exact.
 
 **Constructive `z_min` reduction [v1.4.1].** For a terminal-exact tuple `(q_z, r_z, z)` with `r_z = Q(0)`, the canonical minimal zoom is computed by a deterministic recurrence over the resolution schedule `κ` declared by the active DCC profile (§3.3). Let `ρ(z) = κ(z) / κ(z-1)`: `ρ = 2` for `Dyadic` (`κ(z) = 2^z`), `ρ = 10` for `Decimal` (`κ(z) = 10^z`), and `ρ = z+1` for `Factorial` (`κ(z) = (z+1)!`). While `z > 0` and `r_z = Q(0)`, divide `q_z` by `ρ(z)` as long as the division is exact (`q_z ← q_z / ρ(z)`), then set `z ← z-1` and repeat; stop when `r_z ≠ Q(0)`, when `z = 0`, or when the division is no longer exact. The resulting `z` is `z_min`; an exact zero (`q_z = Q(0)` and `r_z = Q(0)`) collapses directly to `z_min = 0`. Every step is a deterministic re-canonicalization billed to the calling operation and changes the representation only, never the value, so the hash after reduction is the unique zoom-invariant commitment of §4.3.
 
-**Zoom sign and QnIR lowering [v1.4.1].** The convention `δ_z = Q(1)/κ(z)` fixes `δ_z` as a **positive** scale subdivision at zoom `z`. QnIR's binary `ZOOM=4` word carries the exponent `z` with effective scale `2^-z`; for the `Dyadic` schedule the two agree exactly (`δ_z = 2^-z`), so a dyadic leaf lowers directly to a binary `ZOOM=4` word with the same exponent. `Decimal` and `Factorial` schedules are not powers of two: no exponent-only `ZOOM=4` word can denote their leaves, so those leaves lower to QnIR **exact integer / `TUPLE` rationals** (numerator and denominator as exact integer words, canonicalized under §3.6's binary radix), never to dyadic `ZOOM=4` words. This keeps the zoom sign convention uniform across schedules without asserting a false binary denotation.
+**Zoom sign and QnIR lowering [v1.4.1].** The convention `δ_z = Q(1)/κ(z)` fixes `δ_z` as a **positive** scale subdivision at zoom `z`. QnIR's binary `ZOOM=4` word denotes the exact dyadic quantity `m·2^z` (`docs/qnir_semantics.md` §2.3, frozen), while at the `Dyadic` schedule `κ(z) = 2^z` so a Qm leaf is `σ · q_{z_min} · 2^{-z_min}`. The two conventions therefore differ in sign, and a Qm dyadic leaf lowers to QnIR with the **negated** exponent `z_qnir = -z_min`: encoded as an `INT_NEG` magnitude word for `z_min > 0` and as `INT_POS 0` for `z_min = 0`, with odd mantissa `σ · q_{z_min}` — never `+z_min`. Under that negation `(σ · q_{z_min}) · 2^{z_qnir} = σ · q_{z_min} · 2^{-z_min}` reproduces the leaf exactly, so the lowering is sign-correct and lossless. `Decimal` and `Factorial` schedules are not powers of two: no exponent-only `ZOOM=4` word can denote their leaves, so those leaves lower to QnIR **exact integer / `TUPLE` rationals** (numerator and denominator as exact integer words, canonicalized under §3.6's binary radix), never to dyadic `ZOOM=4` words. This keeps the zoom sign convention uniform across schedules without asserting a false binary denotation.
 
 ---
 
@@ -600,11 +600,13 @@ $$I_z(A) = \begin{cases}
 The positional order relation is then:
 
 $$\mathrm{Rel}(A, B) = \begin{cases} 
-A \lt B & \mathrm{if} \; \sup I_z(A) \lt \inf I_z(B) \\
-A \gt B & \mathrm{if} \; \inf I_z(A) \gt \sup I_z(B) \\
+A \lt B & \mathrm{if} \; \sup I_z(A) \lt \inf I_z(B) \;\lor\; \big(\sup I_z(A) = \inf I_z(B) \;\land\; I_z(A) \cap I_z(B) = \emptyset\big) \\
+A \gt B & \mathrm{if} \; \inf I_z(A) \gt \sup I_z(B) \;\lor\; \big(\inf I_z(A) = \sup I_z(B) \;\land\; I_z(A) \cap I_z(B) = \emptyset\big) \\
 A \equiv B & \mathrm{if} \; \text{both residuals collapsed and } \mathcal{H}(A) = \mathcal{H}(B) \text{ after §4.3 normalization} \\
-\mathrm{Indeterminate} & \mathrm{if} \; I_z(A) \cap I_z(B) \neq \emptyset \;\text{and at least one residual is an unexpanded handle}
+\mathrm{Indeterminate} & \text{otherwise (the relation is total over all remaining pairs)}
 \end{cases}$$
+
+The strict-endpoint disjuncts close the shared-boundary gap: when `sup I_z(A) = inf I_z(B)` (or `inf I_z(A) = sup I_z(B)`) but the half-open/closed cells do not intersect, the ordering is decided rather than left undefined. Ordering is checked before equivalence, so an equal collapsed pair (whose point cells share their single endpoint) still reaches `A ≡ B`; the final `otherwise` branch covers every remaining pair, making `Rel` total without heuristic tie-breaking.
 
 When intervals overlap such that inequality cannot be constructively decided at zoom $$z$$, $$\mathrm{Qm}$$ forbids heuristic tie-breaking. It emits the deterministic receipt `ORDERING_INDETERMINATE_AT_ZOOM`. To resolve ordering, the caller must allocate additional compute budget to deepen zoom resolution ($$z \to z + \Delta z$$), which expands the handle residuals (§3.4 form 2) through the metered cascade of §4.1 — narrowing the enclosures by construction, never by estimation.
 
