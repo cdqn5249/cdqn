@@ -131,7 +131,24 @@ pub fn charge_of(profile: &Profile, tag: u64) -> u64 {
         20 | 27 => 10,
         21 | 28 => 16,
         30 | 31 => 6,
+        32..=36 => 4,          // §9.5: fixed-width bitwise
+        37 => hash_charge(64), // the declared default when no bound is carried
         _ => 4,
+    }
+}
+
+/// §9.5: the governed `Q_HASH` charge is a function of the declared byte
+/// bound, never of the runtime payload length (F1/F14).
+pub fn hash_charge(b_bnd: u64) -> u64 {
+    160 + 130 * (b_bnd.saturating_add(63) / 64)
+}
+
+/// Charge of one decoded instruction, using its declared `b_bnd` for tag 37.
+pub fn charge_ins(profile: &Profile, ins: &crate::insn::Insn) -> u64 {
+    if ins.tag == crate::insn::OP_HASH {
+        hash_charge(ins.addr.unwrap_or(64))
+    } else {
+        charge_of(profile, ins.tag)
     }
 }
 
@@ -141,7 +158,7 @@ fn block_charge_and_flow(blocks: &[Block], profile: &Profile, bid: usize) -> (u6
     let b = &blocks[bid];
     let mut total = 0u64;
     for (k, ins) in b.insns.iter().enumerate() {
-        total += charge_of(profile, ins.tag);
+        total += charge_ins(profile, ins);
         match ins.tag {
             OP_BR => {
                 return (
@@ -264,7 +281,7 @@ fn in_block_continue(ctx: &mut Ctx, bid: usize, from_idx: usize, rem: &[u32]) ->
     let mut total = 0u64;
     for k in from_idx..b.insns.len() {
         let ins = &b.insns[k];
-        total += charge_of(ctx.profile, ins.tag);
+        total += charge_ins(ctx.profile, ins);
         match ins.tag {
             OP_HALT => return Some(total),
             OP_JMP => {
@@ -349,6 +366,352 @@ pub fn b_hat(blocks: &[Block], profile: &Profile) -> Option<u64> {
         memo: HashMap::new(),
     };
     val(&mut ctx, 0, &entry_rem).map(|v| profile.gateway + v)
+}
+
+// ---------------------------------------------------------------------------
+// §9.4: SCC-additive admission surrogate (qir-enc-5). Tarjan condensation,
+// exit-aware per-SCC trip-ceiling DP, condensation-DAG max-path aggregation.
+// The value is identical to the global-product surrogate on every globally
+// admitted graph; only the structural state count is widened.
+// ---------------------------------------------------------------------------
+
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+enum Exit {
+    Halt,
+    To(usize),
+}
+type Exits = HashMap<Exit, u64>;
+
+#[derive(Clone, Debug)]
+enum SccTerm {
+    Halt,
+    Jmp(usize),
+    Branch(usize, usize),
+    Cload(usize, usize),
+}
+
+fn scc_flow(blocks: &[Block], profile: &Profile, bid: usize) -> (u64, SccTerm) {
+    let b = &blocks[bid];
+    let mut total = 0u64;
+    for (k, i) in b.insns.iter().enumerate() {
+        total += charge_ins(profile, i);
+        match i.tag {
+            crate::insn::OP_BR => {
+                return (total, SccTerm::Branch(i.targets[0] as usize, i.targets[1] as usize))
+            }
+            crate::insn::OP_JMP => return (total, SccTerm::Jmp(i.targets[0] as usize)),
+            crate::insn::OP_CLOAD => return (total, SccTerm::Cload(k, i.targets[0] as usize)),
+            crate::insn::OP_HALT | 31 => return (total, SccTerm::Halt),
+            _ => {}
+        }
+    }
+    unreachable!("block without terminator")
+}
+
+/// Tarjan SCCs, deterministic by ascending block id, renumbered so that
+/// component order is topological by first member. O(|V|+|E|).
+pub fn tarjan(n: usize, edges: &[(usize, usize)]) -> Vec<usize> {
+    let mut adj = vec![Vec::new(); n];
+    for &(s, d) in edges {
+        if s < n && d < n {
+            adj[s].push(d);
+        }
+    }
+    for a in &mut adj {
+        a.sort_unstable();
+        a.dedup();
+    }
+    let mut index = 0usize;
+    let mut ids = vec![usize::MAX; n];
+    let mut low = vec![0usize; n];
+    let mut on = vec![false; n];
+    let mut stack = Vec::new();
+    let mut comp = vec![usize::MAX; n];
+    let mut ncomp = 0usize;
+    fn strong(
+        v: usize,
+        adj: &[Vec<usize>],
+        index: &mut usize,
+        ids: &mut [usize],
+        low: &mut [usize],
+        on: &mut [bool],
+        stack: &mut Vec<usize>,
+        comp: &mut [usize],
+        ncomp: &mut usize,
+    ) {
+        ids[v] = *index;
+        low[v] = *index;
+        *index += 1;
+        stack.push(v);
+        on[v] = true;
+        for &w in &adj[v] {
+            if ids[w] == usize::MAX {
+                strong(w, adj, index, ids, low, on, stack, comp, ncomp);
+                low[v] = low[v].min(low[w]);
+            } else if on[w] {
+                low[v] = low[v].min(ids[w]);
+            }
+        }
+        if low[v] == ids[v] {
+            loop {
+                let w = stack.pop().unwrap();
+                on[w] = false;
+                comp[w] = *ncomp;
+                if w == v {
+                    break;
+                }
+            }
+            *ncomp += 1;
+        }
+    }
+    for v in 0..n {
+        if ids[v] == usize::MAX {
+            strong(v, &adj, &mut index, &mut ids, &mut low, &mut on, &mut stack, &mut comp, &mut ncomp);
+        }
+    }
+    let mut min_member = vec![usize::MAX; ncomp];
+    for (v, &c) in comp.iter().enumerate() {
+        min_member[c] = min_member[c].min(v);
+    }
+    let mut order: Vec<usize> = (0..ncomp).collect();
+    order.sort_by_key(|&c| min_member[c]);
+    let mut remap = vec![0usize; ncomp];
+    for (new, &old) in order.iter().enumerate() {
+        remap[old] = new;
+    }
+    comp.into_iter().map(|c| remap[c]).collect()
+}
+
+fn join_exits(a: Option<Exits>, b: Option<Exits>) -> Option<Exits> {
+    match (a, b) {
+        (Some(mut x), Some(y)) => {
+            for (k, v) in y {
+                x.entry(k).and_modify(|e| *e = (*e).max(v)).or_insert(v);
+            }
+            Some(x)
+        }
+        (Some(x), None) => Some(x),
+        (None, Some(y)) => Some(y),
+        (None, None) => None,
+    }
+}
+
+fn add_prefix(m: Exits, p: u64) -> Exits {
+    m.into_iter().map(|(k, v)| (k, v + p)).collect()
+}
+
+fn singleton(k: Exit, v: u64) -> Exits {
+    let mut m = HashMap::new();
+    m.insert(k, v);
+    m
+}
+
+struct Local<'a> {
+    blocks: &'a [Block],
+    profile: &'a Profile,
+    comp: &'a [usize],
+    target: usize,
+    be: HashMap<(usize, usize), usize>,
+    memo: HashMap<(usize, Vec<u32>), Option<Exits>>,
+}
+
+impl<'a> Local<'a> {
+    fn in_scc(&self, bid: usize) -> bool {
+        self.comp[bid] == self.target
+    }
+    fn step(&self, src: usize, dst: usize, rem: &[u32]) -> Option<Vec<u32>> {
+        match self.be.get(&(src, dst)) {
+            None => Some(rem.to_vec()),
+            Some(&i) => {
+                if rem[i] == 0 {
+                    None
+                } else {
+                    let mut r = rem.to_vec();
+                    r[i] -= 1;
+                    Some(r)
+                }
+            }
+        }
+    }
+    fn val(&mut self, bid: usize, rem: &[u32]) -> Option<Exits> {
+        let key = (bid, rem.to_vec());
+        if let Some(v) = self.memo.get(&key) {
+            return v.clone();
+        }
+        self.memo.insert(key.clone(), None);
+        let (total, term) = scc_flow(self.blocks, self.profile, bid);
+        let out = match term {
+            SccTerm::Halt => Some(singleton(Exit::Halt, total)),
+            SccTerm::Jmp(t) => {
+                if self.in_scc(t) {
+                    self.step(bid, t, rem).and_then(|r| self.val(t, &r)).map(|m| add_prefix(m, total))
+                } else {
+                    Some(singleton(Exit::To(self.comp[t]), total))
+                }
+            }
+            SccTerm::Branch(t, f) => {
+                let a = if self.in_scc(t) {
+                    self.step(bid, t, rem).and_then(|r| self.val(t, &r)).map(|m| add_prefix(m, total))
+                } else {
+                    Some(singleton(Exit::To(self.comp[t]), total))
+                };
+                let b = if self.in_scc(f) {
+                    self.step(bid, f, rem).and_then(|r| self.val(f, &r)).map(|m| add_prefix(m, total))
+                } else {
+                    Some(singleton(Exit::To(self.comp[f]), total))
+                };
+                join_exits(a, b)
+            }
+            SccTerm::Cload(k, f) => {
+                let rest = self.cont(bid, k + 1, rem).map(|m| add_prefix(m, total));
+                let miss = if self.in_scc(f) {
+                    self.step(bid, f, rem).and_then(|r| self.val(f, &r)).map(|m| add_prefix(m, total))
+                } else {
+                    Some(singleton(Exit::To(self.comp[f]), total))
+                };
+                join_exits(rest, miss)
+            }
+        };
+        self.memo.insert(key, out.clone());
+        out
+    }
+    fn cont(&mut self, bid: usize, from: usize, rem: &[u32]) -> Option<Exits> {
+        let mut total = 0u64;
+        for k in from..self.blocks[bid].insns.len() {
+            let i = &self.blocks[bid].insns[k];
+            total += charge_ins(self.profile, i);
+            match i.tag {
+                crate::insn::OP_HALT => return Some(singleton(Exit::Halt, total)),
+                crate::insn::OP_JMP => {
+                    let t = i.targets[0] as usize;
+                    return if self.in_scc(t) {
+                        self.step(bid, t, rem).and_then(|r| self.val(t, &r)).map(|m| add_prefix(m, total))
+                    } else {
+                        Some(singleton(Exit::To(self.comp[t]), total))
+                    };
+                }
+                crate::insn::OP_BR => {
+                    let t = i.targets[0] as usize;
+                    let f = i.targets[1] as usize;
+                    let a = if self.in_scc(t) {
+                        self.step(bid, t, rem).and_then(|r| self.val(t, &r)).map(|m| add_prefix(m, total))
+                    } else {
+                        Some(singleton(Exit::To(self.comp[t]), total))
+                    };
+                    let b = if self.in_scc(f) {
+                        self.step(bid, f, rem).and_then(|r| self.val(f, &r)).map(|m| add_prefix(m, total))
+                    } else {
+                        Some(singleton(Exit::To(self.comp[f]), total))
+                    };
+                    return join_exits(a, b);
+                }
+                crate::insn::OP_CLOAD => {
+                    let rest = self.cont(bid, k + 1, rem).map(|m| add_prefix(m, total));
+                    let t = i.targets[0] as usize;
+                    let miss = if self.in_scc(t) {
+                        self.step(bid, t, rem).and_then(|r| self.val(t, &r)).map(|m| add_prefix(m, total))
+                    } else {
+                        Some(singleton(Exit::To(self.comp[t]), total))
+                    };
+                    return join_exits(rest, miss);
+                }
+                crate::insn::OP_HALT | 31 => return Some(singleton(Exit::Halt, total)),
+                _ => {}
+            }
+        }
+        unreachable!("block without terminator")
+    }
+}
+
+/// §9.4 structural state count: Σ_i |SCC_i|·(trip+1)^|BE_i|.
+pub fn scc_dp_states(blocks: &[Block], profile: &Profile) -> u128 {
+    let n = blocks.len();
+    if n == 0 {
+        return 0;
+    }
+    let edges = block_graph(blocks);
+    let bes = back_edges(n, &edges);
+    let comp = tarjan(n, &edges);
+    let nc = comp.iter().copied().max().unwrap_or(0) + 1;
+    (0..nc)
+        .map(|c| {
+            let members = comp.iter().filter(|&&x| x == c).count() as u128;
+            let k = bes.iter().filter(|(s, d)| comp[*s] == c && comp[*d] == c).count() as u32;
+            ((profile.trip_ceiling as u128) + 1)
+                .checked_pow(k)
+                .map(|x| members * x)
+                .unwrap_or(u128::MAX)
+        })
+        .sum()
+}
+
+/// The SCC-additive admission bound of §9.4; `None` is a refusal.
+pub fn bhat_scc(blocks: &[Block], profile: &Profile) -> Option<u64> {
+    let n = blocks.len();
+    if n == 0 || n as u128 > profile.s_max as u128 {
+        return None;
+    }
+    let edges = block_graph(blocks);
+    let bes = back_edges(n, &edges);
+    if scc_dp_states(blocks, profile) > profile.s_max as u128 {
+        return None;
+    }
+    let comp = tarjan(n, &edges);
+    let nc = comp.iter().copied().max().unwrap_or(0) + 1;
+    let local_be: Vec<Vec<(usize, usize)>> = (0..nc)
+        .map(|c| bes.iter().copied().filter(|(s, d)| comp[*s] == c && comp[*d] == c).collect())
+        .collect();
+    let mut cross_in: Vec<Vec<usize>> = vec![Vec::new(); nc];
+    for &(s, d) in &edges {
+        if comp[s] != comp[d] {
+            cross_in[comp[d]].push(s);
+        }
+    }
+    let mut local: Vec<Option<Exits>> = vec![None; nc];
+    for c in 0..nc {
+        let entries: Vec<usize> = if comp[0] == c {
+            vec![0]
+        } else {
+            let mut v: Vec<usize> = (0..n).filter(|&b| comp[b] == c && cross_in[c].contains(&b)).collect();
+            if v.is_empty() {
+                v.push((0..n).find(|&b| comp[b] == c).unwrap());
+            }
+            v
+        };
+        let be_index: HashMap<(usize, usize), usize> =
+            local_be[c].iter().cloned().enumerate().map(|(i, e)| (e, i)).collect();
+        let mut ctx = Local {
+            blocks,
+            profile,
+            comp: &comp,
+            target: c,
+            be: be_index,
+            memo: HashMap::new(),
+        };
+        let rem = vec![profile.trip_ceiling; local_be[c].len()];
+        let mut best: Option<Exits> = None;
+        for b in entries {
+            best = join_exits(best, ctx.val(b, &rem));
+        }
+        local[c] = best;
+    }
+    // Condensation is a DAG; min-member renumbering is topological.
+    let mut best = vec![None::<u64>; nc];
+    for c in (0..nc).rev() {
+        let Some(m) = &local[c] else { continue };
+        let mut value = None::<u64>;
+        for (exit, charge) in m {
+            let tail = match exit {
+                Exit::Halt => Some(0u64),
+                Exit::To(d) => best[*d],
+            };
+            if let Some(t) = tail {
+                value = Some(value.map_or(charge + t, |v: u64| v.max(charge + t)));
+            }
+        }
+        best[c] = value;
+    }
+    best[comp[0]].map(|v| profile.gateway + v)
 }
 
 #[cfg(test)]

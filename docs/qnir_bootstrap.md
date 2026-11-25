@@ -62,7 +62,7 @@ All five use §2.6's uniform trailing `ext` word. `ref` is one word, `bnd` is th
 | `35` | `BSHL` | `35, ref(a), ref(s), bnd(w), ext` | `(a << s) & (2^w - 1)` |
 | `36` | `BSHR` | `36, ref(a), ref(s), bnd(w), ext` | logical `a >> s` over `w` bits |
 
-**Pre-dispatch rejection.** Before any effect posts, the validator checks (a) `bnd` is a canonical `INT_POS` whose value is in `1..=2^w-1` for the declared `w` and (b) for `BAND`/`BOR`/`BXOR`, both operand values are non-negative and `< 2^w`; for `BSHL`/`BSHR`, the shift amount `s` satisfies `0 <= s < w` and `a` is non-negative and `< 2^w`. A negative operand, an operand `>= 2^w`, `s >= w`, or an invalid `bnd` births `EXPRESSION_TOO_COMPLEX` fatally at that transition (§2.5); the instruction posts zero, no value instance is bound, and no existing instruction or golden byte is re-versioned. No new token is born. The four choices of `w` are the **closed** width set: `w` outside that set is a static illegality at encode time, not a runtime branch.
+**Pre-dispatch rejection.** Before any effect posts, the validator checks (a) `bnd` is a canonical `INT_POS` whose value is in `1..=2^w-1` for the declared `w` and (b) for `BAND`/`BOR`/`BXOR`, both operand values are non-negative and `< 2^w`; for `BSHL`/`BSHR`, the shift amount `s` satisfies `0 <= s < w` and `a` is non-negative and `< 2^w`. A negative operand, an operand `>= 2^w`, `s >= w`, or an invalid `bnd` births `EXPRESSION_TOO_COMPLEX` fatally at that transition (§2.5); the rejecting transition is counted in `n` but posts **`0 U`** (§3.1), no value instance is bound, and no existing instruction or golden byte is re-versioned. No new token is born. The four choices of `w` are the **closed** width set: `w` outside that set is a static illegality at encode time, not a runtime branch.
 
 ### 9.3 `Q_HASH` (Tag `37`)
 
@@ -70,9 +70,9 @@ All five use §2.6's uniform trailing `ext` word. `ref` is one word, `bnd` is th
 |---:|---|---|---|
 | `37` | `Q_HASH` | `37, ref(v), cnt(b_bnd), ext` | 4-word `TUPLE` of the SHA-256 digest of `v`'s canonical §2.6 bytes |
 
-`b_bnd` is a declared immediate carried in one `cnt` word with `1 <= b_bnd <= max_hash_bytes = 65536`. The hash input is the **exact canonical §2.6 encoding bytes** of the referenced value `v` (not its rendered text, not a digest of a digest, and not a header-only comparison). `Q_HASH` computes `SHA-256(canonical_bytes(v))` and binds a 4-element `TUPLE` of 64-bit `INT_POS` big-endian words `(w0, w1, w2, w3)` — the identical layout used by `ARR_ROOT` (tag `22`) and `TBL_ROOT` (tag `29`, §7.3.1), each `w_i` the corresponding 4-byte big-endian digest chunk. The algorithm tag **`sha-256`** is part of the emitted identity (`sha-256:<hex>`); a bare un-tagged digest is not admissible across a gateway under the migration-witnessing rule of `docs/simemp.md` §4.3.
+`b_bnd` is a declared immediate carried in one `cnt` word with `1 <= b_bnd <= max_hash_bytes = 65536`. The hash input is the **exact canonical §2.6 encoding bytes** of the referenced value `v` (not its rendered text, not a digest of a digest, and not a header-only comparison). `Q_HASH` computes `SHA-256(canonical_bytes(v))` and binds a 4-element `TUPLE` of 64-bit `INT_POS` big-endian words `(w0, w1, w2, w3)` — the identical layout used by `ARR_ROOT` (tag `22`) and `TBL_ROOT` (tag `29`, §7.3.1), each `w_i` the corresponding 8-byte big-endian digest chunk. The algorithm tag **`sha-256`** is part of the emitted identity (`sha-256:<hex>`); a bare un-tagged digest is not admissible across a gateway under the migration-witnessing rule of `docs/simemp.md` §4.3.
 
-If `canonical_bytes(v).len() > b_bnd`, the operation rejects **in-op** with `EXPRESSION_TOO_COMPLEX` at its own transition: it posts zero, binds no tuple, and leaves the escrow intact for terminal settlement. The check uses the declared bound, never a runtime length in a charge formula (F1/F14). Under F6 and `QO-24`, `Q_HASH` is solely an identity/commitment primitive: value equality remains full canonical-encoding comparison with `qir-artifact-cmp-1` collision buckets, never digest comparison.
+If `canonical_bytes(v).len() > b_bnd`, the operation rejects **pre-dispatch within its own transition** with `EXPRESSION_TOO_COMPLEX`: that transition is counted in `n` but posts **`0 U`** (§3.1), binds no tuple, and leaves the unspent escrow to be refunded at terminal settlement (§3.3). The check uses the declared bound, never a runtime length in a charge formula (F1/F14). Under F6 and `QO-24`, `Q_HASH` is solely an identity/commitment primitive: value equality remains full canonical-encoding comparison with `qir-artifact-cmp-1` collision buckets, never digest comparison.
 
 ### 9.4 SCC-Additive `B_hat` Admission
 
@@ -95,13 +95,13 @@ An overflow or a sum above `S_max` refuses before any DP table is allocated; no 
 The profile declares: `gateway = 20 U`, `trip_ceiling = 1`, `S_max = 4096`, `C_max = 8`, `F_max = 64`, `max_cap = 65536`, `max_batch = 64`, and `max_hash_bytes = 65536`. Core opcodes keep their §3.2 `4 U` class; container opcodes keep their `qir-prof-ext-containers-1` charges; call opcodes keep their `qir-prof-ext-calls-1` charges. The new charges are site-stable, positive, and functions of declared data only:
 
 - **Tags `32`–`36` (bitwise): `4 U` each.** This preserves the core minimum positive base of `docs/qnir_accounting.md` §3.2 while replacing a measured `388`–`418 U` + `24,576 B` arithmetic emulation with a `64 B` (or `72 B` for an immediate-shift candidate) native form — a ~100× work reduction on the recorded host. No operand value or runtime width enters the charge; the declared `w` selects admissibility, not price.
-- **Tag `37` (`Q_HASH`): `160 + 130 · ceil(b_bnd / 64)` U.** Calibrated under F14 from the Step-6.3a measurements (`182/329/448/717/1211/2210 U` at `b_bnd = 32/64/128/256/512/1024`, fit intercept `160.3 U`, slope `129.2 U` per 64-byte block). The argument is the **declared** `b_bnd`, never the runtime byte length; a flat `4 U` hash charge is prohibited as under-billing. The digest's emitted identity is `sha-256:<hex>`.
+- **Tag `37` (`Q_HASH`): `160 + 130 * ceil(b_bnd / 64)` U.** Calibrated under F14 from the Step-6.3a measurements (`182/329/448/717/1211/2210 U` at `b_bnd = 32/64/128/256/512/1024`, fit intercept `160.3 U`, slope `129.2 U` per 64-byte block). The argument is the **declared** `b_bnd`, never the runtime byte length; a flat `4 U` hash charge is prohibited as under-billing. The digest's emitted identity is `sha-256:<hex>`.
 
 `W_worst` for BOC Stage 2 is computed from these declared charges, never from the measured nanosecond samples. Portability (`P_gap`) remains UNRESOLVED until a required profile set `R` is declared with single-host-independent evidence (Step-6.3a Stage-2 record).
 
 ### 9.6 Hand-Derived Fixtures `B1`–`B6` (Share 2 `--fixture B`)
 
-The fixtures below are **test-only**, outside the 84-vector declared seed and the `C1`–`C6`/`K1`–`K6` sets; they require no edit to `docs/qnir_goldens.md`. Listing notation is `block:index MNEMONIC operands -> bound value id`. `B_hat` is the declared admission surrogate, `Work(E)` the exact charged path, `n` the executed transitions including a fatal or static rejection record. All amounts are U, and `reserved = B_hat = charged + refunded` throughout.
+The fixtures below are **test-only**, outside the 84-vector declared seed and the `C1`–`C6`/`K1`–`K6` sets; they require no edit to `docs/qnir_goldens.md`. Listing notation is `block:index MNEMONIC operands -> bound value id`. `B_hat` is the declared admission surrogate, `Work(E)` the exact charged path, `n` the executed transitions including a fatal rejection transition (a static rejection has `n = 0`). Under §3.1 a fatal rejecting instruction posts **`0 U`**: it is counted in `n` but contributes nothing to `Work(E)`, and the unspent reserve is refunded at terminal settlement, so `reserved = B_hat = charged + refunded` throughout. All amounts are U.
 
 **`B1` — `u64` pack/unpack round-trip with all five bitwise ops.**
 
@@ -157,11 +157,11 @@ with exact SHA-256
 1fab775418d8ed7a71155cd2d0afb0998718f32b4bd55271eb24daa9bbe20eff
 ```
 
-bound as the 4-word `TUPLE` `(1fab7754, 18d8ed7a, 71155cd2, d0afb099)`.
+bound as the 4-word `TUPLE` of full 64-bit `INT_POS` words `(0x1fab775418d8ed7a, 0x71155cd2d0afb099, 0x8718f32b4bd55271, 0xeb24daa9bbe20eff)`, matching the §7.3.1 `ARR_ROOT`/`TBL_ROOT` layout.
 
-`B3`: `Q_HASH` charge `160 + 130·ceil(64/64) = 290 U`; `B_hat = 318` (20 + CONST 4 + 290 + HALT 4), `Work(E) = 318`, `n = 4`, outcome `SUCCESS`, tokens none, `reserved=318, charged=318, refunded=0`.
+`B3`: `Q_HASH` charge `160 + 130·ceil(64/64) = 290 U`; `B_hat = 318` (20 + CONST 4 + 290 + HALT 4), `Work(E) = 318`, `n = 3` (CONST, `Q_HASH`, HALT), outcome `SUCCESS`, tokens none, `reserved=318, charged=318, refunded=0`.
 
-`B3b`: `B_hat = 318` (the declared bound is unchanged), `Work(E) = 24` (20 + CONST 4; `Q_HASH` posts zero), `n = 3`, outcome `EXPRESSION_TOO_COMPLEX`, no tuple bound, `reserved=318, charged=24, refunded=294`.
+`B3b`: `B_hat = 318` (the declared bound is unchanged), `Work(E) = 24` (20 + CONST 4; `Q_HASH` posts zero), `n = 2` (CONST, rejecting `Q_HASH`; HALT is never reached), outcome `EXPRESSION_TOO_COMPLEX`, no tuple bound, `reserved=318, charged=24, refunded=294`.
 
 **`B4` — `k = 12` sequential loop sites, `trip = 1`.**
 
@@ -192,13 +192,13 @@ B6b  BAND with bnd encoding w = 128          -> REJECTION_BY_GATEWAY (w not in c
 B6c  Q_HASH with b_bnd = 65537               -> REJECTION_BY_GATEWAY (> max_hash_bytes)
 ```
 
-Each: `B_hat = null`, `Work(E) = 0`, `n = 1`, no postings (the escrow never opens), outcome `REJECTION_BY_GATEWAY`, zero value bindings, no new token type.
+Each: `B_hat = null`, `Work(E) = 0`, `n = 0`, no postings, no rejection transition (the escrow never opens), outcome `REJECTION_BY_GATEWAY`, zero value bindings, no new token type — the `K6` static-rejection shape of §8.6.
 
 ### 9.7 Acceptance Condition and Non-Discharge Register
 
 Share 1 is **DISCHARGED** when this section is committed: the extension version pair is declared, preservation and the `V.encoding` gate are fixed, the six opcode word grammars and their rejection surfaces are closed, the SCC-additive admission rule with its pre-DP gate is declared with 51/51 parity evidence, the static cost domain is fixed, and `B1`–`B6` are hand-derived before implementation. The register remains open:
 
-- **Share 2 — artifact/validator share (`--fixture B`)**: **FUTURE**. Both artifacts must accept `qir-enc-5`/`qir-prof-ext-bootstrap-1`, enforce tag `32`–`37` version gating, reproduce the byte-identical `B1`–`B6` fixture block and every §9.6 check, and publish the fixture digest. No implementation claim is made here.
+- **Share 2 — artifact/validator share (`--fixture B`)**: **DISCHARGED**. Both artifacts accept `qir-enc-5`/`qir-prof-ext-bootstrap-1`, enforce tag `32`–`37` version gating, and reproduce the byte-identical `B1`–`B6` fixture block (1,209 bytes, SHA-256[:16] `b6e8626488aa936a`) and every §9.6 check, including the `B3` digest and the `B4` global-refusal/SCC-admission pair. `cargo test --offline` is 23/23 in `src/qnir/` with no regression in the five existing modes. The verification record is [`docs/logs/qnir/step6-3a-bootstrap-artifact-share.md`](https://github.com/cdqn5249/cdqn/blob/main/docs/logs/qnir/step6-3a-bootstrap-artifact-share.md).
 - **Step 6.3b — `OP_SATURATE` / `QO-28`**: **FUTURE and explicitly deferred**. Per `docs/qexpr.md` §4.6.2 it requires a pinned deterministic rule schedule, `K_max`, `N_max`, `D_max`, a polynomial-time greedy extractor with hash tie-breaking, and a **new versioned artifact** carrying input commitments, schedule, ceilings, extractor generation, the §2.2 hashing-generation tag, and the comparator version. `OP_BYPASS` canonical contraction and fixed-width saturating arithmetic remain separate candidates. This share allocates neither opcode tag `32`–`37` nor any envelope key to saturation.
 - **Remaining Step-6 extensions**: Fork–join and Road proofs, FUTURE with their own evidence.
 - **`Q1` / `Q3` / `Q6`**: `QUEUED` / `QUEUED` / `QUEUED`; no term include in this section uses an unregistered slug. The only term includes are `boc-policy`, `computational-consistency`, `licensed-work`, and `receipt`, all already registered in `docs/_data/glossary/`.

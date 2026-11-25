@@ -27,6 +27,7 @@
 //! never conformance.
 
 mod bhat;
+mod bootstrap;
 mod cbor;
 mod calls;
 mod containers;
@@ -2050,8 +2051,8 @@ fn eval_cbor(path: &str, budget: u64) {
         Ok(i) => i,
         Err(e) => {
             println!("ENVELOPE {path} ({} bytes) decode: FAIL", bytes.len());
-            println!("CHANNEL_A (E_WIRE_MISMATCH, {}, envelope, expected a strict qir-enc-4 envelope, got {}, fix the emitter, receipt:qnir/--eval-cbor)", e, e);
-            println!("qir-verbalizer-1: E_WIRE_MISMATCH at {path}:1 — envelope decode; expected a strict qir-enc-4 envelope, got {e}; remedy fix the emitter");
+            println!("CHANNEL_A (E_WIRE_MISMATCH, {}, envelope, expected a strict qir-enc-4/5 envelope, got {}, fix the emitter, receipt:qnir/--eval-cbor)", e, e);
+            println!("qir-verbalizer-1: E_WIRE_MISMATCH at {path}:1 — envelope decode; expected a strict qir-enc-4/5 envelope, got {e}; remedy fix the emitter");
             std::process::exit(1);
         }
     };
@@ -2109,14 +2110,14 @@ fn main() {
     }
     let fixture_id = if args.len() == 4
         && args[2] == "--fixture"
-        && (args[3] == "F27" || args[3] == "F6" || args[3] == "C" || args[3] == "K")
+        && (args[3] == "F27" || args[3] == "F6" || args[3] == "C" || args[3] == "K" || args[3] == "B")
     {
         Some(args[3].clone())
     } else {
         None
     };
     if args.len() != 2 && fixture_id.is_none() {
-        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C|--fixture K]");
+        eprintln!("usage: qnir <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C|--fixture K|--fixture B]");
         std::process::exit(2);
     }
     let path = &args[1];
@@ -2199,6 +2200,18 @@ fn main() {
             }
             if !ok {
                 rep.fail("fixture K: a declared §8.6 expectation diverged".to_string());
+            }
+        } else if fid == "B" {
+            let spec = std::path::PathBuf::from(&path)
+                .parent()
+                .unwrap_or_else(|| std::path::Path::new("."))
+                .join("qnir_bootstrap.md");
+            let (lines, ok) = bootstrap::fixture_b_lines(&spec.to_string_lossy());
+            for l in lines {
+                rep.say(l);
+            }
+            if !ok {
+                rep.fail("fixture B: a declared §9.6 expectation diverged".to_string());
             }
         } else {
             suite_fixture(&md, fid, &mut rep);
@@ -2460,5 +2473,79 @@ mod eval_cbor_tests {
         assert_eq!(outcome_name(run.outcome), "SUCCESS");
         assert_eq!(run.acc.charged, 28);
         assert_eq!(run.records.len(), 2);
+    }
+
+    fn envelope_boot(stream_words: &[u64], insn_count: u64) -> Vec<u8> {
+        let words: Vec<u64> = [vec![0, 0, insn_count], stream_words.to_vec()].concat();
+        let entries = vec![
+            (Cbor::UInt(0), Cbor::Bytes(b"QnIR-Intent".to_vec())),
+            (Cbor::UInt(1), Cbor::Text("v0.3.0-draft.8.4".into())),
+            (Cbor::UInt(2), Cbor::Text("qir-enc-5".into())),
+            (Cbor::UInt(3), Cbor::Text("qir-prof-ext-bootstrap-1".into())),
+            (Cbor::UInt(4), Cbor::Array(Vec::new())),
+            (Cbor::UInt(5), Cbor::UInt(1)),
+            (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(&words))),
+            (Cbor::UInt(7), Cbor::Array(Vec::new())),
+            (Cbor::UInt(8), Cbor::Array(Vec::new())),
+        ];
+        cbor::encode(&Cbor::Map(entries))
+    }
+
+    #[test]
+    fn bootstrap_tags_decode_and_execute_roundtrip() {
+        // B1: CONST 165/15/4, BAND, BSHR, BSHL, BOR, BXOR, HALT.
+        let words = vec![
+            1, 1, 1, 165, 1, 1, 1, 255, 0,
+            1, 1, 1, 15, 1, 1, 1, 255, 0,
+            1, 1, 1, 4, 1, 1, 1, 64, 0,
+            32, 0, 1, 1, 1, 1, 64, 0,
+            36, 0, 2, 1, 1, 1, 64, 0,
+            35, 1, 2, 1, 1, 1, 64, 0,
+            33, 2, 3, 1, 1, 1, 64, 0,
+            34, 4, 0, 1, 1, 1, 64, 0,
+            16, 0,
+        ];
+        let bytes = envelope_boot(&words, 9);
+        let i = insn::decode_envelope(&bytes).unwrap();
+        assert_eq!(i.enc, "qir-enc-5");
+        assert!(i.blocks[0].insns.iter().any(|x| x.tag == 32));
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "SUCCESS");
+        assert_eq!(run.records.len(), 9);
+        assert_eq!(run.acc.charged, 56);
+        assert_eq!(run.acc.reserved, 56);
+    }
+
+    #[test]
+    fn qhash_tuple_and_byte_bound_rejection() {
+        // CONST 5, Q_HASH b_bnd=64, HALT.
+        let ok = envelope_boot(
+            &[1, 1, 1, 5, 1, 1, 1, 255, 0, 37, 0, 64, 0, 16, 0],
+            3,
+        );
+        let run = run_vector(&ok, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "SUCCESS");
+        assert_eq!(run.acc.charged, 318);
+        assert_eq!(run.records.len(), 3);
+        assert_eq!(run.bh, Some(318));
+
+        // B3b: b_bnd=16 rejects the 24-byte canonical value in-op, zero post.
+        let bad = envelope_boot(&[1, 1, 1, 5, 1, 1, 1, 255, 0, 37, 0, 16, 0, 16, 0], 3);
+        let run = run_vector(&bad, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "EXPRESSION_TOO_COMPLEX");
+        assert_eq!(run.acc.charged, 24);
+        assert_eq!(run.records.len(), 2);
+        assert_eq!(run.acc.refunded, 318 - 24);
+    }
+
+    #[test]
+    fn qir_enc4_rejects_bootstrap_tags() {
+        // BAND under qir-enc-4/3/2 is an unknown opcode tag.
+        let w = [32, 0, 1, 1, 1, 64, 0];
+        assert!(insn::decode_envelope(&envelope_v("qir-enc-4", 1, &w, false)).is_err());
+        assert!(insn::decode_envelope(&envelope_v("qir-enc-3", 1, &w, false)).is_err());
+        assert!(insn::decode_envelope(&envelope_v("qir-enc-2", 1, &w, false)).is_err());
+        // Q_HASH under qir-enc-4 is likewise rejected.
+        assert!(insn::decode_envelope(&envelope_v("qir-enc-4", 1, &[37, 0, 64, 0], false)).is_err());
     }
 }

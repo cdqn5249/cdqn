@@ -127,6 +127,9 @@ enum Exec {
     // qir-enc-4 call surface (§8.2–§8.4).
     Call { callee: u64, argc: u64, args: Vec<u64>, retc: u64, rets: Vec<i128> },
     Ret { refs: Vec<u64> },
+    // qir-enc-5 bootstrap surface (§9.2–§9.3).
+    Bitwise { tag: u64, a: u64, b: u64, w: u64 },
+    Hash { a: u64, b_bnd: u64 },
 }
 
 #[derive(Clone, Debug)]
@@ -255,6 +258,7 @@ fn make_sids(blocks: &[ExecBlock], initial: usize) -> Vec<Vec<Option<u64>>> {
                     | Exec::ArrRoot { .. } | Exec::TblNew { .. } | Exec::TblSet { .. }
                     | Exec::TblBatch { .. } | Exec::TblLen { .. } | Exec::TblGet { .. }
                     | Exec::TblAt { .. } | Exec::TblRoot { .. } | Exec::Call { .. }
+                    | Exec::Bitwise { .. } | Exec::Hash { .. }
             );
             if defining {
                 row.push(Some(counter as u64));
@@ -469,6 +473,19 @@ fn decode_exec_stream(stream: &[u8], max_tag: u64) -> Result<Vec<ExecBlock>, Str
                     let mut refs = Vec::with_capacity(retc as usize);
                     for _ in 0..retc { refs.push(r.next("instruction")?); }
                     Exec::Ret { refs }
+                }
+                32..=36 => {
+                    // §9.2: ref, ref, bnd(w), ext.
+                    let a = r.next("instruction")?;
+                    let b = r.next("instruction")?;
+                    let w = dec_bnd(&mut r)? as u64;
+                    Exec::Bitwise { tag, a, b, w }
+                }
+                37 => {
+                    // §9.3: ref, cnt(b_bnd), ext.
+                    let a = r.next("instruction")?;
+                    let b_bnd = r.next("instruction")?;
+                    Exec::Hash { a, b_bnd }
                 }
                 _ => {
                     return Err(format!(
@@ -819,6 +836,7 @@ impl<'a> Machine<'a> {
         b_inject: Option<u64>,
     ) -> Result<Self, String> {
         let max_tag = match intent.enc.as_str() {
+            "qir-enc-5" => 37,
             "qir-enc-4" => 31,
             "qir-enc-3" => 29,
             _ => 16,
@@ -840,7 +858,12 @@ impl<'a> Machine<'a> {
                     let arity = arity_words / 4; // one bnd = 4 words (rtag + INT_POS)
                     callee_sids.push(make_sids(&cb, arity));
                     let ib = insn::decode_stream_gated(b, 1, true)?;
-                    callee_bh.push(bhat::b_hat(&ib, profile).unwrap_or(0));
+                    let cbh = if intent.enc == "qir-enc-5" {
+                        bhat::bhat_scc(&ib, profile)
+                    } else {
+                        bhat::b_hat(&ib, profile)
+                    };
+                    callee_bh.push(cbh.unwrap_or(0));
                     callee_blocks.push(cb);
                 }
             }
@@ -886,7 +909,12 @@ impl<'a> Machine<'a> {
             t
         }
         let computed_bh = b_inject.or_else(|| {
-            let mut b = bhat::b_hat(&intent.blocks, profile).unwrap_or(0);
+            let admission = if intent.enc == "qir-enc-5" {
+                bhat::bhat_scc(&intent.blocks, profile)
+            } else {
+                bhat::b_hat(&intent.blocks, profile)
+            };
+            let mut b = admission.unwrap_or(0);
             let mut wi = 0usize;
             while wi + 1 < stream_words.len() {
                 if stream_words[wi] == 30 {
@@ -1138,7 +1166,10 @@ impl<'a> Machine<'a> {
                 words_to_bytes(&self.callee_words[prog - 1][span.clone()])
             };
             let tag = words_of(&decoded)?[0];
-            let c = bhat::charge_of(self.profile, tag);
+            let c = match &ins.op {
+                Exec::Hash { b_bnd, .. } => bhat::hash_charge(*b_bnd),
+                _ => bhat::charge_of(self.profile, tag),
+            };
             let mut events: Vec<(u64, [u64; 5])> = Vec::new();
             let mut io_ids: Vec<Vec<u8>> = Vec::new();
             let mut gateway = 0u64;
@@ -1687,6 +1718,54 @@ impl<'a> Machine<'a> {
                     return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
                 }
                 Ok(Some(Transfer::Ret))
+            }
+            Exec::Bitwise { tag, a, b, w } => {
+                // §9.2: closed width set, non-negative operands < 2^w.
+                if ![8u64, 16, 32, 64].contains(w) {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let x = self.ref_int(*a);
+                let y = self.ref_int(*b);
+                let mask = if *w == 64 { u64::MAX } else { (1u64 << *w) - 1 };
+                if x < 0 || y < 0 || x as u128 > mask as u128 || y as u128 > mask as u128 {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let (x, y) = (x as u64, y as u64);
+                let r = match *tag {
+                    32 => x & y,
+                    33 => x | y,
+                    34 => x ^ y,
+                    35 => {
+                        if y >= *w { return Err(etc()); }
+                        x.checked_shl(y as u32).unwrap_or(0) & mask
+                    }
+                    36 => {
+                        if y >= *w { return Err(etc()); }
+                        x.checked_shr(y as u32).unwrap_or(0)
+                    }
+                    _ => unreachable!(),
+                };
+                let sid = Self::sid_for(op, pc, sids);
+                self.mint(sid, Value::int(r as i128));
+                Ok(None)
+            }
+            Exec::Hash { a, b_bnd } => {
+                // §9.3: canonical §2.6 bytes, declared byte bound, 4-word
+                // TUPLE in the §7.3.1 ARR_ROOT/TBL_ROOT layout.
+                let bytes = crate::value::enc_value(&self.read_value(*a));
+                if bytes.len() as u64 > *b_bnd || *b_bnd == 0 || *b_bnd > 65536 {
+                    return Err(etc());
+                }
+                let d = crate::sha256::sha256(&bytes);
+                let fields: Vec<Value> = d
+                    .chunks_exact(8)
+                    .map(|c| {
+                        Value::int(u64::from_be_bytes([c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7]]) as i128)
+                    })
+                    .collect();
+                let sid = Self::sid_for(op, pc, sids);
+                self.mint(sid, Value::Tuple(fields));
+                Ok(None)
             }
             Exec::Halt => Ok(Some(Transfer::Halt)),
         }

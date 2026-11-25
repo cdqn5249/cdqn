@@ -9,6 +9,7 @@ use crate::sha256::sha256;
 pub const ENC_V2: &str = "qir-enc-2";
 pub const ENC_V3: &str = "qir-enc-3";
 pub const ENC_V4: &str = "qir-enc-4";
+pub const ENC_V5: &str = "qir-enc-5";
 pub const PROF_CALLS: &str = "qir-prof-ext-calls-1";
 pub const GATEWAY: u64 = 20;
 pub const TRIP_CEILING: u64 = 1;
@@ -26,6 +27,7 @@ pub fn version_bounds(enc: &str) -> Result<(u64, u64, u64), String> {
         ENC_V2 => Ok((8, 16, 4)),   // keys, opcodes, value tags
         ENC_V3 => Ok((8, 29, 5)),
         ENC_V4 => Ok((9, 31, 5)),
+        ENC_V5 => Ok((9, 37, 5)),
         _ => Err("unknown encoding version".to_string()),
     }
 }

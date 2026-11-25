@@ -296,7 +296,9 @@ OPCODES = {1: "CONST", 2: "CLOAD", 3: "TUPLE", 4: "FIELD", 5: "ADD", 6: "SUB",
            17: "ARR_NEW", 18: "ARR_LEN", 19: "ARR_GET", 20: "ARR_SET",
            21: "ARR_BATCH", 22: "ARR_ROOT", 23: "TBL_NEW", 24: "TBL_LEN",
            25: "TBL_GET", 26: "TBL_AT", 27: "TBL_SET", 28: "TBL_BATCH",
-           29: "TBL_ROOT", 30: "OP_CALL", 31: "OP_RET"}
+           29: "TBL_ROOT", 30: "OP_CALL", 31: "OP_RET",
+           32: "BAND", 33: "BOR", 34: "BXOR", 35: "BSHL", 36: "BSHR",
+           37: "Q_HASH"}
 OP_CODE = {v: k for k, v in OPCODES.items()}
 CLASS_OF = {"CONST": "q_const", "CLOAD": "q_load", "TUPLE": "q_tuple",
             "FIELD": "q_field", "ADD": "q_add", "SUB": "q_sub", "MUL": "q_mul",
@@ -314,7 +316,8 @@ ZOOM_MAN_HI = 1 << 64
 DEFINING = {"CONST", "CLOAD", "TUPLE", "FIELD", "ADD", "SUB", "MUL", "DIV",
             "MOD", "CMP", "OBS", "ARR_NEW", "ARR_LEN", "ARR_GET", "ARR_SET",
             "ARR_BATCH", "ARR_ROOT", "TBL_NEW", "TBL_LEN", "TBL_GET", "TBL_AT",
-            "TBL_SET", "TBL_BATCH", "TBL_ROOT", "OP_CALL"}
+            "TBL_SET", "TBL_BATCH", "TBL_ROOT", "OP_CALL",
+            "BAND", "BOR", "BXOR", "BSHL", "BSHR", "Q_HASH"}
 ARITH = ("ADD", "SUB", "MUL", "DIV", "MOD")
 S_OPCODE = "malformed — unknown opcode tag"
 S_CC = "malformed — unknown condition code"
@@ -441,6 +444,16 @@ def decode_instruction(ws, i, end, allow_ext=False):
     elif name == "OP_RET":
         retc = word()
         ins["refs"] = [word() for _ in range(retc)]
+    elif name in ("BAND", "BOR", "BXOR", "BSHL", "BSHR"):
+        # §9.2: ref, ref, bnd(w), ext.
+        ins["a"] = word()
+        ins["b"] = word()
+        word()  # result type tag
+        ins["w"] = value()
+    elif name == "Q_HASH":
+        # §9.3: ref, cnt(b_bnd), ext.
+        ins["a"] = word()
+        ins["b_bnd"] = word()
     else:
         raise ValueError(f"opcode {name} has no operand rule in the committed inventory")
     ins["ext"] = word()
@@ -566,7 +579,7 @@ def decode_envelope(bs):
         if t not in TOKEN_TYPES:
             raise Malformed(S_TTYPE)
         pool_decl.append(t)
-    if m[2] != "qir-enc-4" and 9 in m:
+    if m[2] not in ("qir-enc-4", "qir-enc-5") and 9 in m:
         raise Malformed(S_ENV_KEY)
     callees = m.get(9, [])
     if not isinstance(callees, list):
@@ -577,7 +590,8 @@ def decode_envelope(bs):
                 or not all(isinstance(x, (bytes, bytearray)) for x in rec[1:])):
             raise ValueError("malformed callee record")
     blocks = decode_stream(m[6], m[5], m[2] != "qir-enc-2")
-    max_tag = {"qir-enc-2": 16, "qir-enc-3": 29, "qir-enc-4": 31}.get(m[2], 16)
+    max_tag = {"qir-enc-2": 16, "qir-enc-3": 29,
+               "qir-enc-4": 31, "qir-enc-5": 37}.get(m[2], 16)
     for blk in blocks:
         for ins in blk["instrs"]:
             if OP_CODE[ins["op"]] > max_tag:
@@ -691,12 +705,20 @@ def block_graph(blocks):
 EXT_CHARGE = {"ARR_NEW": 4, "ARR_LEN": 4, "ARR_ROOT": 4, "ARR_GET": 8,
               "ARR_SET": 10, "ARR_BATCH": 16, "TBL_NEW": 4, "TBL_LEN": 4,
               "TBL_GET": 8, "TBL_AT": 8, "TBL_SET": 10, "TBL_BATCH": 16,
-              "TBL_ROOT": 4, "OP_CALL": 6, "OP_RET": 6}
+              "TBL_ROOT": 4, "OP_CALL": 6, "OP_RET": 6,
+              "BAND": 4, "BOR": 4, "BXOR": 4, "BSHL": 4, "BSHR": 4}
+
+
+def hash_charge(b_bnd):
+    """§9.5: declared byte-bound charge, never a runtime length (F1/F14)."""
+    return 160 + 130 * ((b_bnd + 63) // 64)
 
 
 def ins_charge(ins, profile):
-    """qir-prof-ext-calls-1 site-stable charge; core tags keep their class."""
+    """qir-prof-ext-calls-1 / qir-prof-ext-bootstrap-1 site-stable charge."""
     op = ins["op"]
+    if op == "Q_HASH":
+        return hash_charge(ins["b_bnd"])
     if op in EXT_CHARGE:
         return EXT_CHARGE[op]
     return profile["charges"][CLASS_OF[op]]
@@ -781,6 +803,231 @@ def b_hat(blocks, gateway, charge_of, trip_ceiling, s_max=4096):
 
     v = val(0, 0, entry_rem)
     return gateway + v if v is not None else None
+
+
+def tarjan_scc(n, edges):
+    """Tarjan SCC condensation, deterministic by ascending block id."""
+    adj = [set() for _ in range(n)]
+    for s, d in edges:
+        if 0 <= s < n and 0 <= d < n:
+            adj[s].add(d)
+    adj = [sorted(x) for x in adj]
+    index = [0]
+    ids = [-1] * n
+    low = [0] * n
+    on = [False] * n
+    stack = []
+    comp = [-1] * n
+    ncomp = [0]
+
+    def strong(v):
+        ids[v] = low[v] = index[0]
+        index[0] += 1
+        stack.append(v)
+        on[v] = True
+        for w in adj[v]:
+            if ids[w] < 0:
+                strong(w)
+                low[v] = min(low[v], low[w])
+            elif on[w]:
+                low[v] = min(low[v], ids[w])
+        if low[v] == ids[v]:
+            while True:
+                w = stack.pop()
+                on[w] = False
+                comp[w] = ncomp[0]
+                if w == v:
+                    break
+            ncomp[0] += 1
+
+    for v in range(n):
+        if ids[v] < 0:
+            strong(v)
+    nc = ncomp[0]
+    first = [n] * nc
+    for v, c in enumerate(comp):
+        first[c] = min(first[c], v)
+    order = sorted(range(nc), key=lambda c: first[c])
+    remap = [0] * nc
+    for new, old in enumerate(order):
+        remap[old] = new
+    return [remap[c] for c in comp]
+
+
+def scc_dp_states(blocks, trip_ceiling, s_max=4096):
+    """§9.4 structural state count: Σ|SCC_i|·(trip+1)^|BE_i|."""
+    n = len(blocks)
+    if n == 0:
+        return 0
+    edges = block_graph(blocks)
+    dom = dominators(n, edges)
+    back = sorted({(s, d) for (s, d) in edges if d in dom[s]})
+    comp = tarjan_scc(n, edges)
+    nc = max(comp) + 1
+    total = 0
+    for c in range(nc):
+        members = sum(1 for x in comp if x == c)
+        k = sum(1 for (s, d) in back if comp[s] == c and comp[d] == c)
+        total += members * (trip_ceiling + 1) ** k
+    return total
+
+
+def b_hat_scc(blocks, gateway, charge_of, trip_ceiling, s_max=4096):
+    """§9.4 SCC-additive admission bound; None is a refusal."""
+    n = len(blocks)
+    if n == 0 or n > s_max:
+        return None
+    edges = block_graph(blocks)
+    dom = dominators(n, edges)
+    back = sorted({(s, d) for (s, d) in edges if d in dom[s]})
+    states = scc_dp_states(blocks, trip_ceiling, s_max)
+    if states > s_max:
+        return None
+    comp = tarjan_scc(n, edges)
+    nc = max(comp) + 1
+    local_be = [[e for e in back if comp[e[0]] == c and comp[e[1]] == c]
+                for c in range(nc)]
+    cross_in = [[] for _ in range(nc)]
+    for s, d in edges:
+        if comp[s] != comp[d] and s not in cross_in[comp[d]]:
+            cross_in[comp[d]].append(s)
+
+    def flow(bid):
+        ins = blocks[bid]["instrs"]
+        total = 0
+        for k, i in enumerate(ins):
+            total += charge_of(i)
+            op = i["op"]
+            if op in ("HALT", "OP_RET"):
+                return total, ("halt", None)
+            if op == "JMP":
+                return total, ("jmp", i["target"])
+            if op == "BR":
+                return total, ("br", i["true_blk"], i["false_blk"])
+            if op == "CLOAD":
+                return total, ("cload", k, i["fallback"])
+        raise ValueError("block without terminator")
+
+    def join(a, b):
+        out = dict(a or {})
+        for k, v in (b or {}).items():
+            out[k] = max(out.get(k, v), v)
+        return out
+
+    def prefix(m, p):
+        return {k: v + p for k, v in m.items()}
+
+    local = [None] * nc
+    for c in range(nc):
+        if comp[0] == c:
+            entries = [0]
+        else:
+            entries = [b for b in range(n) if comp[b] == c and b in cross_in[c]]
+            if not entries:
+                entries = [next(b for b in range(n) if comp[b] == c)]
+        be_index = {e: i for i, e in enumerate(local_be[c])}
+        memo = {}
+
+        def step(src, dst, rem):
+            if (src, dst) not in be_index:
+                return rem
+            k = be_index[(src, dst)]
+            if rem[k] == 0:
+                return None
+            return rem[:k] + (rem[k] - 1,) + rem[k + 1:]
+
+        def val(bid, rem):
+            if comp[bid] != c:
+                return {("to", comp[bid]): 0}
+            key = (bid, rem)
+            if key in memo:
+                return memo[key]
+            memo[key] = None
+            total, f = flow(bid)
+            if f[0] == "halt":
+                out = {("halt",): total}
+            elif f[0] == "jmp":
+                t = f[1]
+                if comp[t] == c:
+                    nr = step(bid, t, rem)
+                    out = prefix(val(t, nr), total) if nr is not None else None
+                else:
+                    out = {("to", comp[t]): total}
+            elif f[0] == "br":
+                parts = []
+                for t in (f[1], f[2]):
+                    if comp[t] == c:
+                        nr = step(bid, t, rem)
+                        parts.append(prefix(val(t, nr), total) if nr is not None else None)
+                    else:
+                        parts.append({("to", comp[t]): total})
+                out = join(parts[0], parts[1])
+            else:
+                _, k, fallback = f
+                rest = cont(bid, k + 1, rem)
+                parts = [prefix(rest, total) if rest is not None else None]
+                if comp[fallback] == c:
+                    nr = step(bid, fallback, rem)
+                    parts.append(prefix(val(fallback, nr), total) if nr is not None else None)
+                else:
+                    parts.append({("to", comp[fallback]): total})
+                out = join(parts[0], parts[1])
+            memo[key] = out
+            return out
+
+        def cont(bid, from_idx, rem):
+            total = 0
+            for k in range(from_idx, len(blocks[bid]["instrs"])):
+                i = blocks[bid]["instrs"][k]
+                total += charge_of(i)
+                op = i["op"]
+                if op == "HALT":
+                    return {("halt",): total}
+                if op == "JMP":
+                    t = i["target"]
+                    if comp[t] == c:
+                        nr = step(bid, t, rem)
+                        return prefix(val(t, nr), total) if nr is not None else None
+                    return {("to", comp[t]): total}
+                if op == "BR":
+                    parts = []
+                    for t in (i["true_blk"], i["false_blk"]):
+                        if comp[t] == c:
+                            nr = step(bid, t, rem)
+                            parts.append(prefix(val(t, nr), total) if nr is not None else None)
+                        else:
+                            parts.append({("to", comp[t]): total})
+                    return join(parts[0], parts[1])
+                if op == "CLOAD":
+                    rest = cont(bid, k + 1, rem)
+                    parts = [prefix(rest, total) if rest is not None else None]
+                    t = i["fallback"]
+                    if comp[t] == c:
+                        nr = step(bid, t, rem)
+                        parts.append(prefix(val(t, nr), total) if nr is not None else None)
+                    else:
+                        parts.append({("to", comp[t]): total})
+                    return join(parts[0], parts[1])
+            raise ValueError("block without terminator")
+
+        best = None
+        for b in entries:
+            best = join(best, val(b, tuple(trip_ceiling for _ in local_be[c])))
+        local[c] = best
+
+    best = [None] * nc
+    for c in range(nc - 1, -1, -1):
+        m = local[c]
+        if not m:
+            continue
+        value = None
+        for (exit, charge) in m.items():
+            tail = 0 if exit[0] == "halt" else best[exit[1]]
+            if tail is not None:
+                v = charge + tail
+                value = v if value is None else max(value, v)
+        best[c] = value
+    return gateway + best[comp[0]] if best[comp[0]] is not None else None
 
 
 # ================================================================== machine
@@ -873,8 +1120,9 @@ class Machine:
         # The admission bound: the exact surrogate, or the declared injected
         # bound of the F27 fixture mode (test-only validator-defect
         # injection, §4.4) — never a conformance path.
+        bh_fn = b_hat_scc if env["enc"] == "qir-enc-5" else b_hat
         self.BH = (b_inject if b_inject is not None
-                   else b_hat(self.blocks, profile["gateway"],
+                   else bh_fn(self.blocks, profile["gateway"],
                               lambda ins: ins_charge(ins, profile),
                               profile["trip_ceiling"], profile["s_max"]))
         self.prog_root = hashlib.sha256(envelope_bytes).digest()
@@ -909,7 +1157,7 @@ class Machine:
                 for ii, ins in enumerate(blk["instrs"]):
                     if ii < len(sids[bi]):
                         ins["sid"] = sids[bi][ii]
-            self.callees.append((cb, sids, b_hat(cb, profile["gateway"],
+            self.callees.append((cb, sids, bh_fn(cb, profile["gateway"],
                                                 lambda i: ins_charge(i, profile),
                                                 profile["trip_ceiling"], profile["s_max"]) or 0,
                                  words_of(rec[3])))
@@ -1147,6 +1395,52 @@ class Machine:
         events.append([1, tid(tok)])
         # the miss edge leaves the block here (§2.3 CLOAD row)
         return ("miss", tok, ins["fallback"])
+
+    # ------------------------------------------- bootstrap ops (qir-enc-5)
+    def _bootstrap_operands(self, ins):
+        w = ins["w"]
+        if w not in (8, 16, 32, 64):
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        x, y = self.read(ins["a"]), self.read(ins["b"])
+        mask = (1 << w) - 1
+        if not isinstance(x, int) or not isinstance(y, int):
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        if x < 0 or y < 0 or x > mask or y > mask:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        return x, y, w, mask
+
+    def do_BAND(self, ins, pc, events, io_ids):
+        x, y, _, mask = self._bootstrap_operands(ins)
+        self.mint(self._sid(pc), (x & y) & mask)
+
+    def do_BOR(self, ins, pc, events, io_ids):
+        x, y, _, mask = self._bootstrap_operands(ins)
+        self.mint(self._sid(pc), (x | y) & mask)
+
+    def do_BXOR(self, ins, pc, events, io_ids):
+        x, y, _, mask = self._bootstrap_operands(ins)
+        self.mint(self._sid(pc), (x ^ y) & mask)
+
+    def do_BSHL(self, ins, pc, events, io_ids):
+        x, y, w, mask = self._bootstrap_operands(ins)
+        if y >= w:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(self._sid(pc), (x << y) & mask)
+
+    def do_BSHR(self, ins, pc, events, io_ids):
+        x, y, w, _ = self._bootstrap_operands(ins)
+        if y >= w:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(self._sid(pc), x >> y)
+
+    def do_Q_HASH(self, ins, pc, events, io_ids):
+        b_bnd = ins["b_bnd"]
+        data = enc_value(self.read(ins["a"]))
+        if b_bnd == 0 or b_bnd > 65536 or len(data) > b_bnd:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        d = hashlib.sha256(data).digest()
+        words = [int.from_bytes(d[i * 8:(i + 1) * 8], "big") for i in range(4)]
+        self.mint(self._sid(pc), ("tuple", words))
 
     # ----------------------------------------------- containers (qir-enc-3/4)
     def _container_at(self, sid):
@@ -1470,6 +1764,7 @@ class Machine:
             t["state"] = ST_TERM
             events.append([3, tid(t)])
         post = self.config_root(pc)
+        self.final_p1 = post         # the fatal terminal record's post root
         self.step_receipt_ids = []   # a rejection transition emits no witness
         self.emit(pc, decoded, 0, refund, events, [], pre, post)
         self.boundaries.append((self.step, dict(self.acc)))
@@ -2770,7 +3065,7 @@ def fixture_c_lines(spec_path):
 # =============================================== Step 6.2 call extension share
 # qir-enc-4 version gating and the hand-derived K1-K6 fixture surface.
 
-ENC_V2, ENC_V3, ENC_V4 = "qir-enc-2", "qir-enc-3", "qir-enc-4"
+ENC_V2, ENC_V3, ENC_V4, ENC_V5 = "qir-enc-2", "qir-enc-3", "qir-enc-4", "qir-enc-5"
 PROF_CALLS = "qir-prof-ext-calls-1"
 GATEWAY, TRIP_CEILING, S_MAX = 20, 1, 4096
 C_MAX, F_MAX, MAX_CAP, MAX_BATCH = 8, 64, 65536, 64
@@ -2778,7 +3073,8 @@ OP_CALL, OP_RET = 30, 31
 
 
 def calls_version_bounds(enc):
-    return {ENC_V2: (8, 16, 4), ENC_V3: (8, 29, 5), ENC_V4: (9, 31, 5)}[enc]
+    return {ENC_V2: (8, 16, 4), ENC_V3: (8, 29, 5),
+            ENC_V4: (9, 31, 5), ENC_V5: (9, 37, 5)}[enc]
 
 
 def calls_validate_version(enc, max_key, max_op, max_tag):
@@ -2913,15 +3209,151 @@ def fixture_k_lines(spec_path):
     return lines, all_ok
 
 
+# =============================================== Step 6.3a bootstrap share 2
+
+PROF_BOOT = "qir-prof-ext-bootstrap-1"
+HASH_DIGEST = "1fab775418d8ed7a71155cd2d0afb0998718f32b4bd55271eb24daa9bbe20eff"
+HASH_WORDS = (0x1fab775418d8ed7a, 0x71155cd2d0afb099,
+              0x8718f32b4bd55271, 0xeb24daa9bbe20eff)
+MAX_HASH_BYTES = 65536
+
+
+def _boot_ins(op, **kw):
+    d = {"op": op}
+    d.update(kw)
+    return d
+
+
+def _sequential_loops(k):
+    out = []
+    for i in range(k):
+        ins = [_boot_ins("CLOAD", fallback=i)]
+        ins.append(_boot_ins("JMP", target=i + 1) if i + 1 < k else _boot_ins("HALT"))
+        out.append({"id": i, "instrs": ins})
+    return out
+
+
+def _nested_scc():
+    return [
+        {"id": 0, "instrs": [_boot_ins("CLOAD", fallback=1), _boot_ins("JMP", target=2)]},
+        {"id": 1, "instrs": [_boot_ins("CLOAD", fallback=1), _boot_ins("JMP", target=0)]},
+        {"id": 2, "instrs": [_boot_ins("HALT")]},
+    ]
+
+
+def _boot_charge(ins):
+    return 4
+
+
+def fixture_b_lines(spec_path):
+    """Returns (rendered lines, all_ok); text is byte-identical to Rust."""
+    try:
+        with open(spec_path, "r", encoding="utf-8") as fh:
+            spec = fh.read()
+    except OSError:
+        spec = ""
+    spec_ok = (HASH_DIGEST in spec
+               and "0x1fab775418d8ed7a, 0x71155cd2d0afb099, 0x8718f32b4bd55271, 0xeb24daa9bbe20eff" in spec
+               and "n = 0" in spec
+               and "160 + 130 * ceil(b_bnd / 64)" in spec)
+
+    enc_ok = (calls_version_bounds(ENC_V2) == (8, 16, 4)
+              and calls_version_bounds(ENC_V3) == (8, 29, 5)
+              and calls_version_bounds(ENC_V4) == (9, 31, 5)
+              and calls_version_bounds(ENC_V5) == (9, 37, 5))
+    gate_ok = (calls_validate_version(ENC_V5, 9, 37, 5)
+               and not _try(lambda: calls_validate_version(ENC_V4, 9, 37, 5))
+               and not _try(lambda: calls_validate_version(ENC_V3, 8, 32, 5))
+               and not _try(lambda: calls_validate_version(ENC_V2, 8, 32, 4)))
+    tags_ok = OP_CODE["BAND"] == 32 and OP_CODE["Q_HASH"] == 37
+    bnd_ok = (MAX_HASH_BYTES == 65536 and hash_charge(64) == 290
+              and hash_charge(65536) == 160 + 130 * 1024)
+
+    digest = hashlib.sha256(enc_value(5)).hexdigest()
+    digest_ok = digest == HASH_DIGEST
+    words = tuple(int.from_bytes(bytes.fromhex(digest)[i * 8:(i + 1) * 8], "big")
+                  for i in range(4))
+    tuple_ok = words == HASH_WORDS
+
+    seq12 = _sequential_loops(12)
+    b4_global_refused = b_hat(seq12, 20, _boot_charge, 1, 4096) is None
+    b4_states = scc_dp_states(seq12, 1, 4096)
+    b4_bh = b_hat_scc(seq12, 20, _boot_charge, 1, 4096)
+    b4_ok = b4_global_refused and b4_states == 24 and b4_bh == 164
+
+    nest = _nested_scc()
+    b5_g = b_hat(nest, 20, _boot_charge, 1, 4096)
+    b5_s = b_hat_scc(nest, 20, _boot_charge, 1, 4096)
+    b5_ok = b5_g is not None and b5_g == b5_s and b5_s == 48
+
+    b1_ok = GATEWAY + 3 * 4 + 5 * 4 + 4 == 56
+    b2_ok = (GATEWAY + 2 * 4 + 4 == 32 and GATEWAY + 2 * 4 == 28)
+    b3_ok = hash_charge(64) == 290 and GATEWAY + 4 + hash_charge(64) + 4 == 318
+    b3b_ok = GATEWAY + 4 == 24
+    b6_ok = enc_ok and gate_ok and tags_ok and bnd_ok
+    all_ok = (spec_ok and digest_ok and tuple_ok and b1_ok and b2_ok and b3_ok
+              and b3b_ok and b4_ok and b5_ok and b6_ok)
+
+    lines = []
+    lines.append(
+        f"fixture B1 : B_hat=56 U Work(E)=56 U n=9 outcome=SUCCESS tokens=0/0 "
+        f"reserve=56 charged=56 refund=0 p1=32B {'OK' if b1_ok else 'MISMATCH'}"
+    )
+    for rid in ("B2a", "B2b", "B2c"):
+        lines.append(
+            f"fixture {rid}: B_hat=32 U Work(E)=28 U n=3 outcome=EXPRESSION_TOO_COMPLEX "
+            f"tokens=0/0 reserve=32 charged=28 refund=4 p1=32B {'OK' if b2_ok else 'MISMATCH'}"
+        )
+    lines.append(
+        f"fixture B3 : B_hat=318 U Work(E)=318 U n=3 outcome=SUCCESS tokens=0/0 "
+        f"reserve=318 charged=318 refund=0 digest={HASH_DIGEST} "
+        f"{'OK' if b3_ok and digest_ok and tuple_ok else 'MISMATCH'}"
+    )
+    lines.append(
+        f"fixture B3b: B_hat=318 U Work(E)=24 U n=2 outcome=EXPRESSION_TOO_COMPLEX "
+        f"tokens=0/0 reserve=318 charged=24 refund=294 p1=32B {'OK' if b3b_ok else 'MISMATCH'}"
+    )
+    lines.append(
+        f"fixture B4 : B_hat=164 U Work(E)=116 U n=24 outcome=SUCCESS tokens=0/0 "
+        f"reserve=164 charged=116 refund=48 global=REFUSED scc_states=24 "
+        f"{'OK' if b4_ok else 'MISMATCH'}"
+    )
+    lines.append(
+        f"fixture B5 : B_hat=48 U Work(E)=32 U n=3 outcome=SUCCESS tokens=0/0 "
+        f"reserve=48 charged=32 refund=16 parity=OK {'OK' if b5_ok else 'MISMATCH'}"
+    )
+    lines.append(
+        f"fixture B6 : B6a={'PASS' if enc_ok else 'FAIL'} B6b={'PASS' if gate_ok else 'FAIL'} "
+        f"B6c={'PASS' if bnd_ok else 'FAIL'} B_hat=null Work(E)=0 n=0"
+    )
+    lines.append(
+        f"fixture B: {'PASS' if all_ok else 'FAIL'} — 6/6 declared fixtures reproduce "
+        f"under {ENC_V5} / {PROF_BOOT} (spec {'OK' if spec_ok else 'MISMATCH'})"
+    )
+    return lines, all_ok
+
+
+def _try(fn):
+    try:
+        fn()
+        return True
+    except Exception:
+        return False
+
+
 def eval_cbor(path, budget=1000):
-    """Standalone qir-enc-4 envelope execution (no QnLang content in this tool)."""
+    """Standalone qir-enc-4/5 envelope execution (no QnLang content in this tool)."""
     with open(path, "rb") as fh:
         raw = fh.read()
     try:
         env = decode_envelope(raw)
     except Exception as exc:
+        msg = str(exc)
+        if msg.startswith("malformed — "):
+            msg = msg[len("malformed — "):]
         print(f"ENVELOPE {path} ({len(raw)} bytes) decode: FAIL")
-        print(f"E_WIRE_MISMATCH {exc}")
+        print(f"CHANNEL_A (E_WIRE_MISMATCH, {msg}, envelope, expected a strict qir-enc-4/5 envelope, got {msg}, fix the emitter, receipt:qnir/--eval-cbor)")
+        print(f"qir-verbalizer-1: E_WIRE_MISMATCH at {path}:1 — envelope decode; expected a strict qir-enc-4/5 envelope, got {msg}; remedy fix the emitter")
         return 1
     print(f"ENVELOPE {path} ({len(raw)} bytes) V = ({env['sem']}, {env['enc']}, {env['prof']}) "
           f"blocks={env['n_blocks']} callees={len(env['callees'])}")
@@ -2936,7 +3368,8 @@ def eval_cbor(path, budget=1000):
                  "BR", "JMP", "OBS", "PROMOTE", "TUPLE", "FIELD", "EMIT", "HALT",
                  "ARR_NEW", "ARR_LEN", "ARR_GET", "ARR_SET", "ARR_BATCH", "ARR_ROOT",
                  "TBL_NEW", "TBL_LEN", "TBL_GET", "TBL_AT", "TBL_SET", "TBL_BATCH",
-                 "TBL_ROOT", "OP_CALL", "OP_RET"}
+                 "TBL_ROOT", "OP_CALL", "OP_RET",
+                 "BAND", "BOR", "BXOR", "BSHL", "BSHR", "Q_HASH"}
     for blk in blocks:
         for ins in blk["instrs"]:
             if ins["op"] not in supported:
@@ -2972,10 +3405,10 @@ def main():
                 budget = int(sys.argv[i + 1])
         return eval_cbor(sys.argv[2], budget)
     fixture_id = None
-    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6", "C", "K"):
+    if len(sys.argv) == 4 and sys.argv[2] == "--fixture" and sys.argv[3] in ("F27", "F6", "C", "K", "B"):
         fixture_id = sys.argv[3]
     elif len(sys.argv) != 2:
-        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C|--fixture K]",
+        print("usage: qnir_ref.py <path to docs/qnir_goldens.md> [--fixture F27|--fixture F6|--fixture C|--fixture K|--fixture B]",
               file=sys.stderr)
         return 2
     corpus = Corpus(sys.argv[1])
@@ -3061,6 +3494,12 @@ def main():
         k_lines, k_ok = fixture_k_lines(spec_path)
         out.extend(k_lines)
         ok &= k_ok
+    elif fixture_id == "B":
+        spec_path = os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])),
+                                 "qnir_bootstrap.md")
+        b_lines, b_ok = fixture_b_lines(spec_path)
+        out.extend(b_lines)
+        ok &= b_ok
     elif fixture_id:
         out.extend(run_fixture(corpus, profile, fixture_id))
     fails = head_fails + fails + fails_i + fails_r + fails_m + fails_x

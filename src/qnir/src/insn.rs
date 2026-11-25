@@ -43,6 +43,13 @@ pub const OP_TBL_BATCH: u64 = 28;
 pub const OP_TBL_ROOT: u64 = 29;
 pub const OP_CALL: u64 = 30;
 pub const OP_RET: u64 = 31;
+// qir-enc-5 / qir-prof-ext-bootstrap-1 (§9.2–§9.3).
+pub const OP_BAND: u64 = 32;
+pub const OP_BOR: u64 = 33;
+pub const OP_BXOR: u64 = 34;
+pub const OP_BSHL: u64 = 35;
+pub const OP_BSHR: u64 = 36;
+pub const OP_HASH: u64 = 37;
 
 pub fn op_name(tag: u64) -> Option<&'static str> {
     Some(match tag {
@@ -77,6 +84,12 @@ pub fn op_name(tag: u64) -> Option<&'static str> {
         OP_TBL_ROOT => "TBL_ROOT",
         OP_CALL => "OP_CALL",
         OP_RET => "OP_RET",
+        OP_BAND => "BAND",
+        OP_BOR => "BOR",
+        OP_BXOR => "BXOR",
+        OP_BSHL => "BSHL",
+        OP_BSHR => "BSHR",
+        OP_HASH => "Q_HASH",
         _ => return None,
     })
 }
@@ -157,6 +170,31 @@ fn skip_bnd(r: &mut WordReader) -> Result<(), String> {
     }
     dec_value(r)?;
     Ok(())
+}
+
+/// A declared `INT_POS` bound word as `u64` (§9.2 width / §9.3 byte bound).
+fn dec_bnd_u64(r: &mut WordReader) -> Result<u64, String> {
+    let rtag = r.next("instruction")?;
+    if rtag != 1 {
+        return Err(err("unknown result type tag"));
+    }
+    match dec_value(r)? {
+        Value::Int { neg: false, mag } => {
+            let mut m: u128 = 0;
+            for w in mag {
+                if m > (u64::MAX as u128) >> 64 {
+                    return Err(err("bound out of range"));
+                }
+                m = (m << 64) | w as u128;
+            }
+            if m > u64::MAX as u128 {
+                Err(err("bound out of range"))
+            } else {
+                Ok(m as u64)
+            }
+        }
+        _ => Err(err("bound must be a non-negative integer")),
+    }
 }
 
 /// Strict core-only instruction decode (the standalone M-surface verdicts).
@@ -314,6 +352,17 @@ pub fn dec_insn_gated(r: &mut WordReader, allow_ext: bool) -> Result<Insn, Strin
         OP_RET if allow_ext => {
             let retc = r.take_count("return reference count")?;
             for _ in 0..retc { refs.push(r.next("instruction")?); }
+        }
+        OP_BAND | OP_BOR | OP_BXOR | OP_BSHL | OP_BSHR if allow_ext => {
+            // §9.2: ref, ref, bnd(w), ext.
+            refs.push(r.next("instruction")?);
+            refs.push(r.next("instruction")?);
+            addr = Some(dec_bnd_u64(r)?);
+        }
+        OP_HASH if allow_ext => {
+            // §9.3: ref, cnt(b_bnd), ext.
+            refs.push(r.next("instruction")?);
+            addr = Some(r.next("instruction")?);
         }
         _ => return Err(err("unknown opcode tag")),
     }
@@ -675,7 +724,7 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
     let enc_v = take_text(&mut fields[2], "encoding version")?;
     // qir-enc-4's key 9 and extension tags are gated by V.encoding: under
     // qir-enc-2/3 they remain unknown (the committed M8/M1 verdicts).
-    if enc_v != "qir-enc-4" {
+    if enc_v != "qir-enc-4" && enc_v != "qir-enc-5" {
         if fields[9].is_some() {
             return Err(err("unknown envelope key"));
         }
@@ -756,6 +805,7 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
     };
     let allow_ext = enc_v != "qir-enc-2";
     let max_tag = match enc_v.as_str() {
+        "qir-enc-5" => 37,
         "qir-enc-4" => 31,
         "qir-enc-3" => 29,
         _ => 16,
