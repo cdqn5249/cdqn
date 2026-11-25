@@ -187,6 +187,9 @@ struct Emitter<'a> {
     next_id: u64,
     callee_ids: HashMap<String, u64>,
     store_idx: HashMap<String, u64>,
+    next_store_idx: u64,
+    call_targets: Vec<u64>,
+    in_callee: bool,
     /// (declaration name, interior charge excluding gateway).
     segments: Vec<(String, u64)>,
     diags: Vec<Diag>,
@@ -310,11 +313,10 @@ impl<'a> Emitter<'a> {
                             ops.push(arg);
                             ops.push(1u64); // retc
                             ops.extend_from_slice(&bnd(hi));
-                            let r = self.emit(OP_CALL, &ops);
-                            if let Some(&interior) = self.segments.iter().find(|(n, _)| *n == fname).map(|x| &x.1) {
-                                let _ = interior; // folded at budget check, not double-posted here
+                            if !self.in_callee {
+                                self.call_targets.push(cid);
                             }
-                            return Some(r);
+                            return Some(self.emit(OP_CALL, &ops));
                         }
                         self.diags.push(diag("E_LOWERING_AMBIGUOUS", sp, "construct has no declared lowering",
                             "a declared call-site callee id", &format!("call site {}", fname),
@@ -353,8 +355,9 @@ impl<'a> Emitter<'a> {
                         }
                     }
                     let arr = self.value(args[0], None)?;
-                    let idx = *self.store_idx.get(&cname).unwrap_or(&0);
-                    self.store_idx.insert(cname, idx + 1);
+                    let _ = cname;
+                    let idx = self.next_store_idx;
+                    self.next_store_idx += 1;
                     let mut iops = int_pos(idx);
                     iops.extend_from_slice(&bnd(hi));
                     let ir = self.emit(OP_CONST, &iops);
@@ -393,7 +396,14 @@ impl<'a> Emitter<'a> {
                     return None;
                 }
                 let cap = cap_of(args).unwrap_or(0);
-                let elem_name = args.split('|').next().unwrap_or("");
+                let elem_name = args
+                    .split('|')
+                    .next()
+                    .unwrap_or("")
+                    .split(',')
+                    .last()
+                    .unwrap_or("")
+                    .trim();
                 // P13(c): a tuple-valued element bound is present and vacuous (0).
                 let elem_hi = bound_hi(elem_name).or_else(|| self.erased.bounds.get(elem_name).copied()).unwrap_or(0);
                 let mut ops = bnd(cap);
@@ -521,7 +531,7 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
     let mut em = Emitter {
         p, norm: &norm, erased: erased.clone(), words: Vec::new(), op_tags: Vec::new(),
         opcodes: 0, refs: HashMap::new(), next_id: 0, callee_ids, store_idx: HashMap::new(),
-        segments: Vec::new(), diags: Vec::new(),
+        next_store_idx: 0, call_targets: Vec::new(), in_callee: false, segments: Vec::new(), diags: Vec::new(),
     };
     // Q(anchor) names are canonical genesis values (§5.2/§3.1): CONST Q(0)
     // with the anchor's declared bound.
@@ -548,6 +558,7 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
     }
 
     let mut callees: Vec<Cbor> = Vec::new();
+    let mut callee_interiors: Vec<u64> = Vec::new();
     for t in &p.tops {
         let (name, params, body) = match &t.kind {
             TopKind::Pattern { name, params, body, .. } | TopKind::Workflow { name, params, body, .. } => {
@@ -557,9 +568,17 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
             _ => (String::new(), Vec::new(), None),
         };
         if let Some(b) = body {
+            // The callee body is emitted into its own §2.6 block stream,
+            // carried by key 9 (§8.2), never into the caller entry stream.
+            let entry_words = std::mem::take(&mut em.words);
+            let entry_tags = std::mem::take(&mut em.op_tags);
+            em.in_callee = true;
+            // Static value ids in a callee are dense in its own space (§8.2).
+            let saved_next = em.next_id;
+            let saved_refs = std::mem::take(&mut em.refs);
+            em.next_id = 0;
             for (n, ty) in &params {
                 if let Some(h) = bound_hi(ty) { em.erased.bounds.insert(n.clone(), h); }
-                // Callee block-argument binding (§8.2): positional SSA ref.
                 let id = em.next_id;
                 em.next_id += 1;
                 em.refs.insert(n.clone(), id);
@@ -575,14 +594,29 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
             }
             let interior = em.charge_now() - start;
             em.segments.push((name.clone(), interior));
-            // OP_RET closes the callee (§8.3).
             em.push(insn(OP_RET, &[1u64, 0u64]));
+            let callee_words = std::mem::replace(&mut em.words, entry_words);
+            let callee_tags = std::mem::replace(&mut em.op_tags, entry_tags);
+            // §8.4: the callee's DP bound already includes its fallback
+            // branch maximum; do not add the fallback charge twice.
+            let interior: u64 = callee_tags.iter().map(|t| charge(*t)).sum::<u64>();
+            callee_interiors.push(interior);
+            em.next_id = saved_next;
+            em.refs = saved_refs;
+            em.in_callee = false;
             let arg_bnds: Vec<u64> = params.iter()
                 .flat_map(|(_, ty)| bnd(bound_hi(ty).unwrap_or(u64::MAX))).collect();
+            // block id 0, argument arity = argc, then arg bnds, insn count, insns.
+            let mut cblock = vec![0u64, params.len() as u64];
+            cblock.extend_from_slice(&arg_bnds);
+            cblock.push(callee_tags.len() as u64);
+            cblock.extend_from_slice(&callee_words);
             let idx = callees.len() as u64;
             callees.push(Cbor::Array(vec![
-                Cbor::UInt(idx), Cbor::Bytes(Vec::new()), Cbor::Bytes(Vec::new()),
+                Cbor::UInt(idx),
                 Cbor::Bytes(words_to_bytes(&arg_bnds)),
+                Cbor::Bytes(words_to_bytes(&bnd(1))),
+                Cbor::Bytes(words_to_bytes(&cblock)),
             ]));
         }
     }
@@ -625,9 +659,25 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
     let words = em.words.len();
     // §2.6 block framing: block id, argument arity, instruction count, then
     // the instructions. Stage 0B emits exactly one entry block (id 0).
-    let mut framed = vec![0u64, 0u64, em.opcodes as u64];
+    let mut framed = vec![0u64, 0u64, em.op_tags.len() as u64];
     framed.extend_from_slice(&em.words);
-    let b_hat = 20u64 + em.charge_now();
+    // B_hat is the admission surrogate of the EMITTED entry stream, which
+    // terminates at the first HALT: callee bodies are not inlined into it
+    // (qir-enc-4 §8.2/§8.4). Source-level declaration charges are reported
+    // separately by the budget check above.
+    let mut charged = 0u64;
+    for t in &em.op_tags {
+        charged += charge(*t);
+        if *t == OP_HALT {
+            break;
+        }
+    }
+    let mut b_hat = 20u64 + charged;
+    for cid in &em.call_targets {
+        if let Some(v) = callee_interiors.get(*cid as usize) {
+            b_hat += v;
+        }
+    }
     let ok = em.diags.is_empty();
     let cbor = if ok {
         let entries = vec![
