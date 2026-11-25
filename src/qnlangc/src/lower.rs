@@ -41,6 +41,9 @@ pub struct LowerResult {
     pub ext_records: usize,
     pub b_hat: Option<u64>,
     pub budgets: Vec<(String, u64)>,
+    /// `(declaration, declared budget U, source-level b_hat U)` in source
+    /// order — the exact values the budget gate compared.
+    pub budget_checks: Vec<(String, u64, u64)>,
     pub diagnostics: Vec<Diag>,
 }
 
@@ -513,7 +516,19 @@ impl<'a> Emitter<'a> {
     }
 }
 
-pub fn lower(p: &Program, _source: &str) -> LowerResult {
+/// Compiler analysis pass: runs the full deterministic lowering and returns
+/// every metadata value the Exposer needs, but never materializes CBOR and
+/// never prints. It is the Compiler's non-committing preview.
+pub fn analyze(p: &Program, source: &str) -> LowerResult {
+    run(p, source, false)
+}
+
+/// Compiler commit pass: the exact bytes emitted by the Stage 0B R11' table.
+pub fn lower(p: &Program, source: &str) -> LowerResult {
+    run(p, source, true)
+}
+
+fn run(p: &Program, _source: &str, materialize: bool) -> LowerResult {
     let norm = normalize(p);
     let erased = erase_domains(p);
     let mut callee_ids = HashMap::new();
@@ -639,6 +654,7 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
 
     // Budget enforcement: B_hat = gateway + interior charge, with each call
     // site adding its callee's interior bound once (§8.4 compositional rule).
+    let mut budget_checks: Vec<(String, u64, u64)> = Vec::new();
     for (name, sp, budget) in &erased.budgets {
         let own = em.segments.iter().find(|(n, _)| n == name).map(|x| x.1).unwrap_or(0);
         let mut b = 20u64 + own;
@@ -646,6 +662,7 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
         if name == "route" {
             if let Some((_, inner)) = em.segments.iter().find(|(n, _)| n == "step") { b += inner; }
         }
+        budget_checks.push((name.clone(), *budget, b));
         if b > *budget {
             em.diags.push(diag(
                 "E_SMAX_OR_BUDGET", *sp, "declared budget exceeded by B_hat",
@@ -653,7 +670,9 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
                 "raise the declared budget explicitly in §6.4; no silent override is applied",
             ));
         }
-        println!("BUDGET {} declared={} U b_hat={} U", name, budget, b);
+        if materialize {
+            println!("BUDGET {} declared={} U b_hat={} U", name, budget, b);
+        }
     }
 
     let words = em.words.len();
@@ -679,7 +698,7 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
         }
     }
     let ok = em.diags.is_empty();
-    let cbor = if ok {
+    let cbor = if materialize && ok {
         let entries = vec![
             (Cbor::UInt(0), Cbor::Bytes(b"QnIR-Intent".to_vec())),
             (Cbor::UInt(1), Cbor::Text("v0.3.0-draft.8.4".into())),
@@ -700,6 +719,7 @@ pub fn lower(p: &Program, _source: &str) -> LowerResult {
         ok, cbor, sha256: digest, bytes, words, opcodes: em.opcodes, blocks: 1,
         callees: callees.len(), ext_records: 0, b_hat: Some(b_hat),
         budgets: erased.budgets.iter().map(|(n, _, v)| (n.clone(), *v)).collect(),
+        budget_checks,
         diagnostics: em.diags,
     }
 }

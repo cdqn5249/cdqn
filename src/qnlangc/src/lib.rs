@@ -3,6 +3,7 @@
 pub mod ast;
 pub mod cbor;
 pub mod diag;
+pub mod exposer;
 pub mod gates;
 pub mod lexer;
 pub mod lower;
