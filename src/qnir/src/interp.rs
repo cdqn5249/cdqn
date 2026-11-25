@@ -24,6 +24,8 @@
 
 use crate::bhat::{self, Profile};
 use crate::cbor::{self, Cbor};
+use crate::containers;
+use crate::insn;
 use crate::insn::{decode_envelope, op_name, token_type_name, Intent};
 use crate::sha256::sha256;
 use crate::value::{dec_value, enc_value, normalize_zoom, skip_value, w, words_of, Value, WordReader};
@@ -72,7 +74,11 @@ fn class_of(tag: u64) -> &'static str {
         14 => "q_promote",
         15 => "q_emit",
         16 => "q_halt",
-        _ => unreachable!(),
+        17 => "q_arr_new", 18 => "q_arr_len", 19 => "q_arr_get", 20 => "q_arr_set",
+        21 => "q_arr_batch", 22 => "q_arr_root", 23 => "q_tbl_new", 24 => "q_tbl_len",
+        25 => "q_tbl_get", 26 => "q_tbl_at", 27 => "q_tbl_set", 28 => "q_tbl_batch",
+        29 => "q_tbl_root", 30 => "q_call", 31 => "q_ret",
+        _ => "q_unassigned",
     }
 }
 
@@ -104,6 +110,23 @@ enum Exec {
     Promote,
     Emit { kind: u64, refs: Vec<u64> },
     Halt,
+    // qir-enc-3 / qir-enc-4 container surface (§7.3.1).
+    ArrNew { cap: u64, elem: u64 },
+    ArrLen { a: u64, bound: i128 },
+    ArrGet { a: u64, idx: u64, bound: i128 },
+    ArrSet { a: u64, idx: u64, val: u64 },
+    ArrBatch { a: u64, batch: u64, cnt: u64 },
+    ArrRoot { a: u64 },
+    TblNew { cap: u64, elem: u64 },
+    TblLen { a: u64, bound: i128 },
+    TblGet { a: u64, key: u64, fallback: u64, bound: i128 },
+    TblAt { a: u64, rank: u64, kbound: i128, vbound: i128 },
+    TblSet { a: u64, key: u64, val: u64 },
+    TblBatch { a: u64, batch: u64, cnt: u64 },
+    TblRoot { a: u64 },
+    // qir-enc-4 call surface (§8.2–§8.4).
+    Call { callee: u64, argc: u64, args: Vec<u64>, retc: u64, rets: Vec<i128> },
+    Ret { refs: Vec<u64> },
 }
 
 #[derive(Clone, Debug)]
@@ -197,6 +220,16 @@ fn cmp_under_n(a: &Value, b: &Value) -> i128 {
     }
 }
 
+/// One §2.6 `bnd`: a type-tag word plus an INT_POS bound value.
+fn dec_bnd(r: &mut WordReader) -> Result<i128, String> {
+    let rt = r.next("instruction")?;
+    if rt != 1 && rt != 3 && rt != 4 && rt != 5 {
+        return Err("unknown result type tag".to_string());
+    }
+    let b = dec_value(r)?;
+    value_as_i128(&b, "bound")
+}
+
 fn dec_edge_exec(r: &mut WordReader) -> Result<u64, String> {
     let blk = r.next("instruction")?;
     let arity = r.take_count("edge")?;
@@ -206,10 +239,39 @@ fn dec_edge_exec(r: &mut WordReader) -> Result<u64, String> {
     Ok(blk)
 }
 
+/// P10 dense static value ids over value-defining instructions, per stream.
+fn make_sids(blocks: &[ExecBlock], initial: usize) -> Vec<Vec<Option<u64>>> {
+    let mut counter = initial;
+    let mut out = Vec::new();
+    for b in blocks {
+        let mut row = Vec::new();
+        for ins in &b.insns {
+            let defining = matches!(
+                ins.op,
+                Exec::Const { .. } | Exec::Cload { .. } | Exec::Tuple { .. }
+                    | Exec::Field { .. } | Exec::Arith { .. } | Exec::Cmp { .. }
+                    | Exec::Obs { .. } | Exec::ArrNew { .. } | Exec::ArrSet { .. }
+                    | Exec::ArrBatch { .. } | Exec::ArrLen { .. } | Exec::ArrGet { .. }
+                    | Exec::ArrRoot { .. } | Exec::TblNew { .. } | Exec::TblSet { .. }
+                    | Exec::TblBatch { .. } | Exec::TblLen { .. } | Exec::TblGet { .. }
+                    | Exec::TblAt { .. } | Exec::TblRoot { .. } | Exec::Call { .. }
+            );
+            if defining {
+                row.push(Some(counter as u64));
+                counter += 1;
+            } else {
+                row.push(None);
+            }
+        }
+        out.push(row);
+    }
+    out
+}
+
 /// Execution decode of the committed instruction stream: per block its id,
 /// argument signature, instruction count, and instructions with every
 /// operand kept (the transition relation consumes them all).
-fn decode_exec_stream(stream: &[u8]) -> Result<Vec<ExecBlock>, String> {
+fn decode_exec_stream(stream: &[u8], max_tag: u64) -> Result<Vec<ExecBlock>, String> {
     let words = words_of(stream)?;
     let mut r = WordReader::new(&words);
     let mut blocks = Vec::new();
@@ -229,6 +291,9 @@ fn decode_exec_stream(stream: &[u8]) -> Result<Vec<ExecBlock>, String> {
             let start = r.i;
             let tag = r.next("instruction")?;
             let name = op_name(tag).ok_or_else(|| "unknown opcode tag".to_string())?;
+            if tag > max_tag {
+                return Err("unknown opcode tag".to_string());
+            }
             let op = match tag {
                 1 => {
                     let imm = dec_value(&mut r)?;
@@ -343,6 +408,68 @@ fn decode_exec_stream(stream: &[u8]) -> Result<Vec<ExecBlock>, String> {
                     Exec::Emit { kind, refs }
                 }
                 16 => Exec::Halt,
+                17 | 23 => {
+                    let cap = dec_bnd(&mut r)? as u64;
+                    let elem = dec_bnd(&mut r)? as u64;
+                    if tag == 17 { Exec::ArrNew { cap, elem } } else { Exec::TblNew { cap, elem } }
+                }
+                18 | 24 => {
+                    let a = r.next("instruction")?;
+                    let bound = dec_bnd(&mut r)?;
+                    if tag == 18 { Exec::ArrLen { a, bound } } else { Exec::TblLen { a, bound } }
+                }
+                19 => {
+                    let a = r.next("instruction")?;
+                    let idx = r.next("instruction")?;
+                    let bound = dec_bnd(&mut r)?;
+                    Exec::ArrGet { a, idx, bound }
+                }
+                20 | 27 => {
+                    let a = r.next("instruction")?;
+                    let b2 = r.next("instruction")?;
+                    let v = r.next("instruction")?;
+                    if tag == 20 { Exec::ArrSet { a, idx: b2, val: v } } else { Exec::TblSet { a, key: b2, val: v } }
+                }
+                21 | 28 => {
+                    let a = r.next("instruction")?;
+                    let batch = r.next("instruction")?;
+                    let cnt = r.take_count("batch count")? as u64;
+                    if tag == 21 { Exec::ArrBatch { a, batch, cnt } } else { Exec::TblBatch { a, batch, cnt } }
+                }
+                22 | 29 => {
+                    let a = r.next("instruction")?;
+                    if tag == 22 { Exec::ArrRoot { a } } else { Exec::TblRoot { a } }
+                }
+                25 => {
+                    let a = r.next("instruction")?;
+                    let key = r.next("instruction")?;
+                    let fallback = r.next("instruction")?;
+                    let bound = dec_bnd(&mut r)?;
+                    Exec::TblGet { a, key, fallback, bound }
+                }
+                26 => {
+                    let a = r.next("instruction")?;
+                    let rank = r.next("instruction")?;
+                    let kbound = dec_bnd(&mut r)?;
+                    let vbound = dec_bnd(&mut r)?;
+                    Exec::TblAt { a, rank, kbound, vbound }
+                }
+                30 => {
+                    let callee = r.next("instruction")?;
+                    let argc = r.take_count("call argument count")?;
+                    let mut args = Vec::with_capacity(argc as usize);
+                    for _ in 0..argc { args.push(r.next("instruction")?); }
+                    let retc = r.take_count("call return count")?;
+                    let mut rets = Vec::with_capacity(retc as usize);
+                    for _ in 0..retc { rets.push(dec_bnd(&mut r)?); }
+                    Exec::Call { callee, argc: argc as u64, args, retc: retc as u64, rets }
+                }
+                31 => {
+                    let retc = r.take_count("return reference count")?;
+                    let mut refs = Vec::with_capacity(retc as usize);
+                    for _ in 0..retc { refs.push(r.next("instruction")?); }
+                    Exec::Ret { refs }
+                }
                 _ => {
                     return Err(format!(
                         "opcode {name} has no execution rule in the committed inventory"
@@ -607,6 +734,8 @@ enum Transfer {
     Fall,
     To(u64),
     Miss(Token, u64),
+    Call { callee: usize, args: Vec<u64>, ret_sid: u64, ret_bound: i128 },
+    Ret,
     Halt,
 }
 
@@ -653,6 +782,29 @@ struct Machine<'a> {
     traversals: HashMap<(u64, u64, u64), u64>,
     pending_miss: Option<(Token, u64)>,
     fatal_selected: Option<[u64; 5]>,
+    /// §7.2 governed container values, keyed by (static id, instance id).
+    containers: HashMap<(u64, u64), containers::Container>,
+    /// qir-enc-4 key-9 callee block streams (§8.2).
+    callee_blocks: Vec<Vec<ExecBlock>>,
+    callee_sids: Vec<Vec<Vec<Option<u64>>>>,
+    callee_bh: Vec<u64>,
+    callee_words: Vec<Vec<u64>>,
+    n_callees: usize,
+    /// §8.3 hash-chained frame stack and active frame state.
+    stack_root: Vec<u8>,
+    frames: Vec<Frame>,
+}
+
+#[derive(Clone, Debug)]
+struct Frame {
+    callee: usize,
+    ret_pc: (u64, u64),
+    ret_prog: usize,
+    ret_sid: u64,
+    ret_bound: i128,
+    reserve: u64,
+    charged_at_call: u64,
+    parent_root: Vec<u8>,
 }
 
 impl<'a> Machine<'a> {
@@ -666,7 +818,33 @@ impl<'a> Machine<'a> {
         profile: &'a Profile,
         b_inject: Option<u64>,
     ) -> Result<Self, String> {
-        let blocks = decode_exec_stream(&words_to_bytes(&stream_words))?;
+        let max_tag = match intent.enc.as_str() {
+            "qir-enc-4" => 31,
+            "qir-enc-3" => 29,
+            _ => 16,
+        };
+        let blocks = decode_exec_stream(&words_to_bytes(&stream_words), max_tag)?;
+        let mut callee_blocks: Vec<Vec<ExecBlock>> = Vec::new();
+        let mut callee_sids: Vec<Vec<Vec<Option<u64>>>> = Vec::new();
+        let mut callee_bh: Vec<u64> = Vec::new();
+        let mut callee_words: Vec<Vec<u64>> = Vec::new();
+        for rec in &intent.callees {
+            if let Cbor::Array(f) = rec {
+                if let Cbor::Bytes(b) = &f[3] {
+                    if b.is_empty() {
+                        continue;
+                    }
+                    let cb = decode_exec_stream(b, max_tag)?;
+                    callee_words.push(words_of(b)?);
+                    let arity_words = match &f[1] { Cbor::Bytes(x) => x.len() / 8, _ => 0 };
+                    let arity = arity_words / 4; // one bnd = 4 words (rtag + INT_POS)
+                    callee_sids.push(make_sids(&cb, arity));
+                    let ib = insn::decode_stream_gated(b, 1, true)?;
+                    callee_bh.push(bhat::b_hat(&ib, profile).unwrap_or(0));
+                    callee_blocks.push(cb);
+                }
+            }
+        }
         if blocks.len() as u64 != intent.n_blocks {
             return Err("exec decode block count disagrees with the envelope".to_string());
         }
@@ -685,6 +863,41 @@ impl<'a> Machine<'a> {
                 state: STATE_OUTSTANDING,
             })
             .collect();
+        fn folded(
+            cid: usize,
+            bh: &[u64],
+            words: &[Vec<u64>],
+            gateway: u64,
+            depth: usize,
+        ) -> u64 {
+            if depth > 16 || cid >= bh.len() {
+                return 0;
+            }
+            let mut t = bh[cid];
+            let ws = &words[cid];
+            let mut wi = 0usize;
+            while wi + 1 < ws.len() {
+                if ws[wi] == 30 {
+                    let nested = ws[wi + 1] as usize;
+                    t += folded(nested, bh, words, gateway, depth + 1).saturating_sub(gateway);
+                }
+                wi += 1;
+            }
+            t
+        }
+        let computed_bh = b_inject.or_else(|| {
+            let mut b = bhat::b_hat(&intent.blocks, profile).unwrap_or(0);
+            let mut wi = 0usize;
+            while wi + 1 < stream_words.len() {
+                if stream_words[wi] == 30 {
+                    let cid = stream_words[wi + 1] as usize;
+                    b += folded(cid, &callee_bh, &callee_words, profile.gateway, 0)
+                        .saturating_sub(profile.gateway);
+                }
+                wi += 1;
+            }
+            Some(b)
+        });
         Ok(Machine {
             blocks,
             words: stream_words,
@@ -695,7 +908,7 @@ impl<'a> Machine<'a> {
             // the admission bound: the exact surrogate (None = refusal), or
             // the declared injected bound of the F27 fixture mode (test-only
             // validator-defect injection, §4.4) — never a conformance path
-            bh: b_inject.or_else(|| bhat::b_hat(&intent.blocks, profile)),
+            bh: computed_bh,
             versions: [
                 intent.sem.clone(),
                 intent.enc.clone(),
@@ -724,6 +937,14 @@ impl<'a> Machine<'a> {
             traversals: HashMap::new(),
             pending_miss: None,
             fatal_selected: None,
+            containers: HashMap::new(),
+            callee_blocks,
+            callee_sids,
+            callee_bh,
+            callee_words,
+            n_callees: intent.callees.len(),
+            stack_root: crate::sha256::sha256(&[0x02]).to_vec(),
+            frames: Vec::new(),
         })
     }
 
@@ -739,7 +960,12 @@ impl<'a> Machine<'a> {
                 Cbor::Array(vec![
                     Cbor::UInt(sid),
                     Cbor::UInt(iid),
-                    Cbor::Bytes(enc_value(&self.store[&(sid, iid)])),
+                    Cbor::Bytes(
+                        self.containers
+                            .get(&(sid, iid))
+                            .map(|c| c.canonical_bytes())
+                            .unwrap_or_else(|| enc_value(&self.store[&(sid, iid)])),
+                    ),
                 ])
             })
             .collect();
@@ -761,7 +987,14 @@ impl<'a> Machine<'a> {
             .collect();
         let comps = Cbor::Array(vec![
             Cbor::Array(vec![Cbor::UInt(pc.0), Cbor::UInt(pc.1)]),
-            Cbor::Array(Vec::new()), // block-argument environment (seed: arity 0)
+            if self.frames.is_empty() {
+                Cbor::Array(Vec::new()) // depth 0: canonical active_args
+            } else {
+                Cbor::Array(vec![
+                    Cbor::Array(Vec::new()), // active_args
+                    Cbor::Bytes(self.stack_root.clone()), // parent_stack_root
+                ])
+            },
             Cbor::Array(store_c),
             Cbor::Array(pool_c),
             Cbor::Array(vec![
@@ -801,7 +1034,10 @@ impl<'a> Machine<'a> {
     }
 
     fn outstanding_escrow(&self) -> u64 {
-        self.acc.reserved - self.acc.charged - self.acc.refunded
+        self.acc
+            .reserved
+            .saturating_sub(self.acc.charged)
+            .saturating_sub(self.acc.refunded)
     }
 
     fn mint(&mut self, sid: u64, value: Value) {
@@ -878,38 +1114,31 @@ impl<'a> Machine<'a> {
         }
         // static value ids are dense over the Intent's value-defining
         // instructions in block-then-index scan order (§2.6, P10)
-        let mut sid_counter: usize = 0;
-        let mut sids: Vec<Vec<Option<u64>>> = Vec::new();
-        for b in &self.blocks {
-            let mut row = Vec::new();
-            for ins in &b.insns {
-                if matches!(
-                    ins.op,
-                    Exec::Const { .. }
-                        | Exec::Cload { .. }
-                        | Exec::Tuple { .. }
-                        | Exec::Field { .. }
-                        | Exec::Arith { .. }
-                        | Exec::Cmp { .. }
-                        | Exec::Obs { .. }
-                ) {
-                    row.push(Some(sid_counter as u64));
-                    sid_counter += 1;
-                } else {
-                    row.push(None);
-                }
-            }
-            sids.push(row);
-        }
+        let sids = make_sids(&self.blocks, self.n_callees);
+        let mut prog: usize = 0usize;
         let mut pc: (u64, u64) = (0, 0);
         let mut pre = self.state_root(pc);
         loop {
             let blk = pc.0 as usize;
             let idx = pc.1 as usize;
-            let ins = self.blocks[blk].insns[idx].clone();
-            let decoded = self.decoded_at(blk, idx);
+            let (cur_sids, span) = if prog == 0 {
+                (sids.clone(), self.blocks[blk].insns[idx].start..self.blocks[blk].insns[idx].end)
+            } else {
+                let cb = &self.callee_blocks[prog - 1];
+                (self.callee_sids[prog - 1].clone(), cb[blk].insns[idx].start..cb[blk].insns[idx].end)
+            };
+            let ins = if prog == 0 {
+                self.blocks[blk].insns[idx].clone()
+            } else {
+                self.callee_blocks[prog - 1][blk].insns[idx].clone()
+            };
+            let decoded = if prog == 0 {
+                self.decoded_at(blk, idx)
+            } else {
+                words_to_bytes(&self.callee_words[prog - 1][span.clone()])
+            };
             let tag = words_of(&decoded)?[0];
-            let c = self.profile.charge[tag as usize];
+            let c = bhat::charge_of(self.profile, tag);
             let mut events: Vec<(u64, [u64; 5])> = Vec::new();
             let mut io_ids: Vec<Vec<u8>> = Vec::new();
             let mut gateway = 0u64;
@@ -921,7 +1150,7 @@ impl<'a> Machine<'a> {
             let transfer =
                 match {
                     self.step_receipt_ids.clear();
-                    self.dispatch(&ins.op, pc, &mut events, &mut io_ids, &sids)
+                    self.dispatch(&ins.op, pc, &mut events, &mut io_ids, &cur_sids)
                 } {
                     Ok(t) => t,
                     Err(f) => {
@@ -998,10 +1227,57 @@ impl<'a> Machine<'a> {
                     self.pending_miss = Some((tok, fb));
                     pc = (fb, 0);
                 }
+                Transfer::Call { callee, .. } => {
+                    prog = callee + 1;
+                    pc = (0, 0);
+                }
+                Transfer::Ret => {
+                    if let Some(f) = self.frames.pop() {
+                        let used = self.acc.charged.saturating_sub(f.charged_at_call);
+                        let residue = f.reserve.saturating_sub(used + 6);
+                        let _ = residue; // transition-local residue, not a second escrow refund
+                        self.stack_root = f.parent_root.clone();
+                        let v = match &ins.op {
+                            Exec::Ret { refs } => refs.first().map(|r| self.ref_int(*r)).unwrap_or(0),
+                            _ => 0,
+                        };
+                        if v <= f.ret_bound {
+                            self.mint(f.ret_sid, Value::int(v));
+                        }
+                        prog = 0;
+                        pc = (f.ret_pc.0, f.ret_pc.1 + 1);
+                    }
+                }
                 Transfer::To(tgt) => pc = (tgt, 0),
                 Transfer::Fall => pc = (blk as u64, idx as u64 + 1),
                 Transfer::Halt => unreachable!(),
             }
+        }
+    }
+
+    fn sid_for(op: &Exec, pc: (u64, u64), sids: &[Vec<Option<u64>>]) -> u64 {
+        let _ = op;
+        sids[pc.0 as usize][pc.1 as usize].unwrap_or(0)
+    }
+
+    fn container_at(&self, sid: u64) -> Option<&containers::Container> {
+        let iid = self.current.get(&sid).copied()?;
+        self.containers.get(&(sid, iid))
+    }
+
+    /// COW: bind a new container version in the dynamic value store (§2.4).
+    fn put_container(&mut self, sid: u64, c: containers::Container) {
+        let iid = self.next_iid;
+        self.next_iid += 1;
+        self.containers.insert((sid, iid), c);
+        self.store.insert((sid, iid), Value::int(0)); // opaque handle, same instance
+        self.current.insert(sid, iid);
+    }
+
+    fn ref_int(&self, sid: u64) -> i128 {
+        match self.current.get(&sid).and_then(|i| self.store.get(&(sid, *i))) {
+            Some(v) => value_as_i128(v, "reference").unwrap_or(0),
+            None => 0,
         }
     }
 
@@ -1117,11 +1393,11 @@ impl<'a> Machine<'a> {
                 if *tag == 8 {
                     // §2.3's division rule: the zero divisor births the
                     // domain error; the quotient truncates toward zero
-                    let y = self.read_i(*b);
+                    let y = self.ref_int(*b);
                     if y == 0 {
                         return Err(FatalErr { ttype: TT_STATUS_DOMAIN_ERROR });
                     }
-                    let x = self.read_i(*a);
+                    let x = self.ref_int(*a);
                     let q = x / y;
                     if q > *bound {
                         return Err(etc());
@@ -1132,11 +1408,11 @@ impl<'a> Machine<'a> {
                 if *tag == 9 {
                     // §2.3's remainder rule: the zero divisor births the
                     // domain error; the committed remainder is non-negative
-                    let y = self.read_i(*b);
+                    let y = self.ref_int(*b);
                     if y == 0 {
                         return Err(FatalErr { ttype: TT_STATUS_DOMAIN_ERROR });
                     }
-                    let x = self.read_i(*a);
+                    let x = self.ref_int(*a);
                     let r = (x % y).abs();
                     if r > *bound {
                         return Err(etc());
@@ -1144,7 +1420,7 @@ impl<'a> Machine<'a> {
                     self.mint(sid, Value::int(r));
                     return Ok(None);
                 }
-                let (x, y) = (self.read_i(*a), self.read_i(*b));
+                let (x, y) = (self.ref_int(*a), self.ref_int(*b));
                 // §2.3's arithmetic definitions: ADD sums, SUB subtracts,
                 // MUL multiplies. (The seed exercises only ADD; the
                 // derivation tool's SUB/MUL aliases were seed-harmless —
@@ -1268,6 +1544,149 @@ impl<'a> Machine<'a> {
                 ]));
                 self.step_receipt_ids.push(ordn);
                 Ok(None)
+            }
+            Exec::ArrNew { cap, elem } => {
+                let c = containers::Container::new(containers::ARRAY_RRB16, *cap, *elem)
+                    .map_err(|_| FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                self.put_container(Self::sid_for(op, pc, sids), c);
+                Ok(None)
+            }
+            Exec::TblNew { cap, elem } => {
+                let c = containers::Container::new(containers::TABLE_MBTREE16, *cap, *elem)
+                    .map_err(|_| FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                self.put_container(Self::sid_for(op, pc, sids), c);
+                Ok(None)
+            }
+            Exec::ArrLen { a, bound } | Exec::TblLen { a, bound } => {
+                let c = self.container_at(*a).cloned()
+                    .ok_or(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                if c.len() as i128 > *bound {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let sid = Self::sid_for(op, pc, sids);
+                self.mint(sid, Value::int(c.len() as i128));
+                Ok(None)
+            }
+            Exec::ArrGet { a, idx, bound } => {
+                let i = self.ref_int(*idx);
+                let c = self.container_at(*a).cloned()
+                    .ok_or(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                let v = c.get_index(i).map_err(|_| FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                if v > *bound {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let sid = Self::sid_for(op, pc, sids);
+                self.mint(sid, Value::int(v));
+                Ok(None)
+            }
+            Exec::TblAt { a, rank, kbound: _, vbound } => {
+                let r = self.ref_int(*rank);
+                let c = self.container_at(*a).cloned()
+                    .ok_or(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                let (_, v) = c.at(r).map_err(|_| FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                if v > *vbound {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let sid = Self::sid_for(op, pc, sids);
+                self.mint(sid, Value::int(v));
+                Ok(None)
+            }
+            Exec::ArrSet { a, idx, val } | Exec::TblSet { a, key: idx, val } => {
+                let i = self.ref_int(*idx);
+                let v = self.ref_int(*val);
+                let c = self.container_at(*a).cloned()
+                    .ok_or(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                let next = if matches!(op, Exec::ArrSet { .. }) {
+                    c.set_index(i, v)
+                } else {
+                    c.set_key(i as u64, v)
+                }
+                .map_err(|_| FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                let sid = Self::sid_for(op, pc, sids);
+                self.put_container(sid, next);
+                Ok(None)
+            }
+            Exec::TblGet { a, key, fallback, bound } => {
+                let k = self.ref_int(*key) as u64;
+                let c = self.container_at(*a).cloned()
+                    .ok_or(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                if let Some(v) = c.get_key(k) {
+                    if v > *bound {
+                        return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                    }
+                    let sid = Self::sid_for(op, pc, sids);
+                    self.mint(sid, Value::int(v));
+                    return Ok(None);
+                }
+                // miss: F25 trip-ceiling site (src_blk, src_idx, 0)
+                self.check_ceiling(pc, *fallback, 0)?;
+                let tok = self.birth_token(TT_STATUS_LOOKUP_MISS, pc, self.step + 1, TIER_O);
+                events.push((1, tid(&tok)));
+                _ = io_ids;
+                Ok(Some(Transfer::Miss(tok, *fallback)))
+            }
+            Exec::ArrBatch { a, batch, cnt } | Exec::TblBatch { a, batch, cnt } => {
+                let _ = (a, batch, cnt);
+                Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })
+            }
+            Exec::ArrRoot { a } | Exec::TblRoot { a } => {
+                let c = self.container_at(*a).cloned()
+                    .ok_or(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX })?;
+                let d = c.root();
+                let mut fields = Vec::new();
+                for w in d {
+                    fields.push(Value::int(w as i128));
+                }
+                let sid = Self::sid_for(op, pc, sids);
+                self.mint(sid, Value::Tuple(fields));
+                Ok(None)
+            }
+            Exec::Call { callee, argc, args, retc: _, rets } => {
+                let depth = self.frames.len() as u64;
+                if depth >= 8 || *callee as usize >= self.callee_blocks.len() {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let cid = *callee as usize;
+                if *argc > 64 {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                let reserve = self.callee_bh[cid] + 6; // + charge(OP_RET)
+                let parent_root = self.stack_root.clone();
+                let suspended = self.config_p2(pc);
+                let mut pre = vec![0x30u8];
+                pre.extend_from_slice(&parent_root);
+                pre.extend_from_slice(&suspended);
+                self.stack_root = crate::sha256::sha256(&pre).to_vec();
+                // The sub-budget is transition-local: it is not added to the
+                // outer escrow; only its residue is refunded at OP_RET.
+                for (i, a) in args.iter().enumerate() {
+                    let v = self.ref_int(*a);
+                    self.mint(i as u64, Value::int(v)); // callee block-argument ids 0..argc-1
+                }
+                let ret_sid = Self::sid_for(op, pc, sids);
+                let ret_bound = rets.first().copied().unwrap_or(0);
+                self.frames.push(Frame {
+                    callee: cid,
+                    ret_pc: pc,
+                    ret_prog: 0,
+                    ret_sid,
+                    ret_bound,
+                    reserve,
+                    charged_at_call: self.acc.charged,
+                    parent_root,
+                });
+                Ok(Some(Transfer::Call {
+                    callee: cid,
+                    args: args.clone(),
+                    ret_sid,
+                    ret_bound,
+                }))
+            }
+            Exec::Ret { .. } => {
+                if self.frames.is_empty() {
+                    return Err(FatalErr { ttype: TT_EXPRESSION_TOO_COMPLEX });
+                }
+                Ok(Some(Transfer::Ret))
             }
             Exec::Halt => Ok(Some(Transfer::Halt)),
         }

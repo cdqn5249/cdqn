@@ -166,7 +166,7 @@ fn block_charge_and_flow(blocks: &[Block], profile: &Profile, bid: usize) -> (u6
                     },
                 )
             }
-            OP_HALT => return (total, Term::Halt),
+            OP_HALT | 31 => return (total, Term::Halt),
             _ => {}
         }
     }
@@ -264,7 +264,7 @@ fn in_block_continue(ctx: &mut Ctx, bid: usize, from_idx: usize, rem: &[u32]) ->
     let mut total = 0u64;
     for k in from_idx..b.insns.len() {
         let ins = &b.insns[k];
-        total += ctx.profile.charge[ins.tag as usize];
+        total += charge_of(ctx.profile, ins.tag);
         match ins.tag {
             OP_HALT => return Some(total),
             OP_JMP => {
@@ -296,6 +296,7 @@ fn in_block_continue(ctx: &mut Ctx, bid: usize, from_idx: usize, rem: &[u32]) ->
                 };
                 return join(rest, miss).map(|v| v + total);
             }
+            OP_HALT | 31 => return Some(total),
             _ => {}
         }
     }

@@ -312,7 +312,9 @@ RTAG_NAMES = {1: "int", 3: "tuple", 4: "zoom"}
 ZOOM_EXP_LO, ZOOM_EXP_HI = -4, 4
 ZOOM_MAN_HI = 1 << 64
 DEFINING = {"CONST", "CLOAD", "TUPLE", "FIELD", "ADD", "SUB", "MUL", "DIV",
-            "MOD", "CMP", "OBS"}
+            "MOD", "CMP", "OBS", "ARR_NEW", "ARR_LEN", "ARR_GET", "ARR_SET",
+            "ARR_BATCH", "ARR_ROOT", "TBL_NEW", "TBL_LEN", "TBL_GET", "TBL_AT",
+            "TBL_SET", "TBL_BATCH", "TBL_ROOT", "OP_CALL"}
 ARITH = ("ADD", "SUB", "MUL", "DIV", "MOD")
 S_OPCODE = "malformed — unknown opcode tag"
 S_CC = "malformed — unknown condition code"
@@ -410,33 +412,35 @@ def decode_instruction(ws, i, end, allow_ext=False):
     elif name in ("PROMOTE", "HALT"):
         pass
     elif name in ("ARR_NEW", "TBL_NEW"):
-        word(); value(); word(); value()  # cap_bnd, elem_bnd (rtag + INT_POS)
+        word(); ins["cap"] = value(); word(); ins["elem"] = value()
     elif name in ("ARR_LEN", "TBL_LEN"):
-        word(); word(); value()   # ref(arr), rtag + len bnd
+        ins["a"] = word(); word(); ins["rbnd"] = value()
     elif name in ("ARR_ROOT", "TBL_ROOT"):
-        word()
+        ins["a"] = word()
     elif name in ("ARR_GET", "TBL_AT"):
-        word(); word(); word(); value()
+        ins["a"] = word(); ins["idx"] = word(); word(); ins["rbnd"] = value()
         if name == "TBL_AT":
-            word(); value()
+            word(); ins["vbnd"] = value()
     elif name == "TBL_GET":
-        word(); word(); word(); word(); value()  # tbl, key, fallback, rtag, bnd
+        ins["a"] = word(); ins["key"] = word(); ins["fallback"] = word()
+        word(); ins["rbnd"] = value()
     elif name in ("ARR_SET", "TBL_SET", "ARR_BATCH", "TBL_BATCH"):
-        word(); word(); word()
+        ins["a"] = word(); ins["idx"] = word(); ins["val"] = word()
         if name in ("ARR_BATCH", "TBL_BATCH"):
-            word()  # batch_cnt
+            ins["cnt"] = word()  # batch_cnt
     elif name == "OP_CALL":
-        word()                       # callee_id
+        ins["callee_id"] = word()
         argc = word()
-        for _ in range(argc):
-            word()
+        ins["argc"] = argc
+        ins["args"] = [word() for _ in range(argc)]
         retc = word()
+        ins["rets"] = []
         for _ in range(retc):
-            word(); value()
+            word()  # result type tag
+            ins["rets"].append(value())
     elif name == "OP_RET":
         retc = word()
-        for _ in range(retc):
-            word()
+        ins["refs"] = [word() for _ in range(retc)]
     else:
         raise ValueError(f"opcode {name} has no operand rule in the committed inventory")
     ins["ext"] = word()
@@ -572,12 +576,12 @@ def decode_envelope(bs):
                 or not isinstance(rec[0], int)
                 or not all(isinstance(x, (bytes, bytearray)) for x in rec[1:])):
             raise ValueError("malformed callee record")
-    blocks = decode_stream(m[6], m[5], m[2] == "qir-enc-4")
-    if m[2] != "qir-enc-4":
-        for blk in blocks:
-            for ins in blk["instrs"]:
-                if OP_CODE[ins["op"]] >= 17:
-                    raise Malformed(S_OPCODE)
+    blocks = decode_stream(m[6], m[5], m[2] != "qir-enc-2")
+    max_tag = {"qir-enc-2": 16, "qir-enc-3": 29, "qir-enc-4": 31}.get(m[2], 16)
+    for blk in blocks:
+        for ins in blk["instrs"]:
+            if OP_CODE[ins["op"]] > max_tag:
+                raise Malformed(S_OPCODE)
     # the EXT side table: the declared record structure, unique index
     # words, and the payload reading P14 (expansion increment 5)
     check_ext_table(m[7])
@@ -749,7 +753,7 @@ def b_hat(blocks, gateway, charge_of, trip_ceiling, s_max=4096):
             ins = b["instrs"][j]
             total += charge_of(ins)
             op = ins["op"]
-            if op == "HALT":
+            if op in ("HALT", "OP_RET"):
                 out = total
                 break
             if op == "JMP":
@@ -845,6 +849,21 @@ class Machine:
     def __init__(self, envelope_bytes, D, w_budget, profile, b_inject=None):
         env = decode_envelope(envelope_bytes)
         self.blocks = env["blocks"]
+        self.sids = []
+        _sid = len(env.get("callees", []))  # declaration handles precede entry ids
+        for blk in self.blocks:
+            row = []
+            for ins in blk["instrs"]:
+                if ins["op"] in DEFINING:
+                    row.append(_sid)
+                    _sid += 1
+                else:
+                    row.append(0)
+            self.sids.append(row)
+        for bi, blk in enumerate(self.blocks):
+            for ii, ins in enumerate(blk["instrs"]):
+                if ii < len(self.sids[bi]):
+                    ins["sid"] = self.sids[bi][ii]
         self.deps = env["deps"]
         self.words = words_of(env["stream"])
         self.versions = [env["sem"], env["enc"], env["prof"]]
@@ -871,6 +890,36 @@ class Machine:
         #                            each the P13(d) entry
         self.step_receipt_ids = []  # the ordinals the current transition emitted
         self.store = {}             # (static id, instance id) -> value
+        self.containers = {}        # (static id, instance id) -> Container
+        self.callees = []           # [(blocks, sids, interior_bh)]
+        for rec in env.get("callees", []):
+            cb = decode_stream(rec[3], 1, True)
+            arity = len(rec[1]) // 32  # one bnd = 4 words = 32 bytes
+            sids = []
+            n = arity
+            for blk in cb:
+                row = []
+                for ins in blk["instrs"]:
+                    if ins["op"] in DEFINING:
+                        row.append(n); n += 1
+                    else:
+                        row.append(0)
+                sids.append(row)
+            for bi, blk in enumerate(cb):
+                for ii, ins in enumerate(blk["instrs"]):
+                    if ii < len(sids[bi]):
+                        ins["sid"] = sids[bi][ii]
+            self.callees.append((cb, sids, b_hat(cb, profile["gateway"],
+                                                lambda i: ins_charge(i, profile),
+                                                profile["trip_ceiling"], profile["s_max"]) or 0,
+                                 words_of(rec[3])))
+        if b_inject is None and self.callees:
+            ws = words_of(env["stream"])
+            for wi, wv in enumerate(ws[:-1]):
+                if wv == 30 and wv + 0 == 30 and ws[wi + 1] < len(self.callees):
+                    self.BH += max(0, self.callees[ws[wi + 1]][2] - profile["gateway"])
+        self.stack_root = hashlib.sha256(b"\x02").digest()
+        self.frames = []            # frame dicts for OP_CALL/OP_RET
         self.current = {}           # static id -> current instance id
         self.next_iid = 0
         self.next_serial = len(env["pool"])
@@ -891,16 +940,29 @@ class Machine:
         bytes) of the canonical configuration encoding P2 — the P2
         pre-image is retained in-memory per F15 and never substituted for
         the digest."""
-        store_c = [[s, i, enc_value(v)] for (s, i), v in
-                   sorted(self.store.items(), key=lambda kv: kv[0])]
+        store_c = [[s, i, self.containers[(s, i)].canonical_bytes()
+                    if (s, i) in self.containers else enc_value(v)]
+                   for (s, i), v in sorted(self.store.items(), key=lambda kv: kv[0])]
         pool_c = [[t["birth"], t["block"], t["index"], t["serial"], t["type"],
                    t["tier"], t["state"]]
                   for t in sorted(self.pool, key=tid)]
-        comps = [list(pc), [], store_c, pool_c,
+        return hashlib.sha256(self.config_p2_bytes(pc, store_c, pool_c)).digest()
+
+    def p2_now(self, pc):
+        store_c = [[s, i, self.containers[(s, i)].canonical_bytes()
+                    if (s, i) in self.containers else enc_value(v)]
+                   for (s, i), v in sorted(self.store.items(), key=lambda kv: kv[0])]
+        pool_c = [[t["birth"], t["block"], t["index"], t["serial"], t["type"],
+                   t["tier"], t["state"]] for t in sorted(self.pool, key=tid)]
+        return self.config_p2_bytes(pc, store_c, pool_c)
+
+    def config_p2_bytes(self, pc, store_c, pool_c):
+        env_c = [] if not self.frames else [[], self.stack_root]
+        comps = [list(pc), env_c, store_c, pool_c,
                  [self.acc["charged"], self.acc["reserved"], self.acc["refunded"]],
                  self.clock, self.step, [self.halt[0], self.halt[1]],
                  list(self.receipts), list(self.versions)]
-        return hashlib.sha256(cbor_encode(comps)).digest()
+        return cbor_encode(comps)
 
     def emit(self, pc, decoded, charged, refunded, events, io_ids, pre, post):
         """One transition record: the fourteen fields of §2.6's F5 list, in
@@ -952,11 +1014,19 @@ class Machine:
             return self.rejection("EXPRESSION_TOO_COMPLEX", (0, 0),
                                   self.decoded_at(0, 0), pre)
         pc = (0, 0)
+        prog = 0
         pre = self.config_root(pc)
         while True:
+            if self.frames:
+                blocks, sids = self.callees[prog - 1][0], self.callees[prog - 1][1]
+            else:
+                blocks, sids = self.blocks, self.sids
+            self._cur_sids = sids
             blk, idx = pc
-            ins = self.blocks[blk]["instrs"][idx]
-            decoded = self.decoded_at(blk, idx)
+            ins = blocks[blk]["instrs"][idx]
+            decoded = self.decoded_at(blk, idx) if prog == 0 else bytes(
+                v for w in self.callees[prog - 1][3][ins["span"][0]:ins["span"][1]]
+                for v in w.to_bytes(8, "big"))
             c = ins_charge(ins, self.profile)
             events = []
             io_ids = []
@@ -982,7 +1052,7 @@ class Machine:
                 gateway = self.profile["gateway"]
             post_charge = gateway + c
             self.acc["charged"] += post_charge
-            cls = CLASS_OF[ins["op"]]
+            cls = CLASS_OF.get(ins["op"], "q_" + ins["op"].lower())
             self.per_class[cls] = self.per_class.get(cls, 0) + c
             if gateway:
                 self.per_class["gateway"] = self.per_class.get("gateway", 0) + gateway
@@ -1020,6 +1090,19 @@ class Machine:
                 pc = (transfer[2], 0)
             elif transfer[0] in ("br", "jmp"):
                 pc = (transfer[1], 0)
+            elif transfer[0] == "call":
+                prog = transfer[1] + 1
+                pc = (0, 0)
+            elif transfer[0] == "ret":
+                f = self.frames.pop()
+                used = self.acc["charged"] - f["charged_at_call"]
+                residue = max(0, f["reserve"] - used - 6)
+                self.stack_root = f["parent"]
+                v = self._int_at(ins["refs"][0]) if ins["refs"] else 0
+                if v <= f["ret_bound"]:
+                    self.mint(f["ret_sid"], v)
+                prog = 0
+                pc = (f["ret_pc"][0], f["ret_pc"][1] + 1)
             else:
                 pc = (blk, idx + 1)
 
@@ -1065,14 +1148,154 @@ class Machine:
         # the miss edge leaves the block here (§2.3 CLOAD row)
         return ("miss", tok, ins["fallback"])
 
+    # ----------------------------------------------- containers (qir-enc-3/4)
+    def _container_at(self, sid):
+        iid = self.current.get(sid)
+        return self.containers.get((sid, iid)) if iid is not None else None
+
+    def _put_container(self, sid, c):
+        iid = self.next_iid
+        self.next_iid += 1
+        self.containers[(sid, iid)] = c
+        self.store[(sid, iid)] = 0   # opaque integer handle at this instance
+        self.current[sid] = iid
+
+    def _int_at(self, sid):
+        v = self.read(sid)
+        return v if isinstance(v, int) else 0
+
+    def _sid(self, pc):
+        rows = getattr(self, "_cur_sids", self.sids)
+        return rows[pc[0]][pc[1]] or 0
+
+    def do_ARR_NEW(self, ins, pc, events, io_ids):
+        self._put_container(self._sid(pc), Container(ARRAY_RRB16, ins["cap"], ins["elem"]))
+
+    def do_TBL_NEW(self, ins, pc, events, io_ids):
+        self._put_container(self._sid(pc), Container(TABLE_MBTREE16, ins["cap"], ins["elem"]))
+
+    def do_ARR_LEN(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        n = c.len()
+        if n > ins["rbnd"]:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(self._sid(pc), n)
+
+    do_TBL_LEN = do_ARR_LEN
+
+    def do_ARR_GET(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        try:
+            v = c.get_index(self._int_at(ins["idx"]))
+        except ValueError:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        if v > ins["rbnd"]:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(self._sid(pc), v)
+
+    def do_TBL_AT(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        try:
+            _, v = c.at(self._int_at(ins["idx"]))
+        except ValueError:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        if v > ins["vbnd"]:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(self._sid(pc), v)
+
+    def do_ARR_SET(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        try:
+            nxt = c.set_index(self._int_at(ins["idx"]), self._int_at(ins["val"]))
+        except ValueError:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self._put_container(self._sid(pc), nxt)
+
+    def do_TBL_SET(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        try:
+            nxt = c.set_key(self._int_at(ins["idx"]), self._int_at(ins["val"]))
+        except ValueError:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self._put_container(self._sid(pc), nxt)
+
+    def do_TBL_GET(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        k = self._int_at(ins["key"])
+        v = c.get_key(k)
+        if v is not None:
+            if v > ins["rbnd"]:
+                raise Rejection("EXPRESSION_TOO_COMPLEX")
+            self.mint(self._sid(pc), v)
+            return None
+        self.check_ceiling(pc, ins["fallback"], 0)
+        tok = self.birth(TOKEN_TYPES_REV["STATUS_LOOKUP_MISS"], pc)
+        tok["tier"] = TIER_O
+        events.append([1, tid(tok)])
+        return ("miss", tok, ins["fallback"])
+
+    def do_ARR_ROOT(self, ins, pc, events, io_ids):
+        c = self._container_at(ins["a"])
+        if c is None:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(self._sid(pc), ("tuple",) + tuple(c.root()))
+
+    do_TBL_ROOT = do_ARR_ROOT
+
+    def do_OP_CALL(self, ins, pc, events, io_ids):
+        if len(self.frames) >= 8 or ins["callee_id"] >= len(self.callees):
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        cid = ins["callee_id"]
+        if ins["argc"] > 64:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        cb, sids, interior, raw = self.callees[cid]
+        reserve = interior + 6
+        parent = self.stack_root
+        pre = b"\x30" + parent + self.p2_now(pc)
+        self.stack_root = hashlib.sha256(pre).digest()
+        for i, a in enumerate(ins["args"]):
+            self.mint(i, self._int_at(a))  # callee block-argument ids are 0..argc-1
+        self.frames.append({"callee": cid, "ret_pc": pc, "reserve": reserve,
+                            "charged_at_call": self.acc["charged"], "parent": parent,
+                            "ret_sid": self._sid(pc), "ret_bound": ins["rets"][0] if ins["rets"] else 0})
+        self._next_prog = cid + 1
+        self._next_pc = (0, 0)
+        return ("call", cid)
+
+    def do_OP_RET(self, ins, pc, events, io_ids):
+        if not self.frames:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        return ("ret", None)
+
     def do_ADD(self, ins, pc, events, io_ids):
-        r = self.read(ins["a"]) + self.read(ins["b"])
+        r = self._int_at(ins["a"]) + self._int_at(ins["b"])
         if r > ins["rbnd"]:
             raise Rejection("EXPRESSION_TOO_COMPLEX")
         self.mint(ins["sid"], r)
 
-    do_SUB = do_ADD
-    do_MUL = do_ADD
+    def do_SUB(self, ins, pc, events, io_ids):
+        r = self._int_at(ins["a"]) - self._int_at(ins["b"])
+        if r > ins["rbnd"]:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(ins["sid"], r)
+
+    def do_MUL(self, ins, pc, events, io_ids):
+        r = self._int_at(ins["a"]) * self._int_at(ins["b"])
+        if r > ins["rbnd"]:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
+        self.mint(ins["sid"], r)
 
     def do_DIV(self, ins, pc, events, io_ids):
         a, b = self.read(ins["a"]), self.read(ins["b"])
@@ -2709,17 +2932,19 @@ def eval_cbor(path, budget=1000):
     # The committed inventory has execution rules for these opcodes only;
     # validate the whole stream before running (the Rust artifact pre-decodes
     # every instruction, so both implementations must agree).
-    supported = {"CONST", "CLOAD", "ADD", "DIV", "MOD", "CMP", "BR", "JMP",
-                 "OBS", "PROMOTE", "TUPLE", "FIELD", "EMIT", "HALT"}
+    supported = {"CONST", "CLOAD", "ADD", "SUB", "MUL", "DIV", "MOD", "CMP",
+                 "BR", "JMP", "OBS", "PROMOTE", "TUPLE", "FIELD", "EMIT", "HALT",
+                 "ARR_NEW", "ARR_LEN", "ARR_GET", "ARR_SET", "ARR_BATCH", "ARR_ROOT",
+                 "TBL_NEW", "TBL_LEN", "TBL_GET", "TBL_AT", "TBL_SET", "TBL_BATCH",
+                 "TBL_ROOT", "OP_CALL", "OP_RET"}
     for blk in blocks:
         for ins in blk["instrs"]:
             if ins["op"] not in supported:
                 print(f"EVAL_FAIL opcode {ins['op']} has no execution rule in the committed inventory")
                 return 1
-    bh = b_hat(blocks, 20, lambda ins: ins_charge(ins, profile), 1, 4096)
-    print(f"B_hat = {bh if bh is not None else 'null'}")
     try:
         res = Machine(raw, {}, budget, profile).run()
+        print(f"B_hat = {res['B_hat'] if res['B_hat'] is not None else 'null'}")
     except Exception as exc:
         print(f"EVAL_FAIL {type(exc).__name__}: {exc}")
         return 1

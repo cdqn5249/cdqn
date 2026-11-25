@@ -754,13 +754,17 @@ pub fn decode_envelope(bytes: &[u8]) -> Result<Intent, String> {
         None => Vec::new(),
         _ => return Err(err("the callee table must be an array")),
     };
-    let blocks = decode_stream_gated(&stream, n_blocks, enc_v == "qir-enc-4")?;
-    if enc_v != "qir-enc-4" {
-        for b in &blocks {
-            for i in &b.insns {
-                if i.tag >= 17 {
-                    return Err(err("unknown opcode tag"));
-                }
+    let allow_ext = enc_v != "qir-enc-2";
+    let max_tag = match enc_v.as_str() {
+        "qir-enc-4" => 31,
+        "qir-enc-3" => 29,
+        _ => 16,
+    };
+    let blocks = decode_stream_gated(&stream, n_blocks, allow_ext)?;
+    for b in &blocks {
+        for i in &b.insns {
+            if i.tag > max_tag {
+                return Err(err("unknown opcode tag"));
             }
         }
     }

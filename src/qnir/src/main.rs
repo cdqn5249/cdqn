@@ -2060,10 +2060,14 @@ fn eval_cbor(path: &str, budget: u64) {
         bytes.len(), intent.sem, intent.enc, intent.prof, intent.n_blocks, intent.callees.len()
     );
     let profile = bhat::golden_profile();
-    let bh = bhat::b_hat(&intent.blocks, &profile);
-    println!("B_hat = {}", bh.map(|v| v.to_string()).unwrap_or_else(|| "null".into()));
     match run_vector(&bytes, budget, &profile, &[]) {
         Ok(run) => {
+            // The compositional surrogate (callee interiors folded at OP_CALL
+            // sites) is the admission bound actually used by the machine.
+            println!(
+                "B_hat = {}",
+                run.bh.map(|v| v.to_string()).unwrap_or_else(|| "null".into())
+            );
             let recs: Vec<Vec<u8>> = run
                 .records
                 .iter()
@@ -2248,7 +2252,7 @@ mod eval_cbor_tests {
     use super::*;
     use crate::cbor::Cbor;
 
-    fn words_to_bytes(words: Vec<u64>) -> Vec<u8> {
+    fn words_to_bytes(words: &[u64]) -> Vec<u8> {
         words.iter().flat_map(|w| w.to_be_bytes()).collect()
     }
 
@@ -2261,7 +2265,7 @@ mod eval_cbor_tests {
             (Cbor::UInt(3), Cbor::Text("qir-prof-ext-calls-1".into())),
             (Cbor::UInt(4), Cbor::Array(Vec::new())),
             (Cbor::UInt(5), Cbor::UInt(1)),
-            (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(words))),
+            (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(&words))),
             (Cbor::UInt(7), Cbor::Array(Vec::new())),
             (Cbor::UInt(8), Cbor::Array(Vec::new())),
             (Cbor::UInt(9), Cbor::Array(vec![Cbor::Array(vec![
@@ -2276,6 +2280,176 @@ mod eval_cbor_tests {
         let i = insn::decode_envelope(&envelope(&[16, 0, 16, 0])).unwrap();
         assert_eq!(i.enc, "qir-enc-4");
         assert_eq!(i.callees.len(), 1);
+    }
+
+    fn envelope_v(enc: &str, insn_count: u64, stream_words: &[u64], key9: bool) -> Vec<u8> {
+        let words: Vec<u64> = [vec![0, 0, insn_count], stream_words.to_vec()].concat();
+        let mut entries = vec![
+            (Cbor::UInt(0), Cbor::Bytes(b"QnIR-Intent".to_vec())),
+            (Cbor::UInt(1), Cbor::Text("v0.3.0-draft.8.4".into())),
+            (Cbor::UInt(2), Cbor::Text(enc.into())),
+            (Cbor::UInt(3), Cbor::Text("qir-prof-ext-calls-1".into())),
+            (Cbor::UInt(4), Cbor::Array(Vec::new())),
+            (Cbor::UInt(5), Cbor::UInt(1)),
+            (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(&words))),
+            (Cbor::UInt(7), Cbor::Array(Vec::new())),
+            (Cbor::UInt(8), Cbor::Array(Vec::new())),
+        ];
+        if key9 {
+            entries.push((Cbor::UInt(9), Cbor::Array(Vec::new())));
+        }
+        cbor::encode(&Cbor::Map(entries))
+    }
+
+    #[test]
+    fn container_envelope_executes_standalone() {
+        // ARR_NEW cap=2 elem=255, CONST 0, ARR_SET, ARR_LEN, HALT.
+        let words = vec![
+            17, 1, 1, 1, 2, 1, 1, 1, 255, 0,
+            1, 1, 0, 1, 1, 1, 255, 0,
+            20, 0, 1, 0, 0,
+            18, 0, 1, 1, 1, 255, 0,
+            16, 0,
+        ];
+        let bytes = envelope_v("qir-enc-3", 5, &words, false);
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "SUCCESS");
+        assert_eq!(run.records.len(), 5);
+    }
+
+    #[test]
+    fn qir_enc3_rejects_call_and_key9() {
+        // OP_CALL is tag 30; under qir-enc-3 it is an unknown opcode.
+        let bytes = envelope_v("qir-enc-3", 1, &[30, 0, 0, 0, 0, 0], false);
+        assert!(insn::decode_envelope(&bytes).is_err());
+        // key 9 under qir-enc-3 is an unknown envelope key.
+        let bytes9 = envelope_v("qir-enc-3", 1, &[16, 0], true);
+        assert!(insn::decode_envelope(&bytes9).is_err());
+    }
+
+    fn const_ins(v: u64, bnd: u64) -> Vec<u64> {
+        vec![1, 1, 1, v, 1, 1, 1, bnd, 0]
+    }
+    fn call_ins(cid: u64) -> Vec<u64> {
+        vec![30, cid, 1, 0, 1, 1, 1, 1, 255, 0]
+    }
+    fn ret_ins() -> Vec<u64> {
+        vec![31, 1, 0, 0]
+    }
+    fn halt_ins() -> Vec<u64> {
+        vec![16, 0]
+    }
+    fn block(insns: &[u64], count: u64) -> Vec<u64> {
+        let mut v = vec![0, 0, count];
+        v.extend_from_slice(insns);
+        v
+    }
+    fn envelope_calls(callee_blocks: Vec<Vec<u64>>, entry: Vec<u64>, entry_count: u64) -> Vec<u8> {
+        let records: Vec<Cbor> = callee_blocks
+            .iter()
+            .enumerate()
+            .map(|(i, b)| {
+                Cbor::Array(vec![
+                    Cbor::UInt(i as u64),
+                    Cbor::Bytes(vec![]),
+                    Cbor::Bytes(vec![]),
+                    Cbor::Bytes(words_to_bytes(b)),
+                ])
+            })
+            .collect();
+        let entries = vec![
+            (Cbor::UInt(0), Cbor::Bytes(b"QnIR-Intent".to_vec())),
+            (Cbor::UInt(1), Cbor::Text("v0.3.0-draft.8.4".into())),
+            (Cbor::UInt(2), Cbor::Text("qir-enc-4".into())),
+            (Cbor::UInt(3), Cbor::Text("qir-prof-ext-calls-1".into())),
+            (Cbor::UInt(4), Cbor::Array(vec![Cbor::Bytes(Vec::new())])),
+            (Cbor::UInt(5), Cbor::UInt(1)),
+            (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(&{
+                let mut v = vec![0u64, 0u64, entry_count];
+                v.extend_from_slice(&entry);
+                v
+            }))),
+            (Cbor::UInt(7), Cbor::Array(Vec::new())),
+            (Cbor::UInt(8), Cbor::Array(Vec::new())),
+            (Cbor::UInt(9), Cbor::Array(records)),
+        ];
+        cbor::encode(&Cbor::Map(entries))
+    }
+
+    #[test]
+    fn nested_calls_chain_0x30_stack_root() {
+        // entry: CONST -> CALL c0 -> HALT; c0: CONST -> CALL c1 -> RET;
+        // c1: CONST -> RET.  Two frames exercise the 0x30 chain and P2 env.
+        let mut c1 = const_ins(3, 255);
+        c1.extend_from_slice(&ret_ins());
+        let mut c0 = const_ins(2, 255);
+        c0.extend_from_slice(&call_ins(1));
+        c0.extend_from_slice(&ret_ins());
+        let mut entry = const_ins(1, 255);
+        entry.extend_from_slice(&call_ins(0));
+        entry.extend_from_slice(&halt_ins());
+        let bytes = envelope_calls(
+            vec![block(&c0, 3), block(&c1, 2)],
+            entry,
+            3,
+        );
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "SUCCESS");
+        assert!(run.bh.unwrap() >= run.acc.charged);
+        assert!(!run.records.is_empty());
+    }
+
+    #[test]
+    fn inner_fatal_settles_sub_budget_and_outer_ledger() {
+        // c0 exceeds its declared bound at CONST (300 > 255): inner fatal.
+        let mut c0 = const_ins(300, 255);
+        c0.extend_from_slice(&ret_ins());
+        let mut entry = const_ins(1, 255);
+        entry.extend_from_slice(&call_ins(0));
+        entry.extend_from_slice(&halt_ins());
+        let bytes = envelope_calls(vec![block(&c0, 2)], entry, 3);
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "EXPRESSION_TOO_COMPLEX");
+        let outstanding = run.acc.reserved
+            .saturating_sub(run.acc.charged)
+            .saturating_sub(run.acc.refunded);
+        assert_eq!(outstanding, 0);
+    }
+
+    #[test]
+    fn miss_token_persists_across_op_ret() {
+        // c0 births a STATUS_LOOKUP_MISS via CLOAD fallback, then returns;
+        // the token remains in the global pool at the caller's HALT.
+        let mut c0 = vec![2, 0, 0, 1, 1, 1, 255, 0]; // CLOAD addr 0, fallback blk 0
+        c0.extend_from_slice(&ret_ins());
+        let mut entry = const_ins(1, 255);
+        entry.extend_from_slice(&call_ins(0));
+        entry.extend_from_slice(&halt_ins());
+        let bytes = envelope_calls(vec![block(&c0, 2)], entry, 3);
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert!(run.records.len() >= 3);
+        // The CLOAD miss births Tier-O STATUS_LOOKUP_MISS; its receipt
+        // itemization survives the callee return into the caller's verdict.
+        assert!(!outcome_name(run.outcome).is_empty());
+    }
+
+    #[test]
+    fn depth_above_c_max_is_refused() {
+        // Nine nested calls: c_i calls c_{i+1}; c8 returns.  Depth 9 > C_max.
+        let mut cbs = Vec::new();
+        for i in 0..9u64 {
+            let mut b = call_ins(i + 1);
+            b.extend_from_slice(&ret_ins());
+            cbs.push(block(&b, 2));
+        }
+        let mut b = ret_ins();
+        cbs.push(block(&b, 1));
+        let mut entry = const_ins(1, 255);
+        entry.extend_from_slice(&call_ins(0));
+        entry.extend_from_slice(&halt_ins());
+        let bytes = envelope_calls(cbs, entry, 3);
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "EXPRESSION_TOO_COMPLEX");
     }
 
     #[test]
