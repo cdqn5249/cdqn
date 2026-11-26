@@ -10,6 +10,7 @@ use crate::sha256;
 use std::collections::HashMap;
 
 const OP_CONST: u64 = 1;
+const OP_FIELD: u64 = 4;
 const OP_TUPLE: u64 = 3;
 const OP_ADD: u64 = 5;
 const OP_MUL: u64 = 7;
@@ -24,6 +25,13 @@ const OP_TBL_GET: u64 = 25;
 const OP_TBL_SET: u64 = 27;
 const OP_CALL: u64 = 30;
 const OP_RET: u64 = 31;
+// qir-enc-5 bootstrap tags (docs/qnir_bootstrap.md §9).
+const OP_BAND: u64 = 32;
+const OP_BOR: u64 = 33;
+const OP_BXOR: u64 = 34;
+const OP_BSHL: u64 = 35;
+const OP_BSHR: u64 = 36;
+const OP_HASH: u64 = 37;
 const TT_INT_POS: u64 = 1;
 const TT_INT_NEG: u64 = 2;
 const TT_ZOOM: u64 = 4;
@@ -76,8 +84,18 @@ fn charge(tag: u64) -> u64 {
         21 | 28 => 16,
         30 => 6, // argc = 1 site
         31 => 6, // retc = 1 site
+        32..=36 => 4,
+        37 => 290, // replaced by charge_at with the declared b_bnd
         _ => 4,
     }
+}
+
+/// F14 charge of one emitted instruction; Q_HASH uses its declared byte bound.
+fn hash_charge(b_bnd: u64) -> u64 {
+    160 + 130 * ((b_bnd + 63) / 64)
+}
+fn charge_at(tag: u64, b_bnd: u64) -> u64 {
+    if tag == OP_HASH { hash_charge(b_bnd) } else { charge(tag) }
 }
 
 fn bound_hi(ty: &str) -> Option<u64> {
@@ -100,6 +118,10 @@ fn bound_hi(ty: &str) -> Option<u64> {
     };
     inner.split("..").last()?.trim().parse::<u64>().ok()
 }
+fn width_of_hi(hi: u64) -> u64 {
+    if hi <= 255 { 8 } else if hi <= 65535 { 16 } else if hi <= u32::MAX as u64 { 32 } else { 64 }
+}
+
 fn cap_of(ty: &str) -> Option<u64> {
     let i = ty.find("cap(")?;
     ty[i + 4..].split(')').next()?.parse::<u64>().ok()
@@ -192,6 +214,10 @@ struct Emitter<'a> {
     store_idx: HashMap<String, u64>,
     next_store_idx: u64,
     call_targets: Vec<u64>,
+    /// Declared byte bound of each emitted instruction (only tag 37 is non-zero).
+    hash_bnds: Vec<u64>,
+    /// True only for the explicitly selected `qir-enc-5` target.
+    bootstrap: bool,
     in_callee: bool,
     /// (declaration name, interior charge excluding gateway).
     segments: Vec<(String, u64)>,
@@ -201,7 +227,11 @@ struct Emitter<'a> {
 impl<'a> Emitter<'a> {
     fn push(&mut self, w: Vec<u64>) {
         if let Some(&tag) = w.first() {
-            if (1..=31).contains(&tag) { self.op_tags.push(tag); self.opcodes += 1; }
+            if (1..=37).contains(&tag) {
+                self.op_tags.push(tag);
+                self.hash_bnds.push(if tag == OP_HASH { w.get(2).copied().unwrap_or(64) } else { 0 });
+                self.opcodes += 1;
+            }
         }
         self.words.extend_from_slice(&w);
     }
@@ -211,7 +241,9 @@ impl<'a> Emitter<'a> {
         self.next_id += 1;
         id
     }
-    fn charge_now(&self) -> u64 { self.op_tags.iter().map(|t| charge(*t)).sum() }
+    fn charge_now(&self) -> u64 {
+        self.op_tags.iter().zip(&self.hash_bnds).map(|(t, b)| charge_at(*t, *b)).sum()
+    }
     fn resolve(&self, id: NodeId) -> NodeId {
         let mut x = id;
         while let Some(&y) = self.norm.bypass.get(&x) { x = y; }
@@ -326,6 +358,32 @@ impl<'a> Emitter<'a> {
                             "declare the lowering mapping before emitting"));
                         return None;
                     }
+                }
+                if matches!(name.as_str(), "band" | "bor" | "bxor" | "bshl" | "bshr") && args.len() == 2 {
+                    if !self.bootstrap {
+                        self.diags.push(diag("E_TARGET_MISMATCH", sp, "bootstrap opcode outside qir-enc-5",
+                            "--target qir-enc-5", name, "select qir-enc-5 or remove the bootstrap operation"));
+                        return None;
+                    }
+                    let a = self.value(args[0], declared_ty)?;
+                    let b = self.value(args[1], declared_ty)?;
+                    let tag = match name.as_str() {
+                        "band" => OP_BAND, "bor" => OP_BOR, "bxor" => OP_BXOR,
+                        "bshl" => OP_BSHL, _ => OP_BSHR,
+                    };
+                    let mut ops = vec![a, b];
+                    ops.extend_from_slice(&bnd(width_of_hi(hi)));
+                    return Some(self.emit(tag, &ops));
+                }
+                if name == "hash" && args.len() == 2 {
+                    if !self.bootstrap {
+                        self.diags.push(diag("E_TARGET_MISMATCH", sp, "bootstrap opcode outside qir-enc-5",
+                            "--target qir-enc-5", "Q(hash)", "select qir-enc-5 or remove the bootstrap operation"));
+                        return None;
+                    }
+                    let a = self.value(args[0], None)?;
+                    let b_bnd = self.qprim_num(args[1]).unwrap_or(64).max(1).min(65536);
+                    return Some(self.emit(OP_HASH, &[a, b_bnd]));
                 }
                 if name == "2:cons" && args.len() == 2 {
                     let a = self.value(args[0], None)?;
@@ -496,6 +554,69 @@ impl<'a> Emitter<'a> {
                 self.push(insn(OP_EMIT, &[1u64, 0u64]));
                 None
             }
+            NodeKind::Loop { trip, body } => {
+                // Declared R11' row: a bounded back-edge block under SCC-bhat.
+                // Stage 0 emits the equivalent straight-line trip(K) unrolling
+                // with one CONST trip witness per iteration; the charge and
+                // S_max admission are identical to the CFG form.
+                let mut last: Option<u64> = None;
+                for k in 0..*trip {
+                    let mut iops = int_pos(k);
+                    iops.extend_from_slice(&bnd(*trip));
+                    let witness = self.emit(OP_CONST, &iops);
+                    let _ = witness;
+                    match &self.p.node(*body).kind {
+                        NodeKind::Block { stmts, tail } => {
+                            for s in stmts {
+                                if let NodeKind::Bind { target, ty, value } = &self.p.node(*s).kind {
+                                    if let Some(r) = self.value(*value, ty.as_deref()) {
+                                        self.refs.insert(target.clone(), r);
+                                    }
+                                } else {
+                                    let _ = self.value(*s, None);
+                                }
+                            }
+                            if let Some(t) = tail {
+                                if let Some(r) = self.value(*t, declared_ty) { last = Some(r); }
+                            }
+                        }
+                        _ => {
+                            if let Some(r) = self.value(*body, declared_ty) { last = Some(r); }
+                        }
+                    }
+                }
+                last
+            }
+            NodeKind::Match { scrut, arms } => {
+                // Tagged TUPLE [tag, payload] + FIELD/CMP/MUL/ADD exhaustive
+                // dispatch: each guarded arm contributes its value only when
+                // the variant tag equals the declared arm index.
+                let s = self.value(*scrut, None)?;
+                let tag = self.emit(OP_FIELD, &[s, 0]);
+                let mut acc: Option<u64> = None;
+                for (idx, (_, arm)) in arms.iter().enumerate() {
+                    let mut cops = int_pos(idx as u64);
+                    cops.extend_from_slice(&bnd(hi));
+                    let ci = self.emit(OP_CONST, &cops);
+                    let mut cmpops = vec![tag, ci];
+                    cmpops.extend_from_slice(&int_pos(0));
+                    cmpops.extend_from_slice(&int_pos(0));
+                    let cmp = self.emit(OP_CMP, &cmpops);
+                    let v = self.value(*arm, declared_ty)?;
+                    let mut mops = vec![cmp, v];
+                    mops.extend_from_slice(&bnd(hi));
+                    let guarded = self.emit(OP_MUL, &mops);
+                    acc = Some(match acc {
+                        None => guarded,
+                        Some(a) => {
+                            let mut aops = vec![a, guarded];
+                            aops.extend_from_slice(&bnd(hi));
+                            self.emit(OP_ADD, &aops)
+                        }
+                    });
+                }
+                acc
+            }
             _ => {
                 self.diags.push(diag("E_LOWERING_AMBIGUOUS", sp, "construct has no declared lowering",
                     "an explicit R11' table row", &format!("{:?}", node.kind),
@@ -520,15 +641,25 @@ impl<'a> Emitter<'a> {
 /// every metadata value the Exposer needs, but never materializes CBOR and
 /// never prints. It is the Compiler's non-committing preview.
 pub fn analyze(p: &Program, source: &str) -> LowerResult {
-    run(p, source, false)
+    analyze_with_target(p, source, "qir-enc-4")
 }
 
-/// Compiler commit pass: the exact bytes emitted by the Stage 0B R11' table.
+/// The default target is the frozen `qir-enc-4`; `--target qir-enc-5`
+/// selects the bootstrap extension explicitly. No target is inferred.
 pub fn lower(p: &Program, source: &str) -> LowerResult {
-    run(p, source, true)
+    lower_with_target(p, source, "qir-enc-4")
 }
 
-fn run(p: &Program, _source: &str, materialize: bool) -> LowerResult {
+pub fn analyze_with_target(p: &Program, source: &str, target: &str) -> LowerResult {
+    run(p, source, false, target)
+}
+
+pub fn lower_with_target(p: &Program, source: &str, target: &str) -> LowerResult {
+    run(p, source, true, target)
+}
+
+fn run(p: &Program, _source: &str, materialize: bool, target: &str) -> LowerResult {
+    let bootstrap = target == "qir-enc-5";
     let norm = normalize(p);
     let erased = erase_domains(p);
     let mut callee_ids = HashMap::new();
@@ -546,7 +677,8 @@ fn run(p: &Program, _source: &str, materialize: bool) -> LowerResult {
     let mut em = Emitter {
         p, norm: &norm, erased: erased.clone(), words: Vec::new(), op_tags: Vec::new(),
         opcodes: 0, refs: HashMap::new(), next_id: 0, callee_ids, store_idx: HashMap::new(),
-        next_store_idx: 0, call_targets: Vec::new(), in_callee: false, segments: Vec::new(), diags: Vec::new(),
+        next_store_idx: 0, call_targets: Vec::new(), hash_bnds: Vec::new(), bootstrap,
+        in_callee: false, segments: Vec::new(), diags: Vec::new(),
     };
     // Q(anchor) names are canonical genesis values (§5.2/§3.1): CONST Q(0)
     // with the anchor's declared bound.
@@ -685,11 +817,16 @@ fn run(p: &Program, _source: &str, materialize: bool) -> LowerResult {
     // (qir-enc-4 §8.2/§8.4). Source-level declaration charges are reported
     // separately by the budget check above.
     let mut charged = 0u64;
-    for t in &em.op_tags {
-        charged += charge(*t);
+    for (t, b) in em.op_tags.iter().zip(&em.hash_bnds) {
+        charged += charge_at(*t, *b);
         if *t == OP_HALT {
             break;
         }
+    }
+    if !bootstrap && em.op_tags.iter().any(|t| *t >= 32) {
+        em.diags.push(diag("E_TARGET_MISMATCH", Span { line: 1, col: 1 },
+            "bootstrap opcode emitted under qir-enc-4", "--target qir-enc-5",
+            target, "select qir-enc-5 for bootstrap operations"));
     }
     let mut b_hat = 20u64 + charged;
     for cid in &em.call_targets {
@@ -702,8 +839,8 @@ fn run(p: &Program, _source: &str, materialize: bool) -> LowerResult {
         let entries = vec![
             (Cbor::UInt(0), Cbor::Bytes(b"QnIR-Intent".to_vec())),
             (Cbor::UInt(1), Cbor::Text("v0.3.0-draft.8.4".into())),
-            (Cbor::UInt(2), Cbor::Text("qir-enc-4".into())),
-            (Cbor::UInt(3), Cbor::Text("qir-prof-ext-calls-1".into())),
+            (Cbor::UInt(2), Cbor::Text(target.into())),
+            (Cbor::UInt(3), Cbor::Text(if bootstrap { "qir-prof-ext-bootstrap-1" } else { "qir-prof-ext-calls-1" }.into())),
             (Cbor::UInt(4), Cbor::Array(Vec::new())),
             (Cbor::UInt(5), Cbor::UInt(1u64)),
             (Cbor::UInt(6), Cbor::Bytes(words_to_bytes(&framed))),

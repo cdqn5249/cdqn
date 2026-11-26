@@ -2,8 +2,8 @@
 layout: default
 title: QnLang — Rung-0 Candidate Specification (High-Level Authoring Language)
 description: QnLang v0.1 Rung-0 — CAE-AST semantic model, operator hygiene, formal EBNF, six-domain type system, zero-concession compiler, and R11' lowering overview
-version: 0.1.0-draft.3
-updated: 2026-11-24
+version: 0.1.0-draft.4
+updated: 2026-11-26
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
 license_file: LICENSE.md
@@ -70,7 +70,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnLang — Rung-0 Candidate Specification (High-Level Authoring Language) |
-| **Version** | 0.1.0-draft.3 |
+| **Version** | 0.1.0-draft.4 |
 | **Last Updated** | 2026-11-24 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -261,13 +261,16 @@ builtin_call     := "Q(metric_dot)" "(" expr "," expr ")"
                   | "Q(2:chirality)" "(" expr ")"
                   | "Q(3:cmp)" "(" expr "," expr ")"
                   | "Q(4:zoom_cmp)" "(" expr "," expr ")"
+                  | ( "Q(band)" | "Q(bor)" | "Q(bxor)" | "Q(bshl)" | "Q(bshr)" )
+                       "(" expr "," expr ")"        (* fixed-width bootstrap ops *)
+                  | "Q(hash)" "(" expr "," qprim ")" (* declared static byte bound *)
                   | "emit" ident ;
 
 structured       := "Q(2:split)" "(" expr ")" "{" "T" "->" block [ ";" ] "F" "->" block [ ";" ] "}"
                   | "Q(match)" "(" expr ")" "{" { ident "->" expr ";" } "}"
                   | "Q(fold)" expr "over" range "init(" expr ")"
                        "as" "(" ident { "," ident } ")" block
-                  | "Q(loop)" "trip(" uint ")" block
+                  | "Q(loop)" ( "trip(" uint ")" | "@[" "trip(" uint ")" "]" ) block
                   | "Q(load)" "(" expr "," expr ")" "@[" "trip(" uint ")" "]"
                        "->" target_pat [ "or_else" block ] ;
 
@@ -322,6 +325,9 @@ All built-ins used by §4 or §6 have exactly one declared signature:
 | `may_emit` | `(v : T, tag : ident) -> bool` | Emission authorization under `Φ_status`. |
 | `leash` | `(e : Qphy<unit(U),T>, Emax : uint) -> Qphy<unit(U),T>` | Physical dissipation clamp. |
 | `metabolic_cap` | `(b : Blanket, cap : uint) -> Blanket` | Qbio metabolic clamp. |
+| `Q(band)` / `Q(bor)` / `Q(bxor)` | `(a : u w, b : u w) -> u w`, `w ∈ {8,16,32,64}` | Fixed-width bitwise; both operands must satisfy `0 <= x < 2^w` (`G2`/`G14`). Lowers to `qir-enc-5` tags `32`/`33`/`34`. |
+| `Q(bshl)` / `Q(bshr)` | `(a : u w, s : u w) -> u w`, `w ∈ {8,16,32,64}` | Logical shift; `0 <= s < w` (`G2`/`G14`); result masked to `w` bits. Lowers to tags `35`/`36`. |
+| `Q(hash)` | `(x : T, b_bnd : Q(k)) -> Q(tuple)<u64, u64, u64, u64>` | Governed SHA-256 over canonical §2.6 bytes; static bound `1 <= b_bnd <= 65536`; F14 charge `160 + 130 * ceil(b_bnd / 64)` U; lowers to tag `37`. |
 
 ### 5.3 `Qs`
 
@@ -379,6 +385,8 @@ All built-ins used by §4 or §6 have exactly one declared signature:
 | 14 | `E_SMAX_OR_BUDGET` | Structural DP states exceed `S_max = 4096` or declared budget is insufficient. |
 
 Plus the standing invariant `E_NAMESPACE_COLLISION`: SSA names are never rebound. A program passing all gates is *admissible*, not proven.
+
+**Bootstrap-profile gate refinements (v0.1.0-draft.4).** Under `--target qir-enc-5`, gate 2 (`E_BOUND_OVERFLOW`) rejects a bitwise operand outside `0..2^w-1` and a `Q(hash)` byte bound outside `1..=65536`; gate 14 (`E_SMAX_OR_BUDGET`) rejects `s >= w` on `Q(bshl)`/`Q(bshr)` and applies the SCC-additive structural count `Σ_i |SCC_i|·(trip+1)^|BE_i| <= 4096` to declared `trip(K)` loops. Under `--target qir-enc-4` the same constructs are rejected as target mismatches; no target is ever inferred from source.
 
 ### 6.3 Dual-channel diagnostics
 
@@ -523,9 +531,9 @@ The {% include term.html id="terminal-exactness" text="Terminal Exactness" %} ru
 
 1. **CAE-AST normalization** — hash-cons, apply `Q(bypass)` identities bottom-up, sort commutative children, freeze `z_min`.
 2. **Domain erasure** — `Qm`/`Qs`/`Qlog`/`Qphy`/`Qchem`/`Qbio` annotations become declared bounds, units, and receipt tags.
-3. **Encoding lowering** — normalized DAG flattens to `qir-enc-4` with explicit `trip(K)`, `cap(N)`, `budget(W U)`; byte grammar is owned by QnIR companions.
+3. **Encoding lowering** — normalized DAG flattens to the explicitly selected target (`qir-enc-4` or `qir-enc-5`) with explicit `trip(K)`, `cap(N)`, `budget(W U)`; byte grammar is owned by QnIR companions. `qnlangc --target qir-enc-4|qir-enc-5` is explicit; no target is guessed.
 
-**Closed Rung-0 `R11'` Lowering Table [v0.1.0-draft.3].** Each row is the one declared mapping for its construct; nothing below is resolved by convention or implementation accident. Stage 0B emits a single entry block (block 0): bounded structured control is flattened into that block with explicit declared ceilings, and the fallback block id of a load is carried as an operand witness. Multi-block CFG synthesis remains a Step-6.3 obligation and is not improvised here. Charges are `qir-prof-ext-calls-1` (§8.4): `gateway = 20 U`; core `4 U`; `ARR_NEW`/`TBL_NEW`/`ARR_LEN`/`*_ROOT` `4 U`; `ARR_GET`/`TBL_GET`/`TBL_AT` `8 U`; `ARR_SET`/`TBL_SET` `10 U`; `*_BATCH` `16 U`; `OP_CALL = 4 + 2·argc`; `OP_RET = 4 + 2·retc`. `B_hat` of a declaration is `gateway + Σ` site charges; at a call site the callee's **interior** bound is folded as one site-stable charge (§8.4), never its gateway twice. A `![budget(W U)]` on a top declaration is checked as `B_hat <= W`; one embedded in a `qtype` constrains only that container site. No budget is silently raised.
+**Closed Rung-0 `R11'` Lowering Table [v0.1.0-draft.4; additive bootstrap rows].** Each row is the one declared mapping for its construct; nothing below is resolved by convention or implementation accident. Stage 0B emits a single entry block (block 0): bounded structured control is flattened into that block with explicit declared ceilings, and the fallback block id of a load is carried as an operand witness. Multi-block CFG synthesis remains a Step-6.3 obligation and is not improvised here. Charges are `qir-prof-ext-calls-1` (§8.4): `gateway = 20 U`; core `4 U`; `ARR_NEW`/`TBL_NEW`/`ARR_LEN`/`*_ROOT` `4 U`; `ARR_GET`/`TBL_GET`/`TBL_AT` `8 U`; `ARR_SET`/`TBL_SET` `10 U`; `*_BATCH` `16 U`; `OP_CALL = 4 + 2·argc`; `OP_RET = 4 + 2·retc`. `B_hat` of a declaration is `gateway + Σ` site charges; at a call site the callee's **interior** bound is folded as one site-stable charge (§8.4), never its gateway twice. A `![budget(W U)]` on a top declaration is checked as `B_hat <= W`; one embedded in a `qtype` constrains only that container site. No budget is silently raised.
 
 | Source construct | Declared `qir-enc-4` lowering | Charge |
 |---|---|---|
@@ -547,6 +555,11 @@ The {% include term.html id="terminal-exactness" text="Terminal Exactness" %} ru
 | `Q(halt_with)(r)` | `EMIT` (tag 15) `kind = 1` (the declared witness kind of X49), `k = 0`, then `HALT` (tag 16); admitted only in the caller entry (§8.3) | 4 + 4 U |
 | `emit receipt;` | `EMIT` (tag 15) `kind = 1`, `k = 0`; a single terminal `HALT` (tag 16) closes the entry block | 4 + 4 U |
 | `Q(pattern)`, `Q(workflow)`, `Q(falsify)` | one key-9 callee record `[UInt id, Bytes arg_bnds, Bytes ret_bnds, Bytes blocks]`; call sites use `OP_CALL` (tag 30), callee exits `OP_RET` (tag 31), dense ascending acyclic ids | as charged above |
+| `Q(band)(a,b)`, `Q(bor)(a,b)`, `Q(bxor)(a,b)` (`qir-enc-5` only) | tags `32`/`33`/`34` with `ref(a)`, `ref(b)`, `bnd(w)` (`w` from the declared `u8`/`u16`/`u32`/`u64` type), `ext` | 4 U |
+| `Q(bshl)(a,s)`, `Q(bshr)(a,s)` (`qir-enc-5` only) | tags `35`/`36` with `ref(a)`, `ref(s)`, `bnd(w)`, `ext`; `0 <= s < w` enforced by gate 14; result masked to `w` bits | 4 U |
+| `Q(hash)(x, Q(b))` (`qir-enc-5` only) | tag `37` with `ref(x)`, one-word static `b_bnd = b`, `ext`; binds a 4-word `TUPLE` of 64-bit digest words (`§9.3` layout); `1 <= b <= 65536` | `160 + 130·ceil(b/64)` U |
+| `Q(loop) trip(K) B` / `Q(loop) @[trip(K)] B` | declared BR/JMP back-edge block with `trip(K)` ceiling; the branch condition is a `CMP` of the loop counter against `K`, the back edge carries the incremented counter, and the exit block binds the tail. Under `qir-enc-5` admission uses the SCC-additive count `Σ|SCC_i|·(K+1)^|BE_i| <= S_max = 4096`; Stage 0 emits the equivalent straight-line `trip(K)` unrolling in block 0 with the same charge and ceiling witness | `K·(body charge + CMP 4 + CONST 4)` U |
+| `Q(variant) V { A(a:T), B(b:T) }` / `Q(match)(v) { A -> eA; B -> eB; }` | variant value is a tagged `TUPLE [tag_idx, payload]` (`FIELD` tag 4 reads the tag); match emits one `CONST arm_idx` + `CMP(tag == arm_idx, rng [0..0])` + `MUL(cmp, lowered arm)` per arm and sums the guarded results with `ADD` — exhaustive deterministic dispatch with no implicit fallthrough | `n·(CONST 4 + CMP 4 + MUL 4 + arm) + (n−1)·ADD 4` |
 
 Two §6.4 ambiguities are resolved here explicitly, not by inference:
 
@@ -571,7 +584,7 @@ The iterative compiler uses `Q(array)` as arena and `Q(variant)` as tagged union
 2. **Fixed-width bitwise operations.**
 3. **Governed `Q(hash)`** with profile-bound cost and collision-bucket discipline.
 
-Until these have BOC evidence, Stage 1 and Stage 2 remain design targets. QnLang stays `[PENDING]`.
+The three prerequisites now have read-only BOC evidence: the Step-6.3a study (`docs/logs/qnir/step6-3-bootstrap-trade-study.md`) priced SCC-additive `bhat`, fixed-width bitwise ops, and governed `Q(hash)`; the Step-6.3b study (`docs/logs/qnir/step6-3b-saturation-trade-study.md`) recorded `qir-enc-5` as the provisional fallback floor with `P_gap = UNRESOLVED` and left `OP_SATURATE`/`SAT_*` open to multi-host re-evaluation (Axiom 13 / `docs/boc.md` §2.3). `qnlangc` lowers the three prerequisites to `qir-enc-5`/`qir-prof-ext-bootstrap-1` under an explicit `--target`; `qir-enc-4` output and the §6.4 programs remain byte-compatible under their own target. Until multi-host evidence seals Stage 1 and Stage 2, they remain design targets. QnLang stays `[PENDING]`.
 
 ---
 

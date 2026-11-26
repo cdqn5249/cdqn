@@ -9,11 +9,21 @@
 //!
 //! Usage: qnlangc --check <file> [--name-map] [--gate-list]
 //!        qnlangc --expose <file>
-//!        qnlangc --emit-qir <file> [-o <out.cbor>] [--certify-readback <sha256>]
+//!        qnlangc --emit-qir <file> [-o <out.cbor>] [--certify-readback <sha256>] [--target qir-enc-4|qir-enc-5]
 
 use qnlangc::diag::{self, json_str, Diag, Span};
 use qnlangc::{exposer, gates, lower, parser};
 use std::process::ExitCode;
+
+fn target_arg(args: &[String]) -> Result<&str, ()> {
+    match args.iter().position(|a| a == "--target") {
+        Some(j) => match args.get(j + 1).map(|s| s.as_str()) {
+            Some(t @ ("qir-enc-4" | "qir-enc-5")) => Ok(t),
+            _ => Err(()),
+        },
+        None => Ok("qir-enc-4"),
+    }
+}
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -31,13 +41,20 @@ fn main() -> ExitCode {
                 return ExitCode::from(2);
             }
         };
-        return expose_program(&file);
+        let target = match target_arg(&args) {
+            Ok(t) => t,
+            Err(_) => {
+                eprintln!("--target requires qir-enc-4 or qir-enc-5 (no silent guessing)");
+                return ExitCode::from(2);
+            }
+        };
+        return expose_program(&file, target);
     }
     if let Some(i) = args.iter().position(|a| a == "--emit-qir") {
         let file = match args.get(i + 1) {
             Some(f) => f.clone(),
             None => {
-                eprintln!("usage: qnlangc --emit-qir <file> [-o <out.cbor>] [--certify-readback <sha256>]");
+                eprintln!("usage: qnlangc --emit-qir <file> [-o <out.cbor>] [--certify-readback <sha256>] [--target qir-enc-4|qir-enc-5]");
                 return ExitCode::from(2);
             }
         };
@@ -56,7 +73,17 @@ fn main() -> ExitCode {
             },
             None => None,
         };
-        return emit_qir(&file, out.as_deref(), certify.as_deref());
+        let target = match args.iter().position(|a| a == "--target") {
+            Some(j) => match args.get(j + 1).map(|s| s.as_str()) {
+                Some(t @ ("qir-enc-4" | "qir-enc-5")) => t,
+                _ => {
+                    eprintln!("--target requires qir-enc-4 or qir-enc-5 (no silent guessing)");
+                    return ExitCode::from(2);
+                }
+            },
+            None => "qir-enc-4",
+        };
+        return emit_qir(&file, out.as_deref(), certify.as_deref(), target);
     }
     let file = match args.iter().position(|a| a == "--check").and_then(|i| args.get(i + 1)) {
         Some(f) => f.clone(),
@@ -130,7 +157,7 @@ fn emit(file: &str, diags: &[diag::Diag], ok: bool, with_map: bool, map: Option<
     }
 }
 
-fn expose_program(file: &str) -> ExitCode {
+fn expose_program(file: &str, target: &str) -> ExitCode {
     let src = match std::fs::read_to_string(file) {
         Ok(s) => s,
         Err(e) => {
@@ -156,7 +183,7 @@ fn expose_program(file: &str) -> ExitCode {
         return ExitCode::from(1);
     }
     // Exposer: Compiler analysis supplies the declared-budget evidence only.
-    let analysis = lower::analyze(&prog, &src);
+    let analysis = lower::analyze_with_target(&prog, &src, target);
     let exp = exposer::expose(&prog, &analysis, file);
     print!("{}", exp.body);
     println!("readback_lines: {}", exp.lines);
@@ -174,7 +201,7 @@ fn expose_program(file: &str) -> ExitCode {
     }
 }
 
-fn emit_qir(file: &str, out: Option<&str>, certify: Option<&str>) -> ExitCode {
+fn emit_qir(file: &str, out: Option<&str>, certify: Option<&str>, target: &str) -> ExitCode {
     let src = match std::fs::read_to_string(file) {
         Ok(s) => s,
         Err(e) => {
@@ -200,7 +227,7 @@ fn emit_qir(file: &str, out: Option<&str>, certify: Option<&str>) -> ExitCode {
         return ExitCode::from(1);
     }
     // ---- 2. Exposer (before the Compiler commits any byte) -------------
-    let analysis = lower::analyze(&prog, &src);
+    let analysis = lower::analyze_with_target(&prog, &src, target);
     let exp = exposer::expose(&prog, &analysis, file);
     println!(
         "EXPOSE lines={} bytes={} sha256={}",
@@ -226,7 +253,7 @@ fn emit_qir(file: &str, out: Option<&str>, certify: Option<&str>) -> ExitCode {
         certified = true;
     }
     // ---- 4. Compiler commit --------------------------------------------
-    let r = lower::lower(&prog, &src);
+    let r = lower::lower_with_target(&prog, &src, target);
     debug_assert_eq!(r.b_hat, analysis.b_hat, "analysis/commit B_hat drift");
     println!(
         "LOWER {} ok={} bytes={} sha256={} words={} opcodes={} blocks={} callees={} ext={} b_hat={:?} budgets={:?}",

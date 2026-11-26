@@ -47,6 +47,16 @@ fn qm_bounds(ty: &str) -> Option<(i64, i64)> {
     None
 }
 
+fn width_of(ty: &str) -> Option<u32> {
+    match ty.trim() {
+        "u8" => Some(8),
+        "u16" => Some(16),
+        "u32" => Some(32),
+        "u64" => Some(64),
+        _ => None,
+    }
+}
+
 fn unit_of(ty: &str) -> Option<String> {
     let marker = "unit(";
     let i = ty.find(marker)?;
@@ -527,11 +537,49 @@ pub fn check(p: &Program, source: &str) -> Vec<Diag> {
         let expected = match name.as_str() {
             "metric_dot" | "store" | "2:cons" | "3:cmp" | "4:zoom_cmp" => Some(2),
             "reuse" | "drop" | "halt_with" | "cut" | "2:chirality" => Some(1),
+            "band" | "bor" | "bxor" | "bshl" | "bshr" | "hash" => Some(2),
             _ => None,
         };
         if let Some(n) = expected {
             if args.len() != n {
                 d.push(Diag::new("E_BUILTIN_ARITY", *sp, "built-in signature arity mismatch", format!("{} argument(s)", n), format!("{}", args.len()), "match the §5.2 signature"));
+            }
+        }
+    }
+
+    // §6.2 bootstrap-profile refinements (v0.1.0-draft.4): static byte bound
+    // for Q(hash) and shift-width / declared-width compatibility.
+    for (name, args, sp) in &f.calls {
+        if name == "hash" && args.len() == 2 {
+            let b = match &p.node(args[1]).kind {
+                NodeKind::QPrim { core, neg: false, .. } => core.parse::<u64>().ok(),
+                _ => None,
+            };
+            match b {
+                Some(v) if (1..=65536).contains(&v) => {}
+                other => d.push(Diag::new(
+                    "E_BOUND_OVERFLOW", *sp, "invalid Q(hash) byte bound",
+                    "1 <= b_bnd <= 65536", other.map(|v| v.to_string()).unwrap_or_else(|| "non-static".into()),
+                    "declare a static INT_POS byte bound Q(k)",
+                )),
+            }
+        }
+        if matches!(name.as_str(), "bshl" | "bshr") && args.len() == 2 {
+            let ty = match &p.node(args[0]).kind {
+                NodeKind::Ident(s) => f.types.get(s).cloned(),
+                _ => None,
+            };
+            if let (Some(w), NodeKind::QPrim { core, neg: false, .. }) =
+                (ty.as_deref().and_then(width_of), &p.node(args[1]).kind)
+            {
+                if let Ok(s) = core.parse::<u64>() {
+                    if s >= w as u64 {
+                        d.push(Diag::new(
+                            "E_SMAX_OR_BUDGET", *sp, "shift amount reaches declared width",
+                            format!("s < w = {}", w), s.to_string(), "declare a shift below the operand width",
+                        ));
+                    }
+                }
             }
         }
     }

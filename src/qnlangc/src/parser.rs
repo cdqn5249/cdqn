@@ -8,7 +8,8 @@ use crate::diag::{Diag, Span};
 use crate::lexer::{Tok, Token};
 
 const BUILTINS_UNARY: &[&str] = &["reuse", "drop", "halt_with", "cut", "2:chirality"];
-const BUILTINS_BINARY: &[&str] = &["metric_dot", "store", "2:cons", "3:cmp", "4:zoom_cmp"];
+const BUILTINS_BINARY: &[&str] = &["metric_dot", "store", "2:cons", "3:cmp", "4:zoom_cmp",
+    "band", "bor", "bxor", "bshl", "bshr", "hash"];
 const STRUCTURED: &[&str] = &["2:split", "match", "fold", "loop", "load"];
 const CTORS: &[&str] = &["arr_new", "tbl_new"];
 
@@ -813,6 +814,21 @@ impl Parser {
                 NodeKind::Fold { seq, over, init, binders, body }
             }
             "loop" => {
+                // Both declared spellings are admitted: `trip(K)` and the
+                // bootstrap-profile `@[trip(K)]` witness.
+                if self.peek() == &Tok::At {
+                    self.bump();
+                    self.expect(Tok::LBracket, "\"[\"")?;
+                    self.expect(Tok::Ident("trip".into()), "\"trip\"")?;
+                    self.expect(Tok::LParen, "\"(\"")?;
+                    let trip = self.expect_num()?;
+                    self.expect(Tok::RParen, "\")\"")?;
+                    self.expect(Tok::RBracket, "\"]\"")?;
+                    self.depth += 1;
+                    let b = self.parse_block()?;
+                    self.depth -= 1;
+                    return Ok(self.arena.intern(NodeKind::Loop { trip, body: b }, span, self.depth));
+                }
                 self.expect(Tok::Ident("trip".into()), "\"trip\"")?;
                 self.expect(Tok::LParen, "\"(\"")?;
                 let trip = self.expect_num()?;

@@ -1,0 +1,16 @@
+Q(dcc) dc;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+Q(type) T : u64;
+Q(anchor) z : Q(0) : T;
+Q(metric) m : eta(1,1,1);
+Q(1) -> a : u64;
+Q(2) -> b : u64;
+Q(band)(a, b) -> w1 : u64;
+Q(bor)(a, b) -> w2 : u64;
+Q(bxor)(a, b) -> w3 : u64;
+Q(bshl)(a, Q(2)) -> w4 : u64;
+Q(bshr)(a, Q(1)) -> w5 : u64;
+Q(hash)(a, Q(64)) -> dig : Q(tuple)<u64,u64,u64,u64>;
+emit receipt;
