@@ -3,7 +3,7 @@
 use qnlangc::{diag::Diag, gates, parser};
 
 fn fx(name: &str) -> String {
-    std::fs::read_to_string(format!("{}/tests/fixtures/{}.ql", env!("CARGO_MANIFEST_DIR"), name)).unwrap()
+    std::fs::read_to_string(format!("{}/tests/fixtures/{}.qnl", env!("CARGO_MANIFEST_DIR"), name)).unwrap()
 }
 
 /// Runs the exact CLI pipeline: strict parse -> full G1..G14 + standing
@@ -14,17 +14,17 @@ fn check_strict(label: &str, src: &str) -> Vec<Diag> {
         Ok(p) => p,
         Err(e) => {
             println!("CHANNEL_A {}", e.channel_a());
-            println!("CHANNEL_B {}", e.channel_b(&format!("fixtures/{}.ql", label)));
+            println!("CHANNEL_B {}", e.channel_b(&format!("fixtures/{}.qnl", label)));
             return vec![e];
         }
     };
     let ds = gates::check(&p, src);
     if ds.is_empty() {
-        println!("PASS: fixtures/{}.ql — admissible under G1–G14 and E_NAMESPACE_COLLISION", label);
+        println!("PASS: fixtures/{}.qnl — admissible under G1–G14 and E_NAMESPACE_COLLISION", label);
     }
     for d in &ds {
         println!("CHANNEL_A {}", d.channel_a());
-        println!("CHANNEL_B {}", d.channel_b(&format!("fixtures/{}.ql", label)));
+        println!("CHANNEL_B {}", d.channel_b(&format!("fixtures/{}.qnl", label)));
     }
     ds
 }

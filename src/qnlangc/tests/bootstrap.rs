@@ -4,7 +4,7 @@
 use qnlangc::{gates, lower, parser};
 
 fn fx(name: &str) -> String {
-    std::fs::read_to_string(format!("{}/tests/fixtures/{}.ql", env!("CARGO_MANIFEST_DIR"), name)).unwrap()
+    std::fs::read_to_string(format!("{}/tests/fixtures/{}.qnl", env!("CARGO_MANIFEST_DIR"), name)).unwrap()
 }
 
 #[test]

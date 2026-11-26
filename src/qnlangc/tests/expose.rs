@@ -19,7 +19,7 @@ fn fixture_path(name: &str) -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests")
         .join("fixtures")
-        .join(format!("{}.ql", name))
+        .join(format!("{}.qnl", name))
 }
 
 fn fixture_src(name: &str) -> String {
@@ -53,8 +53,8 @@ fn exposition_is_deterministic_and_bounded_for_all_seven() {
         // Two independent Exposer passes over two parser instances must agree.
         let p2 = parser::parse_source(&src).unwrap();
         let a2 = lower::analyze(&p2, &src);
-        let e1 = exposer::expose(&p, &a, &format!("fixtures/{}.ql", name));
-        let e2 = exposer::expose(&p2, &a2, &format!("fixtures/{}.ql", name));
+        let e1 = exposer::expose(&p, &a, &format!("fixtures/{}.qnl", name));
+        let e2 = exposer::expose(&p2, &a2, &format!("fixtures/{}.qnl", name));
 
         assert_eq!(e1.body, e2.body, "{} body drift", name);
         assert_eq!(e1.sha256, e2.sha256, "{} digest drift", name);
@@ -136,7 +136,7 @@ fn exact_certification_emits_identical_cbor() {
     let src = fixture_src("call_worked");
     let p = parser::parse_source(&src).unwrap();
     let a = lower::analyze(&p, &src);
-    let exp = exposer::expose(&p, &a, "call_worked.ql");
+    let exp = exposer::expose(&p, &a, "call_worked.qnl");
     let committed = lower::lower(&p, &src).cbor.unwrap();
 
     let plain = Command::new(bin)

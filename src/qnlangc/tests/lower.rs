@@ -6,7 +6,7 @@ use qnlangc::{gates, lower, parser, sha256};
 const MINIMAL: &str = "Q(dcc) d;\nQ(kappa) dyadic;\nQ(domain) Qm;\nQ(mode) L0;\nQ(type) T : Qm[-255..255];\nQ(anchor) z : Q(0) : T;\nQ(metric) m : eta(1,1,1);\nQ(1) -> x : T;\nQ(2) -> y : T;\nx + y -> w : T;\n";
 
 fn fixture(name: &str) -> String {
-    std::fs::read_to_string(format!("{}/tests/fixtures/{}.ql", env!("CARGO_MANIFEST_DIR"), name)).unwrap()
+    std::fs::read_to_string(format!("{}/tests/fixtures/{}.qnl", env!("CARGO_MANIFEST_DIR"), name)).unwrap()
 }
 
 #[test]
@@ -52,5 +52,5 @@ fn declared_budget_exceedance_is_loud() {
     let r = lower::lower(&p, src);
     assert!(r.diagnostics.iter().any(|d| d.code == "E_SMAX_OR_BUDGET"));
     assert!(!r.ok && r.cbor.is_none());
-    println!("{}", r.diagnostics.iter().find(|d| d.code == "E_SMAX_OR_BUDGET").unwrap().channel_b("budget.ql"));
+    println!("{}", r.diagnostics.iter().find(|d| d.code == "E_SMAX_OR_BUDGET").unwrap().channel_b("budget.qnl"));
 }

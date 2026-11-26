@@ -55,6 +55,16 @@ cdqn/
 
 ---
 
+## Implementation Progress (Milestone 2 substrate)
+
+The following is **implementation evidence only**; it does not promote either specification to canon. `QnIR` and `QnLang` both remain `[PENDING]`.
+
+- **QnIR v0.3 Step 6.1** — Containers, `qir-enc-3` / `qir-prof-ext-containers-1`, fixture `C`: implemented and differentially verified in Rust and Python.
+- **QnIR v0.3 Step 6.2** — Calls, `qir-enc-4` / `qir-prof-ext-calls-1`, fixture `K`: implemented and differentially verified in Rust and Python.
+- **QnIR v0.3 Step 6.3a** — Bootstrap primitives (`BAND`, `BOR`, `BXOR`, `BSHL`, `BSHR`, `Q_HASH`), Tarjan SCC-additive `bhat`, and `qir-enc-5` / `qir-prof-ext-bootstrap-1`, fixture `B`: implemented and differentially verified across Rust (`23/23` tests) and the Python reference implementation.
+- **QnIR v0.3 Step 6.3b** — `OP_SATURATE` / fixed-width saturating arithmetic are retained provisionally as a Layer-3 `Q(rsi)` compile-time transform under `docs/boc.md` §2.3 / Axiom 13; `qir-enc-5` remains the safe fallback, with `P_gap = UNRESOLVED` until multi-host evidence exists.
+- **QnLang Rung-0 Milestone 2** — Stage 0 completed: `src/qnlangc/` Rust seed with the explicit three-part `Checker` → `Exposer` → `Compiler` pipeline, 14 semantic gates, `R12'` dual-channel diagnostics, `--target qir-enc-4|qir-enc-5`, and `qir-enc-5` lowering over `.qnl` source files. `27/27` compiler tests pass; all nine emitted programs are byte-identical across both QnIR artifacts under `--eval-cbor`.
+
 ### Attribution
 
 > Derived from the original work by Christophe Duy Quang Nguyen under the Scaling Source License (SSL).  
