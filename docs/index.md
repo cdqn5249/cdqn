@@ -73,7 +73,7 @@ terms_used:
 **Author:** Christophe Duy Quang Nguyen  
 **License:** [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md)  
 **Repository:** [https://github.com/cdqn5249/cdqn](https://github.com/cdqn5249/cdqn)  
-**Status:** Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline
+**Status:** Canonical Architectural Portal — Milestone 2 [LAUNCHING] (QnIR [PENDING]; QnLang [PENDING])
 
 Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 
@@ -84,11 +84,11 @@ Copyright (c) 2026 Christophe Duy Quang Nguyen. All rights reserved.
 | Field | Specification |
 |---|---|
 | **Portal Title** | CDQN Documentation Portal |
-| **Version** | 1.14.1 |
-| **Last Updated** | 2026-11-05 (Bao Loc, Vietnam) |
+| **Version** | 1.14.2 |
+| **Last Updated** | 2026-11-19 (Bao Loc, Vietnam) |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL) 1.0](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
-| **Status** | Canonical Architectural Portal — Milestone 1 Fully Sealed Baseline |
+| **Status** | Canonical Architectural Portal — Milestone 2 [LAUNCHING] (QnIR [PENDING]; QnLang [PENDING]) |
 
 ---
 

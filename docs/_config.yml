@@ -10,3 +10,6 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - qnir_goldens.md
+  - AiReviews/
+  - logs/
