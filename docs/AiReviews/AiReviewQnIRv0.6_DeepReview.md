@@ -78,7 +78,7 @@ This technical dossier presents the Loop-5 review record and candidate specifica
 
 - **Pages 8–9 (`simemp.md`, Missing Section 8 Heading):** Between `## 7. The BOC Policy` (p. 7) and `## 9. Conclusion` (p. 9), the section header `## 8.` (e.g., *License and Invariant Lineage*) is missing after the horizontal rule `---` at the bottom of page 8, jumping directly into the sentence *"The architectural constraints directly enforce the legal mechanics of the..."* and the bullet `- **Scale Auditing:**` at the top of page 9.
 
-- **Pages 6–8 (`simemp.md`, Unrendered Liquid/Jekyll Link Markup):** Raw Jekyll/Liquid link syntax such as ``[`docs/abstractionLayers.md`]({{ '/abstractionLayers.html' | relative_url }})`` (p. 6), ``[`docs/qs.md`]({{ '/qs.html' | relative_url }})`` (p. 7), and ``[BOC specification]({{ '/boc.html' | relative_url }})`` (p. 8) is left unrendered alongside raw `{% include term.html ... %}` tags; normalizing these in standalone dossier exports would improve readability.
+- **Pages 6–8 (`simemp.md`, Unrendered Liquid/Jekyll Link Markup):** Raw Jekyll/Liquid link syntax such as ``[`docs/abstractionLayers.md`]({% raw %}{{ '/abstractionLayers.html' | relative_url }}{% endraw %})`` (p. 6), ``[`docs/qs.md`]({% raw %}{{ '/qs.html' | relative_url }}{% endraw %})`` (p. 7), and ``[BOC specification]({% raw %}{{ '/boc.html' | relative_url }}{% endraw %})`` (p. 8) is left unrendered alongside raw `{% raw %}{% include term.html ... %}{% endraw %}` tags; normalizing these in standalone dossier exports would improve readability.
 
 ### [Foundational Domain Specifications (Qm, Qs, Qlog, Qphy, Qchem, Qbio) and Qn Primitive Envelope] (Pages: 22-69)
 
