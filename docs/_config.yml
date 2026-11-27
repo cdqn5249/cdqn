@@ -1,7 +1,7 @@
 title: CDQN
 description: Chained and Distributed Quang Numbers Documentation
-baseurl: ""
-url: ""
+baseurl: "/cdqn"
+url: "https://cdqn5249.github.io"
 
 markdown: kramdown
 highlighter: rouge
