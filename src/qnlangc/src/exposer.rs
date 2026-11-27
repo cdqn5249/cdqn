@@ -78,6 +78,9 @@ pub fn expose(p: &Program, r: &LowerResult, file: &str) -> Exposition {
             HeaderKind::Mode(v) => {
                 let _ = writeln!(s, "  Q(mode) {}", v);
             }
+            HeaderKind::Use { alias, path, digest } => {
+                let _ = writeln!(s, "  Q(use) {} : \"{}\" @ sha-256:{}", alias, path, digest);
+            }
         }
     }
 

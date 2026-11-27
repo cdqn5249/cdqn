@@ -48,6 +48,8 @@ pub enum HeaderKind {
     Kappa(String),
     Domain(Vec<String>),
     Mode(String),
+    /// `Q(use) alias : "path.qnl" @ sha-256:<hex64> ;`
+    Use { alias: String, path: String, digest: String },
 }
 
 #[derive(Clone, Debug)]

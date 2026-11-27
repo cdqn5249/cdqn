@@ -1,0 +1,11 @@
+Q(dcc) d;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+Q(type) T : u64;
+Q(anchor) z : Q(0) : T;
+Q(metric) m : eta(1,1,1);
+Q(pattern) square(x : u64) -> u64 ![may_emit(receipt)] {
+  x * x -> r : u64;
+  -> r
+}

@@ -2,7 +2,7 @@
 layout: default
 title: QnLang — Rung-0 Candidate Specification (High-Level Authoring Language)
 description: QnLang v0.1 Rung-0 — CAE-AST semantic model, operator hygiene, formal EBNF, six-domain type system, zero-concession compiler, and R11' lowering overview
-version: 0.1.0-draft.4
+version: 0.1.0-draft.5
 updated: 2026-11-26
 author: Christophe Duy Quang Nguyen
 license: Scaling Source License (SSL) 1.0
@@ -70,7 +70,7 @@ terms_used:
 | Field | Specification |
 |---|---|
 | **Document Title** | QnLang — Rung-0 Candidate Specification (High-Level Authoring Language) |
-| **Version** | 0.1.0-draft.4 |
+| **Version** | 0.1.0-draft.5 |
 | **Last Updated** | 2026-11-24 |
 | **Author** | Christophe Duy Quang Nguyen |
 | **License** | [Scaling Source License (SSL 1.0)](https://github.com/cdqn5249/cdqn/blob/main/LICENSE.md) |
@@ -191,7 +191,8 @@ program          := { header_decl } { top_decl | stmt } ;
 header_decl      := "Q(dcc)" ident ";"
                   | "Q(kappa)" ( "dyadic" | "dec" | "fact" ) ";"
                   | "Q(domain)" ( ident | "(" ident { "," ident } ")" ) ";"
-                  | "Q(mode)" ( "L0" | "L1" | "L2" | "L3" ) ";" ;
+                  | "Q(mode)" ( "L0" | "L1" | "L2" | "L3" ) ";"
+                  | "Q(use)" ident ":" string "@" "sha-256:" hex64 ";" ;
 
 top_decl         := "Q(type)" ident ":" qtype ";"
                   | "Q(anchor)" ident ":" qprim ":" qtype ";"
@@ -218,6 +219,9 @@ contract_item    := "Qs(" ident "," ident ")" | "Qphy(" ident ")" | "Qchem"
 param_list       := ident ":" qtype { "," ident ":" qtype } ;
 variant_arm      := ident "(" [ param_list ] ")" ;
 ident            := letter { letter | digit | "_" } ;
+string           := "\"" { letter | digit | "_" | "-" | "." | "/" } "\"" ;   (* quoted module path *)
+hex64            := ( digit | "a" | ... | "f" | "A" | ... | "F" ) 64 ;
+qualified_ident  := ident { "::" ident } ;        (* alias::name imports *)
 uint             := digit { digit } ;
 sint             := [ "-" ] uint ;
 digit            := "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
@@ -567,6 +571,16 @@ Two §6.4 ambiguities are resolved here explicitly, not by inference:
 - **`Qs + Qlog`, `Q(load)(tbl1,k) @[trip(1)] -> hit or_else { … } -> out : StepOut`.** `hit` is the `TBL_GET` hit binding; `-> out : StepOut` binds the join result; `(Q(0), Q(0))` inhabits `StepOut = Q(tuple)<bool,u64>` through the typed-zero rule of §3.2. The declared `![budget(64 U)]` on `step` and `![budget(80 U)]` on `route` are checked mechanically against compositional `B_hat` (§8.4) by `qnlangc --emit-qir`; a genuine exceedance is reported as `E_SMAX_OR_BUDGET` and the §6.4 annotation is flagged rather than silently raised. No `Q(pattern)`/`Q(workflow)` is admitted above its declared ceiling.
 
 {% include term.html id="q-anchor" text="Q(anchor)" %} commitments from `qs_history.md` may be cited as provenance; {% include term.html id="existential-invariant" text="Existential Invariants" %} reject a lowering that introduces approximate arithmetic, implicit state, or non-deterministic ordering through the {% include term.html id="simemp-gateway" text="SIMEMP Gateway" %}.
+
+**`Q(use)` content-addressed module linking (v0.1.0-draft.5, Axiom 13).** A `Q(use) alias : "<path.qnl>" @ sha-256:<hex64> ;` header links a pure `Library`. 
+
+- **Path.** The file path is relative to the importing `.qnl` file; file bytes MUST match the declared `@ sha-256:<hex64>` exactly, else `E_DIGEST_MISMATCH`. No semver range, no version solving, no silent substitution.
+- **Pure `Library`.** The imported module MUST export only `Q(type)`, `Q(anchor)`, `Q(variant)`, `Q(pattern)`, `Q(workflow)`, `Q(falsify)`; it contains **zero top-level `emit`** and zero top-level statements with side effects; else `E_IMPURE_LIBRARY_IMPORT`.
+- **Acyclicity.** Imports form a DAG; a cycle is statically rejected `E_CYCLIC_IMPORT`.
+- **Domain match.** The imported `Q(domain)` must match the importer's or be a valid sub-domain (e.g. `(Qchem, Qm)` cannot import a module using `Qs`); else `E_MODAL_OR_DOMAIN_LEAK`.
+- **Checker + Exposer first.** Every imported module undergoes `Checker` (`G1`–`G14` + `E_NAMESPACE_COLLISION`) and `Exposer` before linking.
+- **Namespace.** Imported symbols merge under `<alias>::<name>`; calls resolve as `lib_math::square`.
+- **Key-9 callee deduplication.** Functions in imported modules emit into `qir-enc-5` `callees` (key `9`) **once across all callers**; no duplicate callee record is emitted.
 
 ### 7.2 Self-bootstrap ladder
 

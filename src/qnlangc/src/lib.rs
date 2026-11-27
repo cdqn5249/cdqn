@@ -7,5 +7,6 @@ pub mod exposer;
 pub mod gates;
 pub mod lexer;
 pub mod lower;
+pub mod modules;
 pub mod parser;
 pub mod sha256;

@@ -93,7 +93,7 @@ impl Parser {
         if !self.is_ident("Q") || self.peek_n(1) != Tok::LParen {
             return false;
         }
-        matches!(self.peek_n(2), Tok::Ident(ref x) if matches!(x.as_str(), "dcc" | "kappa" | "domain" | "mode"))
+        matches!(self.peek_n(2), Tok::Ident(ref x) if matches!(x.as_str(), "dcc" | "kappa" | "domain" | "mode" | "use"))
     }
     fn is_top_start(&self) -> bool {
         if !self.is_ident("Q") || self.peek_n(1) != Tok::LParen {
@@ -181,7 +181,38 @@ impl Parser {
                 self.expect(Tok::Semi, "\";\"")?;
                 HeaderKind::Mode(v)
             }
-            _ => return Err(self.err("E_GRAMMAR", "unknown header", "header_decl", "use dcc/kappa/domain/mode")),
+            "use" => {
+                let alias = self.expect_ident()?;
+                self.expect(Tok::Colon, "\":\"")?;
+                let path = match self.peek().clone() {
+                    Tok::Str(s) => { self.bump(); s }
+                    _ => return Err(self.err("E_GRAMMAR", "Q(use) path must be a string", "\"<path.qnl>\"", "quote the module path")),
+                };
+                self.expect(Tok::At, "\"@\"")?;
+                let hashname = self.expect_ident()?;
+                if hashname != "sha" {
+                    return Err(self.err("E_GRAMMAR", "unadmitted digest algorithm", "sha-256", "use sha-256:<hex64>"));
+                }
+                self.expect(Tok::Minus, "\"-\"")?;
+                let two56 = self.expect_num()?;
+                if two56 != 256 {
+                    return Err(self.err("E_GRAMMAR", "unadmitted digest algorithm", "sha-256", "use sha-256:<hex64>"));
+                }
+                self.expect(Tok::Colon, "\":\"")?;
+                let mut digest = String::new();
+                loop {
+                    match self.peek().clone() {
+                        Tok::Num(s) | Tok::Ident(s) => { digest.push_str(&s); self.bump(); }
+                        _ => break,
+                    }
+                }
+                if digest.len() != 64 || !digest.chars().all(|c| c.is_ascii_hexdigit()) {
+                    return Err(self.err("E_DIGEST_MISMATCH", "Q(use) digest must be 64 hex chars", "sha-256:<hex64>", "pin the exact file digest"));
+                }
+                self.expect(Tok::Semi, "\";\"")?;
+                HeaderKind::Use { alias, path, digest }
+            }
+            _ => return Err(self.err("E_GRAMMAR", "unknown header", "header_decl", "use dcc/kappa/domain/mode/use")),
         };
         Ok(Header { kind, span })
     }
@@ -695,7 +726,14 @@ impl Parser {
             }
             Tok::Ident(s) => {
                 self.bump();
-                Ok(self.arena.intern(NodeKind::Ident(s), span, self.depth))
+                let mut name = s;
+                // namespace-qualified `alias::name` identifier
+                while self.peek() == &Tok::ColonColon {
+                    self.bump();
+                    name.push_str("::");
+                    name.push_str(&self.expect_ident()?);
+                }
+                Ok(self.arena.intern(NodeKind::Ident(name), span, self.depth))
             }
             Tok::LParen => {
                 self.bump();

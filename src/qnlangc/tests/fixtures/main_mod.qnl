@@ -1,0 +1,8 @@
+Q(dcc) d;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+Q(use) lib_math : "lib_math.qnl" @ sha-256:a5591313294a02d0e930e4cbd0853e02985c195b61ad970c0e094c6e52949e42;
+Q(1) -> a : u64;
+lib_math::square(a) -> res : u64;
+emit receipt;

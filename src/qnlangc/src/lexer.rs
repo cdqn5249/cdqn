@@ -20,6 +20,8 @@ pub enum Tok {
     Comma,
     Semi,
     Colon,
+    ColonColon, // ::
+    Str(String), // "string"
     Eq,
     Ne,
     HashNe,
@@ -83,6 +85,25 @@ pub fn lex(src: &str) -> Result<Vec<Token>, LexError> {
         let start = Span { line, col };
         let peek = |n: usize| chars.get(i + n).copied();
 
+        if c == '"' {
+            let s = i + 1;
+            let mut j = s;
+            while j < chars.len() && chars[j] != '"' {
+                if chars[j] == '\n' {
+                    return Err(LexError { span: start, message: "unterminated string".into() });
+                }
+                j += 1;
+            }
+            if j >= chars.len() {
+                return Err(LexError { span: start, message: "unterminated string".into() });
+            }
+            let text: String = chars[s..j].iter().collect();
+            i = j + 1;
+            col += (j + 1 - s + 1).max(1);
+            out.push(Token { tok: Tok::Str(text.clone()), span: start, text });
+            continue;
+        }
+
         if is_letter(c) {
             let s = i;
             while i < chars.len() && (is_letter(chars[i]) || is_digit(chars[i]) || chars[i] == '_') {
@@ -125,6 +146,7 @@ pub fn lex(src: &str) -> Result<Vec<Token>, LexError> {
             ('>', _, _) => (Tok::GT, 1),
             (',', _, _) => (Tok::Comma, 1),
             (';', _, _) => (Tok::Semi, 1),
+            (':', Some(':'), _) => (Tok::ColonColon, 2),
             (':', _, _) => (Tok::Colon, 1),
             ('=', _, _) => (Tok::Eq, 1),
             ('+', _, _) => (Tok::Plus, 1),

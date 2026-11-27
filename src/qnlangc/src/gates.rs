@@ -225,6 +225,7 @@ fn collect(p: &Program) -> Facts {
                 f.headers.insert("mode".into());
                 push_name(&mut f, n, h.span);
             }
+            HeaderKind::Use { .. } => {}
         }
     }
     for t in &p.tops {

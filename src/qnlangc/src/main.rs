@@ -12,7 +12,8 @@
 //!        qnlangc --emit-qir <file> [-o <out.cbor>] [--certify-readback <sha256>] [--target qir-enc-4|qir-enc-5]
 
 use qnlangc::diag::{self, json_str, Diag, Span};
-use qnlangc::{exposer, gates, lower, parser};
+use qnlangc::{exposer, gates, lower, modules, parser};
+use std::path::Path;
 use std::process::ExitCode;
 
 fn target_arg(args: &[String]) -> Result<&str, ()> {
@@ -99,7 +100,7 @@ fn main() -> ExitCode {
             return ExitCode::from(2);
         }
     };
-    let prog = match parser::parse_source(&src) {
+    let prog = match modules::load_program(Path::new(file.as_str())) {
         Ok(p) => p,
         Err(e) => {
             emit(&file, &[e], false, args.iter().any(|a| a == "--name-map"), None);
@@ -165,7 +166,7 @@ fn expose_program(file: &str, target: &str) -> ExitCode {
             return ExitCode::from(2);
         }
     };
-    let prog = match parser::parse_source(&src) {
+    let prog = match modules::load_program(Path::new(file)) {
         Ok(p) => p,
         Err(e) => {
             println!("CHANNEL_A {}", e.channel_a());
@@ -210,7 +211,7 @@ fn emit_qir(file: &str, out: Option<&str>, certify: Option<&str>, target: &str) 
         }
     };
     // ---- 1. Checker ----------------------------------------------------
-    let prog = match parser::parse_source(&src) {
+    let prog = match modules::load_program(Path::new(file)) {
         Ok(p) => p,
         Err(e) => {
             println!("CHANNEL_A {}", e.channel_a());
