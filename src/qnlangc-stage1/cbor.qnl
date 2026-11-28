@@ -1,0 +1,45 @@
+Q(dcc) d;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+
+
+Q(pattern) cbor_uint_head(v : u64) -> u64 ![may_emit(receipt)] {
+  Q(band)(v, Q(23)) -> r : u64;
+  -> r
+}
+
+Q(pattern) cbor_uint_hi_lo(v : u64) -> u64 ![may_emit(receipt)] {
+  Q(bshr)(v, Q(8)) -> hi : u64;
+  Q(band)(hi, Q(255)) -> hb : u64;
+  Q(band)(v, Q(255)) -> lo : u64;
+  Q(bshl)(hb, Q(8)) -> his : u64;
+  his + lo -> r : u64;
+  -> r
+}
+
+Q(pattern) cbor_byte_header(len : u64) -> u64 ![may_emit(receipt)] {
+  Q(bshl)(Q(2), Q(5)) -> major : u64;
+  major + len -> h : u64;
+  -> h
+}
+
+Q(pattern) cbor_array_header(count : u64) -> u64 ![may_emit(receipt)] {
+  Q(bshl)(Q(4), Q(5)) -> major : u64;
+  major + count -> h : u64;
+  -> h
+}
+
+Q(pattern) cbor_map_header(count : u64) -> u64 ![may_emit(receipt)] {
+  Q(bshl)(Q(5), Q(5)) -> major : u64;
+  major + count -> h : u64;
+  -> h
+}
+
+Q(pattern) cbor_bytes_storage(count : u64) -> u64 ![may_emit(receipt)] {
+  Q(arr_new)<u64, cap(8)> -> tmp : Q(array)<u64, cap(8)>;
+  Q(drop)(tmp);
+  Q(bshl)(Q(2), Q(5)) -> major : u64;
+  major + count -> h : u64;
+  -> h
+}

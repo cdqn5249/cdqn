@@ -1,0 +1,17 @@
+Q(dcc) d;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+
+Q(use) types : "types.qnl" @ sha-256:50c1960df8077a81507280d851b4059bce0bf935ebcd0df18d8a78b853d56c53;
+Q(use) cbor : "cbor.qnl" @ sha-256:d6624d2c5238ff12477a2cc476bc01f1b6c3bc98b60a182932029cc62652c75a;
+
+Q(0) -> tag : u64;
+Q(5) -> payload : u64;
+Q(2:cons)(tag, payload) -> node : Q(tuple)<u64,u64>;
+cbor::cbor_uint_head(tag) -> hdr : u64;
+cbor::cbor_array_header(Q(2)) -> arrh : u64;
+cbor::cbor_uint_head(payload) -> paylh : u64;
+hdr + arrh -> out : u64;
+out + paylh -> total : u64;
+emit receipt;

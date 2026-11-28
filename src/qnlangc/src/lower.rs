@@ -658,21 +658,114 @@ pub fn lower_with_target(p: &Program, source: &str, target: &str) -> LowerResult
     run(p, source, true, target)
 }
 
+fn callee_name(t: &TopDecl) -> Option<String> {
+    match &t.kind {
+        TopKind::Pattern { name, .. } | TopKind::Workflow { name, .. } | TopKind::Falsify { name, .. } => Some(name.clone()),
+        _ => None,
+    }
+}
+
+fn callee_body(t: &TopDecl) -> Option<NodeId> {
+    match &t.kind {
+        TopKind::Pattern { body, .. } | TopKind::Workflow { body, .. } => Some(*body),
+        TopKind::Falsify { body, .. } => Some(*body),
+        _ => None,
+    }
+}
+
+fn collect_calls(p: &Program, body: NodeId, names: &[String], out: &mut Vec<usize>) {
+    let mut stack = vec![body];
+    let mut seen = std::collections::HashSet::new();
+    while let Some(id) = stack.pop() {
+        if id >= p.arena.len() { continue; }
+        if !seen.insert(id) { continue; }
+        match &p.arena[id].kind {
+            NodeKind::Call { name, args } => {
+                if name == "call" && !args.is_empty() {
+                    if let NodeKind::Ident(fname) = &p.arena[args[0]].kind {
+                        if let Some(j) = names.iter().position(|x| x == fname) {
+                            if !out.contains(&j) { out.push(j); }
+                        }
+                    }
+                }
+                for a in args { stack.push(*a); }
+            }
+            NodeKind::Tuple(xs) => { for x in xs { stack.push(*x); } }
+            NodeKind::Split { scrut, t, f } => { stack.push(*scrut); stack.push(*t); stack.push(*f); }
+            NodeKind::Match { scrut, arms } => { stack.push(*scrut); for (_, a) in arms { stack.push(*a); } }
+            NodeKind::Fold { seq, over, init, body, .. } => { stack.push(*seq); stack.push(*over); stack.push(*init); stack.push(*body); }
+            NodeKind::Loop { body, .. } => stack.push(*body),
+            NodeKind::Load { tbl, key, or_else, .. } => { stack.push(*tbl); stack.push(*key); if let Some(o) = or_else { stack.push(*o); } }
+            NodeKind::Binary { lhs, rhs, .. } => { stack.push(*lhs); stack.push(*rhs); }
+            NodeKind::Range { lo, hi, .. } => { stack.push(*lo); stack.push(*hi); }
+            NodeKind::Bind { value, .. } => stack.push(*value),
+            NodeKind::Postfix { base, .. } => stack.push(*base),
+            NodeKind::Block { stmts, tail } => { for s in stmts { stack.push(*s); } if let Some(t) = tail { stack.push(*t); } }
+            _ => {}
+        }
+    }
+}
+
+// Deterministic topological order; p.tops tie-break; caller before target
+// (callee_id(v) > callee_id(u)). Shorter vec on cycle/self-call -> reject.
+fn topo_order_callables<'a>(p: &Program, callables: &[&'a TopDecl]) -> Vec<&'a TopDecl> {
+    let n = callables.len();
+    let names: Vec<String> = callables.iter().filter_map(|t| callee_name(t)).collect();
+    let mut adj: Vec<Vec<usize>> = vec![Vec::new(); n];
+    let mut indeg = vec![0usize; n];
+    for i in 0..n {
+        let mut called: Vec<usize> = Vec::new();
+        if let Some(b) = callee_body(callables[i]) { collect_calls(p, b, &names, &mut called); }
+        for j in called {
+            if i == j { indeg[i] += 1; adj[i].push(i); continue; } // self-call cycle
+            if !adj[i].contains(&j) { adj[i].push(j); indeg[j] += 1; }
+        }
+    }
+    // caller before target => emit caller first. Kahn over reversed edges.
+    let mut ready: Vec<usize> = Vec::new();
+    let mut indeg_target = vec![0usize; n];
+    for i in 0..n { for &j in &adj[i] { indeg_target[j] += 1; } }
+    for i in 0..n { if indeg_target[i] == 0 { ready.push(i); } }
+    ready.sort_unstable();
+    let mut order: Vec<usize> = Vec::new();
+    while !ready.is_empty() {
+        let i = ready.remove(0);
+        order.push(i);
+        for &j in &adj[i] {
+            // self-edges already accounted; no ready transition
+            indeg_target[j] -= 1;
+            if indeg_target[j] == 0 { ready.push(j); ready.sort_unstable(); }
+        }
+    }
+    // a node with self-call has indeg_target>=1 unmet -> not emitted -> shorter
+    order.into_iter().map(|i| callables[i]).collect()
+}
+
+fn folded_interior(own_cost: &[u64], direct: &[Vec<usize>]) -> Vec<u64> {
+    let n = own_cost.len();
+    let mut f = own_cost.to_vec();
+    for cid in (0..n).rev() {
+        let mut t = own_cost[cid];
+        if let Some(ns) = direct.get(cid) {
+            for &j in ns { if j < n { t += f[j]; } }
+        }
+        f[cid] = t;
+    }
+    f
+}
+
 fn run(p: &Program, _source: &str, materialize: bool, target: &str) -> LowerResult {
     let bootstrap = target == "qir-enc-5";
     let norm = normalize(p);
     let erased = erase_domains(p);
     let mut callee_ids = HashMap::new();
-    let mut cid = 0u64;
-    for t in &p.tops {
-        if matches!(t.kind, TopKind::Pattern { .. } | TopKind::Workflow { .. } | TopKind::Falsify { .. }) {
-            let name = match &t.kind {
-                TopKind::Pattern { name, .. } | TopKind::Workflow { name, .. } | TopKind::Falsify { name, .. } => name.clone(),
-                _ => String::new(),
-            };
-            callee_ids.insert(name, cid);
-            cid += 1;
-        }
+    let callables: Vec<&TopDecl> = p.tops.iter().filter(|t| matches!(t.kind,
+        TopKind::Pattern { .. } | TopKind::Workflow { .. } | TopKind::Falsify { .. })).collect();
+    let ordered: Vec<&TopDecl> = topo_order_callables(p, &callables);
+    let cycle = ordered.len() != callables.len();
+    let ordered: Vec<&TopDecl> = if cycle { callables.clone() } else { ordered };
+    for (cid, t) in ordered.iter().enumerate() {
+        callee_ids.insert(callee_name(t).unwrap_or_default(), cid as u64);
     }
     let mut em = Emitter {
         p, norm: &norm, erased: erased.clone(), words: Vec::new(), op_tags: Vec::new(),
@@ -680,6 +773,12 @@ fn run(p: &Program, _source: &str, materialize: bool, target: &str) -> LowerResu
         next_store_idx: 0, call_targets: Vec::new(), hash_bnds: Vec::new(), bootstrap,
         in_callee: false, segments: Vec::new(), diags: Vec::new(),
     };
+    if cycle {
+        em.diags.push(diag("E_LOWERING_AMBIGUOUS", Span::default(),
+            "call cycle / self-recursion among Q(pattern)/Q(workflow)/Q(falsify)",
+            "strict topological order (K6a; callee_id > caller_id)", "cycle",
+            "remove the call cycle; nested OP_CALL may only target callee_id > i"));
+    }
     // Q(anchor) names are canonical genesis values (§5.2/§3.1): CONST Q(0)
     // with the anchor's declared bound.
     for t in &p.tops {
@@ -706,7 +805,10 @@ fn run(p: &Program, _source: &str, materialize: bool, target: &str) -> LowerResu
 
     let mut callees: Vec<Cbor> = Vec::new();
     let mut callee_interiors: Vec<u64> = Vec::new();
-    for t in &p.tops {
+    let mut direct: Vec<Vec<usize>> = Vec::new();
+    let call_names: Vec<String> = ordered.iter().filter_map(|t| callee_name(t)).collect();
+    for t in &ordered {
+        let t: &TopDecl = *t;
         let (name, params, body) = match &t.kind {
             TopKind::Pattern { name, params, body, .. } | TopKind::Workflow { name, params, body, .. } => {
                 (name.clone(), params.clone(), Some(*body))
@@ -748,6 +850,10 @@ fn run(p: &Program, _source: &str, materialize: bool, target: &str) -> LowerResu
             // branch maximum; do not add the fallback charge twice.
             let interior: u64 = callee_tags.iter().map(|t| charge(*t)).sum::<u64>();
             callee_interiors.push(interior);
+            // T37c: direct OP_CALL targets inside this callee (by callee_id).
+            let mut called: Vec<usize> = Vec::new();
+            if let Some(b) = callee_body(t) { collect_calls(p, b, &call_names, &mut called); }
+            direct.push(called);
             em.next_id = saved_next;
             em.refs = saved_refs;
             em.in_callee = false;
@@ -829,8 +935,9 @@ fn run(p: &Program, _source: &str, materialize: bool, target: &str) -> LowerResu
             target, "select qir-enc-5 for bootstrap operations"));
     }
     let mut b_hat = 20u64 + charged;
+    let folded_interior = folded_interior(&callee_interiors, &direct);
     for cid in &em.call_targets {
-        if let Some(v) = callee_interiors.get(*cid as usize) {
+        if let Some(v) = folded_interior.get(*cid as usize) {
             b_hat += v;
         }
     }

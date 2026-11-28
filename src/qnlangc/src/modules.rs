@@ -49,6 +49,7 @@ fn load(path: &Path, stack: &mut Vec<PathBuf>) -> Result<Program, Diag> {
         .collect();
     let root_domains = domains_of(&prog);
     let mut imported: Vec<TopDecl> = Vec::new();
+    let mut extra: Vec<Node> = Vec::new();
     for (alias, relpath, digest, span) in uses {
         let import_path = path.parent().unwrap_or_else(|| Path::new(".")).join(&relpath);
         // Static acyclicity over imports is checked before any digest check.
@@ -94,11 +95,24 @@ fn load(path: &Path, stack: &mut Vec<PathBuf>) -> Result<Program, Diag> {
         if !gate_diags.is_empty() {
             return Err(gate_diags.into_iter().next().unwrap());
         }
+        // Merge the imported arena under a fresh node-id offset so child
+        // references remain valid in the combined program.
+        let base = prog.arena.len() + extra.len();
+        // Names callable inside this library; intra-library references are
+        // qualified under the import alias so `alias::name` resolution holds.
+        let siblings: Vec<String> = lib.tops.iter().filter_map(top_callable_name).collect();
+        for n in &lib.arena {
+            let n = rename_node(n, &alias, &siblings);
+            extra.push(shift_node(&n, base));
+        }
         for t in &lib.tops {
-            imported.push(rename_top(t, &alias));
+            let mut t = rename_top(t, &alias);
+            shift_top(&mut t, base);
+            imported.push(t);
         }
     }
     stack.pop();
+    prog.arena.extend(extra);
     prog.tops.extend(imported);
     Ok(prog)
 }
@@ -125,6 +139,60 @@ fn is_pure_library(p: &Program) -> bool {
         TopKind::Conjecture { name, .. } if name.starts_with("$stmt") => true,
         _ => false,
     })
+}
+
+fn shift_top(t: &mut TopDecl, base: usize) {
+    match &mut t.kind {
+        TopKind::Pattern { body, .. } => *body += base,
+        TopKind::Workflow { body, .. } => *body += base,
+        TopKind::Falsify { body, .. } => *body += base,
+        TopKind::Conjecture { body, .. } => *body += base,
+        _ => {}
+    }
+}
+
+fn shift_node(n: &Node, base: usize) -> Node {
+    let mut n = n.clone();
+    shift_kind(&mut n.kind, base);
+    n
+}
+
+fn shift_kind(k: &mut NodeKind, base: usize) {
+    match k {
+        NodeKind::Tuple(xs) => { for x in xs { *x += base; } }
+        NodeKind::Call { args, .. } => { for x in args { *x += base; } }
+        NodeKind::Split { scrut, t, f } => { *scrut += base; *t += base; *f += base; }
+        NodeKind::Match { scrut, arms } => { *scrut += base; for (_, a) in arms { *a += base; } }
+        NodeKind::Fold { seq, over, init, body, .. } => { *seq += base; *over += base; *init += base; *body += base; }
+        NodeKind::Loop { body, .. } => *body += base,
+        NodeKind::Load { tbl, key, or_else, .. } => {
+            *tbl += base; *key += base;
+            if let Some(o) = or_else { *o += base; }
+        }
+        NodeKind::Binary { lhs, rhs, .. } => { *lhs += base; *rhs += base; }
+        NodeKind::Range { lo, hi, .. } => { *lo += base; *hi += base; }
+        NodeKind::Bind { value, .. } => *value += base,
+        NodeKind::Postfix { base: b, .. } => *b += base,
+        NodeKind::Block { stmts, tail } => { for s in stmts { *s += base; } if let Some(t) = tail { *t += base; } }
+        _ => {}
+    }
+}
+
+fn top_callable_name(t: &TopDecl) -> Option<String> {
+    match &t.kind {
+        TopKind::Pattern { name, .. } | TopKind::Workflow { name, .. } | TopKind::Falsify { name, .. } => Some(name.clone()),
+        _ => None,
+    }
+}
+
+fn rename_node(n: &Node, alias: &str, siblings: &[String]) -> Node {
+    let mut n = n.clone();
+    if let NodeKind::Ident(s) = &mut n.kind {
+        if siblings.iter().any(|x| x == s) {
+            *s = format!("{}::{}", alias, s);
+        }
+    }
+    n
 }
 
 fn rename_top(t: &TopDecl, alias: &str) -> TopDecl {

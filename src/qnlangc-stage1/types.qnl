@@ -1,0 +1,54 @@
+Q(dcc) d;
+Q(kappa) dyadic;
+Q(domain) Qm;
+Q(mode) L0;
+
+Q(type) T : u64;
+Q(anchor) z : Q(0) : T;
+Q(metric) m : eta(1,1,1);
+
+Q(variant) Type { U8, U16, U32, U64, Bool, Tuple(a : u64, b : u64), Array(elem : u64, cap : u64) }
+
+Q(variant) Expr {
+  Const(v : u64),
+  EIdent(name_id : u64),
+  Add(l : u64, r : u64),
+  Sub(l : u64, r : u64),
+  Mul(l : u64, r : u64),
+  Call(name_id : u64, arg : u64),
+  Hash(x : u64, b_bnd : u64)
+}
+
+Q(variant) Stmt {
+  Bind(name_id : u64, ty : u64, value : u64),
+  ExprStmt(e : u64),
+  Emit(kind : u64),
+  Use(alias_id : u64, path_id : u64, digest : u64)
+}
+
+Q(variant) Token {
+  TIdent(name_id : u64),
+  Num(v : u64),
+  Str(s : u64),
+  Arrow,
+  Semi,
+  Colon,
+  LParen,
+  RParen,
+  LBrace,
+  RBrace,
+  Comma,
+  At,
+  Bang,
+  BangBracket
+}
+
+Q(variant) Error {
+  EGrammar,
+  EDigestMismatch,
+  ECyclicImport,
+  EImpureLibraryImport,
+  EModalOrDomainLeak,
+  ESmaxOrBudget,
+  EUndeclaredBound
+}
