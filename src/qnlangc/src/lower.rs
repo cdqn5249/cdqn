@@ -472,6 +472,12 @@ impl<'a> Emitter<'a> {
                 Some(self.emit(tag, &ops))
             }
             NodeKind::Postfix { base, ops } => {
+                // T45: tuple projection .0 / .1 on Q(2:cons)/Q(tuple) -> FIELD.
+                if ops.len() == 1 && (ops[0] == ".0" || ops[0] == ".1") {
+                    let idx: u64 = if ops[0] == ".0" { 0 } else { 1 };
+                    let b = self.value(*base, None)?;
+                    return Some(self.emit(OP_FIELD, &[b, idx]));
+                }
                 if ops.len() == 1 && ops[0] == ".exact?" {
                     // CMP(value, canonical Q(0), rng [0..0]).
                     let v = self.value(*base, declared_ty)?;
@@ -586,6 +592,34 @@ impl<'a> Emitter<'a> {
                     }
                 }
                 last
+            }
+            NodeKind::Split { scrut, t, f } => {
+                // Q(2:split)(scrut bool){ T -> .. F -> .. }: scrut Q(1)=T,
+                // Q(0)=F. Lower to guarded sum on existing QnIR CMP/MUL/ADD.
+                let sv = self.value(*scrut, None)?;
+                let mut z = int_pos(0); z.extend_from_slice(&bnd(hi)); let z0 = self.emit(OP_CONST, &z);
+                let mut one = int_pos(1); one.extend_from_slice(&bnd(hi)); let z1 = self.emit(OP_CONST, &one);
+                let cmp_t = { let mut o=vec![sv,z1]; o.extend_from_slice(&int_pos(0)); o.extend_from_slice(&int_pos(0)); self.emit(OP_CMP,&o) };
+                let cmp_f = { let mut o=vec![sv,z0]; o.extend_from_slice(&int_pos(0)); o.extend_from_slice(&int_pos(0)); self.emit(OP_CMP,&o) };
+                let run_block = |this: &mut Self, blk: &NodeId| -> Option<u64> {
+                    match &this.p.node(*blk).kind {
+                        NodeKind::Block { stmts, tail } => {
+                            for &s in stmts {
+                                if let NodeKind::Bind { target, ty, value } = &this.p.node(s).kind {
+                                    if let Some(r)=this.value(*value,ty.as_deref()) { this.refs.insert(target.clone(),r); }
+                                } else { let _=this.value(s,None); }
+                            }
+                            match tail { Some(t)=>this.value(*t,declared_ty), None=>None }
+                        }
+                        _ => this.value(*blk,declared_ty),
+                    }
+                };
+                let vt = run_block(self, t)?;
+                let vf = run_block(self, f)?;
+                let mt = { let mut o=vec![cmp_t,vt]; o.extend_from_slice(&bnd(hi)); self.emit(OP_MUL,&o) };
+                let mf = { let mut o=vec![cmp_f,vf]; o.extend_from_slice(&bnd(hi)); self.emit(OP_MUL,&o) };
+                let out = { let mut o=vec![mt,mf]; o.extend_from_slice(&bnd(hi)); self.emit(OP_ADD,&o) };
+                return Some(out);
             }
             NodeKind::Match { scrut, arms } => {
                 // Tagged TUPLE [tag, payload] + FIELD/CMP/MUL/ADD exhaustive
