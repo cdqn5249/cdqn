@@ -2548,4 +2548,60 @@ mod eval_cbor_tests {
         // Q_HASH under qir-enc-4 is likewise rejected.
         assert!(insn::decode_envelope(&envelope_v("qir-enc-4", 1, &[37, 0, 64, 0], false)).is_err());
     }
+
+    // T36: multi-level nested OP_CALL. caller B0 -> callee0 -> callee1;
+    // callee0 executes instructions AFTER callee1 returns, then returns to
+    // caller B0 which continues to HALT with SUCCESS. K6a holds (1 > 0).
+    fn nested_ok_cbor() -> Vec<u8> {
+        // callee 1 (x::A): CONST + OP_RET
+        let mut a = const_ins(3, 255);
+        a.extend_from_slice(&ret_ins());
+        // callee 0 (x::B): CALL callee1 -> then CONST (instruction AFTER callee1
+        // returns) -> OP_RET
+        let mut b = const_ins(4, 255);
+        b.extend_from_slice(&call_ins(1));
+        b.extend_from_slice(&const_ins(2, 255));
+        b.extend_from_slice(&ret_ins());
+        // caller B0: CONST -> CALL callee0 -> HALT
+        let mut entry = const_ins(1, 255);
+        entry.extend_from_slice(&call_ins(0));
+        entry.extend_from_slice(&halt_ins());
+        // callee0 listed first: x::B=0 -> x::A=1 (K6a topological order)
+        envelope_calls(vec![block(&b, 4), block(&a, 2)], entry, 3)
+    }
+
+    #[test]
+    fn nested_op_call_multilevel_success_and_frame_restore() {
+        let bytes = nested_ok_cbor();
+        let run = run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).unwrap();
+        assert_eq!(outcome_name(run.outcome), "SUCCESS");
+        assert!(run.bh.unwrap() >= run.acc.charged);
+        assert_eq!(run.acc.reserved, run.acc.charged + run.acc.refunded);
+        assert!(run.records.len() >= 5);
+        // callee0 executed an instruction after callee1 returned, and caller
+        // resumed to HALT: >=5 transitions (CONST,CALL0,CALL1,CONST,RET,RET,...)
+    }
+
+    #[test]
+    fn k6a_rejects_reverse_order_and_self_call() {
+        // K6a: callee1 -> callee0 (reverse order / callee_id <= caller_id)
+        let mut bad_a = const_ins(3, 255);
+        bad_a.extend_from_slice(&ret_ins());
+        let mut bad_b = call_ins(0); // callee1 -> callee0: reverse order
+        bad_b.extend_from_slice(&ret_ins());
+        let mut entry = const_ins(1, 255);
+        entry.extend_from_slice(&call_ins(0));
+        entry.extend_from_slice(&halt_ins());
+        let bytes = envelope_calls(vec![block(&bad_a, 2), block(&bad_b, 3)], entry, 3);
+        assert!(run_vector(&bytes, 1000, &bhat::golden_profile(), &[]).is_err());
+
+        // K6a: self-call callee0 -> callee0
+        let mut selfc = call_ins(0);
+        selfc.extend_from_slice(&ret_ins());
+        let mut e2 = const_ins(1, 255);
+        e2.extend_from_slice(&call_ins(0));
+        e2.extend_from_slice(&halt_ins());
+        let bytes2 = envelope_calls(vec![block(&selfc, 3)], e2, 3);
+        assert!(run_vector(&bytes2, 1000, &bhat::golden_profile(), &[]).is_err());
+    }
 }

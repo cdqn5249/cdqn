@@ -1162,10 +1162,27 @@ class Machine:
                                                 profile["trip_ceiling"], profile["s_max"]) or 0,
                                  words_of(rec[3])))
         if b_inject is None and self.callees:
-            ws = words_of(env["stream"])
-            for wi, wv in enumerate(ws[:-1]):
-                if wv == 30 and wv + 0 == 30 and ws[wi + 1] < len(self.callees):
-                    self.BH += max(0, self.callees[ws[wi + 1]][2] - profile["gateway"])
+            # T36(b): instruction-decoded compositional B_hat in reverse
+            # topological order over key-9 callees (docs/qnir_calls.md §8.4).
+            # No raw-word scanning; no gateway double-count; no caller-only scan.
+            gateway = profile["gateway"]
+            n = len(self.callees)
+            folded = [0] * n
+            for cid in range(n - 1, -1, -1):
+                t = self.callees[cid][2]
+                for blk in self.callees[cid][0]:
+                    for ins in blk["instrs"]:
+                        if ins["op"] == "OP_CALL":
+                            nested = ins["callee_id"]
+                            if nested > cid and nested < n:
+                                t += max(0, folded[nested] - gateway)
+                folded[cid] = t
+            for blk in self.blocks:
+                for ins in blk["instrs"]:
+                    if ins["op"] == "OP_CALL":
+                        cid = ins["callee_id"]
+                        if cid < n:
+                            self.BH += max(0, folded[cid] - gateway)
         self.stack_root = hashlib.sha256(b"\x02").digest()
         self.frames = []            # frame dicts for OP_CALL/OP_RET
         self.current = {}           # static id -> current instance id
@@ -1270,6 +1287,7 @@ class Machine:
             else:
                 blocks, sids = self.blocks, self.sids
             self._cur_sids = sids
+            self._current_prog = prog
             blk, idx = pc
             ins = blocks[blk]["instrs"][idx]
             decoded = self.decoded_at(blk, idx) if prog == 0 else bytes(
@@ -1341,6 +1359,7 @@ class Machine:
             elif transfer[0] == "call":
                 prog = transfer[1] + 1
                 pc = (0, 0)
+            # track current program frame for ret_prog save/restore
             elif transfer[0] == "ret":
                 f = self.frames.pop()
                 used = self.acc["charged"] - f["charged_at_call"]
@@ -1349,7 +1368,7 @@ class Machine:
                 v = self._int_at(ins["refs"][0]) if ins["refs"] else 0
                 if v <= f["ret_bound"]:
                     self.mint(f["ret_sid"], v)
-                prog = 0
+                prog = f.get("ret_prog", 0)
                 pc = (f["ret_pc"][0], f["ret_pc"][1] + 1)
             else:
                 pc = (blk, idx + 1)
@@ -1552,6 +1571,10 @@ class Machine:
         if len(self.frames) >= 8 or ins["callee_id"] >= len(self.callees):
             raise Rejection("EXPRESSION_TOO_COMPLEX")
         cid = ins["callee_id"]
+        # T36(c): static K6a & call-graph validation (docs/qnir_calls.md §8.2).
+        # Inside callee i (prog == i+1) OP_CALL may only target callee_id > i.
+        if self._current_prog > 0 and cid <= self._current_prog - 1:
+            raise Rejection("EXPRESSION_TOO_COMPLEX")
         if ins["argc"] > 64:
             raise Rejection("EXPRESSION_TOO_COMPLEX")
         cb, sids, interior, raw = self.callees[cid]
@@ -1563,7 +1586,8 @@ class Machine:
             self.mint(i, self._int_at(a))  # callee block-argument ids are 0..argc-1
         self.frames.append({"callee": cid, "ret_pc": pc, "reserve": reserve,
                             "charged_at_call": self.acc["charged"], "parent": parent,
-                            "ret_sid": self._sid(pc), "ret_bound": ins["rets"][0] if ins["rets"] else 0})
+                            "ret_sid": self._sid(pc), "ret_bound": ins["rets"][0] if ins["rets"] else 0,
+                            "ret_prog": self._current_prog})
         self._next_prog = cid + 1
         self._next_pc = (0, 0)
         return ("call", cid)

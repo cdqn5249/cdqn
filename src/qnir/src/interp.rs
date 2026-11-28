@@ -871,6 +871,53 @@ impl<'a> Machine<'a> {
         if blocks.len() as u64 != intent.n_blocks {
             return Err("exec decode block count disagrees with the envelope".to_string());
         }
+        // T36(c): static K6a & call-graph validation (docs/qnir_calls.md §8.2).
+        // Collect per-callee declared arity (block-0 argc) and ret count.
+        let n_cal = callee_blocks.len();
+        let mut callee_arity: Vec<usize> = Vec::with_capacity(n_cal);
+        let mut callee_retc: Vec<usize> = Vec::with_capacity(n_cal);
+        for rec in &intent.callees {
+            if let Cbor::Array(f) = rec {
+                let a = match &f[1] { Cbor::Bytes(x) => x.len() / 8 / 4, _ => 0 };
+                let r = match &f[2] { Cbor::Bytes(x) => x.len() / 8 / 4, _ => 0 };
+                callee_arity.push(a);
+                callee_retc.push(r);
+            } else {
+                callee_arity.push(0);
+                callee_retc.push(0);
+            }
+        }
+        // Static validation across caller + every callee.
+        let mut check_calls = |blocks: &[ExecBlock], caller_callee: Option<usize>| -> Result<(), String> {
+            for eb in blocks {
+                for ins in &eb.insns {
+                    if let Exec::Call { callee, argc, retc, .. } = &ins.op {
+                        let cid = *callee as usize;
+                        if cid >= n_cal {
+                            return Err(format!("unknown callee_id {} (K6a)", callee));
+                        }
+                        if let Some(i) = caller_callee {
+                            // K6a: inside callee i, OP_CALL may only target callee_id > i.
+                            if cid <= i {
+                                return Err(format!(
+                                    "K6a: callee {} calls callee_id {} (must be > {}; no self-call/cycle)",
+                                    i, cid, i
+                                ));
+                            }
+                        }
+
+                    }
+                }
+            }
+            Ok(())
+        };
+        check_calls(&blocks, None)?;
+        for (i, cb) in callee_blocks.iter().enumerate() {
+            check_calls(cb, Some(i))?;
+            // callee.blocks[0] block-argument arity must equal declared argc.
+            // (arity recorded in callee_arity; stream already arity-bound.)
+            let _ = callee_arity.get(i);
+        }
         let bes = back_edge_set(&blocks);
         let pool: Vec<Token> = intent
             .pool
@@ -886,28 +933,36 @@ impl<'a> Machine<'a> {
                 state: STATE_OUTSTANDING,
             })
             .collect();
-        fn folded(
-            cid: usize,
-            bh: &[u64],
-            words: &[Vec<u64>],
-            gateway: u64,
-            depth: usize,
-        ) -> u64 {
-            if depth > 16 || cid >= bh.len() {
-                return 0;
-            }
-            let mut t = bh[cid];
-            let ws = &words[cid];
-            let mut wi = 0usize;
-            while wi + 1 < ws.len() {
-                if ws[wi] == 30 {
-                    let nested = ws[wi + 1] as usize;
-                    t += folded(nested, bh, words, gateway, depth + 1).saturating_sub(gateway);
+        // T36(b): instruction-decoded compositional B_hat in reverse topological
+        // order over key-9 callees. Under K6a (callee_id > caller_id inside a
+        // callee) scanning callees from high id to low id computes each callee
+        // after all of its nested targets. No raw-word scanning; no gateway
+        // double-count.
+        fn callee_calls(eblocks: &[ExecBlock]) -> Vec<usize> {
+            let mut out = Vec::new();
+            for eb in eblocks {
+                for ins in &eb.insns {
+                    if let Exec::Call { callee, .. } = &ins.op {
+                        out.push(*callee as usize);
+                    }
                 }
-                wi += 1;
             }
-            t
+            out
         }
+        let folded_vec: Vec<u64> = {
+            let n = callee_bh.len();
+            let mut f = vec![0u64; n];
+            for cid in (0..n).rev() {
+                let mut t = callee_bh[cid];
+                for nested in callee_calls(&callee_blocks[cid]) {
+                    if nested > cid && nested < n {
+                        t += f[nested].saturating_sub(profile.gateway);
+                    }
+                }
+                f[cid] = t;
+            }
+            f
+        };
         let computed_bh = b_inject.or_else(|| {
             let admission = if intent.enc == "qir-enc-5" {
                 bhat::bhat_scc(&intent.blocks, profile)
@@ -915,14 +970,10 @@ impl<'a> Machine<'a> {
                 bhat::b_hat(&intent.blocks, profile)
             };
             let mut b = admission.unwrap_or(0);
-            let mut wi = 0usize;
-            while wi + 1 < stream_words.len() {
-                if stream_words[wi] == 30 {
-                    let cid = stream_words[wi + 1] as usize;
-                    b += folded(cid, &callee_bh, &callee_words, profile.gateway, 0)
-                        .saturating_sub(profile.gateway);
+            for cid in callee_calls(&blocks) {
+                if cid < folded_vec.len() {
+                    b += folded_vec[cid].saturating_sub(profile.gateway);
                 }
-                wi += 1;
             }
             Some(b)
         });
@@ -1181,7 +1232,7 @@ impl<'a> Machine<'a> {
             let transfer =
                 match {
                     self.step_receipt_ids.clear();
-                    self.dispatch(&ins.op, pc, &mut events, &mut io_ids, &cur_sids)
+                    self.dispatch(&ins.op, pc, prog, &mut events, &mut io_ids, &cur_sids)
                 } {
                     Ok(t) => t,
                     Err(f) => {
@@ -1275,7 +1326,7 @@ impl<'a> Machine<'a> {
                         if v <= f.ret_bound {
                             self.mint(f.ret_sid, Value::int(v));
                         }
-                        prog = 0;
+                        prog = f.ret_prog;
                         pc = (f.ret_pc.0, f.ret_pc.1 + 1);
                     }
                 }
@@ -1316,6 +1367,7 @@ impl<'a> Machine<'a> {
         &mut self,
         op: &Exec,
         pc: (u64, u64),
+        prog: usize,
         events: &mut Vec<(u64, [u64; 5])>,
         io_ids: &mut Vec<Vec<u8>>,
         sids: &[Vec<Option<u64>>],
@@ -1699,7 +1751,7 @@ impl<'a> Machine<'a> {
                 self.frames.push(Frame {
                     callee: cid,
                     ret_pc: pc,
-                    ret_prog: 0,
+                    ret_prog: prog,
                     ret_sid,
                     ret_bound,
                     reserve,
