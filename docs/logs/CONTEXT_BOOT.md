@@ -5,6 +5,12 @@ Truth-source-first. Verify `git rev-parse HEAD`, `git status -s`, run `cargo tes
 ## Current
 `HEAD` `f0a773831fb0b9d7b92bec57ebf0fd9db3e4786e`, clean. QnLang `[PENDING]`, QnIR `[PENDING]`. Option B QnLang Alpha. Stage-1 `src/qnlangc-stage1/`.
 
+## Session-Boot Protocol
+- New AI Studio chat uploads Point 1 only (docs/logs/CONTEXT_BOOT.md, docs/simemp.md, docs/boc.md).
+- First OpenCode task of a new chat session is a read-only D(Session) preflight: git rev-parse HEAD, git status -s, docs/logs/{qnir,qnlang}/index.md, latest receipt log(s), active spec/source slice.
+- Keep CONTEXT_BOOT.md <= 40 lines; refresh HEAD, counts, gaps only from verified commit/test receipts.
+- Receipt log per implementation task; truth-sources-first; F19.
+
 ## F19
 - `src/qnir/`+`src/qnir-py/`: QnIR only; NOT `src/qnlangc*`,`docs/qnir*`,`docs/qnir_goldens.md`,`docs/_data/glossary`. 
 - `src/qnlangc/`+`src/qnlangc-stage1/`: QnLang; NOT `src/qnir*`,`docs/qnir*`,`docs/qnir_goldens.md`,`docs/_data/glossary`. 
