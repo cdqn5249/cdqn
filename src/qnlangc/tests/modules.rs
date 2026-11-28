@@ -9,8 +9,19 @@ fn sha256_hex(data: &[u8]) -> String {
     qnlangc::sha256::hex(&qnlangc::sha256::sha256(data))
 }
 
+static TMP_COUNTER: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
 fn tmp_dir(tag: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("qnlangc-modules-{}-{}", std::process::id(), tag));
+    // strictly isolated per test invocation: unique tag + atomic monotonic
+    // counter, so concurrent tests never share a directory.
+    let n = TMP_COUNTER.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+    let d = std::env::temp_dir().join(format!(
+        "qnlangc-modules-{}-{}-{}-{}",
+        std::process::id(),
+        tag,
+        n,
+        std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|x| x.as_nanos()).unwrap_or(0)
+    ));
     let _ = std::fs::remove_dir_all(&d);
     std::fs::create_dir_all(&d).unwrap();
     d
